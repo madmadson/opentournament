@@ -10,6 +10,8 @@ import android.os.Bundle;
 
 import android.support.v4.app.Fragment;
 
+import android.util.Log;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -120,9 +122,9 @@ public class TournamentListFragment extends Fragment {
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
 
-            View view = super.getView(position, convertView, parent);
+            View item = super.getView(position, convertView, parent);
 
-            view.setOnClickListener(new View.OnClickListener() {
+            item.setOnClickListener(new View.OnClickListener() {
 
                     @Override
                     public void onClick(View v) {
@@ -135,7 +137,21 @@ public class TournamentListFragment extends Fragment {
                     }
                 });
 
-            return view;
+            View startTournamentButton = item.findViewById(R.id.startTournamentButton);
+
+            startTournamentButton.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+
+                        Cursor cursor = (Cursor) getItem(position);
+                        int id = cursor.getInt(cursor.getColumnIndex("_id"));
+
+                        Log.i("TournamentList", "startTournamentClicked for tournament: " + id);
+                    }
+                });
+
+            return item;
         }
     }
 }

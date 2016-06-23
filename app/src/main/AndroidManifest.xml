@@ -16,10 +16,12 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".TournamentManagementActivity"
-            android:label="@string/title_activity_tournament_list"></activity>
-
-        
+            android:name=".management.TournamentManagementActivity"
+            android:label="@string/title_activity_tournament_list" />
+        <activity
+            android:name=".tournament.TournamentPlayActivity"
+            android:label="@string/title_activity_tournament_play"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

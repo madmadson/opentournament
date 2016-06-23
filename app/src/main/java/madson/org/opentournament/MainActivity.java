@@ -11,6 +11,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import madson.org.opentournament.management.TournamentManagementActivity;
+
 
 public class MainActivity extends Activity {
 

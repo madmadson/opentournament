@@ -1,6 +1,4 @@
-package madson.org.opentournament;
-
-import android.app.Activity;
+package madson.org.opentournament.management;
 
 import android.database.Cursor;
 
@@ -19,6 +17,8 @@ import android.util.Log;
 import android.view.View;
 
 import android.widget.CursorAdapter;
+
+import madson.org.opentournament.R;
 
 
 public class TournamentManagementActivity extends AppCompatActivity

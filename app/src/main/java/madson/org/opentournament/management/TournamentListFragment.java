@@ -1,4 +1,4 @@
-package madson.org.opentournament;
+package madson.org.opentournament.management;
 
 import android.content.Context;
 
@@ -18,6 +18,9 @@ import android.view.ViewGroup;
 
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
+
+import madson.org.opentournament.OpenTournamentDatabase;
+import madson.org.opentournament.R;
 
 
 public class TournamentListFragment extends Fragment {

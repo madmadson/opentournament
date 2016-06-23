@@ -11,4 +11,7 @@
     <string name="textSaveTorunamentButton">Neues Turnier erstellen</string>
     <string name="newTournamentSaved">Neues Turnier gespeichert</string>
     <string name="existingTournamentSaved">Turnier bearbeitet</string>
+    <string name="title_activity_tournament_play">TournamentPlayActivity</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
 </resources>

@@ -1,4 +1,4 @@
-package madson.org.opentournament;
+package madson.org.opentournament.management;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -22,6 +22,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import madson.org.opentournament.OpenTournamentDatabase;
+import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Tournament;
 
 import java.text.SimpleDateFormat;

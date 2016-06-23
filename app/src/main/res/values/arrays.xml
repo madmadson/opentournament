@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="devTournaments">
+        <item>HeavyMetalDays</item>
+        <item>CoinOfEvil</item>
+        <item>ClogCon</item>
+    </string-array>
+    <string-array name="menu_options">
+        <item>Tournaments</item>
+        <item>Players</item>
+        <item>News</item>
+    </string-array>
+        
+</resources>

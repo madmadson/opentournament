@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Open Tournament</string>
+    <string name="Image_description">Tournaments for all!</string>
+    <string name="title_activity_tournament_list">TournamentList</string>
+    <string name="title_activity_tournament_details">TournamentDetailsActivity</string>
+    <string name="tournamentName">Turniername</string>
+    <string name="tournamentDescription">Turnier Beschreibung</string>
+    <string name="tournamentDate">Datum des Turniers</string>
+    <string name="tournamentNumberOfPlayers">Spieleranzahl</string>
+    <string name="textEditTorunamentButton">Turnier editieren</string>
+    <string name="textSaveTorunamentButton">Neues Turnier erstellen</string>
+    <string name="newTournamentSaved">Neues Turnier gespeichert</string>
+    <string name="existingTournamentSaved">Turnier bearbeitet</string>
+</resources>

@@ -1,12 +1,6 @@
 package madson.org.opentournament.domain;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
-import com.orm.SugarRecord;
-
 import java.util.Date;
-import java.util.UUID;
 
 
 /**

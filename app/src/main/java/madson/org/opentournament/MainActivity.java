@@ -18,11 +18,12 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import madson.org.opentournament.management.TournamentDetailFragment;
 import madson.org.opentournament.management.TournamentListFragment;
+import madson.org.opentournament.management.TournamentManagementFragment;
 
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
-    TournamentListFragment.OnListFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,12 +111,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (id == R.id.nav_tournaments) {
             Log.i("Nav", "Open tournaments");
 
-            Fragment fragment = manager.findFragmentByTag(TournamentListFragment.TAG);
+            Fragment fragment = manager.findFragmentByTag(TournamentManagementFragment.TAG);
 
             if (fragment == null) {
-                fragment = new TournamentListFragment();
+                fragment = new TournamentManagementFragment();
                 manager.beginTransaction()
-                    .replace(R.id.main_fragment_container, fragment, TournamentListFragment.TAG)
+                    .replace(R.id.main_fragment_container, fragment, TournamentManagementFragment.TAG)
                     .commit();
             }
         } else if (id == R.id.nav_players) {
@@ -126,10 +127,5 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawer.closeDrawer(GravityCompat.START);
 
         return true;
-    }
-
-
-    @Override
-    public void onTournamentListItemClicked(long id) {
     }
 }

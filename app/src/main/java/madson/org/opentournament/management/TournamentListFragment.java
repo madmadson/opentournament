@@ -67,10 +67,10 @@ public class TournamentListFragment extends Fragment {
 
         super.onAttach(context);
 
-        if (context instanceof OnListFragmentInteractionListener) {
-            mListener = (OnListFragmentInteractionListener) context;
+        if (getParentFragment() instanceof OnListFragmentInteractionListener) {
+            mListener = (OnListFragmentInteractionListener) getParentFragment();
         } else {
-            throw new RuntimeException(context.toString()
+            throw new RuntimeException(getParentFragment().toString()
                 + " must implement OnListFragmentInteractionListener");
         }
     }

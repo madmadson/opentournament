@@ -8,71 +8,92 @@ import android.os.Bundle;
 
 import android.support.design.widget.FloatingActionButton;
 
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-
-import android.support.v7.app.AppCompatActivity;
 
 import android.util.Log;
 
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
 import android.widget.CursorAdapter;
 
 import madson.org.opentournament.R;
 
 
-public class TournamentManagementActivity extends AppCompatActivity
+public class TournamentManagementFragment extends Fragment
     implements TournamentListFragment.OnListFragmentInteractionListener,
         TournamentDetailFragment.OnTournamentEditedListener {
 
+    public static final String TAG = "tournament_management_fragment";
     private CursorAdapter cursorAdapter;
     private Cursor cursor;
     private SQLiteDatabase readableDatabase;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_tournaments);
 
         TournamentListFragment tournamentListFragment = new TournamentListFragment();
 
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
 
         fragmentTransaction.replace(R.id.list_fragment_container, tournamentListFragment);
         fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         fragmentTransaction.commit();
+    }
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
 
-                // new empty tournament
-                @Override
-                public void onClick(View view) {
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-                    if (findViewById(R.id.detail_fragment_container) != null) {
-                        TournamentDetailFragment tournamentDetailFragment = new TournamentDetailFragment();
+        return inflater.inflate(R.layout.fragment_tournament_management, container, false);
+    }
 
-                        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
 
-                        fragmentTransaction.replace(R.id.detail_fragment_container, tournamentDetailFragment);
-                        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-                        fragmentTransaction.commit();
+    @Override
+    public void onStart() {
+
+        super.onStart();
+
+        final View view = getView();
+
+        if (view != null) {
+            FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
+            fab.setOnClickListener(new View.OnClickListener() {
+
+                    // new empty tournament
+                    @Override
+                    public void onClick(View view) {
+
+                        if (view.findViewById(R.id.detail_fragment_container) != null) {
+                            TournamentDetailFragment tournamentDetailFragment = new TournamentDetailFragment();
+
+                            FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
+
+                            fragmentTransaction.replace(R.id.detail_fragment_container, tournamentDetailFragment);
+                            fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+                            fragmentTransaction.commit();
+                        }
                     }
-                }
-            });
+                });
+        }
     }
 
 
     @Override
     public void onTournamentListItemClicked(long id) {
 
-        if (findViewById(R.id.detail_fragment_container) != null) {
+        final View view = getView();
+
+        if (view.findViewById(R.id.detail_fragment_container) != null) {
             TournamentDetailFragment tournamentDetailFragment = new TournamentDetailFragment();
 
             Log.i("TounamentActivity", "clicked on tournament: " + id);
 
-            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
 
             Bundle bundle = new Bundle();
             bundle.putLong("tournamentId", id);
@@ -90,7 +111,7 @@ public class TournamentManagementActivity extends AppCompatActivity
 
         TournamentListFragment tournamentListFragment = new TournamentListFragment();
 
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
 
         fragmentTransaction.replace(R.id.list_fragment_container, tournamentListFragment);
         fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);

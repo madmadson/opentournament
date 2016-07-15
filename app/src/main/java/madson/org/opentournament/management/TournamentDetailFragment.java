@@ -159,10 +159,10 @@ public class TournamentDetailFragment extends Fragment {
 
         super.onAttach(context);
 
-        if (context instanceof OnTournamentEditedListener) {
-            mListener = (OnTournamentEditedListener) context;
+        if (getParentFragment() instanceof OnTournamentEditedListener) {
+            mListener = (OnTournamentEditedListener) getParentFragment();
         } else {
-            throw new RuntimeException(context.toString()
+            throw new RuntimeException(getParentFragment().toString()
                 + " must implement OnListFragmentInteractionListener");
         }
     }

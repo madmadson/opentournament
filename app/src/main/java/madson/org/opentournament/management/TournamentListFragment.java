@@ -25,6 +25,7 @@ import madson.org.opentournament.R;
 
 public class TournamentListFragment extends Fragment {
 
+    public static final String TAG = "tournament_list_fragment";
     private OnListFragmentInteractionListener mListener;
     private Cursor cursor;
     private SQLiteDatabase readableDatabase;

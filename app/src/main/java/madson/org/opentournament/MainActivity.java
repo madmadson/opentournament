@@ -18,8 +18,11 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import madson.org.opentournament.management.TournamentListFragment;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
+    TournamentListFragment.OnListFragmentInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,13 +42,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-//        FragmentManager manager = getSupportFragmentManager();
-//        Fragment fragment = manager.findFragmentByTag(HomeFragment.TAG);
-//
-//        if (fragment == null) {
-//            fragment = new HomeFragment();
-//            manager.beginTransaction().replace(R.id.fragment_container, fragment, HomeFragment.TAG).commit();
-//        }
+        FragmentManager manager = getSupportFragmentManager();
+        Fragment fragment = manager.findFragmentByTag(HomeFragment.TAG);
+
+        if (fragment == null) {
+            fragment = new HomeFragment();
+            manager.beginTransaction().replace(R.id.main_fragment_container, fragment, HomeFragment.TAG).commit();
+        }
     }
 
 
@@ -93,11 +96,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(MenuItem item) {
 
         int id = item.getItemId();
+        FragmentManager manager = getSupportFragmentManager();
 
         if (id == R.id.nav_home) {
             Log.i("Nav", "Open home");
+
+            Fragment fragment = manager.findFragmentByTag(HomeFragment.TAG);
+
+            if (fragment == null) {
+                fragment = new HomeFragment();
+                manager.beginTransaction().replace(R.id.main_fragment_container, fragment, HomeFragment.TAG).commit();
+            }
         } else if (id == R.id.nav_tournaments) {
             Log.i("Nav", "Open tournaments");
+
+            Fragment fragment = manager.findFragmentByTag(TournamentListFragment.TAG);
+
+            if (fragment == null) {
+                fragment = new TournamentListFragment();
+                manager.beginTransaction()
+                    .replace(R.id.main_fragment_container, fragment, TournamentListFragment.TAG)
+                    .commit();
+            }
         } else if (id == R.id.nav_players) {
             Log.i("Nav", "Open players");
         }
@@ -106,5 +126,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawer.closeDrawer(GravityCompat.START);
 
         return true;
+    }
+
+
+    @Override
+    public void onTournamentListItemClicked(long id) {
     }
 }

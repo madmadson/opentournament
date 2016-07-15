@@ -4,6 +4,8 @@ import android.os.Bundle;
 
 import android.support.design.widget.NavigationView;
 
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 
@@ -36,6 +38,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+//        FragmentManager manager = getSupportFragmentManager();
+//        Fragment fragment = manager.findFragmentByTag(HomeFragment.TAG);
+//
+//        if (fragment == null) {
+//            fragment = new HomeFragment();
+//            manager.beginTransaction().replace(R.id.fragment_container, fragment, HomeFragment.TAG).commit();
+//        }
     }
 
 
@@ -82,15 +92,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
 
-        // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.home_menu) {
-            Log.i("Main", "Open second menu item (tournement)");
+        if (id == R.id.nav_home) {
+            Log.i("Nav", "Open home");
         } else if (id == R.id.nav_tournaments) {
-            Log.i("Main", "Open third menu item (players)");
+            Log.i("Nav", "Open tournaments");
         } else if (id == R.id.nav_players) {
-            Log.i("Main", "Open first menu item (home)");
+            Log.i("Nav", "Open players");
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

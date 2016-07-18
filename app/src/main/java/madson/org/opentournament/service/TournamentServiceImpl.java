@@ -1,5 +1,7 @@
 package madson.org.opentournament.service;
 
+import android.content.ContentValues;
+
 import android.database.Cursor;
 
 import android.database.sqlite.SQLiteDatabase;
@@ -69,5 +71,32 @@ public class TournamentServiceImpl implements TournamentService {
                 null);
 
         return cursor;
+    }
+
+
+    @Override
+    public void insertNewTournament(ContentValues contentValues) {
+
+        SQLiteDatabase writableDatabase = dbHelper.getWritableDatabase();
+
+        try {
+            writableDatabase.insert("Tournament", null, contentValues);
+        } finally {
+            dbHelper.close();
+        }
+    }
+
+
+    @Override
+    public void editTournament(Long tournamentId, ContentValues contentValues) {
+
+        SQLiteDatabase writableDatabase = dbHelper.getWritableDatabase();
+
+        try {
+            writableDatabase.update("Tournament", contentValues, "_id = ?",
+                new String[] { String.valueOf(tournamentId) });
+        } finally {
+            dbHelper.close();
+        }
     }
 }

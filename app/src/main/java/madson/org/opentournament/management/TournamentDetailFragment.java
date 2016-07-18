@@ -3,10 +3,6 @@ package madson.org.opentournament.management;
 import android.content.ContentValues;
 import android.content.Context;
 
-import android.database.Cursor;
-
-import android.database.sqlite.SQLiteDatabase;
-
 import android.os.Bundle;
 
 import android.support.annotation.Nullable;
@@ -23,14 +19,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import madson.org.opentournament.OpenTournamentApplication;
-import madson.org.opentournament.OpenTournamentDatabaseHelper;
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.service.TournamentService;
 
 import java.text.SimpleDateFormat;
-
-import java.util.Date;
 
 
 /**
@@ -89,19 +82,14 @@ public class TournamentDetailFragment extends Fragment {
                         @Override
                         public void onClick(View v) {
 
-                            OpenTournamentDatabaseHelper dbHelper = new OpenTournamentDatabaseHelper(view.getContext());
-
-                            SQLiteDatabase writableDatabase = dbHelper.getWritableDatabase();
-
                             ContentValues contentValues = new ContentValues();
                             contentValues.put("name", String.valueOf(tournamentNameField.getText()));
                             contentValues.put("description", String.valueOf(tournamentDescriptionField.getText()));
                             contentValues.put("date", String.valueOf(tournamentDateField.getText()));
 
-                            writableDatabase.update("Tournament", contentValues, "_id = ?",
-                                new String[] { String.valueOf(tournament.getId()) });
-
-                            dbHelper.close();
+                            TournamentService tournamentService =
+                                ((OpenTournamentApplication) getActivity().getApplication()).getTournamentService();
+                            tournamentService.editTournament((long) tournament.getId(), contentValues);
 
                             Toast toast = Toast.makeText(getActivity(), R.string.existingTournamentSaved,
                                     Toast.LENGTH_SHORT);
@@ -119,18 +107,14 @@ public class TournamentDetailFragment extends Fragment {
                         @Override
                         public void onClick(View v) {
 
-                            OpenTournamentDatabaseHelper dbHelper = new OpenTournamentDatabaseHelper(view.getContext());
-
-                            SQLiteDatabase writableDatabase = dbHelper.getWritableDatabase();
-
                             ContentValues contentValues = new ContentValues();
                             contentValues.put("name", String.valueOf(tournamentNameField.getText()));
                             contentValues.put("description", String.valueOf(tournamentDescriptionField.getText()));
                             contentValues.put("date", String.valueOf(tournamentDateField.getText()));
 
-                            writableDatabase.insert("Tournament", null, contentValues);
-
-                            dbHelper.close();
+                            TournamentService tournamentService =
+                                ((OpenTournamentApplication) getActivity().getApplication()).getTournamentService();
+                            tournamentService.insertNewTournament(contentValues);
 
                             Toast toast = Toast.makeText(getActivity(), R.string.newTournamentSaved,
                                     Toast.LENGTH_SHORT);

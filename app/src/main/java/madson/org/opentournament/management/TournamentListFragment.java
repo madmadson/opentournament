@@ -88,15 +88,6 @@ public class TournamentListFragment extends Fragment {
         mListener = null;
     }
 
-
-    @Override
-    public void onDestroy() {
-
-        super.onDestroy();
-        cursor.close();
-        readableDatabase.close();
-    }
-
     public interface OnListFragmentInteractionListener {
 
         void onTournamentListItemClicked(long id);

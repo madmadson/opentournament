@@ -1,5 +1,7 @@
 package madson.org.opentournament.service;
 
+import android.content.ContentValues;
+
 import android.database.Cursor;
 
 import madson.org.opentournament.domain.Tournament;
@@ -12,18 +14,37 @@ import madson.org.opentournament.domain.Tournament;
  */
 public interface TournamentService {
 
+    /**
+     * @param  id  id of the tournament
+     *
+     * @return
+     */
     Tournament getTournamentForId(Long id);
 
 
+    /**
+     * @return  cursor for all tournaments
+     */
     Cursor getCursorForAllTournaments();
 
 
     /**
-     * *.
+     * @param  tournamentId
      *
-     * @param  tournamentId  id of tournament
-     *
-     * @return  Cursor to get all players in one tournament
+     * @return
      */
     Cursor getCursorForPlayersOfTournament(Long tournamentId);
+
+
+    /**
+     * @param  contentValues  the conetent
+     */
+    void insertNewTournament(ContentValues contentValues);
+
+
+    /**
+     * @param  tournamentId  id of the tournament
+     * @param  contentValues  the content
+     */
+    void editTournament(Long tournamentId, ContentValues contentValues);
 }

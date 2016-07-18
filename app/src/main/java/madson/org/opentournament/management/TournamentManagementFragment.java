@@ -68,15 +68,13 @@ public class TournamentManagementFragment extends Fragment
                     @Override
                     public void onClick(View view) {
 
-                        if (view.findViewById(R.id.detail_fragment_container) != null) {
-                            TournamentDetailFragment tournamentDetailFragment = new TournamentDetailFragment();
+                        TournamentDetailFragment tournamentDetailFragment = new TournamentDetailFragment();
 
-                            FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
+                        FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
 
-                            fragmentTransaction.replace(R.id.detail_fragment_container, tournamentDetailFragment);
-                            fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-                            fragmentTransaction.commit();
-                        }
+                        fragmentTransaction.replace(R.id.detail_fragment_container, tournamentDetailFragment);
+                        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+                        fragmentTransaction.commit();
                     }
                 });
         }

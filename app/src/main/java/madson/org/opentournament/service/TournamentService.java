@@ -1,5 +1,7 @@
 package madson.org.opentournament.service;
 
+import android.database.Cursor;
+
 import madson.org.opentournament.domain.Tournament;
 
 
@@ -11,4 +13,7 @@ import madson.org.opentournament.domain.Tournament;
 public interface TournamentService {
 
     Tournament getTournamentForId(Long id);
+
+
+    Cursor getCursorForTournaments();
 }

@@ -22,9 +22,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import madson.org.opentournament.OpenTournamentApplication;
 import madson.org.opentournament.OpenTournamentDatabaseHelper;
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Tournament;
+import madson.org.opentournament.service.TournamentService;
 
 import java.text.SimpleDateFormat;
 
@@ -49,19 +51,9 @@ public class TournamentDetailFragment extends Fragment {
         Bundle bundle = getArguments();
 
         if (bundle != null && bundle.getLong("tournamentId") != 0) {
-            OpenTournamentDatabaseHelper dbHelper = new OpenTournamentDatabaseHelper(container.getContext());
-
-            SQLiteDatabase readableDatabase = dbHelper.getReadableDatabase();
-            Cursor cursor = readableDatabase.query("tournament", Tournament.ALL_COLS_FOR_TOURNAMENT, "_id  = ?",
-                    new String[] { Long.toString(bundle.getLong("tournamentId")) }, null, null, null);
-
-            if (cursor.moveToFirst()) {
-                tournament = new Tournament(cursor.getInt(0), cursor.getString(1), cursor.getString(2),
-                        cursor.getInt(3), new Date(cursor.getLong(4)));
-            }
-
-            cursor.close();
-            dbHelper.close();
+            TournamentService tournamentService = ((OpenTournamentApplication) getActivity().getApplication())
+                .getTournamentService();
+            tournament = tournamentService.getTournamentForId((long) bundle.getLong("tournamentId"));
         }
 
         return inflater.inflate(R.layout.fragment_tournament_detail, container, false);

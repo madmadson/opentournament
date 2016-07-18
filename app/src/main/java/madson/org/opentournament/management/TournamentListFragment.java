@@ -20,8 +20,10 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
+import madson.org.opentournament.OpenTournamentApplication;
 import madson.org.opentournament.OpenTournamentDatabaseHelper;
 import madson.org.opentournament.R;
+import madson.org.opentournament.service.TournamentService;
 import madson.org.opentournament.tournament.TournamentPlayActivity;
 
 
@@ -53,7 +55,9 @@ public class TournamentListFragment extends Fragment {
 
         ListView listView = (ListView) view.findViewById(R.id.tournament_list_view);
 
-        Cursor cursorForTournaments = getCursorForTournaments();
+        TournamentService tournamentService = ((OpenTournamentApplication) getActivity().getApplication())
+            .getTournamentService();
+        Cursor cursorForTournaments = tournamentService.getCursorForTournaments();
 
         SimpleCursorAdapter simpleCursorAdapter = new MyAdapter(getActivity(), R.layout.tournament_list_row,
                 cursorForTournaments, new String[] { "name" }, new int[] { R.id.tournamentNameInList }, 0);
@@ -75,18 +79,6 @@ public class TournamentListFragment extends Fragment {
             throw new RuntimeException(getParentFragment().toString()
                 + " must implement OnListFragmentInteractionListener");
         }
-    }
-
-
-    public Cursor getCursorForTournaments() {
-
-        OpenTournamentDatabaseHelper dbHelper = new OpenTournamentDatabaseHelper(getActivity());
-
-        readableDatabase = dbHelper.getReadableDatabase();
-
-        cursor = readableDatabase.query("tournament", new String[] { "_id", "name" }, null, null, null, null, null);
-
-        return cursor;
     }
 
 

@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import madson.org.opentournament.OpenTournamentDatabaseHelper;
 import madson.org.opentournament.domain.Tournament;
 
 import java.util.Date;
@@ -44,5 +45,17 @@ public class TournamentServiceImpl implements TournamentService {
         }
 
         return tournament;
+    }
+
+
+    @Override
+    public Cursor getCursorForTournaments() {
+
+        SQLiteDatabase readableDatabase = dbHelper.getReadableDatabase();
+
+        Cursor cursor = readableDatabase.query("tournament", new String[] { "_id", "name" }, null, null, null, null,
+                null);
+
+        return cursor;
     }
 }

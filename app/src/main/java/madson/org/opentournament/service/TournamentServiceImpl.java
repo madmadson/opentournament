@@ -49,7 +49,19 @@ public class TournamentServiceImpl implements TournamentService {
 
 
     @Override
-    public Cursor getCursorForTournaments() {
+    public Cursor getCursorForAllTournaments() {
+
+        SQLiteDatabase readableDatabase = dbHelper.getReadableDatabase();
+
+        Cursor cursor = readableDatabase.query("tournament", new String[] { "_id", "name" }, null, null, null, null,
+                null);
+
+        return cursor;
+    }
+
+
+    @Override
+    public Cursor getCursorForPlayersOfTournament(Long tournamentId) {
 
         SQLiteDatabase readableDatabase = dbHelper.getReadableDatabase();
 

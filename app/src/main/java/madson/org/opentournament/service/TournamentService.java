@@ -15,5 +15,15 @@ public interface TournamentService {
     Tournament getTournamentForId(Long id);
 
 
-    Cursor getCursorForTournaments();
+    Cursor getCursorForAllTournaments();
+
+
+    /**
+     * *.
+     *
+     * @param  tournamentId  id of tournament
+     *
+     * @return  Cursor to get all players in one tournament
+     */
+    Cursor getCursorForPlayersOfTournament(Long tournamentId);
 }

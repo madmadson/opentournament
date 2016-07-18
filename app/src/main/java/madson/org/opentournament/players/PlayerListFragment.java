@@ -1,4 +1,4 @@
-package madson.org.opentournament.management;
+package madson.org.opentournament.players;
 
 import android.content.Context;
 import android.content.Intent;
@@ -26,9 +26,9 @@ import madson.org.opentournament.service.TournamentService;
 import madson.org.opentournament.tournament.TournamentPlayActivity;
 
 
-public class TournamentListFragment extends Fragment {
+public class PlayerListFragment extends Fragment {
 
-    public static final String TAG = "tournament_list_fragment";
+    public static final String TAG = "player_list_fragment";
     private OnListFragmentInteractionListener mListener;
     private Cursor cursor;
     private SQLiteDatabase readableDatabase;
@@ -37,7 +37,7 @@ public class TournamentListFragment extends Fragment {
      * Mandatory empty constructor for the fragment manager to instantiate the fragment (e.g. upon screen orientation
      * changes).
      */
-    public TournamentListFragment() {
+    public PlayerListFragment() {
     }
 
     @Override
@@ -56,7 +56,7 @@ public class TournamentListFragment extends Fragment {
 
         TournamentService tournamentService = ((OpenTournamentApplication) getActivity().getApplication())
             .getTournamentService();
-        Cursor cursorForTournaments = tournamentService.getCursorForAllTournaments();
+        Cursor cursorForTournaments = tournamentService.getCursorForPlayersOfTournament(1L);
 
         SimpleCursorAdapter simpleCursorAdapter = new MyAdapter(getActivity(), R.layout.tournament_list_row,
                 cursorForTournaments, new String[] { "name" }, new int[] { R.id.tournamentNameInList }, 0);

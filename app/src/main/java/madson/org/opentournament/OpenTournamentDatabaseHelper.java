@@ -16,12 +16,12 @@ import static java.util.Calendar.getInstance;
  *
  * @author  Tobias Matt - tmatt@contargo.net
  */
-public class OpenTournamentDatabase extends SQLiteOpenHelper {
+public class OpenTournamentDatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DB_NAME = "open_tournament";
     private static final int DB_VERSION = 1;
 
-    public OpenTournamentDatabase(Context context) {
+    public OpenTournamentDatabaseHelper(Context context) {
 
         super(context, DB_NAME, null, DB_VERSION);
     }

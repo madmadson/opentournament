@@ -18,17 +18,21 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import madson.org.opentournament.management.TournamentDetailFragment;
-import madson.org.opentournament.management.TournamentListFragment;
+import madson.org.opentournament.exception.GeneralExceptionHandler;
 import madson.org.opentournament.management.TournamentManagementFragment;
 
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
+    private static OpenTournamentDatabaseHelper dbHelper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+
+        Thread.setDefaultUncaughtExceptionHandler(new GeneralExceptionHandler(this));
+
         setContentView(R.layout.activity_main);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -127,5 +131,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawer.closeDrawer(GravityCompat.START);
 
         return true;
+    }
+
+
+    public OpenTournamentDatabaseHelper getDBHelper() {
+
+        if (dbHelper == null) {
+            dbHelper = new OpenTournamentDatabaseHelper(getApplicationContext());
+        }
+
+        return dbHelper;
     }
 }

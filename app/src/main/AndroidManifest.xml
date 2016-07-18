@@ -3,6 +3,7 @@
     package="madson.org.opentournament">
 
     <application
+        android:name=".OpenTournamentApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -19,13 +20,15 @@
             </intent-filter>
             
         </activity>
-        <activity
-            android:name=".management.TournamentManagementFragment"
-            android:label="@string/title_activity_tournament_list"
-            android:theme="@style/AppTheme.NoActionBar"/>
+
         <activity
             android:name=".tournament.TournamentPlayActivity"
             android:label="@string/title_activity_tournament_play"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity
+            android:name=".exception.ErrorActivity"
+            android:label="@string/title_activity_error"
             android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 

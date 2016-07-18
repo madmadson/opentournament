@@ -22,7 +22,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import madson.org.opentournament.OpenTournamentDatabase;
+import madson.org.opentournament.OpenTournamentDatabaseHelper;
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Tournament;
 
@@ -49,7 +49,7 @@ public class TournamentDetailFragment extends Fragment {
         Bundle bundle = getArguments();
 
         if (bundle != null && bundle.getLong("tournamentId") != 0) {
-            OpenTournamentDatabase dbHelper = new OpenTournamentDatabase(container.getContext());
+            OpenTournamentDatabaseHelper dbHelper = new OpenTournamentDatabaseHelper(container.getContext());
 
             SQLiteDatabase readableDatabase = dbHelper.getReadableDatabase();
             Cursor cursor = readableDatabase.query("tournament", Tournament.ALL_COLS_FOR_TOURNAMENT, "_id  = ?",
@@ -97,7 +97,7 @@ public class TournamentDetailFragment extends Fragment {
                         @Override
                         public void onClick(View v) {
 
-                            OpenTournamentDatabase dbHelper = new OpenTournamentDatabase(view.getContext());
+                            OpenTournamentDatabaseHelper dbHelper = new OpenTournamentDatabaseHelper(view.getContext());
 
                             SQLiteDatabase writableDatabase = dbHelper.getWritableDatabase();
 
@@ -127,7 +127,7 @@ public class TournamentDetailFragment extends Fragment {
                         @Override
                         public void onClick(View v) {
 
-                            OpenTournamentDatabase dbHelper = new OpenTournamentDatabase(view.getContext());
+                            OpenTournamentDatabaseHelper dbHelper = new OpenTournamentDatabaseHelper(view.getContext());
 
                             SQLiteDatabase writableDatabase = dbHelper.getWritableDatabase();
 

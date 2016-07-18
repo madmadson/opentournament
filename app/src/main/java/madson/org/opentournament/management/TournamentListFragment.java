@@ -1,6 +1,7 @@
 package madson.org.opentournament.management;
 
 import android.content.Context;
+import android.content.Intent;
 
 import android.database.Cursor;
 
@@ -19,8 +20,9 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
-import madson.org.opentournament.OpenTournamentDatabase;
+import madson.org.opentournament.OpenTournamentDatabaseHelper;
 import madson.org.opentournament.R;
+import madson.org.opentournament.tournament.TournamentPlayActivity;
 
 
 public class TournamentListFragment extends Fragment {
@@ -78,7 +80,7 @@ public class TournamentListFragment extends Fragment {
 
     public Cursor getCursorForTournaments() {
 
-        OpenTournamentDatabase dbHelper = new OpenTournamentDatabase(getActivity());
+        OpenTournamentDatabaseHelper dbHelper = new OpenTournamentDatabaseHelper(getActivity());
 
         readableDatabase = dbHelper.getReadableDatabase();
 
@@ -152,6 +154,10 @@ public class TournamentListFragment extends Fragment {
                         int id = cursor.getInt(cursor.getColumnIndex("_id"));
 
                         Log.i("TournamentList", "startTournamentClicked for tournament: " + id);
+
+                        Intent intent = new Intent(getContext(), TournamentPlayActivity.class);
+                        intent.putExtra("tournament_id", id);
+                        startActivity(intent);
                     }
                 });
 

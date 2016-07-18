@@ -27,6 +27,10 @@ public class Tournament {
         this.dateOfTournament = dateOfTournament;
     }
 
+
+    public Tournament() {
+    }
+
     public String getName() {
 
         return name;

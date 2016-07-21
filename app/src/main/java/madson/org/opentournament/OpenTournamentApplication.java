@@ -2,8 +2,12 @@ package madson.org.opentournament;
 
 import android.app.Application;
 
+import madson.org.opentournament.service.PlayerService;
+import madson.org.opentournament.service.PlayerServiceImpl;
 import madson.org.opentournament.service.TournamentService;
 import madson.org.opentournament.service.TournamentServiceImpl;
+
+import net.danlew.android.joda.JodaTimeAndroid;
 
 
 /**
@@ -13,25 +17,33 @@ import madson.org.opentournament.service.TournamentServiceImpl;
  */
 public class OpenTournamentApplication extends Application {
 
-    private static OpenTournamentDatabaseHelper dbHelper;
     private static TournamentService tournamentService;
+    private static PlayerService playerService;
 
-    public OpenTournamentDatabaseHelper getDBHelper() {
+    @Override
+    public void onCreate() {
 
-        if (dbHelper == null) {
-            dbHelper = new OpenTournamentDatabaseHelper(getApplicationContext());
-        }
-
-        return dbHelper;
+        super.onCreate();
+        JodaTimeAndroid.init(this);
     }
 
 
     public TournamentService getTournamentService() {
 
         if (tournamentService == null) {
-            tournamentService = new TournamentServiceImpl(getDBHelper());
+            tournamentService = new TournamentServiceImpl(getApplicationContext());
         }
 
         return tournamentService;
+    }
+
+
+    public PlayerService getPlayerService() {
+
+        if (playerService == null) {
+            playerService = new PlayerServiceImpl(getApplicationContext());
+        }
+
+        return getPlayerService();
     }
 }

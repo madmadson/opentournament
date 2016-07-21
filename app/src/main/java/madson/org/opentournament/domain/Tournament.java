@@ -12,13 +12,13 @@ public class Tournament {
 
     public static final String[] ALL_COLS_FOR_TOURNAMENT = { "_id", "name", "description", "numberOfPlayers", "date" };
 
-    private int _id;
+    private long _id;
     private String name;
     private String description;
     private int numberOfPlayers;
     private Date dateOfTournament;
 
-    public Tournament(int id, String name, String description, int numberOfPlayers, Date dateOfTournament) {
+    public Tournament(long id, String name, String description, int numberOfPlayers, Date dateOfTournament) {
 
         this._id = id;
         this.name = name;
@@ -37,7 +37,7 @@ public class Tournament {
     }
 
 
-    public int getId() {
+    public long getId() {
 
         return _id;
     }

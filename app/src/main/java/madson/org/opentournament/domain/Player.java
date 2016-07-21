@@ -12,9 +12,8 @@ public class Player {
     private String lastname;
     private String nickname;
 
-    public Player(int _id, String firstname, String lastname, String nickname) {
+    public Player(String firstname, String nickname, String lastname) {
 
-        this._id = _id;
         this.firstname = firstname;
         this.lastname = lastname;
         this.nickname = nickname;

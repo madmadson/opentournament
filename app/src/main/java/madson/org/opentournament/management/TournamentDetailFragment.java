@@ -114,7 +114,7 @@ public class TournamentDetailFragment extends Fragment {
 
                             TournamentService tournamentService =
                                 ((OpenTournamentApplication) getActivity().getApplication()).getTournamentService();
-                            tournamentService.insertNewTournament(contentValues);
+                            tournamentService.createTournament(contentValues);
 
                             Toast toast = Toast.makeText(getActivity(), R.string.newTournamentSaved,
                                     Toast.LENGTH_SHORT);

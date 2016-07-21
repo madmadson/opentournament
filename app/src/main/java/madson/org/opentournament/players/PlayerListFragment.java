@@ -17,13 +17,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
 import madson.org.opentournament.OpenTournamentApplication;
 import madson.org.opentournament.R;
+import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.service.TournamentService;
 import madson.org.opentournament.tournament.TournamentPlayActivity;
+
+import java.util.List;
 
 
 public class PlayerListFragment extends Fragment {
@@ -56,12 +60,8 @@ public class PlayerListFragment extends Fragment {
 
         TournamentService tournamentService = ((OpenTournamentApplication) getActivity().getApplication())
             .getTournamentService();
-        Cursor cursorForTournaments = tournamentService.getCursorForPlayersOfTournament(1L);
 
-        SimpleCursorAdapter simpleCursorAdapter = new MyAdapter(getActivity(), R.layout.tournament_list_row,
-                cursorForTournaments, new String[] { "name" }, new int[] { R.id.tournamentNameInList }, 0);
-
-        listView.setAdapter(simpleCursorAdapter);
+        List<Player> playersForTournament = tournamentService.getPlayersForTournament(1L);
 
         return view;
     }
@@ -102,19 +102,12 @@ public class PlayerListFragment extends Fragment {
         void onTournamentListItemClicked(long id);
     }
 
-    public class MyAdapter extends SimpleCursorAdapter {
+    public class MyAdapter extends ArrayAdapter {
 
-        public MyAdapter(Context context, int layout, Cursor c, String[] from, int[] to, int flags) {
+        public MyAdapter(Context context, int resource, List objects) {
 
-            super(context, layout, c, from, to, flags);
+            super(context, resource, objects);
         }
-
-        @Override
-        public void bindView(View view, Context context, Cursor cursor) {
-
-            super.bindView(view, context, cursor);
-        }
-
 
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
@@ -141,14 +134,14 @@ public class PlayerListFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
 
-                        Cursor cursor = (Cursor) getItem(position);
-                        int id = cursor.getInt(cursor.getColumnIndex("_id"));
-
-                        Log.i("TournamentList", "startTournamentClicked for tournament: " + id);
-
-                        Intent intent = new Intent(getContext(), TournamentPlayActivity.class);
-                        intent.putExtra("tournament_id", id);
-                        startActivity(intent);
+//                        Cursor cursor = (Cursor) getItem(position);
+//                        int id = cursor.getInt(cursor.getColumnIndex("_id"));
+//
+//                        Log.i("TournamentList", "startTournamentClicked for tournament: " + id);
+//
+//                        Intent intent = new Intent(getContext(), TournamentPlayActivity.class);
+//                        intent.putExtra("tournament_id", id);
+//                        startActivity(intent);
                     }
                 });
 

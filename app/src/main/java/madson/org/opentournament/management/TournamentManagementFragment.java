@@ -27,9 +27,6 @@ public class TournamentManagementFragment extends Fragment
         TournamentDetailFragment.OnTournamentEditedListener {
 
     public static final String TAG = "tournament_management_fragment";
-    private CursorAdapter cursorAdapter;
-    private Cursor cursor;
-    private SQLiteDatabase readableDatabase;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

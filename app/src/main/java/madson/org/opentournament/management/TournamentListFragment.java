@@ -1,37 +1,36 @@
 package madson.org.opentournament.management;
 
 import android.content.Context;
-import android.content.Intent;
 
 import android.database.Cursor;
-
-import android.database.sqlite.SQLiteDatabase;
 
 import android.os.Bundle;
 
 import android.support.v4.app.Fragment;
-
-import android.util.Log;
+import android.support.v4.app.FragmentActivity;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
 import madson.org.opentournament.OpenTournamentApplication;
 import madson.org.opentournament.R;
+import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.service.TournamentService;
-import madson.org.opentournament.tournament.TournamentPlayActivity;
+
+import java.util.List;
 
 
 public class TournamentListFragment extends Fragment {
 
     public static final String TAG = "tournament_list_fragment";
+
+    private TournamentService tournamentService;
     private OnListFragmentInteractionListener mListener;
-    private Cursor cursor;
-    private SQLiteDatabase readableDatabase;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the fragment (e.g. upon screen orientation
@@ -44,6 +43,10 @@ public class TournamentListFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+
+        if (tournamentService == null) {
+            tournamentService = ((OpenTournamentApplication) getActivity().getApplication()).getTournamentService();
+        }
     }
 
 
@@ -54,14 +57,12 @@ public class TournamentListFragment extends Fragment {
 
         ListView listView = (ListView) view.findViewById(R.id.tournament_list_view);
 
-        TournamentService tournamentService = ((OpenTournamentApplication) getActivity().getApplication())
-            .getTournamentService();
-        Cursor cursorForTournaments = tournamentService.getCursorForAllTournaments();
+        List<Tournament> tournaments = tournamentService.getTournaments();
 
-        SimpleCursorAdapter simpleCursorAdapter = new MyAdapter(getActivity(), R.layout.tournament_list_row,
-                cursorForTournaments, new String[] { "name" }, new int[] { R.id.tournamentNameInList }, 0);
+        TournamentListAdapter tournamentListAdapter = new TournamentListAdapter(getActivity(),
+                R.layout.tournament_list_row, tournaments);
 
-        listView.setAdapter(simpleCursorAdapter);
+        listView.setAdapter(tournamentListAdapter);
 
         return view;
     }
@@ -93,19 +94,12 @@ public class TournamentListFragment extends Fragment {
         void onTournamentListItemClicked(long id);
     }
 
-    public class MyAdapter extends SimpleCursorAdapter {
+    public class TournamentListAdapter extends ArrayAdapter {
 
-        public MyAdapter(Context context, int layout, Cursor c, String[] from, int[] to, int flags) {
+        public TournamentListAdapter(Context context, int resource, List objects) {
 
-            super(context, layout, c, from, to, flags);
+            super(context, resource, objects);
         }
-
-        @Override
-        public void bindView(View view, Context context, Cursor cursor) {
-
-            super.bindView(view, context, cursor);
-        }
-
 
         @Override
         public View getView(final int position, View convertView, ViewGroup parent) {
@@ -132,14 +126,14 @@ public class TournamentListFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
 
-                        Cursor cursor = (Cursor) getItem(position);
-                        int id = cursor.getInt(cursor.getColumnIndex("_id"));
-
-                        Log.i("TournamentList", "startTournamentClicked for tournament: " + id);
-
-                        Intent intent = new Intent(getContext(), TournamentPlayActivity.class);
-                        intent.putExtra("tournament_id", id);
-                        startActivity(intent);
+//                        Cursor cursor = (Cursor) getItem(position);
+//                        int id = cursor.getInt(cursor.getColumnIndex("_id"));
+//
+//                        Log.i("TournamentList", "startTournamentClicked for tournament: " + id);
+//
+//                        Intent intent = new Intent(getContext(), TournamentPlayActivity.class);
+//                        intent.putExtra("tournament_id", id);
+//                        startActivity(intent);
                     }
                 });
 

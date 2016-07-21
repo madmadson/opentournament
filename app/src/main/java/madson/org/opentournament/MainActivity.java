@@ -24,8 +24,6 @@ import madson.org.opentournament.management.TournamentManagementFragment;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    private static OpenTournamentDatabaseHelper dbHelper;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -131,15 +129,5 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawer.closeDrawer(GravityCompat.START);
 
         return true;
-    }
-
-
-    public OpenTournamentDatabaseHelper getDBHelper() {
-
-        if (dbHelper == null) {
-            dbHelper = new OpenTournamentDatabaseHelper(getApplicationContext());
-        }
-
-        return dbHelper;
     }
 }

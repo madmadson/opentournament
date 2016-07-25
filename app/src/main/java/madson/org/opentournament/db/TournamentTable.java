@@ -1,14 +1,8 @@
 package madson.org.opentournament.db;
 
-import android.content.ContentValues;
-import android.content.Context;
-
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 
 import android.util.Log;
-
-import java.util.Calendar;
 
 import static java.util.Calendar.getInstance;
 
@@ -18,7 +12,7 @@ import static java.util.Calendar.getInstance;
  *
  * @author  Tobias Matt - tmatt@contargo.net
  */
-public class TournamentDBHelper extends SQLiteOpenHelper {
+public class TournamentTable {
 
     public static final String TABLE_TOURNAMENTS = "tournament";
     public static final String COLUMN_ID = "_id";
@@ -27,17 +21,9 @@ public class TournamentDBHelper extends SQLiteOpenHelper {
     public static final String COLUMN_DATE = "date";
     public static final String COLUMN_NUMBER_OF_PLAYERS = "numberOfPlayers";
 
-    private static final String DB_NAME = "opentournament.db";
-    private static final int DB_VERSION = 1;
+    public void createTable(SQLiteDatabase db) {
 
-    public TournamentDBHelper(Context context) {
-
-        super(context, DB_NAME, null, DB_VERSION);
-    }
-
-    @Override
-    public void onCreate(SQLiteDatabase db) {
-
+        Log.i(TournamentTable.class.getName(), "cretae tournament table");
         db.execSQL(" CREATE TABLE " + TABLE_TOURNAMENTS
             + " (" + COLUMN_ID
             + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_NAME
@@ -46,13 +32,12 @@ public class TournamentDBHelper extends SQLiteOpenHelper {
     }
 
 
-    @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
-        Log.w(TournamentDBHelper.class.getName(),
+        Log.i(TournamentTable.class.getName(),
             "Upgrading database from version " + oldVersion + " to " + newVersion
             + ", which will destroy all old data");
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_TOURNAMENTS);
-        onCreate(db);
+        createTable(db);
     }
 }

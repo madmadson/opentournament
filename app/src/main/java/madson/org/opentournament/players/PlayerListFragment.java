@@ -56,12 +56,12 @@ public class PlayerListFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_tournament_list, container, false);
 
-        ListView listView = (ListView) view.findViewById(R.id.tournament_list_view);
-
-        TournamentService tournamentService = ((OpenTournamentApplication) getActivity().getApplication())
-            .getTournamentService();
-
-        List<Player> playersForTournament = tournamentService.getPlayersForTournament(1L);
+//        ListView listView = (ListView) view.findViewById(R.id.tournament_list_view);
+//
+//        TournamentService tournamentService = ((OpenTournamentApplication) getActivity().getApplication())
+//            .getTournamentService();
+//
+//        List<Player> playersForTournament = tournamentService.getPlayersForTournament(1L);
 
         return view;
     }

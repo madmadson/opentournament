@@ -2,20 +2,21 @@ package madson.org.opentournament.management;
 
 import android.content.Context;
 
-import android.database.Cursor;
-
 import android.os.Bundle;
 
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
+
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+
+import android.util.Log;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;
+import android.widget.ImageButton;
+import android.widget.TextView;
 
 import madson.org.opentournament.OpenTournamentApplication;
 import madson.org.opentournament.R;
@@ -55,14 +56,18 @@ public class TournamentListFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_tournament_list, container, false);
 
-        ListView listView = (ListView) view.findViewById(R.id.tournament_list_view);
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.tournament_reclcyer_view);
+
+        recyclerView.setHasFixedSize(true);
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+        recyclerView.setLayoutManager(linearLayoutManager);
 
         List<Tournament> tournaments = tournamentService.getTournaments();
 
-        TournamentListAdapter tournamentListAdapter = new TournamentListAdapter(getActivity(),
-                R.layout.tournament_list_row, tournaments);
+        TournamentListAdapter tournamentListAdapter = new TournamentListAdapter(tournaments);
 
-        listView.setAdapter(tournamentListAdapter);
+        recyclerView.setAdapter(tournamentListAdapter);
 
         return view;
     }
@@ -94,50 +99,78 @@ public class TournamentListFragment extends Fragment {
         void onTournamentListItemClicked(long id);
     }
 
-    public class TournamentListAdapter extends ArrayAdapter {
+    public class TournamentListAdapter extends RecyclerView.Adapter<TournamentListAdapter.ViewHolder> {
 
-        public TournamentListAdapter(Context context, int resource, List objects) {
+        private List<Tournament> mDataset;
 
-            super(context, resource, objects);
+        public TournamentListAdapter(List<Tournament> myDataset) {
+
+            mDataset = myDataset;
         }
 
         @Override
-        public View getView(final int position, View convertView, ViewGroup parent) {
+        public TournamentListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-            View item = super.getView(position, convertView, parent);
+            // create a new view
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.tournament_list_row, parent, false);
 
-            item.setOnClickListener(new View.OnClickListener() {
+            // set the view's size, margins, paddings and layout parameters
+            ViewHolder vh = new ViewHolder(v);
 
-                    @Override
-                    public void onClick(View v) {
+            return vh;
+        }
 
-                        if (mListener != null) {
-                            Cursor cursor = (Cursor) getItem(position);
-                            int id = cursor.getInt(cursor.getColumnIndex("_id"));
-                            mListener.onTournamentListItemClicked(id);
-                        }
-                    }
-                });
 
-            View startTournamentButton = item.findViewById(R.id.startTournamentButton);
+        @Override
+        public void onBindViewHolder(TournamentListAdapter.ViewHolder holder, int position) {
 
-            startTournamentButton.setOnClickListener(new View.OnClickListener() {
+            final Tournament tournament = mDataset.get(position);
+            holder.tournamentNameInList.setText(tournament.getName());
+            holder.startTournamentButton.setOnClickListener(new View.OnClickListener() {
 
                     @Override
                     public void onClick(View v) {
 
-//                        Cursor cursor = (Cursor) getItem(position);
-//                        int id = cursor.getInt(cursor.getColumnIndex("_id"));
-//
-//                        Log.i("TournamentList", "startTournamentClicked for tournament: " + id);
-//
-//                        Intent intent = new Intent(getContext(), TournamentPlayActivity.class);
-//                        intent.putExtra("tournament_id", id);
-//                        startActivity(intent);
+                        Log.i(v.getClass().getName(), "tournament Stared");
+                        // mListener.onTournamentListItemClicked(id);
                     }
                 });
+        }
 
-            return item;
+
+        @Override
+        public int getItemCount() {
+
+            return mDataset.size();
+        }
+
+
+        public void add(int position, Tournament item) {
+
+            mDataset.add(position, item);
+            notifyItemInserted(position);
+        }
+
+
+        public void remove(Tournament item) {
+
+            int position = mDataset.indexOf(item);
+            mDataset.remove(position);
+            notifyItemRemoved(position);
+        }
+
+        public class ViewHolder extends RecyclerView.ViewHolder {
+
+            public TextView tournamentNameInList;
+            public ImageButton startTournamentButton;
+
+            public ViewHolder(View v) {
+
+                super(v);
+
+                tournamentNameInList = (TextView) v.findViewById(R.id.tournamentNameInList);
+                startTournamentButton = (ImageButton) v.findViewById(R.id.startTournamentButton);
+            }
         }
     }
 }

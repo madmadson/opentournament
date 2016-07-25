@@ -4,16 +4,14 @@ import android.content.ContentValues;
 import android.content.Context;
 
 import android.database.Cursor;
-import android.database.SQLException;
 
 import android.database.sqlite.SQLiteDatabase;
 
 import android.util.Log;
 
 import madson.org.opentournament.OpenTournamentApplication;
-import madson.org.opentournament.db.PlayerDBHelper;
-import madson.org.opentournament.db.TournamentDBHelper;
-import madson.org.opentournament.db.TournamentPlayerDBHelper;
+import madson.org.opentournament.db.OpenTournamentDBHelper;
+import madson.org.opentournament.db.TournamentTable;
 import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.Tournament;
 
@@ -31,16 +29,16 @@ import java.util.List;
  */
 public class TournamentServiceImpl implements TournamentService {
 
-    private TournamentDBHelper tournamentDBHelper;
+    private OpenTournamentDBHelper openTournamentDBHelper;
     private PlayerService playerService;
     private String[] allColumns = {
-        TournamentDBHelper.COLUMN_ID, TournamentDBHelper.COLUMN_NAME, TournamentDBHelper.COLUMN_DESCRIPTION,
-        TournamentDBHelper.COLUMN_DATE, TournamentDBHelper.COLUMN_NUMBER_OF_PLAYERS
+        TournamentTable.COLUMN_ID, TournamentTable.COLUMN_NAME, TournamentTable.COLUMN_DESCRIPTION,
+        TournamentTable.COLUMN_DATE, TournamentTable.COLUMN_NUMBER_OF_PLAYERS
     };
 
     public TournamentServiceImpl(Context context) {
 
-        Log.w(TournamentServiceImpl.class.getName(), "TournamentServiceImpl Constructor");
+        Log.i(TournamentServiceImpl.class.getName(), "TournamentServiceImpl Constructor");
 
         OpenTournamentApplication application = (OpenTournamentApplication) context;
 
@@ -48,8 +46,8 @@ public class TournamentServiceImpl implements TournamentService {
             playerService = application.getPlayerService();
         }
 
-        if (tournamentDBHelper == null) {
-            tournamentDBHelper = new TournamentDBHelper(context);
+        if (openTournamentDBHelper == null) {
+            openTournamentDBHelper = new OpenTournamentDBHelper(context);
         }
 
         createMockTournaments();
@@ -66,10 +64,10 @@ public class TournamentServiceImpl implements TournamentService {
     private void createTournament(String name, String description, Date date, int numberOfPlayers) {
 
         ContentValues contentValues = new ContentValues();
-        contentValues.put(TournamentDBHelper.COLUMN_NAME, name);
-        contentValues.put(TournamentDBHelper.COLUMN_DESCRIPTION, description);
-        contentValues.put(TournamentDBHelper.COLUMN_DATE, date.toString());
-        contentValues.put(TournamentDBHelper.COLUMN_NUMBER_OF_PLAYERS, numberOfPlayers);
+        contentValues.put(TournamentTable.COLUMN_NAME, name);
+        contentValues.put(TournamentTable.COLUMN_DESCRIPTION, description);
+        contentValues.put(TournamentTable.COLUMN_DATE, date.toString());
+        contentValues.put(TournamentTable.COLUMN_NUMBER_OF_PLAYERS, numberOfPlayers);
         createTournament(contentValues);
     }
 
@@ -78,9 +76,9 @@ public class TournamentServiceImpl implements TournamentService {
     public Tournament getTournamentForId(Long id) {
 
         Tournament tournament = new Tournament();
-        SQLiteDatabase readableDatabase = tournamentDBHelper.getReadableDatabase();
+        SQLiteDatabase readableDatabase = openTournamentDBHelper.getReadableDatabase();
 
-        Cursor cursor = readableDatabase.query(TournamentDBHelper.TABLE_TOURNAMENTS, Tournament.ALL_COLS_FOR_TOURNAMENT,
+        Cursor cursor = readableDatabase.query(TournamentTable.TABLE_TOURNAMENTS, Tournament.ALL_COLS_FOR_TOURNAMENT,
                 "_id  = ?", new String[] { Long.toString(id) }, null, null, null);
 
         if (cursor.moveToFirst()) {
@@ -104,9 +102,9 @@ public class TournamentServiceImpl implements TournamentService {
     @Override
     public void createTournament(ContentValues contentValues) {
 
-        SQLiteDatabase writableDatabase = tournamentDBHelper.getWritableDatabase();
+        SQLiteDatabase writableDatabase = openTournamentDBHelper.getWritableDatabase();
 
-        writableDatabase.insert(TournamentDBHelper.TABLE_TOURNAMENTS, null, contentValues);
+        writableDatabase.insert(TournamentTable.TABLE_TOURNAMENTS, null, contentValues);
 
         writableDatabase.close();
     }
@@ -115,9 +113,9 @@ public class TournamentServiceImpl implements TournamentService {
     @Override
     public void editTournament(Long tournamentId, ContentValues contentValues) {
 
-        SQLiteDatabase writableDatabase = tournamentDBHelper.getWritableDatabase();
+        SQLiteDatabase writableDatabase = openTournamentDBHelper.getWritableDatabase();
 
-        writableDatabase.update(TournamentDBHelper.TABLE_TOURNAMENTS, contentValues, "_id = ?",
+        writableDatabase.update(TournamentTable.TABLE_TOURNAMENTS, contentValues, "_id = ?",
             new String[] { String.valueOf(tournamentId) });
 
         writableDatabase.close();
@@ -128,11 +126,10 @@ public class TournamentServiceImpl implements TournamentService {
     public List<Player> getPlayersForTournament(Long tournamentId) {
 
         ArrayList<Player> players = new ArrayList<>();
-        SQLiteDatabase readableDatabase = tournamentDBHelper.getReadableDatabase();
+        SQLiteDatabase readableDatabase = openTournamentDBHelper.getReadableDatabase();
 
-        Cursor cursor = readableDatabase.query(TournamentDBHelper.TABLE_TOURNAMENTS,
-                new String[] { "_id", "player_id" }, "tournament_id  = ?", new String[] { Long.toString(tournamentId) },
-                null, null, null);
+        Cursor cursor = readableDatabase.query(TournamentTable.TABLE_TOURNAMENTS, new String[] { "_id", "player_id" },
+                "tournament_id  = ?", new String[] { Long.toString(tournamentId) }, null, null, null);
 
         cursor.moveToFirst();
 
@@ -154,9 +151,9 @@ public class TournamentServiceImpl implements TournamentService {
 
         ArrayList<Tournament> tournaments = new ArrayList<>();
 
-        SQLiteDatabase readableDatabase = tournamentDBHelper.getReadableDatabase();
+        SQLiteDatabase readableDatabase = openTournamentDBHelper.getReadableDatabase();
 
-        Cursor cursor = readableDatabase.query(TournamentDBHelper.TABLE_TOURNAMENTS, allColumns, null, null, null, null,
+        Cursor cursor = readableDatabase.query(TournamentTable.TABLE_TOURNAMENTS, allColumns, null, null, null, null,
                 null);
 
         cursor.moveToFirst();

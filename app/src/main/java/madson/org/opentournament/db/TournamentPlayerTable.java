@@ -1,10 +1,8 @@
 package madson.org.opentournament.db;
 
 import android.content.ContentValues;
-import android.content.Context;
 
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 
 import android.util.Log;
 
@@ -14,23 +12,16 @@ import android.util.Log;
  *
  * @author  Tobias Matt - tmatt@contargo.net
  */
-public class TournamentPlayerDBHelper extends SQLiteOpenHelper {
+public class TournamentPlayerTable {
 
     public static final String TABLE_TOURNAMENT_PLAYER = "tournament_player";
     public static final String COLUMN_ID = "_id";
     public static final String COLUMN_TOURNAMENT_ID = "tournament_id";
     public static final String COLUMN_PLAYER_ID = "player_id";
 
-    private static final String DB_NAME = "opentournament.db";
-    private static final int DB_VERSION = 1;
+    public void createTable(SQLiteDatabase db) {
 
-    public TournamentPlayerDBHelper(Context context) {
-
-        super(context, DB_NAME, null, DB_VERSION);
-    }
-
-    @Override
-    public void onCreate(SQLiteDatabase db) {
+        Log.i(this.getClass().getName(), "create tournament_player table");
 
         db.execSQL(" CREATE TABLE " + TABLE_TOURNAMENT_PLAYER
             + " (" + COLUMN_ID
@@ -56,13 +47,12 @@ public class TournamentPlayerDBHelper extends SQLiteOpenHelper {
     }
 
 
-    @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
-        Log.w(TournamentPlayerDBHelper.class.getName(),
+        Log.w(TournamentPlayerTable.class.getName(),
             "Upgrading database from version " + oldVersion + " to " + newVersion
             + ", which will destroy all old data");
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_TOURNAMENT_PLAYER);
-        onCreate(db);
+        createTable(db);
     }
 }

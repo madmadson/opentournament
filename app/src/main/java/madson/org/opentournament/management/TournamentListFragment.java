@@ -16,7 +16,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -24,7 +23,7 @@ import madson.org.opentournament.OpenTournamentApplication;
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.service.TournamentService;
-import madson.org.opentournament.tournament.TournamentPlayActivity;
+import madson.org.opentournament.tournament.OngoingTournamentActivity;
 
 import java.util.List;
 
@@ -138,8 +137,8 @@ public class TournamentListFragment extends Fragment {
                         Log.i(v.getClass().getName(), "tournament Stared:" + tournament);
                         // mListener.onTournamentListItemClicked(tournament.getId());
 
-                        Intent intent = new Intent(getContext(), TournamentPlayActivity.class);
-                        intent.putExtra(TournamentPlayActivity.EXTRA_TOURNAMENT_ID, tournament.getId());
+                        Intent intent = new Intent(getContext(), OngoingTournamentActivity.class);
+                        intent.putExtra(OngoingTournamentActivity.EXTRA_TOURNAMENT_ID, tournament.getId());
                         startActivity(intent);
                     }
                 });

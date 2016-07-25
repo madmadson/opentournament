@@ -22,7 +22,7 @@
         </activity>
 
         <activity
-            android:name=".tournament.TournamentPlayActivity"
+            android:name=".tournament.OngoingTournamentActivity"
             android:label="@string/title_activity_tournament_play"
             android:theme="@style/AppTheme.NoActionBar"/>
 

@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -125,14 +126,15 @@ public class TournamentListFragment extends Fragment {
         public void onBindViewHolder(TournamentListAdapter.ViewHolder holder, int position) {
 
             final Tournament tournament = mDataset.get(position);
-            holder.tournamentNameInList.setText(tournament.getName());
-            holder.startTournamentButton.setOnClickListener(new View.OnClickListener() {
+            holder.setTournament(tournament);
+            holder.getTournamentNameInList().setText(tournament.getName());
+            holder.getStartTournamentButton().setOnClickListener(new View.OnClickListener() {
 
                     @Override
                     public void onClick(View v) {
 
-                        Log.i(v.getClass().getName(), "tournament Stared");
-                        // mListener.onTournamentListItemClicked(id);
+                        Log.i(v.getClass().getName(), "tournament Stared:" + tournament);
+                        // mListener.onTournamentListItemClicked(tournament.getId());
                     }
                 });
         }
@@ -159,17 +161,43 @@ public class TournamentListFragment extends Fragment {
             notifyItemRemoved(position);
         }
 
-        public class ViewHolder extends RecyclerView.ViewHolder {
+        public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-            public TextView tournamentNameInList;
-            public ImageButton startTournamentButton;
+            private TextView tournamentNameInList;
+            private ImageButton startTournamentButton;
+            private Tournament tournament;
 
             public ViewHolder(View v) {
 
                 super(v);
+                v.setOnClickListener(this);
 
                 tournamentNameInList = (TextView) v.findViewById(R.id.tournamentNameInList);
                 startTournamentButton = (ImageButton) v.findViewById(R.id.startTournamentButton);
+            }
+
+            @Override
+            public void onClick(View v) {
+
+                mListener.onTournamentListItemClicked(tournament.getId());
+            }
+
+
+            public TextView getTournamentNameInList() {
+
+                return tournamentNameInList;
+            }
+
+
+            public ImageButton getStartTournamentButton() {
+
+                return startTournamentButton;
+            }
+
+
+            public void setTournament(Tournament tournament) {
+
+                this.tournament = tournament;
             }
         }
     }

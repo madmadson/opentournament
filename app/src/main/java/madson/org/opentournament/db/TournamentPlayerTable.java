@@ -27,23 +27,6 @@ public class TournamentPlayerTable {
             + " (" + COLUMN_ID
             + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_TOURNAMENT_ID
             + " INTEGER, " + COLUMN_PLAYER_ID + " INTEGER)");
-
-        ContentValues contentValues = new ContentValues();
-        contentValues.put("tournament_id", 1);
-        contentValues.put("player_id", 1);
-        db.insert(TABLE_TOURNAMENT_PLAYER, null, contentValues);
-        contentValues.clear();
-
-        contentValues = new ContentValues();
-        contentValues.put("tournament_id", 1);
-        contentValues.put("player_id", 2);
-        db.insert(TABLE_TOURNAMENT_PLAYER, null, contentValues);
-        contentValues.clear();
-
-        contentValues = new ContentValues();
-        contentValues.put("tournament_id", 1);
-        contentValues.put("player_id", 3);
-        db.insert(TABLE_TOURNAMENT_PLAYER, null, contentValues);
     }
 
 

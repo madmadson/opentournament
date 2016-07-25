@@ -46,11 +46,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
 
         FragmentManager manager = getSupportFragmentManager();
-        Fragment fragment = manager.findFragmentByTag(HomeFragment.TAG);
+        Fragment fragment = manager.findFragmentByTag(TournamentManagementFragment.TAG);
 
         if (fragment == null) {
-            fragment = new HomeFragment();
-            manager.beginTransaction().replace(R.id.main_fragment_container, fragment, HomeFragment.TAG).commit();
+            fragment = new TournamentManagementFragment();
+            manager.beginTransaction()
+                .replace(R.id.main_fragment_container, fragment, TournamentManagementFragment.TAG)
+                .commit();
         }
     }
 

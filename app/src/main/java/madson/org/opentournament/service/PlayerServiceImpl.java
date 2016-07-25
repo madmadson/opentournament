@@ -32,8 +32,17 @@ public class PlayerServiceImpl implements PlayerService {
             openTournamentDBHelper = new OpenTournamentDBHelper(context);
         }
 
+        deleteAllPlayers();
         createMockPlayers();
     }
+
+    private void deleteAllPlayers() {
+
+        SQLiteDatabase writableDatabase = openTournamentDBHelper.getWritableDatabase();
+
+        writableDatabase.delete(PlayerTable.TABLE_PLAYER, null, null);
+    }
+
 
     private void createMockPlayers() {
 

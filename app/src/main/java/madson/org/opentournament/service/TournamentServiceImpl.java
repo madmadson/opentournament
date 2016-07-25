@@ -50,6 +50,7 @@ public class TournamentServiceImpl implements TournamentService {
             openTournamentDBHelper = new OpenTournamentDBHelper(context);
         }
 
+        deleteAllTournaments();
         createMockTournaments();
     }
 
@@ -89,6 +90,14 @@ public class TournamentServiceImpl implements TournamentService {
         readableDatabase.close();
 
         return tournament;
+    }
+
+
+    private void deleteAllTournaments() {
+
+        SQLiteDatabase writableDatabase = openTournamentDBHelper.getWritableDatabase();
+
+        writableDatabase.delete(TournamentTable.TABLE_TOURNAMENTS, null, null);
     }
 
 

@@ -5,6 +5,8 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import static madson.org.opentournament.db.TournamentPlayerTable.*;
+
 
 /**
  * Management for opentournament database.
@@ -16,25 +18,17 @@ public class OpenTournamentDBHelper extends SQLiteOpenHelper {
     private static final String DB_NAME = "opentournament.db";
     private static final int DB_VERSION = 1;
 
-    TournamentTable tournamentTable;
-    PlayerTable playerTable;
-    TournamentPlayerTable tournamentPlayerTable;
-
     public OpenTournamentDBHelper(Context context) {
 
         super(context, DB_NAME, null, DB_VERSION);
-
-        tournamentTable = new TournamentTable();
-        playerTable = new PlayerTable();
-        tournamentPlayerTable = new TournamentPlayerTable();
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
 
-        tournamentTable.createTable(db);
-        playerTable.createTable(db);
-        tournamentPlayerTable.createTable(db);
+        TournamentTable.createTable(db);
+        PlayerTable.createTable(db);
+        TournamentPlayerTable.createTable(db);
     }
 
 

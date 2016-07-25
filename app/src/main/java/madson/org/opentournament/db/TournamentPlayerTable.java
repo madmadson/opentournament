@@ -19,9 +19,9 @@ public class TournamentPlayerTable {
     public static final String COLUMN_TOURNAMENT_ID = "tournament_id";
     public static final String COLUMN_PLAYER_ID = "player_id";
 
-    public void createTable(SQLiteDatabase db) {
+    public static void createTable(SQLiteDatabase db) {
 
-        Log.i(this.getClass().getName(), "create tournament_player table");
+        Log.i(TournamentPlayerTable.class.getName(), "create tournament_player table");
 
         db.execSQL(" CREATE TABLE " + TABLE_TOURNAMENT_PLAYER
             + " (" + COLUMN_ID
@@ -47,7 +47,7 @@ public class TournamentPlayerTable {
     }
 
 
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+    public static void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
         Log.w(TournamentPlayerTable.class.getName(),
             "Upgrading database from version " + oldVersion + " to " + newVersion

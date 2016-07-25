@@ -21,7 +21,7 @@ public class TournamentTable {
     public static final String COLUMN_DATE = "date";
     public static final String COLUMN_NUMBER_OF_PLAYERS = "numberOfPlayers";
 
-    public void createTable(SQLiteDatabase db) {
+    public static void createTable(SQLiteDatabase db) {
 
         Log.i(TournamentTable.class.getName(), "cretae tournament table");
         db.execSQL(" CREATE TABLE " + TABLE_TOURNAMENTS
@@ -32,7 +32,7 @@ public class TournamentTable {
     }
 
 
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+    public static void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
         Log.i(TournamentTable.class.getName(),
             "Upgrading database from version " + oldVersion + " to " + newVersion

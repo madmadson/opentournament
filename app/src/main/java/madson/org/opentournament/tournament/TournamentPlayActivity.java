@@ -36,7 +36,7 @@ public class TournamentPlayActivity extends AppCompatActivity {
 
         Bundle extras = intent.getExtras();
 
-        int tournamentId = extras.getInt(EXTRA_TOURNAMENT_ID);
+        long tournamentId = (long) extras.get(EXTRA_TOURNAMENT_ID);
 
         if (tournamentId != 0) {
             Log.i(this.getClass().toString(), "tournament started with id " + tournamentId);
@@ -44,7 +44,7 @@ public class TournamentPlayActivity extends AppCompatActivity {
             ActionBar supportActionBar = getSupportActionBar();
 
             TournamentService tournamentService = ((OpenTournamentApplication) getApplication()).getTournamentService();
-            Tournament tournament = tournamentService.getTournamentForId((long) tournamentId);
+            Tournament tournament = tournamentService.getTournamentForId(tournamentId);
 
             supportActionBar.setTitle(tournament.getName());
         } else {

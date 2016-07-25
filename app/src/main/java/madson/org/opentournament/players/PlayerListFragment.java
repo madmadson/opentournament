@@ -139,9 +139,7 @@ public class PlayerListFragment extends Fragment {
 //
 //                        Log.i("TournamentList", "startTournamentClicked for tournament: " + id);
 //
-//                        Intent intent = new Intent(getContext(), TournamentPlayActivity.class);
-//                        intent.putExtra("tournament_id", id);
-//                        startActivity(intent);
+
                     }
                 });
 

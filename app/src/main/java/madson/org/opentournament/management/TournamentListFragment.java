@@ -1,6 +1,7 @@
 package madson.org.opentournament.management;
 
 import android.content.Context;
+import android.content.Intent;
 
 import android.os.Bundle;
 
@@ -23,6 +24,7 @@ import madson.org.opentournament.OpenTournamentApplication;
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.service.TournamentService;
+import madson.org.opentournament.tournament.TournamentPlayActivity;
 
 import java.util.List;
 
@@ -135,6 +137,10 @@ public class TournamentListFragment extends Fragment {
 
                         Log.i(v.getClass().getName(), "tournament Stared:" + tournament);
                         // mListener.onTournamentListItemClicked(tournament.getId());
+
+                        Intent intent = new Intent(getContext(), TournamentPlayActivity.class);
+                        intent.putExtra(TournamentPlayActivity.EXTRA_TOURNAMENT_ID, tournament.getId());
+                        startActivity(intent);
                     }
                 });
         }

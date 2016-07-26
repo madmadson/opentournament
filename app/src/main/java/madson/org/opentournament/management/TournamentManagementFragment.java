@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import madson.org.opentournament.R;
+import madson.org.opentournament.utility.DrawerLocker;
 
 
 public class TournamentManagementFragment extends Fragment
@@ -52,28 +53,44 @@ public class TournamentManagementFragment extends Fragment
         final View view = getView();
 
         if (view != null) {
-            FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
-            fab.setOnClickListener(new View.OnClickListener() {
+            final FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
 
-                    // new empty tournament
-                    @Override
-                    public void onClick(View view) {
+            if (view.findViewById(R.id.right_fragment_container) == null) {
+                fab.setOnClickListener(new View.OnClickListener() {
 
-                        TournamentDetailFragment tournamentDetailFragment = new TournamentDetailFragment();
+                        // new empty tournament
+                        @Override
+                        public void onClick(View view) {
 
-                        FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
+                            TournamentDetailFragment tournamentDetailFragment = new TournamentDetailFragment();
 
-                        if (view.findViewById(R.id.right_fragment_container) == null) {
+                            FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
+
+                            ((DrawerLocker) getActivity()).setDrawerEnabled(false);
+
+                            fab.hide();
+
                             fragmentTransaction.replace(R.id.left_fragment_container, tournamentDetailFragment);
                             fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
                             fragmentTransaction.commit();
-                        } else {
+                        }
+                    });
+            } else {
+                fab.setOnClickListener(new View.OnClickListener() {
+
+                        @Override
+                        public void onClick(View v) {
+
+                            TournamentDetailFragment tournamentDetailFragment = new TournamentDetailFragment();
+
+                            FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
+
                             fragmentTransaction.replace(R.id.right_fragment_container, tournamentDetailFragment);
                             fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
                             fragmentTransaction.commit();
                         }
-                    }
-                });
+                    });
+            }
         }
     }
 
@@ -92,7 +109,12 @@ public class TournamentManagementFragment extends Fragment
 
         FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
 
+        final FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
+
         if (view.findViewById(R.id.right_fragment_container) == null) {
+            ((DrawerLocker) getActivity()).setDrawerEnabled(false);
+
+            fab.hide();
             fragmentTransaction.replace(R.id.left_fragment_container, tournamentDetailFragment);
             fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
             fragmentTransaction.commit();
@@ -112,8 +134,12 @@ public class TournamentManagementFragment extends Fragment
         TournamentListFragment tournamentListFragment = new TournamentListFragment();
 
         FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
+        final FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
 
         if (view.findViewById(R.id.right_fragment_container) == null) {
+            ((DrawerLocker) getActivity()).setDrawerEnabled(false);
+
+            fab.hide();
             fragmentTransaction.replace(R.id.left_fragment_container, tournamentListFragment);
             fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
             fragmentTransaction.commit();

@@ -71,7 +71,6 @@ public class OngoingTournamentActivity extends AppCompatActivity
             ActionBar supportActionBar = getSupportActionBar();
 
             if (supportActionBar != null) {
-                supportActionBar.setDisplayHomeAsUpEnabled(true);
                 supportActionBar.setTitle(tournament.getName());
             }
         } else {

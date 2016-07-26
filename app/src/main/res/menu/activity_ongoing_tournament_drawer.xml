@@ -2,10 +2,20 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/ic_home_black_24dp"
+            android:title="@string/nav_home_activity" />
         <item
             android:id="@+id/nav_tournaments_setup"
-            android:icon="@drawable/ic_home_black_24dp"
-            android:title="@string/tournament_setup" />
+            android:icon="@drawable/ic_build_black_24dp"
+            android:title="@string/nav_tournament_setup" />
+
+        <item
+            android:id="@+id/nav_tournaments_final"
+            android:icon="@drawable/ic_done_all_black_24dp"
+            android:title="@string/nav_tournament_final" />
 
     </group>
 </menu>

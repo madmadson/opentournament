@@ -1,9 +1,5 @@
 package madson.org.opentournament.management;
 
-import android.database.Cursor;
-
-import android.database.sqlite.SQLiteDatabase;
-
 import android.os.Bundle;
 
 import android.support.design.widget.FloatingActionButton;
@@ -16,8 +12,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import android.widget.CursorAdapter;
 
 import madson.org.opentournament.R;
 
@@ -37,7 +31,7 @@ public class TournamentManagementFragment extends Fragment
 
         FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
 
-        fragmentTransaction.replace(R.id.list_fragment_container, tournamentListFragment);
+        fragmentTransaction.replace(R.id.left_fragment_container, tournamentListFragment);
         fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         fragmentTransaction.commit();
     }
@@ -69,9 +63,15 @@ public class TournamentManagementFragment extends Fragment
 
                         FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
 
-                        fragmentTransaction.replace(R.id.detail_fragment_container, tournamentDetailFragment);
-                        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-                        fragmentTransaction.commit();
+                        if (view.findViewById(R.id.right_fragment_container) == null) {
+                            fragmentTransaction.replace(R.id.left_fragment_container, tournamentDetailFragment);
+                            fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+                            fragmentTransaction.commit();
+                        } else {
+                            fragmentTransaction.replace(R.id.right_fragment_container, tournamentDetailFragment);
+                            fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+                            fragmentTransaction.commit();
+                        }
                     }
                 });
         }
@@ -83,18 +83,21 @@ public class TournamentManagementFragment extends Fragment
 
         final View view = getView();
 
-        if (view.findViewById(R.id.detail_fragment_container) != null) {
-            TournamentDetailFragment tournamentDetailFragment = new TournamentDetailFragment();
+        TournamentDetailFragment tournamentDetailFragment = new TournamentDetailFragment();
+        Bundle bundle = new Bundle();
+        bundle.putLong("tournamentId", id);
+        tournamentDetailFragment.setArguments(bundle);
 
-            Log.i("TounamentActivity", "clicked on tournament: " + id);
+        Log.i("TounamentActivity", "clicked on tournament: " + id);
 
-            FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
+        FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
 
-            Bundle bundle = new Bundle();
-            bundle.putLong("tournamentId", id);
-            tournamentDetailFragment.setArguments(bundle);
-
-            fragmentTransaction.replace(R.id.detail_fragment_container, tournamentDetailFragment);
+        if (view.findViewById(R.id.right_fragment_container) == null) {
+            fragmentTransaction.replace(R.id.left_fragment_container, tournamentDetailFragment);
+            fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+            fragmentTransaction.commit();
+        } else {
+            fragmentTransaction.replace(R.id.right_fragment_container, tournamentDetailFragment);
             fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
             fragmentTransaction.commit();
         }
@@ -104,12 +107,20 @@ public class TournamentManagementFragment extends Fragment
     @Override
     public void onTournamentEditedClicked() {
 
+        final View view = getView();
+
         TournamentListFragment tournamentListFragment = new TournamentListFragment();
 
         FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
 
-        fragmentTransaction.replace(R.id.list_fragment_container, tournamentListFragment);
-        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-        fragmentTransaction.commit();
+        if (view.findViewById(R.id.right_fragment_container) == null) {
+            fragmentTransaction.replace(R.id.left_fragment_container, tournamentListFragment);
+            fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+            fragmentTransaction.commit();
+        } else {
+            fragmentTransaction.replace(R.id.right_fragment_container, tournamentListFragment);
+            fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+            fragmentTransaction.commit();
+        }
     }
 }

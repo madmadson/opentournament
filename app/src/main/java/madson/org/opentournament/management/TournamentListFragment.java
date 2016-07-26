@@ -135,7 +135,6 @@ public class TournamentListFragment extends Fragment {
                     public void onClick(View v) {
 
                         Log.i(v.getClass().getName(), "tournament Stared:" + tournament);
-                        // mListener.onTournamentListItemClicked(tournament.getId());
 
                         Intent intent = new Intent(getContext(), OngoingTournamentActivity.class);
                         intent.putExtra(OngoingTournamentActivity.EXTRA_TOURNAMENT_ID, tournament.getId());

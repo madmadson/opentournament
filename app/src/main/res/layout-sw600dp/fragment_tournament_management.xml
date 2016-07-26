@@ -14,14 +14,14 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="3"
-        android:id="@+id/list_fragment_container">
+        android:id="@+id/left_fragment_container">
     </FrameLayout>
 
     <FrameLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="3"
-        android:id="@+id/detail_fragment_container">
+        android:id="@+id/right_fragment_container">
     </FrameLayout>
     
     <android.support.design.widget.FloatingActionButton

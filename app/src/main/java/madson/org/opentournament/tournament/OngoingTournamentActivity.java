@@ -21,6 +21,7 @@ import android.util.Log;
 import android.view.MenuItem;
 
 import madson.org.opentournament.HomeFragment;
+import madson.org.opentournament.MainActivity;
 import madson.org.opentournament.OpenTournamentApplication;
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Tournament;
@@ -94,7 +95,12 @@ public class OngoingTournamentActivity extends AppCompatActivity
         int id = item.getItemId();
         FragmentManager manager = getSupportFragmentManager();
 
-        if (id == R.id.nav_tournaments_setup) {
+        if (id == R.id.nav_home) {
+            Log.i("Nav", "Main Activity");
+
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+        } else if (id == R.id.nav_tournaments_setup) {
             Log.i("Nav", "Open Tournament Setup");
 
 //            Fragment fragment = manager.findFragmentByTag(HomeFragment.TAG);

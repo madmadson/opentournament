@@ -21,6 +21,8 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="title_activity_error">ErrorHandling</string>
     
-    <string name="tournament_setup">Tournament Setup</string>
+    <string name="nav_tournament_setup">Tournament Setup</string>
+    <string name="nav_home_activity">Home</string>
+    <string name="nav_tournament_final">Final Results</string>
 
 </resources>

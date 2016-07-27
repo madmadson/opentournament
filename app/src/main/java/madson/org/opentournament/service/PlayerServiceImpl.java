@@ -53,7 +53,7 @@ public class PlayerServiceImpl implements PlayerService {
     private void createMockPlayers() {
 
         createPlayer(new Player("Tobias", "Madson", "Matt"));
-        createPlayer(new Player("Christopf", "Zaziboy", "Scholl"));
+        createPlayer(new Player("Christoph", "Zaziboy", "Scholl"));
         createPlayer(new Player("David", "Wildjack", "Voigt"));
     }
 

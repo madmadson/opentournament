@@ -33,6 +33,7 @@ import java.text.SimpleDateFormat;
  */
 public class TournamentDetailFragment extends Fragment {
 
+    public static final String BUNDLE_TOURNAMENT_ID = "tournament_id";
     private Tournament tournament;
     private final SimpleDateFormat sdf = new SimpleDateFormat();
     private OnTournamentEditedListener mListener;
@@ -43,10 +44,11 @@ public class TournamentDetailFragment extends Fragment {
 
         Bundle bundle = getArguments();
 
-        if (bundle != null && bundle.getLong("tournamentId") != 0) {
+        if (bundle != null) {
+            long aLong = bundle.getLong(BUNDLE_TOURNAMENT_ID);
             TournamentService tournamentService = ((OpenTournamentApplication) getActivity().getApplication())
                 .getTournamentService();
-            tournament = tournamentService.getTournamentForId((long) bundle.getLong("tournamentId"));
+            tournament = tournamentService.getTournamentForId(aLong);
         }
 
         return inflater.inflate(R.layout.fragment_tournament_detail, container, false);

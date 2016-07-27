@@ -32,7 +32,6 @@ public class TournamentListFragment extends Fragment {
 
     public static final String TAG = "tournament_list_fragment";
 
-    private TournamentService tournamentService;
     private OnListFragmentInteractionListener mListener;
 
     /**
@@ -46,10 +45,6 @@ public class TournamentListFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-
-        if (tournamentService == null) {
-            tournamentService = ((OpenTournamentApplication) getActivity().getApplication()).getTournamentService();
-        }
     }
 
 
@@ -64,6 +59,9 @@ public class TournamentListFragment extends Fragment {
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(linearLayoutManager);
+
+        TournamentService tournamentService = ((OpenTournamentApplication) getActivity().getApplication())
+            .getTournamentService();
 
         List<Tournament> tournaments = tournamentService.getTournaments();
 

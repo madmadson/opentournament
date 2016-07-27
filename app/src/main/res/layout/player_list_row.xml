@@ -4,27 +4,16 @@
     android:layout_height="48dp"
     android:paddingTop="8dp"
     android:paddingBottom="8dp"
+    android:paddingRight="8dp"
+    android:paddingLeft="8dp"
     android:id="@+id/playerNameRow">
-    
-    
-    //TODO change this to fancy view
-    <ImageButton
-        android:layout_width="22dp"
-        android:layout_height="22dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_centerVertical="true"
-        android:src="@drawable/ic_play_arrow_black_24dp"
-        android:tint="@color/colorTextIcon"
-        android:background="@android:color/transparent"
-        android:id="@+id/addPlayerButton" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_toRightOf="@id/addPlayerButton"
         android:text="New Text"
         android:textColor="@color/colorTextIcon"
         android:id="@+id/playerNameInList" />
+
 </RelativeLayout>

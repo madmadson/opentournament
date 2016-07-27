@@ -77,9 +77,9 @@ public class OngoingTournamentActivity extends AppCompatActivity
             Fragment fragment = manager.findFragmentByTag(TournamentManagementFragment.TAG);
 
             if (fragment == null) {
-                fragment = new PlayerListFragment();
+                fragment = new OngoingTournamentManagementFragment();
                 manager.beginTransaction()
-                    .replace(R.id.main_fragment_container, fragment, PlayerListFragment.TAG)
+                    .replace(R.id.main_fragment_container, fragment, OngoingTournamentManagementFragment.TAG)
                     .commit();
             }
         } else {

@@ -8,7 +8,7 @@
             android:title="Home" />
         <item
             android:id="@+id/nav_tournaments"
-            android:icon="@drawable/ic_menu_manage"
+            android:icon="@drawable/ic_play_arrow_black_24dp"
             android:title="Tournaments" />
         <item
             android:id="@+id/nav_players"

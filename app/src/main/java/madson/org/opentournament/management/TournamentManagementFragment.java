@@ -102,10 +102,10 @@ public class TournamentManagementFragment extends Fragment
 
         TournamentDetailFragment tournamentDetailFragment = new TournamentDetailFragment();
         Bundle bundle = new Bundle();
-        bundle.putLong("tournamentId", id);
+        bundle.putLong(TournamentDetailFragment.BUNDLE_TOURNAMENT_ID, id);
         tournamentDetailFragment.setArguments(bundle);
 
-        Log.i("TounamentActivity", "clicked on tournament: " + id);
+        Log.i("TournamentActivity", "clicked on tournament: " + id);
 
         FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
 
@@ -140,13 +140,10 @@ public class TournamentManagementFragment extends Fragment
             ((DrawerLocker) getActivity()).setDrawerEnabled(false);
 
             fab.hide();
-            fragmentTransaction.replace(R.id.left_fragment_container, tournamentListFragment);
-            fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-            fragmentTransaction.commit();
-        } else {
-            fragmentTransaction.replace(R.id.right_fragment_container, tournamentListFragment);
-            fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-            fragmentTransaction.commit();
         }
+
+        fragmentTransaction.replace(R.id.left_fragment_container, tournamentListFragment);
+        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        fragmentTransaction.commit();
     }
 }

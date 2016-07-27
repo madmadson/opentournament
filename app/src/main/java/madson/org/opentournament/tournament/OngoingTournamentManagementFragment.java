@@ -28,14 +28,6 @@ public class OngoingTournamentManagementFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-
-        PlayerListFragment playerListFragment = new PlayerListFragment();
-
-        FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
-
-        fragmentTransaction.replace(R.id.left_fragment_container, playerListFragment);
-        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-        fragmentTransaction.commit();
     }
 
 
@@ -43,5 +35,32 @@ public class OngoingTournamentManagementFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         return inflater.inflate(R.layout.fragment_ongoing_tournament_management, container, false);
+    }
+
+
+    @Override
+    public void onStart() {
+
+        super.onStart();
+
+        final View view = getView();
+
+        if (view != null) {
+            PlayerListFragment playerListFragment = new PlayerListFragment();
+
+            FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
+
+            fragmentTransaction.replace(R.id.left_fragment_container, playerListFragment);
+            fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+            fragmentTransaction.commit();
+
+//            if (view.findViewById(R.id.right_fragment_container) != null) {
+//                PlayerListFragment playerListFragment2 = new PlayerListFragment();
+//
+//                fragmentTransaction.replace(R.id.right_fragment_container, playerListFragment2);
+//                fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+//                fragmentTransaction.commit();
+//            }
+        }
     }
 }

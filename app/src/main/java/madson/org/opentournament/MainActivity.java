@@ -20,8 +20,8 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
 import android.view.MenuItem;
+import android.view.View;
 
-import madson.org.opentournament.exception.GeneralExceptionHandler;
 import madson.org.opentournament.management.TournamentManagementFragment;
 import madson.org.opentournament.utility.DrawerLocker;
 
@@ -50,6 +50,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
+        toggle.setToolbarNavigationClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+
+                    Log.i("Nav", "Toolbar navigation tournaments");
+
+                    setDrawerEnabled(true);
+                    toggle.syncState();
+
+                    FragmentManager manager = getSupportFragmentManager();
+
+                    TournamentManagementFragment fragment = new TournamentManagementFragment();
+                    manager.beginTransaction()
+                    .replace(R.id.main_fragment_container, fragment, TournamentManagementFragment.TAG)
+                    .commit();
+                }
+            });
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -119,26 +137,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         int lockMode = enabled ? DrawerLayout.LOCK_MODE_UNLOCKED : DrawerLayout.LOCK_MODE_LOCKED_CLOSED;
         drawer.setDrawerLockMode(lockMode);
+
         toggle.setDrawerIndicatorEnabled(enabled);
 
-        // TODO: why does this dont work
         ActionBar supportActionBar = getSupportActionBar();
         supportActionBar.setDisplayHomeAsUpEnabled(!enabled);
-    }
-
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        // TODO: why does this dont work
-        int id = item.getItemId();
-
-        if (id == android.R.id.home) {
-            NavUtils.navigateUpTo(this, new Intent(this, MainActivity.class));
-
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 }

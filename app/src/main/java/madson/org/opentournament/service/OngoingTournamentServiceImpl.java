@@ -80,8 +80,6 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
     @Override
     public List<Player> getPlayersForTournament(Long tournamentId) {
 
-        tournamentId = 1L;
-
         ArrayList<Player> players = new ArrayList<>();
         SQLiteDatabase readableDatabase = openTournamentDBHelper.getReadableDatabase();
 

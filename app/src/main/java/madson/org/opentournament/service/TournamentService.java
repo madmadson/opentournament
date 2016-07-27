@@ -39,14 +39,6 @@ public interface TournamentService {
 
 
     /**
-     * @param  tournamentId
-     *
-     * @return  all players
-     */
-    List<Player> getPlayersForTournament(Long tournamentId);
-
-
-    /**
      * @return  all tournaments
      */
     List<Tournament> getTournaments();

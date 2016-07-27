@@ -26,9 +26,8 @@ import madson.org.opentournament.MainActivity;
 import madson.org.opentournament.OpenTournamentApplication;
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Tournament;
-import madson.org.opentournament.exception.GeneralExceptionHandler;
+import madson.org.opentournament.management.TournamentDetailFragment;
 import madson.org.opentournament.management.TournamentManagementFragment;
-import madson.org.opentournament.players.PlayerListFragment;
 import madson.org.opentournament.service.TournamentService;
 
 
@@ -78,6 +77,10 @@ public class OngoingTournamentActivity extends AppCompatActivity
 
             if (fragment == null) {
                 fragment = new OngoingTournamentManagementFragment();
+
+                Bundle bundle = new Bundle();
+                bundle.putLong(TournamentDetailFragment.BUNDLE_TOURNAMENT_ID, tournamentId);
+                fragment.setArguments(bundle);
                 manager.beginTransaction()
                     .replace(R.id.main_fragment_container, fragment, OngoingTournamentManagementFragment.TAG)
                     .commit();

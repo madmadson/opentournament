@@ -23,21 +23,11 @@ public class OpenTournamentApplication extends Application {
     private static TournamentService tournamentService;
     private static PlayerService playerService;
 
-    public static OngoingTournamentService getOngoingTournamentService() {
-
-        return ongoingTournamentService;
-    }
-
-
     @Override
     public void onCreate() {
 
         super.onCreate();
         JodaTimeAndroid.init(this);
-
-        if (ongoingTournamentService == null) {
-            ongoingTournamentService = new OngoingTournamentServiceImpl(getApplicationContext());
-        }
 
         if (playerService == null) {
             playerService = new PlayerServiceImpl(getApplicationContext());
@@ -45,6 +35,10 @@ public class OpenTournamentApplication extends Application {
 
         if (tournamentService == null) {
             tournamentService = new TournamentServiceImpl(getApplicationContext());
+        }
+
+        if (ongoingTournamentService == null) {
+            ongoingTournamentService = new OngoingTournamentServiceImpl(getApplicationContext());
         }
     }
 
@@ -58,5 +52,11 @@ public class OpenTournamentApplication extends Application {
     public PlayerService getPlayerService() {
 
         return playerService;
+    }
+
+
+    public OngoingTournamentService getOngoingTournamentService() {
+
+        return ongoingTournamentService;
     }
 }

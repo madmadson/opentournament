@@ -52,9 +52,21 @@ public class PlayerServiceImpl implements PlayerService {
 
     private void createMockPlayers() {
 
-        createPlayer(new Player("Tobias", "Madson", "Matt"));
-        createPlayer(new Player("Christoph", "Zaziboy", "Scholl"));
-        createPlayer(new Player("David", "Wildjack", "Voigt"));
+        createPlayer(1, new Player("Tobias", "Madson", "Matt"));
+        createPlayer(2, new Player("Christoph", "Zaziboy", "Scholl"));
+        createPlayer(3, new Player("David", "Wildjack", "Voigt"));
+    }
+
+
+    public void createPlayer(int id, Player player) {
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(PlayerTable.COLUMN_ID, id);
+        contentValues.put(PlayerTable.COLUMN_FIRSTNAME, player.getFirstname());
+        contentValues.put(PlayerTable.COLUMN_NICKNAME, player.getNickname());
+        contentValues.put(PlayerTable.COLUMN_LASTNAME, player.getLastname());
+
+        createPlayer(contentValues);
     }
 
 
@@ -73,11 +85,15 @@ public class PlayerServiceImpl implements PlayerService {
     @Override
     public Player getPlayerForId(Long playerId) {
 
+        Player player = null;
         SQLiteDatabase readableDatabase = openTournamentDBHelper.getReadableDatabase();
 
-        Cursor cursor = readableDatabase.query(PlayerTable.TABLE_PLAYER, allColumns, null, null, null, null, null);
+        Cursor cursor = readableDatabase.query(PlayerTable.TABLE_PLAYER, allColumns, "_id  = ?",
+                new String[] { Long.toString(playerId) }, null, null, null, null);
 
-        Player player = cursorToPlayer(cursor);
+        if (cursor.moveToFirst()) {
+            player = cursorToPlayer(cursor);
+        }
 
         cursor.close();
         readableDatabase.close();

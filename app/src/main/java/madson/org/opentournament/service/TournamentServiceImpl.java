@@ -11,6 +11,7 @@ import android.util.Log;
 
 import madson.org.opentournament.OpenTournamentApplication;
 import madson.org.opentournament.db.OpenTournamentDBHelper;
+import madson.org.opentournament.db.TournamentPlayerTable;
 import madson.org.opentournament.db.TournamentTable;
 import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.Tournament;
@@ -30,7 +31,7 @@ import java.util.List;
 public class TournamentServiceImpl implements TournamentService {
 
     private OpenTournamentDBHelper openTournamentDBHelper;
-    private PlayerService playerService;
+
     private String[] allColumns = {
         TournamentTable.COLUMN_ID, TournamentTable.COLUMN_NAME, TournamentTable.COLUMN_DESCRIPTION,
         TournamentTable.COLUMN_DATE, TournamentTable.COLUMN_NUMBER_OF_PLAYERS
@@ -39,12 +40,6 @@ public class TournamentServiceImpl implements TournamentService {
     public TournamentServiceImpl(Context context) {
 
         Log.i(TournamentServiceImpl.class.getName(), "TournamentServiceImpl Constructor");
-
-        OpenTournamentApplication application = (OpenTournamentApplication) context;
-
-        if (playerService == null) {
-            playerService = application.getPlayerService();
-        }
 
         if (openTournamentDBHelper == null) {
             openTournamentDBHelper = new OpenTournamentDBHelper(context);
@@ -56,15 +51,16 @@ public class TournamentServiceImpl implements TournamentService {
 
     private void createMockTournaments() {
 
-        createTournament("Tournament1", "description1", new DateTime(2016, 3, 10, 10, 0).toDate(), 0);
-        createTournament("Tournament2", "description2", new DateTime(2016, 5, 20, 10, 0).toDate(), 0);
-        createTournament("Tournament3", "description3", new DateTime(2016, 7, 15, 10, 0).toDate(), 0);
+        createTournament(1, "Tournament1", "description1", new DateTime(2016, 3, 10, 10, 0).toDate(), 0);
+        createTournament(2, "Tournament2", "description2", new DateTime(2016, 5, 20, 10, 0).toDate(), 0);
+        createTournament(3, "Tournament3", "description3", new DateTime(2016, 7, 15, 10, 0).toDate(), 0);
     }
 
 
-    private void createTournament(String name, String description, Date date, int numberOfPlayers) {
+    private void createTournament(int _id, String name, String description, Date date, int numberOfPlayers) {
 
         ContentValues contentValues = new ContentValues();
+        contentValues.put(TournamentTable.COLUMN_ID, _id);
         contentValues.put(TournamentTable.COLUMN_NAME, name);
         contentValues.put(TournamentTable.COLUMN_DESCRIPTION, description);
         contentValues.put(TournamentTable.COLUMN_DATE, date.toString());
@@ -128,30 +124,6 @@ public class TournamentServiceImpl implements TournamentService {
             new String[] { String.valueOf(tournamentId) });
 
         writableDatabase.close();
-    }
-
-
-    @Override
-    public List<Player> getPlayersForTournament(Long tournamentId) {
-
-        ArrayList<Player> players = new ArrayList<>();
-        SQLiteDatabase readableDatabase = openTournamentDBHelper.getReadableDatabase();
-
-        Cursor cursor = readableDatabase.query(TournamentTable.TABLE_TOURNAMENTS, new String[] { "_id", "player_id" },
-                "tournament_id  = ?", new String[] { Long.toString(tournamentId) }, null, null, null);
-
-        cursor.moveToFirst();
-
-        while (!cursor.isAfterLast()) {
-            Player player = playerService.getPlayerForId((long) cursor.getInt(0));
-            players.add(player);
-            cursor.moveToNext();
-        }
-
-        cursor.close();
-        readableDatabase.close();
-
-        return players;
     }
 
 

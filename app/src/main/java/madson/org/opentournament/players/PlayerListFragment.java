@@ -108,7 +108,8 @@ public class PlayerListFragment extends Fragment {
 
             final Player player = mfilteredDataset.get(position);
             holder.setPlayer(player);
-            holder.getPlayerNameInList().setText(player.getFirstname() + " " + player.getLastname());
+            holder.getPlayerNameInList()
+                .setText(player.getFirstname() + " \"" + player.getNickname() + "\" " + player.getLastname());
             holder.getAddPlayerButton().setOnClickListener(new View.OnClickListener() {
 
                     @Override

@@ -9,23 +9,23 @@ public class Player {
 
     private int _id;
     private String firstname;
-    private String lastname;
     private String nickname;
+    private String lastname;
 
     public Player(int id, String firstname, String nickname, String lastname) {
 
         this._id = id;
         this.firstname = firstname;
-        this.lastname = lastname;
         this.nickname = nickname;
+        this.lastname = lastname;
     }
 
 
-    public Player(String firstname, String lastname, String nickname) {
+    public Player(String firstname, String nickname, String lastname) {
 
         this.firstname = firstname;
-        this.lastname = lastname;
         this.nickname = nickname;
+        this.lastname = lastname;
     }
 
     public int getId() {

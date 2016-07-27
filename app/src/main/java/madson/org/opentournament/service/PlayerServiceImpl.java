@@ -11,18 +11,24 @@ import android.util.Log;
 
 import madson.org.opentournament.db.OpenTournamentDBHelper;
 import madson.org.opentournament.db.PlayerTable;
+import madson.org.opentournament.db.TournamentTable;
 import madson.org.opentournament.domain.Player;
+import madson.org.opentournament.domain.Tournament;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 
 /**
- * Write some fancy Javadoc!
- *
  * @author  Tobias Matt - tmatt@contargo.net
  */
 public class PlayerServiceImpl implements PlayerService {
 
     private OpenTournamentDBHelper openTournamentDBHelper;
-    private String[] allColumns = { PlayerTable.COLUMN_ID, PlayerTable.COLUMN_FIRSTNAME, PlayerTable.COLUMN_LASTNAME };
+    private String[] allColumns = {
+        PlayerTable.COLUMN_ID, PlayerTable.COLUMN_FIRSTNAME, PlayerTable.COLUMN_NICKNAME, PlayerTable.COLUMN_LASTNAME
+    };
 
     public PlayerServiceImpl(Context context) {
 
@@ -69,16 +75,39 @@ public class PlayerServiceImpl implements PlayerService {
 
         SQLiteDatabase readableDatabase = openTournamentDBHelper.getReadableDatabase();
 
-        Cursor cursor = readableDatabase.query(PlayerTable.TABLE_PLAYER,
-                new String[] { PlayerTable.COLUMN_FIRSTNAME, PlayerTable.COLUMN_NICKNAME, PlayerTable.COLUMN_LASTNAME },
-                null, null, null, null, null);
+        Cursor cursor = readableDatabase.query(PlayerTable.TABLE_PLAYER, allColumns, null, null, null, null, null);
 
-        Player player = new Player(cursor.getString(0), cursor.getString(1), cursor.getString(2));
+        Player player = cursorToPlayer(cursor);
 
         cursor.close();
         readableDatabase.close();
 
         return player;
+    }
+
+
+    @Override
+    public List<Player> getAllPlayers() {
+
+        ArrayList<Player> players = new ArrayList<>();
+
+        SQLiteDatabase readableDatabase = openTournamentDBHelper.getReadableDatabase();
+
+        Cursor cursor = readableDatabase.query(PlayerTable.TABLE_PLAYER, allColumns, null, null, null, null, null);
+
+        cursor.moveToFirst();
+
+        while (!cursor.isAfterLast()) {
+            Player player = cursorToPlayer(cursor);
+
+            players.add(player);
+            cursor.moveToNext();
+        }
+
+        cursor.close();
+        readableDatabase.close();
+
+        return players;
     }
 
 
@@ -89,5 +118,11 @@ public class PlayerServiceImpl implements PlayerService {
         writableDatabase.insert(PlayerTable.TABLE_PLAYER, null, contentValues);
 
         writableDatabase.close();
+    }
+
+
+    private Player cursorToPlayer(Cursor cursor) {
+
+        return new Player(cursor.getInt(0), cursor.getString(1), cursor.getString(2), cursor.getString(3));
     }
 }

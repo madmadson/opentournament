@@ -28,6 +28,7 @@ import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.exception.GeneralExceptionHandler;
 import madson.org.opentournament.management.TournamentManagementFragment;
+import madson.org.opentournament.players.PlayerListFragment;
 import madson.org.opentournament.service.TournamentService;
 
 
@@ -54,8 +55,6 @@ public class OngoingTournamentActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        Thread.setDefaultUncaughtExceptionHandler(new GeneralExceptionHandler(this));
-
         Intent intent = getIntent();
 
         Bundle extras = intent.getExtras();
@@ -72,6 +71,16 @@ public class OngoingTournamentActivity extends AppCompatActivity
 
             if (supportActionBar != null) {
                 supportActionBar.setTitle(tournament.getName());
+            }
+
+            FragmentManager manager = getSupportFragmentManager();
+            Fragment fragment = manager.findFragmentByTag(TournamentManagementFragment.TAG);
+
+            if (fragment == null) {
+                fragment = new PlayerListFragment();
+                manager.beginTransaction()
+                    .replace(R.id.main_fragment_container, fragment, PlayerListFragment.TAG)
+                    .commit();
             }
         } else {
             throw new RuntimeException();
@@ -129,12 +138,12 @@ public class OngoingTournamentActivity extends AppCompatActivity
         } else if (id == R.id.nav_tournaments_setup) {
             Log.i("Nav", "Open Tournament Setup");
 
-//            Fragment fragment = manager.findFragmentByTag(HomeFragment.TAG);
-//
-//            if (fragment == null) {
-//                fragment = new HomeFragment();
-//                manager.beginTransaction().replace(R.id.main_fragment_container, fragment, HomeFragment.TAG).commit();
-//            }
+            Fragment fragment = manager.findFragmentByTag(madson.org.opentournament.players.PlayerListFragment.TAG);
+
+            if (fragment == null) {
+                fragment = new HomeFragment();
+                manager.beginTransaction().replace(R.id.main_fragment_container, fragment, HomeFragment.TAG).commit();
+            }
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

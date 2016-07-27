@@ -19,7 +19,6 @@ import android.support.v7.widget.Toolbar;
 
 import android.util.Log;
 
-import android.view.Menu;
 import android.view.MenuItem;
 
 import madson.org.opentournament.exception.GeneralExceptionHandler;
@@ -38,7 +37,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         super.onCreate(savedInstanceState);
 
-        Thread.setDefaultUncaughtExceptionHandler(new GeneralExceptionHandler(this));
+        // Thread.setDefaultUncaughtExceptionHandler(new GeneralExceptionHandler(this));
 
         setContentView(R.layout.activity_main);
 

@@ -12,7 +12,16 @@ public class Player {
     private String lastname;
     private String nickname;
 
-    public Player(String firstname, String nickname, String lastname) {
+    public Player(int id, String firstname, String nickname, String lastname) {
+
+        this._id = id;
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.nickname = nickname;
+    }
+
+
+    public Player(String firstname, String lastname, String nickname) {
 
         this.firstname = firstname;
         this.lastname = lastname;

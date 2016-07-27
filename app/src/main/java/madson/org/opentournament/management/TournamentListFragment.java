@@ -58,7 +58,7 @@ public class TournamentListFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_tournament_list, container, false);
 
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.tournament_reclcyer_view);
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.tournament_list_recycler_view);
 
         recyclerView.setHasFixedSize(true);
 

@@ -21,6 +21,7 @@ import android.widget.EditText;
 import madson.org.opentournament.OpenTournamentApplication;
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Player;
+import madson.org.opentournament.service.OngoingTournamentService;
 import madson.org.opentournament.service.PlayerService;
 
 import java.util.List;
@@ -29,6 +30,7 @@ import java.util.List;
 public class PlayerListFragment extends Fragment {
 
     public static final String TAG = "player_list_fragment";
+    public static final String BUNDLE_TOURNAMENT_ID = "tournament_id";
 
     private PlayerListAdapter playerListAdapter;
 
@@ -50,6 +52,7 @@ public class PlayerListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_player_list, container, false);
+
         EditText filterPlayer = (EditText) view.findViewById(R.id.input_filter_player);
 
         filterPlayer.addTextChangedListener(new PlayerFilterTextWatcher());
@@ -64,6 +67,16 @@ public class PlayerListFragment extends Fragment {
         recyclerView.setLayoutManager(linearLayoutManager);
 
         List<Player> players = playerService.getAllPlayers();
+
+        Bundle bundle = getArguments();
+
+        if (bundle != null && bundle.getLong(BUNDLE_TOURNAMENT_ID) != 0) {
+            Long tournamentId = bundle.getLong(BUNDLE_TOURNAMENT_ID);
+            OngoingTournamentService ongoingTournamentService =
+                ((OpenTournamentApplication) getActivity().getApplication()).getOngoingTournamentService();
+            List<Player> alreadyPlayingPlayers = ongoingTournamentService.getPlayersForTournament(tournamentId);
+            players.removeAll(alreadyPlayingPlayers);
+        }
 
         playerListAdapter = new PlayerListAdapter(players);
 

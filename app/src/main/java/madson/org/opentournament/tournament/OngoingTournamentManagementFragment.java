@@ -54,7 +54,11 @@ public class OngoingTournamentManagementFragment extends Fragment {
         final View view = getView();
 
         if (view != null) {
+            Bundle bundleForAllPlayers = new Bundle();
+            bundleForAllPlayers.putLong(PlayerListFragment.BUNDLE_TOURNAMENT_ID, tournament.getId());
+
             PlayerListFragment playerListFragment = new PlayerListFragment();
+            playerListFragment.setArguments(bundleForAllPlayers);
 
             FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
 
@@ -62,9 +66,9 @@ public class OngoingTournamentManagementFragment extends Fragment {
 
             if (view.findViewById(R.id.right_fragment_container) != null) {
                 TournamentPlayerListFragment tournamentPlayerListFragment = new TournamentPlayerListFragment();
-                Bundle bundle = new Bundle();
-                bundle.putLong(TournamentDetailFragment.BUNDLE_TOURNAMENT_ID, tournament.getId());
-                tournamentPlayerListFragment.setArguments(bundle);
+                Bundle bundleForTournamentPlayers = new Bundle();
+                bundleForTournamentPlayers.putLong(TournamentDetailFragment.BUNDLE_TOURNAMENT_ID, tournament.getId());
+                tournamentPlayerListFragment.setArguments(bundleForTournamentPlayers);
 
                 fragmentTransaction.replace(R.id.right_fragment_container, tournamentPlayerListFragment);
             }

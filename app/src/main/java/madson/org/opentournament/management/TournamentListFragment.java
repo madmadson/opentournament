@@ -32,7 +32,7 @@ public class TournamentListFragment extends Fragment {
 
     public static final String TAG = "tournament_list_fragment";
 
-    private OnListFragmentInteractionListener mListener;
+    private TournamentListItemListener mListener;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the fragment (e.g. upon screen orientation
@@ -78,11 +78,11 @@ public class TournamentListFragment extends Fragment {
 
         super.onAttach(context);
 
-        if (getParentFragment() instanceof OnListFragmentInteractionListener) {
-            mListener = (OnListFragmentInteractionListener) getParentFragment();
+        if (getParentFragment() instanceof TournamentListItemListener) {
+            mListener = (TournamentListItemListener) getParentFragment();
         } else {
             throw new RuntimeException(getParentFragment().toString()
-                + " must implement OnListFragmentInteractionListener");
+                + " must implement TournamentListItemListener");
         }
     }
 
@@ -94,7 +94,7 @@ public class TournamentListFragment extends Fragment {
         mListener = null;
     }
 
-    public interface OnListFragmentInteractionListener {
+    public interface TournamentListItemListener {
 
         void onTournamentListItemClicked(long id);
     }
@@ -174,8 +174,8 @@ public class TournamentListFragment extends Fragment {
                 super(v);
                 v.setOnClickListener(this);
 
-                tournamentNameInList = (TextView) v.findViewById(R.id.tournamentNameInList);
-                startTournamentButton = (ImageButton) v.findViewById(R.id.startTournamentButton);
+                tournamentNameInList = (TextView) v.findViewById(R.id.tournament_name);
+                startTournamentButton = (ImageButton) v.findViewById(R.id.start_tournament_button);
             }
 
             @Override

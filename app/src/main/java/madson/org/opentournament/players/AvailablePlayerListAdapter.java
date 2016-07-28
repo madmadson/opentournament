@@ -25,23 +25,27 @@ import java.util.List;
  *
  * @author  Tobias Matt - tmatt@contargo.net
  */
-public class PlayerListAdapter extends RecyclerView.Adapter<PlayerListAdapter.ViewHolder> implements Filterable {
+public class AvailablePlayerListAdapter extends RecyclerView.Adapter<AvailablePlayerListAdapter.ViewHolder>
+    implements Filterable {
 
-    private List<Player> mDataset;
-    private List<Player> mfilteredDataset;
+    private AvailablePlayerListFragment.AvailablePlayerListItemListener mListener;
+    private List<Player> originalPlayerList;
+    private List<Player> filteredPlayerList;
     private ItemFilter mFilter = new ItemFilter();
 
-    public PlayerListAdapter(List<Player> myDataset) {
+    public AvailablePlayerListAdapter(List<Player> playerList,
+        AvailablePlayerListFragment.AvailablePlayerListItemListener mListener) {
 
-        mDataset = myDataset;
-        mfilteredDataset = myDataset;
+        this.mListener = mListener;
+        this.originalPlayerList = playerList;
+        this.filteredPlayerList = playerList;
     }
 
     @Override
-    public PlayerListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public AvailablePlayerListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         // create a new view
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.player_list_row, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.available_player_list_row, parent, false);
 
         // set the view's size, margins, paddings and layout parameters
         ViewHolder vh = new ViewHolder(v);
@@ -51,9 +55,9 @@ public class PlayerListAdapter extends RecyclerView.Adapter<PlayerListAdapter.Vi
 
 
     @Override
-    public void onBindViewHolder(PlayerListAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(AvailablePlayerListAdapter.ViewHolder holder, int position) {
 
-        final Player player = mfilteredDataset.get(position);
+        final Player player = filteredPlayerList.get(position);
         holder.setPlayer(player);
         holder.getPlayerNameInList()
             .setText(player.getFirstname() + " \"" + player.getNickname() + "\" " + player.getLastname());
@@ -63,21 +67,21 @@ public class PlayerListAdapter extends RecyclerView.Adapter<PlayerListAdapter.Vi
     @Override
     public int getItemCount() {
 
-        return mfilteredDataset.size();
+        return filteredPlayerList.size();
     }
 
 
-    public void add(int position, Player item) {
+    public void add(Player item) {
 
-        mDataset.add(position, item);
-        notifyItemInserted(position);
+        originalPlayerList.add(item);
+        notifyDataSetChanged();
     }
 
 
     public void remove(Tournament item) {
 
-        int position = mDataset.indexOf(item);
-        mDataset.remove(position);
+        int position = filteredPlayerList.indexOf(item);
+        filteredPlayerList.remove(position);
         notifyItemRemoved(position);
     }
 
@@ -88,7 +92,7 @@ public class PlayerListAdapter extends RecyclerView.Adapter<PlayerListAdapter.Vi
         return mFilter;
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private TextView playerNameInList;
         private Player player;
@@ -96,8 +100,9 @@ public class PlayerListAdapter extends RecyclerView.Adapter<PlayerListAdapter.Vi
         public ViewHolder(View v) {
 
             super(v);
+            v.setOnClickListener(this);
 
-            playerNameInList = (TextView) v.findViewById(R.id.playerNameInList);
+            playerNameInList = (TextView) v.findViewById(R.id.available_player_name);
         }
 
         public TextView getPlayerNameInList() {
@@ -110,6 +115,18 @@ public class PlayerListAdapter extends RecyclerView.Adapter<PlayerListAdapter.Vi
 
             this.player = player;
         }
+
+
+        @Override
+        public void onClick(View v) {
+
+            Log.i(v.getClass().getName(), "remove player from player list: " + player);
+
+            filteredPlayerList.remove(player);
+            notifyDataSetChanged();
+
+            mListener.onPlayerListItemClicked(player);
+        }
     }
 
     private class ItemFilter extends Filter {
@@ -121,13 +138,13 @@ public class PlayerListAdapter extends RecyclerView.Adapter<PlayerListAdapter.Vi
             FilterResults results = new FilterResults();
 
             if (filterString.isEmpty()) {
-                results.values = mDataset;
-                results.count = mDataset.size();
+                results.values = originalPlayerList;
+                results.count = originalPlayerList.size();
 
                 return results;
             }
 
-            final List<Player> list = mDataset;
+            final List<Player> list = originalPlayerList;
 
             int count = list.size();
             final ArrayList<Player> newListOfPlayers = new ArrayList<>(count);
@@ -156,7 +173,7 @@ public class PlayerListAdapter extends RecyclerView.Adapter<PlayerListAdapter.Vi
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
 
-            mfilteredDataset = (ArrayList<Player>) results.values;
+            filteredPlayerList = (ArrayList<Player>) results.values;
             notifyDataSetChanged();
         }
     }

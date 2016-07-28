@@ -1,5 +1,7 @@
 package madson.org.opentournament.players;
 
+import android.content.Context;
+
 import android.os.Bundle;
 
 import android.support.v4.app.Fragment;
@@ -27,18 +29,20 @@ import madson.org.opentournament.service.PlayerService;
 import java.util.List;
 
 
-public class PlayerListFragment extends Fragment {
+public class AvailablePlayerListFragment extends Fragment {
 
     public static final String TAG = "player_list_fragment";
     public static final String BUNDLE_TOURNAMENT_ID = "tournament_id";
 
-    private PlayerListAdapter playerListAdapter;
+    private AvailablePlayerListAdapter availablePlayerListAdapter;
+
+    private AvailablePlayerListItemListener mListener;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the fragment (e.g. upon screen orientation
      * changes).
      */
-    public PlayerListFragment() {
+    public AvailablePlayerListFragment() {
     }
 
     @Override
@@ -78,11 +82,51 @@ public class PlayerListFragment extends Fragment {
             players.removeAll(alreadyPlayingPlayers);
         }
 
-        playerListAdapter = new PlayerListAdapter(players);
-
-        recyclerView.setAdapter(playerListAdapter);
+        if (mListener != null) {
+            availablePlayerListAdapter = new AvailablePlayerListAdapter(players, mListener);
+            recyclerView.setAdapter(availablePlayerListAdapter);
+        } else {
+            throw new RuntimeException("Listener for playerlist missing");
+        }
 
         return view;
+    }
+
+
+    @Override
+    public void onAttach(Context context) {
+
+        super.onAttach(context);
+
+        if (getParentFragment() instanceof AvailablePlayerListItemListener) {
+            mListener = (AvailablePlayerListItemListener) getParentFragment();
+        } else {
+            throw new RuntimeException(getParentFragment().toString()
+                + " must implement AvailablePlayerListItemListener");
+        }
+    }
+
+
+    @Override
+    public void onDetach() {
+
+        super.onDetach();
+        mListener = null;
+    }
+
+
+    public void addPlayer(Player player) {
+
+        Log.i(this.getClass().getName(), "add player to tournament player list: " + player);
+
+        if (availablePlayerListAdapter != null) {
+            availablePlayerListAdapter.add(player);
+        }
+    }
+
+    public interface AvailablePlayerListItemListener {
+
+        void onPlayerListItemClicked(Player player);
     }
 
     private class PlayerFilterTextWatcher implements TextWatcher {
@@ -96,7 +140,7 @@ public class PlayerListFragment extends Fragment {
         public void onTextChanged(CharSequence s, int start, int before, int count) {
 
             Log.i(this.getClass().getName(), "filtered by: " + s.toString());
-            playerListAdapter.getFilter().filter(s.toString());
+            availablePlayerListAdapter.getFilter().filter(s.toString());
         }
 
 

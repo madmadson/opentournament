@@ -141,7 +141,7 @@ public class TournamentDetailFragment extends Fragment {
             mListener = (OnTournamentEditedListener) getParentFragment();
         } else {
             throw new RuntimeException(getParentFragment().toString()
-                + " must implement OnListFragmentInteractionListener");
+                + " must implement TournamentListItemListener");
         }
     }
 

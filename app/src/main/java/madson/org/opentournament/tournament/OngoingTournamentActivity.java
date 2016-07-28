@@ -28,6 +28,7 @@ import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.management.TournamentDetailFragment;
 import madson.org.opentournament.management.TournamentManagementFragment;
+import madson.org.opentournament.players.AvailablePlayerListFragment;
 import madson.org.opentournament.service.TournamentService;
 
 
@@ -141,7 +142,7 @@ public class OngoingTournamentActivity extends AppCompatActivity
         } else if (id == R.id.nav_tournaments_setup) {
             Log.i("Nav", "Open Tournament Setup");
 
-            Fragment fragment = manager.findFragmentByTag(madson.org.opentournament.players.PlayerListFragment.TAG);
+            Fragment fragment = manager.findFragmentByTag(AvailablePlayerListFragment.TAG);
 
             if (fragment == null) {
                 fragment = new HomeFragment();

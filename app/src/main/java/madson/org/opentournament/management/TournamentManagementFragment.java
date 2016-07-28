@@ -17,9 +17,8 @@ import madson.org.opentournament.R;
 import madson.org.opentournament.utility.DrawerLocker;
 
 
-public class TournamentManagementFragment extends Fragment
-    implements TournamentListFragment.OnListFragmentInteractionListener,
-        TournamentDetailFragment.OnTournamentEditedListener {
+public class TournamentManagementFragment extends Fragment implements TournamentListFragment.TournamentListItemListener,
+    TournamentDetailFragment.OnTournamentEditedListener {
 
     public static final String TAG = "tournament_management_fragment";
 

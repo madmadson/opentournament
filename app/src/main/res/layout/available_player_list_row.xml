@@ -6,15 +6,16 @@
     android:paddingBottom="8dp"
     android:paddingRight="8dp"
     android:paddingLeft="8dp"
-    android:id="@+id/playerNameRow">
+    android:id="@+id/available_player_row">
 
     <TextView
+        android:id="@+id/available_player_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:text="New Text"
         android:textColor="@color/colorTextIcon"
-        android:id="@+id/playerNameInList" 
+       
         />
 
 </RelativeLayout>

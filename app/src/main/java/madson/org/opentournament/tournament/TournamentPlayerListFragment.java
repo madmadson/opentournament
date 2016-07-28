@@ -1,11 +1,15 @@
 package madson.org.opentournament.tournament;
 
+import android.content.Context;
+
 import android.os.Bundle;
 
 import android.support.v4.app.Fragment;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+
+import android.util.Log;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,9 +18,10 @@ import android.view.ViewGroup;
 import madson.org.opentournament.OpenTournamentApplication;
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Player;
-import madson.org.opentournament.players.PlayerListAdapter;
+import madson.org.opentournament.domain.Tournament;
+import madson.org.opentournament.players.AvailablePlayerListAdapter;
+import madson.org.opentournament.players.AvailablePlayerListFragment;
 import madson.org.opentournament.service.OngoingTournamentService;
-import madson.org.opentournament.service.TournamentService;
 
 import java.util.List;
 
@@ -30,7 +35,9 @@ public class TournamentPlayerListFragment extends Fragment {
 
     public static final String BUNDLE_TOURNAMENT_ID = "tournament_id";
     private Long tournamentId;
-    private PlayerListAdapter playerListAdapter;
+    private TournamentPlayerListAdapter tournamentPlayerListAdapter;
+
+    private TournamentPlayerListItemListener mListener;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -55,10 +62,50 @@ public class TournamentPlayerListFragment extends Fragment {
 
         List<Player> players = ongoingTournamentService.getPlayersForTournament(tournamentId);
 
-        playerListAdapter = new PlayerListAdapter(players);
-
-        recyclerView.setAdapter(playerListAdapter);
+        if (mListener != null) {
+            tournamentPlayerListAdapter = new TournamentPlayerListAdapter(players, mListener);
+            recyclerView.setAdapter(tournamentPlayerListAdapter);
+        } else {
+            throw new RuntimeException("Listener for tournamentPlayerListAdapter missing");
+        }
 
         return view;
+    }
+
+
+    public void addPlayer(Player player) {
+
+        Log.i(this.getClass().getName(), "add player to tournament player list: " + player);
+
+        if (tournamentPlayerListAdapter != null) {
+            tournamentPlayerListAdapter.add(player);
+        }
+    }
+
+
+    @Override
+    public void onAttach(Context context) {
+
+        super.onAttach(context);
+
+        if (getParentFragment() instanceof TournamentPlayerListItemListener) {
+            mListener = (TournamentPlayerListItemListener) getParentFragment();
+        } else {
+            throw new RuntimeException(getParentFragment().toString()
+                + " must implement TournamentPlayerListItemListener");
+        }
+    }
+
+
+    @Override
+    public void onDetach() {
+
+        super.onDetach();
+        mListener = null;
+    }
+
+    public interface TournamentPlayerListItemListener {
+
+        void onTournamentPlayerListItemClicked(Player player);
     }
 }

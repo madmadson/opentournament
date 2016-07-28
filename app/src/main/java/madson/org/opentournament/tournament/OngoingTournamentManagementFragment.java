@@ -2,6 +2,8 @@ package madson.org.opentournament.tournament;
 
 import android.os.Bundle;
 
+import android.support.design.widget.FloatingActionButton;
+
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 
@@ -16,8 +18,8 @@ import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.management.TournamentDetailFragment;
-import madson.org.opentournament.management.TournamentListFragment;
 import madson.org.opentournament.players.AvailablePlayerListFragment;
+import madson.org.opentournament.players.PlayerAddFragment;
 import madson.org.opentournament.service.TournamentService;
 
 
@@ -85,6 +87,24 @@ public class OngoingTournamentManagementFragment extends Fragment
 
             fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
             fragmentTransaction.commit();
+
+            final FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
+
+            fab.setOnClickListener(new View.OnClickListener() {
+
+                    // new empty tournament
+                    @Override
+                    public void onClick(View view) {
+
+                        PlayerAddFragment playerAddFragement = new PlayerAddFragment();
+
+                        FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
+
+                        fragmentTransaction.replace(R.id.above_left_fragment_container, playerAddFragement);
+                        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+                        fragmentTransaction.commit();
+                    }
+                });
         }
     }
 

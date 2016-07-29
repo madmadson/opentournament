@@ -100,4 +100,29 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
 
         return players;
     }
+
+
+    @Override
+    public void addPlayerToTournament(Player player, Long tournamentId) {
+
+        SQLiteDatabase db = openTournamentDBHelper.getWritableDatabase();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("tournament_id", tournamentId);
+        contentValues.put("player_id", player.getId());
+        db.insert(TournamentPlayerTable.TABLE_TOURNAMENT_PLAYER, null, contentValues);
+    }
+
+
+    @Override
+    public void removePlayerFromTournament(Player player, Long tournamentId) {
+
+        SQLiteDatabase db = openTournamentDBHelper.getWritableDatabase();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("tournament_id", tournamentId);
+        contentValues.put("player_id", player.getId());
+        db.delete(TournamentPlayerTable.TABLE_TOURNAMENT_PLAYER, "tournament_id  = ?  AND  player_id = ? ",
+            new String[] { String.valueOf(tournamentId), String.valueOf(player.getId()) });
+    }
 }

@@ -73,12 +73,26 @@ public class TournamentPlayerListFragment extends Fragment {
     }
 
 
-    public void addPlayer(Player player) {
+    public void addPlayer(final Player player) {
 
         Log.i(this.getClass().getName(), "add player to tournament player list: " + player);
 
         if (tournamentPlayerListAdapter != null) {
             tournamentPlayerListAdapter.add(player);
+
+            Runnable runnable = new Runnable() {
+
+                @Override
+                public void run() {
+
+                    Log.i(this.getClass().getName(), "add player to tournament ");
+
+                    OpenTournamentApplication application = (OpenTournamentApplication) getActivity()
+                        .getApplication();
+                    application.getOngoingTournamentService().addPlayerToTournament(player, tournamentId);
+                }
+            };
+            runnable.run();
         }
     }
 

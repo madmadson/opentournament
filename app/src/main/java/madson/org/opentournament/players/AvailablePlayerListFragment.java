@@ -37,6 +37,7 @@ public class AvailablePlayerListFragment extends Fragment {
     private AvailablePlayerListAdapter availablePlayerListAdapter;
 
     private AvailablePlayerListItemListener mListener;
+    private long tournamentId;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the fragment (e.g. upon screen orientation
@@ -75,7 +76,8 @@ public class AvailablePlayerListFragment extends Fragment {
         Bundle bundle = getArguments();
 
         if (bundle != null && bundle.getLong(BUNDLE_TOURNAMENT_ID) != 0) {
-            Long tournamentId = bundle.getLong(BUNDLE_TOURNAMENT_ID);
+            tournamentId = bundle.getLong(BUNDLE_TOURNAMENT_ID);
+
             OngoingTournamentService ongoingTournamentService =
                 ((OpenTournamentApplication) getActivity().getApplication()).getOngoingTournamentService();
             List<Player> alreadyPlayingPlayers = ongoingTournamentService.getPlayersForTournament(tournamentId);
@@ -115,18 +117,32 @@ public class AvailablePlayerListFragment extends Fragment {
     }
 
 
-    public void addPlayer(Player player) {
+    public void addPlayer(final Player player) {
 
         Log.i(this.getClass().getName(), "add player to tournament player list: " + player);
 
         if (availablePlayerListAdapter != null) {
             availablePlayerListAdapter.add(player);
+
+            Runnable runnable = new Runnable() {
+
+                @Override
+                public void run() {
+
+                    Log.i(this.getClass().getName(), "remove player from tournament ");
+
+                    OpenTournamentApplication application = (OpenTournamentApplication) getActivity()
+                        .getApplication();
+                    application.getOngoingTournamentService().removePlayerFromTournament(player, tournamentId);
+                }
+            };
+            runnable.run();
         }
     }
 
     public interface AvailablePlayerListItemListener {
 
-        void onPlayerListItemClicked(Player player);
+        void onAvailablePlayerListItemClicked(Player player);
     }
 
     private class PlayerFilterTextWatcher implements TextWatcher {

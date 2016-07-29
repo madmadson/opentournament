@@ -18,4 +18,18 @@ public interface OngoingTournamentService {
      * @return  list of all players for given tournament
      */
     List<Player> getPlayersForTournament(Long tournamentId);
+
+
+    /**
+     * @param  player
+     * @param  tournamentId
+     */
+    void addPlayerToTournament(Player player, Long tournamentId);
+
+
+    /**
+     * @param  player
+     * @param  tournamentId
+     */
+    void removePlayerFromTournament(Player player, Long tournamentId);
 }

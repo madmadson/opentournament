@@ -125,7 +125,7 @@ public class AvailablePlayerListAdapter extends RecyclerView.Adapter<AvailablePl
             filteredPlayerList.remove(player);
             notifyDataSetChanged();
 
-            mListener.onPlayerListItemClicked(player);
+            mListener.onAvailablePlayerListItemClicked(player);
         }
     }
 

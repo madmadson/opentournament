@@ -93,7 +93,6 @@ public class OngoingTournamentManagementFragment extends Fragment
 
             fab.setOnClickListener(new View.OnClickListener() {
 
-                    // new empty tournament
                     @Override
                     public void onClick(View view) {
 
@@ -101,7 +100,7 @@ public class OngoingTournamentManagementFragment extends Fragment
 
                         NewPlayerDialog dialog = new NewPlayerDialog();
                         FragmentManager supportFragmentManager = getActivity().getSupportFragmentManager();
-                        dialog.show(supportFragmentManager, "NoticeDialogFragment");
+                        dialog.show(supportFragmentManager, "NewPlayerDialog");
                     }
                 });
         }
@@ -109,9 +108,9 @@ public class OngoingTournamentManagementFragment extends Fragment
 
 
     @Override
-    public void onPlayerListItemClicked(Player player) {
+    public void onAvailablePlayerListItemClicked(Player player) {
 
-        Log.i(this.getClass().getName(), "clicked on avaible player to add: " + player);
+        Log.i(this.getClass().getName(), "clicked on available player to add: " + player);
 
         if (tournamentPlayerListFragment != null) {
             tournamentPlayerListFragment.addPlayer(player);

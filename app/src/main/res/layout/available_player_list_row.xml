@@ -1,21 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_gravity="center"
+    android:layout_height="wrap_content"
     android:layout_width="match_parent"
-    android:layout_height="48dp"
-    android:paddingTop="8dp"
-    android:paddingBottom="8dp"
-    android:paddingRight="8dp"
-    android:paddingLeft="8dp"
-    android:id="@+id/available_player_row">
+    android:id="@+id/available_player_card_view"
+    card_view:cardCornerRadius="4dp"
+    android:layout_marginLeft="@dimen/player_card_side_margin"
+    android:layout_marginRight="@dimen/player_card_side_margin"
+    android:layout_marginBottom="@dimen/player_card_top_bottom_margin"
+    android:layout_marginTop="@dimen/player_card_top_bottom_margin">
 
+    <RelativeLayout
+        android:id="@+id/lib_card_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?android:attr/selectableItemBackground"
+        android:padding="@dimen/player_card_padding">
+    
     <TextView
         android:id="@+id/available_player_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:text="New Text"
-        android:textColor="@color/colorTextIcon"
-       
         />
+    </RelativeLayout>
+</android.support.v7.widget.CardView>
 
-</RelativeLayout>

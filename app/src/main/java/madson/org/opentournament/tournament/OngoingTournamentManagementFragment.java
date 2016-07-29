@@ -96,13 +96,7 @@ public class OngoingTournamentManagementFragment extends Fragment
                     @Override
                     public void onClick(View view) {
 
-                        PlayerAddFragment playerAddFragement = new PlayerAddFragment();
-
-                        FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
-
-                        fragmentTransaction.replace(R.id.above_left_fragment_container, playerAddFragement);
-                        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-                        fragmentTransaction.commit();
+                        Log.i(this.getClass().getName(), "click fab ongoing tournament");
                     }
                 });
         }

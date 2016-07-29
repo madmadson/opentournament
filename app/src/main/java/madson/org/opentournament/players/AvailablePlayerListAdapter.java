@@ -1,5 +1,6 @@
 package madson.org.opentournament.players;
 
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 
 import android.util.Log;
@@ -45,12 +46,11 @@ public class AvailablePlayerListAdapter extends RecyclerView.Adapter<AvailablePl
     public AvailablePlayerListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         // create a new view
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.available_player_list_row, parent, false);
+        CardView v = (CardView) LayoutInflater.from(parent.getContext())
+            .inflate(R.layout.available_player_list_row, parent, false);
 
         // set the view's size, margins, paddings and layout parameters
-        ViewHolder vh = new ViewHolder(v);
-
-        return vh;
+        return new ViewHolder(v);
     }
 
 
@@ -97,7 +97,7 @@ public class AvailablePlayerListAdapter extends RecyclerView.Adapter<AvailablePl
         private TextView playerNameInList;
         private Player player;
 
-        public ViewHolder(View v) {
+        public ViewHolder(CardView v) {
 
             super(v);
             v.setOnClickListener(this);

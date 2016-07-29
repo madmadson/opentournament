@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 
 import android.util.Log;
@@ -19,7 +20,7 @@ import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.management.TournamentDetailFragment;
 import madson.org.opentournament.players.AvailablePlayerListFragment;
-import madson.org.opentournament.players.PlayerAddFragment;
+import madson.org.opentournament.players.NewPlayerDialog;
 import madson.org.opentournament.service.TournamentService;
 
 
@@ -97,6 +98,10 @@ public class OngoingTournamentManagementFragment extends Fragment
                     public void onClick(View view) {
 
                         Log.i(this.getClass().getName(), "click fab ongoing tournament");
+
+                        NewPlayerDialog dialog = new NewPlayerDialog();
+                        FragmentManager supportFragmentManager = getActivity().getSupportFragmentManager();
+                        dialog.show(supportFragmentManager, "NoticeDialogFragment");
                     }
                 });
         }

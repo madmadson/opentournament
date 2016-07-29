@@ -25,5 +25,12 @@
     <string name="nav_home_activity">Home</string>
     <string name="nav_tournament_final">Final Results</string>
     <string name="search_player">Search players</string>
+    <string name="create_player">save</string>
+    <string name="cancel">cancel</string>
+    <string name="label_firstname">firstname</string>
+    <string name="label_nickname">nickname</string>
+    <string name="label_lastname">lastname</string>
+    <string name="validation_error_empty">field cant not be empty</string>
+    <string name="success_new_player_inserted">New Player inserted</string>
 
 </resources>

@@ -32,5 +32,6 @@
     <string name="label_lastname">lastname</string>
     <string name="validation_error_empty">field cant not be empty</string>
     <string name="success_new_player_inserted">New Player inserted</string>
+    <string name="new_player_tournament_title" type="id">Neuer Spieler für Turnier: %1$s</string>
 
 </resources>

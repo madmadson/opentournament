@@ -4,38 +4,40 @@ import android.content.Intent;
 
 import android.os.Bundle;
 
-import android.support.design.widget.NavigationView;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.TabLayout;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.NavUtils;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 import android.util.Log;
 
+import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
-import madson.org.opentournament.HomeFragment;
-import madson.org.opentournament.MainActivity;
 import madson.org.opentournament.OpenTournamentApplication;
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.management.TournamentDetailFragment;
-import madson.org.opentournament.management.TournamentManagementFragment;
-import madson.org.opentournament.players.AvailablePlayerListFragment;
+import madson.org.opentournament.players.NewPlayerForTournamentDialog;
 import madson.org.opentournament.service.TournamentService;
 
 
-public class OngoingTournamentActivity extends AppCompatActivity
-    implements NavigationView.OnNavigationItemSelectedListener {
+public class OngoingTournamentActivity extends AppCompatActivity {
 
     public static final String EXTRA_TOURNAMENT_ID = "tournament_id";
+
+    private SectionsPagerAdapter mSectionsPagerAdapter;
+    private ViewPager mViewPager;
+
+    private OngoingTournamentManagementFragment ongoingTournamentManagementFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,20 +48,11 @@ public class OngoingTournamentActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open,
-                R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-
         Intent intent = getIntent();
 
         Bundle extras = intent.getExtras();
 
-        long tournamentId = (long) extras.get(EXTRA_TOURNAMENT_ID);
+        final long tournamentId = (long) extras.get(EXTRA_TOURNAMENT_ID);
 
         if (tournamentId != 0) {
             Log.i(this.getClass().toString(), "tournament started with id " + tournamentId);
@@ -73,18 +66,35 @@ public class OngoingTournamentActivity extends AppCompatActivity
                 supportActionBar.setTitle(tournament.getName());
             }
 
-            FragmentManager manager = getSupportFragmentManager();
-            Fragment fragment = manager.findFragmentByTag(TournamentManagementFragment.TAG);
+            mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), tournament);
 
-            if (fragment == null) {
-                fragment = new OngoingTournamentManagementFragment();
+            mViewPager = (ViewPager) findViewById(R.id.container);
+            mViewPager.setAdapter(mSectionsPagerAdapter);
 
-                Bundle bundle = new Bundle();
-                bundle.putLong(TournamentDetailFragment.BUNDLE_TOURNAMENT_ID, tournamentId);
-                fragment.setArguments(bundle);
-                manager.beginTransaction()
-                    .replace(R.id.main_fragment_container, fragment, OngoingTournamentManagementFragment.TAG)
-                    .commit();
+            TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+            tabLayout.setupWithViewPager(mViewPager);
+
+            final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+
+            if (fab != null) {
+                fab.setOnClickListener(new View.OnClickListener() {
+
+                        @Override
+                        public void onClick(View view) {
+
+                            Log.i(this.getClass().getName(), "click fab ongoing tournament");
+
+                            NewPlayerForTournamentDialog dialog = new NewPlayerForTournamentDialog();
+
+                            Bundle bundleForTournamentPlayers = new Bundle();
+                            bundleForTournamentPlayers.putLong(NewPlayerForTournamentDialog.BUNDLE_TOURNAMENT_ID,
+                                tournamentId);
+                            dialog.setArguments(bundleForTournamentPlayers);
+
+                            FragmentManager supportFragmentManager = getSupportFragmentManager();
+                            dialog.show(supportFragmentManager, "NewPlayerForTournamentDialog");
+                        }
+                    });
             }
         } else {
             throw new RuntimeException();
@@ -93,34 +103,25 @@ public class OngoingTournamentActivity extends AppCompatActivity
 
 
     @Override
-    public void onBackPressed() {
+    public boolean onCreateOptionsMenu(Menu menu) {
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main, menu);
 
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
+        return true;
     }
 
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        if (id == android.R.id.home) {
-            // This ID represents the Home or Up button. In the case of this
-            // activity, the Up button is shown. Use NavUtils to allow users
-            // to navigate up one level in the application structure. For
-            // more details, see the Navigation pattern on Android Design:
-            //
-            // http://developer.android.com/design/patterns/navigation.html#up-vs-back
-            //
-
-            NavUtils.navigateUpTo(this, new Intent(this, MainActivity.class));
-
+        // noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
             return true;
         }
 
@@ -128,31 +129,54 @@ public class OngoingTournamentActivity extends AppCompatActivity
     }
 
 
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public OngoingTournamentManagementFragment getOngoingTournamentManagementFragment() {
 
-        int id = item.getItemId();
-        FragmentManager manager = getSupportFragmentManager();
+        return ongoingTournamentManagementFragment;
+    }
 
-        if (id == R.id.nav_home) {
-            Log.i("Nav", "Main Activity");
+    private class SectionsPagerAdapter extends FragmentPagerAdapter {
 
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
-        } else if (id == R.id.nav_tournaments_setup) {
-            Log.i("Nav", "Open Tournament Setup");
+        private Tournament tournament;
 
-            Fragment fragment = manager.findFragmentByTag(AvailablePlayerListFragment.TAG);
+        public SectionsPagerAdapter(FragmentManager fm, Tournament tournament) {
 
-            if (fragment == null) {
-                fragment = new HomeFragment();
-                manager.beginTransaction().replace(R.id.main_fragment_container, fragment, HomeFragment.TAG).commit();
+            super(fm);
+            this.tournament = tournament;
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+
+            if (position == 0) {
+                ongoingTournamentManagementFragment = new OngoingTournamentManagementFragment();
+
+                Bundle bundle = new Bundle();
+                bundle.putLong(TournamentDetailFragment.BUNDLE_TOURNAMENT_ID, tournament.getId());
+                ongoingTournamentManagementFragment.setArguments(bundle);
+
+                return ongoingTournamentManagementFragment;
+            } else {
+                return new OngoingTournamentManagementFragment();
             }
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
 
-        return true;
+        @Override
+        public int getCount() {
+
+            return 1;
+        }
+
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+
+            switch (position) {
+                case 0:
+                    return getApplication().getResources().getString(R.string.nav_tournament_setup);
+            }
+
+            return null;
+        }
     }
 }

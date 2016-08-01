@@ -13,4 +13,7 @@
     <dimen name="player_card_padding">8dp</dimen>
     <dimen name="player_card_top_bottom_margin">4dp</dimen>
     <dimen name="player_card_side_margin">12dp</dimen>
+    
+    <dimen name="player_create_dialog">8dp</dimen>
+
 </resources>

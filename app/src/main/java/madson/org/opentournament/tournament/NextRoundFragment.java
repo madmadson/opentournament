@@ -1,5 +1,7 @@
 package madson.org.opentournament.tournament;
 
+import android.content.Context;
+
 import android.os.Bundle;
 
 import android.support.annotation.Nullable;
@@ -33,6 +35,8 @@ public class NextRoundFragment extends Fragment {
 
     public static final String BUNDLE_TOURNAMENT_ID = "tournament_id";
     private Tournament tournament;
+
+    private NextRoundEventListener mListener;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -74,7 +78,32 @@ public class NextRoundFragment extends Fragment {
                     if (pairingsForRound.isEmpty()) {
                         ongoingTournamentService.createPairingForRound(tournament.getId(), tournament.getActualRound());
                     }
+
+                    if (mListener != null) {
+                        mListener.onNextRound(tournament.getActualRound() + 1);
+                    } else {
+                        throw new RuntimeException("Listener for tournamentPlayerListAdapter missing");
+                    }
                 }
             });
+    }
+
+
+    @Override
+    public void onAttach(Context context) {
+
+        super.onAttach(context);
+
+        if (getParentFragment() instanceof NextRoundEventListener) {
+            mListener = (NextRoundEventListener) getParentFragment();
+        } else {
+            throw new RuntimeException(getParentFragment().toString()
+                + " must implement NextRoundEventListener");
+        }
+    }
+
+    public interface NextRoundEventListener {
+
+        void onNextRound(int round);
     }
 }

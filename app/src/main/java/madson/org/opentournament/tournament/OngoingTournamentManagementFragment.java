@@ -22,7 +22,7 @@ import madson.org.opentournament.service.TournamentService;
 
 public class OngoingTournamentManagementFragment extends Fragment
     implements AvailablePlayerListFragment.AvailablePlayerListItemListener,
-        TournamentPlayerListFragment.TournamentPlayerListItemListener {
+        TournamentPlayerListFragment.TournamentPlayerListItemListener, NextRoundFragment.NextRoundEventListener {
 
     public static final String TAG = "ongoing_tournament_management_fragment";
     private static final String BUNDLE_TOURNAMENT_ID = "tournament_id";
@@ -119,5 +119,12 @@ public class OngoingTournamentManagementFragment extends Fragment
         if (tournamentPlayerListFragment != null) {
             tournamentPlayerListFragment.removePlayer();
         }
+    }
+
+
+    @Override
+    public void onNextRound(int round) {
+
+        Log.i(this.getClass().getName(), "clicked next round: " + round);
     }
 }

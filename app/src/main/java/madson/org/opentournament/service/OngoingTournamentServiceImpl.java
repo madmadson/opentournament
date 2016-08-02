@@ -49,23 +49,24 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
 
     private void createMockTournamentPlayers() {
 
+        addPlayerToTournament(1, 1);
+        addPlayerToTournament(1, 2);
+        addPlayerToTournament(1, 3);
+        addPlayerToTournament(1, 4);
+        addPlayerToTournament(1, 5);
+        addPlayerToTournament(1, 6);
+        addPlayerToTournament(1, 7);
+        addPlayerToTournament(1, 8);
+    }
+
+
+    private void addPlayerToTournament(int tournament_id, int player_id) {
+
         SQLiteDatabase db = openTournamentDBHelper.getWritableDatabase();
-
-        ContentValues contentValues = new ContentValues();
-        contentValues.put("tournament_id", 1);
-        contentValues.put("player_id", 1);
-        db.insert(TournamentPlayerTable.TABLE_TOURNAMENT_PLAYER, null, contentValues);
-        contentValues.clear();
-
+        ContentValues contentValues;
         contentValues = new ContentValues();
-        contentValues.put("tournament_id", 1);
-        contentValues.put("player_id", 2);
-        db.insert(TournamentPlayerTable.TABLE_TOURNAMENT_PLAYER, null, contentValues);
-        contentValues.clear();
-
-        contentValues = new ContentValues();
-        contentValues.put("tournament_id", 1);
-        contentValues.put("player_id", 3);
+        contentValues.put("tournament_id", tournament_id);
+        contentValues.put("player_id", player_id);
         db.insert(TournamentPlayerTable.TABLE_TOURNAMENT_PLAYER, null, contentValues);
     }
 

@@ -15,6 +15,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.TextView;
+
 import madson.org.opentournament.OpenTournamentApplication;
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Player;
@@ -36,6 +38,8 @@ public class TournamentPlayerListFragment extends Fragment {
     public static final String BUNDLE_TOURNAMENT_ID = "tournament_id";
     private Long tournamentId;
     private TournamentPlayerListAdapter tournamentPlayerListAdapter;
+
+    private TextView heading;
 
     private TournamentPlayerListItemListener mListener;
 
@@ -62,6 +66,9 @@ public class TournamentPlayerListFragment extends Fragment {
 
         List<Player> players = ongoingTournamentService.getPlayersForTournament(tournamentId);
 
+        heading = (TextView) view.findViewById(R.id.heading_tournament_players);
+        heading.setText(getString(R.string.heading_tournament_player, players.size()));
+
         if (mListener != null) {
             tournamentPlayerListAdapter = new TournamentPlayerListAdapter(players, mListener);
             recyclerView.setAdapter(tournamentPlayerListAdapter);
@@ -80,6 +87,8 @@ public class TournamentPlayerListFragment extends Fragment {
         if (tournamentPlayerListAdapter != null) {
             tournamentPlayerListAdapter.add(player);
 
+            heading.setText(getString(R.string.heading_tournament_player, tournamentPlayerListAdapter.getItemCount()));
+
             Runnable runnable = new Runnable() {
 
                 @Override
@@ -94,6 +103,12 @@ public class TournamentPlayerListFragment extends Fragment {
             };
             runnable.run();
         }
+    }
+
+
+    public void removePlayer() {
+
+        heading.setText(getString(R.string.heading_tournament_player, tournamentPlayerListAdapter.getItemCount()));
     }
 
 

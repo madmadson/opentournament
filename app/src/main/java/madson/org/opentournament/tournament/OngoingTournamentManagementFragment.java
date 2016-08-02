@@ -82,6 +82,9 @@ public class OngoingTournamentManagementFragment extends Fragment
                 fragmentTransaction.replace(R.id.right_fragment_container, tournamentPlayerListFragment);
             }
 
+            NextRoundFragment nextRoundFragment = new NextRoundFragment();
+            fragmentTransaction.replace(R.id.next_round_container, nextRoundFragment);
+
             fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
             fragmentTransaction.commit();
         }
@@ -106,6 +109,11 @@ public class OngoingTournamentManagementFragment extends Fragment
 
         if (availablePlayerListFragment != null) {
             availablePlayerListFragment.addPlayer(player);
+        }
+
+        // for the heading
+        if (tournamentPlayerListFragment != null) {
+            tournamentPlayerListFragment.removePlayer();
         }
     }
 }

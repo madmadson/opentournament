@@ -51,6 +51,7 @@ public class TournamentPlayerListAdapter extends RecyclerView.Adapter<Tournament
 
         final Player player = tournamentPlayerList.get(position);
         holder.setPlayer(player);
+        holder.getPlayerNumber().setText(String.valueOf(position + 1));
         holder.getPlayerNameInList()
             .setText(player.getFirstname() + " \"" + player.getNickname() + "\" " + player.getLastname());
     }
@@ -80,6 +81,7 @@ public class TournamentPlayerListAdapter extends RecyclerView.Adapter<Tournament
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private TextView playerNameInList;
+        private TextView playerNumber;
         private Player player;
 
         public ViewHolder(View v) {
@@ -87,7 +89,8 @@ public class TournamentPlayerListAdapter extends RecyclerView.Adapter<Tournament
             super(v);
             v.setOnClickListener(this);
 
-            playerNameInList = (TextView) v.findViewById(R.id.tournament_player_name_in_list);
+            playerNameInList = (TextView) v.findViewById(R.id.tournament_player_row_name);
+            playerNumber = (TextView) v.findViewById(R.id.tournmanet_player_row_player_number);
         }
 
         public TextView getPlayerNameInList() {
@@ -99,6 +102,12 @@ public class TournamentPlayerListAdapter extends RecyclerView.Adapter<Tournament
         public void setPlayer(Player player) {
 
             this.player = player;
+        }
+
+
+        public TextView getPlayerNumber() {
+
+            return playerNumber;
         }
 
 

@@ -30,8 +30,15 @@
     <string name="label_firstname">firstname</string>
     <string name="label_nickname">nickname</string>
     <string name="label_lastname">lastname</string>
+    
+    
+    <!-- New Player For Tournament dialog-->
     <string name="validation_error_empty">field cant not be empty</string>
     <string name="success_new_player_inserted">New Player inserted</string>
     <string name="new_player_tournament_title" type="id">Neuer Spieler für Turnier: %1$s</string>
+    <string name="button_start_tournament">Start</string>
+    
+    <!-- Tournament Player List -->
+    <string name="heading_tournament_player">Spieler im Turnier (%1$d)</string>
 
 </resources>

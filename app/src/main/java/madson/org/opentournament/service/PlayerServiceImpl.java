@@ -55,6 +55,11 @@ public class PlayerServiceImpl implements PlayerService {
         createPlayer(1, new Player("Tobias", "Madson", "Matt"));
         createPlayer(2, new Player("Christoph", "Zaziboy", "Scholl"));
         createPlayer(3, new Player("David", "Wildjack", "Voigt"));
+        createPlayer(4, new Player("Andreas", "Ragegear", "Neugebauer"));
+        createPlayer(5, new Player("Andreas", "Raskild", "Tonndorf"));
+        createPlayer(6, new Player("Martina", "Bazinga", "Haug"));
+        createPlayer(7, new Player("Tobias", "Zeus", "Rohrauer"));
+        createPlayer(8, new Player("Yann", "Arcane", "Krehl"));
     }
 
 

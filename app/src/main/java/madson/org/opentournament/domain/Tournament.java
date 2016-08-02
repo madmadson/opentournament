@@ -10,13 +10,16 @@ import java.util.Date;
  */
 public class Tournament {
 
-    public static final String[] ALL_COLS_FOR_TOURNAMENT = { "_id", "name", "description", "numberOfPlayers", "date" };
+    public static final String[] ALL_COLS_FOR_TOURNAMENT = {
+        "_id", "name", "description", "numberOfPlayers", "date", "actualRound"
+    };
 
     private long _id;
     private String name;
     private String description;
     private int numberOfPlayers;
     private Date dateOfTournament;
+    private int actualRound;
 
     public Tournament(long id, String name, String description, int numberOfPlayers, Date dateOfTournament) {
 
@@ -30,6 +33,12 @@ public class Tournament {
 
     public Tournament() {
     }
+
+    public int getActualRound() {
+
+        return actualRound;
+    }
+
 
     public String getName() {
 

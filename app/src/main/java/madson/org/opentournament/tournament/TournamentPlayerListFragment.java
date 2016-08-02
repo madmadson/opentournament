@@ -20,9 +20,7 @@ import android.widget.TextView;
 import madson.org.opentournament.OpenTournamentApplication;
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Player;
-import madson.org.opentournament.domain.Tournament;
-import madson.org.opentournament.players.AvailablePlayerListAdapter;
-import madson.org.opentournament.players.AvailablePlayerListFragment;
+import madson.org.opentournament.domain.warmachine.WarmachineTournamentPlayer;
 import madson.org.opentournament.service.OngoingTournamentService;
 
 import java.util.List;
@@ -37,7 +35,7 @@ public class TournamentPlayerListFragment extends Fragment {
 
     public static final String BUNDLE_TOURNAMENT_ID = "tournament_id";
     private Long tournamentId;
-    private TournamentPlayerListAdapter tournamentPlayerListAdapter;
+    private WarmachineTournamentPlayerListAdapter tournamentPlayerListAdapter;
 
     private TextView heading;
 
@@ -64,13 +62,14 @@ public class TournamentPlayerListFragment extends Fragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(linearLayoutManager);
 
-        List<Player> players = ongoingTournamentService.getPlayersForTournament(tournamentId);
+        List<WarmachineTournamentPlayer> players = ongoingTournamentService.getPlayersForWarmachineTournament(
+                tournamentId);
 
         heading = (TextView) view.findViewById(R.id.heading_tournament_players);
         heading.setText(getString(R.string.heading_tournament_player, players.size()));
 
         if (mListener != null) {
-            tournamentPlayerListAdapter = new TournamentPlayerListAdapter(players, mListener);
+            tournamentPlayerListAdapter = new WarmachineTournamentPlayerListAdapter(players, mListener);
             recyclerView.setAdapter(tournamentPlayerListAdapter);
         } else {
             throw new RuntimeException("Listener for tournamentPlayerListAdapter missing");

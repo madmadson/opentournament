@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Player;
+import madson.org.opentournament.domain.warmachine.WarmachineTournamentPlayer;
 
 import java.util.List;
 
@@ -21,12 +22,12 @@ import java.util.List;
  *
  * @author  Tobias Matt - tmatt@contargo.net
  */
-public class TournamentPlayerListAdapter extends RecyclerView.Adapter<TournamentPlayerListAdapter.ViewHolder> {
+public class WarmachineTournamentPlayerListAdapter extends RecyclerView.Adapter<WarmachineTournamentPlayerListAdapter.ViewHolder> {
 
     private TournamentPlayerListFragment.TournamentPlayerListItemListener mListener;
-    private List<Player> tournamentPlayerList;
+    private List<WarmachineTournamentPlayer> tournamentPlayerList;
 
-    public TournamentPlayerListAdapter(List<Player> tournamentPlayerList,
+    public WarmachineTournamentPlayerListAdapter(List<WarmachineTournamentPlayer> tournamentPlayerList,
         TournamentPlayerListFragment.TournamentPlayerListItemListener mListener) {
 
         this.mListener = mListener;
@@ -34,7 +35,7 @@ public class TournamentPlayerListAdapter extends RecyclerView.Adapter<Tournament
     }
 
     @Override
-    public TournamentPlayerListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public WarmachineTournamentPlayerListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         // create a new view
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.tournament_player_list_row, parent, false);
@@ -47,9 +48,9 @@ public class TournamentPlayerListAdapter extends RecyclerView.Adapter<Tournament
 
 
     @Override
-    public void onBindViewHolder(TournamentPlayerListAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(WarmachineTournamentPlayerListAdapter.ViewHolder holder, int position) {
 
-        final Player player = tournamentPlayerList.get(position);
+        final WarmachineTournamentPlayer player = tournamentPlayerList.get(position);
         holder.setPlayer(player);
         holder.getPlayerNumber().setText(String.valueOf(position + 1));
         holder.getPlayerNameInList()
@@ -64,25 +65,28 @@ public class TournamentPlayerListAdapter extends RecyclerView.Adapter<Tournament
     }
 
 
-    public void add(Player item) {
+    public void add(WarmachineTournamentPlayer item) {
 
         tournamentPlayerList.add(item);
         notifyDataSetChanged();
     }
 
 
-    public void remove(Player item) {
+    /**
+     * add new player.
+     *
+     * @param  player
+     */
+    public void add(Player player) {
 
-        int position = tournamentPlayerList.indexOf(item);
-        tournamentPlayerList.remove(position);
-        notifyItemRemoved(position);
+        add(new WarmachineTournamentPlayer(player));
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private TextView playerNameInList;
         private TextView playerNumber;
-        private Player player;
+        private WarmachineTournamentPlayer player;
 
         public ViewHolder(View v) {
 
@@ -99,7 +103,7 @@ public class TournamentPlayerListAdapter extends RecyclerView.Adapter<Tournament
         }
 
 
-        public void setPlayer(Player player) {
+        public void setPlayer(WarmachineTournamentPlayer player) {
 
             this.player = player;
         }

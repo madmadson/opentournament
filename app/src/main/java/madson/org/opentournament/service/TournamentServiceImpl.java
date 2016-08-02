@@ -9,11 +9,8 @@ import android.database.sqlite.SQLiteDatabase;
 
 import android.util.Log;
 
-import madson.org.opentournament.OpenTournamentApplication;
 import madson.org.opentournament.db.OpenTournamentDBHelper;
-import madson.org.opentournament.db.TournamentPlayerTable;
 import madson.org.opentournament.db.TournamentTable;
-import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.Tournament;
 
 import org.joda.time.DateTime;
@@ -34,7 +31,7 @@ public class TournamentServiceImpl implements TournamentService {
 
     private String[] allColumns = {
         TournamentTable.COLUMN_ID, TournamentTable.COLUMN_NAME, TournamentTable.COLUMN_DESCRIPTION,
-        TournamentTable.COLUMN_DATE, TournamentTable.COLUMN_NUMBER_OF_PLAYERS
+        TournamentTable.COLUMN_DATE, TournamentTable.COLUMN_NUMBER_OF_PLAYERS, TournamentTable.COLUMN_ACTUAL_ROUND
     };
 
     public TournamentServiceImpl(Context context) {
@@ -51,7 +48,7 @@ public class TournamentServiceImpl implements TournamentService {
 
     private void createMockTournaments() {
 
-        createTournament(1, "Tournament1", "description1", new DateTime(2016, 3, 10, 10, 0).toDate(), 0);
+        createTournament(1, "Tournament1", "description1", new DateTime(2016, 3, 10, 10, 0).toDate(), 8);
         createTournament(2, "Tournament2", "description2", new DateTime(2016, 5, 20, 10, 0).toDate(), 0);
         createTournament(3, "Tournament3", "description3", new DateTime(2016, 7, 15, 10, 0).toDate(), 0);
     }
@@ -65,6 +62,7 @@ public class TournamentServiceImpl implements TournamentService {
         contentValues.put(TournamentTable.COLUMN_DESCRIPTION, description);
         contentValues.put(TournamentTable.COLUMN_DATE, date.toString());
         contentValues.put(TournamentTable.COLUMN_NUMBER_OF_PLAYERS, numberOfPlayers);
+        contentValues.put(TournamentTable.COLUMN_ACTUAL_ROUND, 0);
         createTournament(contentValues);
     }
 

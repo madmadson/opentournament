@@ -83,6 +83,10 @@ public class OngoingTournamentManagementFragment extends Fragment
             }
 
             NextRoundFragment nextRoundFragment = new NextRoundFragment();
+            Bundle bundleForNextRound = new Bundle();
+            bundleForNextRound.putLong(NextRoundFragment.BUNDLE_TOURNAMENT_ID, tournament.getId());
+            nextRoundFragment.setArguments(bundleForNextRound);
+
             fragmentTransaction.replace(R.id.next_round_container, nextRoundFragment);
 
             fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);

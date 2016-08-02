@@ -1,0 +1,50 @@
+package madson.org.opentournament.db.warmachine;
+
+import android.database.sqlite.SQLiteDatabase;
+
+import android.util.Log;
+
+
+/**
+ * Write some fancy Javadoc!
+ *
+ * @author  Tobias Matt - tmatt@contargo.net
+ */
+public class WarmachineTournamentPairingTable {
+
+    public static final String TABLE_TOURNAMENT_PAIRING = "warmachine_tournament_pairing";
+    public static final String COLUMN_ID = "_id";
+    public static final String COLUMN_TOURNAMENT_ID = "tournament_id";
+    public static final String COLUMN_ROUND = "round";
+    public static final String COLUMN_PLAYER_ONE_ID = "player_one_id";
+    public static final String COLUMN_PLAYER_ONE_SCORE = "player_one_score";
+    public static final String COLUMN_PLAYER_ONE_CONTROL_POINTS = "player_one_control_points";
+    public static final String COLUMN_PLAYER_ONE_VICTORY_POINTS = "player_one_victory_points";
+    public static final String COLUMN_PLAYER_TWO_ID = "player_two_id";
+    public static final String COLUMN_PLAYER_TWO_SCORE = "player_two_score";
+    public static final String COLUMN_PLAYER_TWO_CONTROL_POINTS = "player_two_control_points";
+    public static final String COLUMN_PLAYER_TWO_VICTORY_POINTS = "player_two_victory_points";
+
+    public static void createTable(SQLiteDatabase db) {
+
+        Log.i(WarmachineTournamentPairingTable.class.getName(), "create warmachine_tournament_pairing table");
+
+        db.execSQL(" CREATE TABLE " + TABLE_TOURNAMENT_PAIRING
+            + " (" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_TOURNAMENT_ID + " INTEGER, "
+            + COLUMN_ROUND + " INTEGER, " + COLUMN_PLAYER_ONE_ID + " INTEGER, " + COLUMN_PLAYER_TWO_ID + " INTEGER, "
+            + COLUMN_PLAYER_ONE_SCORE + " INTEGER, " + COLUMN_PLAYER_ONE_CONTROL_POINTS
+            + " INTEGER, " + COLUMN_PLAYER_ONE_VICTORY_POINTS + " INTEGER, " + COLUMN_PLAYER_TWO_SCORE
+            + " INTEGER, " + COLUMN_PLAYER_TWO_CONTROL_POINTS + " INTEGER, " + COLUMN_PLAYER_TWO_VICTORY_POINTS
+            + " INTEGER)");
+    }
+
+
+    public static void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+
+        Log.w(WarmachineTournamentPlayerTable.class.getName(),
+            "Upgrading database from version " + oldVersion + " to " + newVersion
+            + ", which will destroy all old data");
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_TOURNAMENT_PAIRING);
+        createTable(db);
+    }
+}

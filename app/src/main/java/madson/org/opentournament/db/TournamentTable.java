@@ -20,6 +20,7 @@ public class TournamentTable {
     public static final String COLUMN_DESCRIPTION = "description";
     public static final String COLUMN_DATE = "date";
     public static final String COLUMN_NUMBER_OF_PLAYERS = "numberOfPlayers";
+    public static final String COLUMN_ACTUAL_ROUND = "actualRound";
 
     public static void createTable(SQLiteDatabase db) {
 
@@ -27,8 +28,8 @@ public class TournamentTable {
         db.execSQL(" CREATE TABLE " + TABLE_TOURNAMENTS
             + " (" + COLUMN_ID
             + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_NAME
-            + " TEXT, " + COLUMN_DESCRIPTION + " TEXT, " + COLUMN_DATE + " NUMERIC, " + COLUMN_NUMBER_OF_PLAYERS
-            + " NUMERIC)");
+            + " TEXT, " + COLUMN_DESCRIPTION + " TEXT, " + COLUMN_DATE + " INTEGER, " + COLUMN_NUMBER_OF_PLAYERS
+            + " INTEGER, " + COLUMN_ACTUAL_ROUND + " INTEGER)");
     }
 
 

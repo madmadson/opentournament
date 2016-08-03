@@ -73,10 +73,11 @@ public class NextRoundFragment extends Fragment {
 
                     List<WarmachineTournamentPairing> pairingsForRound =
                         ongoingTournamentService.getPairingsForTournament(tournament.getId(),
-                            tournament.getActualRound());
+                            tournament.getActualRound() + 1);
 
                     if (pairingsForRound.isEmpty()) {
-                        ongoingTournamentService.createPairingForRound(tournament.getId(), tournament.getActualRound());
+                        ongoingTournamentService.createPairingForRound(tournament.getId(),
+                            tournament.getActualRound() + 1);
                     }
 
                     if (mListener != null) {

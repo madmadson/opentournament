@@ -126,5 +126,29 @@ public class OngoingTournamentManagementFragment extends Fragment
     public void onNextRound(int round) {
 
         Log.i(this.getClass().getName(), "clicked next round: " + round);
+
+        FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
+
+        PairingListFragment pairingListFragment = new PairingListFragment();
+
+        Bundle bundleForPairing = new Bundle();
+        bundleForPairing.putLong(PairingListFragment.BUNDLE_TOURNAMENT_ID, tournament.getId());
+        bundleForPairing.putInt(PairingListFragment.BUNDLE_ROUND, round);
+        pairingListFragment.setArguments(bundleForPairing);
+
+        fragmentTransaction.replace(R.id.left_fragment_container, pairingListFragment);
+
+        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        fragmentTransaction.commit();
+
+        fragmentTransaction.detach(tournamentPlayerListFragment);
+
+        if (round != 0) {
+            View fab = getActivity().findViewById(R.id.fab);
+
+            if (fab != null) {
+                fab.setVisibility(View.INVISIBLE);
+            }
+        }
     }
 }

@@ -12,6 +12,12 @@ import android.util.Log;
  */
 public class WarmachineTournamentPairingTable {
 
+    public static final String[] ALL_COLS_FOR_TOURNAMENT_PAIRING = {
+        "_id", "tournament_id", "round", "player_one_id", "player_one_score", "player_one_control_points",
+        "player_one_victory_points", "player_two_id", "player_two_score", "player_two_control_points",
+        "player_two_victory_points", "player_one_full_name", "player_two_full_name"
+    };
+
     public static final String TABLE_TOURNAMENT_PAIRING = "warmachine_tournament_pairing";
     public static final String COLUMN_ID = "_id";
     public static final String COLUMN_TOURNAMENT_ID = "tournament_id";
@@ -24,6 +30,8 @@ public class WarmachineTournamentPairingTable {
     public static final String COLUMN_PLAYER_TWO_SCORE = "player_two_score";
     public static final String COLUMN_PLAYER_TWO_CONTROL_POINTS = "player_two_control_points";
     public static final String COLUMN_PLAYER_TWO_VICTORY_POINTS = "player_two_victory_points";
+    public static final String COLUMN_PLAYER_ONE_FULL_NAME = "player_one_full_name";
+    public static final String COLUMN_PLAYER_TWO_FULL_NAME = "player_two_full_name";
 
     public static void createTable(SQLiteDatabase db) {
 
@@ -31,7 +39,8 @@ public class WarmachineTournamentPairingTable {
 
         db.execSQL(" CREATE TABLE " + TABLE_TOURNAMENT_PAIRING
             + " (" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_TOURNAMENT_ID + " INTEGER, "
-            + COLUMN_ROUND + " INTEGER, " + COLUMN_PLAYER_ONE_ID + " INTEGER, " + COLUMN_PLAYER_TWO_ID + " INTEGER, "
+            + COLUMN_ROUND + " INTEGER, " + COLUMN_PLAYER_ONE_ID + " INTEGER, " + COLUMN_PLAYER_ONE_FULL_NAME
+            + " STRING, " + COLUMN_PLAYER_TWO_ID + " INTEGER, " + COLUMN_PLAYER_TWO_FULL_NAME + " STRING, "
             + COLUMN_PLAYER_ONE_SCORE + " INTEGER, " + COLUMN_PLAYER_ONE_CONTROL_POINTS
             + " INTEGER, " + COLUMN_PLAYER_ONE_VICTORY_POINTS + " INTEGER, " + COLUMN_PLAYER_TWO_SCORE
             + " INTEGER, " + COLUMN_PLAYER_TWO_CONTROL_POINTS + " INTEGER, " + COLUMN_PLAYER_TWO_VICTORY_POINTS

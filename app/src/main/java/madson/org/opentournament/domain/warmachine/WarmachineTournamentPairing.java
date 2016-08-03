@@ -7,22 +7,18 @@ package madson.org.opentournament.domain.warmachine;
  */
 public class WarmachineTournamentPairing {
 
-    public static final String[] ALL_COLS_FOR_TOURNAMENT_PAIRING = {
-        "_id", "tournament_id", "round", "player_one_id", "player_one_score", "player_one_control_points",
-        "player_one_victory_points", "player_two_id", "player_two_score", "player_two_control_points",
-        "player_two_victory_points"
-    };
-
     private long _id;
     private int tournament_id;
     private int round;
 
     private int player_one_id;
+    private String player_one_full_name;
     private int player_one_score;
     private int player_one_control_points;
     private int player_one_victory_points;
 
     private int player_two_id;
+    private String player_two_full_name;
     private int player_two_score;
     private int player_two_control_points;
     private int player_two_victory_points;
@@ -63,6 +59,30 @@ public class WarmachineTournamentPairing {
     public void setPlayer_one_id(int player_one_id) {
 
         this.player_one_id = player_one_id;
+    }
+
+
+    public String getPlayer_one_full_name() {
+
+        return player_one_full_name;
+    }
+
+
+    public void setPlayer_one_full_name(String player_one_full_name) {
+
+        this.player_one_full_name = player_one_full_name;
+    }
+
+
+    public String getPlayer_two_full_name() {
+
+        return player_two_full_name;
+    }
+
+
+    public void setPlayer_two_full_name(String player_two_full_name) {
+
+        this.player_two_full_name = player_two_full_name;
     }
 
 

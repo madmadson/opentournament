@@ -17,4 +17,7 @@
     <dimen name="player_create_dialog">8dp</dimen>
     <dimen name="player_list_padding">8dp</dimen>
 
+    <dimen name="pairing_list_padding">8dp</dimen>
+
+    
 </resources>

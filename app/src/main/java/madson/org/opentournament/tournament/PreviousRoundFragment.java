@@ -31,7 +31,7 @@ import java.util.List;
  *
  * @author  Tobias Matt - tmatt@contargo.net
  */
-public class NextRoundFragment extends Fragment {
+public class PreviousRoundFragment extends Fragment {
 
     public static final String BUNDLE_TOURNAMENT_ID = "tournament_id";
     public static final String BUNDLE_ROUND = "round";
@@ -47,14 +47,14 @@ public class NextRoundFragment extends Fragment {
         Bundle bundle = getArguments();
 
         if (bundle != null) {
-            long aLong = bundle.getLong(BUNDLE_TOURNAMENT_ID);
+            long tournament_id = bundle.getLong(BUNDLE_TOURNAMENT_ID);
             TournamentService tournamentService = ((OpenTournamentApplication) getActivity().getApplication())
                 .getTournamentService();
-            tournament = tournamentService.getTournamentForId(aLong);
+            tournament = tournamentService.getTournamentForId(tournament_id);
             round = bundle.getInt(BUNDLE_ROUND);
         }
 
-        return inflater.inflate(R.layout.fragment_next_round_fragment, container, false);
+        return inflater.inflate(R.layout.fragment_previous_round_fragment, container, false);
     }
 
 
@@ -63,9 +63,9 @@ public class NextRoundFragment extends Fragment {
 
         super.onViewCreated(view, savedInstanceState);
 
-        Button nextRoundButton = (Button) view.findViewById(R.id.next_round_button);
+        Button nextRoundButton = (Button) view.findViewById(R.id.previous_round_button);
 
-        nextRoundButton.setText(getString(R.string.button_pair_round, round + 1));
+        nextRoundButton.setText(getString(R.string.button_pair_round, (round - 1)));
 
         nextRoundButton.setOnClickListener(new View.OnClickListener() {
 
@@ -73,25 +73,7 @@ public class NextRoundFragment extends Fragment {
                 public void onClick(View v) {
 
                     Log.i(this.getClass().getName(),
-                        "click next round (" + round + 1 + ") for tournament: " + tournament);
-
-                    OngoingTournamentService ongoingTournamentService =
-                        ((OpenTournamentApplication) getActivity().getApplication()).getOngoingTournamentService();
-
-                    List<WarmachineTournamentPairing> pairingsForRound =
-                        ongoingTournamentService.getPairingsForTournament(tournament.getId(),
-                            tournament.getActualRound() + 1);
-
-                    if (pairingsForRound.isEmpty()) {
-                        ongoingTournamentService.createPairingForRound(tournament.getId(),
-                            tournament.getActualRound() + 1);
-                    }
-
-                    if (mListener != null) {
-                        mListener.onOpenRoundClicked(round + 1);
-                    } else {
-                        throw new RuntimeException("Listener for tournamentPlayerListAdapter missing");
-                    }
+                        "click next round (" + (tournament.getActualRound() - 1) + ") for tournament: " + tournament);
                 }
             });
     }

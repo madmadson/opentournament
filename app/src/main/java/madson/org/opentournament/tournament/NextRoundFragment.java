@@ -60,6 +60,9 @@ public class NextRoundFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         Button nextRoundButton = (Button) view.findViewById(R.id.next_round_button);
+
+        nextRoundButton.setText(getString(R.string.button_pair_next_round, tournament.getActualRound() + 1));
+
         nextRoundButton.setOnClickListener(new View.OnClickListener() {
 
                 @Override

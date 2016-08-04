@@ -26,31 +26,36 @@ public class OngoingTournamentManagementFragment extends Fragment
     implements AvailablePlayerListFragment.AvailablePlayerListItemListener,
         TournamentPlayerListFragment.TournamentPlayerListItemListener, OpenRoundEventListener {
 
-    public static final String TAG = "ongoing_tournament_management_fragment";
-    private static final String BUNDLE_TOURNAMENT_ID = "tournament_id";
+    public static final String BUNDLE_TOURNAMENT_ID = "tournament_id";
+    public static final String BUNDLE_ROUND = "round";
+
     private Tournament tournament;
+    private int round;
 
     private TournamentPlayerListFragment tournamentPlayerListFragment;
     private AvailablePlayerListFragment availablePlayerListFragment;
+    private NextRoundFragment nextRoundFragment;
+    private PreviousRoundFragment previousRoundFragment;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+
+        Bundle bundle = getArguments();
+
+        if (bundle != null) {
+            long tournament_id = bundle.getLong(BUNDLE_TOURNAMENT_ID);
+            TournamentService tournamentService = ((OpenTournamentApplication) getActivity().getApplication())
+                .getTournamentService();
+            tournament = tournamentService.getTournamentForId(tournament_id);
+            round = bundle.getInt(BUNDLE_ROUND);
+        }
     }
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-        Bundle bundle = getArguments();
-
-        if (bundle != null) {
-            long aLong = bundle.getLong(BUNDLE_TOURNAMENT_ID);
-            TournamentService tournamentService = ((OpenTournamentApplication) getActivity().getApplication())
-                .getTournamentService();
-            tournament = tournamentService.getTournamentForId(aLong);
-        }
 
         return inflater.inflate(R.layout.fragment_ongoing_tournament_management, container, false);
     }
@@ -66,21 +71,33 @@ public class OngoingTournamentManagementFragment extends Fragment
         if (view != null) {
             FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
 
-            createAvailablePlayerListFragment();
+            Log.i(this.getClass().getName(), "show round " + round + " of tournament " + tournament);
 
-            fragmentTransaction.replace(R.id.left_fragment_container, availablePlayerListFragment);
-
-            if (view.findViewById(R.id.right_fragment_container) != null) {
-                createTournamentPlayerListFragment();
-
-                fragmentTransaction.replace(R.id.right_fragment_container, tournamentPlayerListFragment);
+            if (round == 0) {
+                showSetup(fragmentTransaction);
+            } else {
+                showRound(round, fragmentTransaction);
             }
-
-            NextRoundFragment nextRoundFragment = createNextRoundFragment(0);
-            fragmentTransaction.replace(R.id.next_round_container, nextRoundFragment);
 
             fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
             fragmentTransaction.commit();
+        }
+    }
+
+
+    private void showSetup(FragmentTransaction fragmentTransaction) {
+
+        createAvailablePlayerListFragment();
+        fragmentTransaction.replace(R.id.left_fragment_container, availablePlayerListFragment);
+
+        createTournamentPlayerListFragment();
+        fragmentTransaction.replace(R.id.right_fragment_container, tournamentPlayerListFragment);
+
+        nextRoundFragment = createNextRoundFragment(0);
+        fragmentTransaction.replace(R.id.next_round_container, nextRoundFragment);
+
+        if (previousRoundFragment != null) {
+            fragmentTransaction.detach(previousRoundFragment);
         }
     }
 
@@ -135,13 +152,14 @@ public class OngoingTournamentManagementFragment extends Fragment
     @NonNull
     private PreviousRoundFragment createPreviousRoundFragment(int round) {
 
-        PreviousRoundFragment previosRoundFragment = new PreviousRoundFragment();
+        previousRoundFragment = new PreviousRoundFragment();
+
         Bundle bundleForPreviousRound = new Bundle();
         bundleForPreviousRound.putLong(PreviousRoundFragment.BUNDLE_TOURNAMENT_ID, tournament.getId());
         bundleForPreviousRound.putInt(PreviousRoundFragment.BUNDLE_ROUND, round);
-        previosRoundFragment.setArguments(bundleForPreviousRound);
+        previousRoundFragment.setArguments(bundleForPreviousRound);
 
-        return previosRoundFragment;
+        return previousRoundFragment;
     }
 
 
@@ -179,6 +197,15 @@ public class OngoingTournamentManagementFragment extends Fragment
 
         FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
 
+        showRound(round, fragmentTransaction);
+
+        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        fragmentTransaction.commit();
+    }
+
+
+    private void showRound(int round, FragmentTransaction fragmentTransaction) {
+
         NextRoundFragment nextRoundFragment = createNextRoundFragment(round);
         fragmentTransaction.replace(R.id.next_round_container, nextRoundFragment);
 
@@ -197,8 +224,5 @@ public class OngoingTournamentManagementFragment extends Fragment
                 fab.setVisibility(View.INVISIBLE);
             }
         }
-
-        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-        fragmentTransaction.commit();
     }
 }

@@ -21,13 +21,15 @@ public class Tournament {
     private Date dateOfTournament;
     private int actualRound;
 
-    public Tournament(long id, String name, String description, int numberOfPlayers, Date dateOfTournament) {
+    public Tournament(long id, String name, String description, int numberOfPlayers, Date dateOfTournament,
+        int actualRound) {
 
         this._id = id;
         this.name = name;
         this.description = description;
         this.numberOfPlayers = numberOfPlayers;
         this.dateOfTournament = dateOfTournament;
+        this.actualRound = actualRound;
     }
 
 
@@ -73,6 +75,12 @@ public class Tournament {
     @Override
     public String toString() {
 
-        return name;
+        return "Tournament{"
+            + "_id=" + _id
+            + ", name='" + name + '\''
+            + ", description='" + description + '\''
+            + ", numberOfPlayers=" + numberOfPlayers
+            + ", dateOfTournament=" + dateOfTournament
+            + ", actualRound=" + actualRound + '}';
     }
 }

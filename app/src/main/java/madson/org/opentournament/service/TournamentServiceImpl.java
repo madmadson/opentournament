@@ -62,7 +62,7 @@ public class TournamentServiceImpl implements TournamentService {
         contentValues.put(TournamentTable.COLUMN_DESCRIPTION, description);
         contentValues.put(TournamentTable.COLUMN_DATE, date.toString());
         contentValues.put(TournamentTable.COLUMN_NUMBER_OF_PLAYERS, numberOfPlayers);
-        contentValues.put(TournamentTable.COLUMN_ACTUAL_ROUND, 0);
+        contentValues.put(TournamentTable.COLUMN_ACTUAL_ROUND, 1);
         createTournament(contentValues);
     }
 
@@ -98,7 +98,7 @@ public class TournamentServiceImpl implements TournamentService {
     private Tournament cursorToTournament(Cursor cursor) {
 
         return new Tournament(cursor.getInt(0), cursor.getString(1), cursor.getString(2), cursor.getInt(3),
-                new Date(cursor.getLong(4)));
+                new Date(cursor.getLong(4)), cursor.getInt(5));
     }
 
 
@@ -115,6 +115,8 @@ public class TournamentServiceImpl implements TournamentService {
 
     @Override
     public void editTournament(Long tournamentId, ContentValues contentValues) {
+
+        Log.i(this.getClass().getName(), "edit tournament: " + tournamentId + " with: " + contentValues);
 
         SQLiteDatabase writableDatabase = openTournamentDBHelper.getWritableDatabase();
 

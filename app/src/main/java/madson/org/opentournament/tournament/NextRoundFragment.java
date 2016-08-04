@@ -75,7 +75,7 @@ public class NextRoundFragment extends Fragment {
                     Log.i(this.getClass().getName(),
                         "click next round (" + round + 1 + ") for tournament: " + tournament);
 
-                    OngoingTournamentService ongoingTournamentService =
+                    final OngoingTournamentService ongoingTournamentService =
                         ((OpenTournamentApplication) getActivity().getApplication()).getOngoingTournamentService();
 
                     List<WarmachineTournamentPairing> pairingsForRound =
@@ -85,6 +85,9 @@ public class NextRoundFragment extends Fragment {
                     if (pairingsForRound.isEmpty()) {
                         ongoingTournamentService.createPairingForRound(tournament.getId(),
                             tournament.getActualRound() + 1);
+
+                        OngoingTournamentActivity activity = (OngoingTournamentActivity) getActivity();
+                        activity.addRoundTabToViewPager();
                     }
 
                     if (mListener != null) {

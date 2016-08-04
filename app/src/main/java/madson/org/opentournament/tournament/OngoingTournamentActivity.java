@@ -38,6 +38,7 @@ public class OngoingTournamentActivity extends AppCompatActivity {
     private ViewPager mViewPager;
 
     private OngoingTournamentManagementFragment ongoingTournamentManagementFragment;
+    private long tournamentId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +53,7 @@ public class OngoingTournamentActivity extends AppCompatActivity {
 
         Bundle extras = intent.getExtras();
 
-        final long tournamentId = (long) extras.get(EXTRA_TOURNAMENT_ID);
+        tournamentId = (long) extras.get(EXTRA_TOURNAMENT_ID);
 
         if (tournamentId != 0) {
             Log.i(this.getClass().toString(), "tournament started with id " + tournamentId);
@@ -134,49 +135,67 @@ public class OngoingTournamentActivity extends AppCompatActivity {
         return ongoingTournamentManagementFragment;
     }
 
+
+    public void addRoundTabToViewPager() {
+
+        Log.i(this.getClass().getName(), "Add tab to view pager");
+
+        mSectionsPagerAdapter.addTabToPager();
+        mSectionsPagerAdapter.notifyDataSetChanged();
+        mViewPager.setCurrentItem(mSectionsPagerAdapter.getCount());
+    }
+
     private class SectionsPagerAdapter extends FragmentPagerAdapter {
 
         private Tournament tournament;
+
+        private int amountOfTabs;
 
         public SectionsPagerAdapter(FragmentManager fm, Tournament tournament) {
 
             super(fm);
             this.tournament = tournament;
+
+            amountOfTabs = tournament.getActualRound() + 1;
         }
 
         @Override
         public Fragment getItem(int position) {
 
-            if (position == 0) {
-                ongoingTournamentManagementFragment = new OngoingTournamentManagementFragment();
+            Log.i(this.getClass().getName(), "create tournament fragment: " + tournament);
 
-                Bundle bundle = new Bundle();
-                bundle.putLong(TournamentDetailFragment.BUNDLE_TOURNAMENT_ID, tournament.getId());
-                ongoingTournamentManagementFragment.setArguments(bundle);
+            ongoingTournamentManagementFragment = new OngoingTournamentManagementFragment();
 
-                return ongoingTournamentManagementFragment;
-            } else {
-                return new OngoingTournamentManagementFragment();
-            }
+            Bundle bundle = new Bundle();
+            bundle.putLong(OngoingTournamentManagementFragment.BUNDLE_TOURNAMENT_ID, tournament.getId());
+            bundle.getInt(OngoingTournamentManagementFragment.BUNDLE_ROUND, position);
+            ongoingTournamentManagementFragment.setArguments(bundle);
+
+            return ongoingTournamentManagementFragment;
         }
 
 
         @Override
         public int getCount() {
 
-            return 1;
+            return amountOfTabs;
         }
 
 
         @Override
         public CharSequence getPageTitle(int position) {
 
-            switch (position) {
-                case 0:
-                    return getApplication().getResources().getString(R.string.nav_tournament_setup);
+            if (position == 0) {
+                return getApplication().getResources().getString(R.string.nav_tournament_setup);
+            } else {
+                return getApplication().getResources().getString(R.string.nav_round_tab, position);
             }
+        }
 
-            return null;
+
+        public void addTabToPager() {
+
+            amountOfTabs = amountOfTabs + 1;
         }
     }
 }

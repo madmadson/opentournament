@@ -20,6 +20,7 @@
     <string name="title_activity_error">ErrorHandling</string>
     
     <string name="nav_tournament_setup">Tournament Setup</string>
+    <string name="nav_round_tab">Round %1$d</string>
     <string name="nav_home_activity">Home</string>
     <string name="nav_tournament_final">Final Results</string>
     <string name="search_player">Search players</string>

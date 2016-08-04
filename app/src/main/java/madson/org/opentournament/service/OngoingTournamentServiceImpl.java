@@ -219,7 +219,17 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
             insertWarmachineTournamentPairing(warmachineTournamentPairing);
         }
 
+        makeTournamentRoundActual(tournamentId, round);
+
         return warmachineTournamentPairings;
+    }
+
+
+    private void makeTournamentRoundActual(Long tournamentId, int round) {
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(TournamentTable.COLUMN_ACTUAL_ROUND, round);
+        tournamentService.editTournament(tournamentId, contentValues);
     }
 
 

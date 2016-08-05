@@ -25,7 +25,6 @@ import android.view.View;
 import madson.org.opentournament.OpenTournamentApplication;
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Tournament;
-import madson.org.opentournament.management.TournamentDetailFragment;
 import madson.org.opentournament.players.NewPlayerForTournamentDialog;
 import madson.org.opentournament.service.TournamentService;
 
@@ -39,6 +38,7 @@ public class OngoingTournamentActivity extends AppCompatActivity {
 
     private OngoingTournamentManagementFragment ongoingTournamentManagementFragment;
     private long tournamentId;
+    private Tournament tournament;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +59,7 @@ public class OngoingTournamentActivity extends AppCompatActivity {
             Log.i(this.getClass().toString(), "tournament started with id " + tournamentId);
 
             TournamentService tournamentService = ((OpenTournamentApplication) getApplication()).getTournamentService();
-            Tournament tournament = tournamentService.getTournamentForId(tournamentId);
+            tournament = tournamentService.getTournamentForId(tournamentId);
 
             ActionBar supportActionBar = getSupportActionBar();
 
@@ -67,7 +67,7 @@ public class OngoingTournamentActivity extends AppCompatActivity {
                 supportActionBar.setTitle(tournament.getName());
             }
 
-            mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), tournament);
+            mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
             mViewPager = (ViewPager) findViewById(R.id.container);
             mViewPager.setAdapter(mSectionsPagerAdapter);
@@ -136,7 +136,7 @@ public class OngoingTournamentActivity extends AppCompatActivity {
     }
 
 
-    public void addRoundTabToViewPager() {
+    public void addRoundAfterNewPairing() {
 
         Log.i(this.getClass().getName(), "Add tab to view pager");
 
@@ -145,16 +145,19 @@ public class OngoingTournamentActivity extends AppCompatActivity {
         mViewPager.setCurrentItem(mSectionsPagerAdapter.getCount());
     }
 
-    private class SectionsPagerAdapter extends FragmentPagerAdapter {
 
-        private Tournament tournament;
+    public void setRoundTabToRoundNumber(int roundNumber) {
+
+        mViewPager.setCurrentItem(roundNumber);
+    }
+
+    private class SectionsPagerAdapter extends FragmentPagerAdapter {
 
         private int amountOfTabs;
 
-        public SectionsPagerAdapter(FragmentManager fm, Tournament tournament) {
+        public SectionsPagerAdapter(FragmentManager fm) {
 
             super(fm);
-            this.tournament = tournament;
 
             amountOfTabs = tournament.getActualRound() + 1;
         }
@@ -162,16 +165,9 @@ public class OngoingTournamentActivity extends AppCompatActivity {
         @Override
         public Fragment getItem(int position) {
 
-            Log.i(this.getClass().getName(), "create tournament fragment: " + tournament);
+            Log.i(this.getClass().getName(), "create tournament fragment: " + tournament + " on position: " + position);
 
-            ongoingTournamentManagementFragment = new OngoingTournamentManagementFragment();
-
-            Bundle bundle = new Bundle();
-            bundle.putLong(OngoingTournamentManagementFragment.BUNDLE_TOURNAMENT_ID, tournament.getId());
-            bundle.getInt(OngoingTournamentManagementFragment.BUNDLE_ROUND, position);
-            ongoingTournamentManagementFragment.setArguments(bundle);
-
-            return ongoingTournamentManagementFragment;
+            return OngoingTournamentManagementFragment.newInstance(position, tournament.getId());
         }
 
 

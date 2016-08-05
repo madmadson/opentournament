@@ -62,7 +62,7 @@ public class TournamentServiceImpl implements TournamentService {
         contentValues.put(TournamentTable.COLUMN_DESCRIPTION, description);
         contentValues.put(TournamentTable.COLUMN_DATE, date.toString());
         contentValues.put(TournamentTable.COLUMN_NUMBER_OF_PLAYERS, numberOfPlayers);
-        contentValues.put(TournamentTable.COLUMN_ACTUAL_ROUND, 1);
+        contentValues.put(TournamentTable.COLUMN_ACTUAL_ROUND, 0);
         createTournament(contentValues);
     }
 

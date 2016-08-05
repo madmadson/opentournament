@@ -13,75 +13,63 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import madson.org.opentournament.OpenTournamentApplication;
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Player;
-import madson.org.opentournament.domain.Tournament;
-import madson.org.opentournament.management.TournamentDetailFragment;
 import madson.org.opentournament.players.AvailablePlayerListFragment;
-import madson.org.opentournament.service.TournamentService;
 
 
 public class OngoingTournamentManagementFragment extends Fragment
     implements AvailablePlayerListFragment.AvailablePlayerListItemListener,
-        TournamentPlayerListFragment.TournamentPlayerListItemListener, OpenRoundEventListener {
+        TournamentPlayerListFragment.TournamentPlayerListItemListener {
 
     public static final String BUNDLE_TOURNAMENT_ID = "tournament_id";
     public static final String BUNDLE_ROUND = "round";
 
-    private Tournament tournament;
+    private long tournament_id;
     private int round;
 
     private TournamentPlayerListFragment tournamentPlayerListFragment;
     private AvailablePlayerListFragment availablePlayerListFragment;
-    private NextRoundFragment nextRoundFragment;
-    private PreviousRoundFragment previousRoundFragment;
+    private RoundChangeButtonFragment nextRoundButtonFragment;
+    private RoundChangeButtonFragment previousRoundFragment;
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public OngoingTournamentManagementFragment() {
+    }
 
-        super.onCreate(savedInstanceState);
+    public static OngoingTournamentManagementFragment newInstance(int roundNumber, long tournament_id) {
 
-        Bundle bundle = getArguments();
+        OngoingTournamentManagementFragment fragment = new OngoingTournamentManagementFragment();
+        Bundle args = new Bundle();
+        args.putInt(BUNDLE_ROUND, roundNumber);
+        args.putLong(BUNDLE_TOURNAMENT_ID, tournament_id);
+        fragment.setArguments(args);
 
-        if (bundle != null) {
-            long tournament_id = bundle.getLong(BUNDLE_TOURNAMENT_ID);
-            TournamentService tournamentService = ((OpenTournamentApplication) getActivity().getApplication())
-                .getTournamentService();
-            tournament = tournamentService.getTournamentForId(tournament_id);
-            round = bundle.getInt(BUNDLE_ROUND);
-        }
+        return fragment;
     }
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        return inflater.inflate(R.layout.fragment_ongoing_tournament_management, container, false);
-    }
+        View view = inflater.inflate(R.layout.fragment_ongoing_tournament_management, container, false);
 
+        round = getArguments().getInt(BUNDLE_ROUND);
+        tournament_id = getArguments().getLong(BUNDLE_TOURNAMENT_ID);
 
-    @Override
-    public void onStart() {
+        FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
 
-        super.onStart();
+        Log.i(this.getClass().getName(), "show round " + round + " of tournament " + tournament_id);
 
-        final View view = getView();
-
-        if (view != null) {
-            FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
-
-            Log.i(this.getClass().getName(), "show round " + round + " of tournament " + tournament);
-
-            if (round == 0) {
-                showSetup(fragmentTransaction);
-            } else {
-                showRound(round, fragmentTransaction);
-            }
-
-            fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-            fragmentTransaction.commit();
+        if (round == 0) {
+            showSetup(fragmentTransaction);
+        } else {
+            showRound(round, fragmentTransaction);
         }
+
+        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        fragmentTransaction.commit();
+
+        return view;
     }
 
 
@@ -93,8 +81,8 @@ public class OngoingTournamentManagementFragment extends Fragment
         createTournamentPlayerListFragment();
         fragmentTransaction.replace(R.id.right_fragment_container, tournamentPlayerListFragment);
 
-        nextRoundFragment = createNextRoundFragment(0);
-        fragmentTransaction.replace(R.id.next_round_container, nextRoundFragment);
+        nextRoundButtonFragment = createNextRoundFragment(0);
+        fragmentTransaction.replace(R.id.next_round_container, nextRoundButtonFragment);
 
         if (previousRoundFragment != null) {
             fragmentTransaction.detach(previousRoundFragment);
@@ -107,7 +95,7 @@ public class OngoingTournamentManagementFragment extends Fragment
         tournamentPlayerListFragment = new TournamentPlayerListFragment();
 
         Bundle bundleForTournamentPlayers = new Bundle();
-        bundleForTournamentPlayers.putLong(TournamentDetailFragment.BUNDLE_TOURNAMENT_ID, tournament.getId());
+        bundleForTournamentPlayers.putLong(TournamentPlayerListFragment.BUNDLE_TOURNAMENT_ID, tournament_id);
         tournamentPlayerListFragment.setArguments(bundleForTournamentPlayers);
     }
 
@@ -115,7 +103,7 @@ public class OngoingTournamentManagementFragment extends Fragment
     private void createAvailablePlayerListFragment() {
 
         Bundle bundleForAllPlayers = new Bundle();
-        bundleForAllPlayers.putLong(AvailablePlayerListFragment.BUNDLE_TOURNAMENT_ID, tournament.getId());
+        bundleForAllPlayers.putLong(AvailablePlayerListFragment.BUNDLE_TOURNAMENT_ID, tournament_id);
 
         availablePlayerListFragment = new AvailablePlayerListFragment();
         availablePlayerListFragment.setArguments(bundleForAllPlayers);
@@ -150,13 +138,15 @@ public class OngoingTournamentManagementFragment extends Fragment
 
 
     @NonNull
-    private PreviousRoundFragment createPreviousRoundFragment(int round) {
+    private RoundChangeButtonFragment createPreviousRoundFragment(int round) {
 
-        previousRoundFragment = new PreviousRoundFragment();
+        previousRoundFragment = new RoundChangeButtonFragment();
 
         Bundle bundleForPreviousRound = new Bundle();
-        bundleForPreviousRound.putLong(PreviousRoundFragment.BUNDLE_TOURNAMENT_ID, tournament.getId());
-        bundleForPreviousRound.putInt(PreviousRoundFragment.BUNDLE_ROUND, round);
+        bundleForPreviousRound.putLong(RoundChangeButtonFragment.BUNDLE_TOURNAMENT_ID, tournament_id);
+        bundleForPreviousRound.putInt(RoundChangeButtonFragment.BUNDLE_ROUND_TO_DISPLAY, (round - 1));
+        bundleForPreviousRound.putString(RoundChangeButtonFragment.BUNDLE_NEXT_OR_PREVIOUS,
+            RoundChangeButtonFragment.NextOrPrevious.PREVIOUS.name());
         previousRoundFragment.setArguments(bundleForPreviousRound);
 
         return previousRoundFragment;
@@ -164,15 +154,18 @@ public class OngoingTournamentManagementFragment extends Fragment
 
 
     @NonNull
-    private NextRoundFragment createNextRoundFragment(int round) {
+    private RoundChangeButtonFragment createNextRoundFragment(int round) {
 
-        NextRoundFragment nextRoundFragment = new NextRoundFragment();
-        Bundle bundleForNextRound = new Bundle();
-        bundleForNextRound.putLong(NextRoundFragment.BUNDLE_TOURNAMENT_ID, tournament.getId());
-        bundleForNextRound.putInt(NextRoundFragment.BUNDLE_ROUND, round);
-        nextRoundFragment.setArguments(bundleForNextRound);
+        nextRoundButtonFragment = new RoundChangeButtonFragment();
 
-        return nextRoundFragment;
+        Bundle nextRoundButtonBundle = new Bundle();
+        nextRoundButtonBundle.putLong(RoundChangeButtonFragment.BUNDLE_TOURNAMENT_ID, tournament_id);
+        nextRoundButtonBundle.putInt(RoundChangeButtonFragment.BUNDLE_ROUND_TO_DISPLAY, (round + 1));
+        nextRoundButtonBundle.putString(RoundChangeButtonFragment.BUNDLE_NEXT_OR_PREVIOUS,
+            RoundChangeButtonFragment.NextOrPrevious.NEXT.name());
+        nextRoundButtonFragment.setArguments(nextRoundButtonBundle);
+
+        return nextRoundButtonFragment;
     }
 
 
@@ -182,7 +175,7 @@ public class OngoingTournamentManagementFragment extends Fragment
         PairingListFragment pairingListFragment = new PairingListFragment();
 
         Bundle bundleForPairing = new Bundle();
-        bundleForPairing.putLong(PairingListFragment.BUNDLE_TOURNAMENT_ID, tournament.getId());
+        bundleForPairing.putLong(PairingListFragment.BUNDLE_TOURNAMENT_ID, tournament_id);
         bundleForPairing.putInt(PairingListFragment.BUNDLE_ROUND, round);
         pairingListFragment.setArguments(bundleForPairing);
 
@@ -190,37 +183,23 @@ public class OngoingTournamentManagementFragment extends Fragment
     }
 
 
-    @Override
-    public void onOpenRoundClicked(int round) {
-
-        Log.i(this.getClass().getName(), "clicked open round: " + round);
-
-        FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
-
-        showRound(round, fragmentTransaction);
-
-        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-        fragmentTransaction.commit();
-    }
-
-
     private void showRound(int round, FragmentTransaction fragmentTransaction) {
 
-        NextRoundFragment nextRoundFragment = createNextRoundFragment(round);
+        RoundChangeButtonFragment nextRoundFragment = createNextRoundFragment(round);
         fragmentTransaction.replace(R.id.next_round_container, nextRoundFragment);
 
         PairingListFragment pairingListFragment = createPairingListFragment(round);
         fragmentTransaction.replace(R.id.left_fragment_container, pairingListFragment);
 
-        PreviousRoundFragment previousRoundFragment = createPreviousRoundFragment(round);
+        RoundChangeButtonFragment previousRoundFragment = createPreviousRoundFragment(round);
         fragmentTransaction.replace(R.id.previous_round_container, previousRoundFragment);
 
-        if (round != 0) {
-            fragmentTransaction.detach(tournamentPlayerListFragment);
+        View fab = getActivity().findViewById(R.id.fab);
 
-            View fab = getActivity().findViewById(R.id.fab);
-
-            if (fab != null) {
+        if (fab != null) {
+            if (round == 0) {
+                fab.setVisibility(View.VISIBLE);
+            } else {
                 fab.setVisibility(View.INVISIBLE);
             }
         }

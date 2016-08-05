@@ -44,6 +44,11 @@
     
     <!-- Pairing table -->
     <string name="heading_pairing_for_round">Pairing round: %1$d</string>
+    
+    
+    <!-- confirm pairing dialog -->
+    <string name="confirm">confirm</string>
+    <string name="confirm_pairing_title">Pairing round: %1$d</string>
 
 
 </resources>

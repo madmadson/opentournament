@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 
 import android.util.Log;
 
@@ -20,6 +21,7 @@ import madson.org.opentournament.OpenTournamentApplication;
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.warmachine.WarmachineTournamentPairing;
+import madson.org.opentournament.players.NewPlayerForTournamentDialog;
 import madson.org.opentournament.service.OngoingTournamentService;
 import madson.org.opentournament.service.TournamentService;
 
@@ -43,7 +45,7 @@ public class RoundChangeButtonFragment extends Fragment {
         NEXT
     }
 
-    private Tournament tournament;
+    private long tournament_id;
     private int round_to_display;
     private NextOrPrevious next_or_previous;
 
@@ -53,10 +55,7 @@ public class RoundChangeButtonFragment extends Fragment {
         Bundle bundle = getArguments();
 
         if (bundle != null) {
-            long aLong = bundle.getLong(BUNDLE_TOURNAMENT_ID);
-            TournamentService tournamentService = ((OpenTournamentApplication) getActivity().getApplication())
-                .getTournamentService();
-            tournament = tournamentService.getTournamentForId(aLong);
+            tournament_id = bundle.getLong(BUNDLE_TOURNAMENT_ID);
             round_to_display = bundle.getInt(BUNDLE_ROUND_TO_DISPLAY);
             next_or_previous = NextOrPrevious.valueOf(bundle.getString(BUNDLE_NEXT_OR_PREVIOUS));
         }
@@ -82,7 +81,7 @@ public class RoundChangeButtonFragment extends Fragment {
                 public void onClick(View v) {
 
                     Log.i(this.getClass().getName(),
-                        "click round_to_display (" + round_to_display + ") for tournament: " + tournament);
+                        "click round_to_display (" + round_to_display + ") for tournament: " + tournament_id);
 
                     OngoingTournamentActivity activity = (OngoingTournamentActivity) getActivity();
 
@@ -91,12 +90,20 @@ public class RoundChangeButtonFragment extends Fragment {
 
                     if (next_or_previous.equals(NextOrPrevious.NEXT)) {
                         List<WarmachineTournamentPairing> pairingsForRound =
-                            ongoingTournamentService.getPairingsForTournament(tournament.getId(), round_to_display);
+                            ongoingTournamentService.getPairingsForTournament(tournament_id, round_to_display);
 
                         if (pairingsForRound.isEmpty()) {
-                            ongoingTournamentService.createPairingForRound(tournament.getId(), round_to_display);
+                            ConfirmPairNewRoundDialog dialog = new ConfirmPairNewRoundDialog();
 
-                            activity.addRoundAfterNewPairing();
+                            Bundle bundleForConfirmPairNewRoundDialog = new Bundle();
+                            bundleForConfirmPairNewRoundDialog.putLong(ConfirmPairNewRoundDialog.BUNDLE_TOURNAMENT_ID,
+                                tournament_id);
+                            bundleForConfirmPairNewRoundDialog.putInt(ConfirmPairNewRoundDialog.BUNDLE_ROUND_TO_DISPLAY,
+                                round_to_display);
+                            dialog.setArguments(bundleForConfirmPairNewRoundDialog);
+
+                            FragmentManager supportFragmentManager = getActivity().getSupportFragmentManager();
+                            dialog.show(supportFragmentManager, "ConfirmPairingDialog");
                         }
                     }
 

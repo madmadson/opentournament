@@ -63,6 +63,9 @@ public class PairingListFragment extends Fragment {
         List<WarmachineTournamentPairing> pairingsForTournament = ongoingTournamentService.getPairingsForTournament(
                 tournamentId, round);
 
+        TextView heading = (TextView) view.findViewById(R.id.heading_pairing_for_round);
+        heading.setText(getString(R.string.heading_pairing_for_round, round));
+
         PairingListAdapter pairingListAdapter = new PairingListAdapter(pairingsForTournament);
 
         recyclerView.setAdapter(pairingListAdapter);

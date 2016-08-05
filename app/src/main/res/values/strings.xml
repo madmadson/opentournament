@@ -41,5 +41,9 @@
     <string name="heading_tournament_player">Player in tournament: (%1$d)</string>
     <string name="button_pair_round">Pair \n round %1$d</string>
     <string name="pairing_divider">:</string>
+    
+    <!-- Pairing table -->
+    <string name="heading_pairing_for_round">Pairing round: %1$d</string>
+
 
 </resources>

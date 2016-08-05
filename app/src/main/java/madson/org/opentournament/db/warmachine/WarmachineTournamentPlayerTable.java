@@ -13,7 +13,7 @@ import android.util.Log;
 public class WarmachineTournamentPlayerTable {
 
     public static final String[] ALL_COLS_FOR_WARMACHINE_TOURNAMENT_PLAYER = {
-        "_id", "tournament_id", "player_id", "score", "control_points", "victory_points"
+        "_id", "tournament_id", "player_id", "score", "sos", "control_points", "victory_points"
     };
 
     public static final String TABLE_WARMACHINE_TOURNAMENT_PLAYER = "warmachine_tournament_player";
@@ -21,6 +21,7 @@ public class WarmachineTournamentPlayerTable {
     public static final String COLUMN_TOURNAMENT_ID = "tournament_id";
     public static final String COLUMN_PLAYER_ID = "player_id";
     public static final String COLUMN_SCORE = "score";
+    public static final String COLUMN_SOS = "sos";
     public static final String COLUMN_CONTROL_POINTS = "control_points";
     public static final String COLUMN_VICTORY_POINTS = "victory_points";
 
@@ -31,7 +32,8 @@ public class WarmachineTournamentPlayerTable {
         db.execSQL(" CREATE TABLE " + TABLE_WARMACHINE_TOURNAMENT_PLAYER
             + " (" + COLUMN_ID
             + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_TOURNAMENT_ID
-            + " INTEGER, " + COLUMN_PLAYER_ID + " INTEGER, " + COLUMN_SCORE + " INTEGER, " + COLUMN_CONTROL_POINTS
+            + " INTEGER, " + COLUMN_PLAYER_ID + " INTEGER, " + COLUMN_SCORE + " INTEGER, " + COLUMN_SOS + " INTEGER, "
+            + COLUMN_CONTROL_POINTS
             + " INTEGER, " + COLUMN_VICTORY_POINTS + " INTEGER )");
     }
 

@@ -104,8 +104,9 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
             Player player = playerService.getPlayerForId((long) cursor.getInt(2));
             WarmachineTournamentPlayer warmachineTournamentPlayer = new WarmachineTournamentPlayer(player);
             warmachineTournamentPlayer.setScore(cursor.getInt(3));
-            warmachineTournamentPlayer.setControl_points(cursor.getInt(4));
-            warmachineTournamentPlayer.setVictory_points(cursor.getInt(5));
+            warmachineTournamentPlayer.setSos(cursor.getInt(4));
+            warmachineTournamentPlayer.setControl_points(cursor.getInt(5));
+            warmachineTournamentPlayer.setVictory_points(cursor.getInt(6));
             players.add(warmachineTournamentPlayer);
             cursor.moveToNext();
         }
@@ -178,6 +179,7 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
             WarmachineTournamentPlayer warmachineTournamentDummyPlayer = new WarmachineTournamentPlayer(new Player(
                         "dummy", "bye", "player"));
             warmachineTournamentDummyPlayer.setScore(0);
+            warmachineTournamentDummyPlayer.setSos(0);
             warmachineTournamentDummyPlayer.setControl_points(0);
             warmachineTournamentDummyPlayer.setVictory_points(0);
             playersForTournament.add(warmachineTournamentDummyPlayer);

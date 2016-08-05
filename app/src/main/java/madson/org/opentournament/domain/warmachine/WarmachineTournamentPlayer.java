@@ -14,6 +14,7 @@ public class WarmachineTournamentPlayer extends Player {
     private int tournament_id;
 
     private int score;
+    private int sos;
     private int control_points;
     private int victory_points;
 
@@ -58,12 +59,25 @@ public class WarmachineTournamentPlayer extends Player {
     }
 
 
+    public int getSos() {
+
+        return sos;
+    }
+
+
+    public void setSos(int sos) {
+
+        this.sos = sos;
+    }
+
+
     @Override
     public String toString() {
 
         return "WarmachineTournamentPlayer{"
             + "tournament_id=" + tournament_id
             + ", score=" + score
+            + ", sos=" + sos
             + ", control_points=" + control_points
             + ", victory_points=" + victory_points + '}';
     }

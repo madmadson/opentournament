@@ -44,11 +44,13 @@ public class PairingListAdapter extends RecyclerView.Adapter<PairingListAdapter.
         holder.setPairing(pairing);
         holder.getPlayerOneNameInList().setText(String.valueOf(pairing.getPlayer_one_full_name()));
         holder.getPlayerOneScore().setText("SC: " + String.valueOf(pairing.getPlayer_one_score()));
+        holder.getPlayerOneSoS().setText("SOS: " + String.valueOf(pairing.getPlayer_one_sos()));
         holder.getPlayerOneControlPoints().setText("CP: " + String.valueOf(pairing.getPlayer_one_control_points()));
         holder.getPlayerOneVictoryPoints().setText("VP: " + String.valueOf(pairing.getPlayer_one_victory_points()));
 
         holder.getPlayerTwoNameInList().setText(String.valueOf(pairing.getPlayer_two_full_name()));
         holder.getPlayerTwoScore().setText("SC: " + String.valueOf(pairing.getPlayer_two_score()));
+        holder.getPlayerTwoSoS().setText("SOS: " + String.valueOf(pairing.getPlayer_two_sos()));
         holder.getPlayerTwoControlPoints().setText("CP: " + String.valueOf(pairing.getPlayer_two_control_points()));
         holder.getPlayerTwoVictoryPoints().setText("VP: " + String.valueOf(pairing.getPlayer_two_victory_points()));
     }
@@ -65,11 +67,13 @@ public class PairingListAdapter extends RecyclerView.Adapter<PairingListAdapter.
         private WarmachineTournamentPairing pairing;
         private TextView playerOneNameInList;
         private TextView playerOneScore;
+        private TextView playerOneSoS;
         private TextView playerOneControlPoints;
         private TextView playerOneVictoryPoints;
 
         private TextView playerTwoNameInList;
         private TextView playerTwoScore;
+        private TextView playerTwoSoS;
         private TextView playerTwoControlPoints;
         private TextView playerTwoVictoryPoints;
 
@@ -79,11 +83,13 @@ public class PairingListAdapter extends RecyclerView.Adapter<PairingListAdapter.
 
             playerOneNameInList = (TextView) v.findViewById(R.id.pairing_player_one_name);
             playerOneScore = (TextView) v.findViewById(R.id.pairing_player_one_score);
+            playerOneSoS = (TextView) v.findViewById(R.id.pairing_player_one_strength_of_schedule);
             playerOneControlPoints = (TextView) v.findViewById(R.id.pairing_player_one_control_points);
             playerOneVictoryPoints = (TextView) v.findViewById(R.id.pairing_player_one_victory_points);
 
             playerTwoNameInList = (TextView) v.findViewById(R.id.pairing_player_two_name);
             playerTwoScore = (TextView) v.findViewById(R.id.pairing_player_two_score);
+            playerTwoSoS = (TextView) v.findViewById(R.id.pairing_player_two_strength_of_schedule);
             playerTwoControlPoints = (TextView) v.findViewById(R.id.pairing_player_two_control_points);
             playerTwoVictoryPoints = (TextView) v.findViewById(R.id.pairing_player_two_victory_points);
         }
@@ -144,6 +150,18 @@ public class PairingListAdapter extends RecyclerView.Adapter<PairingListAdapter.
         public TextView getPlayerOneScore() {
 
             return playerOneScore;
+        }
+
+
+        public TextView getPlayerOneSoS() {
+
+            return playerOneSoS;
+        }
+
+
+        public TextView getPlayerTwoSoS() {
+
+            return playerTwoSoS;
         }
     }
 }

@@ -14,33 +14,26 @@ public class WarmachineTournamentPairing {
     private int player_one_id;
     private String player_one_full_name;
     private int player_one_score;
+    private int player_one_sos;
     private int player_one_control_points;
     private int player_one_victory_points;
 
     private int player_two_id;
     private String player_two_full_name;
     private int player_two_score;
+    private int player_two_sos;
     private int player_two_control_points;
     private int player_two_victory_points;
 
-    public WarmachineTournamentPairing(long _id, int tournament_id, int round, int player_one_id, int player_one_score,
-        int player_one_control_points, int player_one_victory_points, int player_two_id, int player_two_score,
-        int player_two_control_points, int player_two_victory_points) {
+    public WarmachineTournamentPairing(long _id) {
 
         this._id = _id;
-        this.tournament_id = tournament_id;
-        this.round = round;
-        this.player_one_id = player_one_id;
-        this.player_one_score = player_one_score;
-        this.player_one_control_points = player_one_control_points;
-        this.player_one_victory_points = player_one_victory_points;
-        this.player_two_id = player_two_id;
-        this.player_two_score = player_two_score;
-        this.player_two_control_points = player_two_control_points;
-        this.player_two_victory_points = player_two_victory_points;
     }
 
 
+    /**
+     * for creation.
+     */
     public WarmachineTournamentPairing() {
     }
 
@@ -191,6 +184,30 @@ public class WarmachineTournamentPairing {
     public int getRound() {
 
         return round;
+    }
+
+
+    public int getPlayer_one_sos() {
+
+        return player_one_sos;
+    }
+
+
+    public void setPlayer_one_sos(int player_one_sos) {
+
+        this.player_one_sos = player_one_sos;
+    }
+
+
+    public int getPlayer_two_sos() {
+
+        return player_two_sos;
+    }
+
+
+    public void setPlayer_two_sos(int player_two_sos) {
+
+        this.player_two_sos = player_two_sos;
     }
 
 

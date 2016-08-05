@@ -4,6 +4,8 @@ import android.content.Context;
 
 import android.os.Bundle;
 
+import android.provider.Settings;
+
 import android.support.v4.app.Fragment;
 
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,6 +19,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import android.view.inputmethod.InputMethodManager;
 
 import android.widget.EditText;
 
@@ -62,6 +66,19 @@ public class AvailablePlayerListFragment extends Fragment {
         EditText filterPlayer = (EditText) view.findViewById(R.id.input_filter_player);
 
         filterPlayer.addTextChangedListener(new PlayerFilterTextWatcher());
+
+        filterPlayer.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+
+                    if (!hasFocus) {
+                        Log.i(this.getClass().getName(), "lost focus");
+                    } else {
+                        Log.i(this.getClass().getName(), "has focus");
+                    }
+                }
+            });
 
         PlayerService playerService = ((OpenTournamentApplication) getActivity().getApplication()).getPlayerService();
 

@@ -50,5 +50,9 @@
     <string name="confirm">confirm</string>
     <string name="confirm_pairing_title">Pairing round: %1$d</string>
 
+    <!-- result entering dialog -->
+    <string name="result">confirm</string>
+    <string name="result_pairing_title">RESULT</string>
+
 
 </resources>

@@ -145,7 +145,7 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
 
 
     @Override
-    public List<WarmachineTournamentPairing> getPairingsForTournament(Long tournamentId, int round) {
+    public List<WarmachineTournamentPairing> getPairingForTournament(Long tournamentId, int round) {
 
         List<WarmachineTournamentPairing> warmachineTournamentPairings = new ArrayList<>();
         SQLiteDatabase readableDatabase = openTournamentDBHelper.getReadableDatabase();
@@ -257,6 +257,26 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
         readableDatabase.close();
 
         return players;
+    }
+
+
+    @Override
+    public WarmachineTournamentPairing getPairingForTournament(long pairing_id) {
+
+        SQLiteDatabase readableDatabase = openTournamentDBHelper.getReadableDatabase();
+
+        Cursor cursor = readableDatabase.query(WarmachineTournamentPairingTable.TABLE_TOURNAMENT_PAIRING,
+                WarmachineTournamentPairingTable.ALL_COLS_FOR_TOURNAMENT_PAIRING, "_id  = ? ",
+                new String[] { String.valueOf(pairing_id) }, null, null, null);
+
+        cursor.moveToFirst();
+
+        WarmachineTournamentPairing pairing = cursorToTournamentPairing(cursor);
+
+        cursor.close();
+        readableDatabase.close();
+
+        return pairing;
     }
 
 

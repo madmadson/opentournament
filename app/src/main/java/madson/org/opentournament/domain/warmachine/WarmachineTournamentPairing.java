@@ -1,5 +1,8 @@
 package madson.org.opentournament.domain.warmachine;
 
+import android.os.Parcelable;
+
+
 /**
  * Represent one pairing for one round in tournament.
  *

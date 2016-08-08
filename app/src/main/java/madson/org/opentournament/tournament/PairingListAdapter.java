@@ -1,6 +1,13 @@
 package madson.org.opentournament.tournament;
 
+import android.os.Bundle;
+
+import android.support.v4.app.FragmentManager;
+
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+
+import android.util.Log;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -81,6 +88,8 @@ public class PairingListAdapter extends RecyclerView.Adapter<PairingListAdapter.
 
             super(v);
 
+            v.setOnClickListener(this);
+
             playerOneNameInList = (TextView) v.findViewById(R.id.pairing_player_one_name);
             playerOneScore = (TextView) v.findViewById(R.id.pairing_player_one_score);
             playerOneSoS = (TextView) v.findViewById(R.id.pairing_player_one_strength_of_schedule);
@@ -96,6 +105,17 @@ public class PairingListAdapter extends RecyclerView.Adapter<PairingListAdapter.
 
         @Override
         public void onClick(View v) {
+
+            Log.i(v.getClass().getName(), "pairing clicked: " + pairing);
+
+            EnterResultForPairingDialog dialog = new EnterResultForPairingDialog();
+
+            Bundle resultForPairingResult = new Bundle();
+            resultForPairingResult.putLong(EnterResultForPairingDialog.BUNDLE_PAIRING_ID, pairing.get_id());
+            dialog.setArguments(resultForPairingResult);
+
+            FragmentManager supportFragmentManager = ((AppCompatActivity) v.getContext()).getSupportFragmentManager();
+            dialog.show(supportFragmentManager, "resultForPairingResult");
         }
 
 

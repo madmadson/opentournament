@@ -4,7 +4,6 @@ import android.os.Bundle;
 
 import android.support.v4.app.Fragment;
 
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
@@ -17,7 +16,6 @@ import android.widget.TextView;
 import madson.org.opentournament.OpenTournamentApplication;
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.warmachine.WarmachineTournamentPairing;
-import madson.org.opentournament.domain.warmachine.WarmachineTournamentPlayer;
 import madson.org.opentournament.service.OngoingTournamentService;
 
 import java.util.List;
@@ -60,7 +58,7 @@ public class PairingListFragment extends Fragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(linearLayoutManager);
 
-        List<WarmachineTournamentPairing> pairingsForTournament = ongoingTournamentService.getPairingsForTournament(
+        List<WarmachineTournamentPairing> pairingsForTournament = ongoingTournamentService.getPairingForTournament(
                 tournamentId, round);
 
         TextView heading = (TextView) view.findViewById(R.id.heading_pairing_for_round);

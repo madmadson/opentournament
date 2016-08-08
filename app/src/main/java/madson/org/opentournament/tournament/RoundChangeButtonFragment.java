@@ -19,11 +19,8 @@ import android.widget.Button;
 
 import madson.org.opentournament.OpenTournamentApplication;
 import madson.org.opentournament.R;
-import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.warmachine.WarmachineTournamentPairing;
-import madson.org.opentournament.players.NewPlayerForTournamentDialog;
 import madson.org.opentournament.service.OngoingTournamentService;
-import madson.org.opentournament.service.TournamentService;
 
 import java.util.List;
 
@@ -90,7 +87,7 @@ public class RoundChangeButtonFragment extends Fragment {
 
                     if (next_or_previous.equals(NextOrPrevious.NEXT)) {
                         List<WarmachineTournamentPairing> pairingsForRound =
-                            ongoingTournamentService.getPairingsForTournament(tournament_id, round_to_display);
+                            ongoingTournamentService.getPairingForTournament(tournament_id, round_to_display);
 
                         if (pairingsForRound.isEmpty()) {
                             ConfirmPairNewRoundDialog dialog = new ConfirmPairNewRoundDialog();

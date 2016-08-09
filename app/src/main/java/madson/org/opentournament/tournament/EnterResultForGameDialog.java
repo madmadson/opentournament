@@ -46,6 +46,19 @@ public class EnterResultForGameDialog extends DialogFragment {
 
     private static final Integer MIN_VICTORY_POINTS = 0;
     private static final Integer MAX_VICTORY_POINTS = 1000;
+
+    private enum WaysOfScoring {
+
+        VICTORY_POINTS,
+        CONTROL_POINTS
+    }
+
+    private enum IncreaseOrDecrease {
+
+        INCREASE,
+        DECREASE
+    }
+
     private long game_id;
 
     private GameListFragment.GameResultEnteredListener mListener;
@@ -91,11 +104,11 @@ public class EnterResultForGameDialog extends DialogFragment {
 
         super.onAttach(activity);
 
-        OngoingTournamentManagementFragment tournamentManagementFragment = ((OngoingTournamentActivity) getActivity())
-            .getOngoingTournamentManagementFragment();
+        OngoingTournamentManagementFragment ongoingTournamentManagementFragment =
+            ((OngoingTournamentActivity) getActivity()).getOngoingTournamentManagementFragment();
 
-        if (tournamentManagementFragment != null) {
-            mListener = tournamentManagementFragment;
+        if (ongoingTournamentManagementFragment != null) {
+            mListener = ongoingTournamentManagementFragment;
         } else {
             throw new RuntimeException("OngoingTournamentManagementFragment must be available");
         }
@@ -116,14 +129,37 @@ public class EnterResultForGameDialog extends DialogFragment {
             final Button button_win_player_one = (Button) dialog.findViewById(R.id.result_player_one_win_button);
             final Button button_win_player_two = (Button) dialog.findViewById(R.id.result_player_two_win_button);
 
-            final ImageButton button_increase_player_one = (ImageButton) dialog.findViewById(
-                    R.id.result_player_one__inc_control_points);
-
+            // ControlPoints Player one
+            final ImageButton button_increase_player_one_control_points = (ImageButton) dialog.findViewById(
+                    R.id.result_player_one_inc_control_points);
             final EditText text_player_one_control_points = (EditText) dialog.findViewById(
                     R.id.result_player_one_control_points);
+            final ImageButton button_decrease_player_one_control_points = (ImageButton) dialog.findViewById(
+                    R.id.result_player_one_dec_control_points);
 
-            final ImageButton button_decrease_player_one = (ImageButton) dialog.findViewById(
-                    R.id.result_player_one__dec_control_points);
+            // VictoryPoints Player one
+            final ImageButton button_increase_player_one_victory_points = (ImageButton) dialog.findViewById(
+                    R.id.result_player_one_inc_victory_points);
+            final EditText text_player_one_victory_points = (EditText) dialog.findViewById(
+                    R.id.result_player_one_victory_points);
+            final ImageButton button_decrease_player_one_victory_points = (ImageButton) dialog.findViewById(
+                    R.id.result_player_one_dec_victory_points);
+
+            // ControlPoints Player two
+            final ImageButton button_increase_player_two_control_points = (ImageButton) dialog.findViewById(
+                    R.id.result_player_two_inc_control_points);
+            final EditText text_player_two_control_points = (EditText) dialog.findViewById(
+                    R.id.result_player_two_control_points);
+            final ImageButton button_decrease_player_two_control_points = (ImageButton) dialog.findViewById(
+                    R.id.result_player_two_dec_control_points);
+
+            // VictoryPoints Player two
+            final ImageButton button_increase_player_two_victory_points = (ImageButton) dialog.findViewById(
+                    R.id.result_player_two_inc_victory_points);
+            final EditText text_player_two_victory_points = (EditText) dialog.findViewById(
+                    R.id.result_player_two_victory_points);
+            final ImageButton button_decrease_player_two_victory_points = (ImageButton) dialog.findViewById(
+                    R.id.result_player_two_dec_victory_points);
 
             text_name_player_one.setText(game.getPlayer_one_full_name());
             text_name_player_two.setText(game.getPlayer_two_full_name());
@@ -137,50 +173,185 @@ public class EnterResultForGameDialog extends DialogFragment {
             }
 
             text_player_one_control_points.setText(String.valueOf(game.getPlayer_one_control_points()));
+            text_player_one_victory_points.setText(String.valueOf(game.getPlayer_one_victory_points()));
+
+            text_player_two_control_points.setText(String.valueOf(game.getPlayer_two_control_points()));
+            text_player_two_victory_points.setText(String.valueOf(game.getPlayer_two_victory_points()));
 
             addClickForPlayerOneWinListener(text_name_player_one, text_name_player_two, button_win_player_one);
             addPlayerTwoClickWonListener(text_name_player_one, text_name_player_two, button_win_player_two);
 
-            addIncreaseControlPointsForPlayerOneClickListener(button_increase_player_one,
-                text_player_one_control_points);
+            // PlayerOne ControlPoints
+            addPointsForPlayerClickListener(1, button_increase_player_one_control_points,
+                text_player_one_control_points, WaysOfScoring.CONTROL_POINTS, IncreaseOrDecrease.INCREASE);
+            addPointsOnLongPressed(1, button_increase_player_one_control_points, text_player_one_control_points,
+                WaysOfScoring.CONTROL_POINTS, IncreaseOrDecrease.INCREASE);
+            addPointsForPlayerClickListener(1, button_decrease_player_one_control_points,
+                text_player_one_control_points, WaysOfScoring.CONTROL_POINTS, IncreaseOrDecrease.DECREASE);
+            addPointsOnLongPressed(1, button_decrease_player_one_control_points, text_player_one_control_points,
+                WaysOfScoring.CONTROL_POINTS, IncreaseOrDecrease.DECREASE);
 
-            addIncreaseControlPointsOnLongPressed(button_increase_player_one, text_player_one_control_points);
+            // PlayerOne VictoryPoints
+            addPointsForPlayerClickListener(1, button_increase_player_one_victory_points,
+                text_player_one_victory_points, WaysOfScoring.VICTORY_POINTS, IncreaseOrDecrease.INCREASE);
+            addPointsOnLongPressed(1, button_increase_player_one_victory_points, text_player_one_victory_points,
+                WaysOfScoring.VICTORY_POINTS, IncreaseOrDecrease.INCREASE);
+            addPointsForPlayerClickListener(1, button_decrease_player_one_victory_points,
+                text_player_one_victory_points, WaysOfScoring.VICTORY_POINTS, IncreaseOrDecrease.DECREASE);
+            addPointsOnLongPressed(1, button_decrease_player_one_victory_points, text_player_one_victory_points,
+                WaysOfScoring.VICTORY_POINTS, IncreaseOrDecrease.DECREASE);
 
-            addDecreaseControlPointsForPlayerOneClickListener(button_decrease_player_one,
-                text_player_one_control_points);
+            // PlayerTwo ControlPoints
+            addPointsForPlayerClickListener(2, button_increase_player_two_control_points,
+                text_player_two_control_points, WaysOfScoring.CONTROL_POINTS, IncreaseOrDecrease.INCREASE);
+            addPointsOnLongPressed(2, button_increase_player_two_control_points, text_player_two_control_points,
+                WaysOfScoring.CONTROL_POINTS, IncreaseOrDecrease.INCREASE);
+            addPointsForPlayerClickListener(2, button_decrease_player_two_control_points,
+                text_player_two_control_points, WaysOfScoring.CONTROL_POINTS, IncreaseOrDecrease.DECREASE);
+            addPointsOnLongPressed(2, button_decrease_player_two_control_points, text_player_two_control_points,
+                WaysOfScoring.CONTROL_POINTS, IncreaseOrDecrease.DECREASE);
 
-            addDecreaseControlPointsOnLongPressed(button_decrease_player_one, text_player_one_control_points);
+            // PlayerTwo VictoryPoints
+            addPointsForPlayerClickListener(2, button_increase_player_two_victory_points,
+                text_player_two_victory_points, WaysOfScoring.VICTORY_POINTS, IncreaseOrDecrease.INCREASE);
+            addPointsOnLongPressed(2, button_increase_player_two_victory_points, text_player_two_victory_points,
+                WaysOfScoring.VICTORY_POINTS, IncreaseOrDecrease.INCREASE);
+            addPointsForPlayerClickListener(2, button_decrease_player_two_victory_points,
+                text_player_two_victory_points, WaysOfScoring.VICTORY_POINTS, IncreaseOrDecrease.DECREASE);
+            addPointsOnLongPressed(2, button_decrease_player_two_victory_points, text_player_two_victory_points,
+                WaysOfScoring.VICTORY_POINTS, IncreaseOrDecrease.DECREASE);
 
             viewConfirmButton(dialog);
         }
     }
 
 
-    private void addDecreaseControlPointsForPlayerOneClickListener(ImageButton button_decrease_player_one,
-        final EditText text_player_one_control_points) {
+    private void addPointsForPlayerClickListener(final int player_number, ImageButton button,
+        final EditText text_player_one_control_points, final WaysOfScoring controlOrVictory,
+        final IncreaseOrDecrease increaseOrDecrease) {
 
-        button_decrease_player_one.setOnClickListener(new View.OnClickListener() {
+        button.setOnClickListener(new View.OnClickListener() {
 
                 @Override
                 public void onClick(View v) {
 
-                    decreaseControlPointsForPlayer(1, text_player_one_control_points);
+                    if (increaseOrDecrease.equals(IncreaseOrDecrease.INCREASE)) {
+                        increasePointsForPlayer(player_number, text_player_one_control_points, controlOrVictory);
+                    } else if (increaseOrDecrease.equals(IncreaseOrDecrease.DECREASE)) {
+                        decreasePointsForPlayer(player_number, text_player_one_control_points, controlOrVictory);
+                    }
                 }
             });
     }
 
 
-    private void addIncreaseControlPointsForPlayerOneClickListener(ImageButton button_increase_player_one,
-        final EditText text_player_one_control_points) {
+    private void addPointsOnLongPressed(final int player_number, final ImageButton button,
+        final EditText edit_text_player_points, final WaysOfScoring controlOrVictory,
+        final IncreaseOrDecrease increaseOrDecrease) {
 
-        button_increase_player_one.setOnClickListener(new View.OnClickListener() {
+        button.setOnLongClickListener(new View.OnLongClickListener() {
 
                 @Override
-                public void onClick(View v) {
+                public boolean onLongClick(View v) {
 
-                    increaseControlPointsForPlayer(1, text_player_one_control_points);
+                    final Timer timer = new Timer();
+                    timer.schedule(new TimerTask() {
+
+                            @Override
+                            public void run() {
+
+                                if (button.isPressed()) {
+                                    new Handler(Looper.getMainLooper()).post(new Runnable() {
+
+                                            @Override
+                                            public void run() {
+
+                                                if (increaseOrDecrease.equals(IncreaseOrDecrease.INCREASE)) {
+                                                    increasePointsForPlayer(player_number, edit_text_player_points,
+                                                        controlOrVictory);
+                                                } else if (increaseOrDecrease.equals(IncreaseOrDecrease.DECREASE)) {
+                                                    decreasePointsForPlayer(player_number, edit_text_player_points,
+                                                        controlOrVictory);
+                                                }
+                                            }
+                                        });
+                                } else {
+                                    timer.cancel();
+                                }
+                            }
+                        }, 100, 200);
+
+                    return false;
                 }
             });
+    }
+
+
+    private void increasePointsForPlayer(int player_number, EditText editText_points, WaysOfScoring scoring) {
+
+        if (scoring.equals(WaysOfScoring.CONTROL_POINTS)) {
+            Integer controlPoints = Integer.valueOf(editText_points.getText().toString());
+
+            if (controlPoints < MAX_CONTROL_POINTS) {
+                int increasedControlPoints = controlPoints + 1;
+
+                editText_points.setText(String.valueOf(increasedControlPoints));
+
+                if (player_number == 1) {
+                    game.setPlayer_one_control_points(increasedControlPoints);
+                } else if (player_number == 2) {
+                    game.setPlayer_two_control_points(increasedControlPoints);
+                }
+            }
+        } else if (scoring.equals(WaysOfScoring.VICTORY_POINTS)) {
+            Integer victoryPoints = Integer.valueOf(editText_points.getText().toString());
+
+            if (victoryPoints < MAX_VICTORY_POINTS) {
+                int increasedVictoryPoints = victoryPoints + 1;
+
+                editText_points.setText(String.valueOf(increasedVictoryPoints));
+
+                if (player_number == 1) {
+                    game.setPlayer_one_victory_points(increasedVictoryPoints);
+                } else if (player_number == 2) {
+                    game.setPlayer_two_victory_points(increasedVictoryPoints);
+                }
+            }
+        }
+    }
+
+
+    private void decreasePointsForPlayer(int player_number, EditText editText_points, WaysOfScoring scoring) {
+
+        if (scoring.equals(WaysOfScoring.CONTROL_POINTS)) {
+            Integer controlPoints = Integer.valueOf(editText_points.getText().toString());
+
+            if (controlPoints > MIN_CONTROL_POINTS) {
+                int decreasedControlPoints = controlPoints - 1;
+
+                editText_points.setText(String.valueOf(decreasedControlPoints));
+
+                if (player_number == 1) {
+                    game.setPlayer_one_control_points(decreasedControlPoints);
+                } else if (player_number == 2) {
+                    game.setPlayer_two_control_points(decreasedControlPoints);
+                }
+            }
+        } else if (scoring.equals(WaysOfScoring.VICTORY_POINTS)) {
+            Integer victoryPoints = Integer.valueOf(editText_points.getText().toString());
+
+            if (victoryPoints > MIN_CONTROL_POINTS) {
+                int decreasedVictoryPoints = victoryPoints - 1;
+
+                editText_points.setText(String.valueOf(decreasedVictoryPoints));
+
+                if (player_number == 1) {
+                    game.setPlayer_one_victory_points(decreasedVictoryPoints);
+                } else if (player_number == 2) {
+                    game.setPlayer_two_victory_points(decreasedVictoryPoints);
+                }
+            }
+        }
     }
 
 
@@ -217,6 +388,7 @@ public class EnterResultForGameDialog extends DialogFragment {
 
         if (player_number == 1) {
             game.setPlayer_one_score(1);
+            game.setPlayer_two_score(0);
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 text_name_player_one.setTextColor(getResources().getColor(R.color.colorWin, null));
@@ -227,6 +399,7 @@ public class EnterResultForGameDialog extends DialogFragment {
             }
         } else if (player_number == 2) {
             game.setPlayer_two_score(1);
+            game.setPlayer_one_score(0);
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 text_name_player_one.setTextColor(getResources().getColor(R.color.colorLoose, null));
@@ -236,112 +409,6 @@ public class EnterResultForGameDialog extends DialogFragment {
                 text_name_player_two.setTextColor(getResources().getColor(R.color.colorWin));
             }
         }
-    }
-
-
-    private void addIncreaseControlPointsOnLongPressed(final ImageButton button_increase_player_one,
-        final EditText text_player_one_control_points) {
-
-        button_increase_player_one.setOnLongClickListener(new View.OnLongClickListener() {
-
-                @Override
-                public boolean onLongClick(View v) {
-
-                    final Timer timer = new Timer();
-                    timer.schedule(new TimerTask() {
-
-                            @Override
-                            public void run() {
-
-                                if (button_increase_player_one.isPressed()) {
-                                    new Handler(Looper.getMainLooper()).post(new Runnable() {
-
-                                            @Override
-                                            public void run() {
-
-                                                increaseControlPointsForPlayer(1, text_player_one_control_points);
-                                            }
-                                        });
-                                } else {
-                                    timer.cancel();
-                                }
-                            }
-                        }, 100, 200);
-
-                    return false;
-                }
-            });
-    }
-
-
-    private void increaseControlPointsForPlayer(int player_number, EditText editText_control_points) {
-
-        Integer controlPoints = Integer.valueOf(editText_control_points.getText().toString());
-
-        if (controlPoints < MAX_CONTROL_POINTS) {
-            int increasedControlPoints = controlPoints + 1;
-
-            editText_control_points.setText(String.valueOf(increasedControlPoints));
-
-            if (player_number == 1) {
-                game.setPlayer_one_control_points(increasedControlPoints);
-            } else if (player_number == 2) {
-                game.setPlayer_two_control_points(increasedControlPoints);
-            }
-        }
-    }
-
-
-    private void decreaseControlPointsForPlayer(int player_number, EditText editText_control_points) {
-
-        Integer controlPoints = Integer.valueOf(editText_control_points.getText().toString());
-
-        if (controlPoints > MIN_CONTROL_POINTS) {
-            int decreasedControlPoints = controlPoints - 1;
-
-            editText_control_points.setText(String.valueOf(decreasedControlPoints));
-
-            if (player_number == 1) {
-                game.setPlayer_one_control_points(decreasedControlPoints);
-            } else if (player_number == 2) {
-                game.setPlayer_two_control_points(decreasedControlPoints);
-            }
-        }
-    }
-
-
-    private void addDecreaseControlPointsOnLongPressed(final ImageButton button_decrease_player_one,
-        final EditText text_player_one_control_points) {
-
-        button_decrease_player_one.setOnLongClickListener(new View.OnLongClickListener() {
-
-                @Override
-                public boolean onLongClick(View v) {
-
-                    final Timer timer = new Timer();
-                    timer.schedule(new TimerTask() {
-
-                            @Override
-                            public void run() {
-
-                                if (button_decrease_player_one.isPressed()) {
-                                    new Handler(Looper.getMainLooper()).post(new Runnable() {
-
-                                            @Override
-                                            public void run() {
-
-                                                decreaseControlPointsForPlayer(1, text_player_one_control_points);
-                                            }
-                                        });
-                                } else {
-                                    timer.cancel();
-                                }
-                            }
-                        }, 100, 200);
-
-                    return false;
-                }
-            });
     }
 
 

@@ -78,7 +78,7 @@
             android:layout_alignParentLeft="true">
 
             <ImageButton
-                android:id="@+id/result_player_one__inc_control_points"
+                android:id="@+id/result_player_one_inc_control_points"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_add_black_24dp"/>
@@ -94,7 +94,7 @@
                 android:focusableInTouchMode="true"/>
 
             <ImageButton
-                android:id="@+id/result_player_one__dec_control_points"
+                android:id="@+id/result_player_one_dec_control_points"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_remove_black_24dp"/>
@@ -113,12 +113,13 @@
             android:layout_alignParentRight="true">
             
             <ImageButton
+                android:id="@+id/result_player_two_inc_control_points"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_add_black_24dp"/>
 
             <EditText
-                android:id="@+id/playerTwoControlPoints"
+                android:id="@+id/result_player_two_control_points"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingLeft="16dp"
@@ -128,6 +129,7 @@
                 android:focusableInTouchMode="true"/>
 
             <ImageButton
+                android:id="@+id/result_player_two_dec_control_points"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_remove_black_24dp"/>
@@ -152,12 +154,13 @@
             android:layout_alignParentLeft="true">
 
             <ImageButton
+                android:id="@+id/result_player_one_inc_victory_points"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_add_black_24dp"/>
 
             <EditText
-                android:id="@+id/playerOneVictoryPoints"
+                android:id="@+id/result_player_one_victory_points"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
                 android:layout_width="wrap_content"
@@ -167,6 +170,7 @@
                 android:focusableInTouchMode="true"/>
 
             <ImageButton
+                android:id="@+id/result_player_one_dec_victory_points"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_remove_black_24dp"/>
@@ -185,12 +189,13 @@
             android:layout_alignParentRight="true">
 
             <ImageButton
+                android:id="@+id/result_player_two_inc_victory_points"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_add_black_24dp"/>
 
             <EditText
-                android:id="@+id/playerTwoVictoryPoints"
+                android:id="@+id/result_player_two_victory_points"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingLeft="16dp"
@@ -200,6 +205,7 @@
                 android:focusableInTouchMode="true"/>
 
             <ImageButton
+                android:id="@+id/result_player_two_dec_victory_points"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_remove_black_24dp"/>

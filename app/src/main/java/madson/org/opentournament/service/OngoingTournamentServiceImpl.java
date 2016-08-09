@@ -287,9 +287,17 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
         ContentValues contentValues = new ContentValues();
 
         contentValues.put(WarmachineTournamentGameTable.COLUMN_PLAYER_ONE_SCORE, game.getPlayer_one_score());
-        contentValues.put(WarmachineTournamentGameTable.COLUMN_PLAYER_TWO_SCORE, game.getPlayer_two_score());
         contentValues.put(WarmachineTournamentGameTable.COLUMN_PLAYER_ONE_CONTROL_POINTS,
             game.getPlayer_one_control_points());
+        contentValues.put(WarmachineTournamentGameTable.COLUMN_PLAYER_ONE_VICTORY_POINTS,
+            game.getPlayer_one_victory_points());
+
+        contentValues.put(WarmachineTournamentGameTable.COLUMN_PLAYER_TWO_SCORE, game.getPlayer_two_score());
+        contentValues.put(WarmachineTournamentGameTable.COLUMN_PLAYER_TWO_CONTROL_POINTS,
+            game.getPlayer_two_control_points());
+        contentValues.put(WarmachineTournamentGameTable.COLUMN_PLAYER_TWO_VICTORY_POINTS,
+            game.getPlayer_two_victory_points());
+
         db.update(WarmachineTournamentGameTable.TABLE_TOURNAMENT_GAME, contentValues, "_id = ? ",
             new String[] { String.valueOf(game.get_id()) });
     }

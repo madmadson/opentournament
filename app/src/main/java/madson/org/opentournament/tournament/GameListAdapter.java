@@ -67,11 +67,11 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHo
         holder.setPairing(game);
 
         if (game.getPlayer_one_score() == 1) {
-            holder.getPlayerOneCardView().setBackgroundColor(Color.parseColor("#008000"));
-            holder.getPlayerTwoCardView().setBackgroundColor(Color.parseColor("#E50000"));
+            holder.getPlayerOneCardView().setCardBackgroundColor(Color.parseColor("#008000"));
+            holder.getPlayerTwoCardView().setCardBackgroundColor(Color.parseColor("#E50000"));
         } else if (game.getPlayer_two_score() == 1) {
-            holder.getPlayerOneCardView().setBackgroundColor(Color.parseColor("#E50000"));
-            holder.getPlayerTwoCardView().setBackgroundColor(Color.parseColor("#008000"));
+            holder.getPlayerOneCardView().setCardBackgroundColor(Color.parseColor("#E50000"));
+            holder.getPlayerTwoCardView().setCardBackgroundColor(Color.parseColor("#008000"));
         }
 
         holder.getPlayerOneNameInList().setText(String.valueOf(game.getPlayer_one_full_name()));

@@ -184,12 +184,8 @@ public class EnterResultForGameDialog extends DialogFragment {
             // PlayerOne ControlPoints
             addPointsForPlayerClickListener(1, button_increase_player_one_control_points,
                 text_player_one_control_points, WaysOfScoring.CONTROL_POINTS, IncreaseOrDecrease.INCREASE);
-            addPointsOnLongPressed(1, button_increase_player_one_control_points, text_player_one_control_points,
-                WaysOfScoring.CONTROL_POINTS, IncreaseOrDecrease.INCREASE);
             addPointsForPlayerClickListener(1, button_decrease_player_one_control_points,
                 text_player_one_control_points, WaysOfScoring.CONTROL_POINTS, IncreaseOrDecrease.DECREASE);
-            addPointsOnLongPressed(1, button_decrease_player_one_control_points, text_player_one_control_points,
-                WaysOfScoring.CONTROL_POINTS, IncreaseOrDecrease.DECREASE);
 
             // PlayerOne VictoryPoints
             addPointsForPlayerClickListener(1, button_increase_player_one_victory_points,
@@ -204,12 +200,8 @@ public class EnterResultForGameDialog extends DialogFragment {
             // PlayerTwo ControlPoints
             addPointsForPlayerClickListener(2, button_increase_player_two_control_points,
                 text_player_two_control_points, WaysOfScoring.CONTROL_POINTS, IncreaseOrDecrease.INCREASE);
-            addPointsOnLongPressed(2, button_increase_player_two_control_points, text_player_two_control_points,
-                WaysOfScoring.CONTROL_POINTS, IncreaseOrDecrease.INCREASE);
             addPointsForPlayerClickListener(2, button_decrease_player_two_control_points,
                 text_player_two_control_points, WaysOfScoring.CONTROL_POINTS, IncreaseOrDecrease.DECREASE);
-            addPointsOnLongPressed(2, button_decrease_player_two_control_points, text_player_two_control_points,
-                WaysOfScoring.CONTROL_POINTS, IncreaseOrDecrease.DECREASE);
 
             // PlayerTwo VictoryPoints
             addPointsForPlayerClickListener(2, button_increase_player_two_victory_points,
@@ -236,9 +228,9 @@ public class EnterResultForGameDialog extends DialogFragment {
                 public void onClick(View v) {
 
                     if (increaseOrDecrease.equals(IncreaseOrDecrease.INCREASE)) {
-                        increasePointsForPlayer(player_number, text_player_one_control_points, controlOrVictory);
+                        increasePointsForPlayer(player_number, text_player_one_control_points, controlOrVictory, 1);
                     } else if (increaseOrDecrease.equals(IncreaseOrDecrease.DECREASE)) {
-                        decreasePointsForPlayer(player_number, text_player_one_control_points, controlOrVictory);
+                        decreasePointsForPlayer(player_number, text_player_one_control_points, controlOrVictory, 1);
                     }
                 }
             });
@@ -268,10 +260,10 @@ public class EnterResultForGameDialog extends DialogFragment {
 
                                                 if (increaseOrDecrease.equals(IncreaseOrDecrease.INCREASE)) {
                                                     increasePointsForPlayer(player_number, edit_text_player_points,
-                                                        controlOrVictory);
+                                                        controlOrVictory, 10);
                                                 } else if (increaseOrDecrease.equals(IncreaseOrDecrease.DECREASE)) {
                                                     decreasePointsForPlayer(player_number, edit_text_player_points,
-                                                        controlOrVictory);
+                                                        controlOrVictory, 10);
                                                 }
                                             }
                                         });
@@ -287,14 +279,14 @@ public class EnterResultForGameDialog extends DialogFragment {
     }
 
 
-    private void increasePointsForPlayer(int player_number, EditText editText_points, WaysOfScoring scoring) {
+    private void increasePointsForPlayer(int player_number, EditText editText_points, WaysOfScoring scoring,
+        int amount) {
 
         if (scoring.equals(WaysOfScoring.CONTROL_POINTS)) {
             Integer controlPoints = Integer.valueOf(editText_points.getText().toString());
+            int increasedControlPoints = controlPoints + amount;
 
-            if (controlPoints < MAX_CONTROL_POINTS) {
-                int increasedControlPoints = controlPoints + 1;
-
+            if (increasedControlPoints <= MAX_CONTROL_POINTS) {
                 editText_points.setText(String.valueOf(increasedControlPoints));
 
                 if (player_number == 1) {
@@ -305,10 +297,9 @@ public class EnterResultForGameDialog extends DialogFragment {
             }
         } else if (scoring.equals(WaysOfScoring.VICTORY_POINTS)) {
             Integer victoryPoints = Integer.valueOf(editText_points.getText().toString());
+            int increasedVictoryPoints = victoryPoints + amount;
 
-            if (victoryPoints < MAX_VICTORY_POINTS) {
-                int increasedVictoryPoints = victoryPoints + 1;
-
+            if (increasedVictoryPoints <= MAX_VICTORY_POINTS) {
                 editText_points.setText(String.valueOf(increasedVictoryPoints));
 
                 if (player_number == 1) {
@@ -321,14 +312,14 @@ public class EnterResultForGameDialog extends DialogFragment {
     }
 
 
-    private void decreasePointsForPlayer(int player_number, EditText editText_points, WaysOfScoring scoring) {
+    private void decreasePointsForPlayer(int player_number, EditText editText_points, WaysOfScoring scoring,
+        int amount) {
 
         if (scoring.equals(WaysOfScoring.CONTROL_POINTS)) {
             Integer controlPoints = Integer.valueOf(editText_points.getText().toString());
+            int decreasedControlPoints = controlPoints - amount;
 
-            if (controlPoints > MIN_CONTROL_POINTS) {
-                int decreasedControlPoints = controlPoints - 1;
-
+            if (decreasedControlPoints >= MIN_CONTROL_POINTS) {
                 editText_points.setText(String.valueOf(decreasedControlPoints));
 
                 if (player_number == 1) {
@@ -339,10 +330,9 @@ public class EnterResultForGameDialog extends DialogFragment {
             }
         } else if (scoring.equals(WaysOfScoring.VICTORY_POINTS)) {
             Integer victoryPoints = Integer.valueOf(editText_points.getText().toString());
+            int decreasedVictoryPoints = victoryPoints - amount;
 
-            if (victoryPoints > MIN_CONTROL_POINTS) {
-                int decreasedVictoryPoints = victoryPoints - 1;
-
+            if (decreasedVictoryPoints >= MIN_VICTORY_POINTS) {
                 editText_points.setText(String.valueOf(decreasedVictoryPoints));
 
                 if (player_number == 1) {

@@ -34,6 +34,7 @@ public class OngoingTournamentManagementFragment extends Fragment
     private RoundChangeButtonFragment nextRoundButtonFragment;
     private RoundChangeButtonFragment previousRoundFragment;
     private GameListFragment gameListFragment;
+    private RankingListFragment rankingForRoundListFragment;
 
     public OngoingTournamentManagementFragment() {
     }
@@ -171,7 +172,6 @@ public class OngoingTournamentManagementFragment extends Fragment
     }
 
 
-    @NonNull
     private GameListFragment createPairingListFragment(int round) {
 
         gameListFragment = new GameListFragment();
@@ -185,6 +185,19 @@ public class OngoingTournamentManagementFragment extends Fragment
     }
 
 
+    private RankingListFragment createRankingListFragment(int round) {
+
+        rankingForRoundListFragment = new RankingListFragment();
+
+        Bundle bundleForRanking = new Bundle();
+        bundleForRanking.putLong(RankingListFragment.BUNDLE_TOURNAMENT_ID, tournament_id);
+        bundleForRanking.putInt(RankingListFragment.BUNDLE_ROUND, round);
+        rankingForRoundListFragment.setArguments(bundleForRanking);
+
+        return rankingForRoundListFragment;
+    }
+
+
     private void showRound(int round, FragmentTransaction fragmentTransaction) {
 
         RoundChangeButtonFragment nextRoundFragment = createNextRoundFragment(round);
@@ -192,6 +205,9 @@ public class OngoingTournamentManagementFragment extends Fragment
 
         GameListFragment gameListFragment = createPairingListFragment(round);
         fragmentTransaction.replace(R.id.left_fragment_container, gameListFragment);
+
+        RankingListFragment rankingListFragment = createRankingListFragment(round);
+        fragmentTransaction.replace(R.id.right_fragment_container, rankingListFragment);
 
         RoundChangeButtonFragment previousRoundFragment = createPreviousRoundFragment(round);
         fragmentTransaction.replace(R.id.previous_round_container, previousRoundFragment);

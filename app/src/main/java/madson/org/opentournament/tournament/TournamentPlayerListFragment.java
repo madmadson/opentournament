@@ -62,8 +62,8 @@ public class TournamentPlayerListFragment extends Fragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(linearLayoutManager);
 
-        List<WarmachineTournamentPlayer> players = ongoingTournamentService.getPlayersForWarmachineTournament(
-                tournamentId);
+        List<WarmachineTournamentPlayer> players = ongoingTournamentService.getTournamentPlayersForRound(tournamentId,
+                0);
 
         heading = (TextView) view.findViewById(R.id.heading_tournament_players);
         heading.setText(getString(R.string.heading_tournament_player, players.size()));

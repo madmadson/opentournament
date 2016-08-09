@@ -19,7 +19,7 @@ public interface OngoingTournamentService {
      *
      * @return  list of all players for given tournament
      */
-    List<WarmachineTournamentPlayer> getPlayersForWarmachineTournament(Long tournamentId);
+    List<WarmachineTournamentPlayer> getTournamentPlayersForRound(Long tournamentId, int round);
 
 
     /**
@@ -42,7 +42,7 @@ public interface OngoingTournamentService {
      *
      * @return  list of pairings for round
      */
-    List<WarmachineTournamentGame> getPairingsForTournament(Long tournamentId, int round);
+    List<WarmachineTournamentGame> getGameForRound(Long tournamentId, int round);
 
 
     /**
@@ -69,7 +69,7 @@ public interface OngoingTournamentService {
      *
      * @return  pairing
      */
-    WarmachineTournamentGame getPairingsForTournament(long pairing_id);
+    WarmachineTournamentGame getGameForRound(long pairing_id);
 
 
     /**

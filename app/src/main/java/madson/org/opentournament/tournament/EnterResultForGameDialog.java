@@ -77,7 +77,7 @@ public class EnterResultForGameDialog extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         OngoingTournamentService ongoingTournamentService = ((OpenTournamentApplication) getActivity()
                 .getApplication()).getOngoingTournamentService();
-        game = ongoingTournamentService.getPairingsForTournament(game_id);
+        game = ongoingTournamentService.getGameForRound(game_id);
 
         // Get the layout inflater
         LayoutInflater inflater = getActivity().getLayoutInflater();

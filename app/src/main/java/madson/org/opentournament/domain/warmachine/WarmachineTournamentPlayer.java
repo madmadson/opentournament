@@ -12,6 +12,7 @@ import madson.org.opentournament.domain.Player;
 public class WarmachineTournamentPlayer extends Player {
 
     private int tournament_id;
+    private int round;
 
     private int score;
     private int sos;
@@ -68,6 +69,18 @@ public class WarmachineTournamentPlayer extends Player {
     public void setSos(int sos) {
 
         this.sos = sos;
+    }
+
+
+    public int getRound() {
+
+        return round;
+    }
+
+
+    public void setRound(int round) {
+
+        this.round = round;
     }
 
 

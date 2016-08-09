@@ -86,8 +86,8 @@ public class RoundChangeButtonFragment extends Fragment {
                         ((OpenTournamentApplication) getActivity().getApplication()).getOngoingTournamentService();
 
                     if (next_or_previous.equals(NextOrPrevious.NEXT)) {
-                        List<WarmachineTournamentGame> pairingsForRound =
-                            ongoingTournamentService.getPairingsForTournament(tournament_id, round_to_display);
+                        List<WarmachineTournamentGame> pairingsForRound = ongoingTournamentService.getGameForRound(
+                                tournament_id, round_to_display);
 
                         if (pairingsForRound.isEmpty()) {
                             ConfirmPairingNewRoundDialog dialog = new ConfirmPairingNewRoundDialog();

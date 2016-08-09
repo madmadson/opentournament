@@ -13,7 +13,7 @@ import madson.org.opentournament.OpenTournamentApplication;
 import madson.org.opentournament.db.OpenTournamentDBHelper;
 import madson.org.opentournament.db.TournamentTable;
 import madson.org.opentournament.db.warmachine.WarmachineTournamentGameTable;
-import madson.org.opentournament.db.warmachine.WarmachineTournamentPlayerTable;
+import madson.org.opentournament.db.warmachine.WarmachineTournamentPlayerRankingTable;
 import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.warmachine.WarmachineTournamentGame;
 import madson.org.opentournament.domain.warmachine.WarmachineTournamentPlayer;
@@ -77,36 +77,41 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
         contentValues = new ContentValues();
         contentValues.put("tournament_id", tournament_id);
         contentValues.put("player_id", player_id);
-        db.insert(WarmachineTournamentPlayerTable.TABLE_WARMACHINE_TOURNAMENT_PLAYER, null, contentValues);
+        contentValues.put("round", 0);
+        db.insert(WarmachineTournamentPlayerRankingTable.TABLE_WARMACHINE_TOURNAMENT_PLAYER_RANKING, null,
+            contentValues);
     }
 
 
     private void deleteAllTournamentPlayers() {
 
         SQLiteDatabase db = openTournamentDBHelper.getWritableDatabase();
-        db.delete(WarmachineTournamentPlayerTable.TABLE_WARMACHINE_TOURNAMENT_PLAYER, null, null);
+        db.delete(WarmachineTournamentPlayerRankingTable.TABLE_WARMACHINE_TOURNAMENT_PLAYER_RANKING, null, null);
     }
 
 
     @Override
-    public List<WarmachineTournamentPlayer> getPlayersForWarmachineTournament(Long tournamentId) {
+    public List<WarmachineTournamentPlayer> getTournamentPlayersForRound(Long tournamentId, int round) {
 
         ArrayList<WarmachineTournamentPlayer> players = new ArrayList<>();
         SQLiteDatabase readableDatabase = openTournamentDBHelper.getReadableDatabase();
 
-        Cursor cursor = readableDatabase.query(WarmachineTournamentPlayerTable.TABLE_WARMACHINE_TOURNAMENT_PLAYER,
-                WarmachineTournamentPlayerTable.ALL_COLS_FOR_WARMACHINE_TOURNAMENT_PLAYER, "tournament_id  = ?",
-                new String[] { Long.toString(tournamentId) }, null, null, null);
+        Cursor cursor = readableDatabase.query(
+                WarmachineTournamentPlayerRankingTable.TABLE_WARMACHINE_TOURNAMENT_PLAYER_RANKING,
+                WarmachineTournamentPlayerRankingTable.ALL_COLS_FOR_WARMACHINE_TOURNAMENT_PLAYER,
+                "tournament_id  = ? AND round = ?", new String[] { Long.toString(tournamentId), String.valueOf(round) },
+                null, null, null);
 
         cursor.moveToFirst();
 
         while (!cursor.isAfterLast()) {
             Player player = playerService.getPlayerForId((long) cursor.getInt(2));
             WarmachineTournamentPlayer warmachineTournamentPlayer = new WarmachineTournamentPlayer(player);
-            warmachineTournamentPlayer.setScore(cursor.getInt(3));
-            warmachineTournamentPlayer.setSos(cursor.getInt(4));
-            warmachineTournamentPlayer.setControl_points(cursor.getInt(5));
-            warmachineTournamentPlayer.setVictory_points(cursor.getInt(6));
+            warmachineTournamentPlayer.setRound(cursor.getInt(3));
+            warmachineTournamentPlayer.setScore(cursor.getInt(4));
+            warmachineTournamentPlayer.setSos(cursor.getInt(5));
+            warmachineTournamentPlayer.setControl_points(cursor.getInt(6));
+            warmachineTournamentPlayer.setVictory_points(cursor.getInt(7));
             players.add(warmachineTournamentPlayer);
             cursor.moveToNext();
         }
@@ -126,7 +131,9 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
         ContentValues contentValues = new ContentValues();
         contentValues.put("tournament_id", tournamentId);
         contentValues.put("player_id", player.getId());
-        db.insert(WarmachineTournamentPlayerTable.TABLE_WARMACHINE_TOURNAMENT_PLAYER, null, contentValues);
+        contentValues.put("round", 0);
+        db.insert(WarmachineTournamentPlayerRankingTable.TABLE_WARMACHINE_TOURNAMENT_PLAYER_RANKING, null,
+            contentValues);
     }
 
 
@@ -138,14 +145,14 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
         ContentValues contentValues = new ContentValues();
         contentValues.put("tournament_id", tournamentId);
         contentValues.put("player_id", player.getId());
-        db.delete(WarmachineTournamentPlayerTable.TABLE_WARMACHINE_TOURNAMENT_PLAYER,
+        db.delete(WarmachineTournamentPlayerRankingTable.TABLE_WARMACHINE_TOURNAMENT_PLAYER_RANKING,
             "tournament_id  = ?  AND  player_id = ? ",
             new String[] { String.valueOf(tournamentId), String.valueOf(player.getId()) });
     }
 
 
     @Override
-    public List<WarmachineTournamentGame> getPairingsForTournament(Long tournamentId, int round) {
+    public List<WarmachineTournamentGame> getGameForRound(Long tournamentId, int round) {
 
         List<WarmachineTournamentGame> warmachineTournamentGames = new ArrayList<>();
         SQLiteDatabase readableDatabase = openTournamentDBHelper.getReadableDatabase();
@@ -172,16 +179,12 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
     @Override
     public List<WarmachineTournamentGame> createPairingForRound(Long tournamentId, int round) {
 
-        List<WarmachineTournamentPlayer> playersForTournament = getPlayersForWarmachineTournament(tournamentId);
+        List<WarmachineTournamentPlayer> playersForTournament = getTournamentPlayersForRound(tournamentId, round - 1);
 
         // uneven number of players
         if (playersForTournament.size() % 2 == 1) {
             WarmachineTournamentPlayer warmachineTournamentDummyPlayer = new WarmachineTournamentPlayer(new Player(
                         "dummy", "bye", "player"));
-            warmachineTournamentDummyPlayer.setScore(0);
-            warmachineTournamentDummyPlayer.setSos(0);
-            warmachineTournamentDummyPlayer.setControl_points(0);
-            warmachineTournamentDummyPlayer.setVictory_points(0);
             playersForTournament.add(warmachineTournamentDummyPlayer);
         }
 
@@ -200,17 +203,10 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
             warmachineTournamentGame.setPlayer_one_full_name(player_one.getFirstname() + " \""
                 + player_one.getNickname() + "\" " + player_one.getLastname());
 
-//            warmachineTournamentGame.setPlayer_one_score(player_one.getScore());
-//            warmachineTournamentGame.setPlayer_one_control_points(player_one.getControl_points());
-//            warmachineTournamentGame.setPlayer_one_victory_points(player_one.getVictory_points());
-
             WarmachineTournamentPlayer player_two = playersForTournament.get(i + 1);
             warmachineTournamentGame.setPlayer_two_id(player_two.getId());
             warmachineTournamentGame.setPlayer_two_full_name(player_two.getFirstname() + " \""
                 + player_two.getNickname() + "\" " + player_two.getLastname());
-//            warmachineTournamentGame.setPlayer_two_score(player_two.getScore());
-//            warmachineTournamentGame.setPlayer_two_control_points(player_two.getControl_points());
-//            warmachineTournamentGame.setPlayer_two_victory_points(player_two.getVictory_points());
 
             warmachineTournamentGames.add(warmachineTournamentGame);
 
@@ -238,8 +234,9 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
         ArrayList<Player> players = new ArrayList<>();
         SQLiteDatabase readableDatabase = openTournamentDBHelper.getReadableDatabase();
 
-        Cursor cursor = readableDatabase.query(WarmachineTournamentPlayerTable.TABLE_WARMACHINE_TOURNAMENT_PLAYER,
-                new String[] { WarmachineTournamentPlayerTable.COLUMN_PLAYER_ID }, "tournament_id  = ?",
+        Cursor cursor = readableDatabase.query(
+                WarmachineTournamentPlayerRankingTable.TABLE_WARMACHINE_TOURNAMENT_PLAYER_RANKING,
+                new String[] { WarmachineTournamentPlayerRankingTable.COLUMN_PLAYER_ID }, "tournament_id  = ?",
                 new String[] { Long.toString(tournamentId) }, null, null, null);
 
         cursor.moveToFirst();
@@ -258,13 +255,13 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
 
 
     @Override
-    public WarmachineTournamentGame getPairingsForTournament(long pairing_id) {
+    public WarmachineTournamentGame getGameForRound(long game_id) {
 
         SQLiteDatabase readableDatabase = openTournamentDBHelper.getReadableDatabase();
 
         Cursor cursor = readableDatabase.query(WarmachineTournamentGameTable.TABLE_TOURNAMENT_GAME,
                 WarmachineTournamentGameTable.ALL_COLS_FOR_TOURNAMENT_GAME, "_id  = ? ",
-                new String[] { String.valueOf(pairing_id) }, null, null, null);
+                new String[] { String.valueOf(game_id) }, null, null, null);
 
         cursor.moveToFirst();
 

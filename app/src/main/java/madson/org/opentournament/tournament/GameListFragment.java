@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import madson.org.opentournament.OpenTournamentApplication;
 import madson.org.opentournament.R;
+import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.warmachine.WarmachineTournamentGame;
 import madson.org.opentournament.service.OngoingTournamentService;
 
@@ -26,12 +27,13 @@ import java.util.List;
  *
  * @author  Tobias Matt - tmatt@contargo.net
  */
-public class PairingListFragment extends Fragment {
+public class GameListFragment extends Fragment {
 
     public static final String BUNDLE_TOURNAMENT_ID = "tournament_id";
     public static final String BUNDLE_ROUND = "round";
     private Long tournamentId;
     private int round;
+    private GameListAdapter gameListAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -46,28 +48,39 @@ public class PairingListFragment extends Fragment {
             round = bundle.getInt(BUNDLE_ROUND);
         }
 
-        View view = inflater.inflate(R.layout.fragment_pairing_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_game_list, container, false);
 
         OngoingTournamentService ongoingTournamentService = ((OpenTournamentApplication) getActivity()
                 .getApplication()).getOngoingTournamentService();
 
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.pairing_list_recycler_view);
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.game_list_recycler_view);
 
         recyclerView.setHasFixedSize(true);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(linearLayoutManager);
 
-        List<WarmachineTournamentGame> pairingsForTournament = ongoingTournamentService.getPairingForTournament(
+        List<WarmachineTournamentGame> pairingsForTournament = ongoingTournamentService.getPairingsForTournament(
                 tournamentId, round);
 
-        TextView heading = (TextView) view.findViewById(R.id.heading_pairing_for_round);
+        TextView heading = (TextView) view.findViewById(R.id.heading_game_for_round);
         heading.setText(getString(R.string.heading_pairing_for_round, round));
 
-        PairingListAdapter pairingListAdapter = new PairingListAdapter(pairingsForTournament);
+        gameListAdapter = new GameListAdapter(pairingsForTournament);
 
-        recyclerView.setAdapter(pairingListAdapter);
+        recyclerView.setAdapter(gameListAdapter);
 
         return view;
+    }
+
+
+    public void updateGameInList(WarmachineTournamentGame game) {
+
+        gameListAdapter.updateGame(game);
+    }
+
+    public interface GameResultEnteredListener {
+
+        void onResultConfirmed(WarmachineTournamentGame game);
     }
 }

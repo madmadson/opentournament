@@ -15,7 +15,7 @@
         android:layout_alignParentLeft="true"
         android:layout_height="60dp"
         android:layout_width="240dp"
-        android:id="@+id/pairing_player_one_card_view"
+        android:id="@+id/game_list_player_one_card_view"
         card_view:cardCornerRadius="4dp">
 
         <GridLayout
@@ -23,7 +23,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:layout_column="4"
+            android:layout_column="3"
             android:padding="8dp"
             android:background="?android:attr/selectableItemBackground">
 
@@ -34,7 +34,7 @@
                 android:layout_height="wrap_content"
                 android:layout_row="0"
                 android:layout_column="0"
-                android:layout_columnSpan="4"
+                android:layout_columnSpan="3"
                 />
 
             <TextView
@@ -45,23 +45,14 @@
                 android:layout_row="1"
                 android:layout_column="0"
                 android:text="SC 0"/>
-
-            <TextView
-                android:id="@+id/pairing_player_one_strength_of_schedule"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingRight="20dp"
-                android:layout_row="1"
-                android:layout_column="1"
-                android:text="SOS 0"/>
-
+            
             <TextView
                 android:id="@+id/pairing_player_one_control_points"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingRight="20dp"
                 android:layout_row="1"
-                android:layout_column="2"
+                android:layout_column="1"
                 android:text="CP 0"/>
 
             <TextView
@@ -70,7 +61,7 @@
                 android:layout_height="wrap_content"
                 android:paddingRight="20dp"
                 android:layout_row="1"
-                android:layout_column="3"
+                android:layout_column="2"
                 android:text="VP 0"/>
 
         </GridLayout>
@@ -90,7 +81,7 @@
         android:layout_alignParentRight="true"
         android:layout_height="60dp"
         android:layout_width="240dp"
-        android:id="@+id/pairing_player2_card_view"
+        android:id="@+id/game_list_player_two_card_view"
         card_view:cardCornerRadius="4dp">
 
         <GridLayout
@@ -98,7 +89,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:layout_column="4"
+            android:layout_column="3"
             android:padding="8dp"
             android:background="?android:attr/selectableItemBackground">
 
@@ -109,7 +100,7 @@
                 android:layout_height="wrap_content"
                 android:layout_row="0"
                 android:layout_column="0"
-                android:layout_columnSpan="4" 
+                android:layout_columnSpan="3" 
                 />
 
             <TextView
@@ -122,21 +113,12 @@
                 android:text="SC 0"/>
 
             <TextView
-                android:id="@+id/pairing_player_two_strength_of_schedule"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingRight="20dp"
-                android:layout_row="1"
-                android:layout_column="1"
-                android:text="SOS 0"/>
-
-            <TextView
                 android:id="@+id/pairing_player_two_control_points"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingRight="20dp"
                 android:layout_row="1"
-                android:layout_column="2"
+                android:layout_column="1"
                 android:text="CP 0"/>
 
             <TextView
@@ -145,7 +127,7 @@
                 android:layout_height="wrap_content"
                 android:paddingRight="20dp"
                 android:layout_row="1"
-                android:layout_column="3"
+                android:layout_column="2"
                 android:text="VP 0"/>
 
         </GridLayout>

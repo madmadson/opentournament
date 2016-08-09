@@ -15,12 +15,13 @@ import android.view.ViewGroup;
 
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Player;
+import madson.org.opentournament.domain.warmachine.WarmachineTournamentGame;
 import madson.org.opentournament.players.AvailablePlayerListFragment;
 
 
 public class OngoingTournamentManagementFragment extends Fragment
     implements AvailablePlayerListFragment.AvailablePlayerListItemListener,
-        TournamentPlayerListFragment.TournamentPlayerListItemListener {
+        TournamentPlayerListFragment.TournamentPlayerListItemListener, GameListFragment.GameResultEnteredListener {
 
     public static final String BUNDLE_TOURNAMENT_ID = "tournament_id";
     public static final String BUNDLE_ROUND = "round";
@@ -32,6 +33,7 @@ public class OngoingTournamentManagementFragment extends Fragment
     private AvailablePlayerListFragment availablePlayerListFragment;
     private RoundChangeButtonFragment nextRoundButtonFragment;
     private RoundChangeButtonFragment previousRoundFragment;
+    private GameListFragment gameListFragment;
 
     public OngoingTournamentManagementFragment() {
     }
@@ -170,16 +172,16 @@ public class OngoingTournamentManagementFragment extends Fragment
 
 
     @NonNull
-    private PairingListFragment createPairingListFragment(int round) {
+    private GameListFragment createPairingListFragment(int round) {
 
-        PairingListFragment pairingListFragment = new PairingListFragment();
+        gameListFragment = new GameListFragment();
 
         Bundle bundleForPairing = new Bundle();
-        bundleForPairing.putLong(PairingListFragment.BUNDLE_TOURNAMENT_ID, tournament_id);
-        bundleForPairing.putInt(PairingListFragment.BUNDLE_ROUND, round);
-        pairingListFragment.setArguments(bundleForPairing);
+        bundleForPairing.putLong(GameListFragment.BUNDLE_TOURNAMENT_ID, tournament_id);
+        bundleForPairing.putInt(GameListFragment.BUNDLE_ROUND, round);
+        gameListFragment.setArguments(bundleForPairing);
 
-        return pairingListFragment;
+        return gameListFragment;
     }
 
 
@@ -188,8 +190,8 @@ public class OngoingTournamentManagementFragment extends Fragment
         RoundChangeButtonFragment nextRoundFragment = createNextRoundFragment(round);
         fragmentTransaction.replace(R.id.next_round_container, nextRoundFragment);
 
-        PairingListFragment pairingListFragment = createPairingListFragment(round);
-        fragmentTransaction.replace(R.id.left_fragment_container, pairingListFragment);
+        GameListFragment gameListFragment = createPairingListFragment(round);
+        fragmentTransaction.replace(R.id.left_fragment_container, gameListFragment);
 
         RoundChangeButtonFragment previousRoundFragment = createPreviousRoundFragment(round);
         fragmentTransaction.replace(R.id.previous_round_container, previousRoundFragment);
@@ -202,6 +204,17 @@ public class OngoingTournamentManagementFragment extends Fragment
             } else {
                 fab.setVisibility(View.INVISIBLE);
             }
+        }
+    }
+
+
+    @Override
+    public void onResultConfirmed(WarmachineTournamentGame game) {
+
+        Log.i(this.getClass().getName(), "game result entered: " + game);
+
+        if (gameListFragment != null) {
+            gameListFragment.updateGameInList(game);
         }
     }
 }

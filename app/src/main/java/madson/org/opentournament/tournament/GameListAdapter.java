@@ -1,10 +1,14 @@
 package madson.org.opentournament.tournament;
 
+import android.graphics.Color;
+
+import android.os.Build;
 import android.os.Bundle;
 
 import android.support.v4.app.FragmentManager;
 
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 
 import android.util.Log;
@@ -26,19 +30,31 @@ import java.util.List;
  *
  * @author  Tobias Matt - tmatt@contargo.net
  */
-public class PairingListAdapter extends RecyclerView.Adapter<PairingListAdapter.ViewHolder> {
+public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHolder> {
 
     private List<WarmachineTournamentGame> pairingsForTournament;
 
-    public PairingListAdapter(List<WarmachineTournamentGame> pairingsForTournament) {
+    public GameListAdapter(List<WarmachineTournamentGame> pairingsForTournament) {
 
         this.pairingsForTournament = pairingsForTournament;
     }
 
+    public void updateGame(WarmachineTournamentGame game) {
+
+        if (pairingsForTournament.contains(game)) {
+            int indexOfGame = pairingsForTournament.indexOf(game);
+
+            pairingsForTournament.remove(game);
+            pairingsForTournament.add(indexOfGame, game);
+            notifyDataSetChanged();
+        }
+    }
+
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.pairing_list_row, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.game_list_row, parent, false);
 
         return new ViewHolder(v);
     }
@@ -47,18 +63,26 @@ public class PairingListAdapter extends RecyclerView.Adapter<PairingListAdapter.
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
 
-        final WarmachineTournamentGame pairing = pairingsForTournament.get(position);
-        holder.setPairing(pairing);
-        holder.getPlayerOneNameInList().setText(String.valueOf(pairing.getPlayer_one_full_name()));
-        holder.getPlayerOneScore().setText("WIN: " + String.valueOf(pairing.getPlayer_one_score()));
+        final WarmachineTournamentGame game = pairingsForTournament.get(position);
+        holder.setPairing(game);
 
-        holder.getPlayerOneControlPoints().setText("CP: " + String.valueOf(pairing.getPlayer_one_control_points()));
-        holder.getPlayerOneVictoryPoints().setText("VP: " + String.valueOf(pairing.getPlayer_one_victory_points()));
+        if (game.getPlayer_one_score() == 1) {
+            holder.getPlayerOneCardView().setBackgroundColor(Color.parseColor("#008000"));
+            holder.getPlayerTwoCardView().setBackgroundColor(Color.parseColor("#E50000"));
+        } else if (game.getPlayer_two_score() == 1) {
+            holder.getPlayerOneCardView().setBackgroundColor(Color.parseColor("#E50000"));
+            holder.getPlayerTwoCardView().setBackgroundColor(Color.parseColor("#008000"));
+        }
 
-        holder.getPlayerTwoNameInList().setText(String.valueOf(pairing.getPlayer_two_full_name()));
-        holder.getPlayerTwoScore().setText("WIN: " + String.valueOf(pairing.getPlayer_two_score()));
-        holder.getPlayerTwoControlPoints().setText("CP: " + String.valueOf(pairing.getPlayer_two_control_points()));
-        holder.getPlayerTwoVictoryPoints().setText("VP: " + String.valueOf(pairing.getPlayer_two_victory_points()));
+        holder.getPlayerOneNameInList().setText(String.valueOf(game.getPlayer_one_full_name()));
+        holder.getPlayerOneScore().setText("WIN: " + String.valueOf(game.getPlayer_one_score()));
+        holder.getPlayerOneControlPoints().setText("CP: " + String.valueOf(game.getPlayer_one_control_points()));
+        holder.getPlayerOneVictoryPoints().setText("VP: " + String.valueOf(game.getPlayer_one_victory_points()));
+
+        holder.getPlayerTwoNameInList().setText(String.valueOf(game.getPlayer_two_full_name()));
+        holder.getPlayerTwoScore().setText("WIN: " + String.valueOf(game.getPlayer_two_score()));
+        holder.getPlayerTwoControlPoints().setText("CP: " + String.valueOf(game.getPlayer_two_control_points()));
+        holder.getPlayerTwoVictoryPoints().setText("VP: " + String.valueOf(game.getPlayer_two_victory_points()));
     }
 
 
@@ -71,15 +95,18 @@ public class PairingListAdapter extends RecyclerView.Adapter<PairingListAdapter.
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private WarmachineTournamentGame pairing;
+
+        private CardView playerOneCardView;
+
         private TextView playerOneNameInList;
         private TextView playerOneScore;
-        private TextView playerOneSoS;
         private TextView playerOneControlPoints;
         private TextView playerOneVictoryPoints;
 
+        private CardView playerTwoCardView;
+
         private TextView playerTwoNameInList;
         private TextView playerTwoScore;
-        private TextView playerTwoSoS;
         private TextView playerTwoControlPoints;
         private TextView playerTwoVictoryPoints;
 
@@ -89,15 +116,16 @@ public class PairingListAdapter extends RecyclerView.Adapter<PairingListAdapter.
 
             v.setOnClickListener(this);
 
+            playerOneCardView = (CardView) v.findViewById(R.id.game_list_player_one_card_view);
+            playerTwoCardView = (CardView) v.findViewById(R.id.game_list_player_two_card_view);
+
             playerOneNameInList = (TextView) v.findViewById(R.id.pairing_player_one_name);
             playerOneScore = (TextView) v.findViewById(R.id.pairing_player_one_score);
-            playerOneSoS = (TextView) v.findViewById(R.id.pairing_player_one_strength_of_schedule);
             playerOneControlPoints = (TextView) v.findViewById(R.id.pairing_player_one_control_points);
             playerOneVictoryPoints = (TextView) v.findViewById(R.id.pairing_player_one_victory_points);
 
             playerTwoNameInList = (TextView) v.findViewById(R.id.pairing_player_two_name);
             playerTwoScore = (TextView) v.findViewById(R.id.pairing_player_two_score);
-            playerTwoSoS = (TextView) v.findViewById(R.id.pairing_player_two_strength_of_schedule);
             playerTwoControlPoints = (TextView) v.findViewById(R.id.pairing_player_two_control_points);
             playerTwoVictoryPoints = (TextView) v.findViewById(R.id.pairing_player_two_victory_points);
         }
@@ -110,17 +138,29 @@ public class PairingListAdapter extends RecyclerView.Adapter<PairingListAdapter.
             EnterResultForGameDialog dialog = new EnterResultForGameDialog();
 
             Bundle resultForPairingResult = new Bundle();
-            resultForPairingResult.putLong(EnterResultForGameDialog.BUNDLE_PAIRING_ID, pairing.get_id());
+            resultForPairingResult.putLong(EnterResultForGameDialog.BUNDLE_GAME_ID, pairing.get_id());
             dialog.setArguments(resultForPairingResult);
 
             FragmentManager supportFragmentManager = ((AppCompatActivity) v.getContext()).getSupportFragmentManager();
-            dialog.show(supportFragmentManager, "resultForPairingResult");
+            dialog.show(supportFragmentManager, "enterGameResultDialog");
         }
 
 
         public void setPairing(WarmachineTournamentGame pairing) {
 
             this.pairing = pairing;
+        }
+
+
+        public CardView getPlayerOneCardView() {
+
+            return playerOneCardView;
+        }
+
+
+        public CardView getPlayerTwoCardView() {
+
+            return playerTwoCardView;
         }
 
 
@@ -169,18 +209,6 @@ public class PairingListAdapter extends RecyclerView.Adapter<PairingListAdapter.
         public TextView getPlayerOneScore() {
 
             return playerOneScore;
-        }
-
-
-        public TextView getPlayerOneSoS() {
-
-            return playerOneSoS;
-        }
-
-
-        public TextView getPlayerTwoSoS() {
-
-            return playerTwoSoS;
         }
     }
 }

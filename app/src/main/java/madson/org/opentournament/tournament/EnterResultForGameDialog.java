@@ -1,5 +1,6 @@
 package madson.org.opentournament.tournament;
 
+import android.app.Activity;
 import android.app.Dialog;
 
 import android.content.DialogInterface;
@@ -39,13 +40,15 @@ import java.util.TimerTask;
  */
 public class EnterResultForGameDialog extends DialogFragment {
 
-    public static final String BUNDLE_PAIRING_ID = "pairing_id";
+    public static final String BUNDLE_GAME_ID = "game_id";
     private static final Integer MIN_CONTROL_POINTS = 0;
     private static final Integer MAX_CONTROL_POINTS = 5;
 
     private static final Integer MIN_VICTORY_POINTS = 0;
     private static final Integer MAX_VICTORY_POINTS = 1000;
-    private long pairing_id;
+    private long game_id;
+
+    private GameListFragment.GameResultEnteredListener mListener;
 
     private WarmachineTournamentGame game;
 
@@ -55,18 +58,18 @@ public class EnterResultForGameDialog extends DialogFragment {
         Bundle bundle = getArguments();
 
         if (bundle != null) {
-            pairing_id = bundle.getLong(BUNDLE_PAIRING_ID);
+            game_id = bundle.getLong(BUNDLE_GAME_ID);
         }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         OngoingTournamentService ongoingTournamentService = ((OpenTournamentApplication) getActivity()
                 .getApplication()).getOngoingTournamentService();
-        game = ongoingTournamentService.getPairingForTournament(pairing_id);
+        game = ongoingTournamentService.getPairingsForTournament(game_id);
 
         // Get the layout inflater
         LayoutInflater inflater = getActivity().getLayoutInflater();
 
-        View dialogView = inflater.inflate(R.layout.dialog_enter_result_pairing, null);
+        View dialogView = inflater.inflate(R.layout.dialog_enter_result_game, null);
 
         builder.setView(dialogView)
             .setPositiveButton(R.string.confirm, null)
@@ -80,6 +83,22 @@ public class EnterResultForGameDialog extends DialogFragment {
                 });
 
         return builder.create();
+    }
+
+
+    @Override
+    public void onAttach(Activity activity) {
+
+        super.onAttach(activity);
+
+        OngoingTournamentManagementFragment tournamentManagementFragment = ((OngoingTournamentActivity) getActivity())
+            .getOngoingTournamentManagementFragment();
+
+        if (tournamentManagementFragment != null) {
+            mListener = tournamentManagementFragment;
+        } else {
+            throw new RuntimeException("OngoingTournamentManagementFragment must be available");
+        }
     }
 
 
@@ -343,6 +362,9 @@ public class EnterResultForGameDialog extends DialogFragment {
                         ((OpenTournamentApplication) getActivity().getApplication()).getOngoingTournamentService();
 
                     ongoingTournamentService.saveGameResult(game);
+
+                    // notify game list
+                    mListener.onResultConfirmed(game);
 
                     dialog.dismiss();
                 }

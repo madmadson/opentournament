@@ -206,4 +206,36 @@ public class WarmachineTournamentGame {
             + ", player_two_control_points=" + player_two_control_points
             + ", player_two_victory_points=" + player_two_victory_points + '}';
     }
+
+
+    @Override
+    public boolean equals(Object o) {
+
+        if (this == o)
+            return true;
+
+        if (o == null || getClass() != o.getClass())
+            return false;
+
+        WarmachineTournamentGame that = (WarmachineTournamentGame) o;
+
+        if (_id != that._id)
+            return false;
+
+        if (tournament_id != that.tournament_id)
+            return false;
+
+        return round == that.round;
+    }
+
+
+    @Override
+    public int hashCode() {
+
+        int result = (int) (_id ^ (_id >>> 32));
+        result = 31 * result + tournament_id;
+        result = 31 * result + round;
+
+        return result;
+    }
 }

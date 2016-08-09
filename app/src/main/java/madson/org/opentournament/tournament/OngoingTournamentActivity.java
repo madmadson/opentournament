@@ -166,8 +166,10 @@ public class OngoingTournamentActivity extends AppCompatActivity {
         public Fragment getItem(int position) {
 
             Log.i(this.getClass().getName(), "create tournament fragment: " + tournament + " on position: " + position);
+            ongoingTournamentManagementFragment = OngoingTournamentManagementFragment.newInstance(position,
+                    tournament.getId());
 
-            return OngoingTournamentManagementFragment.newInstance(position, tournament.getId());
+            return ongoingTournamentManagementFragment;
         }
 
 

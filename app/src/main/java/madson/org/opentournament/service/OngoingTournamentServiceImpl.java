@@ -12,10 +12,10 @@ import android.util.Log;
 import madson.org.opentournament.OpenTournamentApplication;
 import madson.org.opentournament.db.OpenTournamentDBHelper;
 import madson.org.opentournament.db.TournamentTable;
-import madson.org.opentournament.db.warmachine.WarmachineTournamentPairingTable;
+import madson.org.opentournament.db.warmachine.WarmachineTournamentGameTable;
 import madson.org.opentournament.db.warmachine.WarmachineTournamentPlayerTable;
 import madson.org.opentournament.domain.Player;
-import madson.org.opentournament.domain.warmachine.WarmachineTournamentPairing;
+import madson.org.opentournament.domain.warmachine.WarmachineTournamentGame;
 import madson.org.opentournament.domain.warmachine.WarmachineTournamentPlayer;
 import madson.org.opentournament.service.warmachine.WarmachinePlayerComparator;
 
@@ -145,32 +145,32 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
 
 
     @Override
-    public List<WarmachineTournamentPairing> getPairingForTournament(Long tournamentId, int round) {
+    public List<WarmachineTournamentGame> getPairingForTournament(Long tournamentId, int round) {
 
-        List<WarmachineTournamentPairing> warmachineTournamentPairings = new ArrayList<>();
+        List<WarmachineTournamentGame> warmachineTournamentGames = new ArrayList<>();
         SQLiteDatabase readableDatabase = openTournamentDBHelper.getReadableDatabase();
 
-        Cursor cursor = readableDatabase.query(WarmachineTournamentPairingTable.TABLE_TOURNAMENT_PAIRING,
-                WarmachineTournamentPairingTable.ALL_COLS_FOR_TOURNAMENT_PAIRING, "tournament_id  = ? AND round = ?",
+        Cursor cursor = readableDatabase.query(WarmachineTournamentGameTable.TABLE_TOURNAMENT_GAME,
+                WarmachineTournamentGameTable.ALL_COLS_FOR_TOURNAMENT_GAME, "tournament_id  = ? AND round = ?",
                 new String[] { String.valueOf(tournamentId), String.valueOf(round) }, null, null, null);
 
         cursor.moveToFirst();
 
         while (!cursor.isAfterLast()) {
-            WarmachineTournamentPairing pairing = cursorToTournamentPairing(cursor);
-            warmachineTournamentPairings.add(pairing);
+            WarmachineTournamentGame pairing = cursorToTournamentPairing(cursor);
+            warmachineTournamentGames.add(pairing);
             cursor.moveToNext();
         }
 
         cursor.close();
         readableDatabase.close();
 
-        return warmachineTournamentPairings;
+        return warmachineTournamentGames;
     }
 
 
     @Override
-    public List<WarmachineTournamentPairing> createPairingForRound(Long tournamentId, int round) {
+    public List<WarmachineTournamentGame> createPairingForRound(Long tournamentId, int round) {
 
         List<WarmachineTournamentPlayer> playersForTournament = getPlayersForWarmachineTournament(tournamentId);
 
@@ -188,42 +188,39 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
         Collections.shuffle(playersForTournament);
         Collections.sort(playersForTournament, new WarmachinePlayerComparator());
 
-        ArrayList<WarmachineTournamentPairing> warmachineTournamentPairings = new ArrayList<>(
-                playersForTournament.size());
+        ArrayList<WarmachineTournamentGame> warmachineTournamentGames = new ArrayList<>(playersForTournament.size());
 
         for (int i = 0; i <= (playersForTournament.size() - 1); i = i + 2) {
-            WarmachineTournamentPairing warmachineTournamentPairing = new WarmachineTournamentPairing();
-            warmachineTournamentPairing.setTournament_id(tournamentId.intValue());
-            warmachineTournamentPairing.setRound(round);
+            WarmachineTournamentGame warmachineTournamentGame = new WarmachineTournamentGame();
+            warmachineTournamentGame.setTournament_id(tournamentId.intValue());
+            warmachineTournamentGame.setRound(round);
 
             WarmachineTournamentPlayer player_one = playersForTournament.get(i);
-            warmachineTournamentPairing.setPlayer_one_id(player_one.getId());
-            warmachineTournamentPairing.setPlayer_one_full_name(player_one.getFirstname() + " \""
+            warmachineTournamentGame.setPlayer_one_id(player_one.getId());
+            warmachineTournamentGame.setPlayer_one_full_name(player_one.getFirstname() + " \""
                 + player_one.getNickname() + "\" " + player_one.getLastname());
 
-            warmachineTournamentPairing.setPlayer_one_score(player_one.getScore());
-            warmachineTournamentPairing.setPlayer_one_sos(player_one.getSos());
-            warmachineTournamentPairing.setPlayer_one_control_points(player_one.getControl_points());
-            warmachineTournamentPairing.setPlayer_one_victory_points(player_one.getVictory_points());
+//            warmachineTournamentGame.setPlayer_one_score(player_one.getScore());
+//            warmachineTournamentGame.setPlayer_one_control_points(player_one.getControl_points());
+//            warmachineTournamentGame.setPlayer_one_victory_points(player_one.getVictory_points());
 
             WarmachineTournamentPlayer player_two = playersForTournament.get(i + 1);
-            warmachineTournamentPairing.setPlayer_two_id(player_two.getId());
-            warmachineTournamentPairing.setPlayer_two_score(player_two.getScore());
-            warmachineTournamentPairing.setPlayer_two_sos(player_two.getSos());
-            warmachineTournamentPairing.setPlayer_two_control_points(player_two.getControl_points());
-            warmachineTournamentPairing.setPlayer_two_victory_points(player_two.getVictory_points());
-            warmachineTournamentPairing.setPlayer_two_full_name(player_two.getFirstname() + " \""
+            warmachineTournamentGame.setPlayer_two_id(player_two.getId());
+            warmachineTournamentGame.setPlayer_two_full_name(player_two.getFirstname() + " \""
                 + player_two.getNickname() + "\" " + player_two.getLastname());
+//            warmachineTournamentGame.setPlayer_two_score(player_two.getScore());
+//            warmachineTournamentGame.setPlayer_two_control_points(player_two.getControl_points());
+//            warmachineTournamentGame.setPlayer_two_victory_points(player_two.getVictory_points());
 
-            warmachineTournamentPairings.add(warmachineTournamentPairing);
+            warmachineTournamentGames.add(warmachineTournamentGame);
 
             // persist pairing
-            insertWarmachineTournamentPairing(warmachineTournamentPairing);
+            insertWarmachineTournamentPairing(warmachineTournamentGame);
         }
 
         makeTournamentRoundActual(tournamentId, round);
 
-        return warmachineTournamentPairings;
+        return warmachineTournamentGames;
     }
 
 
@@ -261,17 +258,17 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
 
 
     @Override
-    public WarmachineTournamentPairing getPairingForTournament(long pairing_id) {
+    public WarmachineTournamentGame getPairingForTournament(long pairing_id) {
 
         SQLiteDatabase readableDatabase = openTournamentDBHelper.getReadableDatabase();
 
-        Cursor cursor = readableDatabase.query(WarmachineTournamentPairingTable.TABLE_TOURNAMENT_PAIRING,
-                WarmachineTournamentPairingTable.ALL_COLS_FOR_TOURNAMENT_PAIRING, "_id  = ? ",
+        Cursor cursor = readableDatabase.query(WarmachineTournamentGameTable.TABLE_TOURNAMENT_GAME,
+                WarmachineTournamentGameTable.ALL_COLS_FOR_TOURNAMENT_GAME, "_id  = ? ",
                 new String[] { String.valueOf(pairing_id) }, null, null, null);
 
         cursor.moveToFirst();
 
-        WarmachineTournamentPairing pairing = cursorToTournamentPairing(cursor);
+        WarmachineTournamentGame pairing = cursorToTournamentPairing(cursor);
 
         cursor.close();
         readableDatabase.close();
@@ -280,26 +277,42 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
     }
 
 
-    private void insertWarmachineTournamentPairing(WarmachineTournamentPairing pairing) {
+    @Override
+    public void saveGameResult(WarmachineTournamentGame game) {
+
+        Log.i(this.getClass().getName(), "save game: " + game);
 
         SQLiteDatabase db = openTournamentDBHelper.getWritableDatabase();
 
         ContentValues contentValues = new ContentValues();
-        contentValues.put(WarmachineTournamentPairingTable.COLUMN_TOURNAMENT_ID, pairing.getTournament_id());
-        contentValues.put(WarmachineTournamentPairingTable.COLUMN_ROUND, pairing.getRound());
-        contentValues.put(WarmachineTournamentPairingTable.COLUMN_PLAYER_ONE_ID, pairing.getPlayer_one_id());
-        contentValues.put(WarmachineTournamentPairingTable.COLUMN_PLAYER_TWO_ID, pairing.getPlayer_two_id());
-        contentValues.put(WarmachineTournamentPairingTable.COLUMN_PLAYER_ONE_FULL_NAME,
-            pairing.getPlayer_one_full_name());
-        contentValues.put(WarmachineTournamentPairingTable.COLUMN_PLAYER_TWO_FULL_NAME,
-            pairing.getPlayer_two_full_name());
-        db.insert(WarmachineTournamentPairingTable.TABLE_TOURNAMENT_PAIRING, null, contentValues);
+
+        contentValues.put(WarmachineTournamentGameTable.COLUMN_PLAYER_ONE_SCORE, game.getPlayer_one_score());
+        contentValues.put(WarmachineTournamentGameTable.COLUMN_PLAYER_TWO_SCORE, game.getPlayer_two_score());
+        contentValues.put(WarmachineTournamentGameTable.COLUMN_PLAYER_ONE_CONTROL_POINTS,
+            game.getPlayer_one_control_points());
+        db.update(WarmachineTournamentGameTable.TABLE_TOURNAMENT_GAME, contentValues, "_id = ? ",
+            new String[] { String.valueOf(game.get_id()) });
     }
 
 
-    private WarmachineTournamentPairing cursorToTournamentPairing(Cursor cursor) {
+    private void insertWarmachineTournamentPairing(WarmachineTournamentGame pairing) {
 
-        WarmachineTournamentPairing pairing = new WarmachineTournamentPairing(cursor.getLong(0));
+        SQLiteDatabase db = openTournamentDBHelper.getWritableDatabase();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(WarmachineTournamentGameTable.COLUMN_TOURNAMENT_ID, pairing.getTournament_id());
+        contentValues.put(WarmachineTournamentGameTable.COLUMN_ROUND, pairing.getRound());
+        contentValues.put(WarmachineTournamentGameTable.COLUMN_PLAYER_ONE_ID, pairing.getPlayer_one_id());
+        contentValues.put(WarmachineTournamentGameTable.COLUMN_PLAYER_TWO_ID, pairing.getPlayer_two_id());
+        contentValues.put(WarmachineTournamentGameTable.COLUMN_PLAYER_ONE_FULL_NAME, pairing.getPlayer_one_full_name());
+        contentValues.put(WarmachineTournamentGameTable.COLUMN_PLAYER_TWO_FULL_NAME, pairing.getPlayer_two_full_name());
+        db.insert(WarmachineTournamentGameTable.TABLE_TOURNAMENT_GAME, null, contentValues);
+    }
+
+
+    private WarmachineTournamentGame cursorToTournamentPairing(Cursor cursor) {
+
+        WarmachineTournamentGame pairing = new WarmachineTournamentGame(cursor.getLong(0));
 
         pairing.setTournament_id(cursor.getInt(1));
         pairing.setRound(cursor.getInt(2));
@@ -307,16 +320,14 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
         pairing.setPlayer_one_id(cursor.getInt(3));
         pairing.setPlayer_one_full_name(cursor.getString(4));
         pairing.setPlayer_one_score(cursor.getInt(5));
-        pairing.setPlayer_one_sos(cursor.getInt(6));
-        pairing.setPlayer_one_control_points(cursor.getInt(7));
-        pairing.setPlayer_one_victory_points(cursor.getInt(8));
+        pairing.setPlayer_one_control_points(cursor.getInt(6));
+        pairing.setPlayer_one_victory_points(cursor.getInt(7));
 
-        pairing.setPlayer_two_id(cursor.getInt(9));
-        pairing.setPlayer_two_full_name(cursor.getString(10));
-        pairing.setPlayer_two_score(cursor.getInt(11));
-        pairing.setPlayer_two_sos(cursor.getInt(12));
-        pairing.setPlayer_two_control_points(cursor.getInt(13));
-        pairing.setPlayer_two_victory_points(cursor.getInt(14));
+        pairing.setPlayer_two_id(cursor.getInt(8));
+        pairing.setPlayer_two_full_name(cursor.getString(9));
+        pairing.setPlayer_two_score(cursor.getInt(10));
+        pairing.setPlayer_two_control_points(cursor.getInt(11));
+        pairing.setPlayer_two_victory_points(cursor.getInt(12));
 
         return pairing;
     }

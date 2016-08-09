@@ -1,7 +1,7 @@
 package madson.org.opentournament.service;
 
 import madson.org.opentournament.domain.Player;
-import madson.org.opentournament.domain.warmachine.WarmachineTournamentPairing;
+import madson.org.opentournament.domain.warmachine.WarmachineTournamentGame;
 import madson.org.opentournament.domain.warmachine.WarmachineTournamentPlayer;
 
 import java.util.List;
@@ -42,7 +42,7 @@ public interface OngoingTournamentService {
      *
      * @return  list of pairings for round
      */
-    List<WarmachineTournamentPairing> getPairingForTournament(Long tournamentId, int round);
+    List<WarmachineTournamentGame> getPairingForTournament(Long tournamentId, int round);
 
 
     /**
@@ -51,7 +51,7 @@ public interface OngoingTournamentService {
      *
      * @return  new create list of pairings
      */
-    List<WarmachineTournamentPairing> createPairingForRound(Long tournamentId, int round);
+    List<WarmachineTournamentGame> createPairingForRound(Long tournamentId, int round);
 
 
     /**
@@ -69,5 +69,13 @@ public interface OngoingTournamentService {
      *
      * @return  pairing
      */
-    WarmachineTournamentPairing getPairingForTournament(long pairing_id);
+    WarmachineTournamentGame getPairingForTournament(long pairing_id);
+
+
+    /**
+     * Save result.
+     *
+     * @param  game
+     */
+    void saveGameResult(WarmachineTournamentGame game);
 }

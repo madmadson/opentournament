@@ -27,7 +27,7 @@ import madson.org.opentournament.service.OngoingTournamentService;
  *
  * @author  Tobias Matt - tmatt@contargo.net
  */
-public class ConfirmPairNewRoundDialog extends DialogFragment {
+public class ConfirmPairingNewRoundDialog extends DialogFragment {
 
     public static final String BUNDLE_TOURNAMENT_ID = "tournament_id";
     public static final String BUNDLE_ROUND_TO_DISPLAY = "round_for_pairing";
@@ -60,7 +60,7 @@ public class ConfirmPairNewRoundDialog extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
 
-                        ConfirmPairNewRoundDialog.this.getDialog().cancel();
+                        ConfirmPairingNewRoundDialog.this.getDialog().cancel();
                     }
                 });
 
@@ -76,27 +76,32 @@ public class ConfirmPairNewRoundDialog extends DialogFragment {
         final AlertDialog dialog = (AlertDialog) getDialog();
 
         if (dialog != null) {
-            Button positive = dialog.getButton(Dialog.BUTTON_POSITIVE);
-
-            positive.setOnClickListener(new View.OnClickListener() {
-
-                    @Override
-                    public void onClick(View v) {
-
-                        Log.i(this.getClass().getName(), "confirmed pairing");
-
-                        OngoingTournamentActivity activity = (OngoingTournamentActivity) getActivity();
-
-                        OngoingTournamentService ongoingTournamentService =
-                            ((OpenTournamentApplication) getActivity().getApplication()).getOngoingTournamentService();
-
-                        ongoingTournamentService.createPairingForRound(tournament_id, round_for_pairing);
-
-                        activity.addRoundAfterNewPairing();
-
-                        dialog.dismiss();
-                    }
-                });
+            viewConfirmButton(dialog);
         }
+    }
+
+
+    private void viewConfirmButton(final AlertDialog dialog) {
+
+        Button positive = dialog.getButton(Dialog.BUTTON_POSITIVE);
+        positive.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+
+                    Log.i(this.getClass().getName(), "confirmed pairing");
+
+                    OngoingTournamentActivity activity = (OngoingTournamentActivity) getActivity();
+
+                    OngoingTournamentService ongoingTournamentService =
+                        ((OpenTournamentApplication) getActivity().getApplication()).getOngoingTournamentService();
+
+                    ongoingTournamentService.createPairingForRound(tournament_id, round_for_pairing);
+
+                    activity.addRoundAfterNewPairing();
+
+                    dialog.dismiss();
+                }
+            });
     }
 }

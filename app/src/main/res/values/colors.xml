@@ -8,4 +8,7 @@
     <color name="colorDivider">#B6B6B6</color>
     <color name="colorPrimaryText">#212121</color>
     <color name="colorSecondaryText">#727272</color>
+        
+    <color name="colorLoose">#E50000</color>
+    <color name="colorWin">#008000</color>
 </resources>

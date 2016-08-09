@@ -11,7 +11,7 @@ import android.util.Log;
 
 import madson.org.opentournament.db.OpenTournamentDBHelper;
 import madson.org.opentournament.db.TournamentTable;
-import madson.org.opentournament.db.warmachine.WarmachineTournamentPairingTable;
+import madson.org.opentournament.db.warmachine.WarmachineTournamentGameTable;
 import madson.org.opentournament.domain.Tournament;
 
 import org.joda.time.DateTime;
@@ -52,7 +52,7 @@ public class TournamentServiceImpl implements TournamentService {
 
         SQLiteDatabase writableDatabase = openTournamentDBHelper.getWritableDatabase();
 
-        writableDatabase.delete(WarmachineTournamentPairingTable.TABLE_TOURNAMENT_PAIRING, null, null);
+        writableDatabase.delete(WarmachineTournamentGameTable.TABLE_TOURNAMENT_GAME, null, null);
     }
 
 

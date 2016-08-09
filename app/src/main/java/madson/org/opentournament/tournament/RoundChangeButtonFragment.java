@@ -19,7 +19,7 @@ import android.widget.Button;
 
 import madson.org.opentournament.OpenTournamentApplication;
 import madson.org.opentournament.R;
-import madson.org.opentournament.domain.warmachine.WarmachineTournamentPairing;
+import madson.org.opentournament.domain.warmachine.WarmachineTournamentGame;
 import madson.org.opentournament.service.OngoingTournamentService;
 
 import java.util.List;
@@ -86,17 +86,17 @@ public class RoundChangeButtonFragment extends Fragment {
                         ((OpenTournamentApplication) getActivity().getApplication()).getOngoingTournamentService();
 
                     if (next_or_previous.equals(NextOrPrevious.NEXT)) {
-                        List<WarmachineTournamentPairing> pairingsForRound =
+                        List<WarmachineTournamentGame> pairingsForRound =
                             ongoingTournamentService.getPairingForTournament(tournament_id, round_to_display);
 
                         if (pairingsForRound.isEmpty()) {
-                            ConfirmPairNewRoundDialog dialog = new ConfirmPairNewRoundDialog();
+                            ConfirmPairingNewRoundDialog dialog = new ConfirmPairingNewRoundDialog();
 
                             Bundle bundleForConfirmPairNewRoundDialog = new Bundle();
-                            bundleForConfirmPairNewRoundDialog.putLong(ConfirmPairNewRoundDialog.BUNDLE_TOURNAMENT_ID,
-                                tournament_id);
-                            bundleForConfirmPairNewRoundDialog.putInt(ConfirmPairNewRoundDialog.BUNDLE_ROUND_TO_DISPLAY,
-                                round_to_display);
+                            bundleForConfirmPairNewRoundDialog.putLong(
+                                ConfirmPairingNewRoundDialog.BUNDLE_TOURNAMENT_ID, tournament_id);
+                            bundleForConfirmPairNewRoundDialog.putInt(
+                                ConfirmPairingNewRoundDialog.BUNDLE_ROUND_TO_DISPLAY, round_to_display);
                             dialog.setArguments(bundleForConfirmPairNewRoundDialog);
 
                             FragmentManager supportFragmentManager = getActivity().getSupportFragmentManager();

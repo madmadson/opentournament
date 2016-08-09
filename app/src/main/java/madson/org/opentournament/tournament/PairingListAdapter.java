@@ -16,7 +16,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import madson.org.opentournament.R;
-import madson.org.opentournament.domain.warmachine.WarmachineTournamentPairing;
+import madson.org.opentournament.domain.warmachine.WarmachineTournamentGame;
 
 import java.util.List;
 
@@ -28,9 +28,9 @@ import java.util.List;
  */
 public class PairingListAdapter extends RecyclerView.Adapter<PairingListAdapter.ViewHolder> {
 
-    private List<WarmachineTournamentPairing> pairingsForTournament;
+    private List<WarmachineTournamentGame> pairingsForTournament;
 
-    public PairingListAdapter(List<WarmachineTournamentPairing> pairingsForTournament) {
+    public PairingListAdapter(List<WarmachineTournamentGame> pairingsForTournament) {
 
         this.pairingsForTournament = pairingsForTournament;
     }
@@ -47,17 +47,16 @@ public class PairingListAdapter extends RecyclerView.Adapter<PairingListAdapter.
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
 
-        final WarmachineTournamentPairing pairing = pairingsForTournament.get(position);
+        final WarmachineTournamentGame pairing = pairingsForTournament.get(position);
         holder.setPairing(pairing);
         holder.getPlayerOneNameInList().setText(String.valueOf(pairing.getPlayer_one_full_name()));
-        holder.getPlayerOneScore().setText("SC: " + String.valueOf(pairing.getPlayer_one_score()));
-        holder.getPlayerOneSoS().setText("SOS: " + String.valueOf(pairing.getPlayer_one_sos()));
+        holder.getPlayerOneScore().setText("WIN: " + String.valueOf(pairing.getPlayer_one_score()));
+
         holder.getPlayerOneControlPoints().setText("CP: " + String.valueOf(pairing.getPlayer_one_control_points()));
         holder.getPlayerOneVictoryPoints().setText("VP: " + String.valueOf(pairing.getPlayer_one_victory_points()));
 
         holder.getPlayerTwoNameInList().setText(String.valueOf(pairing.getPlayer_two_full_name()));
-        holder.getPlayerTwoScore().setText("SC: " + String.valueOf(pairing.getPlayer_two_score()));
-        holder.getPlayerTwoSoS().setText("SOS: " + String.valueOf(pairing.getPlayer_two_sos()));
+        holder.getPlayerTwoScore().setText("WIN: " + String.valueOf(pairing.getPlayer_two_score()));
         holder.getPlayerTwoControlPoints().setText("CP: " + String.valueOf(pairing.getPlayer_two_control_points()));
         holder.getPlayerTwoVictoryPoints().setText("VP: " + String.valueOf(pairing.getPlayer_two_victory_points()));
     }
@@ -71,7 +70,7 @@ public class PairingListAdapter extends RecyclerView.Adapter<PairingListAdapter.
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        private WarmachineTournamentPairing pairing;
+        private WarmachineTournamentGame pairing;
         private TextView playerOneNameInList;
         private TextView playerOneScore;
         private TextView playerOneSoS;
@@ -108,10 +107,10 @@ public class PairingListAdapter extends RecyclerView.Adapter<PairingListAdapter.
 
             Log.i(v.getClass().getName(), "pairing clicked: " + pairing);
 
-            EnterResultForPairingDialog dialog = new EnterResultForPairingDialog();
+            EnterResultForGameDialog dialog = new EnterResultForGameDialog();
 
             Bundle resultForPairingResult = new Bundle();
-            resultForPairingResult.putLong(EnterResultForPairingDialog.BUNDLE_PAIRING_ID, pairing.get_id());
+            resultForPairingResult.putLong(EnterResultForGameDialog.BUNDLE_PAIRING_ID, pairing.get_id());
             dialog.setArguments(resultForPairingResult);
 
             FragmentManager supportFragmentManager = ((AppCompatActivity) v.getContext()).getSupportFragmentManager();
@@ -119,7 +118,7 @@ public class PairingListAdapter extends RecyclerView.Adapter<PairingListAdapter.
         }
 
 
-        public void setPairing(WarmachineTournamentPairing pairing) {
+        public void setPairing(WarmachineTournamentGame pairing) {
 
             this.pairing = pairing;
         }

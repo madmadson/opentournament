@@ -4,8 +4,6 @@ import android.content.Context;
 
 import android.os.Bundle;
 
-import android.provider.Settings;
-
 import android.support.v4.app.Fragment;
 
 import android.support.v7.widget.LinearLayoutManager;
@@ -20,14 +18,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import android.view.inputmethod.InputMethodManager;
-
 import android.widget.EditText;
 
 import madson.org.opentournament.OpenTournamentApplication;
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Player;
-import madson.org.opentournament.domain.warmachine.WarmachineTournamentPlayer;
 import madson.org.opentournament.service.OngoingTournamentService;
 import madson.org.opentournament.service.PlayerService;
 
@@ -98,7 +93,7 @@ public class AvailablePlayerListFragment extends Fragment {
 
             OngoingTournamentService ongoingTournamentService =
                 ((OpenTournamentApplication) getActivity().getApplication()).getOngoingTournamentService();
-            List<Player> alreadyPlayingPlayers = ongoingTournamentService.getPlayersForTournament(tournamentId);
+            List<Player> alreadyPlayingPlayers = ongoingTournamentService.getAllPlayersForTournament(tournamentId);
             players.removeAll(alreadyPlayingPlayers);
         }
 
@@ -135,11 +130,14 @@ public class AvailablePlayerListFragment extends Fragment {
     }
 
 
-    public void addPlayer(final Player player) {
+    public void addPlayer(final long player_id) {
 
-        Log.i(this.getClass().getName(), "add player to tournament player list: " + player);
+        Log.i(this.getClass().getName(), "add player to tournament player list: " + player_id);
 
         if (availablePlayerListAdapter != null) {
+            final OpenTournamentApplication application = (OpenTournamentApplication) getActivity()
+                .getApplication();
+            final Player player = application.getPlayerService().getPlayerForId(player_id);
             availablePlayerListAdapter.add(player);
 
             Runnable runnable = new Runnable() {
@@ -149,8 +147,6 @@ public class AvailablePlayerListFragment extends Fragment {
 
                     Log.i(this.getClass().getName(), "remove player from tournament ");
 
-                    OpenTournamentApplication application = (OpenTournamentApplication) getActivity()
-                        .getApplication();
                     application.getOngoingTournamentService().removePlayerFromTournament(player, tournamentId);
                 }
             };

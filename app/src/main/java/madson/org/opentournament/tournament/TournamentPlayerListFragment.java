@@ -20,7 +20,7 @@ import android.widget.TextView;
 import madson.org.opentournament.OpenTournamentApplication;
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Player;
-import madson.org.opentournament.domain.warmachine.WarmachineTournamentPlayer;
+import madson.org.opentournament.domain.warmachine.WarmachineTournamentRanking;
 import madson.org.opentournament.service.OngoingTournamentService;
 
 import java.util.List;
@@ -62,8 +62,7 @@ public class TournamentPlayerListFragment extends Fragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(linearLayoutManager);
 
-        List<WarmachineTournamentPlayer> players = ongoingTournamentService.getTournamentPlayersForRound(tournamentId,
-                0);
+        List<WarmachineTournamentRanking> players = ongoingTournamentService.getRankingForRound(tournamentId, 0);
 
         heading = (TextView) view.findViewById(R.id.heading_tournament_players);
         heading.setText(getString(R.string.heading_tournament_player, players.size()));
@@ -134,6 +133,6 @@ public class TournamentPlayerListFragment extends Fragment {
 
     public interface TournamentPlayerListItemListener {
 
-        void onTournamentPlayerListItemClicked(Player player);
+        void onTournamentPlayerListItemClicked(long player_id);
     }
 }

@@ -67,7 +67,7 @@ public class WarmachineTournamentGameTable {
 
     public static void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
-        Log.w(WarmachineTournamentPlayerRankingTable.class.getName(),
+        Log.w(WarmachineRankingTable.class.getName(),
             "Upgrading database from version " + oldVersion + " to " + newVersion
             + ", which will destroy all old data");
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_TOURNAMENT_GAME);

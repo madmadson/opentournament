@@ -2,7 +2,7 @@ package madson.org.opentournament.service;
 
 import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.warmachine.WarmachineTournamentGame;
-import madson.org.opentournament.domain.warmachine.WarmachineTournamentPlayer;
+import madson.org.opentournament.domain.warmachine.WarmachineTournamentRanking;
 
 import java.util.List;
 
@@ -19,7 +19,7 @@ public interface OngoingTournamentService {
      *
      * @return  list of all players for given tournament
      */
-    List<WarmachineTournamentPlayer> getTournamentPlayersForRound(Long tournamentId, int round);
+    List<WarmachineTournamentRanking> getRankingForRound(Long tournamentId, int round);
 
 
     /**
@@ -59,7 +59,7 @@ public interface OngoingTournamentService {
      *
      * @return
      */
-    List<Player> getPlayersForTournament(long tournamentId);
+    List<Player> getAllPlayersForTournament(long tournamentId);
 
 
     /**
@@ -69,7 +69,7 @@ public interface OngoingTournamentService {
      *
      * @return  pairing
      */
-    WarmachineTournamentGame getGameForRound(long pairing_id);
+    WarmachineTournamentGame getGameForId(long pairing_id);
 
 
     /**
@@ -78,4 +78,14 @@ public interface OngoingTournamentService {
      * @param  game
      */
     void saveGameResult(WarmachineTournamentGame game);
+
+
+    /**
+     * Calculates ranking of players for all played rounds. Note: calculation base are all games playes in given
+     * tournament
+     *
+     * @param  tournament_id  the tournament_id
+     * @param  round_number  round number till calculation
+     */
+    void createRankingForRound(long tournament_id, int round_number);
 }

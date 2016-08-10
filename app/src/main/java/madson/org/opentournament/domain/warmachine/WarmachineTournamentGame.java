@@ -11,16 +11,16 @@ import android.os.Parcelable;
 public class WarmachineTournamentGame {
 
     private long _id;
-    private int tournament_id;
+    private long tournament_id;
     private int round;
 
-    private int player_one_id;
+    private long player_one_id;
     private String player_one_full_name;
     private int player_one_score;
     private int player_one_control_points;
     private int player_one_victory_points;
 
-    private int player_two_id;
+    private long player_two_id;
     private String player_two_full_name;
     private int player_two_score;
     private int player_two_control_points;
@@ -128,13 +128,13 @@ public class WarmachineTournamentGame {
     }
 
 
-    public int getTournament_id() {
+    public long getTournament_id() {
 
         return tournament_id;
     }
 
 
-    public int getPlayer_one_id() {
+    public long getPlayer_one_id() {
 
         return player_one_id;
     }
@@ -158,7 +158,7 @@ public class WarmachineTournamentGame {
     }
 
 
-    public int getPlayer_two_id() {
+    public long getPlayer_two_id() {
 
         return player_two_id;
     }
@@ -233,7 +233,7 @@ public class WarmachineTournamentGame {
     public int hashCode() {
 
         int result = (int) (_id ^ (_id >>> 32));
-        result = 31 * result + tournament_id;
+        result = 31 * result + (int) (tournament_id ^ (tournament_id >>> 32));
         result = 31 * result + round;
 
         return result;

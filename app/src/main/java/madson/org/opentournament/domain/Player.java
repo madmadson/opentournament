@@ -7,12 +7,12 @@ package madson.org.opentournament.domain;
  */
 public class Player {
 
-    private int _id;
+    private long _id;
     private String firstname;
     private String nickname;
     private String lastname;
 
-    public Player(int id, String firstname, String nickname, String lastname) {
+    public Player(long id, String firstname, String nickname, String lastname) {
 
         this._id = id;
         this.firstname = firstname;
@@ -28,7 +28,11 @@ public class Player {
         this.lastname = lastname;
     }
 
-    public int getId() {
+
+    public Player() {
+    }
+
+    public long get_id() {
 
         return _id;
     }
@@ -74,13 +78,27 @@ public class Player {
 
         Player player = (Player) o;
 
-        return _id == player._id;
+        if (_id != player._id)
+            return false;
+
+        if (firstname != null ? !firstname.equals(player.firstname) : player.firstname != null)
+            return false;
+
+        if (nickname != null ? !nickname.equals(player.nickname) : player.nickname != null)
+            return false;
+
+        return lastname != null ? lastname.equals(player.lastname) : player.lastname == null;
     }
 
 
     @Override
     public int hashCode() {
 
-        return _id;
+        int result = (int) (_id ^ (_id >>> 32));
+        result = 31 * result + (firstname != null ? firstname.hashCode() : 0);
+        result = 31 * result + (nickname != null ? nickname.hashCode() : 0);
+        result = 31 * result + (lastname != null ? lastname.hashCode() : 0);
+
+        return result;
     }
 }

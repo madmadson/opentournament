@@ -125,12 +125,12 @@ public class OngoingTournamentManagementFragment extends Fragment
 
 
     @Override
-    public void onTournamentPlayerListItemClicked(Player player) {
+    public void onTournamentPlayerListItemClicked(long player_id) {
 
-        Log.i(this.getClass().getName(), "clicked on tournament player to remove: " + player);
+        Log.i(this.getClass().getName(), "clicked on tournament player to remove: " + player_id);
 
         if (availablePlayerListFragment != null) {
-            availablePlayerListFragment.addPlayer(player);
+            availablePlayerListFragment.addPlayer(player_id);
         }
 
         // for the heading

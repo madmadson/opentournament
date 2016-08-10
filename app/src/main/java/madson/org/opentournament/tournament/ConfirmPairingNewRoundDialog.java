@@ -97,6 +97,7 @@ public class ConfirmPairingNewRoundDialog extends DialogFragment {
                         ((OpenTournamentApplication) getActivity().getApplication()).getOngoingTournamentService();
 
                     ongoingTournamentService.createPairingForRound(tournament_id, round_for_pairing);
+                    ongoingTournamentService.createRankingForRound(tournament_id, round_for_pairing);
 
                     activity.addRoundAfterNewPairing();
 

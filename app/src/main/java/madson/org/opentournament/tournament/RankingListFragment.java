@@ -15,8 +15,7 @@ import android.widget.TextView;
 
 import madson.org.opentournament.OpenTournamentApplication;
 import madson.org.opentournament.R;
-import madson.org.opentournament.domain.warmachine.WarmachineTournamentGame;
-import madson.org.opentournament.domain.warmachine.WarmachineTournamentPlayer;
+import madson.org.opentournament.domain.warmachine.WarmachineTournamentRanking;
 import madson.org.opentournament.service.OngoingTournamentService;
 
 import java.util.List;
@@ -59,8 +58,8 @@ public class RankingListFragment extends Fragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(linearLayoutManager);
 
-        List<WarmachineTournamentPlayer> rankingForRound = ongoingTournamentService.getTournamentPlayersForRound(
-                tournamentId, round);
+        List<WarmachineTournamentRanking> rankingForRound = ongoingTournamentService.getRankingForRound(tournamentId,
+                round);
 
         TextView heading = (TextView) view.findViewById(R.id.heading_ranking_for_round);
         heading.setText(getString(R.string.heading_ranking_for_round, round));

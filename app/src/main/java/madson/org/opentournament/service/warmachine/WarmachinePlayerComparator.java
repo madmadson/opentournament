@@ -15,6 +15,6 @@ public class WarmachinePlayerComparator implements Comparator<WarmachineTourname
     @Override
     public int compare(WarmachineTournamentRanking player1, WarmachineTournamentRanking player2) {
 
-        return player1.getScore() - player2.getScore();
+        return player2.getScore() - player1.getScore();
     }
 }

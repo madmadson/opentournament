@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_gravity="center"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:id="@+id/ranking_row_card_view"
+    card_view:cardCornerRadius="4dp"
+    android:layout_marginLeft="@dimen/player_card_side_margin"
+    android:layout_marginRight="@dimen/player_card_side_margin"
+    android:layout_marginBottom="@dimen/player_card_top_bottom_margin"
+    android:layout_marginTop="@dimen/player_card_top_bottom_margin">
+
+    <LinearLayout
+        android:id="@+id/lib_card_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?android:attr/selectableItemBackground"
+        android:padding="@dimen/player_card_padding">
+
+        <TextView
+            android:id="@+id/ranking_row_player_number"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/ranking_row_name"
+            android:layout_width="0dp"
+            android:layout_weight="6"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/ranking_row_score"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/ranking_row_sos"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/ranking_row_control_points"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/ranking_row_victory_points"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content" />
+        
+    </LinearLayout>
+</android.support.v7.widget.CardView>
+

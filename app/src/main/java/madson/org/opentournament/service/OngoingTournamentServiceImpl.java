@@ -11,7 +11,6 @@ import android.util.Log;
 
 import madson.org.opentournament.OpenTournamentApplication;
 import madson.org.opentournament.db.OpenTournamentDBHelper;
-import madson.org.opentournament.db.PlayerTable;
 import madson.org.opentournament.db.TournamentTable;
 import madson.org.opentournament.db.warmachine.WarmachineRankingTable;
 import madson.org.opentournament.db.warmachine.WarmachineTournamentGameTable;
@@ -22,7 +21,6 @@ import madson.org.opentournament.service.warmachine.WarmachinePlayerComparator;
 import madson.org.opentournament.service.warmachine.WarmachineRankingComparator;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -186,32 +184,34 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
     @Override
     public List<WarmachineTournamentGame> createPairingForRound(Long tournamentId, int round) {
 
-        List<WarmachineTournamentRanking> playersForTournament = getRankingForRound(tournamentId, round - 1);
-
-        final List<Player> allPlayersForTournament = getAllPlayersForTournament(tournamentId);
+        List<WarmachineTournamentRanking> playersWithRankingFromRound = getRankingForRound(tournamentId, round);
 
         // uneven number of players
-        if (playersForTournament.size() % 2 == 1) {
+        if (playersWithRankingFromRound.size() % 2 == 1) {
             WarmachineTournamentRanking warmachineTournamentDummyPlayer = new WarmachineTournamentRanking();
-            playersForTournament.add(warmachineTournamentDummyPlayer);
+            playersWithRankingFromRound.add(warmachineTournamentDummyPlayer);
         }
 
-        Collections.shuffle(playersForTournament);
-        Collections.sort(playersForTournament, new WarmachinePlayerComparator());
+        Collections.shuffle(playersWithRankingFromRound);
+        Collections.sort(playersWithRankingFromRound, new WarmachinePlayerComparator());
 
-        List<WarmachineTournamentGame> warmachineTournamentGames = new ArrayList<>(playersForTournament.size());
+        List<WarmachineTournamentGame> warmachineTournamentGames = new ArrayList<>(playersWithRankingFromRound.size());
 
-        for (int i = 0; i <= (playersForTournament.size() - 1); i = i + 2) {
+        for (int i = 0; i <= (playersWithRankingFromRound.size() - 1); i = i + 2) {
+            Log.i(this.getClass().getName(), "player1:" + playersWithRankingFromRound.get(i));
+
             WarmachineTournamentGame warmachineTournamentGame = new WarmachineTournamentGame();
             warmachineTournamentGame.setTournament_id(tournamentId.intValue());
             warmachineTournamentGame.setRound(round);
 
-            WarmachineTournamentRanking player_one = playersForTournament.get(i);
+            WarmachineTournamentRanking player_one = playersWithRankingFromRound.get(i);
             warmachineTournamentGame.setPlayer_one_id((int) player_one.getPlayer_id());
             warmachineTournamentGame.setPlayer_one_full_name(player_one.getFirstname() + " \""
                 + player_one.getNickname() + "\" " + player_one.getLastname());
 
-            WarmachineTournamentRanking player_two = playersForTournament.get(i + 1);
+            Log.i(this.getClass().getName(), "player2:" + playersWithRankingFromRound.get(i + 1));
+
+            WarmachineTournamentRanking player_two = playersWithRankingFromRound.get(i + 1);
             warmachineTournamentGame.setPlayer_two_id((int) player_two.getPlayer_id());
             warmachineTournamentGame.setPlayer_two_full_name(player_two.getFirstname() + " \""
                 + player_two.getNickname() + "\" " + player_two.getLastname());
@@ -373,7 +373,8 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
         SQLiteDatabase readableDatabase = openTournamentDBHelper.getReadableDatabase();
 
         Cursor cursor = readableDatabase.query(WarmachineTournamentGameTable.TABLE_TOURNAMENT_GAME,
-                WarmachineTournamentGameTable.ALL_COLS_FOR_TOURNAMENT_GAME, "tournament_id  = ? AND round <= ? ",
+                WarmachineTournamentGameTable.ALL_COLS_FOR_TOURNAMENT_GAME,
+                "tournament_id  = ? AND round <= ? AND (player_one_score != 0 OR player_two_score != 0) ",
                 new String[] { String.valueOf(tournament_id), String.valueOf(round) }, null, null, null);
 
         cursor.moveToFirst();

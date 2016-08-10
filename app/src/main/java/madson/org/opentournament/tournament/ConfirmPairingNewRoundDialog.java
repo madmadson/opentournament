@@ -89,15 +89,18 @@ public class ConfirmPairingNewRoundDialog extends DialogFragment {
                 @Override
                 public void onClick(View v) {
 
-                    Log.i(this.getClass().getName(), "confirmed pairing");
+                    Log.i(this.getClass().getName(), "confirmed pairing for round " + round_for_pairing);
 
                     OngoingTournamentActivity activity = (OngoingTournamentActivity) getActivity();
 
                     OngoingTournamentService ongoingTournamentService =
                         ((OpenTournamentApplication) getActivity().getApplication()).getOngoingTournamentService();
 
-                    ongoingTournamentService.createPairingForRound(tournament_id, round_for_pairing);
+                    // first create ranking for complete games
                     ongoingTournamentService.createRankingForRound(tournament_id, round_for_pairing);
+
+                    // now we can create pairings for new round
+                    ongoingTournamentService.createPairingForRound(tournament_id, round_for_pairing);
 
                     activity.addRoundAfterNewPairing();
 

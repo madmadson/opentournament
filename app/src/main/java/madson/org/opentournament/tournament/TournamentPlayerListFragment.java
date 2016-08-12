@@ -69,6 +69,7 @@ public class TournamentPlayerListFragment extends Fragment {
 
         if (mListener != null) {
             tournamentPlayerListAdapter = new WarmachineTournamentPlayerListAdapter(players, mListener);
+
             recyclerView.setAdapter(tournamentPlayerListAdapter);
         } else {
             throw new RuntimeException("Listener for tournamentPlayerListAdapter missing");

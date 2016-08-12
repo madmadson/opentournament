@@ -8,6 +8,7 @@ import android.support.design.widget.NavigationView;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.NavUtils;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -50,42 +51,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
-        toggle.setToolbarNavigationClickListener(new View.OnClickListener() {
-
-                @Override
-                public void onClick(View v) {
-
-                    Log.i("Nav", "Toolbar navigation tournaments");
-
-                    setDrawerEnabled(true);
-                    toggle.syncState();
-
-                    FragmentManager manager = getSupportFragmentManager();
-
-                    TournamentManagementFragment fragment = new TournamentManagementFragment();
-                    manager.beginTransaction()
-                    .replace(R.id.main_fragment_container, fragment, TournamentManagementFragment.TAG)
-                    .commit();
-                }
-            });
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        FragmentManager manager = getSupportFragmentManager();
-        Fragment fragment = manager.findFragmentByTag(TournamentManagementFragment.TAG);
+        if (savedInstanceState == null) {
+            TournamentManagementFragment homeFragment = new TournamentManagementFragment();
 
-        if (fragment == null) {
-            fragment = new TournamentManagementFragment();
-            manager.beginTransaction()
-                .replace(R.id.main_fragment_container, fragment, TournamentManagementFragment.TAG)
-                .commit();
+            getSupportFragmentManager().beginTransaction().add(R.id.main_fragment_container, homeFragment).commit();
+
+            drawer.openDrawer(GravityCompat.START);
         }
     }
 
 
     @Override
     public void onBackPressed() {
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
@@ -103,13 +86,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         if (id == R.id.nav_home) {
             Log.i("Nav", "Open home");
-
-            Fragment fragment = manager.findFragmentByTag(HomeFragment.TAG);
-
-            if (fragment == null) {
-                fragment = new HomeFragment();
-                manager.beginTransaction().replace(R.id.main_fragment_container, fragment, HomeFragment.TAG).commit();
-            }
+            replaceFragment(new HomeFragment());
         } else if (id == R.id.nav_tournaments) {
             Log.i("Nav", "Open tournaments");
 
@@ -142,5 +119,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         ActionBar supportActionBar = getSupportActionBar();
         supportActionBar.setDisplayHomeAsUpEnabled(!enabled);
+    }
+
+
+    public void replaceFragment(Fragment fragment) {
+
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+
+        transaction.replace(R.id.main_fragment_container, fragment);
+
+        transaction.commit();
     }
 }

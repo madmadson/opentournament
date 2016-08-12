@@ -50,18 +50,21 @@ public class WarmachineTournamentPlayerListAdapter extends RecyclerView.Adapter<
     @Override
     public void onBindViewHolder(WarmachineTournamentPlayerListAdapter.ViewHolder holder, int position) {
 
-        final WarmachineTournamentRanking player = tournamentPlayerList.get(position);
-        holder.setPlayer(player);
-        holder.getPlayerNumber().setText(String.valueOf(position + 1));
-        holder.getPlayerNameInList()
-            .setText(player.getFirstname() + " \"" + player.getNickname() + "\" " + player.getLastname());
+        if (position == 0) {
+        } else {
+            final WarmachineTournamentRanking player = tournamentPlayerList.get(position);
+            holder.setPlayer(player);
+            holder.getPlayerNumber().setText(String.valueOf(position + 1));
+            holder.getPlayerNameInList()
+                .setText(player.getFirstname() + " \"" + player.getNickname() + "\" " + player.getLastname());
+        }
     }
 
 
     @Override
     public int getItemCount() {
 
-        return tournamentPlayerList.size();
+        return tournamentPlayerList.size() + 1;
     }
 
 

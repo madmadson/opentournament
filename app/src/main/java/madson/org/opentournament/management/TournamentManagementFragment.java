@@ -1,11 +1,18 @@
 package madson.org.opentournament.management;
 
+import android.app.ActionBar;
+
 import android.os.Bundle;
+
+import android.support.annotation.Nullable;
 
 import android.support.design.widget.FloatingActionButton;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 
 import android.util.Log;
 
@@ -34,6 +41,15 @@ public class TournamentManagementFragment extends Fragment implements Tournament
         fragmentTransaction.replace(R.id.left_fragment_container, tournamentListFragment);
         fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         fragmentTransaction.commit();
+    }
+
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+
+        super.onActivityCreated(savedInstanceState);
+
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.title_tournament_management);
     }
 
 

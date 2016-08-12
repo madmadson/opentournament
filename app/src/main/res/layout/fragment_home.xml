@@ -8,19 +8,34 @@
                 tools:context="madson.org.opentournament.MainActivity"
                 tools:showIn="@layout/app_bar_main">
 
-            <ImageView
-                android:id="@+id/opentournament_logo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:contentDescription="@string/Image_description"
-                android:src="@drawable/open_tournament" />
-            
-            
-            <ListView android:id="@+id/home_menu"
-                android:entries="@array/menu_options"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/opentournament_logo"/>
+    <ImageView
+        android:id="@+id/opentournament_logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/Image_description"
+        android:src="@drawable/open_tournament" />
+    
+    
+    <ListView android:id="@+id/home_menu"
+        android:entries="@array/menu_options"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/opentournament_logo"/>
+
+    <EditText
+        android:id="@+id/inputField"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/home_menu"/>
+
+    <Button
+        android:id="@+id/changeText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/inputField"
+        android:text="New Button" 
+       />
+    
 </RelativeLayout>
 
     

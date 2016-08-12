@@ -16,6 +16,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.ThemedSpinnerAdapter;
 import android.support.v7.widget.Toolbar;
 
 import android.util.Log;
@@ -56,11 +57,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
 
         if (savedInstanceState == null) {
-            TournamentManagementFragment homeFragment = new TournamentManagementFragment();
+            HomeFragment homeFragment = new HomeFragment();
 
             getSupportFragmentManager().beginTransaction().add(R.id.main_fragment_container, homeFragment).commit();
 
-            drawer.openDrawer(GravityCompat.START);
+            // drawer.openDrawer(GravityCompat.START);
         }
     }
 

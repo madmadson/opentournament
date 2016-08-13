@@ -60,8 +60,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             HomeFragment homeFragment = new HomeFragment();
 
             getSupportFragmentManager().beginTransaction().add(R.id.main_fragment_container, homeFragment).commit();
-
-            // drawer.openDrawer(GravityCompat.START);
         }
     }
 

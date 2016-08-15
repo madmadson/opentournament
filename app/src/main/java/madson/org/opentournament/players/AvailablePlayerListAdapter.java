@@ -47,7 +47,7 @@ public class AvailablePlayerListAdapter extends RecyclerView.Adapter<AvailablePl
 
         // create a new view
         CardView v = (CardView) LayoutInflater.from(parent.getContext())
-            .inflate(R.layout.available_player_list_row, parent, false);
+            .inflate(R.layout.row_available_player, parent, false);
 
         // set the view's size, margins, paddings and layout parameters
         return new ViewHolder(v);

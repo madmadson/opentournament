@@ -38,7 +38,7 @@ public class WarmachineTournamentPlayerListAdapter extends RecyclerView.Adapter<
     public WarmachineTournamentPlayerListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         // create a new view
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.tournament_player_list_row, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_tournament_player, parent, false);
 
         // set the view's size, margins, paddings and layout parameters
         ViewHolder vh = new ViewHolder(v);

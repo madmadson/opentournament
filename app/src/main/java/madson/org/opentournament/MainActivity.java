@@ -83,15 +83,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             replaceFragment(new HomeFragment());
         } else if (id == R.id.nav_tournaments) {
             Log.i("Nav", "Open tournaments");
-
-            Fragment fragment = manager.findFragmentByTag(TournamentManagementFragment.TAG);
-
-            if (fragment == null) {
-                fragment = new TournamentManagementFragment();
-                manager.beginTransaction()
-                    .replace(R.id.main_fragment_container, fragment, TournamentManagementFragment.TAG)
-                    .commit();
-            }
+            replaceFragment(new TournamentManagementFragment());
         } else if (id == R.id.nav_players) {
             Log.i("Nav", "Open players");
         }

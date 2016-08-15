@@ -24,8 +24,6 @@ import madson.org.opentournament.utility.DrawerLocker;
 public class TournamentManagementFragment extends Fragment implements TournamentListFragment.TournamentListItemListener,
     TournamentDetailFragment.OnTournamentEditedListener {
 
-    public static final String TAG = "tournament_management_fragment";
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
 

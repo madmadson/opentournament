@@ -22,19 +22,6 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/opentournament_logo"/>
 
-    <EditText
-        android:id="@+id/inputField"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/home_menu"/>
-
-    <Button
-        android:id="@+id/changeText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/inputField"
-        android:text="New Button" 
-       />
     
 </RelativeLayout>
 

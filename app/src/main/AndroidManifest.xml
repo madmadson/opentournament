@@ -21,7 +21,7 @@
         </activity>
 
         <activity
-            android:name=".tournament.OngoingTournamentActivity"
+            android:name=".ongoing.OngoingTournamentActivity"
             android:label="@string/title_activity_tournament_play"
 
             android:parentActivityName=".MainActivity">

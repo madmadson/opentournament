@@ -1,8 +1,7 @@
-package madson.org.opentournament.tournament;
+package madson.org.opentournament.ongoing;
 
 import android.graphics.Color;
 
-import android.os.Build;
 import android.os.Bundle;
 
 import android.support.v4.app.FragmentManager;

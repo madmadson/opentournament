@@ -1,4 +1,4 @@
-package madson.org.opentournament.tournament;
+package madson.org.opentournament.ongoing;
 
 import android.support.v7.widget.RecyclerView;
 

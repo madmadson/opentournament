@@ -1,4 +1,4 @@
-package madson.org.opentournament.management;
+package madson.org.opentournament.tournaments;
 
 import android.content.Context;
 import android.content.Intent;
@@ -22,8 +22,8 @@ import android.widget.TextView;
 import madson.org.opentournament.OpenTournamentApplication;
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Tournament;
+import madson.org.opentournament.ongoing.OngoingTournamentActivity;
 import madson.org.opentournament.service.TournamentService;
-import madson.org.opentournament.tournament.OngoingTournamentActivity;
 
 import java.util.List;
 

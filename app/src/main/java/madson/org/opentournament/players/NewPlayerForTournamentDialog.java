@@ -21,7 +21,6 @@ import android.util.Log;
 
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import android.widget.Button;
 import android.widget.EditText;
@@ -30,11 +29,11 @@ import madson.org.opentournament.OpenTournamentApplication;
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.Tournament;
+import madson.org.opentournament.ongoing.OngoingTournamentActivity;
+import madson.org.opentournament.ongoing.OngoingTournamentManagementFragment;
 import madson.org.opentournament.service.OngoingTournamentService;
 import madson.org.opentournament.service.PlayerService;
 import madson.org.opentournament.service.TournamentService;
-import madson.org.opentournament.tournament.OngoingTournamentActivity;
-import madson.org.opentournament.tournament.OngoingTournamentManagementFragment;
 
 
 /**

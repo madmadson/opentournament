@@ -1,4 +1,4 @@
-package madson.org.opentournament.management;
+package madson.org.opentournament.tournaments;
 
 import android.content.ContentValues;
 import android.content.Context;

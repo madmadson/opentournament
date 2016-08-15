@@ -34,8 +34,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         super.onCreate(savedInstanceState);
 
-        // Thread.setDefaultUncaughtExceptionHandler(new GeneralExceptionHandler(this));
-
         setContentView(R.layout.activity_main);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);

@@ -5,10 +5,12 @@
     <color name="colorPrimaryLight">#C5CAE9</color>
     <color name="colorAccent">#4CAF50</color>
     <color name="colorTextIcon">#FFFFFF</color>
-    <color name="colorDivider">#B6B6B6</color>
+    <color name="colorDivider">#C7C7CC</color>
     <color name="colorPrimaryText">#212121</color>
     <color name="colorSecondaryText">#727272</color>
         
-    <color name="colorLoose">#E50000</color>
+    <color name="colorLoose">#FFF22AB0</color>
     <color name="colorWin">#008000</color>
+    
+    <color name="colorBackground">#FBFBFB</color>
 </resources>

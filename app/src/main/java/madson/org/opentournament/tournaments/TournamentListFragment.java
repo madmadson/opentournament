@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import madson.org.opentournament.HomeFragment;
 import madson.org.opentournament.OpenTournamentApplication;
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Tournament;
@@ -64,6 +65,10 @@ public class TournamentListFragment extends Fragment {
             .getTournamentService();
 
         List<Tournament> tournaments = tournamentService.getTournaments();
+
+        TournamentListHeaderFragment headerFragment = new TournamentListHeaderFragment();
+
+        getChildFragmentManager().beginTransaction().add(R.id.row_header_container, headerFragment).commit();
 
         TournamentListAdapter tournamentListAdapter = new TournamentListAdapter(tournaments);
 
@@ -111,10 +116,7 @@ public class TournamentListFragment extends Fragment {
         @Override
         public TournamentListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-            // create a new view
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_tournament, parent, false);
-
-            // set the view's size, margins, paddings and layout parameters
             ViewHolder vh = new ViewHolder(v);
 
             return vh;

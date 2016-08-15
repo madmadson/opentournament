@@ -4,6 +4,10 @@
     <string name="title_activity_tournament_list">TournamentList</string>
     <string name="title_activity_tournament_details">TournamentDetailsActivity</string>
     <string name="title_activity_tournament_play">TournamentPlayActivity</string>
+        
+    <!-- Tournament Management -->
+
+    <string name="header_tournament_name">Tournament name</string>
     
     <string name="tournamentName">Tournament name</string>
     <string name="tournamentDescription">Tournament description</string>
@@ -56,6 +60,7 @@
     <string name="heading_ranking_for_round">Ranking round: %1$d</string>
     <string name="tournaments">Manage Tournaments</string>
     <string name="title_tournament_management">Tournament Management</string>
+
 
 
 </resources>

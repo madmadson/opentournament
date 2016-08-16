@@ -20,6 +20,8 @@
             
         </activity>
 
+        <activity android:name=".SignInActivity" />
+
         <activity
             android:name=".ongoing.OngoingTournamentActivity"
             android:label="@string/title_activity_tournament_play"

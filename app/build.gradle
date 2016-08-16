@@ -1,4 +1,6 @@
 apply plugin: 'idea'
+
+
 idea{
     module {
         downloadJavadoc = true
@@ -54,4 +56,20 @@ dependencies {
     androidTestCompile ('com.android.support.test.espresso:espresso-contrib:2.2.2'){
         exclude group: 'com.android.support'
     }
+
+    // Google
+    compile 'com.google.android.gms:play-services-auth:9.4.0'
+
+    // Firebase
+    compile 'com.google.firebase:firebase-database:9.4.0'
+    compile 'com.google.firebase:firebase-auth:9.4.0'
+    compile 'com.google.firebase:firebase-config:9.4.0'
+    compile 'com.google.android.gms:play-services-appinvite:9.4.0'
+    compile 'com.google.firebase:firebase-messaging:9.4.0'
+    compile 'com.google.android.gms:play-services-ads:9.4.0'
+    compile 'com.google.firebase:firebase-crash:9.4.0'
+    // Firebase UI
+    compile 'com.firebaseui:firebase-ui-database:0.4.0'
 }
+
+apply plugin: 'com.google.gms.google-services'

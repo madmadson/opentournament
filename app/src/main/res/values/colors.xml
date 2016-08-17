@@ -13,4 +13,11 @@
     <color name="colorWin">#008000</color>
     
     <color name="colorBackground">#FBFBFB</color>
+    
+    <color name="colorDanger">#d4261f</color>
+    <color name="colorNegative">#EE6558</color>
+    <color name="colorWarning">#fa7430</color>
+    <color name="colorNeutral">#fff479</color>
+    <color name="colorPositive">#77c180</color>
+    <color name="colorAction">#1d75b8</color>
 </resources>

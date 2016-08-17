@@ -68,7 +68,7 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
         setContentView(R.layout.activity_sign_in);
 
         // Assign fields
-        mSignInButton = (SignInButton) findViewById(R.id.sign_in_button);
+        mSignInButton = (SignInButton) findViewById(R.id.google_sign_in_button);
 
         // Set click listeners
         mSignInButton.setOnClickListener(this);
@@ -90,7 +90,7 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
     public void onClick(View v) {
 
         switch (v.getId()) {
-            case R.id.sign_in_button:
+            case R.id.google_sign_in_button:
                 signIn();
                 break;
         }

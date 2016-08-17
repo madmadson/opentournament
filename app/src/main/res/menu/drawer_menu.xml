@@ -17,4 +17,13 @@
 
     </group>
 
+    <group android:id="@+id/drawer_menu_main_group">
+        <item
+            android:id="@+id/action_about"
+            android:icon="@drawable/ic_note_add_black_24dp"
+            android:orderInCategory="200"
+            android:title="@string/about"
+            />
+    </group>
+
 </menu>

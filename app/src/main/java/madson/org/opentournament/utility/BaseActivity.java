@@ -1,0 +1,287 @@
+package madson.org.opentournament.utility;
+
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+
+import android.os.Bundle;
+
+import android.preference.PreferenceManager;
+
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
+
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+
+import android.util.Log;
+
+import android.view.MenuItem;
+import android.view.View;
+
+import android.view.inputmethod.InputMethodManager;
+
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.bumptech.glide.Glide;
+
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
+import madson.org.opentournament.HomeFragment;
+import madson.org.opentournament.R;
+import madson.org.opentournament.SignInActivity;
+import madson.org.opentournament.tournaments.TournamentManagementFragment;
+
+
+/**
+ * Base Activity for all activities.
+ *
+ * @author  Tobias Matt - tmatt@contargo.net
+ */
+public class BaseActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
+    GoogleApiClient.OnConnectionFailedListener {
+
+    private static BaseApplication mApplication;
+
+    public static final String ANONYMOUS_USER = "anonymous";
+
+    private Toolbar toolbar;
+    private FloatingActionButton floatingActionButton;
+
+    private DrawerLayout drawer;
+    private NavigationView navView;
+    private CoordinatorLayout coordinatorLayout;
+
+    private ImageView userAvatar;
+    private TextView userDisplayname;
+
+    // Auth
+    private GoogleApiClient mGoogleApiClient;
+    private FirebaseAuth mFirebaseAuth;
+    private String mUsername = "anonymous";
+    private FirebaseUser mFirebaseUser;
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+
+        super.onCreate(savedInstanceState);
+
+        if (useNavigationDrawer()) {
+            setContentView(R.layout.activity_main_drawer);
+        } else {
+            setContentView(R.layout.activity_main);
+        }
+
+        coordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinator_main);
+        floatingActionButton = (FloatingActionButton) findViewById(R.id.fab);
+
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(isDisplayHomeAsUp());
+
+        doLogin();
+
+        if (useNavigationDrawer()) {
+            drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+            navView = (NavigationView) findViewById(R.id.nav_view);
+            navView.setNavigationItemSelectedListener(this);
+
+            if (mFirebaseUser != null) {
+                View headerView = navView.getHeaderView(0);
+
+                userAvatar = (ImageView) headerView.findViewById(R.id.drawer_avatar);
+                userDisplayname = (TextView) headerView.findViewById(R.id.drawer_name);
+
+                if (mFirebaseUser.getPhotoUrl() != null) {
+                    Glide.with(this).load(mFirebaseAuth.getCurrentUser().getPhotoUrl()).into(userAvatar);
+                }
+
+                userDisplayname.setText(mFirebaseUser.getDisplayName());
+            }
+        }
+    }
+
+
+    @Override
+    public void onBackPressed() {
+
+        if (useNavigationDrawer()) {
+            if (drawer.isDrawerOpen(GravityCompat.START)) {
+                drawer.closeDrawer(GravityCompat.START);
+            } else {
+                super.onBackPressed();
+            }
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+
+        if (useNavigationDrawer()) {
+            int id = item.getItemId();
+
+            if (id == R.id.nav_home) {
+                Log.i("Nav", "Open home");
+                replaceFragment(new HomeFragment());
+            } else if (id == R.id.nav_tournaments) {
+                Log.i("Nav", "Open tournaments");
+                replaceFragment(new TournamentManagementFragment());
+            } else if (id == R.id.nav_players) {
+                Log.i("Nav", "Open players");
+            }
+
+            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+            drawer.closeDrawer(GravityCompat.START);
+
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
+    public void replaceFragment(Fragment fragment) {
+
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+
+        transaction.replace(R.id.content_main, fragment);
+
+        transaction.commit();
+    }
+
+
+    /**
+     * @return  the default {@link CoordinatorLayout}.
+     */
+    public CoordinatorLayout getCoordinatorLayout() {
+
+        return coordinatorLayout;
+    }
+
+
+    /**
+     * Gets the FloatingActionButton of the toolbar_menu layout. To use it, set a click listener, an image, and set it
+     * to visible, as it is invisible by default.
+     *
+     * @return  the FloatingActionButton of the toolbar_menu layout.
+     */
+    public FloatingActionButton getFloatingActionButton() {
+
+        return floatingActionButton;
+    }
+
+
+    /**
+     * @return  the BaseApplication for the current App.
+     */
+    public BaseApplication getBaseApplication() {
+
+        if (mApplication == null) {
+            mApplication = (BaseApplication) getApplication();
+        }
+
+        return mApplication;
+    }
+
+
+    /**
+     * States if the Activity should use the default navigation drawer. Main Activities should do this in almost every
+     * case.
+     *
+     * @return  if the Activity should use the default navigation drawer. Defaults to {@code true}.
+     */
+    public boolean useNavigationDrawer() {
+
+        return true;
+    }
+
+
+    /**
+     * Defines whether the 'home' button on the actionbar should act as a 'up' (or 'back') button click and so close the
+     * current Activity to get back to the previous one.
+     *
+     * @return  true if it should do this, false otherwise. Defaults to {@code false}.
+     */
+    public boolean isDisplayHomeAsUp() {
+
+        return false;
+    }
+
+
+    private void doLogin() {
+
+        SharedPreferences mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+        // Set default username is anonymous.
+
+        mUsername = ANONYMOUS_USER;
+
+        mGoogleApiClient = new GoogleApiClient.Builder(this).enableAutoManage(this /* FragmentActivity */,
+                this /* OnConnectionFailedListener */).addApi(Auth.GOOGLE_SIGN_IN_API).build();
+
+        // Initialize Firebase Auth
+        mFirebaseAuth = FirebaseAuth.getInstance();
+
+        mFirebaseUser = mFirebaseAuth.getCurrentUser();
+
+        if (mFirebaseUser == null) {
+            // Not signed in, launch the Sign In activity
+            startActivity(new Intent(this, SignInActivity.class));
+            finish();
+
+            return;
+        } else {
+            mUsername = mFirebaseUser.getDisplayName();
+            mFirebaseUser.getPhotoUrl();
+
+            if (mFirebaseUser.getPhotoUrl() != null) {
+                String mPhotoUrl = mFirebaseUser.getPhotoUrl().toString();
+            }
+        }
+    }
+
+
+    /**
+     * Closes the soft keyboard, if open.
+     */
+    public void closeKeyboard() {
+
+        if (getWindow() != null && getWindow().getDecorView() != null) {
+            // close the soft input, if open
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), 0);
+        }
+    }
+
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+        // An unresolvable error has occurred and Google APIs (including Sign-In) will not
+        // be available.
+        Log.d(this.getClass().getName(), "onConnectionFailed:" + connectionResult);
+        Toast.makeText(this, "Google Play Services error.", Toast.LENGTH_SHORT).show();
+    }
+}

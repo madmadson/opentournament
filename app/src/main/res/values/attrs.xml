@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="AsyncTaskAware">
+        <attr name="baseClass" format="string"/>
+    </declare-styleable>
+
+    <declare-styleable name="AboutPage">
+        <attr name="colorCardBackground" format="color|reference" />
+        <attr name="colorItemDivider" format="color|reference" />>
+    </declare-styleable>
+    
+</resources>

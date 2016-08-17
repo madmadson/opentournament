@@ -62,6 +62,14 @@
     <string name="title_tournament_management">Tournament Management</string>
     <string name="sign_in">Sign in</string>
     <string name="sign_out">Sign Out</string>
+    <string name="user_name">anonymous</string>
 
 
+    <string name="material_design_icons_id" translatable="false">material-design-icons</string>
+    <string name="material_design_icons_name" translatable="false">Material Design Icons</string>
+    <string name="material_design_icons_author" translatable="false">Austin Andrews</string>
+    <string name="material_design_icons_description">Community managed Material Design icon set</string>
+    <string name="material_design_icons_url" translatable="false">https://materialdesignicons.com/</string>
+    <string name="about_used_libraries">Used Open Source libraries:</string>
+    <string name="about">about</string>
 </resources>

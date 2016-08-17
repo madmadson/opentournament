@@ -17,9 +17,9 @@ import android.view.View;
 
 import android.widget.Button;
 
-import madson.org.opentournament.OpenTournamentApplication;
 import madson.org.opentournament.R;
 import madson.org.opentournament.service.OngoingTournamentService;
+import madson.org.opentournament.utility.BaseApplication;
 
 
 /**
@@ -94,7 +94,7 @@ public class ConfirmPairingNewRoundDialog extends DialogFragment {
                     OngoingTournamentActivity activity = (OngoingTournamentActivity) getActivity();
 
                     OngoingTournamentService ongoingTournamentService =
-                        ((OpenTournamentApplication) getActivity().getApplication()).getOngoingTournamentService();
+                        ((BaseApplication) getActivity().getApplication()).getOngoingTournamentService();
 
                     // first create ranking for complete games
                     ongoingTournamentService.createRankingForRound(tournament_id, round_for_pairing);

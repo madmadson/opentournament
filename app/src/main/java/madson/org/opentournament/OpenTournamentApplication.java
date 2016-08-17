@@ -1,62 +1,45 @@
 package madson.org.opentournament;
 
-import android.app.Application;
+import madson.org.opentournament.about.AppInfo;
+import madson.org.opentournament.about.LibraryItem;
+import madson.org.opentournament.utility.BaseApplication;
+import madson.org.opentournament.utility.Environment;
 
-import madson.org.opentournament.service.OngoingTournamentService;
-import madson.org.opentournament.service.OngoingTournamentServiceImpl;
-import madson.org.opentournament.service.PlayerService;
-import madson.org.opentournament.service.PlayerServiceImpl;
-import madson.org.opentournament.service.TournamentService;
-import madson.org.opentournament.service.TournamentServiceImpl;
-
-import net.danlew.android.joda.JodaTimeAndroid;
+import java.util.List;
 
 
 /**
- * Holds all available services.
+ * Write some fancy Javadoc!
  *
  * @author  Tobias Matt - tmatt@contargo.net
  */
-public class OpenTournamentApplication extends Application {
+public class OpenTournamentApplication extends BaseApplication {
 
-    private static OngoingTournamentService ongoingTournamentService;
-    private static TournamentService tournamentService;
-    private static PlayerService playerService;
+    private AppInfo appInfo;
+
+    private List<LibraryItem> libraryItems;
 
     @Override
-    public void onCreate() {
+    public Environment getEnvironment() {
 
-        super.onCreate();
-        JodaTimeAndroid.init(this);
-
-        if (playerService == null) {
-            playerService = new PlayerServiceImpl(getApplicationContext());
-        }
-
-        if (tournamentService == null) {
-            tournamentService = new TournamentServiceImpl(getApplicationContext());
-        }
-
-        if (ongoingTournamentService == null) {
-            ongoingTournamentService = new OngoingTournamentServiceImpl(getApplicationContext());
-        }
+        return Environment.DEV;
     }
 
 
-    public TournamentService getTournamentService() {
+    @Override
+    public List<LibraryItem> getAdditionalLibraries() {
 
-        return tournamentService;
+        return libraryItems;
     }
 
 
-    public PlayerService getPlayerService() {
+    @Override
+    public AppInfo getAppInfo() {
 
-        return playerService;
-    }
+        if (appInfo != null) {
+            return appInfo;
+        }
 
-
-    public OngoingTournamentService getOngoingTournamentService() {
-
-        return ongoingTournamentService;
+        return new AppInfo("Test", "1", "App to test the about stuff.", R.drawable.avatar_anonymous);
     }
 }

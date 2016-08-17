@@ -25,7 +25,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import madson.org.opentournament.OpenTournamentApplication;
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.Tournament;
@@ -34,6 +33,7 @@ import madson.org.opentournament.ongoing.OngoingTournamentManagementFragment;
 import madson.org.opentournament.service.OngoingTournamentService;
 import madson.org.opentournament.service.PlayerService;
 import madson.org.opentournament.service.TournamentService;
+import madson.org.opentournament.utility.BaseApplication;
 
 
 /**
@@ -97,8 +97,7 @@ public class NewPlayerForTournamentDialog extends DialogFragment {
         nicknameEditText = (EditText) dialogView.findViewById(R.id.new_player_nickname);
         lastnameEditText = (EditText) dialogView.findViewById(R.id.new_player_lastname);
 
-        TournamentService tournamentService = ((OpenTournamentApplication) getActivity().getApplication())
-            .getTournamentService();
+        TournamentService tournamentService = ((BaseApplication) getActivity().getApplication()).getTournamentService();
         Tournament tournamentForId = tournamentService.getTournamentForId(tournamentId);
 
         builder.setView(dialogView)
@@ -141,13 +140,12 @@ public class NewPlayerForTournamentDialog extends DialogFragment {
                         if (!firstname.isEmpty() && !nickname.isEmpty() && !lastname.isEmpty()) {
                             Player player = new Player(firstname, nickname, lastname);
 
-                            PlayerService playerService = ((OpenTournamentApplication) getActivity()
-                                    .getApplication()).getPlayerService();
+                            PlayerService playerService = ((BaseApplication) getActivity().getApplication())
+                                .getPlayerService();
                             playerService.createPlayer(player);
 
                             OngoingTournamentService ongoingTournamentService =
-                                ((OpenTournamentApplication) getActivity().getApplication())
-                                .getOngoingTournamentService();
+                                ((BaseApplication) getActivity().getApplication()).getOngoingTournamentService();
 
                             ongoingTournamentService.addPlayerToTournament(player, tournamentId);
 

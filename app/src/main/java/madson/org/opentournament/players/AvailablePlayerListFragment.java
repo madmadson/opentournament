@@ -20,11 +20,11 @@ import android.view.ViewGroup;
 
 import android.widget.EditText;
 
-import madson.org.opentournament.OpenTournamentApplication;
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.service.OngoingTournamentService;
 import madson.org.opentournament.service.PlayerService;
+import madson.org.opentournament.utility.BaseApplication;
 
 import java.util.List;
 
@@ -75,7 +75,7 @@ public class AvailablePlayerListFragment extends Fragment {
                 }
             });
 
-        PlayerService playerService = ((OpenTournamentApplication) getActivity().getApplication()).getPlayerService();
+        PlayerService playerService = ((BaseApplication) getActivity().getApplication()).getPlayerService();
 
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.player_list_recycler_view);
 
@@ -91,8 +91,8 @@ public class AvailablePlayerListFragment extends Fragment {
         if (bundle != null && bundle.getLong(BUNDLE_TOURNAMENT_ID) != 0) {
             tournamentId = bundle.getLong(BUNDLE_TOURNAMENT_ID);
 
-            OngoingTournamentService ongoingTournamentService =
-                ((OpenTournamentApplication) getActivity().getApplication()).getOngoingTournamentService();
+            OngoingTournamentService ongoingTournamentService = ((BaseApplication) getActivity().getApplication())
+                .getOngoingTournamentService();
             List<Player> alreadyPlayingPlayers = ongoingTournamentService.getAllPlayersForTournament(tournamentId);
             players.removeAll(alreadyPlayingPlayers);
         }
@@ -135,8 +135,7 @@ public class AvailablePlayerListFragment extends Fragment {
         Log.i(this.getClass().getName(), "add player to tournament player list: " + player_id);
 
         if (availablePlayerListAdapter != null) {
-            final OpenTournamentApplication application = (OpenTournamentApplication) getActivity()
-                .getApplication();
+            final BaseApplication application = (BaseApplication) getActivity().getApplication();
             final Player player = application.getPlayerService().getPlayerForId(player_id);
             availablePlayerListAdapter.add(player);
 

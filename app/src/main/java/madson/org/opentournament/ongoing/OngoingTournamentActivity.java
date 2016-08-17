@@ -22,11 +22,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import madson.org.opentournament.OpenTournamentApplication;
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.players.NewPlayerForTournamentDialog;
 import madson.org.opentournament.service.TournamentService;
+import madson.org.opentournament.utility.BaseApplication;
 
 
 public class OngoingTournamentActivity extends AppCompatActivity {
@@ -58,7 +58,7 @@ public class OngoingTournamentActivity extends AppCompatActivity {
         if (tournamentId != 0) {
             Log.i(this.getClass().toString(), "tournament started with id " + tournamentId);
 
-            TournamentService tournamentService = ((OpenTournamentApplication) getApplication()).getTournamentService();
+            TournamentService tournamentService = ((BaseApplication) getApplication()).getTournamentService();
             tournament = tournamentService.getTournamentForId(tournamentId);
 
             ActionBar supportActionBar = getSupportActionBar();
@@ -122,7 +122,7 @@ public class OngoingTournamentActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         // noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.toolbar_menu_about) {
             return true;
         }
 

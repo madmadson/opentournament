@@ -17,11 +17,11 @@ import android.view.ViewGroup;
 
 import android.widget.TextView;
 
-import madson.org.opentournament.OpenTournamentApplication;
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.warmachine.WarmachineTournamentRanking;
 import madson.org.opentournament.service.OngoingTournamentService;
+import madson.org.opentournament.utility.BaseApplication;
 
 import java.util.List;
 
@@ -52,8 +52,8 @@ public class TournamentPlayerListFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_tournament_player_list, container, false);
 
-        OngoingTournamentService ongoingTournamentService = ((OpenTournamentApplication) getActivity()
-                .getApplication()).getOngoingTournamentService();
+        OngoingTournamentService ongoingTournamentService = ((BaseApplication) getActivity().getApplication())
+            .getOngoingTournamentService();
 
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.tournament_player_list_recycler_view);
 
@@ -95,8 +95,7 @@ public class TournamentPlayerListFragment extends Fragment {
 
                     Log.i(this.getClass().getName(), "add player to tournament ");
 
-                    OpenTournamentApplication application = (OpenTournamentApplication) getActivity()
-                        .getApplication();
+                    BaseApplication application = (BaseApplication) getActivity().getApplication();
                     application.getOngoingTournamentService().addPlayerToTournament(player, tournamentId);
                 }
             };

@@ -17,10 +17,10 @@ import android.view.ViewGroup;
 
 import android.widget.Button;
 
-import madson.org.opentournament.OpenTournamentApplication;
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.warmachine.WarmachineTournamentGame;
 import madson.org.opentournament.service.OngoingTournamentService;
+import madson.org.opentournament.utility.BaseApplication;
 
 import java.util.List;
 
@@ -83,7 +83,7 @@ public class RoundChangeButtonFragment extends Fragment {
                     OngoingTournamentActivity activity = (OngoingTournamentActivity) getActivity();
 
                     final OngoingTournamentService ongoingTournamentService =
-                        ((OpenTournamentApplication) getActivity().getApplication()).getOngoingTournamentService();
+                        ((BaseApplication) getActivity().getApplication()).getOngoingTournamentService();
 
                     if (next_or_previous.equals(NextOrPrevious.NEXT)) {
                         List<WarmachineTournamentGame> pairingsForRound = ongoingTournamentService.getGameForRound(

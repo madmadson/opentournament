@@ -13,10 +13,10 @@ import android.view.ViewGroup;
 
 import android.widget.TextView;
 
-import madson.org.opentournament.OpenTournamentApplication;
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.warmachine.WarmachineTournamentRanking;
 import madson.org.opentournament.service.OngoingTournamentService;
+import madson.org.opentournament.utility.BaseApplication;
 
 import java.util.List;
 
@@ -48,8 +48,8 @@ public class RankingListFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_ranking_list, container, false);
 
-        OngoingTournamentService ongoingTournamentService = ((OpenTournamentApplication) getActivity()
-                .getApplication()).getOngoingTournamentService();
+        OngoingTournamentService ongoingTournamentService = ((BaseApplication) getActivity().getApplication())
+            .getOngoingTournamentService();
 
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.ranking_list_recycler_view);
 

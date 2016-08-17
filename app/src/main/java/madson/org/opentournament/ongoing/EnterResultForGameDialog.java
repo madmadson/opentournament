@@ -24,10 +24,10 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import madson.org.opentournament.OpenTournamentApplication;
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.warmachine.WarmachineTournamentGame;
 import madson.org.opentournament.service.OngoingTournamentService;
+import madson.org.opentournament.utility.BaseApplication;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -75,8 +75,8 @@ public class EnterResultForGameDialog extends DialogFragment {
         }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        OngoingTournamentService ongoingTournamentService = ((OpenTournamentApplication) getActivity()
-                .getApplication()).getOngoingTournamentService();
+        OngoingTournamentService ongoingTournamentService = ((BaseApplication) getActivity().getApplication())
+            .getOngoingTournamentService();
         game = ongoingTournamentService.getGameForId(game_id);
 
         // Get the layout inflater
@@ -416,7 +416,7 @@ public class EnterResultForGameDialog extends DialogFragment {
                     OngoingTournamentActivity activity = (OngoingTournamentActivity) getActivity();
 
                     OngoingTournamentService ongoingTournamentService =
-                        ((OpenTournamentApplication) getActivity().getApplication()).getOngoingTournamentService();
+                        ((BaseApplication) getActivity().getApplication()).getOngoingTournamentService();
 
                     ongoingTournamentService.saveGameResult(game);
 

@@ -11,6 +11,14 @@ import android.util.Log;
 import madson.org.opentournament.R;
 import madson.org.opentournament.about.AppInfo;
 import madson.org.opentournament.about.LibraryItem;
+import madson.org.opentournament.service.OngoingTournamentService;
+import madson.org.opentournament.service.OngoingTournamentServiceImpl;
+import madson.org.opentournament.service.PlayerService;
+import madson.org.opentournament.service.PlayerServiceImpl;
+import madson.org.opentournament.service.TournamentService;
+import madson.org.opentournament.service.TournamentServiceImpl;
+
+import net.danlew.android.joda.JodaTimeAndroid;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -22,6 +30,10 @@ import java.util.List;
  */
 public abstract class BaseApplication extends Application {
 
+    private static OngoingTournamentService ongoingTournamentService;
+    private static TournamentService tournamentService;
+    private static PlayerService playerService;
+
     @Override
     public void onCreate() {
 
@@ -32,6 +44,20 @@ public abstract class BaseApplication extends Application {
 
         if (getAppInfo() == null) {
             throw new IllegalStateException("AppInfo must be set!");
+        }
+
+        JodaTimeAndroid.init(this);
+
+        if (playerService == null) {
+            playerService = new PlayerServiceImpl(getApplicationContext());
+        }
+
+        if (tournamentService == null) {
+            tournamentService = new TournamentServiceImpl(getApplicationContext());
+        }
+
+        if (ongoingTournamentService == null) {
+            ongoingTournamentService = new OngoingTournamentServiceImpl(getApplicationContext());
         }
     }
 
@@ -94,4 +120,22 @@ public abstract class BaseApplication extends Application {
      * @return  the {@link AppInfo} for this app.
      */
     public abstract AppInfo getAppInfo();
+
+
+    public TournamentService getTournamentService() {
+
+        return tournamentService;
+    }
+
+
+    public PlayerService getPlayerService() {
+
+        return playerService;
+    }
+
+
+    public OngoingTournamentService getOngoingTournamentService() {
+
+        return ongoingTournamentService;
+    }
 }

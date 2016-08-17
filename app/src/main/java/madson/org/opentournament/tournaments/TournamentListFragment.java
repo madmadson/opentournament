@@ -19,12 +19,11 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import madson.org.opentournament.HomeFragment;
-import madson.org.opentournament.OpenTournamentApplication;
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.ongoing.OngoingTournamentActivity;
 import madson.org.opentournament.service.TournamentService;
+import madson.org.opentournament.utility.BaseApplication;
 
 import java.util.List;
 
@@ -61,8 +60,7 @@ public class TournamentListFragment extends Fragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(linearLayoutManager);
 
-        TournamentService tournamentService = ((OpenTournamentApplication) getActivity().getApplication())
-            .getTournamentService();
+        TournamentService tournamentService = ((BaseApplication) getActivity().getApplication()).getTournamentService();
 
         List<Tournament> tournaments = tournamentService.getTournaments();
 

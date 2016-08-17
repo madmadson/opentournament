@@ -18,10 +18,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import madson.org.opentournament.OpenTournamentApplication;
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.service.TournamentService;
+import madson.org.opentournament.utility.BaseApplication;
 
 import java.text.SimpleDateFormat;
 
@@ -46,7 +46,7 @@ public class TournamentDetailFragment extends Fragment {
 
         if (bundle != null) {
             long aLong = bundle.getLong(BUNDLE_TOURNAMENT_ID);
-            TournamentService tournamentService = ((OpenTournamentApplication) getActivity().getApplication())
+            TournamentService tournamentService = ((BaseApplication) getActivity().getApplication())
                 .getTournamentService();
             tournament = tournamentService.getTournamentForId(aLong);
         }
@@ -89,8 +89,8 @@ public class TournamentDetailFragment extends Fragment {
                             contentValues.put("description", String.valueOf(tournamentDescriptionField.getText()));
                             contentValues.put("date", String.valueOf(tournamentDateField.getText()));
 
-                            TournamentService tournamentService =
-                                ((OpenTournamentApplication) getActivity().getApplication()).getTournamentService();
+                            TournamentService tournamentService = ((BaseApplication) getActivity().getApplication())
+                                .getTournamentService();
                             tournamentService.editTournament((long) tournament.getId(), contentValues);
 
                             Toast toast = Toast.makeText(getActivity(), R.string.existingTournamentSaved,
@@ -114,8 +114,8 @@ public class TournamentDetailFragment extends Fragment {
                             contentValues.put("description", String.valueOf(tournamentDescriptionField.getText()));
                             contentValues.put("date", String.valueOf(tournamentDateField.getText()));
 
-                            TournamentService tournamentService =
-                                ((OpenTournamentApplication) getActivity().getApplication()).getTournamentService();
+                            TournamentService tournamentService = ((BaseApplication) getActivity().getApplication())
+                                .getTournamentService();
                             tournamentService.createTournament(contentValues);
 
                             Toast toast = Toast.makeText(getActivity(), R.string.newTournamentSaved,

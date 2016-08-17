@@ -9,7 +9,6 @@ import android.database.sqlite.SQLiteDatabase;
 
 import android.util.Log;
 
-import madson.org.opentournament.OpenTournamentApplication;
 import madson.org.opentournament.db.OpenTournamentDBHelper;
 import madson.org.opentournament.db.TournamentTable;
 import madson.org.opentournament.db.warmachine.WarmachineRankingTable;
@@ -19,6 +18,7 @@ import madson.org.opentournament.domain.warmachine.WarmachineTournamentGame;
 import madson.org.opentournament.domain.warmachine.WarmachineTournamentRanking;
 import madson.org.opentournament.service.warmachine.WarmachinePlayerComparator;
 import madson.org.opentournament.service.warmachine.WarmachineRankingComparator;
+import madson.org.opentournament.utility.BaseApplication;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -42,7 +42,7 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
 
         Log.w(OngoingTournamentServiceImpl.class.getName(), "WarmachineTournamentServiceImpl Constructor");
 
-        OpenTournamentApplication application = (OpenTournamentApplication) context;
+        BaseApplication application = (BaseApplication) context;
 
         if (openTournamentDBHelper == null) {
             openTournamentDBHelper = new OpenTournamentDBHelper(context);

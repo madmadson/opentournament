@@ -30,4 +30,11 @@ public class MainActivity extends BaseActivity {
 
         return true;
     }
+
+
+    @Override
+    public boolean isDisplayHomeAsUp() {
+
+        return true;
+    }
 }

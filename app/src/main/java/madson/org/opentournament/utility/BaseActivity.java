@@ -21,6 +21,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -47,6 +48,7 @@ import com.google.firebase.auth.FirebaseUser;
 import madson.org.opentournament.HomeFragment;
 import madson.org.opentournament.R;
 import madson.org.opentournament.SignInActivity;
+import madson.org.opentournament.about.AboutActivity;
 import madson.org.opentournament.tournaments.TournamentManagementFragment;
 
 
@@ -102,6 +104,11 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         if (useNavigationDrawer()) {
             drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
+            ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
+                    R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+            drawer.addDrawerListener(toggle);
+            toggle.syncState();
+
             navView = (NavigationView) findViewById(R.id.nav_view);
             navView.setNavigationItemSelectedListener(this);
 
@@ -136,6 +143,13 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
+    /**
+     * Drawer menu.
+     *
+     * @param  item
+     *
+     * @return
+     */
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
 
@@ -159,6 +173,37 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         } else {
             return false;
         }
+    }
+
+
+    /**
+     * Toolbar menu.
+     *
+     * @param  item
+     *
+     * @return
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        final int id = item.getItemId();
+
+        if (id == android.R.id.home) {
+            // this is only effective, if  getActionBar().setDisplayHomeAsUpEnabled(true)
+            // was called for the activity instance.
+
+            // treat a tap on the home icon like the back button was pressed - this will
+            // (if it is not overridden in another Activity) result in the current activity
+            // to close to get back to the previous activity.
+            this.onBackPressed();
+
+            return true;
+        } else if (id == R.id.toolbar_menu_about) {
+            Intent intent = new Intent(this, AboutActivity.class);
+            startActivity(intent);
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
 
@@ -283,5 +328,30 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         // be available.
         Log.d(this.getClass().getName(), "onConnectionFailed:" + connectionResult);
         Toast.makeText(this, "Google Play Services error.", Toast.LENGTH_SHORT).show();
+    }
+
+
+    /**
+     * Checks whether the given fragment is currently active. Active is defined as: the fragment is added to the current
+     * view hierarchy, is not hidden and is not currently being removed.
+     *
+     * @param  fragment  the fragment to check
+     *
+     * @return  true if the fragment is active, false otherwise.
+     */
+    public boolean isFragmentActive(Fragment fragment) {
+
+        return fragment.isAdded() && !fragment.isHidden() && !fragment.isRemoving();
+    }
+
+
+    /**
+     * Gets the main Toolbar of the Activity. Only call this <i>after</i> super.onPostCreate() has been called!
+     *
+     * @return  the toolbar
+     */
+    public Toolbar getToolbar() {
+
+        return this.toolbar;
     }
 }

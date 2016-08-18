@@ -1,4 +1,7 @@
 <resources>
+    <string name="firebase_url">https://madson-org-opentournament.firebaseio.com</string>
+    <string name="facebook_app_id">1736501436623651</string>
+    
     <string name="app_name">Open Tournament</string>
     <string name="Image_description">Tournaments for everyone!</string>
     <string name="title_activity_tournament_list">TournamentList</string>

@@ -20,4 +20,6 @@
     <color name="colorNeutral">#fff479</color>
     <color name="colorPositive">#77c180</color>
     <color name="colorAction">#1d75b8</color>
+    
+    <color name="colorLightGrey">#E0E0E0</color>
 </resources>

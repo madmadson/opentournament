@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/sign_out_menu"
+        android:id="@+id/toolbar_menu_sign_out"
         android:title="@string/sign_out"
-        app:showAsAction="never"/>c
+        app:showAsAction="never"/>
     <item
         android:id="@+id/toolbar_menu_about"
         android:icon="@drawable/ic_note_add_black_24dp"

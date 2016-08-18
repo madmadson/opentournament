@@ -16,7 +16,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -37,6 +36,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+
+import com.facebook.login.LoginManager;
 
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.common.ConnectionResult;
@@ -73,6 +74,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
     private ImageView userAvatar;
     private TextView userDisplayname;
+    private TextView userMail;
 
     // Auth
     private GoogleApiClient mGoogleApiClient;
@@ -117,12 +119,14 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
                 userAvatar = (ImageView) headerView.findViewById(R.id.drawer_avatar);
                 userDisplayname = (TextView) headerView.findViewById(R.id.drawer_name);
+                userMail = (TextView) headerView.findViewById(R.id.drawer_mail);
 
                 if (mFirebaseUser.getPhotoUrl() != null) {
                     Glide.with(this).load(mFirebaseAuth.getCurrentUser().getPhotoUrl()).into(userAvatar);
                 }
 
                 userDisplayname.setText(mFirebaseUser.getDisplayName());
+                userMail.setText(mFirebaseUser.getEmail());
             }
         }
     }
@@ -198,6 +202,13 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
             this.onBackPressed();
 
             return true;
+        } else if (id == R.id.toolbar_menu_sign_out) {
+            mFirebaseAuth.signOut();
+            LoginManager.getInstance().logOut();
+
+            Auth.GoogleSignInApi.signOut(mGoogleApiClient);
+            mUsername = ANONYMOUS_USER;
+            startActivity(new Intent(this, SignInActivity.class));
         } else if (id == R.id.toolbar_menu_about) {
             Intent intent = new Intent(this, AboutActivity.class);
             startActivity(intent);

@@ -8,6 +8,8 @@ import android.net.ConnectivityManager;
 
 import android.util.Log;
 
+import com.facebook.FacebookSdk;
+
 import madson.org.opentournament.R;
 import madson.org.opentournament.about.AppInfo;
 import madson.org.opentournament.about.LibraryItem;
@@ -47,6 +49,7 @@ public abstract class BaseApplication extends Application {
         }
 
         JodaTimeAndroid.init(this);
+        FacebookSdk.sdkInitialize(getApplicationContext());
 
         if (playerService == null) {
             playerService = new PlayerServiceImpl(getApplicationContext());

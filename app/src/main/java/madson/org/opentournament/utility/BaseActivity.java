@@ -87,10 +87,14 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
         super.onCreate(savedInstanceState);
 
-        if (useNavigationDrawer()) {
-            setContentView(R.layout.activity_main_drawer);
+        if (useTabLayout()) {
+            setContentView(R.layout.activity_main_tablayout);
         } else {
-            setContentView(R.layout.activity_main);
+            if (useNavigationDrawer()) {
+                setContentView(R.layout.activity_main_drawer);
+            } else {
+                setContentView(R.layout.activity_main);
+            }
         }
 
         coordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinator_main);
@@ -271,6 +275,17 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     public boolean useNavigationDrawer() {
 
         return true;
+    }
+
+
+    /**
+     * States if the Activity should use tab layout with view pager.
+     *
+     * @return  if the Activity should use tab layout. Defaults to {@code true}.
+     */
+    public boolean useTabLayout() {
+
+        return false;
     }
 
 

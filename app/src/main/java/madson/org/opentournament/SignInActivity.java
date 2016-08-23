@@ -35,6 +35,7 @@ import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 
+import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
@@ -111,7 +112,7 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
 
         callbackManager = CallbackManager.Factory.create();
         mFacebookSignInButton.setReadPermissions("email", "public_profile");
-        mFacebookSignInButton.registerCallback(callbackManager, facebookCallback());
+        LoginManager.getInstance().registerCallback(callbackManager, facebookCallback());
 
         // Configure Google Sign In
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestIdToken(

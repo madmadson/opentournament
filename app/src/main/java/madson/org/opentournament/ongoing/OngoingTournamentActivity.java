@@ -26,10 +26,11 @@ import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.players.NewPlayerForTournamentDialog;
 import madson.org.opentournament.service.TournamentService;
+import madson.org.opentournament.utility.BaseActivity;
 import madson.org.opentournament.utility.BaseApplication;
 
 
-public class OngoingTournamentActivity extends AppCompatActivity {
+public class OngoingTournamentActivity extends BaseActivity {
 
     public static final String EXTRA_TOURNAMENT_ID = "tournament_id";
 
@@ -41,13 +42,40 @@ public class OngoingTournamentActivity extends AppCompatActivity {
     private Tournament tournament;
 
     @Override
+    public boolean useTabLayout() {
+
+        return true;
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        // additionally to the navigation drawer, inflate the base menu into the options menu
+        getMenuInflater().inflate(R.menu.toolbar_menu, menu);
+
+        return true;
+    }
+
+
+    @Override
+    public boolean isDisplayHomeAsUp() {
+
+        return true;
+    }
+
+
+    @Override
+    public boolean useNavigationDrawer() {
+
+        return false;
+    }
+
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_ongoing_tournament);
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
         Intent intent = getIntent();
 
@@ -77,56 +105,25 @@ public class OngoingTournamentActivity extends AppCompatActivity {
 
             final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 
-            if (fab != null) {
-                fab.setOnClickListener(new View.OnClickListener() {
+            fab.setOnClickListener(new View.OnClickListener() {
 
-                        @Override
-                        public void onClick(View view) {
+                    @Override
+                    public void onClick(View view) {
 
-                            Log.i(this.getClass().getName(), "click fab ongoing tournament");
+                        Log.i(this.getClass().getName(), "click fab ongoing tournament");
 
-                            NewPlayerForTournamentDialog dialog = new NewPlayerForTournamentDialog();
+                        NewPlayerForTournamentDialog dialog = new NewPlayerForTournamentDialog();
 
-                            Bundle bundleForTournamentPlayers = new Bundle();
-                            bundleForTournamentPlayers.putLong(NewPlayerForTournamentDialog.BUNDLE_TOURNAMENT_ID,
-                                tournamentId);
-                            dialog.setArguments(bundleForTournamentPlayers);
+                        Bundle bundleForTournamentPlayers = new Bundle();
+                        bundleForTournamentPlayers.putLong(NewPlayerForTournamentDialog.BUNDLE_TOURNAMENT_ID,
+                            tournamentId);
+                        dialog.setArguments(bundleForTournamentPlayers);
 
-                            FragmentManager supportFragmentManager = getSupportFragmentManager();
-                            dialog.show(supportFragmentManager, "NewPlayerForTournamentDialog");
-                        }
-                    });
-            }
-        } else {
-            throw new RuntimeException();
+                        FragmentManager supportFragmentManager = getSupportFragmentManager();
+                        dialog.show(supportFragmentManager, "NewPlayerForTournamentDialog");
+                    }
+                });
         }
-    }
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.toolbar_menu, menu);
-
-        return true;
-    }
-
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        // noinspection SimplifiableIfStatement
-        if (id == R.id.toolbar_menu_about) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
 

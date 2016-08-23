@@ -1,6 +1,7 @@
 <resources>
     <string name="firebase_url">https://madson-org-opentournament.firebaseio.com</string>
     <string name="facebook_app_id">1736501436623651</string>
+    <string name="fb_login_protocol_scheme">fb1736501436623651</string>
     
     <string name="app_name">Open Tournament</string>
     <string name="Image_description">Tournaments for everyone!</string>
@@ -29,7 +30,7 @@
     <string name="nav_tournament_setup">Tournament Setup</string>
     <string name="nav_round_tab">Round %1$d</string>
     <string name="nav_home_activity">Home</string>
-    <string name="nav_tournament_final">Final Results</string>
+    <string name="nav_tournament_final">Final Results</string>ch
     <string name="search_player">Search players</string>
     <string name="create_player">save</string>
     <string name="cancel">cancel</string>

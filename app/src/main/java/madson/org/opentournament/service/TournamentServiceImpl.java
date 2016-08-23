@@ -58,7 +58,7 @@ public class TournamentServiceImpl implements TournamentService {
 
     private void createMockTournaments() {
 
-        createTournament(1, "Tournament1", "description1", new DateTime(2016, 3, 10, 10, 0).toDate(), 8);
+        createTournament(1, "Tournament1", "description1", new DateTime(2016, 3, 10, 10, 8).toDate(), 8);
         createTournament(2, "Tournament2", "description2", new DateTime(2016, 5, 20, 10, 0).toDate(), 0);
         createTournament(3, "Tournament3", "description3", new DateTime(2016, 7, 15, 10, 0).toDate(), 0);
     }
@@ -107,8 +107,8 @@ public class TournamentServiceImpl implements TournamentService {
 
     private Tournament cursorToTournament(Cursor cursor) {
 
-        return new Tournament(cursor.getInt(0), cursor.getString(1), cursor.getString(2), cursor.getInt(3),
-                new Date(cursor.getLong(4)), cursor.getInt(5));
+        return new Tournament(cursor.getInt(0), cursor.getString(1), cursor.getString(2), new Date(cursor.getLong(3)),
+                cursor.getInt(4), cursor.getInt(5));
     }
 
 

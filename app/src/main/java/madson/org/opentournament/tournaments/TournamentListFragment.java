@@ -127,6 +127,7 @@ public class TournamentListFragment extends Fragment {
             final Tournament tournament = mDataset.get(position);
             holder.setTournament(tournament);
             holder.getTournamentNameInList().setText(tournament.getName());
+            holder.getTournamentPlayersInList().setText(String.valueOf(tournament.getNumberOfPlayers()));
             holder.getStartTournamentButton().setOnClickListener(new View.OnClickListener() {
 
                     @Override
@@ -165,8 +166,9 @@ public class TournamentListFragment extends Fragment {
 
         public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-            private TextView tournamentNameInList;
             private ImageButton startTournamentButton;
+            private TextView tournamentNameInList;
+            private TextView tournamentPlayersInList;
             private Tournament tournament;
 
             public ViewHolder(View v) {
@@ -174,8 +176,9 @@ public class TournamentListFragment extends Fragment {
                 super(v);
                 v.setOnClickListener(this);
 
-                tournamentNameInList = (TextView) v.findViewById(R.id.tournament_name);
                 startTournamentButton = (ImageButton) v.findViewById(R.id.start_tournament_button);
+                tournamentNameInList = (TextView) v.findViewById(R.id.tournament_name);
+                tournamentPlayersInList = (TextView) v.findViewById(R.id.amount_players);
             }
 
             @Override
@@ -200,6 +203,12 @@ public class TournamentListFragment extends Fragment {
             public void setTournament(Tournament tournament) {
 
                 this.tournament = tournament;
+            }
+
+
+            public TextView getTournamentPlayersInList() {
+
+                return tournamentPlayersInList;
             }
         }
     }

@@ -11,7 +11,7 @@ import java.util.Date;
 public class Tournament {
 
     public static final String[] ALL_COLS_FOR_TOURNAMENT = {
-        "_id", "name", "description", "numberOfPlayers", "date", "actualRound"
+        "_id", "name", "description", "date", "numberOfPlayers", "actualRound"
     };
 
     private long _id;
@@ -21,14 +21,14 @@ public class Tournament {
     private Date dateOfTournament;
     private int actualRound;
 
-    public Tournament(long id, String name, String description, int numberOfPlayers, Date dateOfTournament,
+    public Tournament(long id, String name, String description, Date dateOfTournament, int numberOfPlayers,
         int actualRound) {
 
         this._id = id;
         this.name = name;
         this.description = description;
-        this.numberOfPlayers = numberOfPlayers;
         this.dateOfTournament = dateOfTournament;
+        this.numberOfPlayers = numberOfPlayers;
         this.actualRound = actualRound;
     }
 

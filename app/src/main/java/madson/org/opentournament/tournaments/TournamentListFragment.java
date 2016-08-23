@@ -25,7 +25,10 @@ import madson.org.opentournament.ongoing.OngoingTournamentActivity;
 import madson.org.opentournament.service.TournamentService;
 import madson.org.opentournament.utility.BaseApplication;
 
+import java.text.DateFormat;
+
 import java.util.List;
+import java.util.Locale;
 
 
 public class TournamentListFragment extends Fragment {
@@ -125,9 +128,15 @@ public class TournamentListFragment extends Fragment {
         public void onBindViewHolder(TournamentListAdapter.ViewHolder holder, int position) {
 
             final Tournament tournament = mDataset.get(position);
+
+            DateFormat dateFormatter = DateFormat.getDateInstance(DateFormat.DEFAULT, Locale.getDefault());
+            String formatedDate = dateFormatter.format(tournament.getDateOfTournament());
+
             holder.setTournament(tournament);
             holder.getTournamentNameInList().setText(tournament.getName());
-            holder.getTournamentPlayersInList().setText(String.valueOf(tournament.getMaxNumberOfPlayers()));
+            holder.getTournamentLocationInList().setText(tournament.getLocation());
+            holder.getTournamentDateInList().setText(formatedDate);
+            holder.getTournamentPlayersInList().setText("0/" + String.valueOf(tournament.getMaxNumberOfPlayers()));
             holder.getStartTournamentButton().setOnClickListener(new View.OnClickListener() {
 
                     @Override
@@ -169,6 +178,8 @@ public class TournamentListFragment extends Fragment {
             private ImageButton startTournamentButton;
             private TextView tournamentNameInList;
             private TextView tournamentPlayersInList;
+            private TextView tournamentLocationInList;
+            private TextView tournamentDateInList;
             private Tournament tournament;
 
             public ViewHolder(View v) {
@@ -179,6 +190,8 @@ public class TournamentListFragment extends Fragment {
                 startTournamentButton = (ImageButton) v.findViewById(R.id.start_tournament_button);
                 tournamentNameInList = (TextView) v.findViewById(R.id.tournament_name);
                 tournamentPlayersInList = (TextView) v.findViewById(R.id.amount_players);
+                tournamentLocationInList = (TextView) v.findViewById(R.id.tournament_location);
+                tournamentDateInList = (TextView) v.findViewById(R.id.tournament_date);
             }
 
             @Override
@@ -209,6 +222,18 @@ public class TournamentListFragment extends Fragment {
             public TextView getTournamentPlayersInList() {
 
                 return tournamentPlayersInList;
+            }
+
+
+            public TextView getTournamentLocationInList() {
+
+                return tournamentLocationInList;
+            }
+
+
+            public TextView getTournamentDateInList() {
+
+                return tournamentDateInList;
             }
         }
     }

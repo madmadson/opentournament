@@ -85,7 +85,8 @@
     <string name="material_design_icons_url" translatable="false">https://materialdesignicons.com/</string>
     <string name="about_used_libraries">Used Open Source libraries:</string>
     <string name="about">about</string>
-    
-    
+    <string name="header_tournament_location">Location</string>
+    <string name="header_tournament_date">Date</string>
+
 
 </resources>

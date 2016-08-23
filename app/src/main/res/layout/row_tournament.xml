@@ -2,12 +2,12 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/rootView"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/row_height"
+    android:layout_height="@dimen/row_height_tournament_list"
     android:paddingTop="@dimen/row_padding_top"
     android:paddingBottom="@dimen/row_padding_bottom"
     android:background="@drawable/row_item">
 
-    <ImageButton
+  <ImageButton
         android:id="@+id/start_tournament_button"
         android:layout_width="45dp"
         android:layout_height="45dp"
@@ -16,7 +16,7 @@
         android:layout_marginLeft="15dp"
         android:src="@drawable/ic_play_arrow_black_48dp"
         android:background="@android:color/transparent"/>
-
+    
     <TextView
         android:id="@+id/tournament_name" 
         android:layout_width="wrap_content"
@@ -27,11 +27,27 @@
        />
 
     <TextView
+        android:id="@+id/tournament_location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="220dp"
+        />
+
+    <TextView
+        android:id="@+id/tournament_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="350dp"
+        />
+
+    <TextView
         android:id="@+id/amount_players"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
-        android:layout_marginRight="15dp"
+        android:layout_marginRight="25dp"
         android:text="0" />
 </RelativeLayout>

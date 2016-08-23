@@ -59,19 +59,23 @@ public class TournamentServiceImpl implements TournamentService {
 
     private void createMockTournaments() {
 
-        createTournament("Coin of Evil", "Ludwigsburg", new DateTime(2016, 3, 10, 10, 8).toDate(), 32, true,
+        createTournament(1, "Coin of Evil", "Ludwigsburg", new DateTime(2016, 3, 10, 10, 8).toDate(), 32, true,
             "Harry Hirsch", "harry@gmail.com");
-        createTournament("HMDZ", "Oberhausen", new DateTime(2016, 5, 20, 10, 0).toDate(), 0, false, "Tim Grubi",
+        createTournament(2, "HMDZ", "Oberhausen", new DateTime(2016, 5, 20, 10, 0).toDate(), 0, false, "Tim Grubi",
             "grubbi@gmail.com");
-        createTournament("Dead Fish", "Heidelberg", new DateTime(2016, 7, 15, 10, 0).toDate(), 16, false,
+        createTournament(3, "Dead Fish", "Heidelberg", new DateTime(2016, 7, 15, 10, 0).toDate(), 16, false,
             "Bernhard Fishi", "fishi@gmail.com");
     }
 
 
-    private void createTournament(String name, String location, Date date, int maxPlayer, boolean online,
+    private void createTournament(int id, String name, String location, Date date, int maxPlayer, boolean online,
         String creator, String creatorEmail) {
 
         ContentValues contentValues = new ContentValues();
+
+        if (id != 0) {
+            contentValues.put(TournamentTable.COLUMN_ID, id);
+        }
 
         contentValues.put(TournamentTable.COLUMN_NAME, name);
         contentValues.put(TournamentTable.COLUMN_LOCATION, location);
@@ -119,7 +123,11 @@ public class TournamentServiceImpl implements TournamentService {
         tournament.set_id(cursor.getInt(0));
         tournament.setName(cursor.getString(1));
         tournament.setLocation(cursor.getString(2));
-        tournament.setDateOfTournament(new DateTime(Long.getLong(cursor.getString(3))).toDate());
+
+        String timeInMillis = cursor.getString(3);
+        DateTime dateTime = new DateTime(Long.parseLong(timeInMillis));
+
+        tournament.setDateOfTournament(dateTime.toDate());
         tournament.setMaxNumberOfPlayers(cursor.getInt(4));
         tournament.setActualRound(cursor.getInt(5));
         tournament.setOnline(cursor.getInt(6) == 1);
@@ -186,7 +194,7 @@ public class TournamentServiceImpl implements TournamentService {
 
         Log.i(this.getClass().getName(), "create tournament: " + tournament);
 
-        createTournament(tournament.getName(), tournament.getLocation(), tournament.getDateOfTournament(),
+        createTournament(0, tournament.getName(), tournament.getLocation(), tournament.getDateOfTournament(),
             tournament.getMaxNumberOfPlayers(), tournament.isOnline(), tournament.getCreatorName(),
             tournament.getCreatorEmail());
     }

@@ -21,6 +21,8 @@
         
     
     <!--  list row dimensions-->
+    <dimen name="row_height_tournament_list">96dp</dimen>
+
     <dimen name="row_height">48dp</dimen>
     <dimen name="row_header_height">48dp</dimen>
     

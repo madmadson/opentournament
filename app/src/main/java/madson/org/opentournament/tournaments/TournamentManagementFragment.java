@@ -19,7 +19,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import madson.org.opentournament.R;
+import madson.org.opentournament.domain.Tournament;
+import madson.org.opentournament.ongoing.RankingListFragment;
 import madson.org.opentournament.players.NewPlayerForTournamentDialog;
+import madson.org.opentournament.service.TournamentService;
+import madson.org.opentournament.utility.BaseActivity;
+import madson.org.opentournament.utility.BaseApplication;
 import madson.org.opentournament.utility.DrawerLocker;
 
 
@@ -111,12 +116,19 @@ public class TournamentManagementFragment extends Fragment implements Tournament
 
         final View view = getView();
 
-        TournamentDetailFragment tournamentDetailFragment = new TournamentDetailFragment();
-        Bundle bundle = new Bundle();
-        bundle.putLong(TournamentDetailFragment.BUNDLE_TOURNAMENT_ID, id);
-        tournamentDetailFragment.setArguments(bundle);
+        // get actual tournament to get actual state
+        TournamentService tournamentService = ((BaseApplication) getActivity().getApplication()).getTournamentService();
+        Tournament tournament = tournamentService.getTournamentForId(id);
 
-        Log.i("TournamentActivity", "clicked on tournament: " + id);
+        RankingListFragment rankingListFragment = new RankingListFragment();
+
+        Bundle bundle = new Bundle();
+        bundle.putLong(RankingListFragment.BUNDLE_TOURNAMENT_ID, id);
+
+        bundle.putInt(RankingListFragment.BUNDLE_ROUND, tournament.getActualRound());
+        rankingListFragment.setArguments(bundle);
+
+        Log.i(this.getClass().getName(), "clicked on tournament: " + tournament);
 
         FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
 
@@ -126,11 +138,11 @@ public class TournamentManagementFragment extends Fragment implements Tournament
             ((DrawerLocker) getActivity()).setDrawerEnabled(false);
 
             fab.hide();
-            fragmentTransaction.replace(R.id.left_fragment_container, tournamentDetailFragment);
+            fragmentTransaction.replace(R.id.left_fragment_container, rankingListFragment);
             fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
             fragmentTransaction.commit();
         } else {
-            fragmentTransaction.replace(R.id.right_fragment_container, tournamentDetailFragment);
+            fragmentTransaction.replace(R.id.right_fragment_container, rankingListFragment);
             fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
             fragmentTransaction.commit();
         }

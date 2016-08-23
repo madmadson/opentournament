@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 
 import android.support.v7.app.AppCompatActivity;
@@ -18,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import madson.org.opentournament.R;
+import madson.org.opentournament.players.NewPlayerForTournamentDialog;
 import madson.org.opentournament.utility.DrawerLocker;
 
 
@@ -91,13 +93,12 @@ public class TournamentManagementFragment extends Fragment implements Tournament
                         @Override
                         public void onClick(View v) {
 
-                            TournamentDetailFragment tournamentDetailFragment = new TournamentDetailFragment();
+                            Log.i(this.getClass().getName(), "click fab tournament management");
 
-                            FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
+                            TournamentManagementDialog dialog = new TournamentManagementDialog();
 
-                            fragmentTransaction.replace(R.id.right_fragment_container, tournamentDetailFragment);
-                            fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-                            fragmentTransaction.commit();
+                            FragmentManager supportFragmentManager = getChildFragmentManager();
+                            dialog.show(supportFragmentManager, "tournament management new tournament");
                         }
                     });
             }

@@ -102,8 +102,8 @@ public class NewPlayerForTournamentDialog extends DialogFragment {
 
         builder.setView(dialogView)
             .setTitle(getString(R.string.new_player_tournament_title, tournamentForId.getName()))
-            .setPositiveButton(R.string.create_player, null)
-            .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            .setPositiveButton(R.string.dialog_save, null)
+            .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
 
                     @Override
                     public void onClick(DialogInterface dialog, int id) {

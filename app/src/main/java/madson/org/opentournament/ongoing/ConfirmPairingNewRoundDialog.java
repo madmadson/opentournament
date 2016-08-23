@@ -54,8 +54,8 @@ public class ConfirmPairingNewRoundDialog extends DialogFragment {
 
         builder.setView(dialogView)
             .setTitle(getString(R.string.confirm_pairing_title, round_for_pairing))
-            .setPositiveButton(R.string.confirm, null)
-            .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            .setPositiveButton(R.string.dialog_save, null)
+            .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
 
                     @Override
                     public void onClick(DialogInterface dialog, int id) {

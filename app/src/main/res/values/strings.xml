@@ -22,8 +22,14 @@
     <string name="textSaveTorunamentButton">Create new tournament</string>
     <string name="newTournamentSaved">tournament saved</string>
     <string name="existingTournamentSaved">Edit tournament</string>
-
-
+    
+    <!--dialog -->
+    <string name="dialog_save">save</string>
+    <string name="dialog_cancel">cancel</string>
+    
+    <!-- Tournament managementdialog-->
+    <string name="new_tournament_title" type="id">New tournament</string>
+    
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     
@@ -32,8 +38,7 @@
     <string name="nav_home_activity">Home</string>
     <string name="nav_tournament_final">Final Results</string>ch
     <string name="search_player">Search players</string>
-    <string name="create_player">save</string>
-    <string name="cancel">cancel</string>
+
     <string name="label_firstname">firstname</string>
     <string name="label_nickname">nickname</string>
     <string name="label_lastname">lastname</string>
@@ -76,4 +81,5 @@
     <string name="material_design_icons_url" translatable="false">https://materialdesignicons.com/</string>
     <string name="about_used_libraries">Used Open Source libraries:</string>
     <string name="about">about</string>
+    <string name="label_tournament_name">tournament name</string>
 </resources>

@@ -85,8 +85,8 @@ public class EnterResultForGameDialog extends DialogFragment {
         View dialogView = inflater.inflate(R.layout.dialog_enter_result_game, null);
 
         builder.setView(dialogView)
-            .setPositiveButton(R.string.confirm, null)
-            .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            .setPositiveButton(R.string.dialog_save, null)
+            .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
 
                     @Override
                     public void onClick(DialogInterface dialog, int id) {

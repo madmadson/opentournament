@@ -8,7 +8,8 @@ import static java.util.Calendar.getInstance;
 
 
 /**
- * Database stuff for tournaments.
+ * Database stuff for tournaments. Note: date of tournament is stored as TIMESTAMP. Online is a flag for 1: online 0:
+ * only local
  *
  * @author  Tobias Matt - tmatt@contargo.net
  */
@@ -17,10 +18,13 @@ public class TournamentTable {
     public static final String TABLE_TOURNAMENTS = "tournament";
     public static final String COLUMN_ID = "_id";
     public static final String COLUMN_NAME = "name";
-    public static final String COLUMN_DESCRIPTION = "description";
+    public static final String COLUMN_LOCATION = "location";
     public static final String COLUMN_DATE = "date";
-    public static final String COLUMN_NUMBER_OF_PLAYERS = "numberOfPlayers";
+    public static final String COLUMN_MAX_NUMBER_OF_PLAYERS = "maxNumberOfPlayers";
     public static final String COLUMN_ACTUAL_ROUND = "actualRound";
+    public static final String COLUMN_ONLINE = "online";
+    public static final String COLUMN_CREATOR = "creator";
+    public static final String COLUMN_CREATOR_EMAIL = "creatorEmail";
 
     public static void createTable(SQLiteDatabase db) {
 
@@ -28,8 +32,9 @@ public class TournamentTable {
         db.execSQL(" CREATE TABLE " + TABLE_TOURNAMENTS
             + " (" + COLUMN_ID
             + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_NAME
-            + " TEXT, " + COLUMN_DESCRIPTION + " TEXT, " + COLUMN_DATE + " INTEGER, " + COLUMN_NUMBER_OF_PLAYERS
-            + " INTEGER, " + COLUMN_ACTUAL_ROUND + " INTEGER)");
+            + " TEXT, " + COLUMN_LOCATION + " TEXT, " + COLUMN_DATE + " INTEGER, " + COLUMN_MAX_NUMBER_OF_PLAYERS
+            + " INTEGER, " + COLUMN_ACTUAL_ROUND + " INTEGER, " + COLUMN_ONLINE + " INTEGER, " + COLUMN_CREATOR
+            + " TEXT, " + COLUMN_CREATOR_EMAIL + " TEXT )");
     }
 
 

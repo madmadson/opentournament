@@ -11,30 +11,33 @@ import java.util.Date;
 public class Tournament {
 
     public static final String[] ALL_COLS_FOR_TOURNAMENT = {
-        "_id", "name", "description", "date", "numberOfPlayers", "actualRound"
+        "_id", "name", "location", "date", "maxNumberOfPlayers", "actualRound", "online", "creator", "creatorEmail"
     };
 
     private long _id;
     private String name;
-    private String description;
-    private int numberOfPlayers;
+    private String location;
+    private int maxNumberOfPlayers;
     private Date dateOfTournament;
     private int actualRound;
-
-    public Tournament(long id, String name, String description, Date dateOfTournament, int numberOfPlayers,
-        int actualRound) {
-
-        this._id = id;
-        this.name = name;
-        this.description = description;
-        this.dateOfTournament = dateOfTournament;
-        this.numberOfPlayers = numberOfPlayers;
-        this.actualRound = actualRound;
-    }
-
+    private boolean online;
+    private String creatorName;
+    private String creatorEmail;
 
     public Tournament() {
     }
+
+    public long get_id() {
+
+        return _id;
+    }
+
+
+    public void set_id(long _id) {
+
+        this._id = _id;
+    }
+
 
     public int getActualRound() {
 
@@ -54,15 +57,15 @@ public class Tournament {
     }
 
 
-    public String getDescription() {
+    public String getLocation() {
 
-        return description;
+        return location;
     }
 
 
-    public int getNumberOfPlayers() {
+    public int getMaxNumberOfPlayers() {
 
-        return numberOfPlayers;
+        return maxNumberOfPlayers;
     }
 
 
@@ -72,15 +75,84 @@ public class Tournament {
     }
 
 
+    public void setName(String name) {
+
+        this.name = name;
+    }
+
+
+    public void setLocation(String location) {
+
+        this.location = location;
+    }
+
+
+    public void setMaxNumberOfPlayers(int maxNumberOfPlayers) {
+
+        this.maxNumberOfPlayers = maxNumberOfPlayers;
+    }
+
+
+    public void setDateOfTournament(Date dateOfTournament) {
+
+        this.dateOfTournament = dateOfTournament;
+    }
+
+
+    public void setActualRound(int actualRound) {
+
+        this.actualRound = actualRound;
+    }
+
+
+    public boolean isOnline() {
+
+        return online;
+    }
+
+
+    public void setOnline(boolean online) {
+
+        this.online = online;
+    }
+
+
+    public String getCreatorName() {
+
+        return creatorName;
+    }
+
+
+    public void setCreatorName(String creatorName) {
+
+        this.creatorName = creatorName;
+    }
+
+
+    public String getCreatorEmail() {
+
+        return creatorEmail;
+    }
+
+
+    public void setCreatorEmail(String creatorEmail) {
+
+        this.creatorEmail = creatorEmail;
+    }
+
+
     @Override
     public String toString() {
 
         return "Tournament{"
             + "_id=" + _id
             + ", name='" + name + '\''
-            + ", description='" + description + '\''
-            + ", numberOfPlayers=" + numberOfPlayers
+            + ", location='" + location + '\''
+            + ", maxNumberOfPlayers=" + maxNumberOfPlayers
             + ", dateOfTournament=" + dateOfTournament
-            + ", actualRound=" + actualRound + '}';
+            + ", actualRound=" + actualRound
+            + ", online=" + online
+            + ", creatorName='" + creatorName + '\''
+            + ", creatorEmail='" + creatorEmail + '\'' + '}';
     }
 }

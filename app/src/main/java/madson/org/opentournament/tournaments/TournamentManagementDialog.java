@@ -1,5 +1,6 @@
 package madson.org.opentournament.tournaments;
 
+import android.app.DatePickerDialog;
 import android.app.Dialog;
 
 import android.content.Context;
@@ -21,10 +22,24 @@ import android.view.LayoutInflater;
 import android.view.View;
 
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 
+import com.google.firebase.auth.FirebaseUser;
+
 import madson.org.opentournament.R;
+import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.players.AvailablePlayerListFragment;
+import madson.org.opentournament.service.OngoingTournamentService;
+import madson.org.opentournament.service.TournamentService;
+import madson.org.opentournament.utility.BaseActivity;
+import madson.org.opentournament.utility.BaseApplication;
+
+import org.joda.time.DateTime;
+
+import java.text.DateFormat;
+
+import java.util.Locale;
 
 
 /**
@@ -36,16 +51,22 @@ public class TournamentManagementDialog extends DialogFragment {
 
     public static final String BUNDLE_TOURNAMENT_ID = "tournament_id";
     private EditText tournamentNameEditText;
+    private EditText tournamentLocationEditText;
+    private EditText tournamentDateEditText;
+    private EditText tournamentMaxPlayersEditText;
 
     private CoordinatorLayout coordinatorLayout;
     private AvailablePlayerListFragment.AvailablePlayerListItemListener mListener;
     private long tournamentId;
+    private DateFormat dateFormatter;
+    private DatePickerDialog datePickerDialog;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
 
         coordinatorLayout = (CoordinatorLayout) getActivity().findViewById(R.id.coordinator_main);
 
+        dateFormatter = DateFormat.getDateInstance(DateFormat.DEFAULT, Locale.getDefault());
         super.onCreate(savedInstanceState);
     }
 
@@ -73,7 +94,44 @@ public class TournamentManagementDialog extends DialogFragment {
 
         View dialogView = inflater.inflate(R.layout.dialog_tournament_management, null);
 
-        tournamentNameEditText = (EditText) dialogView.findViewById(R.id.tournamentName);
+        tournamentNameEditText = (EditText) dialogView.findViewById(R.id.tournament_name);
+        tournamentLocationEditText = (EditText) dialogView.findViewById(R.id.tournament_location);
+
+        tournamentDateEditText = (EditText) dialogView.findViewById(R.id.tournament_date);
+        tournamentMaxPlayersEditText = (EditText) dialogView.findViewById(R.id.tournament_max_players);
+        tournamentDateEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+
+                @Override
+                public void onFocusChange(View view, boolean hasFocus) {
+
+                    if (hasFocus) {
+                        datePickerDialog.show();
+                    } else {
+                        datePickerDialog.dismiss();
+                    }
+                }
+            });
+        tournamentDateEditText.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View view) {
+
+                    datePickerDialog.show();
+                }
+            });
+
+        DateTime now = DateTime.now();
+        datePickerDialog = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
+
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+
+                        DateTime dateTime = new DateTime(year, monthOfYear, dayOfMonth, 0, 0);
+                        tournamentDateEditText.setText(dateFormatter.format(dateTime.toDate()));
+                    }
+                }, now.getYear(), now.getMonthOfYear(), now.getDayOfMonth());
+
+        datePickerDialog.updateDate(now.getYear(), now.getMonthOfYear(), now.getDayOfMonth());
 
         builder.setView(dialogView)
             .setTitle(getString(R.string.new_tournament_title))
@@ -106,7 +164,63 @@ public class TournamentManagementDialog extends DialogFragment {
                     @Override
                     public void onClick(View v) {
 
-                        Log.i(this.getClass().getName(), "edit tournament");
+                        Log.i(this.getClass().getName(), "save tournament");
+
+                        String tournamentName = tournamentNameEditText.getText().toString();
+                        String location = tournamentLocationEditText.getText().toString();
+                        String date = tournamentDateEditText.getText().toString();
+                        String maxPlayers = tournamentMaxPlayersEditText.getText().toString();
+
+                        if (!tournamentName.isEmpty()) {
+                            Tournament tournament = new Tournament();
+                            tournament.setName(tournamentName);
+
+                            if (!location.isEmpty()) {
+                                tournament.setLocation(location);
+                            } else {
+                                tournament.setLocation("unknown");
+                            }
+
+                            if (!date.isEmpty()) {
+                                tournament.setDateOfTournament(new DateTime(date).toDate());
+                            } else {
+                                tournament.setDateOfTournament(null);
+                            }
+
+                            if (!maxPlayers.isEmpty()) {
+                                tournament.setMaxNumberOfPlayers(Integer.valueOf(maxPlayers));
+                            } else {
+                                tournament.setMaxNumberOfPlayers(0);
+                            }
+
+                            FirebaseUser currentFireBaseUser = ((BaseActivity) getActivity()).getCurrentFireBaseUser();
+
+                            if (currentFireBaseUser != null) {
+                                tournament.setOnline(true);
+                                tournament.setCreatorName(currentFireBaseUser.getDisplayName());
+                                tournament.setCreatorEmail(currentFireBaseUser.getEmail());
+                            } else {
+                                tournament.setOnline(false);
+                                tournament.setCreatorName("anonymous");
+                                tournament.setCreatorEmail("anonymous");
+                            }
+
+                            TournamentService tournamentService = ((BaseApplication) getActivity().getApplication())
+                                .getTournamentService();
+
+                            tournamentService.createTournament(tournament);
+
+                            dialog.dismiss();
+                        } else {
+                            Log.i(this.getClass().getName(), "validation failed");
+
+                            if (tournamentName.isEmpty()) {
+                                tournamentNameEditText.setError(
+                                    getContext().getString(R.string.validation_error_empty));
+                            } else {
+                                tournamentNameEditText.setError(null);
+                            }
+                        }
                     }
                 });
         }

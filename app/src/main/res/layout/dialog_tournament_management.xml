@@ -11,5 +11,29 @@
         android:layout_height="wrap_content"
         android:hint="@string/label_tournament_name"
         android:layout_gravity="center_horizontal" />
+
+    <EditText
+        android:id="@+id/tournament_location"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/label_tournament_location"
+        android:layout_gravity="center_horizontal" />
+
+    <EditText
+        android:id="@+id/tournament_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="none"
+        android:enabled="false"
+        android:hint="@string/label_tournament_date"
+        android:layout_gravity="center_horizontal" />
+
+    <EditText
+        android:id="@+id/tournament_max_players"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/label_tournament_max_players"
+        android:layout_gravity="center_horizontal"
+        android:inputType="number"/>
     
 </LinearLayout>

@@ -380,4 +380,10 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
         return this.toolbar;
     }
+
+
+    public FirebaseUser getCurrentFireBaseUser() {
+
+        return mFirebaseAuth.getCurrentUser();
+    }
 }

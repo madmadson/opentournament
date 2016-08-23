@@ -15,7 +15,7 @@
     <string name="header_amount_player">Players</string>
     
     <string name="tournamentName">Tournament name</string>
-    <string name="tournamentDescription">Tournament description</string>
+    <string name="tournamentDescription">Tournament location</string>
     <string name="tournamentDate">Date of tournament</string>
     <string name="tournamentNumberOfPlayers">Amount players</string>
     <string name="textEditTorunamentButton">Edit</string>
@@ -29,6 +29,10 @@
     
     <!-- Tournament managementdialog-->
     <string name="new_tournament_title" type="id">New tournament</string>
+    <string name="label_tournament_name">tournament name</string>
+    <string name="label_tournament_max_players">max players</string>
+    <string name="label_tournament_date">date</string>
+    <string name="label_tournament_location">location</string>
     
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -81,5 +85,7 @@
     <string name="material_design_icons_url" translatable="false">https://materialdesignicons.com/</string>
     <string name="about_used_libraries">Used Open Source libraries:</string>
     <string name="about">about</string>
-    <string name="label_tournament_name">tournament name</string>
+    
+    
+
 </resources>

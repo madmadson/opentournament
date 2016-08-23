@@ -127,7 +127,7 @@ public class TournamentListFragment extends Fragment {
             final Tournament tournament = mDataset.get(position);
             holder.setTournament(tournament);
             holder.getTournamentNameInList().setText(tournament.getName());
-            holder.getTournamentPlayersInList().setText(String.valueOf(tournament.getNumberOfPlayers()));
+            holder.getTournamentPlayersInList().setText(String.valueOf(tournament.getMaxNumberOfPlayers()));
             holder.getStartTournamentButton().setOnClickListener(new View.OnClickListener() {
 
                     @Override

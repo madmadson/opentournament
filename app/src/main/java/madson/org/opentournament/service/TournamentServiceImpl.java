@@ -31,8 +31,9 @@ public class TournamentServiceImpl implements TournamentService {
     private OpenTournamentDBHelper openTournamentDBHelper;
 
     private String[] allColumns = {
-        TournamentTable.COLUMN_ID, TournamentTable.COLUMN_NAME, TournamentTable.COLUMN_DESCRIPTION,
-        TournamentTable.COLUMN_DATE, TournamentTable.COLUMN_NUMBER_OF_PLAYERS, TournamentTable.COLUMN_ACTUAL_ROUND
+        TournamentTable.COLUMN_ID, TournamentTable.COLUMN_NAME, TournamentTable.COLUMN_LOCATION,
+        TournamentTable.COLUMN_DATE, TournamentTable.COLUMN_MAX_NUMBER_OF_PLAYERS, TournamentTable.COLUMN_ACTUAL_ROUND,
+        TournamentTable.COLUMN_ONLINE, TournamentTable.COLUMN_CREATOR, TournamentTable.COLUMN_CREATOR_EMAIL
     };
 
     public TournamentServiceImpl(Context context) {
@@ -58,21 +59,28 @@ public class TournamentServiceImpl implements TournamentService {
 
     private void createMockTournaments() {
 
-        createTournament(1, "Tournament1", "description1", new DateTime(2016, 3, 10, 10, 8).toDate(), 8);
-        createTournament(2, "Tournament2", "description2", new DateTime(2016, 5, 20, 10, 0).toDate(), 0);
-        createTournament(3, "Tournament3", "description3", new DateTime(2016, 7, 15, 10, 0).toDate(), 0);
+        createTournament("Coin of Evil", "Ludwigsburg", new DateTime(2016, 3, 10, 10, 8).toDate(), 32, true,
+            "Harry Hirsch", "harry@gmail.com");
+        createTournament("HMDZ", "Oberhausen", new DateTime(2016, 5, 20, 10, 0).toDate(), 0, false, "Tim Grubi",
+            "grubbi@gmail.com");
+        createTournament("Dead Fish", "Heidelberg", new DateTime(2016, 7, 15, 10, 0).toDate(), 16, false,
+            "Bernhard Fishi", "fishi@gmail.com");
     }
 
 
-    private void createTournament(int _id, String name, String description, Date date, int numberOfPlayers) {
+    private void createTournament(String name, String location, Date date, int maxPlayer, boolean online,
+        String creator, String creatorEmail) {
 
         ContentValues contentValues = new ContentValues();
-        contentValues.put(TournamentTable.COLUMN_ID, _id);
+
         contentValues.put(TournamentTable.COLUMN_NAME, name);
-        contentValues.put(TournamentTable.COLUMN_DESCRIPTION, description);
-        contentValues.put(TournamentTable.COLUMN_DATE, date.toString());
-        contentValues.put(TournamentTable.COLUMN_NUMBER_OF_PLAYERS, numberOfPlayers);
+        contentValues.put(TournamentTable.COLUMN_LOCATION, location);
+        contentValues.put(TournamentTable.COLUMN_DATE, date == null ? null : date.getTime());
+        contentValues.put(TournamentTable.COLUMN_MAX_NUMBER_OF_PLAYERS, maxPlayer);
         contentValues.put(TournamentTable.COLUMN_ACTUAL_ROUND, 0);
+        contentValues.put(TournamentTable.COLUMN_ONLINE, online);
+        contentValues.put(TournamentTable.COLUMN_CREATOR, creator);
+        contentValues.put(TournamentTable.COLUMN_CREATOR_EMAIL, creatorEmail);
         createTournament(contentValues);
     }
 
@@ -107,8 +115,18 @@ public class TournamentServiceImpl implements TournamentService {
 
     private Tournament cursorToTournament(Cursor cursor) {
 
-        return new Tournament(cursor.getInt(0), cursor.getString(1), cursor.getString(2), new Date(cursor.getLong(3)),
-                cursor.getInt(4), cursor.getInt(5));
+        Tournament tournament = new Tournament();
+        tournament.set_id(cursor.getInt(0));
+        tournament.setName(cursor.getString(1));
+        tournament.setLocation(cursor.getString(2));
+        tournament.setDateOfTournament(new DateTime(Long.getLong(cursor.getString(3))).toDate());
+        tournament.setMaxNumberOfPlayers(cursor.getInt(4));
+        tournament.setActualRound(cursor.getInt(5));
+        tournament.setOnline(cursor.getInt(6) == 1);
+        tournament.setCreatorName(cursor.getString(7));
+        tournament.setCreatorEmail(cursor.getString(8));
+
+        return tournament;
     }
 
 
@@ -160,5 +178,16 @@ public class TournamentServiceImpl implements TournamentService {
         readableDatabase.close();
 
         return tournaments;
+    }
+
+
+    @Override
+    public void createTournament(Tournament tournament) {
+
+        Log.i(this.getClass().getName(), "create tournament: " + tournament);
+
+        createTournament(tournament.getName(), tournament.getLocation(), tournament.getDateOfTournament(),
+            tournament.getMaxNumberOfPlayers(), tournament.isOnline(), tournament.getCreatorName(),
+            tournament.getCreatorEmail());
     }
 }

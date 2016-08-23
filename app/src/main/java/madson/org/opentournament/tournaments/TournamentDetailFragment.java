@@ -72,11 +72,11 @@ public class TournamentDetailFragment extends Fragment {
             if (tournament != null) {
                 tournamentNameField.setText(tournament.getName());
 
-                tournamentDescriptionField.setText(tournament.getDescription());
+                tournamentDescriptionField.setText(tournament.getLocation());
 
                 tournamentDateField.setText(sdf.format(tournament.getDateOfTournament()));
 
-                tournamentNumberOfPlayers.setText(Integer.toString(tournament.getNumberOfPlayers()));
+                tournamentNumberOfPlayers.setText(Integer.toString(tournament.getMaxNumberOfPlayers()));
 
                 saveButton.setText(R.string.textEditTorunamentButton);
                 saveButton.setOnClickListener(new View.OnClickListener() {

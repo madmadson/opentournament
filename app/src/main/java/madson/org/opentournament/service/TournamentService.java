@@ -42,4 +42,12 @@ public interface TournamentService {
      * @return  all tournaments
      */
     List<Tournament> getTournaments();
+
+
+    /**
+     * Tournament to save.
+     *
+     * @param  tournament
+     */
+    void createTournament(Tournament tournament);
 }

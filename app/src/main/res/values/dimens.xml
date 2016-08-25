@@ -21,7 +21,7 @@
         
     
     <!--  list row dimensions-->
-    <dimen name="row_height_tournament_list">96dp</dimen>
+    <dimen name="row_height_tournament_list">48dp</dimen>
 
     <dimen name="row_height">48dp</dimen>
     <dimen name="row_header_height">48dp</dimen>
@@ -37,6 +37,8 @@
     <dimen name="library_text_large">20sp</dimen>
     <dimen name="library_text_normal">16sp</dimen>
     <dimen name="library_text_small">14sp</dimen>
+    
+    
     <dimen name="about_icon_size">90dp</dimen>
     <dimen name="login_form_margin">16dp</dimen>
     

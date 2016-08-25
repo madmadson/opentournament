@@ -22,6 +22,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 
@@ -56,6 +57,7 @@ public class TournamentManagementDialog extends DialogFragment {
     private EditText tournamentLocationEditText;
     private EditText tournamentDateEditText;
     private EditText tournamentMaxPlayersEditText;
+    private CheckBox tournamentOnlineCheckbox;
 
     private CoordinatorLayout coordinatorLayout;
     private AvailablePlayerListFragment.AvailablePlayerListItemListener mListener;
@@ -147,6 +149,8 @@ public class TournamentManagementDialog extends DialogFragment {
                     }
                 });
 
+        tournamentOnlineCheckbox = (CheckBox) dialogView.findViewById(R.id.tournament_online);
+
         return builder.create();
     }
 
@@ -216,9 +220,11 @@ public class TournamentManagementDialog extends DialogFragment {
                             TournamentService tournamentService = ((BaseApplication) getActivity().getApplication())
                                 .getTournamentService();
 
-                            // tournamentService.createTournament(tournament);
-
-                            tournamentService.pushTournamentToFirebase(tournament);
+                            if (tournamentOnlineCheckbox.isChecked()) {
+                                tournamentService.pushTournamentToFirebase(tournament);
+                            } else {
+                                tournamentService.createTournament(tournament);
+                            }
 
                             dialog.dismiss();
                         } else {

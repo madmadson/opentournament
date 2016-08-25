@@ -129,9 +129,13 @@ public class TournamentServiceImpl implements TournamentService {
         tournament.setLocation(cursor.getString(2));
 
         String timeInMillis = cursor.getString(3);
-        DateTime dateTime = new DateTime(Long.parseLong(timeInMillis));
 
-        tournament.setDateOfTournament(dateTime.toDate());
+        if (timeInMillis != null) {
+            DateTime dateTime = new DateTime(Long.parseLong(timeInMillis));
+
+            tournament.setDateOfTournament(dateTime.toDate());
+        }
+
         tournament.setMaxNumberOfPlayers(cursor.getInt(4));
         tournament.setActualRound(cursor.getInt(5));
         tournament.setOnlineUUID(cursor.getString(6));

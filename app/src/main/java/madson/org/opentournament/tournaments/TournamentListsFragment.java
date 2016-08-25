@@ -22,6 +22,8 @@ import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -47,6 +49,7 @@ public class TournamentListsFragment extends Fragment {
     private ProgressBar mProgressBar;
     private RecyclerView mOnlineTournamentRecyclerView;
     private DateFormat dateFormatter = DateFormat.getDateInstance(DateFormat.DEFAULT, Locale.getDefault());
+    private FirebaseUser currentUser;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the fragment (e.g. upon screen orientation
@@ -59,6 +62,9 @@ public class TournamentListsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+
+        // Initialize Firebase Auth
+        currentUser = FirebaseAuth.getInstance().getCurrentUser();
     }
 
 
@@ -70,8 +76,6 @@ public class TournamentListsFragment extends Fragment {
         // tournaments from server
 
         mProgressBar = (ProgressBar) view.findViewById(R.id.progressBar);
-
-        LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(getActivity());
 
         mOnlineTournamentRecyclerView = (RecyclerView) view.findViewById(R.id.online_tournament_list_recycler_view);
 
@@ -89,25 +93,33 @@ public class TournamentListsFragment extends Fragment {
                 viewHolder.setTournament(tournament);
                 viewHolder.getTournamentNameInList().setText(tournament.getName());
 
-                String formattedDate = dateFormatter.format(tournament.getDateOfTournament());
-                viewHolder.getTournamentDateInList().setText(formattedDate);
+                if (tournament.getDateOfTournament() != null) {
+                    String formattedDate = dateFormatter.format(tournament.getDateOfTournament());
+                    viewHolder.getTournamentDateInList().setText(formattedDate);
+                }
+
                 viewHolder.getTournamentLocationInList().setText(tournament.getLocation());
 
                 viewHolder.getTournamentPlayersInList()
                     .setText("0/" + String.valueOf(tournament.getMaxNumberOfPlayers()));
 
-                viewHolder.getStartTournamentButton().setOnClickListener(new View.OnClickListener() {
+                if (currentUser != null && currentUser.getEmail().equals(tournament.getCreatorEmail())) {
+                    viewHolder.getStartTournamentButton().setOnClickListener(new View.OnClickListener() {
 
-                        @Override
-                        public void onClick(View v) {
+                            @Override
+                            public void onClick(View v) {
 
-                            Log.i(v.getClass().getName(), "tournament Stared:" + tournament);
+                                Log.i(v.getClass().getName(), "tournament Stared:" + tournament);
 
-                            Intent intent = new Intent(getContext(), OngoingTournamentActivity.class);
-                            intent.putExtra(OngoingTournamentActivity.EXTRA_TOURNAMENT_ID, tournament.getId());
-                            startActivity(intent);
-                        }
-                    });
+                                Intent intent = new Intent(getContext(), OngoingTournamentActivity.class);
+                                intent.putExtra(OngoingTournamentActivity.EXTRA_TOURNAMENT_ID, tournament.getId());
+                                startActivity(intent);
+                            }
+                        });
+                } else {
+                    // only creator should do action
+                    viewHolder.getStartTournamentButton().setVisibility(View.INVISIBLE);
+                }
             }
         };
 
@@ -189,12 +201,15 @@ public class TournamentListsFragment extends Fragment {
 
             final Tournament tournament = mDataset.get(position);
 
-            String formattedDate = dateFormatter.format(tournament.getDateOfTournament());
-
             holder.setTournament(tournament);
             holder.getTournamentNameInList().setText(tournament.getName());
             holder.getTournamentLocationInList().setText(tournament.getLocation());
-            holder.getTournamentDateInList().setText(formattedDate);
+
+            if (tournament.getDateOfTournament() != null) {
+                String formattedDate = dateFormatter.format(tournament.getDateOfTournament());
+                holder.getTournamentDateInList().setText(formattedDate);
+            }
+
             holder.getTournamentPlayersInList().setText("0/" + String.valueOf(tournament.getMaxNumberOfPlayers()));
             holder.getStartTournamentButton().setOnClickListener(new View.OnClickListener() {
 

@@ -14,7 +14,7 @@
         android:layout_centerVertical="true"
         android:layout_alignParentLeft="true"
         android:layout_marginLeft="15dp"
-        android:src="@drawable/ic_play_arrow_black_48dp"
+        android:src="@drawable/ic_play_arrow_black_24dp"
         android:background="@android:color/transparent"/>
     
     <TextView

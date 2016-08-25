@@ -206,11 +206,9 @@ public class TournamentManagementDialog extends DialogFragment {
                             FirebaseUser currentFireBaseUser = ((BaseActivity) getActivity()).getCurrentFireBaseUser();
 
                             if (currentFireBaseUser != null) {
-                                tournament.setOnline(true);
                                 tournament.setCreatorName(currentFireBaseUser.getDisplayName());
                                 tournament.setCreatorEmail(currentFireBaseUser.getEmail());
                             } else {
-                                tournament.setOnline(false);
                                 tournament.setCreatorName("anonymous");
                                 tournament.setCreatorEmail("anonymous");
                             }
@@ -218,7 +216,9 @@ public class TournamentManagementDialog extends DialogFragment {
                             TournamentService tournamentService = ((BaseApplication) getActivity().getApplication())
                                 .getTournamentService();
 
-                            tournamentService.createTournament(tournament);
+                            // tournamentService.createTournament(tournament);
+
+                            tournamentService.pushTournamentToFirebase(tournament);
 
                             dialog.dismiss();
                         } else {

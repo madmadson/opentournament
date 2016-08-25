@@ -50,4 +50,12 @@ public interface TournamentService {
      * @param  tournament
      */
     void createTournament(Tournament tournament);
+
+
+    /**
+     * Pushes a tournament to online services. Kill local stored tournament.
+     *
+     * @param  tournament
+     */
+    void pushTournamentToFirebase(Tournament tournament);
 }

@@ -91,7 +91,7 @@ public class AboutAdapter extends RecyclerView.Adapter {
 
 
     /**
-     * Set the data of the given ViewHolder, using the given {@link LibraryItem}.
+     * Set the data of the given TournamentViewHolder, using the given {@link LibraryItem}.
      *
      * @param  viewHolder  to set the data to
      * @param  library  to get the data from
@@ -122,7 +122,7 @@ public class AboutAdapter extends RecyclerView.Adapter {
 
 
     /**
-     * Set the data to the given header ViewHolder.
+     * Set the data to the given header TournamentViewHolder.
      *
      * @param  viewHolder  to set the data to
      */

@@ -11,7 +11,7 @@ import java.util.Date;
 public class Tournament {
 
     public static final String[] ALL_COLS_FOR_TOURNAMENT = {
-        "_id", "name", "location", "date", "maxNumberOfPlayers", "actualRound", "online", "creator", "creatorEmail"
+        "_id", "name", "location", "date", "maxNumberOfPlayers", "actualRound", "onlineUUID", "creator", "creatorEmail"
     };
 
     private long _id;
@@ -20,12 +20,9 @@ public class Tournament {
     private int maxNumberOfPlayers;
     private Date dateOfTournament;
     private int actualRound;
-    private boolean online;
+    private String onlineUUID;
     private String creatorName;
     private String creatorEmail;
-
-    public Tournament() {
-    }
 
     public long get_id() {
 
@@ -105,15 +102,15 @@ public class Tournament {
     }
 
 
-    public boolean isOnline() {
+    public String getOnlineUUID() {
 
-        return online;
+        return onlineUUID;
     }
 
 
-    public void setOnline(boolean online) {
+    public void setOnlineUUID(String onlineUUID) {
 
-        this.online = online;
+        this.onlineUUID = onlineUUID;
     }
 
 
@@ -151,7 +148,7 @@ public class Tournament {
             + ", maxNumberOfPlayers=" + maxNumberOfPlayers
             + ", dateOfTournament=" + dateOfTournament
             + ", actualRound=" + actualRound
-            + ", online=" + online
+            + ", onlineUUID=" + onlineUUID
             + ", creatorName='" + creatorName + '\''
             + ", creatorEmail='" + creatorEmail + '\'' + '}';
     }

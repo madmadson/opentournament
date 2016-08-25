@@ -23,6 +23,9 @@
     <string name="newTournamentSaved">tournament saved</string>
     <string name="existingTournamentSaved">Edit tournament</string>
     
+    <string name="heading_local_tournaments">- local tournamnts (only visible for you) -</string>
+    <string name="heading_online_tournaments">- online tournaments -</string>
+    
     <!--dialog -->
     <string name="dialog_save">save</string>
     <string name="dialog_cancel">cancel</string>
@@ -88,6 +91,5 @@
     <string name="header_tournament_location">Location</string>
     <string name="header_tournament_date">Date</string>
     <string name="heading_tournmant_players">Tournament players</string>
-
 
 </resources>

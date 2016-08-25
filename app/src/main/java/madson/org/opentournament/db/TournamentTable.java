@@ -22,7 +22,7 @@ public class TournamentTable {
     public static final String COLUMN_DATE = "date";
     public static final String COLUMN_MAX_NUMBER_OF_PLAYERS = "maxNumberOfPlayers";
     public static final String COLUMN_ACTUAL_ROUND = "actualRound";
-    public static final String COLUMN_ONLINE = "online";
+    public static final String COLUMN_ONLINE_UUID = "onlineUUID";
     public static final String COLUMN_CREATOR = "creator";
     public static final String COLUMN_CREATOR_EMAIL = "creatorEmail";
 
@@ -33,7 +33,7 @@ public class TournamentTable {
             + " (" + COLUMN_ID
             + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_NAME
             + " TEXT, " + COLUMN_LOCATION + " TEXT, " + COLUMN_DATE + " INTEGER, " + COLUMN_MAX_NUMBER_OF_PLAYERS
-            + " INTEGER, " + COLUMN_ACTUAL_ROUND + " INTEGER, " + COLUMN_ONLINE + " INTEGER, " + COLUMN_CREATOR
+            + " INTEGER, " + COLUMN_ACTUAL_ROUND + " INTEGER, " + COLUMN_ONLINE_UUID + " TEXT, " + COLUMN_CREATOR
             + " TEXT, " + COLUMN_CREATOR_EMAIL + " TEXT )");
     }
 

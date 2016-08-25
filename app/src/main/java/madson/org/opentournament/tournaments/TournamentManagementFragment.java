@@ -21,22 +21,20 @@ import android.view.ViewGroup;
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.ongoing.RankingListFragment;
-import madson.org.opentournament.players.NewPlayerForTournamentDialog;
 import madson.org.opentournament.service.TournamentService;
-import madson.org.opentournament.utility.BaseActivity;
 import madson.org.opentournament.utility.BaseApplication;
 import madson.org.opentournament.utility.DrawerLocker;
 
 
-public class TournamentManagementFragment extends Fragment implements TournamentListFragment.TournamentListItemListener,
-    TournamentDetailFragment.OnTournamentEditedListener {
+public class TournamentManagementFragment extends Fragment
+    implements TournamentListsFragment.TournamentListItemListener, TournamentDetailFragment.OnTournamentEditedListener {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
 
-        TournamentListFragment tournamentListFragment = new TournamentListFragment();
+        TournamentListsFragment tournamentListFragment = new TournamentListsFragment();
 
         FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
 
@@ -150,11 +148,18 @@ public class TournamentManagementFragment extends Fragment implements Tournament
 
 
     @Override
+    public void onOnlineTournamentListItemClicked(String onlineUUID) {
+
+        Log.i(this.getClass().getName(), "clicked on tournament: " + onlineUUID);
+    }
+
+
+    @Override
     public void onTournamentEditedClicked() {
 
         final View view = getView();
 
-        TournamentListFragment tournamentListFragment = new TournamentListFragment();
+        TournamentListsFragment tournamentListFragment = new TournamentListsFragment();
 
         FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
         final FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);

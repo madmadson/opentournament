@@ -9,8 +9,42 @@
         android:layout_height="wrap_content"
         android:id="@+id/row_header_container"/>
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorPrimary"
+        android:textStyle="bold"
+        android:id="@+id/heading_online_tournaments"
+        android:text="@string/heading_online_tournaments"/>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/tournament_list_recycler_view"
+        android:id="@+id/online_tournament_list_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorPrimary"
+        android:textStyle="bold"
+        android:id="@+id/heading_local_tournaments"
+        android:text="@string/heading_local_tournaments"/>
+    
+    <View
+        android:layout_width="match_parent"
+        android:paddingBottom="16dp"
+        android:paddingTop="16dp"
+        android:layout_height="1dp"
+        android:background="@color/colorAccent" />
+    
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/local_tournament_list_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
     

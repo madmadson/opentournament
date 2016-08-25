@@ -9,8 +9,8 @@
     <color name="colorPrimaryText">#212121</color>
     <color name="colorSecondaryText">#727272</color>
         
-    <color name="colorLoose">#FFF22AB0</color>
-    <color name="colorWin">#008000</color>
+    <color name="colorLoose">#F24000</color>
+    <color name="colorWin">#00B000</color>
     
     <color name="colorBackground">#FBFBFB</color>
     

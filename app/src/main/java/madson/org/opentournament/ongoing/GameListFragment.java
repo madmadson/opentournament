@@ -65,7 +65,7 @@ public class GameListFragment extends Fragment {
         TextView heading = (TextView) view.findViewById(R.id.heading_game_for_round);
         heading.setText(getString(R.string.heading_pairing_for_round, round));
 
-        gameListAdapter = new GameListAdapter(pairingsForTournament);
+        gameListAdapter = new GameListAdapter(pairingsForTournament, getActivity());
 
         recyclerView.setAdapter(gameListAdapter);
 

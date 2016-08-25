@@ -402,9 +402,9 @@ public class EnterResultForGameDialog extends DialogFragment {
     }
 
 
-    private void viewConfirmButton(final AlertDialog dialog) {
+    private void viewConfirmButton(final AlertDialog confirm_dialog) {
 
-        Button positive = dialog.getButton(Dialog.BUTTON_POSITIVE);
+        Button positive = confirm_dialog.getButton(Dialog.BUTTON_POSITIVE);
 
         positive.setOnClickListener(new View.OnClickListener() {
 
@@ -413,18 +413,48 @@ public class EnterResultForGameDialog extends DialogFragment {
 
                     Log.i(this.getClass().getName(), "click confirm result of game");
 
-                    game.setFinished(true);
+                    if (game.getPlayer_one_score() == 0 && game.getPlayer_two_score() == 0) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
-                    OngoingTournamentService ongoingTournamentService =
-                        ((BaseApplication) getActivity().getApplication()).getOngoingTournamentService();
+                        builder.setTitle("Sure draw?")
+                        .setPositiveButton(R.string.dialog_save, new DialogInterface.OnClickListener() {
 
-                    ongoingTournamentService.saveGameResult(game);
+                                    @Override
+                                    public void onClick(DialogInterface sure_draw_dialog, int id) {
 
-                    // notify game list
-                    mListener.onResultConfirmed(game);
+                                        finishEnterResult(confirm_dialog);
+                                        sure_draw_dialog.cancel();
+                                    }
+                                })
+                        .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
 
-                    dialog.dismiss();
+                                @Override
+                                public void onClick(DialogInterface sure_draw_dialog, int id) {
+
+                                    sure_draw_dialog.cancel();
+                                }
+                            });
+                        builder.show();
+                    } else {
+                        finishEnterResult(confirm_dialog);
+                    }
                 }
             });
+    }
+
+
+    private void finishEnterResult(AlertDialog dialog) {
+
+        game.setFinished(true);
+
+        OngoingTournamentService ongoingTournamentService = ((BaseApplication) getActivity().getApplication())
+            .getOngoingTournamentService();
+
+        ongoingTournamentService.saveGameResult(game);
+
+        // notify game list
+        mListener.onResultConfirmed(game);
+
+        dialog.dismiss();
     }
 }

@@ -4,6 +4,7 @@ import android.graphics.Color;
 
 import android.os.Bundle;
 
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 
 import android.support.v7.app.AppCompatActivity;
@@ -32,10 +33,12 @@ import java.util.List;
 public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHolder> {
 
     private List<WarmachineTournamentGame> pairingsForTournament;
+    private FragmentActivity context;
 
-    public GameListAdapter(List<WarmachineTournamentGame> pairingsForTournament) {
+    public GameListAdapter(List<WarmachineTournamentGame> pairingsForTournament, FragmentActivity activity) {
 
         this.pairingsForTournament = pairingsForTournament;
+        context = activity;
     }
 
     public void updateGame(WarmachineTournamentGame game) {
@@ -65,12 +68,16 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHo
         final WarmachineTournamentGame game = pairingsForTournament.get(position);
         holder.setPairing(game);
 
-        if (game.getPlayer_one_score() == 1) {
-            holder.getPlayerOneCardView().setCardBackgroundColor(Color.parseColor("#008000"));
-            holder.getPlayerTwoCardView().setCardBackgroundColor(Color.parseColor("#E50000"));
-        } else if (game.getPlayer_two_score() == 1) {
-            holder.getPlayerOneCardView().setCardBackgroundColor(Color.parseColor("#E50000"));
-            holder.getPlayerTwoCardView().setCardBackgroundColor(Color.parseColor("#008000"));
+        if (game.isFinished()) {
+            ;
+            holder.getPlayerOneCardView()
+                .setCardBackgroundColor(game.getPlayer_one_score() == 1
+                        ? context.getResources().getColor(R.color.colorWin)
+                        : context.getResources().getColor(R.color.colorLoose));
+            holder.getPlayerTwoCardView()
+                .setCardBackgroundColor(game.getPlayer_two_score() == 1
+                        ? context.getResources().getColor(R.color.colorWin)
+                        : context.getResources().getColor(R.color.colorLoose));
         }
 
         holder.getPlayerOneNameInList().setText(String.valueOf(game.getPlayer_one_full_name()));

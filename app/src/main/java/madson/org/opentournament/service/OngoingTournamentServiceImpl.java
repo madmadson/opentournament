@@ -275,7 +275,12 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
 
         cursor.moveToFirst();
 
-        WarmachineTournamentGame pairing = cursorToTournamentPairing(cursor);
+        WarmachineTournamentGame pairing = null;
+
+        while (!cursor.isAfterLast()) {
+            pairing = cursorToTournamentPairing(cursor);
+            cursor.moveToNext();
+        }
 
         cursor.close();
         readableDatabase.close();

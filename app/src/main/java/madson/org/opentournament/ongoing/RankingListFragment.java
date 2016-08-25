@@ -62,7 +62,12 @@ public class RankingListFragment extends Fragment {
                 round);
 
         TextView heading = (TextView) view.findViewById(R.id.heading_ranking_for_round);
-        heading.setText(getString(R.string.heading_ranking_for_round, round));
+
+        if (round != 0) {
+            heading.setText(getString(R.string.heading_ranking_for_round, round));
+        } else {
+            heading.setText(getString(R.string.heading_tournmant_players));
+        }
 
         RankingListAdapter rankingListAdapter = new RankingListAdapter(rankingForRound);
         recyclerView.setAdapter(rankingListAdapter);

@@ -51,8 +51,6 @@
         android:textStyle="bold"
         android:id="@+id/header_amount_players"
         android:text="@string/header_amount_player"/>
-    
-    
 
     <View
         android:layout_width="match_parent"

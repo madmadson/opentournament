@@ -87,6 +87,7 @@
     <string name="about">about</string>
     <string name="header_tournament_location">Location</string>
     <string name="header_tournament_date">Date</string>
+    <string name="heading_tournmant_players">Tournament players</string>
 
 
 </resources>

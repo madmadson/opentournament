@@ -38,7 +38,9 @@ import madson.org.opentournament.utility.BaseApplication;
 import org.joda.time.DateTime;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 
+import java.util.Date;
 import java.util.Locale;
 
 
@@ -169,6 +171,14 @@ public class TournamentManagementDialog extends DialogFragment {
                         String tournamentName = tournamentNameEditText.getText().toString();
                         String location = tournamentLocationEditText.getText().toString();
                         String date = tournamentDateEditText.getText().toString();
+                        Date parsed_date = null;
+
+                        try {
+                            parsed_date = dateFormatter.parse(date);
+                        } catch (ParseException e) {
+                            Log.i(this.getClass().getName(), "Failed to parse date");
+                        }
+
                         String maxPlayers = tournamentMaxPlayersEditText.getText().toString();
 
                         if (!tournamentName.isEmpty()) {
@@ -182,7 +192,7 @@ public class TournamentManagementDialog extends DialogFragment {
                             }
 
                             if (!date.isEmpty()) {
-                                tournament.setDateOfTournament(new DateTime(date).toDate());
+                                tournament.setDateOfTournament(parsed_date);
                             } else {
                                 tournament.setDateOfTournament(null);
                             }

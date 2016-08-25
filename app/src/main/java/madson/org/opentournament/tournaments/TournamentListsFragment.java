@@ -138,7 +138,7 @@ public class TournamentListsFragment extends Fragment {
 
         TournamentListHeaderFragment headerFragment = new TournamentListHeaderFragment();
 
-        getChildFragmentManager().beginTransaction().add(R.id.row_header_container, headerFragment).commit();
+        getChildFragmentManager().beginTransaction().add(R.id.row_tournament_header_container, headerFragment).commit();
 
         TournamentListAdapter tournamentListAdapter = new TournamentListAdapter(localTournaments);
 

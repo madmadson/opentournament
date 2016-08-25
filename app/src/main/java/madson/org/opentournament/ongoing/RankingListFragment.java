@@ -16,6 +16,7 @@ import android.widget.TextView;
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.warmachine.WarmachineTournamentRanking;
 import madson.org.opentournament.service.OngoingTournamentService;
+import madson.org.opentournament.tournaments.TournamentListHeaderFragment;
 import madson.org.opentournament.utility.BaseApplication;
 
 import java.util.List;
@@ -68,6 +69,10 @@ public class RankingListFragment extends Fragment {
         } else {
             heading.setText(getString(R.string.heading_tournmant_players));
         }
+
+        RankingListHeaderFragment headerFragment = new RankingListHeaderFragment();
+
+        getChildFragmentManager().beginTransaction().add(R.id.row_ranking_header_container, headerFragment).commit();
 
         RankingListAdapter rankingListAdapter = new RankingListAdapter(rankingForRound);
         recyclerView.setAdapter(rankingListAdapter);

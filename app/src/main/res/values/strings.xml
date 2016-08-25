@@ -92,5 +92,11 @@
     <string name="header_tournament_date">Date</string>
     <string name="heading_tournmant_players">Tournament players</string>
     <string name="tournament_online">online</string>
+    <string name="header_ranking_number">#</string>
+    <string name="header_ranking_player">player</string>
+    <string name="header_ranking_score">sc</string>
+    <string name="header_ranking_sos">sos</string>
+    <string name="header_ranking_cp">cp</string>
+    <string name="header_ranking_vp">vp</string>
 
 </resources>

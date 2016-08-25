@@ -12,7 +12,7 @@
     android:layout_marginBottom="@dimen/player_card_top_bottom_margin"
     android:layout_marginTop="@dimen/player_card_top_bottom_margin">
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/lib_card_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -21,38 +21,46 @@
 
         <TextView
             android:id="@+id/ranking_row_player_number"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"/>
         <TextView
             android:id="@+id/ranking_row_name"
-            android:layout_width="0dp"
-            android:layout_weight="6"
-            android:layout_height="wrap_content" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="18dp"
+            android:layout_toRightOf="@id/ranking_row_player_number"
+           />
 
         <TextView
             android:id="@+id/ranking_row_score"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="360dp"
+            />
 
         <TextView
             android:id="@+id/ranking_row_sos"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="24dp"
+            android:layout_toRightOf="@id/ranking_row_score"/>
 
         <TextView
             android:id="@+id/ranking_row_control_points"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="24dp"
+            android:layout_toRightOf="@id/ranking_row_sos"/>
         <TextView
             android:id="@+id/ranking_row_victory_points"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="24dp"
+            android:layout_toRightOf="@id/ranking_row_control_points"/>
         
-    </LinearLayout>
+    </RelativeLayout>
 </android.support.v7.widget.CardView>
 

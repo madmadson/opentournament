@@ -42,7 +42,7 @@ public interface OngoingTournamentService {
      *
      * @return  list of pairings for round
      */
-    List<WarmachineTournamentGame> getGameForRound(Long tournamentId, int round);
+    List<WarmachineTournamentGame> getAllGamesForTournamentRound(Long tournamentId, int round);
 
 
     /**
@@ -65,11 +65,11 @@ public interface OngoingTournamentService {
     /**
      * Get specific pairing.
      *
-     * @param  pairing_id
+     * @param  game_id
      *
      * @return  pairing
      */
-    WarmachineTournamentGame getGameForId(long pairing_id);
+    WarmachineTournamentGame getGameForId(long game_id);
 
 
     /**
@@ -88,4 +88,15 @@ public interface OngoingTournamentService {
      * @param  round_number  round number till calculation
      */
     void createRankingForRound(long tournament_id, int round_number);
+
+
+    /**
+     * checks if previous round is finished before new round could be paired.
+     *
+     * @param  tournament_id
+     * @param  round
+     *
+     * @return  if all games are finished or not
+     */
+    boolean checkAllGamesAreFinishedForRound(long tournament_id, int round);
 }

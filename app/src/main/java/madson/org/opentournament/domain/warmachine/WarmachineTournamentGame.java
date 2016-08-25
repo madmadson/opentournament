@@ -26,6 +26,8 @@ public class WarmachineTournamentGame {
     private int player_two_control_points;
     private int player_two_victory_points;
 
+    private boolean finished;
+
     public WarmachineTournamentGame(long _id) {
 
         this._id = _id;
@@ -188,6 +190,18 @@ public class WarmachineTournamentGame {
     }
 
 
+    public boolean isFinished() {
+
+        return finished;
+    }
+
+
+    public void setFinished(boolean finished) {
+
+        this.finished = finished;
+    }
+
+
     @Override
     public String toString() {
 
@@ -204,7 +218,8 @@ public class WarmachineTournamentGame {
             + ", player_two_full_name='" + player_two_full_name + '\''
             + ", player_two_score=" + player_two_score
             + ", player_two_control_points=" + player_two_control_points
-            + ", player_two_victory_points=" + player_two_victory_points + '}';
+            + ", player_two_victory_points=" + player_two_victory_points
+            + ", finished=" + finished + '}';
     }
 
 

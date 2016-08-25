@@ -413,7 +413,7 @@ public class EnterResultForGameDialog extends DialogFragment {
 
                     Log.i(this.getClass().getName(), "click confirm result of game");
 
-                    OngoingTournamentActivity activity = (OngoingTournamentActivity) getActivity();
+                    game.setFinished(true);
 
                     OngoingTournamentService ongoingTournamentService =
                         ((BaseApplication) getActivity().getApplication()).getOngoingTournamentService();

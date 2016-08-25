@@ -71,12 +71,12 @@ public class RoundChangeButtonFragment extends Fragment {
         final OngoingTournamentService ongoingTournamentService = ((BaseApplication) getActivity().getApplication())
             .getOngoingTournamentService();
 
-        final List<WarmachineTournamentGame> pairingsForRound = ongoingTournamentService.getGameForRound(tournament_id,
-                round_to_display);
+        final List<WarmachineTournamentGame> pairingsForRoundToDisplay =
+            ongoingTournamentService.getAllGamesForTournamentRound(tournament_id, round_to_display);
 
         Button changeRoundButton = (Button) view.findViewById(R.id.change_round_button);
 
-        if (next_or_previous.equals(NextOrPrevious.NEXT) && pairingsForRound.isEmpty()) {
+        if (next_or_previous.equals(NextOrPrevious.NEXT) && pairingsForRoundToDisplay.isEmpty()) {
             changeRoundButton.setText(getString(R.string.button_pair_round, round_to_display));
         } else {
             changeRoundButton.setText(getString(R.string.button_change_round, round_to_display));
@@ -93,18 +93,26 @@ public class RoundChangeButtonFragment extends Fragment {
                         "click round_to_display (" + round_to_display + ") for tournament: " + tournament_id);
 
                     if (next_or_previous.equals(NextOrPrevious.NEXT)) {
-                        if (pairingsForRound.isEmpty()) {
-                            ConfirmPairingNewRoundDialog dialog = new ConfirmPairingNewRoundDialog();
+                        final List<WarmachineTournamentGame> pairingsForRoundToDisplay =
+                            ongoingTournamentService.getAllGamesForTournamentRound(tournament_id, round_to_display);
 
-                            Bundle bundleForConfirmPairNewRoundDialog = new Bundle();
-                            bundleForConfirmPairNewRoundDialog.putLong(
-                                ConfirmPairingNewRoundDialog.BUNDLE_TOURNAMENT_ID, tournament_id);
-                            bundleForConfirmPairNewRoundDialog.putInt(
-                                ConfirmPairingNewRoundDialog.BUNDLE_ROUND_TO_DISPLAY, round_to_display);
-                            dialog.setArguments(bundleForConfirmPairNewRoundDialog);
+                        if (pairingsForRoundToDisplay.isEmpty()) {
+                            if (ongoingTournamentService.checkAllGamesAreFinishedForRound(tournament_id,
+                                        round_to_display - 1)) {
+                                ConfirmPairingNewRoundDialog dialog = new ConfirmPairingNewRoundDialog();
 
-                            FragmentManager supportFragmentManager = getActivity().getSupportFragmentManager();
-                            dialog.show(supportFragmentManager, "ConfirmPairingDialog");
+                                Bundle bundleForConfirmPairNewRoundDialog = new Bundle();
+                                bundleForConfirmPairNewRoundDialog.putLong(
+                                    ConfirmPairingNewRoundDialog.BUNDLE_TOURNAMENT_ID, tournament_id);
+                                bundleForConfirmPairNewRoundDialog.putInt(
+                                    ConfirmPairingNewRoundDialog.BUNDLE_ROUND_TO_DISPLAY, round_to_display);
+                                dialog.setArguments(bundleForConfirmPairNewRoundDialog);
+
+                                FragmentManager supportFragmentManager = getActivity().getSupportFragmentManager();
+                                dialog.show(supportFragmentManager, "ConfirmPairingDialog");
+                            } else {
+                                Log.i(this.getClass().getName(), "not all games are finished");
+                            }
                         }
                     }
 

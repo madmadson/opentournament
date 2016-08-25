@@ -26,11 +26,12 @@ public class WarmachineTournamentGameTable {
      * 10: player_two_score
      * 11: player_two_control_points
      * 12: player_two_victory_points
+     * 13: game finished
      */
     public static final String[] ALL_COLS_FOR_TOURNAMENT_GAME = {
         "_id", "tournament_id", "round", "player_one_id", "player_one_full_name", "player_one_score",
         "player_one_control_points", "player_one_victory_points", "player_two_id", "player_two_full_name",
-        "player_two_score", "player_two_control_points", "player_two_victory_points"
+        "player_two_score", "player_two_control_points", "player_two_victory_points", "finished"
     };
 
     public static final String TABLE_TOURNAMENT_GAME = "warmachine_tournament_game";
@@ -51,6 +52,8 @@ public class WarmachineTournamentGameTable {
     public static final String COLUMN_PLAYER_TWO_CONTROL_POINTS = "player_two_control_points";
     public static final String COLUMN_PLAYER_TWO_VICTORY_POINTS = "player_two_victory_points";
 
+    public static final String COLUMN_FINISHED = "finished";
+
     public static void createTable(SQLiteDatabase db) {
 
         Log.i(WarmachineTournamentGameTable.class.getName(), "create warmachine_tournament_pairing table");
@@ -61,7 +64,8 @@ public class WarmachineTournamentGameTable {
             + " STRING, " + COLUMN_PLAYER_TWO_ID + " INTEGER, " + COLUMN_PLAYER_TWO_FULL_NAME + " STRING, "
             + COLUMN_PLAYER_ONE_SCORE + " INTEGER, " + COLUMN_PLAYER_ONE_CONTROL_POINTS + " INTEGER, "
             + COLUMN_PLAYER_ONE_VICTORY_POINTS + " INTEGER, " + COLUMN_PLAYER_TWO_SCORE + " INTEGER, "
-            + COLUMN_PLAYER_TWO_CONTROL_POINTS + " INTEGER, " + COLUMN_PLAYER_TWO_VICTORY_POINTS + " INTEGER)");
+            + COLUMN_PLAYER_TWO_CONTROL_POINTS + " INTEGER, " + COLUMN_PLAYER_TWO_VICTORY_POINTS + " INTEGER, "
+            + COLUMN_FINISHED + " INTEGER)");
     }
 
 

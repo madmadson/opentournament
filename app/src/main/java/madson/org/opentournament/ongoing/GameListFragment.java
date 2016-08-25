@@ -59,8 +59,8 @@ public class GameListFragment extends Fragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(linearLayoutManager);
 
-        List<WarmachineTournamentGame> pairingsForTournament = ongoingTournamentService.getGameForRound(tournamentId,
-                round);
+        List<WarmachineTournamentGame> pairingsForTournament = ongoingTournamentService.getAllGamesForTournamentRound(
+                tournamentId, round);
 
         TextView heading = (TextView) view.findViewById(R.id.heading_game_for_round);
         heading.setText(getString(R.string.heading_pairing_for_round, round));

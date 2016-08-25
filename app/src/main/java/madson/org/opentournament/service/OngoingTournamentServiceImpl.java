@@ -157,7 +157,7 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
 
 
     @Override
-    public List<WarmachineTournamentGame> getGameForRound(Long tournamentId, int round) {
+    public List<WarmachineTournamentGame> getAllGamesForTournamentRound(Long tournamentId, int round) {
 
         List<WarmachineTournamentGame> warmachineTournamentGames = new ArrayList<>();
         SQLiteDatabase readableDatabase = openTournamentDBHelper.getReadableDatabase();
@@ -219,6 +219,8 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
             warmachineTournamentGames.add(warmachineTournamentGame);
         }
 
+        Log.i(this.getClass().getName(), "finished pairing for new round");
+
         // persist pairing and new round
         insertGames(warmachineTournamentGames);
         makeTournamentRoundActual(tournamentId, round);
@@ -263,6 +265,8 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
     @Override
     public WarmachineTournamentGame getGameForId(long game_id) {
 
+        Log.i(this.getClass().getName(), "get game for id:" + game_id);
+
         SQLiteDatabase readableDatabase = openTournamentDBHelper.getReadableDatabase();
 
         Cursor cursor = readableDatabase.query(WarmachineTournamentGameTable.TABLE_TOURNAMENT_GAME,
@@ -275,6 +279,8 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
 
         cursor.close();
         readableDatabase.close();
+
+        Log.i(this.getClass().getName(), "pairing loaded sucessfully: " + pairing);
 
         return pairing;
     }
@@ -300,6 +306,7 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
             game.getPlayer_two_control_points());
         contentValues.put(WarmachineTournamentGameTable.COLUMN_PLAYER_TWO_VICTORY_POINTS,
             game.getPlayer_two_victory_points());
+        contentValues.put(WarmachineTournamentGameTable.COLUMN_FINISHED, game.isFinished());
 
         db.update(WarmachineTournamentGameTable.TABLE_TOURNAMENT_GAME, contentValues, "_id = ? ",
             new String[] { String.valueOf(game.get_id()) });
@@ -345,6 +352,23 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
         calculateSoSForPlayerMap(mapOfPlayers);
 
         insertWarmachinePlayerRankingForRound(mapOfPlayers);
+    }
+
+
+    @Override
+    public boolean checkAllGamesAreFinishedForRound(long tournament_id, int round) {
+
+        List<WarmachineTournamentGame> gamesForRound = getAllGamesForTournamentRound(tournament_id, round);
+
+        boolean allGamesFinished = true;
+
+        for (WarmachineTournamentGame game : gamesForRound) {
+            if (!game.isFinished()) {
+                allGamesFinished = false;
+            }
+        }
+
+        return allGamesFinished;
     }
 
 
@@ -454,6 +478,8 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
         pairing.setPlayer_two_score(cursor.getInt(10));
         pairing.setPlayer_two_control_points(cursor.getInt(11));
         pairing.setPlayer_two_victory_points(cursor.getInt(12));
+
+        pairing.setFinished(cursor.getInt(13) == 1);
 
         return pairing;
     }

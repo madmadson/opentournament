@@ -66,13 +66,25 @@ public class RoundChangeButtonFragment extends Fragment {
 
         super.onViewCreated(view, savedInstanceState);
 
-        Button nextRoundButton = (Button) view.findViewById(R.id.change_round_button);
+        final OngoingTournamentActivity activity = (OngoingTournamentActivity) getActivity();
 
-        nextRoundButton.setText(getString(R.string.button_pair_round, round_to_display));
+        final OngoingTournamentService ongoingTournamentService = ((BaseApplication) getActivity().getApplication())
+            .getOngoingTournamentService();
 
-        setChevron(nextRoundButton);
+        final List<WarmachineTournamentGame> pairingsForRound = ongoingTournamentService.getGameForRound(tournament_id,
+                round_to_display);
 
-        nextRoundButton.setOnClickListener(new View.OnClickListener() {
+        Button changeRoundButton = (Button) view.findViewById(R.id.change_round_button);
+
+        if (next_or_previous.equals(NextOrPrevious.NEXT) && pairingsForRound.isEmpty()) {
+            changeRoundButton.setText(getString(R.string.button_pair_round, round_to_display));
+        } else {
+            changeRoundButton.setText(getString(R.string.button_change_round, round_to_display));
+        }
+
+        setChevron(changeRoundButton);
+
+        changeRoundButton.setOnClickListener(new View.OnClickListener() {
 
                 @Override
                 public void onClick(View v) {
@@ -80,15 +92,7 @@ public class RoundChangeButtonFragment extends Fragment {
                     Log.i(this.getClass().getName(),
                         "click round_to_display (" + round_to_display + ") for tournament: " + tournament_id);
 
-                    OngoingTournamentActivity activity = (OngoingTournamentActivity) getActivity();
-
-                    final OngoingTournamentService ongoingTournamentService =
-                        ((BaseApplication) getActivity().getApplication()).getOngoingTournamentService();
-
                     if (next_or_previous.equals(NextOrPrevious.NEXT)) {
-                        List<WarmachineTournamentGame> pairingsForRound = ongoingTournamentService.getGameForRound(
-                                tournament_id, round_to_display);
-
                         if (pairingsForRound.isEmpty()) {
                             ConfirmPairingNewRoundDialog dialog = new ConfirmPairingNewRoundDialog();
 

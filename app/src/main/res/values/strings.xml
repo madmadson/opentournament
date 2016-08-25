@@ -73,7 +73,7 @@
     <!-- result entering dialog -->
     <string name="result">confirm</string>
     <string name="result_pairing_title">RESULT</string>
-    <string name="heading_ranking_for_round">Ranking round: %1$d</string>
+    <string name="heading_ranking_for_round">Ranking after round: %1$d</string>
     <string name="tournaments">Manage Tournaments</string>
     <string name="title_tournament_management">Tournament Management</string>
     <string name="sign_in">Sign in</string>

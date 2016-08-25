@@ -64,7 +64,7 @@ public class RankingListFragment extends Fragment {
         TextView heading = (TextView) view.findViewById(R.id.heading_ranking_for_round);
 
         if (round != 0) {
-            heading.setText(getString(R.string.heading_ranking_for_round, round));
+            heading.setText(getString(R.string.heading_ranking_for_round, (round - 1)));
         } else {
             heading.setText(getString(R.string.heading_tournmant_players));
         }

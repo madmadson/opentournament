@@ -17,6 +17,15 @@
         android:id="@+id/heading_online_tournaments"
         android:text="@string/heading_online_tournaments"/>
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="12dp"
+        android:textStyle="bold"
+        android:id="@+id/offline_text"
+        android:text="@string/offline_text"
+        android:visibility="gone"/>
+
     <ProgressBar
         android:id="@+id/progressBar"
         style="?android:attr/progressBarStyleLarge"

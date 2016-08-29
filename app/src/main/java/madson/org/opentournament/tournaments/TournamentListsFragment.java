@@ -31,6 +31,7 @@ import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.ongoing.OngoingTournamentActivity;
 import madson.org.opentournament.service.TournamentService;
+import madson.org.opentournament.utility.BaseActivity;
 import madson.org.opentournament.utility.BaseApplication;
 
 import java.text.DateFormat;
@@ -77,56 +78,64 @@ public class TournamentListsFragment extends Fragment {
 
         mProgressBar = (ProgressBar) view.findViewById(R.id.progressBar);
 
-        mOnlineTournamentRecyclerView = (RecyclerView) view.findViewById(R.id.online_tournament_list_recycler_view);
+        if (((BaseActivity) getActivity()).isConnected()) {
+            mOnlineTournamentRecyclerView = (RecyclerView) view.findViewById(R.id.online_tournament_list_recycler_view);
+            mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
 
-        mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
-        mFirebaseTournamentAdapter = new FirebaseRecyclerAdapter<Tournament, TournamentViewHolder>(Tournament.class,
-                R.layout.row_tournament, TournamentViewHolder.class,
-                mFirebaseDatabaseReference.child(TOURNAMENTS_CHILD)) {
+            mFirebaseTournamentAdapter = new FirebaseRecyclerAdapter<Tournament, TournamentViewHolder>(Tournament.class,
+                    R.layout.row_tournament, TournamentViewHolder.class,
+                    mFirebaseDatabaseReference.child(TOURNAMENTS_CHILD)) {
 
-            @Override
-            protected void populateViewHolder(TournamentViewHolder viewHolder, final Tournament tournament,
-                int position) {
+                @Override
+                protected void populateViewHolder(TournamentViewHolder viewHolder, final Tournament tournament,
+                    int position) {
 
-                mProgressBar.setVisibility(ProgressBar.GONE);
+                    mProgressBar.setVisibility(ProgressBar.GONE);
 
-                viewHolder.setTournament(tournament);
-                viewHolder.getTournamentNameInList().setText(tournament.getName());
+                    viewHolder.setTournament(tournament);
+                    viewHolder.getTournamentNameInList().setText(tournament.getName());
 
-                if (tournament.getDateOfTournament() != null) {
-                    String formattedDate = dateFormatter.format(tournament.getDateOfTournament());
-                    viewHolder.getTournamentDateInList().setText(formattedDate);
-                }
-
-                viewHolder.getTournamentLocationInList().setText(tournament.getLocation());
-
-                viewHolder.getTournamentPlayersInList()
-                    .setText("0/" + String.valueOf(tournament.getMaxNumberOfPlayers()));
-
-                if (currentUser != null && currentUser.getEmail() != null) {
-                    if (currentUser.getEmail().equals(tournament.getCreatorEmail())) {
-                        viewHolder.getStartTournamentButton().setOnClickListener(new View.OnClickListener() {
-
-                                @Override
-                                public void onClick(View v) {
-
-                                    Log.i(v.getClass().getName(), "tournament Stared:" + tournament);
-
-                                    Intent intent = new Intent(getContext(), OngoingTournamentActivity.class);
-                                    intent.putExtra(OngoingTournamentActivity.EXTRA_TOURNAMENT_ID, tournament.getId());
-                                    startActivity(intent);
-                                }
-                            });
+                    if (tournament.getDateOfTournament() != null) {
+                        String formattedDate = dateFormatter.format(tournament.getDateOfTournament());
+                        viewHolder.getTournamentDateInList().setText(formattedDate);
                     }
-                } else {
-                    // only creator should do action
-                    viewHolder.getStartTournamentButton().setVisibility(View.INVISIBLE);
-                }
-            }
-        };
 
-        mOnlineTournamentRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mOnlineTournamentRecyclerView.setAdapter(mFirebaseTournamentAdapter);
+                    viewHolder.getTournamentLocationInList().setText(tournament.getLocation());
+
+                    viewHolder.getTournamentPlayersInList()
+                        .setText("0/" + String.valueOf(tournament.getMaxNumberOfPlayers()));
+
+                    if (currentUser != null && currentUser.getEmail() != null) {
+                        if (currentUser.getEmail().equals(tournament.getCreatorEmail())) {
+                            viewHolder.getStartTournamentButton().setOnClickListener(new View.OnClickListener() {
+
+                                    @Override
+                                    public void onClick(View v) {
+
+                                        Log.i(v.getClass().getName(), "tournament Stared:" + tournament);
+
+                                        Intent intent = new Intent(getContext(), OngoingTournamentActivity.class);
+                                        intent.putExtra(OngoingTournamentActivity.EXTRA_TOURNAMENT_ID,
+                                            tournament.getId());
+                                        startActivity(intent);
+                                    }
+                                });
+                        }
+                    } else {
+                        // only creator should do action
+                        viewHolder.getStartTournamentButton().setVisibility(View.INVISIBLE);
+                    }
+                }
+            };
+
+            mOnlineTournamentRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+            mOnlineTournamentRecyclerView.setAdapter(mFirebaseTournamentAdapter);
+        } else {
+            mProgressBar.setVisibility(ProgressBar.GONE);
+
+            TextView offline_text = (TextView) view.findViewById(R.id.offline_text);
+            offline_text.setVisibility(View.VISIBLE);
+        }
 
         // local tournaments
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.local_tournament_list_recycler_view);

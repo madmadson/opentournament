@@ -105,6 +105,8 @@
     <!-- Sign in -->
     <string name="anonymously_sign_in">anonymously sign in</string>
     <string name="toast_sign_in_anonymously">Sign in anonymously</string>
-
+    <string name="toast_no_connection">no connection possible</string>
+    <string name="toast_sign_out_no_connection">you cant sign out when no internet</string>
+    <string name="offline_text">you are offline</string>
 
 </resources>

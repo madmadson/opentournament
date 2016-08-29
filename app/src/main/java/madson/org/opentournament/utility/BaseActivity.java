@@ -4,6 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+
 import android.os.Bundle;
 
 import android.preference.PreferenceManager;
@@ -26,6 +29,7 @@ import android.support.v7.widget.Toolbar;
 
 import android.util.Log;
 
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -37,9 +41,13 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
+import com.facebook.FacebookSdk;
+
 import com.facebook.login.LoginManager;
 
 import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 
@@ -64,6 +72,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     private static BaseApplication mApplication;
 
     public static final String ANONYMOUS_USER = "anonymous";
+    public static final String NO_CONNECTION = "no internet";
 
     private Toolbar toolbar;
     private FloatingActionButton floatingActionButton;
@@ -105,7 +114,9 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(isDisplayHomeAsUp());
 
-        doLogin();
+        if (isConnected()) {
+            doLogin();
+        }
 
         if (useNavigationDrawer()) {
             drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -118,13 +129,13 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
             navView = (NavigationView) findViewById(R.id.nav_view);
             navView.setNavigationItemSelectedListener(this);
 
+            View headerView = navView.getHeaderView(0);
+
+            userAvatar = (ImageView) headerView.findViewById(R.id.drawer_avatar);
+            userDisplayname = (TextView) headerView.findViewById(R.id.drawer_name);
+            userMail = (TextView) headerView.findViewById(R.id.drawer_mail);
+
             if (mFirebaseUser != null) {
-                View headerView = navView.getHeaderView(0);
-
-                userAvatar = (ImageView) headerView.findViewById(R.id.drawer_avatar);
-                userDisplayname = (TextView) headerView.findViewById(R.id.drawer_name);
-                userMail = (TextView) headerView.findViewById(R.id.drawer_mail);
-
                 if (mFirebaseUser.getPhotoUrl() != null) {
                     Glide.with(this).load(mFirebaseAuth.getCurrentUser().getPhotoUrl()).into(userAvatar);
                 }
@@ -136,6 +147,8 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                 }
 
                 userMail.setText(mFirebaseUser.getEmail());
+            } else {
+                userDisplayname.setText(NO_CONNECTION);
             }
         }
     }
@@ -202,22 +215,21 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         final int id = item.getItemId();
 
         if (id == android.R.id.home) {
-            // this is only effective, if  getActionBar().setDisplayHomeAsUpEnabled(true)
-            // was called for the activity instance.
-
-            // treat a tap on the home icon like the back button was pressed - this will
-            // (if it is not overridden in another Activity) result in the current activity
-            // to close to get back to the previous activity.
             this.onBackPressed();
 
             return true;
         } else if (id == R.id.toolbar_menu_sign_out) {
-            mFirebaseAuth.signOut();
-            LoginManager.getInstance().logOut();
+            if (isConnected()) {
+                mFirebaseAuth.signOut();
+                LoginManager.getInstance().logOut();
 
-            Auth.GoogleSignInApi.signOut(mGoogleApiClient);
-            mUsername = ANONYMOUS_USER;
-            startActivity(new Intent(this, SignInActivity.class));
+                Auth.GoogleSignInApi.signOut(mGoogleApiClient);
+                mUsername = ANONYMOUS_USER;
+                startActivity(new Intent(this, SignInActivity.class));
+            } else {
+                Log.i(this.getClass().getName(), "wign out when no internet");
+                Toast.makeText(BaseActivity.this, R.string.toast_sign_out_no_connection, Toast.LENGTH_SHORT).show();
+            }
         } else if (id == R.id.toolbar_menu_about) {
             Intent intent = new Intent(this, AboutActivity.class);
             startActivity(intent);
@@ -234,6 +246,16 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         transaction.replace(R.id.content_main, fragment);
 
         transaction.commit();
+    }
+
+
+    public boolean isConnected() {
+
+        ConnectivityManager cm = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+
+        return (activeNetwork != null && activeNetwork.isConnectedOrConnecting());
     }
 
 
@@ -390,5 +412,12 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     public FirebaseUser getCurrentFireBaseUser() {
 
         return mFirebaseAuth.getCurrentUser();
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }

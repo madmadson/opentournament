@@ -189,22 +189,30 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
 
     private void signInAnonymously(final Context context) {
 
-        mFirebaseAuth.signInAnonymously().addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+        Task<AuthResult> authResultTask = mFirebaseAuth.signInAnonymously();
 
-                @Override
-                public void onComplete(@NonNull Task<AuthResult> task) {
+        OnCompleteListener<AuthResult> signInAnonymously = new OnCompleteListener<AuthResult>() {
 
-                    if (task.isSuccessful()) {
-                        Log.i(TAG, "signInAnonymously:onComplete:" + task.isSuccessful());
-                        Toast.makeText(SignInActivity.this, R.string.toast_sign_in_anonymously, Toast.LENGTH_SHORT)
-                        .show();
-                        startActivity(new Intent(context, MainActivity.class));
-                    } else {
-                        Log.e(TAG, "signInAnonymously", task.getException());
-                        Toast.makeText(SignInActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
-                    }
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+
+                if (task.isSuccessful()) {
+                    Log.i(TAG, "signInAnonymously:onComplete:" + task.isSuccessful());
+                    Toast.makeText(SignInActivity.this, R.string.toast_sign_in_anonymously, Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(context, MainActivity.class));
+                } else {
+                    Log.e(TAG, "signInAnonymously", task.getException());
+                    Toast.makeText(SignInActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
                 }
-            });
+            }
+        };
+        authResultTask.addOnCompleteListener(this, signInAnonymously);
+
+        if (mFirebaseAuth.getCurrentUser() == null) {
+            Log.i(this.getClass().getName(), "no connection possible to firebase");
+            Toast.makeText(SignInActivity.this, R.string.toast_no_connection, Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(context, MainActivity.class));
+        }
     }
 
 

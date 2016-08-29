@@ -15,6 +15,7 @@
  */
 package madson.org.opentournament;
 
+import android.content.Context;
 import android.content.Intent;
 
 import android.os.Bundle;
@@ -106,6 +107,7 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
         // Assign fields
         mGoogleSignInButton = (SignInButton) findViewById(R.id.google_sign_in_button);
         mFacebookSignInButton = (LoginButton) findViewById(R.id.facebook_login_button);
+        findViewById(R.id.button_anonymous_sign_in).setOnClickListener(this);
 
         // Set click listeners
         mGoogleSignInButton.setOnClickListener(this);
@@ -121,6 +123,25 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
                 .build();
         mGoogleApiClient = new GoogleApiClient.Builder(this).enableAutoManage(this /* FragmentActivity */,
                 this /* OnConnectionFailedListener */).addApi(Auth.GOOGLE_SIGN_IN_API, gso).build();
+    }
+
+
+    @Override
+    public void onStart() {
+
+        super.onStart();
+        mFirebaseAuth.addAuthStateListener(mAuthListener);
+    }
+
+
+    @Override
+    public void onStop() {
+
+        super.onStop();
+
+        if (mAuthListener != null) {
+            mFirebaseAuth.removeAuthStateListener(mAuthListener);
+        }
     }
 
 
@@ -156,15 +177,36 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
     @Override
     public void onClick(View v) {
 
-        switch (v.getId()) {
-            case R.id.google_sign_in_button:
-                signIn();
-                break;
+        int i = v.getId();
+
+        if (i == R.id.google_sign_in_button) {
+            googleSignIn();
+        } else if (i == R.id.button_anonymous_sign_in) {
+            signInAnonymously(this);
         }
     }
 
 
-    private void signIn() {
+    private void signInAnonymously(final Context context) {
+
+        mFirebaseAuth.signInAnonymously().addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
+
+                    if (task.isSuccessful()) {
+                        Log.i(TAG, "signInAnonymously:onComplete:" + task.isSuccessful());
+                        startActivity(new Intent(context, MainActivity.class));
+                    } else {
+                        Log.e(TAG, "signInAnonymously", task.getException());
+                        Toast.makeText(SignInActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+    }
+
+
+    private void googleSignIn() {
 
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         startActivityForResult(signInIntent, RC_SIGN_IN);

@@ -103,19 +103,21 @@ public class TournamentListsFragment extends Fragment {
                 viewHolder.getTournamentPlayersInList()
                     .setText("0/" + String.valueOf(tournament.getMaxNumberOfPlayers()));
 
-                if (currentUser != null && currentUser.getEmail().equals(tournament.getCreatorEmail())) {
-                    viewHolder.getStartTournamentButton().setOnClickListener(new View.OnClickListener() {
+                if (currentUser != null && currentUser.getEmail() != null) {
+                    if (currentUser.getEmail().equals(tournament.getCreatorEmail())) {
+                        viewHolder.getStartTournamentButton().setOnClickListener(new View.OnClickListener() {
 
-                            @Override
-                            public void onClick(View v) {
+                                @Override
+                                public void onClick(View v) {
 
-                                Log.i(v.getClass().getName(), "tournament Stared:" + tournament);
+                                    Log.i(v.getClass().getName(), "tournament Stared:" + tournament);
 
-                                Intent intent = new Intent(getContext(), OngoingTournamentActivity.class);
-                                intent.putExtra(OngoingTournamentActivity.EXTRA_TOURNAMENT_ID, tournament.getId());
-                                startActivity(intent);
-                            }
-                        });
+                                    Intent intent = new Intent(getContext(), OngoingTournamentActivity.class);
+                                    intent.putExtra(OngoingTournamentActivity.EXTRA_TOURNAMENT_ID, tournament.getId());
+                                    startActivity(intent);
+                                }
+                            });
+                    }
                 } else {
                     // only creator should do action
                     viewHolder.getStartTournamentButton().setVisibility(View.INVISIBLE);

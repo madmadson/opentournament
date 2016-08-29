@@ -23,6 +23,8 @@
     <string name="newTournamentSaved">tournament saved</string>
     <string name="existingTournamentSaved">Edit tournament</string>
     
+    <string name="no_online_tournaments_if_anonymous">You cannot create online tournaments anonymously</string>
+    
     <string name="heading_local_tournaments">- local tournamnts (only visible for you) -</string>
     <string name="heading_online_tournaments">- online tournaments -</string>
     
@@ -30,7 +32,7 @@
     <string name="dialog_save">save</string>
     <string name="dialog_cancel">cancel</string>
     
-    <!-- Tournament managementdialog-->
+    <!-- Tournament management dialog-->
     <string name="new_tournament_title" type="id">New tournament</string>
     <string name="label_tournament_name">tournament name</string>
     <string name="label_tournament_max_players">max players</string>
@@ -99,5 +101,10 @@
     <string name="header_ranking_sos">sos</string>
     <string name="header_ranking_cp">cp</string>
     <string name="header_ranking_vp">vp</string>
+
+    <!-- Sign in -->
+    <string name="anonymously_sign_in">anonymously sign in</string>
+
+
 
 </resources>

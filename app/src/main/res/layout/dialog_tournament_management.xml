@@ -36,9 +36,17 @@
         android:layout_gravity="center_horizontal"
         android:inputType="number"/>
 
-    <CheckBox android:id="@+id/tournament_online"
+    <CheckBox 
+        android:id="@+id/tournament_online"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:checked="true"
         android:text="@string/tournament_online" />
+    <TextView
+        android:id="@+id/tournament_anonymous_no_online_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorWarning"
+        android:text="@string/no_online_tournaments_if_anonymous"
+        android:visibility="gone"/>
 </LinearLayout>

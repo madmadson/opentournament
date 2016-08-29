@@ -26,6 +26,7 @@ import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import madson.org.opentournament.R;
@@ -64,12 +65,14 @@ public class TournamentManagementDialog extends DialogFragment {
     private long tournamentId;
     private DateFormat dateFormatter;
     private DatePickerDialog datePickerDialog;
+    private FirebaseUser currentUser;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
 
         coordinatorLayout = (CoordinatorLayout) getActivity().findViewById(R.id.coordinator_main);
 
+        currentUser = FirebaseAuth.getInstance().getCurrentUser();
         dateFormatter = DateFormat.getDateInstance(DateFormat.DEFAULT, Locale.getDefault());
         super.onCreate(savedInstanceState);
     }
@@ -150,6 +153,12 @@ public class TournamentManagementDialog extends DialogFragment {
                 });
 
         tournamentOnlineCheckbox = (CheckBox) dialogView.findViewById(R.id.tournament_online);
+
+        if (currentUser == null || currentUser.getEmail() == null) {
+            tournamentOnlineCheckbox.setEnabled(false);
+            tournamentOnlineCheckbox.setChecked(false);
+            dialogView.findViewById(R.id.tournament_anonymous_no_online_text).setVisibility(View.VISIBLE);
+        }
 
         return builder.create();
     }

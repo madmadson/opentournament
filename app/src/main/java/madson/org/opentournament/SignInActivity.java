@@ -196,6 +196,8 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
 
                     if (task.isSuccessful()) {
                         Log.i(TAG, "signInAnonymously:onComplete:" + task.isSuccessful());
+                        Toast.makeText(SignInActivity.this, R.string.toast_sign_in_anonymously, Toast.LENGTH_SHORT)
+                        .show();
                         startActivity(new Intent(context, MainActivity.class));
                     } else {
                         Log.e(TAG, "signInAnonymously", task.getException());

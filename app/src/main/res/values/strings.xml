@@ -104,7 +104,7 @@
 
     <!-- Sign in -->
     <string name="anonymously_sign_in">anonymously sign in</string>
-
+    <string name="toast_sign_in_anonymously">Sign in anonymously</string>
 
 
 </resources>

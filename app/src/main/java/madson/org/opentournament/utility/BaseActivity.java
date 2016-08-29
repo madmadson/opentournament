@@ -129,7 +129,12 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                     Glide.with(this).load(mFirebaseAuth.getCurrentUser().getPhotoUrl()).into(userAvatar);
                 }
 
-                userDisplayname.setText(mFirebaseUser.getDisplayName());
+                if (mFirebaseUser.getDisplayName() == null) {
+                    userDisplayname.setText(ANONYMOUS_USER);
+                } else {
+                    userDisplayname.setText(mFirebaseUser.getDisplayName());
+                }
+
                 userMail.setText(mFirebaseUser.getEmail());
             }
         }

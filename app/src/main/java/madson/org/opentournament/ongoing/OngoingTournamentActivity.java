@@ -32,13 +32,12 @@ import madson.org.opentournament.utility.BaseApplication;
 
 public class OngoingTournamentActivity extends BaseActivity {
 
-    public static final String EXTRA_TOURNAMENT_ID = "tournament_id";
+    public static final String EXTRA_TOURNAMENT = "tournament";
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
 
     private OngoingTournamentManagementFragment ongoingTournamentManagementFragment;
-    private long tournamentId;
     private Tournament tournament;
 
     @Override
@@ -81,13 +80,10 @@ public class OngoingTournamentActivity extends BaseActivity {
 
         Bundle extras = intent.getExtras();
 
-        tournamentId = (long) extras.get(EXTRA_TOURNAMENT_ID);
+        tournament = (Tournament) extras.get(EXTRA_TOURNAMENT);
 
-        if (tournamentId != 0) {
-            Log.i(this.getClass().toString(), "tournament started with id " + tournamentId);
-
-            TournamentService tournamentService = ((BaseApplication) getApplication()).getTournamentService();
-            tournament = tournamentService.getTournamentForId(tournamentId);
+        if (tournament != null) {
+            Log.i(this.getClass().toString(), "tournament opened with id " + tournament);
 
             ActionBar supportActionBar = getSupportActionBar();
 
@@ -102,27 +98,6 @@ public class OngoingTournamentActivity extends BaseActivity {
 
             TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
             tabLayout.setupWithViewPager(mViewPager);
-
-            final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-
-            fab.setOnClickListener(new View.OnClickListener() {
-
-                    @Override
-                    public void onClick(View view) {
-
-                        Log.i(this.getClass().getName(), "click fab ongoing tournament");
-
-                        NewPlayerForTournamentDialog dialog = new NewPlayerForTournamentDialog();
-
-                        Bundle bundleForTournamentPlayers = new Bundle();
-                        bundleForTournamentPlayers.putLong(NewPlayerForTournamentDialog.BUNDLE_TOURNAMENT_ID,
-                            tournamentId);
-                        dialog.setArguments(bundleForTournamentPlayers);
-
-                        FragmentManager supportFragmentManager = getSupportFragmentManager();
-                        dialog.show(supportFragmentManager, "NewPlayerForTournamentDialog");
-                    }
-                });
         }
     }
 
@@ -163,10 +138,23 @@ public class OngoingTournamentActivity extends BaseActivity {
         public Fragment getItem(int position) {
 
             Log.i(this.getClass().getName(), "create tournament fragment: " + tournament + " on position: " + position);
-            ongoingTournamentManagementFragment = OngoingTournamentManagementFragment.newInstance(position,
-                    tournament.get_id());
 
-            return ongoingTournamentManagementFragment;
+            if (position == 0 && checkIfOnlineTournamentAndUserNotCreator()) {
+                // show online tournament player list
+                return TournamentPlayerListFragment.newInstance(tournament);
+            } else {
+                ongoingTournamentManagementFragment = OngoingTournamentManagementFragment.newInstance(position,
+                        tournament.get_id());
+
+                return ongoingTournamentManagementFragment;
+            }
+        }
+
+
+        private boolean checkIfOnlineTournamentAndUserNotCreator() {
+
+            return tournament.getOnlineUUID() != null
+                && !tournament.getCreatorEmail().equals(getCurrentFireBaseUser().getEmail());
         }
 
 
@@ -181,7 +169,7 @@ public class OngoingTournamentActivity extends BaseActivity {
         public CharSequence getPageTitle(int position) {
 
             if (position == 0) {
-                return getApplication().getResources().getString(R.string.nav_tournament_setup);
+                return getApplication().getResources().getString(R.string.nav_player_list);
             } else {
                 return getApplication().getResources().getString(R.string.nav_round_tab, position);
             }

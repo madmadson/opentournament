@@ -1,6 +1,6 @@
 package madson.org.opentournament.service.warmachine;
 
-import madson.org.opentournament.domain.warmachine.WarmachineTournamentRanking;
+import madson.org.opentournament.domain.TournamentPlayer;
 
 import java.util.Comparator;
 
@@ -10,10 +10,10 @@ import java.util.Comparator;
  *
  * @author  Tobias Matt - tmatt@contargo.net
  */
-public class WarmachineRankingComparator implements Comparator<WarmachineTournamentRanking> {
+public class WarmachineRankingComparator implements Comparator<TournamentPlayer> {
 
     @Override
-    public int compare(WarmachineTournamentRanking player1, WarmachineTournamentRanking player2) {
+    public int compare(TournamentPlayer player1, TournamentPlayer player2) {
 
         if (player2.getScore() - player1.getScore() != 0) {
             return player2.getScore() - player1.getScore();

@@ -1,8 +1,8 @@
 package madson.org.opentournament.service;
 
 import madson.org.opentournament.domain.Player;
+import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.domain.warmachine.WarmachineTournamentGame;
-import madson.org.opentournament.domain.warmachine.WarmachineTournamentRanking;
 
 import java.util.List;
 
@@ -19,7 +19,7 @@ public interface OngoingTournamentService {
      *
      * @return  list of all players for given tournament
      */
-    List<WarmachineTournamentRanking> getRankingForRound(Long tournamentId, int round);
+    List<TournamentPlayer> getRankingForRound(Long tournamentId, int round);
 
 
     /**

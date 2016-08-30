@@ -88,31 +88,13 @@ public class TournamentManagementFragment extends Fragment
 
 
     @Override
-    public void onTournamentListItemClicked(long id) {
-
-        // get actual tournament to get actual state
-        TournamentService tournamentService = ((BaseApplication) getActivity().getApplication()).getTournamentService();
-        Tournament tournament = tournamentService.getTournamentForId(id);
-
-        RankingListFragment rankingListFragment = new RankingListFragment();
-
-        Bundle bundle = new Bundle();
-        bundle.putLong(RankingListFragment.BUNDLE_TOURNAMENT_ID, id);
-
-        rankingListFragment.setArguments(bundle);
+    public void onTournamentListItemClicked(Tournament tournament) {
 
         Log.i(this.getClass().getName(), "clicked on tournament: " + tournament);
 
         Intent intent = new Intent(getContext(), OngoingTournamentActivity.class);
-        intent.putExtra(OngoingTournamentActivity.EXTRA_TOURNAMENT_ID, tournament.get_id());
+        intent.putExtra(OngoingTournamentActivity.EXTRA_TOURNAMENT, tournament);
         startActivity(intent);
-    }
-
-
-    @Override
-    public void onOnlineTournamentListItemClicked(String onlineUUID) {
-
-        Log.i(this.getClass().getName(), "clicked on tournament: " + onlineUUID);
     }
 
 

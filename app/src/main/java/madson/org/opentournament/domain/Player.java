@@ -8,6 +8,8 @@ package madson.org.opentournament.domain;
 public class Player {
 
     private long _id;
+    private String onlineUUID;
+
     private String firstname;
     private String nickname;
     private String lastname;

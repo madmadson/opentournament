@@ -239,10 +239,7 @@ public class TournamentListsFragment extends Fragment {
 
     public interface TournamentListItemListener {
 
-        void onTournamentListItemClicked(long id);
-
-
-        void onOnlineTournamentListItemClicked(String onlineUUID);
+        void onTournamentListItemClicked(Tournament tournament);
     }
 
     public class TournamentListAdapter extends RecyclerView.Adapter<TournamentViewHolder> {
@@ -346,11 +343,7 @@ public class TournamentListsFragment extends Fragment {
 
             Log.i(this.getClass().getName(), "clicked on tournament");
 
-            if (tournament.get_id() != 0) {
-                mListener.onTournamentListItemClicked(tournament.get_id());
-            } else {
-                mListener.onOnlineTournamentListItemClicked(tournament.getOnlineUUID());
-            }
+            mListener.onTournamentListItemClicked(tournament);
         }
 
 

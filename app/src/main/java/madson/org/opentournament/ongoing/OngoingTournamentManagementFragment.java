@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Player;
+import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.warmachine.WarmachineTournamentGame;
 import madson.org.opentournament.players.AvailablePlayerListFragment;
 
@@ -64,7 +65,7 @@ public class OngoingTournamentManagementFragment extends Fragment
         Log.i(this.getClass().getName(), "show round " + round + " of tournament " + tournament_id);
 
         if (round == 0) {
-            showSetup(fragmentTransaction);
+            showPlayerList(fragmentTransaction);
         } else {
             showRound(round, fragmentTransaction);
         }
@@ -76,7 +77,7 @@ public class OngoingTournamentManagementFragment extends Fragment
     }
 
 
-    private void showSetup(FragmentTransaction fragmentTransaction) {
+    private void showPlayerList(FragmentTransaction fragmentTransaction) {
 
         createAvailablePlayerListFragment();
         fragmentTransaction.replace(R.id.left_fragment_container, availablePlayerListFragment);
@@ -98,7 +99,7 @@ public class OngoingTournamentManagementFragment extends Fragment
         tournamentPlayerListFragment = new TournamentPlayerListFragment();
 
         Bundle bundleForTournamentPlayers = new Bundle();
-        bundleForTournamentPlayers.putLong(TournamentPlayerListFragment.BUNDLE_TOURNAMENT_ID, tournament_id);
+        bundleForTournamentPlayers.putParcelable(TournamentPlayerListFragment.BUNDLE_TOURNAMENT, new Tournament());
         tournamentPlayerListFragment.setArguments(bundleForTournamentPlayers);
     }
 

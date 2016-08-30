@@ -14,9 +14,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import madson.org.opentournament.R;
-import madson.org.opentournament.domain.warmachine.WarmachineTournamentRanking;
+import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.service.OngoingTournamentService;
-import madson.org.opentournament.tournaments.TournamentListHeaderFragment;
 import madson.org.opentournament.utility.BaseApplication;
 
 import java.util.List;
@@ -59,8 +58,7 @@ public class RankingListFragment extends Fragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(linearLayoutManager);
 
-        List<WarmachineTournamentRanking> rankingForRound = ongoingTournamentService.getRankingForRound(tournamentId,
-                round);
+        List<TournamentPlayer> rankingForRound = ongoingTournamentService.getRankingForRound(tournamentId, round);
 
         TextView heading = (TextView) view.findViewById(R.id.heading_ranking_for_round);
 
@@ -82,9 +80,9 @@ public class RankingListFragment extends Fragment {
 
     private class RankingListAdapter extends RecyclerView.Adapter<RankingListAdapter.ViewHolder> {
 
-        private final List<WarmachineTournamentRanking> rankingList;
+        private final List<TournamentPlayer> rankingList;
 
-        public RankingListAdapter(List<WarmachineTournamentRanking> ranking) {
+        public RankingListAdapter(List<TournamentPlayer> ranking) {
 
             this.rankingList = ranking;
         }
@@ -105,7 +103,7 @@ public class RankingListFragment extends Fragment {
         @Override
         public void onBindViewHolder(RankingListAdapter.ViewHolder holder, int position) {
 
-            final WarmachineTournamentRanking ranking = rankingList.get(position);
+            final TournamentPlayer ranking = rankingList.get(position);
             holder.setRanking(ranking);
             holder.getRankingNumber().setText(String.valueOf(position + 1));
             holder.getScore().setText(String.valueOf(ranking.getScore()));
@@ -129,7 +127,7 @@ public class RankingListFragment extends Fragment {
             private final TextView sos;
             private final TextView cp;
             private final TextView vp;
-            private WarmachineTournamentRanking ranking;
+            private TournamentPlayer ranking;
             private TextView playerNumber;
             private TextView playerNameInList;
 
@@ -145,7 +143,7 @@ public class RankingListFragment extends Fragment {
                 vp = (TextView) itemView.findViewById(R.id.ranking_row_victory_points);
             }
 
-            public void setRanking(WarmachineTournamentRanking ranking) {
+            public void setRanking(TournamentPlayer ranking) {
 
                 this.ranking = ranking;
             }

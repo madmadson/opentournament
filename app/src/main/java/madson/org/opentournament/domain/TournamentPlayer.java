@@ -1,18 +1,15 @@
-package madson.org.opentournament.domain.warmachine;
-
-import madson.org.opentournament.db.PlayerTable;
-import madson.org.opentournament.domain.Player;
+package madson.org.opentournament.domain;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
 /**
- * Write some fancy Javadoc!
+ * Mapping Class for tournament and mapping.
  *
  * @author  Tobias Matt - tmatt@contargo.net
  */
-public class WarmachineTournamentRanking {
+public class TournamentPlayer {
 
     private long tournament_id;
     private long player_id;
@@ -23,19 +20,24 @@ public class WarmachineTournamentRanking {
     private int control_points;
     private int victory_points;
 
+    private SportOrGameScoreData scoringData;
+
     private String firstname;
     private String nickname;
     private String lastname;
 
+    private String tournament_onlineUUID;
+    private String player_onlineUUID;
+
     private List<Long> listOfOpponents;
 
-    public WarmachineTournamentRanking() {
+    public TournamentPlayer() {
 
         listOfOpponents = new ArrayList<>();
     }
 
 
-    public WarmachineTournamentRanking(long tournament_id, long player_id, int round) {
+    public TournamentPlayer(long tournament_id, long player_id, int round) {
 
         this.tournament_id = tournament_id;
         this.player_id = player_id;
@@ -173,7 +175,7 @@ public class WarmachineTournamentRanking {
     @Override
     public String toString() {
 
-        return "WarmachineTournamentRanking{"
+        return "TournamentPlayer{"
             + "tournament_id=" + tournament_id
             + ", round=" + round
             + ", player_id=" + player_id

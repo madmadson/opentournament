@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Player;
-import madson.org.opentournament.domain.warmachine.WarmachineTournamentRanking;
+import madson.org.opentournament.domain.TournamentPlayer;
 
 import java.util.List;
 
@@ -25,9 +25,9 @@ import java.util.List;
 public class WarmachineTournamentPlayerListAdapter extends RecyclerView.Adapter<WarmachineTournamentPlayerListAdapter.ViewHolder> {
 
     private TournamentPlayerListFragment.TournamentPlayerListItemListener mListener;
-    private List<WarmachineTournamentRanking> tournamentPlayerList;
+    private List<TournamentPlayer> tournamentPlayerList;
 
-    public WarmachineTournamentPlayerListAdapter(List<WarmachineTournamentRanking> tournamentPlayerList,
+    public WarmachineTournamentPlayerListAdapter(List<TournamentPlayer> tournamentPlayerList,
         TournamentPlayerListFragment.TournamentPlayerListItemListener mListener) {
 
         this.mListener = mListener;
@@ -50,7 +50,7 @@ public class WarmachineTournamentPlayerListAdapter extends RecyclerView.Adapter<
     @Override
     public void onBindViewHolder(WarmachineTournamentPlayerListAdapter.ViewHolder holder, int position) {
 
-        final WarmachineTournamentRanking player = tournamentPlayerList.get(position);
+        final TournamentPlayer player = tournamentPlayerList.get(position);
         holder.setPlayer(player);
         holder.getPlayerNumber().setText(String.valueOf(position + 1));
         holder.getPlayerNameInList()
@@ -65,7 +65,7 @@ public class WarmachineTournamentPlayerListAdapter extends RecyclerView.Adapter<
     }
 
 
-    public void add(WarmachineTournamentRanking item) {
+    public void add(TournamentPlayer item) {
 
         tournamentPlayerList.add(item);
         notifyDataSetChanged();
@@ -79,20 +79,20 @@ public class WarmachineTournamentPlayerListAdapter extends RecyclerView.Adapter<
      */
     public void add(Player player) {
 
-        WarmachineTournamentRanking warmachineTournamentRanking = new WarmachineTournamentRanking();
-        warmachineTournamentRanking.setPlayer_id(player.get_id());
-        warmachineTournamentRanking.setFirstname(player.getFirstname());
-        warmachineTournamentRanking.setNickname(player.getNickname());
-        warmachineTournamentRanking.setLastname(player.getLastname());
+        TournamentPlayer tournamentPlayer = new TournamentPlayer();
+        tournamentPlayer.setPlayer_id(player.get_id());
+        tournamentPlayer.setFirstname(player.getFirstname());
+        tournamentPlayer.setNickname(player.getNickname());
+        tournamentPlayer.setLastname(player.getLastname());
 
-        add(warmachineTournamentRanking);
+        add(tournamentPlayer);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private TextView playerNameInList;
         private TextView playerNumber;
-        private WarmachineTournamentRanking player;
+        private TournamentPlayer player;
 
         public ViewHolder(View v) {
 
@@ -109,7 +109,7 @@ public class WarmachineTournamentPlayerListAdapter extends RecyclerView.Adapter<
         }
 
 
-        public void setPlayer(WarmachineTournamentRanking player) {
+        public void setPlayer(TournamentPlayer player) {
 
             this.player = player;
         }

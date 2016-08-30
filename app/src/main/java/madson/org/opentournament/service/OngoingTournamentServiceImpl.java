@@ -10,12 +10,11 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import madson.org.opentournament.db.OpenTournamentDBHelper;
-import madson.org.opentournament.db.TournamentTable;
 import madson.org.opentournament.db.warmachine.WarmachineRankingTable;
 import madson.org.opentournament.db.warmachine.WarmachineTournamentGameTable;
 import madson.org.opentournament.domain.Player;
+import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.domain.warmachine.WarmachineTournamentGame;
-import madson.org.opentournament.domain.warmachine.WarmachineTournamentRanking;
 import madson.org.opentournament.service.warmachine.WarmachinePlayerComparator;
 import madson.org.opentournament.service.warmachine.WarmachineRankingComparator;
 import madson.org.opentournament.utility.BaseApplication;
@@ -93,9 +92,11 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
 
 
     @Override
-    public List<WarmachineTournamentRanking> getRankingForRound(Long tournamentId, int round) {
+    public List<TournamentPlayer> getRankingForRound(Long tournamentId, int round) {
 
-        ArrayList<WarmachineTournamentRanking> players = new ArrayList<>();
+        Log.i(this.getClass().getName(), "search Players for round");
+
+        ArrayList<TournamentPlayer> players = new ArrayList<>();
         SQLiteDatabase readableDatabase = openTournamentDBHelper.getReadableDatabase();
 
         Cursor cursor = readableDatabase.query(WarmachineRankingTable.TABLE_WARMACHINE_RANKING,
@@ -107,7 +108,7 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
         while (!cursor.isAfterLast()) {
             Player player = playerService.getPlayerForId((long) cursor.getInt(2));
 
-            WarmachineTournamentRanking warmachineTournamentPlayer = new WarmachineTournamentRanking();
+            TournamentPlayer warmachineTournamentPlayer = new TournamentPlayer();
             warmachineTournamentPlayer.setPlayer_id(cursor.getInt(2));
             warmachineTournamentPlayer.setFirstname(player.getFirstname());
             warmachineTournamentPlayer.setNickname(player.getNickname());
@@ -184,11 +185,11 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
     @Override
     public List<WarmachineTournamentGame> createPairingForRound(Long tournamentId, int round) {
 
-        List<WarmachineTournamentRanking> playersWithRankingFromRound = getRankingForRound(tournamentId, round);
+        List<TournamentPlayer> playersWithRankingFromRound = getRankingForRound(tournamentId, round);
 
         // uneven number of players
         if (playersWithRankingFromRound.size() % 2 == 1) {
-            WarmachineTournamentRanking warmachineTournamentDummyPlayer = new WarmachineTournamentRanking();
+            TournamentPlayer warmachineTournamentDummyPlayer = new TournamentPlayer();
             playersWithRankingFromRound.add(warmachineTournamentDummyPlayer);
         }
 
@@ -204,14 +205,14 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
             warmachineTournamentGame.setTournament_id(tournamentId.intValue());
             warmachineTournamentGame.setRound(round);
 
-            WarmachineTournamentRanking player_one = playersWithRankingFromRound.get(i);
+            TournamentPlayer player_one = playersWithRankingFromRound.get(i);
             warmachineTournamentGame.setPlayer_one_id((int) player_one.getPlayer_id());
             warmachineTournamentGame.setPlayer_one_full_name(player_one.getFirstname() + " \""
                 + player_one.getNickname() + "\" " + player_one.getLastname());
 
             Log.i(this.getClass().getName(), "player2:" + playersWithRankingFromRound.get(i + 1));
 
-            WarmachineTournamentRanking player_two = playersWithRankingFromRound.get(i + 1);
+            TournamentPlayer player_two = playersWithRankingFromRound.get(i + 1);
             warmachineTournamentGame.setPlayer_two_id((int) player_two.getPlayer_id());
             warmachineTournamentGame.setPlayer_two_full_name(player_two.getFirstname() + " \""
                 + player_two.getNickname() + "\" " + player_two.getLastname());
@@ -320,24 +321,24 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
     public void createRankingForRound(long tournament_id, int round_for_calculation) {
 
         List<Player> allPlayersForTournament = getAllPlayersForTournament(tournament_id);
-        Map<Long, WarmachineTournamentRanking> mapOfPlayers = new HashMap<>();
+        Map<Long, TournamentPlayer> mapOfPlayers = new HashMap<>();
 
         for (Player player : allPlayersForTournament) {
             mapOfPlayers.put(player.get_id(),
-                new WarmachineTournamentRanking(tournament_id, player.get_id(), round_for_calculation));
+                new TournamentPlayer(tournament_id, player.get_id(), round_for_calculation));
         }
 
         List<WarmachineTournamentGame> gamesOfPlayerForTournament = getAllGamesForTournamentTillRound(tournament_id,
                 round_for_calculation);
 
         for (WarmachineTournamentGame game : gamesOfPlayerForTournament) {
-            WarmachineTournamentRanking playerOne = mapOfPlayers.get(game.getPlayer_one_id());
+            TournamentPlayer playerOne = mapOfPlayers.get(game.getPlayer_one_id());
 
             playerOne.setScore(playerOne.getScore() + game.getPlayer_one_score());
             playerOne.setControl_points(playerOne.getControl_points() + game.getPlayer_one_control_points());
             playerOne.setVictory_points(playerOne.getVictory_points() + game.getPlayer_one_victory_points());
 
-            WarmachineTournamentRanking playerTwo = mapOfPlayers.get(game.getPlayer_two_id());
+            TournamentPlayer playerTwo = mapOfPlayers.get(game.getPlayer_two_id());
 
             playerTwo.setScore(playerTwo.getScore() + game.getPlayer_two_score());
             playerTwo.setControl_points(playerTwo.getControl_points() + game.getPlayer_two_control_points());
@@ -375,9 +376,9 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
     }
 
 
-    private void calculateSoSForPlayerMap(Map<Long, WarmachineTournamentRanking> mapOfPlayers) {
+    private void calculateSoSForPlayerMap(Map<Long, TournamentPlayer> mapOfPlayers) {
 
-        for (WarmachineTournamentRanking ranking : mapOfPlayers.values()) {
+        for (TournamentPlayer ranking : mapOfPlayers.values()) {
             List<Long> listOfOpponents = ranking.getListOfOpponents();
 
             int sos = 0;
@@ -419,11 +420,11 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
     }
 
 
-    private void insertWarmachinePlayerRankingForRound(Map<Long, WarmachineTournamentRanking> newRankingForRoundList) {
+    private void insertWarmachinePlayerRankingForRound(Map<Long, TournamentPlayer> newRankingForRoundList) {
 
         SQLiteDatabase db = openTournamentDBHelper.getWritableDatabase();
 
-        for (WarmachineTournamentRanking ranking : newRankingForRoundList.values()) {
+        for (TournamentPlayer ranking : newRankingForRoundList.values()) {
             ContentValues contentValues = new ContentValues();
             contentValues.put(WarmachineRankingTable.COLUMN_TOURNAMENT_ID, ranking.getTournament_id());
             contentValues.put(WarmachineRankingTable.COLUMN_PLAYER_ID, ranking.getPlayer_id());

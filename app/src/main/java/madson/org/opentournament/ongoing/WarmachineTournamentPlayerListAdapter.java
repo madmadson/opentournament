@@ -125,11 +125,6 @@ public class WarmachineTournamentPlayerListAdapter extends RecyclerView.Adapter<
         public void onClick(View v) {
 
             Log.i(v.getClass().getName(), "remove player from tournament player list: " + player);
-
-            tournamentPlayerList.remove(player);
-            notifyDataSetChanged();
-
-            mListener.onTournamentPlayerListItemClicked(player.getPlayer_id());
         }
     }
 }

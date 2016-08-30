@@ -118,7 +118,7 @@
     <string name="toast_sign_in_anonymously">Sign in anonymously</string>
     <string name="toast_no_connection">no connection possible</string>
     <string name="toast_sign_out_no_connection">you cant sign out when no internet</string>
-    <string name="offline_text">you are offline</string>
+    <string name="offline_text">you are offline - cannot load online tournaments</string>
     <string name="delete_tournament">Delete Tournament</string>
     <string name="dialof_confirm_draw">Sure draw?</string>
     <string name="dialog_confirm_delete_tournament">Sure delete tournament?</string>

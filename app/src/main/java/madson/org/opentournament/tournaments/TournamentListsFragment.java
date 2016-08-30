@@ -153,6 +153,7 @@ public class TournamentListsFragment extends Fragment {
 
             TextView offline_text = (TextView) view.findViewById(R.id.offline_text);
             offline_text.setVisibility(View.VISIBLE);
+            noOnlineTournamentsFoundTextView.setVisibility(View.GONE);
         }
 
         // local tournaments

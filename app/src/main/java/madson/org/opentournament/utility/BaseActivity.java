@@ -219,7 +219,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
             return true;
         } else if (id == R.id.toolbar_menu_sign_out) {
-            if (isConnected()) {
+            if (isConnected() || mFirebaseAuth == null) {
                 mFirebaseAuth.signOut();
                 LoginManager.getInstance().logOut();
 

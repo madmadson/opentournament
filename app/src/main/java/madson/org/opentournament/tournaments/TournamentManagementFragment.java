@@ -38,7 +38,7 @@ public class TournamentManagementFragment extends Fragment
 
         FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
 
-        fragmentTransaction.replace(R.id.left_fragment_container, tournamentListFragment);
+        fragmentTransaction.replace(R.id.fragment_container, tournamentListFragment);
         fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         fragmentTransaction.commit();
     }
@@ -70,41 +70,19 @@ public class TournamentManagementFragment extends Fragment
         if (view != null) {
             final FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
 
-            if (view.findViewById(R.id.right_fragment_container) == null) {
-                fab.setOnClickListener(new View.OnClickListener() {
+            fab.setOnClickListener(new View.OnClickListener() {
 
-                        // new empty tournament
-                        @Override
-                        public void onClick(View view) {
+                    @Override
+                    public void onClick(View v) {
 
-                            TournamentDetailFragment tournamentDetailFragment = new TournamentDetailFragment();
+                        Log.i(this.getClass().getName(), "click fab tournament management");
 
-                            FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
+                        TournamentManagementDialog dialog = new TournamentManagementDialog();
 
-                            ((DrawerLocker) getActivity()).setDrawerEnabled(false);
-
-                            fab.hide();
-
-                            fragmentTransaction.replace(R.id.left_fragment_container, tournamentDetailFragment);
-                            fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-                            fragmentTransaction.commit();
-                        }
-                    });
-            } else {
-                fab.setOnClickListener(new View.OnClickListener() {
-
-                        @Override
-                        public void onClick(View v) {
-
-                            Log.i(this.getClass().getName(), "click fab tournament management");
-
-                            TournamentManagementDialog dialog = new TournamentManagementDialog();
-
-                            FragmentManager supportFragmentManager = getChildFragmentManager();
-                            dialog.show(supportFragmentManager, "tournament management new tournament");
-                        }
-                    });
-            }
+                        FragmentManager supportFragmentManager = getChildFragmentManager();
+                        dialog.show(supportFragmentManager, "tournament management new tournament");
+                    }
+                });
         }
     }
 
@@ -127,23 +105,6 @@ public class TournamentManagementFragment extends Fragment
         rankingListFragment.setArguments(bundle);
 
         Log.i(this.getClass().getName(), "clicked on tournament: " + tournament);
-
-        FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
-
-        final FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
-
-        if (view.findViewById(R.id.right_fragment_container) == null) {
-            ((DrawerLocker) getActivity()).setDrawerEnabled(false);
-
-            fab.hide();
-            fragmentTransaction.replace(R.id.left_fragment_container, rankingListFragment);
-            fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-            fragmentTransaction.commit();
-        } else {
-            fragmentTransaction.replace(R.id.right_fragment_container, rankingListFragment);
-            fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-            fragmentTransaction.commit();
-        }
     }
 
 
@@ -158,20 +119,5 @@ public class TournamentManagementFragment extends Fragment
     public void onTournamentEditedClicked() {
 
         final View view = getView();
-
-        TournamentListsFragment tournamentListFragment = new TournamentListsFragment();
-
-        FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
-        final FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
-
-        if (view.findViewById(R.id.right_fragment_container) == null) {
-            ((DrawerLocker) getActivity()).setDrawerEnabled(false);
-
-            fab.hide();
-        }
-
-        fragmentTransaction.replace(R.id.left_fragment_container, tournamentListFragment);
-        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-        fragmentTransaction.commit();
     }
 }

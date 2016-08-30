@@ -177,7 +177,10 @@ public class TournamentListsFragment extends Fragment {
     public void onDetach() {
 
         super.onDetach();
-        mListener = null;
+
+        if (mListener == null) {
+            mListener = null;
+        }
     }
 
     public interface TournamentListItemListener {

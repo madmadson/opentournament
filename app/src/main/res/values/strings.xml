@@ -33,7 +33,9 @@
     <string name="dialog_cancel">cancel</string>
     
     <!-- Tournament management dialog-->
-    <string name="new_tournament_title" type="id">New tournament</string>
+    <string name="dialog_edit_tournament">Edit tournament</string>
+    <string name="dialog_new_tournament">New tournament</string>
+    
     <string name="label_tournament_name">tournament name</string>
     <string name="label_tournament_max_players">max players</string>
     <string name="label_tournament_date">date</string>
@@ -108,5 +110,6 @@
     <string name="toast_no_connection">no connection possible</string>
     <string name="toast_sign_out_no_connection">you cant sign out when no internet</string>
     <string name="offline_text">you are offline</string>
+  
 
 </resources>

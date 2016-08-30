@@ -86,8 +86,6 @@ public class TournamentManagementFragment extends Fragment
     @Override
     public void onTournamentListItemClicked(long id) {
 
-        final View view = getView();
-
         // get actual tournament to get actual state
         TournamentService tournamentService = ((BaseApplication) getActivity().getApplication()).getTournamentService();
         Tournament tournament = tournamentService.getTournamentForId(id);

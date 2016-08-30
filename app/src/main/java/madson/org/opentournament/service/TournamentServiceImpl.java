@@ -63,12 +63,10 @@ public class TournamentServiceImpl implements TournamentService {
 
     private void createMockTournaments() {
 
-        createTournament(1, "Coin of Evil", "Ludwigsburg", new DateTime(2016, 3, 10, 10, 8).toDate(), 32, null,
-            "Harry Hirsch", "harry@gmail.com");
-        createTournament(2, "HMDZ", "Oberhausen", new DateTime(2016, 5, 20, 10, 0).toDate(), 0, null, "Tim Grubi",
-            "grubbi@gmail.com");
-        createTournament(3, "Dead Fish", "Heidelberg", new DateTime(2016, 7, 15, 10, 0).toDate(), 16, null,
-            "Bernhard Fishi", "fishi@gmail.com");
+        createTournament(1, "Coin of Evil", "Ludwigsburg", new DateTime(2016, 3, 10, 10, 8).toDate(), 32, null, null,
+            null);
+        createTournament(2, "HMDZ", "Oberhausen", new DateTime(2016, 5, 20, 10, 0).toDate(), 0, null, null, null);
+        createTournament(3, "Dead Fish", "Heidelberg", new DateTime(2016, 7, 15, 10, 0).toDate(), 16, null, null, null);
     }
 
 

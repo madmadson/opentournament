@@ -3,6 +3,8 @@ package madson.org.opentournament.domain;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import org.joda.time.DateTime;
+
 import java.util.Date;
 
 
@@ -58,6 +60,7 @@ public class Tournament implements Parcelable {
         onlineUUID = in.readString();
         creatorName = in.readString();
         creatorEmail = in.readString();
+        dateOfTournament = new Date(in.readLong());
     }
 
     public long get_id() {
@@ -202,7 +205,18 @@ public class Tournament implements Parcelable {
 
         parcel.writeLong(_id);
         parcel.writeString(name);
-        parcel.writeLong(dateOfTournament.getTime());
         parcel.writeString(location);
+        parcel.writeInt(maxNumberOfPlayers);
+        parcel.writeInt(actualRound);
+        parcel.writeString(onlineUUID);
+        parcel.writeString(creatorName);
+        parcel.writeString(creatorEmail);
+
+        if (dateOfTournament != null) {
+            parcel.writeLong(dateOfTournament.getTime());
+        } else {
+            // get today
+            parcel.writeLong(DateTime.now().getMillis());
+        }
     }
 }

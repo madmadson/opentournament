@@ -32,7 +32,6 @@ import com.google.firebase.auth.FirebaseUser;
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.players.AvailablePlayerListFragment;
-import madson.org.opentournament.service.OngoingTournamentService;
 import madson.org.opentournament.service.TournamentService;
 import madson.org.opentournament.utility.BaseActivity;
 import madson.org.opentournament.utility.BaseApplication;
@@ -53,7 +52,7 @@ import java.util.Locale;
  */
 public class TournamentManagementDialog extends DialogFragment {
 
-    public static final String BUNDLE_TOURNAMENT_ID = "tournament_id";
+    public static final String BUNDLE_TOURNAMENT = "tournament";
     private EditText tournamentNameEditText;
     private EditText tournamentLocationEditText;
     private EditText tournamentDateEditText;
@@ -62,7 +61,7 @@ public class TournamentManagementDialog extends DialogFragment {
 
     private CoordinatorLayout coordinatorLayout;
     private AvailablePlayerListFragment.AvailablePlayerListItemListener mListener;
-    private long tournamentId;
+    private Tournament tournament;
     private DateFormat dateFormatter;
     private DatePickerDialog datePickerDialog;
     private FirebaseUser currentUser;
@@ -91,7 +90,7 @@ public class TournamentManagementDialog extends DialogFragment {
         Bundle bundle = getArguments();
 
         if (bundle != null) {
-            tournamentId = bundle.getLong(BUNDLE_TOURNAMENT_ID);
+            tournament = bundle.getParcelable(BUNDLE_TOURNAMENT);
         }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -141,7 +140,8 @@ public class TournamentManagementDialog extends DialogFragment {
         datePickerDialog.updateDate(now.getYear(), now.getMonthOfYear(), now.getDayOfMonth());
 
         builder.setView(dialogView)
-            .setTitle(getString(R.string.new_tournament_title))
+            .setTitle(tournament == null ? getString(R.string.dialog_new_tournament)
+                                         : getString(R.string.dialog_edit_tournament))
             .setPositiveButton(R.string.dialog_save, null)
             .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
 
@@ -158,6 +158,17 @@ public class TournamentManagementDialog extends DialogFragment {
             tournamentOnlineCheckbox.setEnabled(false);
             tournamentOnlineCheckbox.setChecked(false);
             dialogView.findViewById(R.id.tournament_anonymous_no_online_text).setVisibility(View.VISIBLE);
+        }
+
+        if (tournament != null) {
+            tournamentNameEditText.setText(tournament.getName());
+            tournamentLocationEditText.setText(tournament.getLocation());
+            tournamentDateEditText.setText(dateFormatter.format(tournament.getDateOfTournament()));
+            tournamentMaxPlayersEditText.setText(String.valueOf(tournament.getMaxNumberOfPlayers()));
+
+            if (tournament.getCreatorEmail() == null || tournament.getCreatorEmail().isEmpty()) {
+                tournamentOnlineCheckbox.setChecked(false);
+            }
         }
 
         return builder.create();

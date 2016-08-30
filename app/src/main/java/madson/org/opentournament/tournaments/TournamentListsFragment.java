@@ -31,7 +31,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.ongoing.OngoingTournamentActivity;
-import madson.org.opentournament.ongoing.RankingListFragment;
 import madson.org.opentournament.service.TournamentService;
 import madson.org.opentournament.utility.BaseActivity;
 import madson.org.opentournament.utility.BaseApplication;
@@ -236,7 +235,7 @@ public class TournamentListsFragment extends Fragment {
 
                         TournamentManagementDialog dialog = new TournamentManagementDialog();
                         Bundle bundle = new Bundle();
-                        bundle.putParcelable(TournamentManagementDialog.BUNDLE_TOURNAMENT_ID, tournament);
+                        bundle.putParcelable(TournamentManagementDialog.BUNDLE_TOURNAMENT, tournament);
                         dialog.setArguments(bundle);
 
                         FragmentManager supportFragmentManager = getChildFragmentManager();

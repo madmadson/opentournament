@@ -1,5 +1,8 @@
 package madson.org.opentournament.domain;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.Date;
 
 
@@ -8,10 +11,26 @@ import java.util.Date;
  *
  * @author  Tobias Matt - tmatt@contargo.net
  */
-public class Tournament {
+public class Tournament implements Parcelable {
 
     public static final String[] ALL_COLS_FOR_TOURNAMENT = {
         "_id", "name", "location", "date", "maxNumberOfPlayers", "actualRound", "onlineUUID", "creator", "creatorEmail"
+    };
+
+    public static final Creator<Tournament> CREATOR = new Creator<Tournament>() {
+
+        @Override
+        public Tournament createFromParcel(Parcel in) {
+
+            return new Tournament(in);
+        }
+
+
+        @Override
+        public Tournament[] newArray(int size) {
+
+            return new Tournament[size];
+        }
     };
 
     private long _id;
@@ -23,6 +42,23 @@ public class Tournament {
     private String onlineUUID;
     private String creatorName;
     private String creatorEmail;
+
+    // empty constructor
+    public Tournament() {
+    }
+
+
+    protected Tournament(Parcel in) {
+
+        _id = in.readLong();
+        name = in.readString();
+        location = in.readString();
+        maxNumberOfPlayers = in.readInt();
+        actualRound = in.readInt();
+        onlineUUID = in.readString();
+        creatorName = in.readString();
+        creatorEmail = in.readString();
+    }
 
     public long get_id() {
 
@@ -151,5 +187,22 @@ public class Tournament {
             + ", onlineUUID=" + onlineUUID
             + ", creatorName='" + creatorName + '\''
             + ", creatorEmail='" + creatorEmail + '\'' + '}';
+    }
+
+
+    @Override
+    public int describeContents() {
+
+        return 0;
+    }
+
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+
+        parcel.writeLong(_id);
+        parcel.writeString(name);
+        parcel.writeLong(dateOfTournament.getTime());
+        parcel.writeString(location);
     }
 }

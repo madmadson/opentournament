@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -30,6 +31,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.ongoing.OngoingTournamentActivity;
+import madson.org.opentournament.ongoing.RankingListFragment;
 import madson.org.opentournament.service.TournamentService;
 import madson.org.opentournament.utility.BaseActivity;
 import madson.org.opentournament.utility.BaseApplication;
@@ -107,7 +109,7 @@ public class TournamentListsFragment extends Fragment {
 
                     if (currentUser != null && currentUser.getEmail() != null) {
                         if (currentUser.getEmail().equals(tournament.getCreatorEmail())) {
-                            viewHolder.getStartTournamentButton().setOnClickListener(new View.OnClickListener() {
+                            viewHolder.getEditTournamentButton().setOnClickListener(new View.OnClickListener() {
 
                                     @Override
                                     public void onClick(View v) {
@@ -123,7 +125,7 @@ public class TournamentListsFragment extends Fragment {
                         }
                     } else {
                         // only creator should do action
-                        viewHolder.getStartTournamentButton().setVisibility(View.INVISIBLE);
+                        viewHolder.getEditTournamentButton().setVisibility(View.INVISIBLE);
                     }
                 }
             };
@@ -225,16 +227,20 @@ public class TournamentListsFragment extends Fragment {
             }
 
             holder.getTournamentPlayersInList().setText("0/" + String.valueOf(tournament.getMaxNumberOfPlayers()));
-            holder.getStartTournamentButton().setOnClickListener(new View.OnClickListener() {
+            holder.getEditTournamentButton().setOnClickListener(new View.OnClickListener() {
 
                     @Override
                     public void onClick(View v) {
 
-                        Log.i(v.getClass().getName(), "tournament Stared:" + tournament);
+                        Log.i(v.getClass().getName(), "tournament edit:" + tournament);
 
-                        Intent intent = new Intent(getContext(), OngoingTournamentActivity.class);
-                        intent.putExtra(OngoingTournamentActivity.EXTRA_TOURNAMENT_ID, tournament.getId());
-                        startActivity(intent);
+                        TournamentManagementDialog dialog = new TournamentManagementDialog();
+                        Bundle bundle = new Bundle();
+                        bundle.putParcelable(TournamentManagementDialog.BUNDLE_TOURNAMENT_ID, tournament);
+                        dialog.setArguments(bundle);
+
+                        FragmentManager supportFragmentManager = getChildFragmentManager();
+                        dialog.show(supportFragmentManager, "tournament management edit dialog tournament");
                     }
                 });
         }
@@ -264,7 +270,7 @@ public class TournamentListsFragment extends Fragment {
 
     public static class TournamentViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        private ImageButton startTournamentButton;
+        private ImageButton editTournamentButton;
         private TextView tournamentNameInList;
         private TextView tournamentPlayersInList;
         private TextView tournamentLocationInList;
@@ -276,7 +282,7 @@ public class TournamentListsFragment extends Fragment {
             super(v);
             v.setOnClickListener(this);
 
-            startTournamentButton = (ImageButton) v.findViewById(R.id.start_tournament_button);
+            editTournamentButton = (ImageButton) v.findViewById(R.id.button_edit_tournament);
             tournamentNameInList = (TextView) v.findViewById(R.id.tournament_name);
             tournamentPlayersInList = (TextView) v.findViewById(R.id.amount_players);
             tournamentLocationInList = (TextView) v.findViewById(R.id.tournament_location);
@@ -302,9 +308,9 @@ public class TournamentListsFragment extends Fragment {
         }
 
 
-        public ImageButton getStartTournamentButton() {
+        public ImageButton getEditTournamentButton() {
 
-            return startTournamentButton;
+            return editTournamentButton;
         }
 
 

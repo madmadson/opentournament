@@ -1,5 +1,7 @@
 package madson.org.opentournament.tournaments;
 
+import android.content.Intent;
+
 import android.os.Bundle;
 
 import android.support.annotation.Nullable;
@@ -20,10 +22,11 @@ import android.view.ViewGroup;
 
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Tournament;
+import madson.org.opentournament.ongoing.OngoingTournamentActivity;
 import madson.org.opentournament.ongoing.RankingListFragment;
 import madson.org.opentournament.service.TournamentService;
+import madson.org.opentournament.utility.BaseActivity;
 import madson.org.opentournament.utility.BaseApplication;
-import madson.org.opentournament.utility.DrawerLocker;
 
 
 public class TournamentManagementFragment extends Fragment
@@ -56,34 +59,27 @@ public class TournamentManagementFragment extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        return inflater.inflate(R.layout.fragment_tournament_management, container, false);
-    }
+        View view = inflater.inflate(R.layout.fragment_tournament_management, container, false);
 
+        FloatingActionButton floatingActionButton = ((BaseActivity) getActivity()).getFloatingActionButton();
+        floatingActionButton.setVisibility(View.VISIBLE);
+        floatingActionButton.setImageResource(R.drawable.ic_add_white_24dp);
 
-    @Override
-    public void onStart() {
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
 
-        super.onStart();
+                @Override
+                public void onClick(View v) {
 
-        final View view = getView();
+                    Log.i(this.getClass().getName(), "click floatingActionButton tournament management");
 
-        if (view != null) {
-            final FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
+                    TournamentManagementDialog dialog = new TournamentManagementDialog();
 
-            fab.setOnClickListener(new View.OnClickListener() {
+                    FragmentManager supportFragmentManager = getChildFragmentManager();
+                    dialog.show(supportFragmentManager, "tournament management new tournament");
+                }
+            });
 
-                    @Override
-                    public void onClick(View v) {
-
-                        Log.i(this.getClass().getName(), "click fab tournament management");
-
-                        TournamentManagementDialog dialog = new TournamentManagementDialog();
-
-                        FragmentManager supportFragmentManager = getChildFragmentManager();
-                        dialog.show(supportFragmentManager, "tournament management new tournament");
-                    }
-                });
-        }
+        return view;
     }
 
 
@@ -101,10 +97,13 @@ public class TournamentManagementFragment extends Fragment
         Bundle bundle = new Bundle();
         bundle.putLong(RankingListFragment.BUNDLE_TOURNAMENT_ID, id);
 
-        bundle.putInt(RankingListFragment.BUNDLE_ROUND, tournament.getActualRound());
         rankingListFragment.setArguments(bundle);
 
         Log.i(this.getClass().getName(), "clicked on tournament: " + tournament);
+
+        Intent intent = new Intent(getContext(), OngoingTournamentActivity.class);
+        intent.putExtra(OngoingTournamentActivity.EXTRA_TOURNAMENT_ID, tournament.getId());
+        startActivity(intent);
     }
 
 

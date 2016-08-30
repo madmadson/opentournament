@@ -58,4 +58,12 @@ public interface TournamentService {
      * @param  tournament
      */
     void pushTournamentToFirebase(Tournament tournament);
+
+
+    /**
+     * Delete tournament for given id.
+     *
+     * @param  id
+     */
+    void deleteTournament(long id);
 }

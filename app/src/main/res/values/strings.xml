@@ -25,7 +25,7 @@
     
     <string name="no_online_tournaments_if_anonymous">You cannot create online tournaments anonymously</string>
     
-    <string name="heading_local_tournaments">- local tournamnts (only visible for you) -</string>
+    <string name="heading_local_tournaments">- local tournaments (only visible for you) -</string>
     <string name="heading_online_tournaments">- online tournaments -</string>
     
     <!--dialog -->
@@ -110,6 +110,9 @@
     <string name="toast_no_connection">no connection possible</string>
     <string name="toast_sign_out_no_connection">you cant sign out when no internet</string>
     <string name="offline_text">you are offline</string>
-  
+    <string name="delete_tournament">Delete Tournament</string>
+    <string name="dialof_confirm_draw">Sure draw?</string>
+    <string name="dialog_confirm_delete_tournament">Sure delete tournament?</string>
+
 
 </resources>

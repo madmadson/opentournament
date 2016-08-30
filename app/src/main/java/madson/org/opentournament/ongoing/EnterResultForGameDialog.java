@@ -416,7 +416,7 @@ public class EnterResultForGameDialog extends DialogFragment {
                     if (game.getPlayer_one_score() == 0 && game.getPlayer_two_score() == 0) {
                         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
-                        builder.setTitle("Sure draw?")
+                        builder.setTitle(R.string.dialof_confirm_draw)
                         .setPositiveButton(R.string.dialog_save, new DialogInterface.OnClickListener() {
 
                                     @Override

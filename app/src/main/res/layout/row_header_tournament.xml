@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/row_header_height"
     android:paddingTop="@dimen/row_padding_top"
-    android:paddingBottom="@dimen/row_padding_bottom"
     android:background="@drawable/row_item">
 
     <TextView

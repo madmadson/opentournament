@@ -224,6 +224,19 @@ public class TournamentServiceImpl implements TournamentService {
             SQLiteDatabase writableDatabase = openTournamentDBHelper.getWritableDatabase();
             writableDatabase.delete(TournamentTable.TABLE_TOURNAMENTS, "_id  = ?",
                 new String[] { String.valueOf(tournament.get_id()) });
+
+            writableDatabase.close();
         }
+    }
+
+
+    @Override
+    public void deleteTournament(long id) {
+
+        Log.i(this.getClass().getName(), "delete  tournament for id: " + id);
+
+        SQLiteDatabase writableDatabase = openTournamentDBHelper.getWritableDatabase();
+        writableDatabase.delete(TournamentTable.TABLE_TOURNAMENTS, "_id  = ?", new String[] { String.valueOf(id) });
+        writableDatabase.close();
     }
 }

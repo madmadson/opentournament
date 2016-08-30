@@ -1,11 +1,16 @@
 package madson.org.opentournament.tournaments;
 
+import android.annotation.TargetApi;
+
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 
 import android.content.Context;
 import android.content.DialogInterface;
 
+import android.graphics.drawable.Drawable;
+
+import android.os.Build;
 import android.os.Bundle;
 
 import android.support.annotation.Nullable;
@@ -259,6 +264,48 @@ public class TournamentManagementDialog extends DialogFragment {
                         }
                     }
                 });
+
+            if (tournament != null) {
+                View deleteTournamentButton = dialog.findViewById(R.id.dialog_delete_tournament_button);
+
+                if (deleteTournamentButton != null) {
+                    deleteTournamentButton.setVisibility(View.VISIBLE);
+                    deleteTournamentButton.setOnClickListener(new View.OnClickListener() {
+
+                            @Override
+                            public void onClick(View view) {
+
+                                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+                                builder.setTitle(R.string.dialog_confirm_delete_tournament)
+                                .setPositiveButton(R.string.dialog_save, new DialogInterface.OnClickListener() {
+
+                                            @Override
+                                            public void onClick(DialogInterface sure_draw_dialog, int id) {
+
+                                                Log.i(this.getClass().getName(), "tournament deletion confirmed");
+
+                                                TournamentService tournamentService =
+                                                    ((BaseApplication) getActivity().getApplication())
+                                                    .getTournamentService();
+                                                tournamentService.deleteTournament(tournament.get_id());
+                                                sure_draw_dialog.dismiss();
+                                                dialog.dismiss();
+                                            }
+                                        })
+                                .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
+
+                                        @Override
+                                        public void onClick(DialogInterface delete_confirm_dialog, int id) {
+
+                                            delete_confirm_dialog.cancel();
+                                        }
+                                    });
+                                builder.show();
+                            }
+                        });
+                }
+            }
         }
     }
 }

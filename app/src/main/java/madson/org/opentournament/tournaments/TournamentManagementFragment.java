@@ -30,18 +30,21 @@ import madson.org.opentournament.utility.BaseApplication;
 
 
 public class TournamentManagementFragment extends Fragment
-    implements TournamentListsFragment.TournamentListItemListener, TournamentDetailFragment.OnTournamentEditedListener {
+    implements TournamentListsFragment.TournamentListItemListener,
+        TournamentManagementDialog.TournamentChangedListener {
+
+    private TournamentListsFragment tournamentListsFragment;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
 
-        TournamentListsFragment tournamentListFragment = new TournamentListsFragment();
+        tournamentListsFragment = new TournamentListsFragment();
 
         FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
 
-        fragmentTransaction.replace(R.id.fragment_container, tournamentListFragment);
+        fragmentTransaction.replace(R.id.fragment_container, tournamentListsFragment);
         fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         fragmentTransaction.commit();
     }
@@ -73,6 +76,7 @@ public class TournamentManagementFragment extends Fragment
                     Log.i(this.getClass().getName(), "click floatingActionButton tournament management");
 
                     TournamentManagementDialog dialog = new TournamentManagementDialog();
+                    dialog.setTargetFragment(TournamentManagementFragment.this, 1);
 
                     FragmentManager supportFragmentManager = getChildFragmentManager();
                     dialog.show(supportFragmentManager, "tournament management new tournament");
@@ -100,7 +104,7 @@ public class TournamentManagementFragment extends Fragment
         Log.i(this.getClass().getName(), "clicked on tournament: " + tournament);
 
         Intent intent = new Intent(getContext(), OngoingTournamentActivity.class);
-        intent.putExtra(OngoingTournamentActivity.EXTRA_TOURNAMENT_ID, tournament.getId());
+        intent.putExtra(OngoingTournamentActivity.EXTRA_TOURNAMENT_ID, tournament.get_id());
         startActivity(intent);
     }
 
@@ -113,8 +117,22 @@ public class TournamentManagementFragment extends Fragment
 
 
     @Override
-    public void onTournamentEditedClicked() {
+    public void tournamentChangedEvent(Tournament tournament) {
 
-        final View view = getView();
+        tournamentListsFragment.getLocalTournamentListAdapter().replace(tournament);
+    }
+
+
+    @Override
+    public void tournamentAddedEvent(Tournament tournament) {
+
+        tournamentListsFragment.getLocalTournamentListAdapter().add(tournament);
+    }
+
+
+    @Override
+    public void tournamentDeletedEvent(Tournament tournament) {
+
+        tournamentListsFragment.getLocalTournamentListAdapter().remove(tournament);
     }
 }

@@ -164,7 +164,7 @@ public class OngoingTournamentActivity extends BaseActivity {
 
             Log.i(this.getClass().getName(), "create tournament fragment: " + tournament + " on position: " + position);
             ongoingTournamentManagementFragment = OngoingTournamentManagementFragment.newInstance(position,
-                    tournament.getId());
+                    tournament.get_id());
 
             return ongoingTournamentManagementFragment;
         }

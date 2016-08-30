@@ -1,21 +1,17 @@
 package madson.org.opentournament.tournaments;
 
-import android.annotation.TargetApi;
-
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 
 import android.content.Context;
 import android.content.DialogInterface;
 
-import android.graphics.drawable.Drawable;
-
-import android.os.Build;
 import android.os.Bundle;
 
 import android.support.annotation.Nullable;
 
 import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 
 import android.support.v4.app.DialogFragment;
 
@@ -30,13 +26,13 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Tournament;
-import madson.org.opentournament.players.AvailablePlayerListFragment;
 import madson.org.opentournament.service.TournamentService;
 import madson.org.opentournament.utility.BaseActivity;
 import madson.org.opentournament.utility.BaseApplication;
@@ -65,11 +61,13 @@ public class TournamentManagementDialog extends DialogFragment {
     private CheckBox tournamentOnlineCheckbox;
 
     private CoordinatorLayout coordinatorLayout;
-    private AvailablePlayerListFragment.AvailablePlayerListItemListener mListener;
+
     private Tournament tournament;
     private DateFormat dateFormatter;
     private DatePickerDialog datePickerDialog;
     private FirebaseUser currentUser;
+    private TournamentChangedListener mListener;
+    private TextView tournamentInfoConvertToOnlineTournament;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -79,13 +77,6 @@ public class TournamentManagementDialog extends DialogFragment {
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
         dateFormatter = DateFormat.getDateInstance(DateFormat.DEFAULT, Locale.getDefault());
         super.onCreate(savedInstanceState);
-    }
-
-
-    @Override
-    public void onAttach(Context activity) {
-
-        super.onAttach(activity);
     }
 
 
@@ -145,8 +136,7 @@ public class TournamentManagementDialog extends DialogFragment {
         datePickerDialog.updateDate(now.getYear(), now.getMonthOfYear(), now.getDayOfMonth());
 
         builder.setView(dialogView)
-            .setTitle(tournament == null ? getString(R.string.dialog_new_tournament)
-                                         : getString(R.string.dialog_edit_tournament))
+            .setTitle(tournament == null ? getString(R.string.dialog_new_tournament) : "")
             .setPositiveButton(R.string.dialog_save, null)
             .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
 
@@ -158,6 +148,8 @@ public class TournamentManagementDialog extends DialogFragment {
                 });
 
         tournamentOnlineCheckbox = (CheckBox) dialogView.findViewById(R.id.tournament_online);
+        tournamentInfoConvertToOnlineTournament = (TextView) dialogView.findViewById(
+                R.id.tournament_convert_to_online_tournament);
 
         if (currentUser == null || currentUser.getEmail() == null) {
             tournamentOnlineCheckbox.setEnabled(false);
@@ -168,11 +160,19 @@ public class TournamentManagementDialog extends DialogFragment {
         if (tournament != null) {
             tournamentNameEditText.setText(tournament.getName());
             tournamentLocationEditText.setText(tournament.getLocation());
-            tournamentDateEditText.setText(dateFormatter.format(tournament.getDateOfTournament()));
+
+            if (tournament.getDateOfTournament() == null) {
+                tournamentDateEditText.setText(dateFormatter.format(DateTime.now().toDate()));
+            } else {
+                tournamentDateEditText.setText(dateFormatter.format(tournament.getDateOfTournament()));
+            }
+
             tournamentMaxPlayersEditText.setText(String.valueOf(tournament.getMaxNumberOfPlayers()));
 
-            if (tournament.getCreatorEmail() == null || tournament.getCreatorEmail().isEmpty()) {
-                tournamentOnlineCheckbox.setChecked(false);
+            if (tournament.getOnlineUUID() != null) {
+                tournamentOnlineCheckbox.setVisibility(View.GONE);
+            } else {
+                tournamentInfoConvertToOnlineTournament.setVisibility(View.VISIBLE);
             }
         }
 
@@ -211,44 +211,10 @@ public class TournamentManagementDialog extends DialogFragment {
                         String maxPlayers = tournamentMaxPlayersEditText.getText().toString();
 
                         if (!tournamentName.isEmpty()) {
-                            Tournament tournament = new Tournament();
-                            tournament.setName(tournamentName);
-
-                            if (!location.isEmpty()) {
-                                tournament.setLocation(location);
+                            if (tournament == null) {
+                                createNewTournament(tournamentName, location, date, parsed_date, maxPlayers);
                             } else {
-                                tournament.setLocation("unknown");
-                            }
-
-                            if (!date.isEmpty()) {
-                                tournament.setDateOfTournament(parsed_date);
-                            } else {
-                                tournament.setDateOfTournament(null);
-                            }
-
-                            if (!maxPlayers.isEmpty()) {
-                                tournament.setMaxNumberOfPlayers(Integer.valueOf(maxPlayers));
-                            } else {
-                                tournament.setMaxNumberOfPlayers(0);
-                            }
-
-                            FirebaseUser currentFireBaseUser = ((BaseActivity) getActivity()).getCurrentFireBaseUser();
-
-                            if (currentFireBaseUser != null) {
-                                tournament.setCreatorName(currentFireBaseUser.getDisplayName());
-                                tournament.setCreatorEmail(currentFireBaseUser.getEmail());
-                            } else {
-                                tournament.setCreatorName("anonymous");
-                                tournament.setCreatorEmail("anonymous");
-                            }
-
-                            TournamentService tournamentService = ((BaseApplication) getActivity().getApplication())
-                                .getTournamentService();
-
-                            if (tournamentOnlineCheckbox.isChecked()) {
-                                tournamentService.pushTournamentToFirebase(tournament);
-                            } else {
-                                tournamentService.createTournament(tournament);
+                                updateTournament(tournamentName, location, date, parsed_date, maxPlayers);
                             }
 
                             dialog.dismiss();
@@ -283,12 +249,27 @@ public class TournamentManagementDialog extends DialogFragment {
                                             @Override
                                             public void onClick(DialogInterface sure_draw_dialog, int id) {
 
-                                                Log.i(this.getClass().getName(), "tournament deletion confirmed");
-
                                                 TournamentService tournamentService =
                                                     ((BaseApplication) getActivity().getApplication())
                                                     .getTournamentService();
-                                                tournamentService.deleteTournament(tournament.get_id());
+
+                                                Log.i(this.getClass().getName(), "tournament deletion confirmed");
+
+                                                if (tournament.getOnlineUUID() == null) {
+                                                    tournamentService.deleteTournament(tournament.get_id());
+
+                                                    mListener.tournamentDeletedEvent(tournament);
+                                                } else {
+                                                    tournamentService.removeTournamentInFirebase(tournament);
+                                                }
+
+                                                Snackbar snackbar = Snackbar.make(coordinatorLayout,
+                                                        R.string.success_delete_tournament, Snackbar.LENGTH_LONG);
+                                                snackbar.getView()
+                                                .setBackgroundColor(
+                                                    getContext().getResources().getColor(R.color.colorAccent));
+                                                snackbar.show();
+
                                                 sure_draw_dialog.dismiss();
                                                 dialog.dismiss();
                                             }
@@ -307,5 +288,156 @@ public class TournamentManagementDialog extends DialogFragment {
                 }
             }
         }
+    }
+
+
+    /**
+     * ************************* UPDATE TOURNAMENT.*************************
+     */
+    private void updateTournament(String tournamentName, String location, String date, Date parsed_date,
+        String maxPlayers) {
+
+        tournament.setName(tournamentName);
+
+        if (!location.isEmpty()) {
+            tournament.setLocation(location);
+        } else {
+            tournament.setLocation("unknown");
+        }
+
+        if (!date.isEmpty()) {
+            tournament.setDateOfTournament(parsed_date);
+        } else {
+            tournament.setDateOfTournament(null);
+        }
+
+        if (!maxPlayers.isEmpty()) {
+            tournament.setMaxNumberOfPlayers(Integer.valueOf(maxPlayers));
+        } else {
+            tournament.setMaxNumberOfPlayers(0);
+        }
+
+        final TournamentService tournamentService = ((BaseApplication) getActivity().getApplication())
+            .getTournamentService();
+
+        // convert to online tournament
+        if (tournamentOnlineCheckbox.isChecked()) {
+            if (tournament.getOnlineUUID() == null) {
+                FirebaseUser currentFireBaseUser = ((BaseActivity) getActivity()).getCurrentFireBaseUser();
+
+                if (currentFireBaseUser != null) {
+                    tournament.setCreatorName(currentFireBaseUser.getDisplayName());
+                    tournament.setCreatorEmail(currentFireBaseUser.getEmail());
+                } else {
+                    tournament.setCreatorName("anonymous");
+                    tournament.setCreatorEmail("anonymous");
+                }
+
+                tournamentService.setTournamentToFirebase(tournament);
+
+                tournamentService.deleteTournament(tournament.get_id());
+                mListener.tournamentDeletedEvent(tournament);
+
+                Snackbar snackbar = Snackbar.make(coordinatorLayout, R.string.success_convert_to_online_tournament,
+                        Snackbar.LENGTH_LONG);
+                snackbar.getView().setBackgroundColor(getContext().getResources().getColor(R.color.colorAccent));
+                snackbar.show();
+            } else {
+                tournamentService.updateTournamentInFirebase(tournament);
+
+                Snackbar snackbar = Snackbar.make(coordinatorLayout, R.string.success_save_online_tournament,
+                        Snackbar.LENGTH_LONG);
+                snackbar.getView().setBackgroundColor(getContext().getResources().getColor(R.color.colorAccent));
+                snackbar.show();
+            }
+        } else {
+            tournamentService.editTournament(tournament);
+            mListener.tournamentChangedEvent(tournament);
+        }
+    }
+
+
+    /**
+     * *****************NEW TOURNAMENT.****************************
+     */
+    private void createNewTournament(String tournamentName, String location, String date, Date parsed_date,
+        String maxPlayers) {
+
+        Tournament newTournament = new Tournament();
+
+        newTournament.setName(tournamentName);
+
+        if (!location.isEmpty()) {
+            newTournament.setLocation(location);
+        } else {
+            newTournament.setLocation("unknown");
+        }
+
+        if (!date.isEmpty()) {
+            newTournament.setDateOfTournament(parsed_date);
+        } else {
+            newTournament.setDateOfTournament(null);
+        }
+
+        if (!maxPlayers.isEmpty()) {
+            newTournament.setMaxNumberOfPlayers(Integer.valueOf(maxPlayers));
+        } else {
+            newTournament.setMaxNumberOfPlayers(0);
+        }
+
+        TournamentService tournamentService = ((BaseApplication) getActivity().getApplication()).getTournamentService();
+
+        if (tournamentOnlineCheckbox.isChecked()) {
+            FirebaseUser currentFireBaseUser = ((BaseActivity) getActivity()).getCurrentFireBaseUser();
+
+            if (currentFireBaseUser != null) {
+                newTournament.setCreatorName(currentFireBaseUser.getDisplayName());
+                newTournament.setCreatorEmail(currentFireBaseUser.getEmail());
+            } else {
+                newTournament.setCreatorName("anonymous");
+                newTournament.setCreatorEmail("anonymous");
+            }
+
+            tournamentService.setTournamentToFirebase(newTournament);
+        } else {
+            mListener.tournamentAddedEvent(newTournament);
+            tournamentService.createTournament(newTournament);
+        }
+    }
+
+
+    @Override
+    public void onAttach(Context context) {
+
+        super.onAttach(context);
+
+        if (getTargetFragment() instanceof TournamentManagementFragment) {
+            mListener = (TournamentManagementFragment) getTargetFragment();
+        } else {
+            throw new RuntimeException(getParentFragment().toString()
+                + " must implement TournamentListItemListener");
+        }
+    }
+
+
+    @Override
+    public void onDetach() {
+
+        super.onDetach();
+
+        if (mListener != null) {
+            mListener = null;
+        }
+    }
+
+    public interface TournamentChangedListener {
+
+        void tournamentChangedEvent(Tournament tournament);
+
+
+        void tournamentAddedEvent(Tournament tournament);
+
+
+        void tournamentDeletedEvent(Tournament tournament);
     }
 }

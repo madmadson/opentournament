@@ -32,13 +32,6 @@ public interface TournamentService {
 
 
     /**
-     * @param  tournamentId  id of the tournament
-     * @param  contentValues  the content
-     */
-    void editTournament(Long tournamentId, ContentValues contentValues);
-
-
-    /**
      * @return  all tournaments
      */
     List<Tournament> getTournaments();
@@ -57,7 +50,7 @@ public interface TournamentService {
      *
      * @param  tournament
      */
-    void pushTournamentToFirebase(Tournament tournament);
+    void setTournamentToFirebase(Tournament tournament);
 
 
     /**
@@ -66,4 +59,33 @@ public interface TournamentService {
      * @param  id
      */
     void deleteTournament(long id);
+
+
+    /**
+     * Remove value from firebase.
+     *
+     * @param  tournament
+     */
+    void removeTournamentInFirebase(Tournament tournament);
+
+
+    /**
+     * Edited Tournament.
+     *
+     * @param  tournament
+     */
+    void editTournament(Tournament tournament);
+
+
+    /**
+     * @param  tournamentId
+     * @param  round
+     */
+    void updateActualRound(Long tournamentId, int round);
+
+
+    /**
+     * @param  tournament
+     */
+    void updateTournamentInFirebase(Tournament tournament);
 }

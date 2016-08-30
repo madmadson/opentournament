@@ -231,9 +231,7 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
 
     private void makeTournamentRoundActual(Long tournamentId, int round) {
 
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(TournamentTable.COLUMN_ACTUAL_ROUND, round);
-        tournamentService.editTournament(tournamentId, contentValues);
+        tournamentService.updateActualRound(tournamentId, round);
     }
 
 

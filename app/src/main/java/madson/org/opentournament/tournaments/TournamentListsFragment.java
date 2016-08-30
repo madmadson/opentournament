@@ -37,6 +37,9 @@ import madson.org.opentournament.utility.BaseApplication;
 
 import java.text.DateFormat;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 
@@ -47,11 +50,14 @@ public class TournamentListsFragment extends Fragment {
 
     private static TournamentListItemListener mListener;
     private DatabaseReference mFirebaseDatabaseReference;
-    private FirebaseRecyclerAdapter<Tournament, TournamentViewHolder> mFirebaseTournamentAdapter;
     private ProgressBar mProgressBar;
+    private TextView noOnlineTournamentsFoundTextView;
     private RecyclerView mOnlineTournamentRecyclerView;
     private DateFormat dateFormatter = DateFormat.getDateInstance(DateFormat.DEFAULT, Locale.getDefault());
     private FirebaseUser currentUser;
+
+    private TournamentListAdapter localTournamentListAdapter;
+    private FirebaseRecyclerAdapter<Tournament, TournamentViewHolder> mFirebaseTournamentAdapter;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the fragment (e.g. upon screen orientation
@@ -73,11 +79,12 @@ public class TournamentListsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_tournament_list, container, false);
+        final View view = inflater.inflate(R.layout.fragment_tournament_list, container, false);
 
         // tournaments from server
 
         mProgressBar = (ProgressBar) view.findViewById(R.id.progressBar);
+        noOnlineTournamentsFoundTextView = (TextView) view.findViewById(R.id.no_online_tournaments);
 
         if (((BaseActivity) getActivity()).isConnected()) {
             mOnlineTournamentRecyclerView = (RecyclerView) view.findViewById(R.id.online_tournament_list_recycler_view);
@@ -88,10 +95,22 @@ public class TournamentListsFragment extends Fragment {
                     mFirebaseDatabaseReference.child(TOURNAMENTS_CHILD)) {
 
                 @Override
+                public int getItemCount() {
+
+                    if (super.getItemCount() == 0) {
+                        noOnlineTournamentsFoundTextView.setVisibility(ProgressBar.GONE);
+                    }
+
+                    return super.getItemCount();
+                }
+
+
+                @Override
                 protected void populateViewHolder(TournamentViewHolder viewHolder, final Tournament tournament,
                     int position) {
 
                     mProgressBar.setVisibility(ProgressBar.GONE);
+                    noOnlineTournamentsFoundTextView.setVisibility(View.GONE);
 
                     viewHolder.setTournament(tournament);
                     viewHolder.getTournamentNameInList().setText(tournament.getName());
@@ -113,17 +132,15 @@ public class TournamentListsFragment extends Fragment {
                                     @Override
                                     public void onClick(View v) {
 
-                                        Log.i(v.getClass().getName(), "tournament Stared:" + tournament);
-
-                                        Intent intent = new Intent(getContext(), OngoingTournamentActivity.class);
-                                        intent.putExtra(OngoingTournamentActivity.EXTRA_TOURNAMENT_ID,
-                                            tournament.getId());
-                                        startActivity(intent);
+                                        editTournamentDialog(v, tournament);
                                     }
                                 });
+                        } else {
+                            // only creator should do action
+                            viewHolder.getEditTournamentButton().setVisibility(View.INVISIBLE);
                         }
                     } else {
-                        // only creator should do action
+                        // no user no fun
                         viewHolder.getEditTournamentButton().setVisibility(View.INVISIBLE);
                     }
                 }
@@ -152,9 +169,11 @@ public class TournamentListsFragment extends Fragment {
 
         getChildFragmentManager().beginTransaction().add(R.id.row_tournament_header_container, headerFragment).commit();
 
-        TournamentListAdapter tournamentListAdapter = new TournamentListAdapter(localTournaments);
+        Collections.sort(localTournaments, new TournamentListComparator());
 
-        recyclerView.setAdapter(tournamentListAdapter);
+        localTournamentListAdapter = new TournamentListAdapter(localTournaments);
+
+        recyclerView.setAdapter(localTournamentListAdapter);
 
         return view;
     }
@@ -182,6 +201,39 @@ public class TournamentListsFragment extends Fragment {
         if (mListener == null) {
             mListener = null;
         }
+    }
+
+
+    public FirebaseRecyclerAdapter<Tournament, TournamentViewHolder> getOnlineTournamentAdapter() {
+
+        return mFirebaseTournamentAdapter;
+    }
+
+
+    public TournamentListAdapter getLocalTournamentListAdapter() {
+
+        return localTournamentListAdapter;
+    }
+
+
+    private void editTournamentDialog(View v, Tournament tournament) {
+
+        Log.i(v.getClass().getName(), "tournament edit:" + tournament);
+
+        TournamentManagementDialog dialog = new TournamentManagementDialog();
+
+        if (getParentFragment() instanceof TournamentManagementFragment) {
+            dialog.setTargetFragment(getParentFragment(), 1);
+        } else {
+            new RuntimeException("parent must be management fragement");
+        }
+
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(TournamentManagementDialog.BUNDLE_TOURNAMENT, tournament);
+        dialog.setArguments(bundle);
+
+        FragmentManager supportFragmentManager = getChildFragmentManager();
+        dialog.show(supportFragmentManager, "tournament management edit dialog tournament");
     }
 
     public interface TournamentListItemListener {
@@ -231,15 +283,7 @@ public class TournamentListsFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
 
-                        Log.i(v.getClass().getName(), "tournament edit:" + tournament);
-
-                        TournamentManagementDialog dialog = new TournamentManagementDialog();
-                        Bundle bundle = new Bundle();
-                        bundle.putParcelable(TournamentManagementDialog.BUNDLE_TOURNAMENT, tournament);
-                        dialog.setArguments(bundle);
-
-                        FragmentManager supportFragmentManager = getChildFragmentManager();
-                        dialog.show(supportFragmentManager, "tournament management edit dialog tournament");
+                        editTournamentDialog(v, tournament);
                     }
                 });
         }
@@ -252,10 +296,18 @@ public class TournamentListsFragment extends Fragment {
         }
 
 
-        public void add(int position, Tournament item) {
+        public void add(Tournament item) {
 
-            mDataset.add(position, item);
-            notifyItemInserted(position);
+            mDataset.add(0, item);
+            notifyItemInserted(0);
+        }
+
+
+        public void replace(Tournament item) {
+
+            int position = mDataset.indexOf(item);
+            mDataset.set(position, item);
+            notifyItemChanged(position, item);
         }
 
 
@@ -294,7 +346,7 @@ public class TournamentListsFragment extends Fragment {
             Log.i(this.getClass().getName(), "clicked on tournament");
 
             if (tournament.get_id() != 0) {
-                mListener.onTournamentListItemClicked(tournament.getId());
+                mListener.onTournamentListItemClicked(tournament.get_id());
             } else {
                 mListener.onOnlineTournamentListItemClicked(tournament.getOnlineUUID());
             }
@@ -334,6 +386,15 @@ public class TournamentListsFragment extends Fragment {
         public TextView getTournamentDateInList() {
 
             return tournamentDateInList;
+        }
+    }
+
+    private class TournamentListComparator implements Comparator<Tournament> {
+
+        @Override
+        public int compare(Tournament t1, Tournament t2) {
+
+            return t1.getDateOfTournament().getTime() > t2.getDateOfTournament().getTime() ? 1 : 0;
         }
     }
 }

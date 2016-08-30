@@ -8,7 +8,7 @@
     <Button
         android:id="@+id/dialog_delete_tournament_button"
         android:drawableLeft="@android:drawable/ic_delete"
-        android:drawablePadding="8dp"
+        android:drawablePadding="4dp"
         android:background="@color/colorPrimaryDark"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -16,7 +16,7 @@
         android:textColor="@color/colorTextIcon"
         android:textStyle="bold"
         android:paddingRight="8dp"
-        android:layout_gravity="center_horizontal"
+        android:layout_gravity="right"
         android:visibility="gone"/>
 
     <EditText
@@ -61,6 +61,13 @@
         android:layout_height="wrap_content"
         android:textColor="@color/colorWarning"
         android:text="@string/no_online_tournaments_if_anonymous"
+        android:visibility="gone"/>
+    <TextView
+        android:id="@+id/tournament_convert_to_online_tournament"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorAction"
+        android:text="@string/convert_to_online_tournament"
         android:visibility="gone"/>
     
     

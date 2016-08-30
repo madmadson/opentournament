@@ -87,12 +87,6 @@ public class Tournament implements Parcelable {
     }
 
 
-    public long getId() {
-
-        return _id;
-    }
-
-
     public String getLocation() {
 
         return location;

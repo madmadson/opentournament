@@ -156,9 +156,33 @@ public class TournamentServiceImpl implements TournamentService {
 
 
     @Override
-    public void editTournament(Long tournamentId, ContentValues contentValues) {
+    public void editTournament(Tournament tournament) {
 
-        Log.i(this.getClass().getName(), "edit tournament: " + tournamentId + " with: " + contentValues);
+        Log.i(this.getClass().getName(), "edit tournament: " + tournament);
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(TournamentTable.COLUMN_NAME, tournament.getName());
+        contentValues.put(TournamentTable.COLUMN_LOCATION, tournament.getLocation());
+        contentValues.put(TournamentTable.COLUMN_DATE,
+            tournament.getDateOfTournament() == null ? null : tournament.getDateOfTournament().getTime());
+        contentValues.put(TournamentTable.COLUMN_MAX_NUMBER_OF_PLAYERS, tournament.getMaxNumberOfPlayers());
+
+        SQLiteDatabase writableDatabase = openTournamentDBHelper.getWritableDatabase();
+
+        writableDatabase.update(TournamentTable.TABLE_TOURNAMENTS, contentValues, "_id = ?",
+            new String[] { String.valueOf(tournament.get_id()) });
+
+        writableDatabase.close();
+    }
+
+
+    @Override
+    public void updateActualRound(Long tournamentId, int round) {
+
+        Log.i(this.getClass().getName(), "update actual round for tournament: " + tournamentId);
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(TournamentTable.COLUMN_ACTUAL_ROUND, round);
 
         SQLiteDatabase writableDatabase = openTournamentDBHelper.getWritableDatabase();
 
@@ -166,6 +190,18 @@ public class TournamentServiceImpl implements TournamentService {
             new String[] { String.valueOf(tournamentId) });
 
         writableDatabase.close();
+    }
+
+
+    @Override
+    public void updateTournamentInFirebase(Tournament tournament) {
+
+        Log.i(this.getClass().getName(), "update online tournament in firebase: " + tournament);
+
+        DatabaseReference referenceForTournamentToDelete = FirebaseDatabase.getInstance()
+                .getReference("tournaments/" + tournament.getOnlineUUID());
+
+        referenceForTournamentToDelete.setValue(tournament);
     }
 
 
@@ -207,7 +243,7 @@ public class TournamentServiceImpl implements TournamentService {
 
 
     @Override
-    public void pushTournamentToFirebase(Tournament tournament) {
+    public void setTournamentToFirebase(Tournament tournament) {
 
         Log.i(this.getClass().getName(), "pushes tournament to online: " + tournament);
 
@@ -215,9 +251,10 @@ public class TournamentServiceImpl implements TournamentService {
 
         tournament.setOnlineUUID(uuid.toString());
 
-        DatabaseReference firebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference referenceForNewTournament = FirebaseDatabase.getInstance()
+                .getReference("tournaments/" + uuid);
 
-        firebaseDatabaseReference.child("tournaments").push().setValue(tournament);
+        referenceForNewTournament.setValue(tournament);
 
         // kill local stored tournament
         if (tournament.get_id() != 0) {
@@ -238,5 +275,17 @@ public class TournamentServiceImpl implements TournamentService {
         SQLiteDatabase writableDatabase = openTournamentDBHelper.getWritableDatabase();
         writableDatabase.delete(TournamentTable.TABLE_TOURNAMENTS, "_id  = ?", new String[] { String.valueOf(id) });
         writableDatabase.close();
+    }
+
+
+    @Override
+    public void removeTournamentInFirebase(Tournament tournament) {
+
+        Log.i(this.getClass().getName(), "delete online tournament in firebase: " + tournament);
+
+        DatabaseReference refernceForTournamentToDelete = FirebaseDatabase.getInstance()
+                .getReference("tournaments/" + tournament.getOnlineUUID());
+
+        refernceForTournamentToDelete.removeValue();
     }
 }

@@ -16,6 +16,7 @@ import madson.org.opentournament.db.OpenTournamentDBHelper;
 import madson.org.opentournament.db.TournamentTable;
 import madson.org.opentournament.db.warmachine.WarmachineTournamentGameTable;
 import madson.org.opentournament.domain.Tournament;
+import madson.org.opentournament.domain.TournamentTyp;
 
 import org.joda.time.DateTime;
 
@@ -37,7 +38,8 @@ public class TournamentServiceImpl implements TournamentService {
     private String[] allColumns = {
         TournamentTable.COLUMN_ID, TournamentTable.COLUMN_NAME, TournamentTable.COLUMN_LOCATION,
         TournamentTable.COLUMN_DATE, TournamentTable.COLUMN_MAX_NUMBER_OF_PLAYERS, TournamentTable.COLUMN_ACTUAL_ROUND,
-        TournamentTable.COLUMN_ONLINE_UUID, TournamentTable.COLUMN_CREATOR, TournamentTable.COLUMN_CREATOR_EMAIL
+        TournamentTable.COLUMN_ONLINE_UUID, TournamentTable.COLUMN_CREATOR, TournamentTable.COLUMN_CREATOR_EMAIL,
+        TournamentTable.COLUMN_TOURNAMENT_TYPE
     };
 
     public TournamentServiceImpl(Context context) {
@@ -87,6 +89,7 @@ public class TournamentServiceImpl implements TournamentService {
         contentValues.put(TournamentTable.COLUMN_ONLINE_UUID, onlineUUID);
         contentValues.put(TournamentTable.COLUMN_CREATOR, creator);
         contentValues.put(TournamentTable.COLUMN_CREATOR_EMAIL, creatorEmail);
+        contentValues.put(TournamentTable.COLUMN_TOURNAMENT_TYPE, "WARMACHINE");
         createTournament(contentValues);
     }
 
@@ -139,6 +142,7 @@ public class TournamentServiceImpl implements TournamentService {
         tournament.setOnlineUUID(cursor.getString(6));
         tournament.setCreatorName(cursor.getString(7));
         tournament.setCreatorEmail(cursor.getString(8));
+        tournament.setTournamentTyp(cursor.getString(9));
 
         return tournament;
     }

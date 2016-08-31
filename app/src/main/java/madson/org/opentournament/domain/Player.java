@@ -58,6 +58,18 @@ public class Player {
     }
 
 
+    public String getOnlineUUID() {
+
+        return onlineUUID;
+    }
+
+
+    public void setOnlineUUID(String onlineUUID) {
+
+        this.onlineUUID = onlineUUID;
+    }
+
+
     @Override
     public String toString() {
 

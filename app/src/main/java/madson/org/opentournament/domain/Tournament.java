@@ -16,7 +16,8 @@ import java.util.Date;
 public class Tournament implements Parcelable {
 
     public static final String[] ALL_COLS_FOR_TOURNAMENT = {
-        "_id", "name", "location", "date", "maxNumberOfPlayers", "actualRound", "onlineUUID", "creator", "creatorEmail"
+        "_id", "name", "location", "date", "maxNumberOfPlayers", "actualRound", "onlineUUID", "creator", "creatorEmail",
+        "tournamentType"
     };
 
     public static final Creator<Tournament> CREATOR = new Creator<Tournament>() {
@@ -44,9 +45,12 @@ public class Tournament implements Parcelable {
     private String onlineUUID;
     private String creatorName;
     private String creatorEmail;
+    private TournamentTyp tournamentTyp;
 
     // empty constructor
     public Tournament() {
+
+        tournamentTyp = TournamentTyp.WARMACHINE;
     }
 
 
@@ -212,5 +216,17 @@ public class Tournament implements Parcelable {
             // get today
             parcel.writeLong(DateTime.now().getMillis());
         }
+    }
+
+
+    public String getTournamentTyp() {
+
+        return tournamentTyp.name();
+    }
+
+
+    public void setTournamentTyp(String tournamentTyp) {
+
+        this.tournamentTyp = TournamentTyp.valueOf(tournamentTyp);
     }
 }

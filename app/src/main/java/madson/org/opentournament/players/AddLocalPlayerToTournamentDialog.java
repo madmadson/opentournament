@@ -5,7 +5,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 
-import android.os.Build;
 import android.os.Bundle;
 
 import android.support.annotation.Nullable;
@@ -97,7 +96,7 @@ public class AddLocalPlayerToTournamentDialog extends DialogFragment {
             // Get the layout inflater
             LayoutInflater inflater = getActivity().getLayoutInflater();
 
-            View dialogView = inflater.inflate(R.layout.dialog_new_player, null);
+            View dialogView = inflater.inflate(R.layout.dialog_add_local_tournament_player, null);
 
             firstnameEditText = (EditText) dialogView.findViewById(R.id.new_player_firstname);
             nicknameEditText = (EditText) dialogView.findViewById(R.id.new_player_nickname);
@@ -152,28 +151,24 @@ public class AddLocalPlayerToTournamentDialog extends DialogFragment {
 
                             PlayerService playerService = ((BaseApplication) getActivity().getApplication())
                                 .getPlayerService();
-                            playerService.createPlayer(player);
+                            playerService.createLocalPlayer(player);
 
                             OngoingTournamentService ongoingTournamentService =
                                 ((BaseApplication) getActivity().getApplication()).getOngoingTournamentService();
 
-                            ongoingTournamentService.addPlayerToTournament(player, tournament.get_id());
+                            TournamentPlayer tournamentPlayer = ongoingTournamentService.addPlayerToTournament(player,
+                                    tournament);
 
                             Snackbar snackbar = Snackbar.make(coordinatorLayout, R.string.success_new_player_inserted,
                                     Snackbar.LENGTH_LONG);
 
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                                snackbar.getView()
-                                .setBackgroundColor(getContext().getResources().getColor(R.color.colorAccent, null));
-                            } else {
-                                snackbar.getView()
-                                .setBackgroundColor(getContext().getResources().getColor(R.color.colorAccent));
-                            }
+                            snackbar.getView()
+                            .setBackgroundColor(getContext().getResources().getColor(R.color.colorAccent));
 
                             snackbar.show();
 
                             if (mListener != null) {
-                                // mListener.addTournamentPlayer();
+                                mListener.addTournamentPlayer(tournamentPlayer);
                             }
 
                             dialog.dismiss();

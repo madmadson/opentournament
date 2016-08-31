@@ -1,4 +1,4 @@
-package madson.org.opentournament.service.warmachine;
+package madson.org.opentournament.players;
 
 import madson.org.opentournament.domain.TournamentPlayer;
 
@@ -10,11 +10,11 @@ import java.util.Comparator;
  *
  * @author  Tobias Matt - tmatt@contargo.net
  */
-public class WarmachinePlayerComparator implements Comparator<TournamentPlayer> {
+public class TournamentPlayerComparator implements Comparator<TournamentPlayer> {
 
     @Override
     public int compare(TournamentPlayer player1, TournamentPlayer player2) {
 
-        return player2.getScore() - player1.getScore();
+        return player2.getNickname().compareTo(player1.getNickname());
     }
 }

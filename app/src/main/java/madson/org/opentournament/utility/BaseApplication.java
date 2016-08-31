@@ -19,6 +19,7 @@ import madson.org.opentournament.service.PlayerService;
 import madson.org.opentournament.service.PlayerServiceImpl;
 import madson.org.opentournament.service.TournamentService;
 import madson.org.opentournament.service.TournamentServiceImpl;
+import madson.org.opentournament.utility.web.HttpRequester;
 
 import net.danlew.android.joda.JodaTimeAndroid;
 
@@ -35,6 +36,7 @@ public abstract class BaseApplication extends Application {
     private static OngoingTournamentService ongoingTournamentService;
     private static TournamentService tournamentService;
     private static PlayerService playerService;
+    private static HttpRequester httpRequester;
 
     @Override
     public void onCreate() {
@@ -61,6 +63,10 @@ public abstract class BaseApplication extends Application {
 
         if (ongoingTournamentService == null) {
             ongoingTournamentService = new OngoingTournamentServiceImpl(getApplicationContext());
+        }
+
+        if (httpRequester == null) {
+            httpRequester = new HttpRequester();
         }
     }
 
@@ -134,6 +140,15 @@ public abstract class BaseApplication extends Application {
     public PlayerService getPlayerService() {
 
         return playerService;
+    }
+
+
+    /**
+     * @return  class for doing rest calls
+     */
+    public HttpRequester getHttpRequester() {
+
+        return httpRequester;
     }
 
 

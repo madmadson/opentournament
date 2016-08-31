@@ -2,14 +2,17 @@ package madson.org.opentournament.domain;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 
 /**
- * Mapping Class for tournament and mapping.
+ * Mapping Class for tournament and mapping. Is own instance for whole tournament.
  *
  * @author  Tobias Matt - tmatt@contargo.net
  */
 public class TournamentPlayer {
+
+    private long _id;
 
     private long tournament_id;
     private long player_id;
@@ -22,11 +25,11 @@ public class TournamentPlayer {
 
     private SportOrGameScoreData scoringData;
 
+    // used for shortcut not always go for names
     private String firstname;
     private String nickname;
     private String lastname;
 
-    private String tournament_onlineUUID;
     private String player_onlineUUID;
 
     private List<Long> listOfOpponents;
@@ -45,6 +48,48 @@ public class TournamentPlayer {
 
         listOfOpponents = new ArrayList<>();
     }
+
+
+    /**
+     * constructor to enable player to tournament mapping.
+     *
+     * @param  player
+     * @param  tournament
+     */
+    public TournamentPlayer(Player player, Tournament tournament) {
+
+        this.player_id = player.get_id();
+        this.player_onlineUUID = player.getOnlineUUID();
+        this.firstname = player.getFirstname();
+        this.lastname = player.getLastname();
+        this.nickname = player.getNickname();
+
+        listOfOpponents = new ArrayList<>();
+    }
+
+    public long get_id() {
+
+        return _id;
+    }
+
+
+    public void setPlayer_onlineUUID(String player_onlineUUID) {
+
+        this.player_onlineUUID = player_onlineUUID;
+    }
+
+
+    public SportOrGameScoreData getScoringData() {
+
+        return scoringData;
+    }
+
+
+    public String getPlayer_onlineUUID() {
+
+        return player_onlineUUID;
+    }
+
 
     public long getPlayer_id() {
 
@@ -176,12 +221,19 @@ public class TournamentPlayer {
     public String toString() {
 
         return "TournamentPlayer{"
-            + "tournament_id=" + tournament_id
-            + ", round=" + round
+            + "_id=" + _id
+            + ", tournament_id=" + tournament_id
             + ", player_id=" + player_id
+            + ", round=" + round
             + ", score=" + score
             + ", sos=" + sos
             + ", control_points=" + control_points
-            + ", victory_points=" + victory_points + '}';
+            + ", victory_points=" + victory_points
+            + ", scoringData=" + scoringData
+            + ", firstname='" + firstname + '\''
+            + ", nickname='" + nickname + '\''
+            + ", lastname='" + lastname + '\''
+            + ", player_onlineUUID='" + player_onlineUUID + '\''
+            + ", listOfOpponents=" + listOfOpponents + '}';
     }
 }

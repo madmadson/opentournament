@@ -9,11 +9,20 @@ import android.database.sqlite.SQLiteDatabase;
 
 import android.util.Log;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import madson.org.opentournament.db.OpenTournamentDBHelper;
 import madson.org.opentournament.db.PlayerTable;
 import madson.org.opentournament.db.TournamentTable;
 import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.Tournament;
+import madson.org.opentournament.domain.TournamentPlayer;
+import madson.org.opentournament.utility.BaseApplication;
+import madson.org.opentournament.utility.web.HttpRequester;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -76,7 +85,7 @@ public class PlayerServiceImpl implements PlayerService {
 
 
     @Override
-    public void createPlayer(Player player) {
+    public void createLocalPlayer(Player player) {
 
         ContentValues contentValues = new ContentValues();
         contentValues.put(PlayerTable.COLUMN_FIRSTNAME, player.getFirstname());

@@ -14,7 +14,12 @@ import java.util.List;
  */
 public interface PlayerService {
 
-    void createPlayer(Player player);
+    /**
+     * Create local player.
+     *
+     * @param  player
+     */
+    void createLocalPlayer(Player player);
 
 
     /**

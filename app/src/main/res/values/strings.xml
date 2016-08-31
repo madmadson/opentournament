@@ -71,7 +71,7 @@
     <string name="button_start_tournament">Start</string>
     
     <!-- Tournament Player List -->
-    <string name="heading_tournament_player">Player in tournament: (%1$d)</string>
+    <string name="heading_tournament_player">Player in offline tournament: (%1$d)</string>
     <string name="button_pair_round">Pair \n round %1$d</string>
     <string name="button_change_round">show \n round %1$d</string>
     <string name="pairing_divider">:</string>

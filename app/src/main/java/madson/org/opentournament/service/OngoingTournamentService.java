@@ -1,6 +1,7 @@
 package madson.org.opentournament.service;
 
 import madson.org.opentournament.domain.Player;
+import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.domain.warmachine.WarmachineTournamentGame;
 
@@ -23,10 +24,12 @@ public interface OngoingTournamentService {
 
 
     /**
-     * @param  player
-     * @param  tournamentId
+     * Add Player to tournament and return new tournament player instance.
+     *
+     * @param  player  player instance
+     * @param  tournament  tournament
      */
-    void addPlayerToTournament(Player player, Long tournamentId);
+    TournamentPlayer addPlayerToTournament(Player player, Tournament tournament);
 
 
     /**
@@ -99,4 +102,14 @@ public interface OngoingTournamentService {
      * @return  if all games are finished or not
      */
     boolean checkAllGamesAreFinishedForRound(long tournament_id, int round);
+
+
+    /**
+     * Get all players for offline tournament.
+     *
+     * @param  tournament  tournament
+     *
+     * @return
+     */
+    List<TournamentPlayer> getLocalTournamentPlayers(Tournament tournament);
 }

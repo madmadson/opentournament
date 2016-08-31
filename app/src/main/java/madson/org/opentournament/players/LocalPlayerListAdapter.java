@@ -78,14 +78,16 @@ public class LocalPlayerListAdapter extends RecyclerView.Adapter<LocalPlayerList
     public void add(Player item) {
 
         originalPlayerList.add(item);
+        filteredPlayerList.add(item);
         notifyDataSetChanged();
     }
 
 
-    public void remove(Tournament item) {
+    public void remove(Player player) {
 
-        int position = filteredPlayerList.indexOf(item);
+        int position = filteredPlayerList.indexOf(player);
         filteredPlayerList.remove(position);
+
         notifyItemRemoved(position);
     }
 
@@ -124,14 +126,12 @@ public class LocalPlayerListAdapter extends RecyclerView.Adapter<LocalPlayerList
         @Override
         public void onClick(View v) {
 
-            Log.i(v.getClass().getName(), "remove player from player list: " + player);
-
-            filteredPlayerList.remove(player);
-            notifyDataSetChanged();
+            Log.i(v.getClass().getName(), "remove player from local player list: " + player);
 
             // call listener if set
             if (mListener != null) {
                 mListener.onAvailablePlayerListItemClicked(player);
+                remove(player);
             }
         }
     }

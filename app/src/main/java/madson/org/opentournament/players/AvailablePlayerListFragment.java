@@ -85,7 +85,7 @@ public class AvailablePlayerListFragment extends Fragment {
 
                 LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
                 mOnlinePlayerRecyclerView.setLayoutManager(linearLayoutManager);
-                onlinePlayerListAdapter = new OnlinePlayerListAdapter();
+                onlinePlayerListAdapter = new OnlinePlayerListAdapter(mListener);
 
                 ValueEventListener playerListener = new ValueEventListener() {
 

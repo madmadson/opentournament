@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import madson.org.opentournament.R;
+import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.players.AddLocalPlayerToTournamentDialog;
@@ -28,7 +29,8 @@ import madson.org.opentournament.utility.BaseActivity;
  * @author  Tobias Matt - tmatt@contargo.net
  */
 public class TournamentSetupFragment extends Fragment
-    implements AddLocalPlayerToTournamentDialog.TournamentPlayerAddListener {
+    implements AddLocalPlayerToTournamentDialog.TournamentPlayerAddListener,
+        AvailablePlayerListFragment.AvailablePlayerListItemListener {
 
     private static final String BUNDLE_TOURNAMENT = "tournament";
     private Tournament tournament;
@@ -126,6 +128,17 @@ public class TournamentSetupFragment extends Fragment
     @Override
     public void addTournamentPlayer(TournamentPlayer tournamentPlayer) {
 
-        Log.i(this.getClass().getName(), "player added to tournament");
+        Log.i(this.getClass().getName(), "manually player added to tournament");
+    }
+
+
+    @Override
+    public void onAvailablePlayerListItemClicked(Player player) {
+
+        Log.i(this.getClass().getName(), "clicked on available player to add: " + player);
+
+        if (tournamentPlayerListFragment != null) {
+            tournamentPlayerListFragment.addPlayer(player);
+        }
     }
 }

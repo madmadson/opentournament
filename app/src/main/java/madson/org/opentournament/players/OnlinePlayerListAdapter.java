@@ -17,6 +17,7 @@ import com.google.firebase.database.Query;
 
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Player;
+import madson.org.opentournament.domain.Tournament;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,8 +34,11 @@ public class OnlinePlayerListAdapter extends RecyclerView.Adapter<OnlinePlayerLi
     private List<Player> filteredPlayerList;
 
     private ItemFilter filter;
+    private AvailablePlayerListFragment.AvailablePlayerListItemListener mListener;
 
-    public OnlinePlayerListAdapter() {
+    public OnlinePlayerListAdapter(AvailablePlayerListFragment.AvailablePlayerListItemListener mListener) {
+
+        this.mListener = mListener;
 
         this.originalPlayerList = new ArrayList<>();
         this.filteredPlayerList = new ArrayList<>();
@@ -78,12 +82,22 @@ public class OnlinePlayerListAdapter extends RecyclerView.Adapter<OnlinePlayerLi
     }
 
 
+    public void removePlayer(Player player) {
+
+        int position = filteredPlayerList.indexOf(player);
+        int positionOriginal = originalPlayerList.indexOf(player);
+        filteredPlayerList.remove(position);
+        originalPlayerList.remove(positionOriginal);
+        notifyItemRemoved(position);
+    }
+
+
     public Filter getFilter() {
 
         return filter;
     }
 
-    public static class PlayerViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class PlayerViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private TextView playerFullNameInList;
         private Player player;
@@ -99,7 +113,12 @@ public class OnlinePlayerListAdapter extends RecyclerView.Adapter<OnlinePlayerLi
         @Override
         public void onClick(View v) {
 
-            Log.i(this.getClass().getName(), "clicked on player");
+            Log.i(v.getClass().getName(), "remove player from online player list: " + player);
+
+            if (mListener != null) {
+                mListener.onAvailablePlayerListItemClicked(player);
+                removePlayer(player);
+            }
         }
 
 

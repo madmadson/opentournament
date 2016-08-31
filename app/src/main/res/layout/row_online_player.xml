@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rootView"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/row_height_tournament_list"
+    android:paddingTop="@dimen/row_padding_top"
+    android:paddingBottom="@dimen/row_padding_bottom"
+    android:background="@drawable/row_item">
+
+    <ImageView
+        android:id="@+id/online_icon"
+        android:src="@drawable/ic_cloud_black_24dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="15dp"
+        />
+    
+    <TextView
+        android:id="@+id/online_player_full_name" 
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:text="Test"
+        android:layout_toRightOf="@id/online_icon"
+        android:layout_marginLeft="15dp"
+       />
+
+    <ImageView
+        android:id="@+id/account_icon"
+        android:src="@drawable/ic_account_circle_black_36dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="25dp"
+        />
+
+</RelativeLayout>

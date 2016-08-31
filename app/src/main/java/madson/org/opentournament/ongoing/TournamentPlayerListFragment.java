@@ -70,7 +70,7 @@ public class TournamentPlayerListFragment extends Fragment {
         if (tournament.getOnlineUUID() != null) {
             View view = inflater.inflate(R.layout.fragment_online_tournament_player_list, container, false);
 
-            loadOnlinePlayers();
+            loadOnlineTournamentPlayers();
 
             return view;
         } else {
@@ -101,11 +101,11 @@ public class TournamentPlayerListFragment extends Fragment {
     }
 
 
-    private void loadOnlinePlayers() {
+    private void loadOnlineTournamentPlayers() {
 
         mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
 
-        final ArrayList<String> onlineTournamentPlayersUUIDs = new ArrayList<>();
+        final List<String> onlineTournamentPlayersUUIDs = new ArrayList<>();
 
         ValueEventListener tournamentPlayerListener = new ValueEventListener() {
 

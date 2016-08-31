@@ -22,11 +22,11 @@ import java.util.List;
 
 
 /**
- * adapter for player list.
+ * adapter for local player list.
  *
  * @author  Tobias Matt - tmatt@contargo.net
  */
-public class AvailablePlayerListAdapter extends RecyclerView.Adapter<AvailablePlayerListAdapter.ViewHolder>
+public class LocalPlayerListAdapter extends RecyclerView.Adapter<LocalPlayerListAdapter.ViewHolder>
     implements Filterable {
 
     private AvailablePlayerListFragment.AvailablePlayerListItemListener mListener;
@@ -38,7 +38,7 @@ public class AvailablePlayerListAdapter extends RecyclerView.Adapter<AvailablePl
      * @param  playerList  list of players to show
      * @param  mListener  maybe null when no listener is needed
      */
-    public AvailablePlayerListAdapter(List<Player> playerList,
+    public LocalPlayerListAdapter(List<Player> playerList,
         AvailablePlayerListFragment.AvailablePlayerListItemListener mListener) {
 
         this.mListener = mListener;
@@ -47,7 +47,7 @@ public class AvailablePlayerListAdapter extends RecyclerView.Adapter<AvailablePl
     }
 
     @Override
-    public AvailablePlayerListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public LocalPlayerListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         // create a new view
         CardView v = (CardView) LayoutInflater.from(parent.getContext())
@@ -59,7 +59,7 @@ public class AvailablePlayerListAdapter extends RecyclerView.Adapter<AvailablePl
 
 
     @Override
-    public void onBindViewHolder(AvailablePlayerListAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(LocalPlayerListAdapter.ViewHolder holder, int position) {
 
         final Player player = filteredPlayerList.get(position);
         holder.setPlayer(player);

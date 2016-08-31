@@ -117,7 +117,7 @@ public class PlayerServiceImpl implements PlayerService {
 
 
     @Override
-    public List<Player> getAllPlayers() {
+    public List<Player> getAllLocalPlayers() {
 
         ArrayList<Player> players = new ArrayList<>();
 

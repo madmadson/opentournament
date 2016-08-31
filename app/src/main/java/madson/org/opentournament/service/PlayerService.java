@@ -37,5 +37,5 @@ public interface PlayerService {
      *
      * @return  list with all players
      */
-    List<Player> getAllPlayers();
+    List<Player> getAllLocalPlayers();
 }

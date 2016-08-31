@@ -126,6 +126,6 @@ public class TournamentSetupFragment extends Fragment
     @Override
     public void addTournamentPlayer(TournamentPlayer tournamentPlayer) {
 
-        Log.i(this.getClass().getName(), "player added tp tournament");
+        Log.i(this.getClass().getName(), "player added to tournament");
     }
 }

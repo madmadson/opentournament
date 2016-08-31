@@ -14,6 +14,8 @@ public class Player {
     private String nickname;
     private String lastname;
 
+    private String auth_email;
+
     public Player(long id, String firstname, String nickname, String lastname) {
 
         this._id = id;

@@ -20,11 +20,18 @@ import android.view.ViewGroup;
 
 import android.widget.EditText;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.service.OngoingTournamentService;
 import madson.org.opentournament.service.PlayerService;
+import madson.org.opentournament.utility.BaseActivity;
 import madson.org.opentournament.utility.BaseApplication;
 
 import java.util.List;
@@ -33,11 +40,15 @@ import java.util.List;
 public class AvailablePlayerListFragment extends Fragment {
 
     public static final String BUNDLE_TOURNAMENT = "tournament";
+    public static final String PLAYERS_CHILD = "players";
 
-    private AvailablePlayerListAdapter availablePlayerListAdapter;
+    private LocalPlayerListAdapter localPlayerListAdapter;
 
     private AvailablePlayerListItemListener mListener;
     private Tournament tournament;
+    private RecyclerView mOnlinePlayerRecyclerView;
+    private DatabaseReference mFirebaseDatabaseReference;
+    private OnlinePlayerListAdapter onlinePlayerListAdapter;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the fragment (e.g. upon screen orientation
@@ -58,49 +69,71 @@ public class AvailablePlayerListFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_player_list, container, false);
 
-        EditText filterPlayer = (EditText) view.findViewById(R.id.input_filter_player);
-
-        filterPlayer.addTextChangedListener(new PlayerFilterTextWatcher());
-
-        filterPlayer.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-
-                @Override
-                public void onFocusChange(View v, boolean hasFocus) {
-
-                    if (!hasFocus) {
-                        Log.i(this.getClass().getName(), "lost focus");
-                    } else {
-                        Log.i(this.getClass().getName(), "has focus");
-                    }
-                }
-            });
-
-        PlayerService playerService = ((BaseApplication) getActivity().getApplication()).getPlayerService();
-
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.player_list_recycler_view);
-
-        recyclerView.setHasFixedSize(true);
-
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-        recyclerView.setLayoutManager(linearLayoutManager);
-
-        List<Player> players = playerService.getAllPlayers();
-
         Bundle bundle = getArguments();
 
         if (bundle != null && bundle.getParcelable(BUNDLE_TOURNAMENT) != null) {
             tournament = bundle.getParcelable(BUNDLE_TOURNAMENT);
 
+            EditText filterPlayer = (EditText) view.findViewById(R.id.input_filter_player);
+
+            filterPlayer.addTextChangedListener(new PlayerFilterTextWatcher());
+
+            if (((BaseActivity) getActivity()).isConnected()) {
+                mOnlinePlayerRecyclerView = (RecyclerView) view.findViewById(R.id.online_player_list_recycler_view);
+                mOnlinePlayerRecyclerView.setHasFixedSize(true);
+                mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
+
+                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+                mOnlinePlayerRecyclerView.setLayoutManager(linearLayoutManager);
+                onlinePlayerListAdapter = new OnlinePlayerListAdapter();
+
+                ValueEventListener playerListener = new ValueEventListener() {
+
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+
+                        Log.i(this.getClass().getName(), "player loaded from firebase");
+
+                        for (DataSnapshot playerSnapShot : dataSnapshot.getChildren()) {
+                            Player player = playerSnapShot.getValue(Player.class);
+                            onlinePlayerListAdapter.addPlayer(player);
+                        }
+                    }
+
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                    }
+                };
+
+                DatabaseReference child = mFirebaseDatabaseReference.child("players");
+
+                child.addValueEventListener(playerListener);
+
+                mOnlinePlayerRecyclerView.setAdapter(onlinePlayerListAdapter);
+            }
+
+            PlayerService playerService = ((BaseApplication) getActivity().getApplication()).getPlayerService();
+            List<Player> localPlayers = playerService.getAllLocalPlayers();
+
+            RecyclerView localPlayerRecyclerView = (RecyclerView) view.findViewById(
+                    R.id.local_player_list_recycler_view);
+
+            localPlayerRecyclerView.setHasFixedSize(true);
+
+            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+            localPlayerRecyclerView.setLayoutManager(linearLayoutManager);
+
             OngoingTournamentService ongoingTournamentService = ((BaseApplication) getActivity().getApplication())
                 .getOngoingTournamentService();
             List<Player> alreadyPlayingPlayers = ongoingTournamentService.getAllPlayersForTournament(
                     tournament.get_id());
-            players.removeAll(alreadyPlayingPlayers);
-        }
+            localPlayers.removeAll(alreadyPlayingPlayers);
 
-        // listener may be null
-        availablePlayerListAdapter = new AvailablePlayerListAdapter(players, mListener);
-        recyclerView.setAdapter(availablePlayerListAdapter);
+            // listener may be null
+            localPlayerListAdapter = new LocalPlayerListAdapter(localPlayers, mListener);
+            localPlayerRecyclerView.setAdapter(localPlayerListAdapter);
+        }
 
         return view;
     }
@@ -133,10 +166,10 @@ public class AvailablePlayerListFragment extends Fragment {
 
         Log.i(this.getClass().getName(), "add player to tournament player list: " + player_id);
 
-        if (availablePlayerListAdapter != null) {
+        if (localPlayerListAdapter != null) {
             final BaseApplication application = (BaseApplication) getActivity().getApplication();
             final Player player = application.getPlayerService().getPlayerForId(player_id);
-            availablePlayerListAdapter.add(player);
+            localPlayerListAdapter.add(player);
 
             Runnable runnable = new Runnable() {
 
@@ -168,7 +201,8 @@ public class AvailablePlayerListFragment extends Fragment {
         public void onTextChanged(CharSequence s, int start, int before, int count) {
 
             Log.i(this.getClass().getName(), "filtered by: " + s.toString());
-            availablePlayerListAdapter.getFilter().filter(s.toString());
+            localPlayerListAdapter.getFilter().filter(s.toString());
+            onlinePlayerListAdapter.getFilter().filter(s.toString());
         }
 
 

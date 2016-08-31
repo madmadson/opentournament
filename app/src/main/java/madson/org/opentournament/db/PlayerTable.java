@@ -6,7 +6,7 @@ import android.util.Log;
 
 
 /**
- * Database stuff for tournaments.
+ * Local database for players.
  *
  * @author  Tobias Matt - tmatt@contargo.net
  */
@@ -14,6 +14,8 @@ public class PlayerTable {
 
     public static final String TABLE_PLAYER = "player";
     public static final String COLUMN_ID = "_id";
+    public static final String COLUMN_ONLINE_UUID = "onlineUUID";
+
     public static final String COLUMN_FIRSTNAME = "firstname";
     public static final String COLUMN_LASTNAME = "lastname";
     public static final String COLUMN_NICKNAME = "nickname";
@@ -25,7 +27,7 @@ public class PlayerTable {
         db.execSQL(" CREATE TABLE " + TABLE_PLAYER
             + " (" + COLUMN_ID
             + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_FIRSTNAME
-            + " TEXT, " + COLUMN_LASTNAME + " TEXT, " + COLUMN_NICKNAME + " TEXT)");
+            + " TEXT, " + COLUMN_LASTNAME + " TEXT, " + COLUMN_NICKNAME + " TEXT, " + COLUMN_ONLINE_UUID + " TEXT)");
     }
 
 

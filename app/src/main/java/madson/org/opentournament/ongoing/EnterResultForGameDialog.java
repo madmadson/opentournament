@@ -104,13 +104,13 @@ public class EnterResultForGameDialog extends DialogFragment {
 
         super.onAttach(activity);
 
-        OngoingTournamentManagementFragment ongoingTournamentManagementFragment =
-            ((OngoingTournamentActivity) getActivity()).getOngoingTournamentManagementFragment();
+        TournamentRoundManagementFragment tournamentRoundManagementFragment =
+            ((OngoingTournamentActivity) getActivity()).getTournamentRoundManagementFragment();
 
-        if (ongoingTournamentManagementFragment != null) {
-            mListener = ongoingTournamentManagementFragment;
+        if (tournamentRoundManagementFragment != null) {
+            mListener = tournamentRoundManagementFragment;
         } else {
-            throw new RuntimeException("OngoingTournamentManagementFragment must be available");
+            throw new RuntimeException("TournamentRoundManagementFragment must be available");
         }
     }
 

@@ -4,7 +4,6 @@ import android.content.Intent;
 
 import android.os.Bundle;
 
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 
 import android.support.v4.app.Fragment;
@@ -13,21 +12,14 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 
 import android.util.Log;
 
 import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
 
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Tournament;
-import madson.org.opentournament.players.NewPlayerForTournamentDialog;
-import madson.org.opentournament.service.TournamentService;
 import madson.org.opentournament.utility.BaseActivity;
-import madson.org.opentournament.utility.BaseApplication;
 
 
 public class OngoingTournamentActivity extends BaseActivity {
@@ -37,7 +29,7 @@ public class OngoingTournamentActivity extends BaseActivity {
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
 
-    private OngoingTournamentManagementFragment ongoingTournamentManagementFragment;
+    private TournamentRoundManagementFragment tournamentRoundManagementFragment;
     private Tournament tournament;
 
     @Override
@@ -102,9 +94,9 @@ public class OngoingTournamentActivity extends BaseActivity {
     }
 
 
-    public OngoingTournamentManagementFragment getOngoingTournamentManagementFragment() {
+    public TournamentRoundManagementFragment getTournamentRoundManagementFragment() {
 
-        return ongoingTournamentManagementFragment;
+        return tournamentRoundManagementFragment;
     }
 
 
@@ -142,11 +134,13 @@ public class OngoingTournamentActivity extends BaseActivity {
             if (position == 0 && checkIfOnlineTournamentAndUserNotCreator()) {
                 // show online tournament player list
                 return TournamentPlayerListFragment.newInstance(tournament);
+            } else if (position == 0) {
+                // setup to add players to tournament
+                return TournamentSetupFragment.newInstance(tournament);
             } else {
-                ongoingTournamentManagementFragment = OngoingTournamentManagementFragment.newInstance(position,
-                        tournament.get_id());
+                tournamentRoundManagementFragment = TournamentRoundManagementFragment.newInstance(position, tournament);
 
-                return ongoingTournamentManagementFragment;
+                return tournamentRoundManagementFragment;
             }
         }
 

@@ -4,6 +4,8 @@ import android.database.sqlite.SQLiteDatabase;
 
 import android.util.Log;
 
+import madson.org.opentournament.db.TournamentPlayerTable;
+
 
 /**
  * Write some fancy Javadoc!
@@ -71,7 +73,7 @@ public class WarmachineTournamentGameTable {
 
     public static void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
-        Log.w(WarmachineRankingTable.class.getName(),
+        Log.w(TournamentPlayerTable.class.getName(),
             "Upgrading database from version " + oldVersion + " to " + newVersion
             + ", which will destroy all old data");
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_TOURNAMENT_GAME);

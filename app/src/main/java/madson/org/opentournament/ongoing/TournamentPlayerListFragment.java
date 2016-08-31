@@ -82,19 +82,6 @@ public class TournamentPlayerListFragment extends Fragment {
 
         recyclerView.setAdapter(tournamentPlayerListAdapter);
 
-        FloatingActionButton floatingActionButton = ((BaseActivity) getActivity()).getFloatingActionButton();
-        floatingActionButton.setVisibility(View.VISIBLE);
-        floatingActionButton.setImageResource(R.drawable.ic_add_white_24dp);
-
-        floatingActionButton.setOnClickListener(new View.OnClickListener() {
-
-                @Override
-                public void onClick(View v) {
-
-                    Log.i(this.getClass().getName(), "click floatingActionButton tournament player");
-                }
-            });
-
         return view;
     }
 

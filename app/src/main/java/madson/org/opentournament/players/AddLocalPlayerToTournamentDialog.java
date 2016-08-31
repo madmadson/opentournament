@@ -1,8 +1,8 @@
 package madson.org.opentournament.players;
 
-import android.app.Activity;
 import android.app.Dialog;
 
+import android.content.Context;
 import android.content.DialogInterface;
 
 import android.os.Build;
@@ -28,8 +28,8 @@ import android.widget.EditText;
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.Tournament;
-import madson.org.opentournament.ongoing.OngoingTournamentActivity;
-import madson.org.opentournament.ongoing.OngoingTournamentManagementFragment;
+import madson.org.opentournament.domain.TournamentPlayer;
+import madson.org.opentournament.ongoing.TournamentSetupFragment;
 import madson.org.opentournament.service.OngoingTournamentService;
 import madson.org.opentournament.service.PlayerService;
 import madson.org.opentournament.service.TournamentService;
@@ -37,20 +37,21 @@ import madson.org.opentournament.utility.BaseApplication;
 
 
 /**
- * Write some fancy Javadoc!
+ * Dialog for adding new local players to tournament.
  *
  * @author  Tobias Matt - tmatt@contargo.net
  */
-public class NewPlayerForTournamentDialog extends DialogFragment {
+public class AddLocalPlayerToTournamentDialog extends DialogFragment {
 
-    public static final String BUNDLE_TOURNAMENT_ID = "tournament_id";
+    public static final String BUNDLE_TOURNAMENT = "tournament";
+    private CoordinatorLayout coordinatorLayout;
+    private TournamentPlayerAddListener mListener;
+
     private EditText firstnameEditText;
     private EditText nicknameEditText;
     private EditText lastnameEditText;
 
-    private CoordinatorLayout coordinatorLayout;
-    private AvailablePlayerListFragment.AvailablePlayerListItemListener mListener;
-    private long tournamentId;
+    private Tournament tournament;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -62,17 +63,23 @@ public class NewPlayerForTournamentDialog extends DialogFragment {
 
 
     @Override
-    public void onAttach(Activity activity) {
+    public void onAttach(Context context) {
 
-        super.onAttach(activity);
+        super.onAttach(context);
 
-        OngoingTournamentManagementFragment tournamentManagementFragment = ((OngoingTournamentActivity) getActivity())
-            .getOngoingTournamentManagementFragment();
+        if (getTargetFragment() instanceof TournamentSetupFragment) {
+            mListener = (TournamentSetupFragment) getTargetFragment();
+        }
+    }
 
-        if (tournamentManagementFragment != null) {
-            mListener = tournamentManagementFragment;
-        } else {
-            throw new RuntimeException("OngoingTournamentManagementFragment must be available");
+
+    @Override
+    public void onDetach() {
+
+        super.onDetach();
+
+        if (mListener != null) {
+            mListener = null;
         }
     }
 
@@ -82,37 +89,40 @@ public class NewPlayerForTournamentDialog extends DialogFragment {
 
         Bundle bundle = getArguments();
 
-        if (bundle != null) {
-            tournamentId = bundle.getLong(BUNDLE_TOURNAMENT_ID);
+        if (bundle != null && bundle.getParcelable(BUNDLE_TOURNAMENT) != null) {
+            tournament = bundle.getParcelable(BUNDLE_TOURNAMENT);
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+            // Get the layout inflater
+            LayoutInflater inflater = getActivity().getLayoutInflater();
+
+            View dialogView = inflater.inflate(R.layout.dialog_new_player, null);
+
+            firstnameEditText = (EditText) dialogView.findViewById(R.id.new_player_firstname);
+            nicknameEditText = (EditText) dialogView.findViewById(R.id.new_player_nickname);
+            lastnameEditText = (EditText) dialogView.findViewById(R.id.new_player_lastname);
+
+            TournamentService tournamentService = ((BaseApplication) getActivity().getApplication())
+                .getTournamentService();
+            Tournament tournamentForId = tournamentService.getTournamentForId(tournament.get_id());
+
+            builder.setView(dialogView)
+                .setTitle(getString(R.string.new_player_tournament_title, tournamentForId.getName()))
+                .setPositiveButton(R.string.dialog_save, null)
+                .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
+
+                        @Override
+                        public void onClick(DialogInterface dialog, int id) {
+
+                            AddLocalPlayerToTournamentDialog.this.getDialog().cancel();
+                        }
+                    });
+
+            return builder.create();
         }
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-
-        // Get the layout inflater
-        LayoutInflater inflater = getActivity().getLayoutInflater();
-
-        View dialogView = inflater.inflate(R.layout.dialog_new_player, null);
-
-        firstnameEditText = (EditText) dialogView.findViewById(R.id.new_player_firstname);
-        nicknameEditText = (EditText) dialogView.findViewById(R.id.new_player_nickname);
-        lastnameEditText = (EditText) dialogView.findViewById(R.id.new_player_lastname);
-
-        TournamentService tournamentService = ((BaseApplication) getActivity().getApplication()).getTournamentService();
-        Tournament tournamentForId = tournamentService.getTournamentForId(tournamentId);
-
-        builder.setView(dialogView)
-            .setTitle(getString(R.string.new_player_tournament_title, tournamentForId.getName()))
-            .setPositiveButton(R.string.dialog_save, null)
-            .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
-
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
-
-                        NewPlayerForTournamentDialog.this.getDialog().cancel();
-                    }
-                });
-
-        return builder.create();
+        return null;
     }
 
 
@@ -147,7 +157,7 @@ public class NewPlayerForTournamentDialog extends DialogFragment {
                             OngoingTournamentService ongoingTournamentService =
                                 ((BaseApplication) getActivity().getApplication()).getOngoingTournamentService();
 
-                            ongoingTournamentService.addPlayerToTournament(player, tournamentId);
+                            ongoingTournamentService.addPlayerToTournament(player, tournament.get_id());
 
                             Snackbar snackbar = Snackbar.make(coordinatorLayout, R.string.success_new_player_inserted,
                                     Snackbar.LENGTH_LONG);
@@ -161,7 +171,10 @@ public class NewPlayerForTournamentDialog extends DialogFragment {
                             }
 
                             snackbar.show();
-                            mListener.onAvailablePlayerListItemClicked(player);
+
+                            if (mListener != null) {
+                                // mListener.addTournamentPlayer();
+                            }
 
                             dialog.dismiss();
                         } else {
@@ -188,5 +201,10 @@ public class NewPlayerForTournamentDialog extends DialogFragment {
                     }
                 });
         }
+    }
+
+    public interface TournamentPlayerAddListener {
+
+        void addTournamentPlayer(TournamentPlayer tournamentPlayer);
     }
 }

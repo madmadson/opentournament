@@ -47,7 +47,8 @@ import java.util.Locale;
 
 
 /**
- * Write some fancy Javadoc!
+ * Dialog for create/update/delete tournaments. If parent Fragment is implements listener for manipulating lists, call
+ * listener when manipulate tournaments
  *
  * @author  Tobias Matt - tmatt@contargo.net
  */
@@ -60,6 +61,7 @@ public class TournamentManagementDialog extends DialogFragment {
     private EditText tournamentMaxPlayersEditText;
     private CheckBox tournamentOnlineCheckbox;
 
+    // for snackbars
     private CoordinatorLayout coordinatorLayout;
 
     private Tournament tournament;
@@ -258,7 +260,9 @@ public class TournamentManagementDialog extends DialogFragment {
                                                 if (tournament.getOnlineUUID() == null) {
                                                     tournamentService.deleteTournament(tournament.get_id());
 
-                                                    mListener.tournamentDeletedEvent(tournament);
+                                                    if (mListener != null) {
+                                                        mListener.tournamentDeletedEvent(tournament);
+                                                    }
                                                 } else {
                                                     tournamentService.removeTournamentInFirebase(tournament);
                                                 }
@@ -336,7 +340,10 @@ public class TournamentManagementDialog extends DialogFragment {
                 tournamentService.setTournamentToFirebase(tournament);
 
                 tournamentService.deleteTournament(tournament.get_id());
-                mListener.tournamentDeletedEvent(tournament);
+
+                if (mListener != null) {
+                    mListener.tournamentDeletedEvent(tournament);
+                }
 
                 Snackbar snackbar = Snackbar.make(coordinatorLayout, R.string.success_convert_to_online_tournament,
                         Snackbar.LENGTH_LONG);
@@ -352,7 +359,10 @@ public class TournamentManagementDialog extends DialogFragment {
             }
         } else {
             tournamentService.editTournament(tournament);
-            mListener.tournamentChangedEvent(tournament);
+
+            if (mListener != null) {
+                mListener.tournamentChangedEvent(tournament);
+            }
         }
     }
 
@@ -413,9 +423,6 @@ public class TournamentManagementDialog extends DialogFragment {
 
         if (getTargetFragment() instanceof TournamentManagementFragment) {
             mListener = (TournamentManagementFragment) getTargetFragment();
-        } else {
-            throw new RuntimeException(getParentFragment().toString()
-                + " must implement TournamentListItemListener");
         }
     }
 

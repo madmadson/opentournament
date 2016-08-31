@@ -22,7 +22,7 @@ import java.util.List;
 
 
 /**
- * Write some fancy Javadoc!
+ * adapter for player list.
  *
  * @author  Tobias Matt - tmatt@contargo.net
  */
@@ -34,6 +34,10 @@ public class AvailablePlayerListAdapter extends RecyclerView.Adapter<AvailablePl
     private List<Player> filteredPlayerList;
     private ItemFilter mFilter = new ItemFilter();
 
+    /**
+     * @param  playerList  list of players to show
+     * @param  mListener  maybe null when no listener is needed
+     */
     public AvailablePlayerListAdapter(List<Player> playerList,
         AvailablePlayerListFragment.AvailablePlayerListItemListener mListener) {
 
@@ -125,7 +129,10 @@ public class AvailablePlayerListAdapter extends RecyclerView.Adapter<AvailablePl
             filteredPlayerList.remove(player);
             notifyDataSetChanged();
 
-            mListener.onAvailablePlayerListItemClicked(player);
+            // call listener if set
+            if (mListener != null) {
+                mListener.onAvailablePlayerListItemClicked(player);
+            }
         }
     }
 

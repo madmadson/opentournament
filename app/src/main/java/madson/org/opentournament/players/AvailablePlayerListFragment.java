@@ -22,6 +22,7 @@ import android.widget.EditText;
 
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Player;
+import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.service.OngoingTournamentService;
 import madson.org.opentournament.service.PlayerService;
 import madson.org.opentournament.utility.BaseApplication;
@@ -31,13 +32,12 @@ import java.util.List;
 
 public class AvailablePlayerListFragment extends Fragment {
 
-    public static final String TAG = "player_list_fragment";
-    public static final String BUNDLE_TOURNAMENT_ID = "tournament_id";
+    public static final String BUNDLE_TOURNAMENT = "tournament";
 
     private AvailablePlayerListAdapter availablePlayerListAdapter;
 
     private AvailablePlayerListItemListener mListener;
-    private long tournamentId;
+    private Tournament tournament;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the fragment (e.g. upon screen orientation
@@ -88,21 +88,19 @@ public class AvailablePlayerListFragment extends Fragment {
 
         Bundle bundle = getArguments();
 
-        if (bundle != null && bundle.getLong(BUNDLE_TOURNAMENT_ID) != 0) {
-            tournamentId = bundle.getLong(BUNDLE_TOURNAMENT_ID);
+        if (bundle != null && bundle.getParcelable(BUNDLE_TOURNAMENT) != null) {
+            tournament = bundle.getParcelable(BUNDLE_TOURNAMENT);
 
             OngoingTournamentService ongoingTournamentService = ((BaseApplication) getActivity().getApplication())
                 .getOngoingTournamentService();
-            List<Player> alreadyPlayingPlayers = ongoingTournamentService.getAllPlayersForTournament(tournamentId);
+            List<Player> alreadyPlayingPlayers = ongoingTournamentService.getAllPlayersForTournament(
+                    tournament.get_id());
             players.removeAll(alreadyPlayingPlayers);
         }
 
-        if (mListener != null) {
-            availablePlayerListAdapter = new AvailablePlayerListAdapter(players, mListener);
-            recyclerView.setAdapter(availablePlayerListAdapter);
-        } else {
-            throw new RuntimeException("Listener for playerlist missing");
-        }
+        // listener may be null
+        availablePlayerListAdapter = new AvailablePlayerListAdapter(players, mListener);
+        recyclerView.setAdapter(availablePlayerListAdapter);
 
         return view;
     }
@@ -113,11 +111,9 @@ public class AvailablePlayerListFragment extends Fragment {
 
         super.onAttach(context);
 
+        // mlistener to call when player is clicked
         if (getParentFragment() instanceof AvailablePlayerListItemListener) {
             mListener = (AvailablePlayerListItemListener) getParentFragment();
-        } else {
-            throw new RuntimeException(getParentFragment().toString()
-                + " must implement AvailablePlayerListItemListener");
         }
     }
 
@@ -126,7 +122,10 @@ public class AvailablePlayerListFragment extends Fragment {
     public void onDetach() {
 
         super.onDetach();
-        mListener = null;
+
+        if (mListener != null) {
+            mListener = null;
+        }
     }
 
 
@@ -146,7 +145,7 @@ public class AvailablePlayerListFragment extends Fragment {
 
                     Log.i(this.getClass().getName(), "remove player from tournament ");
 
-                    application.getOngoingTournamentService().removePlayerFromTournament(player, tournamentId);
+                    application.getOngoingTournamentService().removePlayerFromTournament(player, tournament.get_id());
                 }
             };
             runnable.run();

@@ -1,4 +1,4 @@
-package madson.org.opentournament.db.warmachine;
+package madson.org.opentournament.db;
 
 import android.database.sqlite.SQLiteDatabase;
 
@@ -10,13 +10,13 @@ import android.util.Log;
  *
  * @author  Tobias Matt - tmatt@contargo.net
  */
-public class WarmachineRankingTable {
+public class TournamentPlayerTable {
 
     public static final String[] ALL_COLS_FOR_RANKING_TABLE = {
         "_id", "tournament_id", "player_id", "round", "score", "sos", "control_points", "victory_points"
     };
 
-    public static final String TABLE_WARMACHINE_RANKING = "warmachine_tournament_player_ranking";
+    public static final String TABLE_WARMACHINE_RANKING = "tournament_player";
     public static final String COLUMN_ID = "_id";
     public static final String COLUMN_TOURNAMENT_ID = "tournament_id";
     public static final String COLUMN_PLAYER_ID = "player_id";
@@ -29,7 +29,7 @@ public class WarmachineRankingTable {
 
     public static void createTable(SQLiteDatabase db) {
 
-        Log.i(WarmachineRankingTable.class.getName(), "create tournament_player table");
+        Log.i(TournamentPlayerTable.class.getName(), "create tournament_player table");
 
         db.execSQL(" CREATE TABLE " + TABLE_WARMACHINE_RANKING
             + " (" + COLUMN_ID
@@ -43,7 +43,7 @@ public class WarmachineRankingTable {
 
     public static void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
-        Log.w(WarmachineRankingTable.class.getName(),
+        Log.w(TournamentPlayerTable.class.getName(),
             "Upgrading database from version " + oldVersion + " to " + newVersion
             + ", which will destroy all old data");
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_WARMACHINE_RANKING);

@@ -330,8 +330,6 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
     private void doLogin() {
 
-        SharedPreferences mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-
         // Set default username is anonymous.
 
         mUsername = ANONYMOUS_USER;
@@ -381,20 +379,6 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         // be available.
         Log.d(this.getClass().getName(), "onConnectionFailed:" + connectionResult);
         Toast.makeText(this, "Google Play Services error.", Toast.LENGTH_SHORT).show();
-    }
-
-
-    /**
-     * Checks whether the given fragment is currently active. Active is defined as: the fragment is added to the current
-     * view hierarchy, is not hidden and is not currently being removed.
-     *
-     * @param  fragment  the fragment to check
-     *
-     * @return  true if the fragment is active, false otherwise.
-     */
-    public boolean isFragmentActive(Fragment fragment) {
-
-        return fragment.isAdded() && !fragment.isHidden() && !fragment.isRemoving();
     }
 
 

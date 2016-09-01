@@ -76,9 +76,11 @@ public class OnlinePlayerListAdapter extends RecyclerView.Adapter<OnlinePlayerLi
 
         Log.i(this.getClass().getName(), "player added to adapter ");
 
-        this.filteredPlayerList.add(player);
-        this.originalPlayerList.add(player);
-        notifyDataSetChanged();
+        if (!originalPlayerList.contains(player)) {
+            this.filteredPlayerList.add(player);
+            this.originalPlayerList.add(player);
+            notifyDataSetChanged();
+        }
     }
 
 
@@ -95,6 +97,12 @@ public class OnlinePlayerListAdapter extends RecyclerView.Adapter<OnlinePlayerLi
     public Filter getFilter() {
 
         return filter;
+    }
+
+
+    public List<Player> getFilteredPlayerList() {
+
+        return filteredPlayerList;
     }
 
     public class PlayerViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

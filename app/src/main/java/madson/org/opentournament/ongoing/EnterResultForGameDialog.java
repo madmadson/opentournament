@@ -25,7 +25,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import madson.org.opentournament.R;
-import madson.org.opentournament.domain.warmachine.WarmachineTournamentGame;
+import madson.org.opentournament.domain.warmachine.Game;
 import madson.org.opentournament.service.OngoingTournamentService;
 import madson.org.opentournament.utility.BaseApplication;
 
@@ -63,7 +63,7 @@ public class EnterResultForGameDialog extends DialogFragment {
 
     private GameListFragment.GameResultEnteredListener mListener;
 
-    private WarmachineTournamentGame game;
+    private Game game;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {

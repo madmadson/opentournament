@@ -31,6 +31,7 @@ import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.ongoing.TournamentSetupFragment;
 import madson.org.opentournament.service.OngoingTournamentService;
 import madson.org.opentournament.service.PlayerService;
+import madson.org.opentournament.service.TournamentPlayerService;
 import madson.org.opentournament.service.TournamentService;
 import madson.org.opentournament.utility.BaseApplication;
 
@@ -153,10 +154,10 @@ public class AddLocalPlayerToTournamentDialog extends DialogFragment {
                                 .getPlayerService();
                             playerService.createLocalPlayer(player);
 
-                            OngoingTournamentService ongoingTournamentService =
-                                ((BaseApplication) getActivity().getApplication()).getOngoingTournamentService();
+                            TournamentPlayerService tournamentPlayerService =
+                                ((BaseApplication) getActivity().getApplication()).getTournamentPlayerService();
 
-                            TournamentPlayer tournamentPlayer = ongoingTournamentService.addPlayerToTournament(player,
+                            TournamentPlayer tournamentPlayer = tournamentPlayerService.addPlayerToTournament(player,
                                     tournament);
 
                             Snackbar snackbar = Snackbar.make(coordinatorLayout, R.string.success_new_player_inserted,

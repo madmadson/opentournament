@@ -14,8 +14,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import madson.org.opentournament.R;
+import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
-import madson.org.opentournament.service.OngoingTournamentService;
+import madson.org.opentournament.domain.TournamentRanking;
+import madson.org.opentournament.service.RankingService;
 import madson.org.opentournament.utility.BaseApplication;
 
 import java.util.List;
@@ -28,9 +30,9 @@ import java.util.List;
  */
 public class RankingListFragment extends Fragment {
 
-    public static final String BUNDLE_TOURNAMENT_ID = "tournament_id";
+    public static final String BUNDLE_TOURNAMENT = "tournament";
     public static final String BUNDLE_ROUND = "round";
-    private Long tournamentId;
+    private Tournament tournament;
     private int round;
 
     @Override
@@ -38,8 +40,8 @@ public class RankingListFragment extends Fragment {
 
         Bundle bundle = getArguments();
 
-        if (bundle != null && bundle.getLong(BUNDLE_TOURNAMENT_ID) != 0) {
-            tournamentId = bundle.getLong(BUNDLE_TOURNAMENT_ID);
+        if (bundle != null && bundle.getParcelable(BUNDLE_TOURNAMENT) != null) {
+            tournament = bundle.getParcelable(BUNDLE_TOURNAMENT);
         }
 
         if (bundle != null && bundle.getInt(BUNDLE_ROUND) != 0) {
@@ -48,8 +50,7 @@ public class RankingListFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_ranking_list, container, false);
 
-        OngoingTournamentService ongoingTournamentService = ((BaseApplication) getActivity().getApplication())
-            .getOngoingTournamentService();
+        RankingService rankingService = ((BaseApplication) getActivity().getApplication()).getRankingService();
 
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.ranking_list_recycler_view);
 
@@ -58,7 +59,7 @@ public class RankingListFragment extends Fragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(linearLayoutManager);
 
-        List<TournamentPlayer> rankingForRound = ongoingTournamentService.getRankingForRound(tournamentId, round);
+        List<TournamentRanking> rankingsForRound = rankingService.getTournamentRankingForRound(tournament, round);
 
         TextView heading = (TextView) view.findViewById(R.id.heading_ranking_for_round);
 
@@ -72,7 +73,7 @@ public class RankingListFragment extends Fragment {
 
         getChildFragmentManager().beginTransaction().add(R.id.row_ranking_header_container, headerFragment).commit();
 
-        RankingListAdapter rankingListAdapter = new RankingListAdapter(rankingForRound);
+        RankingListAdapter rankingListAdapter = new RankingListAdapter(rankingsForRound);
         recyclerView.setAdapter(rankingListAdapter);
 
         return view;
@@ -80,9 +81,9 @@ public class RankingListFragment extends Fragment {
 
     private class RankingListAdapter extends RecyclerView.Adapter<RankingListAdapter.ViewHolder> {
 
-        private final List<TournamentPlayer> rankingList;
+        private final List<TournamentRanking> rankingList;
 
-        public RankingListAdapter(List<TournamentPlayer> ranking) {
+        public RankingListAdapter(List<TournamentRanking> ranking) {
 
             this.rankingList = ranking;
         }
@@ -103,7 +104,7 @@ public class RankingListFragment extends Fragment {
         @Override
         public void onBindViewHolder(RankingListAdapter.ViewHolder holder, int position) {
 
-            final TournamentPlayer ranking = rankingList.get(position);
+            final TournamentRanking ranking = rankingList.get(position);
             holder.setRanking(ranking);
             holder.getRankingNumber().setText(String.valueOf(position + 1));
             holder.getScore().setText(String.valueOf(ranking.getScore()));
@@ -127,7 +128,7 @@ public class RankingListFragment extends Fragment {
             private final TextView sos;
             private final TextView cp;
             private final TextView vp;
-            private TournamentPlayer ranking;
+            private TournamentRanking ranking;
             private TextView playerNumber;
             private TextView playerNameInList;
 
@@ -143,7 +144,7 @@ public class RankingListFragment extends Fragment {
                 vp = (TextView) itemView.findViewById(R.id.ranking_row_victory_points);
             }
 
-            public void setRanking(TournamentPlayer ranking) {
+            public void setRanking(TournamentRanking ranking) {
 
                 this.ranking = ranking;
             }

@@ -46,7 +46,8 @@ public interface TournamentService {
 
 
     /**
-     * Pushes a tournament to online services. Kill local stored tournament.
+     * Pushes a tournament to online services. Clones given tournament and add meta data for online instance. given
+     * tournament will not be manipulated
      *
      * @param  tournament
      */
@@ -74,7 +75,7 @@ public interface TournamentService {
      *
      * @param  tournament
      */
-    void editTournament(Tournament tournament);
+    void updateTournament(Tournament tournament);
 
 
     /**

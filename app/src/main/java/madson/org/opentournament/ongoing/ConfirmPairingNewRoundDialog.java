@@ -18,7 +18,9 @@ import android.view.View;
 import android.widget.Button;
 
 import madson.org.opentournament.R;
+import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.service.OngoingTournamentService;
+import madson.org.opentournament.service.RankingService;
 import madson.org.opentournament.utility.BaseApplication;
 
 
@@ -29,10 +31,10 @@ import madson.org.opentournament.utility.BaseApplication;
  */
 public class ConfirmPairingNewRoundDialog extends DialogFragment {
 
-    public static final String BUNDLE_TOURNAMENT_ID = "tournament_id";
+    public static final String BUNDLE_TOURNAMENT = "tournament";
     public static final String BUNDLE_ROUND_TO_DISPLAY = "round_for_pairing";
 
-    private long tournament_id;
+    private Tournament tournament;
     private int round_for_pairing;
 
     @Override
@@ -41,7 +43,7 @@ public class ConfirmPairingNewRoundDialog extends DialogFragment {
         Bundle bundle = getArguments();
 
         if (bundle != null) {
-            tournament_id = bundle.getLong(BUNDLE_TOURNAMENT_ID);
+            tournament = bundle.getParcelable(BUNDLE_TOURNAMENT);
             round_for_pairing = bundle.getInt(BUNDLE_ROUND_TO_DISPLAY);
         }
 
@@ -96,11 +98,14 @@ public class ConfirmPairingNewRoundDialog extends DialogFragment {
                     OngoingTournamentService ongoingTournamentService =
                         ((BaseApplication) getActivity().getApplication()).getOngoingTournamentService();
 
+                    RankingService rankingService = ((BaseApplication) getActivity().getApplication())
+                        .getRankingService();
+
                     // first create ranking for complete games
-                    ongoingTournamentService.createRankingForRound(tournament_id, round_for_pairing);
+                    rankingService.createRankingForRound(tournament, round_for_pairing);
 
                     // now we can create pairings for new round
-                    ongoingTournamentService.createPairingForRound(tournament_id, round_for_pairing);
+                    ongoingTournamentService.createGamesForRound(tournament, round_for_pairing);
 
                     activity.addRoundAfterNewPairing();
 

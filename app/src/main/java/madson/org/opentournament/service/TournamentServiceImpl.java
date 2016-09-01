@@ -14,9 +14,8 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import madson.org.opentournament.db.OpenTournamentDBHelper;
 import madson.org.opentournament.db.TournamentTable;
-import madson.org.opentournament.db.warmachine.WarmachineTournamentGameTable;
+import madson.org.opentournament.db.warmachine.GameTable;
 import madson.org.opentournament.domain.Tournament;
-import madson.org.opentournament.domain.TournamentTyp;
 
 import org.joda.time.DateTime;
 
@@ -59,7 +58,7 @@ public class TournamentServiceImpl implements TournamentService {
 
         SQLiteDatabase writableDatabase = openTournamentDBHelper.getWritableDatabase();
 
-        writableDatabase.delete(WarmachineTournamentGameTable.TABLE_TOURNAMENT_GAME, null, null);
+        writableDatabase.delete(GameTable.TABLE_TOURNAMENT_GAME, null, null);
     }
 
 
@@ -100,8 +99,9 @@ public class TournamentServiceImpl implements TournamentService {
         Tournament tournament = new Tournament();
         SQLiteDatabase readableDatabase = openTournamentDBHelper.getReadableDatabase();
 
-        Cursor cursor = readableDatabase.query(TournamentTable.TABLE_TOURNAMENTS, Tournament.ALL_COLS_FOR_TOURNAMENT,
-                "_id  = ?", new String[] { Long.toString(id) }, null, null, null);
+        Cursor cursor = readableDatabase.query(TournamentTable.TABLE_TOURNAMENTS,
+                TournamentTable.ALL_COLS_FOR_TOURNAMENT, "_id  = ?", new String[] { Long.toString(id) }, null, null,
+                null);
 
         if (cursor.moveToFirst()) {
             tournament = cursorToTournament(cursor);
@@ -160,9 +160,9 @@ public class TournamentServiceImpl implements TournamentService {
 
 
     @Override
-    public void editTournament(Tournament tournament) {
+    public void updateTournament(Tournament tournament) {
 
-        Log.i(this.getClass().getName(), "edit tournament: " + tournament);
+        Log.i(this.getClass().getName(), "update tournament: " + tournament);
 
         ContentValues contentValues = new ContentValues();
         contentValues.put(TournamentTable.COLUMN_NAME, tournament.getName());
@@ -251,23 +251,17 @@ public class TournamentServiceImpl implements TournamentService {
 
         Log.i(this.getClass().getName(), "pushes tournament to online: " + tournament);
 
+        // avoid manipulate offline tournament
+        Tournament onlineTournament = new Tournament(tournament);
+
         UUID uuid = UUID.randomUUID();
 
-        tournament.setOnlineUUID(uuid.toString());
+        onlineTournament.setOnlineUUID(uuid.toString());
 
         DatabaseReference referenceForNewTournament = FirebaseDatabase.getInstance()
                 .getReference("tournaments/" + uuid);
 
-        referenceForNewTournament.setValue(tournament);
-
-        // kill local stored tournament
-        if (tournament.get_id() != 0) {
-            SQLiteDatabase writableDatabase = openTournamentDBHelper.getWritableDatabase();
-            writableDatabase.delete(TournamentTable.TABLE_TOURNAMENTS, "_id  = ?",
-                new String[] { String.valueOf(tournament.get_id()) });
-
-            writableDatabase.close();
-        }
+        referenceForNewTournament.setValue(onlineTournament);
     }
 
 

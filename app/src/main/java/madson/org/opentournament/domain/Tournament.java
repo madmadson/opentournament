@@ -15,11 +15,6 @@ import java.util.Date;
  */
 public class Tournament implements Parcelable {
 
-    public static final String[] ALL_COLS_FOR_TOURNAMENT = {
-        "_id", "name", "location", "date", "maxNumberOfPlayers", "actualRound", "onlineUUID", "creator", "creatorEmail",
-        "tournamentType"
-    };
-
     public static final Creator<Tournament> CREATOR = new Creator<Tournament>() {
 
         @Override
@@ -54,7 +49,27 @@ public class Tournament implements Parcelable {
     }
 
 
-    protected Tournament(Parcel in) {
+    /**
+     * Clones given Tournament.
+     *
+     * @param  tournament
+     */
+    public Tournament(Tournament tournament) {
+
+        this._id = tournament.get_id();
+        this.name = tournament.getName();
+        this.location = tournament.getLocation();
+        this.maxNumberOfPlayers = tournament.getMaxNumberOfPlayers();
+        this.dateOfTournament = tournament.getDateOfTournament();
+        this.actualRound = tournament.getActualRound();
+        this.onlineUUID = tournament.getOnlineUUID();
+        this.creatorName = tournament.getCreatorName();
+        this.creatorEmail = tournament.getCreatorEmail();
+        this.tournamentTyp = TournamentTyp.valueOf(tournament.getTournamentTyp());
+    }
+
+
+    public Tournament(Parcel in) {
 
         _id = in.readLong();
         name = in.readString();
@@ -185,9 +200,10 @@ public class Tournament implements Parcelable {
             + ", maxNumberOfPlayers=" + maxNumberOfPlayers
             + ", dateOfTournament=" + dateOfTournament
             + ", actualRound=" + actualRound
-            + ", onlineUUID=" + onlineUUID
+            + ", onlineUUID='" + onlineUUID + '\''
             + ", creatorName='" + creatorName + '\''
-            + ", creatorEmail='" + creatorEmail + '\'' + '}';
+            + ", creatorEmail='" + creatorEmail + '\''
+            + ", tournamentTyp=" + tournamentTyp + '}';
     }
 
 
@@ -228,5 +244,27 @@ public class Tournament implements Parcelable {
     public void setTournamentTyp(String tournamentTyp) {
 
         this.tournamentTyp = TournamentTyp.valueOf(tournamentTyp);
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+
+        if (this == o)
+            return true;
+
+        if (o == null || getClass() != o.getClass())
+            return false;
+
+        Tournament that = (Tournament) o;
+
+        return _id == that._id;
+    }
+
+
+    @Override
+    public int hashCode() {
+
+        return (int) (_id ^ (_id >>> 32));
     }
 }

@@ -29,8 +29,10 @@ import com.google.firebase.database.ValueEventListener;
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.Tournament;
+import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.service.OngoingTournamentService;
 import madson.org.opentournament.service.PlayerService;
+import madson.org.opentournament.service.TournamentPlayerService;
 import madson.org.opentournament.utility.BaseActivity;
 import madson.org.opentournament.utility.BaseApplication;
 
@@ -65,7 +67,7 @@ public class AvailablePlayerListFragment extends Fragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_player_list, container, false);
 
@@ -92,7 +94,7 @@ public class AvailablePlayerListFragment extends Fragment {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
 
-                        Log.i(this.getClass().getName(), "player loaded from firebase");
+                        Log.i(this.getClass().getName(), "players loaded from firebase");
 
                         for (DataSnapshot playerSnapShot : dataSnapshot.getChildren()) {
                             Player player = playerSnapShot.getValue(Player.class);
@@ -124,10 +126,12 @@ public class AvailablePlayerListFragment extends Fragment {
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
             localPlayerRecyclerView.setLayoutManager(linearLayoutManager);
 
-            OngoingTournamentService ongoingTournamentService = ((BaseApplication) getActivity().getApplication())
-                .getOngoingTournamentService();
-            List<Player> alreadyPlayingPlayers = ongoingTournamentService.getAllPlayersForTournament(
-                    tournament.get_id());
+            TournamentPlayerService tournamentPlayerService = ((BaseApplication) getActivity().getApplication())
+                .getTournamentPlayerService();
+            List<TournamentPlayer> alreadyPlayingPlayers = tournamentPlayerService.getAllPlayersForTournament(
+                    tournament);
+
+            // TODO: remove localplayers from tournament players
             localPlayers.removeAll(alreadyPlayingPlayers);
 
             // listener may be null
@@ -178,7 +182,7 @@ public class AvailablePlayerListFragment extends Fragment {
 
                     Log.i(this.getClass().getName(), "remove player from tournament ");
 
-                    application.getOngoingTournamentService().removePlayerFromTournament(player, tournament.get_id());
+                    application.getTournamentPlayerService().removePlayerFromTournament(player, tournament);
                 }
             };
             runnable.run();

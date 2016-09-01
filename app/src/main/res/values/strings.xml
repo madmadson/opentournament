@@ -124,7 +124,7 @@
     <string name="offline_text">you are offline - cannot load online tournaments</string>
     <string name="delete_tournament">Delete Tournament</string>
     <string name="dialof_confirm_draw">Sure draw?</string>
-    <string name="dialog_confirm_delete_tournament">Sure delete tournament?</string>
+    <string name="dialog_confirm_delete_tournament">Sure delete tournament? You cannot recover any data if you confirm.</string>
     <string name="dialog_confirm_convert_to_online_tournament">Please confirm convertions to online tournament</string>
     <string name="success_convert_to_online_tournament">successfully convert local tournament to online</string>
     <string name="nav_player_list">Tournament Players</string>

@@ -16,7 +16,7 @@ import android.view.ViewGroup;
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.Tournament;
-import madson.org.opentournament.domain.warmachine.WarmachineTournamentGame;
+import madson.org.opentournament.domain.warmachine.Game;
 import madson.org.opentournament.players.AvailablePlayerListFragment;
 
 
@@ -144,7 +144,7 @@ public class TournamentRoundManagementFragment extends Fragment
         previousRoundFragment = new RoundChangeButtonFragment();
 
         Bundle bundleForPreviousRound = new Bundle();
-        bundleForPreviousRound.putLong(RoundChangeButtonFragment.BUNDLE_TOURNAMENT_ID, tournament.get_id());
+        bundleForPreviousRound.putParcelable(RoundChangeButtonFragment.BUNDLE_TOURNAMENT, tournament);
         bundleForPreviousRound.putInt(RoundChangeButtonFragment.BUNDLE_ROUND_TO_DISPLAY, (round - 1));
         bundleForPreviousRound.putString(RoundChangeButtonFragment.BUNDLE_NEXT_OR_PREVIOUS,
             RoundChangeButtonFragment.NextOrPrevious.PREVIOUS.name());
@@ -160,7 +160,7 @@ public class TournamentRoundManagementFragment extends Fragment
         nextRoundButtonFragment = new RoundChangeButtonFragment();
 
         Bundle nextRoundButtonBundle = new Bundle();
-        nextRoundButtonBundle.putLong(RoundChangeButtonFragment.BUNDLE_TOURNAMENT_ID, tournament.get_id());
+        nextRoundButtonBundle.putParcelable(RoundChangeButtonFragment.BUNDLE_TOURNAMENT, tournament);
         nextRoundButtonBundle.putInt(RoundChangeButtonFragment.BUNDLE_ROUND_TO_DISPLAY, (round + 1));
         nextRoundButtonBundle.putString(RoundChangeButtonFragment.BUNDLE_NEXT_OR_PREVIOUS,
             RoundChangeButtonFragment.NextOrPrevious.NEXT.name());
@@ -175,7 +175,7 @@ public class TournamentRoundManagementFragment extends Fragment
         gameListFragment = new GameListFragment();
 
         Bundle bundleForPairing = new Bundle();
-        bundleForPairing.putLong(GameListFragment.BUNDLE_TOURNAMENT_ID, tournament.get_id());
+        bundleForPairing.putLong(GameListFragment.BUNDLE_TOURNAMENT, tournament.get_id());
         bundleForPairing.putInt(GameListFragment.BUNDLE_ROUND, round);
         gameListFragment.setArguments(bundleForPairing);
 
@@ -188,7 +188,7 @@ public class TournamentRoundManagementFragment extends Fragment
         rankingForRoundListFragment = new RankingListFragment();
 
         Bundle bundleForRanking = new Bundle();
-        bundleForRanking.putLong(RankingListFragment.BUNDLE_TOURNAMENT_ID, tournament.get_id());
+        bundleForRanking.putLong(RankingListFragment.BUNDLE_TOURNAMENT, tournament.get_id());
         bundleForRanking.putInt(RankingListFragment.BUNDLE_ROUND, round);
         rankingForRoundListFragment.setArguments(bundleForRanking);
 
@@ -223,7 +223,7 @@ public class TournamentRoundManagementFragment extends Fragment
 
 
     @Override
-    public void onResultConfirmed(WarmachineTournamentGame game) {
+    public void onResultConfirmed(Game game) {
 
         Log.i(this.getClass().getName(), "game result entered: " + game);
 

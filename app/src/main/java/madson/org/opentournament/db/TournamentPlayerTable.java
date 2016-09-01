@@ -12,9 +12,24 @@ import android.util.Log;
  */
 public class TournamentPlayerTable {
 
+    /*
+     * 0: id
+     * 1: tournament_id
+     * 2: player_id
+     * 3: player_online_uuid
+     * 4: firstname
+     * 5: nickname
+     * 6: lastname
+     * 7: teamname
+     * 8: faction
+     * 9: meta
+     */
     public static final String[] ALL_COLS_FOR_TOURNAMENT_PLAYER_TABLE = {
-        "_id", "tournament_id", "player_id", "round", "score", "sos", "control_points", "victory_points",
-        "player_online_uuid"
+        TournamentPlayerTable.COLUMN_ID, TournamentPlayerTable.COLUMN_TOURNAMENT_ID,
+        TournamentPlayerTable.COLUMN_PLAYER_ID, TournamentPlayerTable.COLUMN_PLAYER_ONLINE_UUID,
+        TournamentPlayerTable.COLUMN_FIRSTNAME, TournamentPlayerTable.COLUMN_NICKNAME,
+        TournamentPlayerTable.COLUMN_LASTNAME, TournamentPlayerTable.COLUMN_TEAMNAME,
+        TournamentPlayerTable.COLUMN_FACTION, TournamentPlayerTable.COLUMN_META
     };
 
     public static final String TABLE_TOURNAMENT_PLAYER = "tournament_player";
@@ -24,12 +39,14 @@ public class TournamentPlayerTable {
     public static final String COLUMN_PLAYER_ID = "player_id";
     public static final String COLUMN_PLAYER_ONLINE_UUID = "player_online_uuid";
 
-    public static final String COLUMN_ROUND = "round";
+    public static final String COLUMN_FIRSTNAME = "firstname";
+    public static final String COLUMN_NICKNAME = "nickname";
+    public static final String COLUMN_LASTNAME = "lastname";
 
-    public static final String COLUMN_SCORE = "score";
-    public static final String COLUMN_SOS = "sos";
-    public static final String COLUMN_CONTROL_POINTS = "control_points";
-    public static final String COLUMN_VICTORY_POINTS = "victory_points";
+    // META DATA for warmachine -> may extract to sperate tournament specific table
+    public static final String COLUMN_TEAMNAME = "teamname";
+    public static final String COLUMN_FACTION = "faction";
+    public static final String COLUMN_META = "meta";
 
     public static void createTable(SQLiteDatabase db) {
 
@@ -37,9 +54,9 @@ public class TournamentPlayerTable {
 
         db.execSQL(" CREATE TABLE " + TABLE_TOURNAMENT_PLAYER
             + " (" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_TOURNAMENT_ID + " INTEGER,"
-            + COLUMN_PLAYER_ID + " INTEGER, " + COLUMN_PLAYER_ONLINE_UUID
-            + " TEXT, " + COLUMN_ROUND + " INTEGER, " + COLUMN_SCORE + " INTEGER, " + COLUMN_SOS + " INTEGER, "
-            + COLUMN_CONTROL_POINTS + " INTEGER, " + COLUMN_VICTORY_POINTS + " INTEGER )");
+            + COLUMN_PLAYER_ID + " INTEGER, " + COLUMN_PLAYER_ONLINE_UUID + " TEXT," + COLUMN_FIRSTNAME
+            + " TEXT, " + COLUMN_NICKNAME + " TEXT, " + COLUMN_LASTNAME + " TEXT, " + COLUMN_TEAMNAME + " TEXT, "
+            + COLUMN_FACTION + " TEXT, " + COLUMN_META + " TEXT) ");
     }
 
 

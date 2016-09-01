@@ -18,7 +18,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import madson.org.opentournament.R;
-import madson.org.opentournament.domain.warmachine.WarmachineTournamentGame;
+import madson.org.opentournament.domain.Tournament;
+import madson.org.opentournament.domain.warmachine.Game;
 import madson.org.opentournament.service.OngoingTournamentService;
 import madson.org.opentournament.utility.BaseApplication;
 
@@ -32,7 +33,7 @@ import java.util.List;
  */
 public class RoundChangeButtonFragment extends Fragment {
 
-    public static final String BUNDLE_TOURNAMENT_ID = "tournament_id";
+    public static final String BUNDLE_TOURNAMENT = "tournament";
     public static final String BUNDLE_ROUND_TO_DISPLAY = "round_to_display";
     public static final String BUNDLE_NEXT_OR_PREVIOUS = "next_or_previous";
 
@@ -42,7 +43,7 @@ public class RoundChangeButtonFragment extends Fragment {
         NEXT
     }
 
-    private long tournament_id;
+    private Tournament tournament;
     private int round_to_display;
     private NextOrPrevious next_or_previous;
 
@@ -52,7 +53,7 @@ public class RoundChangeButtonFragment extends Fragment {
         Bundle bundle = getArguments();
 
         if (bundle != null) {
-            tournament_id = bundle.getLong(BUNDLE_TOURNAMENT_ID);
+            tournament = bundle.getParcelable(BUNDLE_TOURNAMENT);
             round_to_display = bundle.getInt(BUNDLE_ROUND_TO_DISPLAY);
             next_or_previous = NextOrPrevious.valueOf(bundle.getString(BUNDLE_NEXT_OR_PREVIOUS));
         }
@@ -71,8 +72,8 @@ public class RoundChangeButtonFragment extends Fragment {
         final OngoingTournamentService ongoingTournamentService = ((BaseApplication) getActivity().getApplication())
             .getOngoingTournamentService();
 
-        final List<WarmachineTournamentGame> pairingsForRoundToDisplay =
-            ongoingTournamentService.getAllGamesForTournamentRound(tournament_id, round_to_display);
+        final List<Game> pairingsForRoundToDisplay = ongoingTournamentService.getGamesForRound(tournament,
+                round_to_display);
 
         Button changeRoundButton = (Button) view.findViewById(R.id.change_round_button);
 
@@ -90,20 +91,20 @@ public class RoundChangeButtonFragment extends Fragment {
                 public void onClick(View v) {
 
                     Log.i(this.getClass().getName(),
-                        "click round_to_display (" + round_to_display + ") for tournament: " + tournament_id);
+                        "click round_to_display (" + round_to_display + ") for tournament: " + tournament);
 
                     if (next_or_previous.equals(NextOrPrevious.NEXT)) {
-                        final List<WarmachineTournamentGame> pairingsForRoundToDisplay =
-                            ongoingTournamentService.getAllGamesForTournamentRound(tournament_id, round_to_display);
+                        final List<Game> pairingsForRoundToDisplay = ongoingTournamentService.getGamesForRound(
+                                tournament, round_to_display);
 
                         if (pairingsForRoundToDisplay.isEmpty()) {
-                            if (ongoingTournamentService.checkAllGamesAreFinishedForRound(tournament_id,
+                            if (ongoingTournamentService.checkAllGamesAreFinishedForRound(tournament,
                                         round_to_display - 1)) {
                                 ConfirmPairingNewRoundDialog dialog = new ConfirmPairingNewRoundDialog();
 
                                 Bundle bundleForConfirmPairNewRoundDialog = new Bundle();
-                                bundleForConfirmPairNewRoundDialog.putLong(
-                                    ConfirmPairingNewRoundDialog.BUNDLE_TOURNAMENT_ID, tournament_id);
+                                bundleForConfirmPairNewRoundDialog.putParcelable(
+                                    ConfirmPairingNewRoundDialog.BUNDLE_TOURNAMENT, tournament);
                                 bundleForConfirmPairNewRoundDialog.putInt(
                                     ConfirmPairingNewRoundDialog.BUNDLE_ROUND_TO_DISPLAY, round_to_display);
                                 dialog.setArguments(bundleForConfirmPairNewRoundDialog);

@@ -14,7 +14,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import madson.org.opentournament.R;
-import madson.org.opentournament.domain.warmachine.WarmachineTournamentGame;
+import madson.org.opentournament.domain.Tournament;
+import madson.org.opentournament.domain.warmachine.Game;
 import madson.org.opentournament.service.OngoingTournamentService;
 import madson.org.opentournament.utility.BaseApplication;
 
@@ -28,9 +29,9 @@ import java.util.List;
  */
 public class GameListFragment extends Fragment {
 
-    public static final String BUNDLE_TOURNAMENT_ID = "tournament_id";
+    public static final String BUNDLE_TOURNAMENT = "tournament";
     public static final String BUNDLE_ROUND = "round";
-    private Long tournamentId;
+    private Tournament tournament;
     private int round;
     private GameListAdapter gameListAdapter;
 
@@ -39,8 +40,8 @@ public class GameListFragment extends Fragment {
 
         Bundle bundle = getArguments();
 
-        if (bundle != null && bundle.getLong(BUNDLE_TOURNAMENT_ID) != 0) {
-            tournamentId = bundle.getLong(BUNDLE_TOURNAMENT_ID);
+        if (bundle != null && bundle.getParcelable(BUNDLE_TOURNAMENT) != null) {
+            tournament = bundle.getParcelable(BUNDLE_TOURNAMENT);
         }
 
         if (bundle != null && bundle.getInt(BUNDLE_ROUND) != 0) {
@@ -59,8 +60,7 @@ public class GameListFragment extends Fragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(linearLayoutManager);
 
-        List<WarmachineTournamentGame> pairingsForTournament = ongoingTournamentService.getAllGamesForTournamentRound(
-                tournamentId, round);
+        List<Game> pairingsForTournament = ongoingTournamentService.getGamesForRound(tournament, round);
 
         TextView heading = (TextView) view.findViewById(R.id.heading_game_for_round);
         heading.setText(getString(R.string.heading_pairing_for_round, round));
@@ -73,13 +73,13 @@ public class GameListFragment extends Fragment {
     }
 
 
-    public void updateGameInList(WarmachineTournamentGame game) {
+    public void updateGameInList(Game game) {
 
         gameListAdapter.updateGame(game);
     }
 
     public interface GameResultEnteredListener {
 
-        void onResultConfirmed(WarmachineTournamentGame game);
+        void onResultConfirmed(Game game);
     }
 }

@@ -1,7 +1,5 @@
 package madson.org.opentournament.ongoing;
 
-import android.graphics.Color;
-
 import android.os.Bundle;
 
 import android.support.v4.app.FragmentActivity;
@@ -20,7 +18,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import madson.org.opentournament.R;
-import madson.org.opentournament.domain.warmachine.WarmachineTournamentGame;
+import madson.org.opentournament.domain.warmachine.Game;
 
 import java.util.List;
 
@@ -32,16 +30,16 @@ import java.util.List;
  */
 public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHolder> {
 
-    private List<WarmachineTournamentGame> pairingsForTournament;
+    private List<Game> pairingsForTournament;
     private FragmentActivity context;
 
-    public GameListAdapter(List<WarmachineTournamentGame> pairingsForTournament, FragmentActivity activity) {
+    public GameListAdapter(List<Game> pairingsForTournament, FragmentActivity activity) {
 
         this.pairingsForTournament = pairingsForTournament;
         context = activity;
     }
 
-    public void updateGame(WarmachineTournamentGame game) {
+    public void updateGame(Game game) {
 
         if (pairingsForTournament.contains(game)) {
             int indexOfGame = pairingsForTournament.indexOf(game);
@@ -65,7 +63,7 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHo
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
 
-        final WarmachineTournamentGame game = pairingsForTournament.get(position);
+        final Game game = pairingsForTournament.get(position);
         holder.setPairing(game);
 
         if (game.isFinished()) {
@@ -100,7 +98,7 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHo
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        private WarmachineTournamentGame pairing;
+        private Game pairing;
 
         private CardView playerOneCardView;
 
@@ -152,7 +150,7 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHo
         }
 
 
-        public void setPairing(WarmachineTournamentGame pairing) {
+        public void setPairing(Game pairing) {
 
             this.pairing = pairing;
         }

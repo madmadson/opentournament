@@ -327,6 +327,14 @@ public class TournamentManagementDialog extends DialogFragment {
         // convert to online tournament
         if (tournamentOnlineCheckbox.isChecked()) {
             if (tournament.getOnlineUUID() == null) {
+                // first update local
+                tournamentService.updateTournament(tournament);
+
+                if (mListener != null) {
+                    mListener.tournamentChangedEvent(tournament);
+                }
+
+                // after push to firebase with meta data
                 FirebaseUser currentFireBaseUser = ((BaseActivity) getActivity()).getCurrentFireBaseUser();
 
                 if (currentFireBaseUser != null) {
@@ -338,12 +346,6 @@ public class TournamentManagementDialog extends DialogFragment {
                 }
 
                 tournamentService.setTournamentToFirebase(tournament);
-
-                tournamentService.deleteTournament(tournament.get_id());
-
-                if (mListener != null) {
-                    mListener.tournamentDeletedEvent(tournament);
-                }
 
                 Snackbar snackbar = Snackbar.make(coordinatorLayout, R.string.success_convert_to_online_tournament,
                         Snackbar.LENGTH_LONG);
@@ -358,7 +360,7 @@ public class TournamentManagementDialog extends DialogFragment {
                 snackbar.show();
             }
         } else {
-            tournamentService.editTournament(tournament);
+            tournamentService.updateTournament(tournament);
 
             if (mListener != null) {
                 mListener.tournamentChangedEvent(tournament);
@@ -410,8 +412,11 @@ public class TournamentManagementDialog extends DialogFragment {
 
             tournamentService.setTournamentToFirebase(newTournament);
         } else {
-            mListener.tournamentAddedEvent(newTournament);
             tournamentService.createTournament(newTournament);
+
+            if (mListener != null) {
+                mListener.tournamentAddedEvent(newTournament);
+            }
         }
     }
 

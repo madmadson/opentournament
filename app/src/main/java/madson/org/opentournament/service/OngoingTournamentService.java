@@ -3,7 +3,8 @@ package madson.org.opentournament.service;
 import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
-import madson.org.opentournament.domain.warmachine.WarmachineTournamentGame;
+import madson.org.opentournament.domain.TournamentRanking;
+import madson.org.opentournament.domain.warmachine.Game;
 
 import java.util.List;
 
@@ -16,53 +17,23 @@ import java.util.List;
 public interface OngoingTournamentService {
 
     /**
-     * @param  tournamentId
-     *
-     * @return  list of all players for given tournament
-     */
-    List<TournamentPlayer> getRankingForRound(Long tournamentId, int round);
-
-
-    /**
-     * Add Player to tournament and return new tournament player instance.
-     *
-     * @param  player  player instance
-     * @param  tournament  tournament
-     */
-    TournamentPlayer addPlayerToTournament(Player player, Tournament tournament);
-
-
-    /**
-     * @param  player
-     * @param  tournamentId
-     */
-    void removePlayerFromTournament(Player player, Long tournamentId);
-
-
-    /**
-     * @param  tournamentId  id of the tournament
+     * @param  tournament  id of the tournament
      * @param  round  the given round
      *
      * @return  list of pairings for round
      */
-    List<WarmachineTournamentGame> getAllGamesForTournamentRound(Long tournamentId, int round);
+    List<Game> getGamesForRound(Tournament tournament, int round);
 
 
     /**
-     * @param  tournamentId
-     * @param  round
+     * Create games for given round.
+     *
+     * @param  tournament  tournament
+     * @param  round  the round calculated for
      *
      * @return  new create list of pairings
      */
-    List<WarmachineTournamentGame> createPairingForRound(Long tournamentId, int round);
-
-
-    /**
-     * @param  tournamentId
-     *
-     * @return
-     */
-    List<Player> getAllPlayersForTournament(long tournamentId);
+    List<Game> createGamesForRound(Tournament tournament, int round);
 
 
     /**
@@ -72,7 +43,7 @@ public interface OngoingTournamentService {
      *
      * @return  pairing
      */
-    WarmachineTournamentGame getGameForId(long game_id);
+    Game getGameForId(long game_id);
 
 
     /**
@@ -80,17 +51,7 @@ public interface OngoingTournamentService {
      *
      * @param  game
      */
-    void saveGameResult(WarmachineTournamentGame game);
-
-
-    /**
-     * Calculates ranking of players for all played rounds. Note: calculation base are all games playes in given
-     * tournament
-     *
-     * @param  tournament_id  the tournament_id
-     * @param  round_number  round number till calculation
-     */
-    void createRankingForRound(long tournament_id, int round_number);
+    void saveGameResult(Game game);
 
 
     /**
@@ -101,15 +62,5 @@ public interface OngoingTournamentService {
      *
      * @return  if all games are finished or not
      */
-    boolean checkAllGamesAreFinishedForRound(long tournament_id, int round);
-
-
-    /**
-     * Get all players for offline tournament.
-     *
-     * @param  tournament  tournament
-     *
-     * @return
-     */
-    List<TournamentPlayer> getLocalTournamentPlayers(Tournament tournament);
+    boolean checkAllGamesAreFinishedForRound(Tournament tournament, int round);
 }

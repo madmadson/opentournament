@@ -17,6 +17,10 @@ import madson.org.opentournament.service.OngoingTournamentService;
 import madson.org.opentournament.service.OngoingTournamentServiceImpl;
 import madson.org.opentournament.service.PlayerService;
 import madson.org.opentournament.service.PlayerServiceImpl;
+import madson.org.opentournament.service.RankingService;
+import madson.org.opentournament.service.RankingServiceImpl;
+import madson.org.opentournament.service.TournamentPlayerService;
+import madson.org.opentournament.service.TournamentPlayerServiceImpl;
 import madson.org.opentournament.service.TournamentService;
 import madson.org.opentournament.service.TournamentServiceImpl;
 import madson.org.opentournament.utility.web.HttpRequester;
@@ -35,7 +39,9 @@ public abstract class BaseApplication extends Application {
 
     private static OngoingTournamentService ongoingTournamentService;
     private static TournamentService tournamentService;
+    private static RankingService rankingService;
     private static PlayerService playerService;
+    private static TournamentPlayerService tournamentPlayerService;
     private static HttpRequester httpRequester;
 
     @Override
@@ -63,6 +69,14 @@ public abstract class BaseApplication extends Application {
 
         if (ongoingTournamentService == null) {
             ongoingTournamentService = new OngoingTournamentServiceImpl(getApplicationContext());
+        }
+
+        if (rankingService == null) {
+            rankingService = new RankingServiceImpl(getApplicationContext());
+        }
+
+        if (tournamentPlayerService == null) {
+            tournamentPlayerService = new TournamentPlayerServiceImpl(getApplicationContext());
         }
 
         if (httpRequester == null) {
@@ -155,5 +169,17 @@ public abstract class BaseApplication extends Application {
     public OngoingTournamentService getOngoingTournamentService() {
 
         return ongoingTournamentService;
+    }
+
+
+    public RankingService getRankingService() {
+
+        return rankingService;
+    }
+
+
+    public TournamentPlayerService getTournamentPlayerService() {
+
+        return tournamentPlayerService;
     }
 }

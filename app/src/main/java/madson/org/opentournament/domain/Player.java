@@ -77,9 +77,11 @@ public class Player {
 
         return "Player{"
             + "_id=" + _id
+            + ", onlineUUID='" + onlineUUID + '\''
             + ", firstname='" + firstname + '\''
+            + ", nickname='" + nickname + '\''
             + ", lastname='" + lastname + '\''
-            + ", nickname='" + nickname + '\'' + '}';
+            + ", auth_email='" + auth_email + '\'' + '}';
     }
 
 

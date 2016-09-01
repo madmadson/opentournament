@@ -18,6 +18,7 @@ import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.warmachine.Game;
 import madson.org.opentournament.players.AvailablePlayerListFragment;
+import madson.org.opentournament.players.TournamentPlayerListFragment;
 
 
 public class TournamentRoundManagementFragment extends Fragment

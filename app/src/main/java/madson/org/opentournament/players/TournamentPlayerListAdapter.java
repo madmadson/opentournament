@@ -1,4 +1,4 @@
-package madson.org.opentournament.ongoing;
+package madson.org.opentournament.players;
 
 import android.support.v7.widget.RecyclerView;
 
@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import madson.org.opentournament.R;
@@ -22,12 +23,12 @@ import java.util.List;
  *
  * @author  Tobias Matt - tmatt@contargo.net
  */
-public class WarmachineTournamentPlayerListAdapter extends RecyclerView.Adapter<WarmachineTournamentPlayerListAdapter.ViewHolder> {
+public class TournamentPlayerListAdapter extends RecyclerView.Adapter<TournamentPlayerListAdapter.ViewHolder> {
 
     private TournamentPlayerListFragment.TournamentPlayerListItemListener mListener;
     private List<TournamentPlayer> tournamentPlayerList;
 
-    public WarmachineTournamentPlayerListAdapter(List<TournamentPlayer> tournamentPlayerList,
+    public TournamentPlayerListAdapter(List<TournamentPlayer> tournamentPlayerList,
         TournamentPlayerListFragment.TournamentPlayerListItemListener mListener) {
 
         this.mListener = mListener;
@@ -35,7 +36,7 @@ public class WarmachineTournamentPlayerListAdapter extends RecyclerView.Adapter<
     }
 
     @Override
-    public WarmachineTournamentPlayerListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public TournamentPlayerListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         // create a new view
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_tournament_player, parent, false);
@@ -48,13 +49,18 @@ public class WarmachineTournamentPlayerListAdapter extends RecyclerView.Adapter<
 
 
     @Override
-    public void onBindViewHolder(WarmachineTournamentPlayerListAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(TournamentPlayerListAdapter.ViewHolder holder, int position) {
 
         final TournamentPlayer player = tournamentPlayerList.get(position);
         holder.setPlayer(player);
         holder.getPlayerNumber().setText(String.valueOf(position + 1));
         holder.getPlayerNameInList()
             .setText(player.getFirstname() + " \"" + player.getNickname() + "\" " + player.getLastname());
+
+        // mark online player
+        if (player.getPlayer_online_uuid() != null) {
+            holder.getOnlineIcon().setVisibility(View.VISIBLE);
+        }
     }
 
 
@@ -65,33 +71,22 @@ public class WarmachineTournamentPlayerListAdapter extends RecyclerView.Adapter<
     }
 
 
-    public void add(TournamentPlayer item) {
-
-        tournamentPlayerList.add(item);
-        notifyDataSetChanged();
-    }
-
-
     /**
-     * add new player.
+     * Add new tournament player.
      *
-     * @param  player
+     * @param  tournamentPlayer
      */
-    public void add(Player player) {
+    public void add(TournamentPlayer tournamentPlayer) {
 
-        TournamentPlayer tournamentPlayer = new TournamentPlayer();
-        tournamentPlayer.setPlayer_id(player.get_id());
-        tournamentPlayer.setFirstname(player.getFirstname());
-        tournamentPlayer.setNickname(player.getNickname());
-        tournamentPlayer.setLastname(player.getLastname());
-
-        add(tournamentPlayer);
+        tournamentPlayerList.add(tournamentPlayer);
+        notifyDataSetChanged();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private TextView playerNameInList;
         private TextView playerNumber;
+        private ImageView onlineIcon;
         private TournamentPlayer player;
 
         public ViewHolder(View v) {
@@ -99,8 +94,9 @@ public class WarmachineTournamentPlayerListAdapter extends RecyclerView.Adapter<
             super(v);
             v.setOnClickListener(this);
 
+            playerNumber = (TextView) v.findViewById(R.id.tournament_player_row_player_number);
             playerNameInList = (TextView) v.findViewById(R.id.tournament_player_row_name);
-            playerNumber = (TextView) v.findViewById(R.id.tournmanet_player_row_player_number);
+            onlineIcon = (ImageView) v.findViewById(R.id.tournament_player_row_online_icon);
         }
 
         public TextView getPlayerNameInList() {
@@ -118,6 +114,12 @@ public class WarmachineTournamentPlayerListAdapter extends RecyclerView.Adapter<
         public TextView getPlayerNumber() {
 
             return playerNumber;
+        }
+
+
+        public ImageView getOnlineIcon() {
+
+            return onlineIcon;
         }
 
 

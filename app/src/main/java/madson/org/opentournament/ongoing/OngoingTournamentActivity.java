@@ -19,6 +19,8 @@ import android.view.Menu;
 
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Tournament;
+import madson.org.opentournament.players.TournamentPlayerListFragment;
+import madson.org.opentournament.players.TournamentSetupFragment;
 import madson.org.opentournament.utility.BaseActivity;
 
 

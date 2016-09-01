@@ -1,4 +1,4 @@
-package madson.org.opentournament.ongoing;
+package madson.org.opentournament.players;
 
 import android.os.Bundle;
 
@@ -18,8 +18,6 @@ import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
-import madson.org.opentournament.players.AddLocalPlayerToTournamentDialog;
-import madson.org.opentournament.players.AvailablePlayerListFragment;
 import madson.org.opentournament.utility.BaseActivity;
 
 

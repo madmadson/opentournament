@@ -97,7 +97,10 @@ public class AvailablePlayerListFragment extends Fragment {
                         Log.i(this.getClass().getName(), "players loaded from firebase");
 
                         for (DataSnapshot playerSnapShot : dataSnapshot.getChildren()) {
+                            String player_online_uuid = playerSnapShot.getKey();
+
                             Player player = playerSnapShot.getValue(Player.class);
+                            player.setOnlineUUID(player_online_uuid);
                             onlinePlayerListAdapter.addPlayer(player);
                         }
                     }

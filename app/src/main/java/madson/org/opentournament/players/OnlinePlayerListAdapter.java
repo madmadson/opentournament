@@ -99,12 +99,6 @@ public class OnlinePlayerListAdapter extends RecyclerView.Adapter<OnlinePlayerLi
         return filter;
     }
 
-
-    public List<Player> getFilteredPlayerList() {
-
-        return filteredPlayerList;
-    }
-
     public class PlayerViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private TextView playerFullNameInList;

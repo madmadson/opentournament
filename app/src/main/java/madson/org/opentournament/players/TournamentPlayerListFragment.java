@@ -1,9 +1,11 @@
-package madson.org.opentournament.ongoing;
+package madson.org.opentournament.players;
 
 import android.os.Bundle;
 
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
@@ -25,9 +27,8 @@ import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
-import madson.org.opentournament.service.OngoingTournamentService;
+import madson.org.opentournament.ongoing.EnterResultForGameDialog;
 import madson.org.opentournament.service.TournamentPlayerService;
-import madson.org.opentournament.service.TournamentService;
 import madson.org.opentournament.utility.BaseApplication;
 
 import java.util.ArrayList;
@@ -44,7 +45,7 @@ public class TournamentPlayerListFragment extends Fragment {
     public static final String BUNDLE_TOURNAMENT = "tournament";
 
     private Tournament tournament;
-    private WarmachineTournamentPlayerListAdapter localTournamentPlayerListAdapter;
+    private TournamentPlayerListAdapter localTournamentPlayerListAdapter;
 
     private TextView heading;
     private DatabaseReference mFirebaseDatabaseReference;
@@ -70,36 +71,32 @@ public class TournamentPlayerListFragment extends Fragment {
         }
 
         if (tournament.getOnlineUUID() != null) {
-            View view = inflater.inflate(R.layout.fragment_online_tournament_player_list, container, false);
-
             loadOnlineTournamentPlayers();
-
-            return view;
-        } else {
-            View view = inflater.inflate(R.layout.fragment_local_tournament_player_list, container, false);
-            // ********************* LOCAL ***************************
-
-            TournamentPlayerService tournamentPlayerService = ((BaseApplication) getActivity().getApplication())
-                .getTournamentPlayerService();
-
-            RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.tournament_player_list_recycler_view);
-
-            recyclerView.setHasFixedSize(true);
-
-            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-            recyclerView.setLayoutManager(linearLayoutManager);
-
-            List<TournamentPlayer> players = tournamentPlayerService.getAllPlayersForTournament(tournament);
-
-            heading = (TextView) view.findViewById(R.id.heading_tournament_players);
-            heading.setText(getString(R.string.heading_tournament_player, players.size()));
-
-            localTournamentPlayerListAdapter = new WarmachineTournamentPlayerListAdapter(players, null);
-
-            recyclerView.setAdapter(localTournamentPlayerListAdapter);
-
-            return view;
         }
+
+        View view = inflater.inflate(R.layout.fragment_local_tournament_player_list, container, false);
+        // ********************* LOCAL ***************************
+
+        TournamentPlayerService tournamentPlayerService = ((BaseApplication) getActivity().getApplication())
+            .getTournamentPlayerService();
+
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.tournament_player_list_recycler_view);
+
+        recyclerView.setHasFixedSize(true);
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+        recyclerView.setLayoutManager(linearLayoutManager);
+
+        List<TournamentPlayer> players = tournamentPlayerService.getAllPlayersForTournament(tournament);
+
+        heading = (TextView) view.findViewById(R.id.heading_tournament_players);
+        heading.setText(getString(R.string.heading_tournament_player, players.size()));
+
+        localTournamentPlayerListAdapter = new TournamentPlayerListAdapter(players, null);
+
+        recyclerView.setAdapter(localTournamentPlayerListAdapter);
+
+        return view;
     }
 
 
@@ -116,7 +113,6 @@ public class TournamentPlayerListFragment extends Fragment {
 
                 for (DataSnapshot playerSnapshot : dataSnapshot.getChildren()) {
                     onlineTournamentPlayersUUIDs.add(playerSnapshot.getKey());
-                    Log.i(this.getClass().getName(), "online player id of tournaments:" + playerSnapshot.getKey());
 
                     DatabaseReference child = mFirebaseDatabaseReference.child("tournament_players/"
                             + playerSnapshot.getKey());
@@ -127,7 +123,7 @@ public class TournamentPlayerListFragment extends Fragment {
 
                                 TournamentPlayer player = dataSnapshot.getValue(TournamentPlayer.class);
 
-                                Log.i(this.getClass().getName(), "online player of tournaments:" + player);
+                                localTournamentPlayerListAdapter.add(player);
                             }
 
 
@@ -160,7 +156,9 @@ public class TournamentPlayerListFragment extends Fragment {
         // local tournament
         if (tournament.getOnlineUUID() == null) {
             if (localTournamentPlayerListAdapter != null) {
-                localTournamentPlayerListAdapter.add(player);
+                TournamentPlayer tournamentPlayer = enterAdditionalDataForTournamentPlayerDialog(player);
+
+                localTournamentPlayerListAdapter.add(tournamentPlayer);
 
                 heading.setText(getString(R.string.heading_tournament_player,
                         localTournamentPlayerListAdapter.getItemCount()));
@@ -181,6 +179,20 @@ public class TournamentPlayerListFragment extends Fragment {
         } else {
             // online tournament
         }
+    }
+
+
+    private TournamentPlayer enterAdditionalDataForTournamentPlayerDialog(Player player) {
+
+        // TODO open dialog to add aditional information about tournament player
+        TournamentPlayer tournamentPlayer = new TournamentPlayer();
+        tournamentPlayer.setPlayer_id(player.get_id());
+        tournamentPlayer.setFirstname(player.getFirstname());
+        tournamentPlayer.setNickname(player.getNickname());
+        tournamentPlayer.setLastname(player.getLastname());
+        tournamentPlayer.setPlayer_online_uuid(player.getOnlineUUID());
+
+        return tournamentPlayer;
     }
 
 

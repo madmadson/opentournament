@@ -34,9 +34,9 @@ public class OnlinePlayerListAdapter extends RecyclerView.Adapter<OnlinePlayerLi
     private List<Player> filteredPlayerList;
 
     private ItemFilter filter;
-    private AvailablePlayerListFragment.AvailablePlayerListItemListener mListener;
+    private TournamentSetupEventListener mListener;
 
-    public OnlinePlayerListAdapter(AvailablePlayerListFragment.AvailablePlayerListItemListener mListener) {
+    public OnlinePlayerListAdapter(TournamentSetupEventListener mListener) {
 
         this.mListener = mListener;
 
@@ -115,11 +115,10 @@ public class OnlinePlayerListAdapter extends RecyclerView.Adapter<OnlinePlayerLi
         @Override
         public void onClick(View v) {
 
-            Log.i(v.getClass().getName(), "remove player from online player list: " + player);
+            Log.i(v.getClass().getName(), "click available online player : " + player);
 
             if (mListener != null) {
-                mListener.onAvailablePlayerListItemClicked(player);
-                removePlayer(player);
+                mListener.clickAvailablePlayerListItem(player);
             }
         }
 

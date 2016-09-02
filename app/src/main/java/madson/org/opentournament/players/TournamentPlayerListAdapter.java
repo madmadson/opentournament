@@ -25,11 +25,11 @@ import java.util.List;
  */
 public class TournamentPlayerListAdapter extends RecyclerView.Adapter<TournamentPlayerListAdapter.ViewHolder> {
 
-    private TournamentPlayerListFragment.TournamentPlayerListItemListener mListener;
+    private TournamentSetupEventListener mListener;
     private List<TournamentPlayer> tournamentPlayerList;
 
     public TournamentPlayerListAdapter(List<TournamentPlayer> tournamentPlayerList,
-        TournamentPlayerListFragment.TournamentPlayerListItemListener mListener) {
+        TournamentSetupEventListener mListener) {
 
         this.mListener = mListener;
         this.tournamentPlayerList = tournamentPlayerList;
@@ -127,6 +127,10 @@ public class TournamentPlayerListAdapter extends RecyclerView.Adapter<Tournament
         public void onClick(View v) {
 
             Log.i(v.getClass().getName(), "remove player from tournament player list: " + player);
+
+            if (mListener != null) {
+                mListener.clickTournamentPlayerListItem(player);
+            }
         }
     }
 }

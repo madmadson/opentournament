@@ -26,9 +26,7 @@ import madson.org.opentournament.utility.BaseActivity;
  *
  * @author  Tobias Matt - tmatt@contargo.net
  */
-public class TournamentSetupFragment extends Fragment
-    implements AddLocalPlayerToTournamentDialog.TournamentPlayerAddListener,
-        AvailablePlayerListFragment.AvailablePlayerListItemListener {
+public class TournamentSetupFragment extends Fragment implements TournamentSetupEventListener {
 
     private static final String BUNDLE_TOURNAMENT = "tournament";
     private Tournament tournament;
@@ -87,11 +85,11 @@ public class TournamentSetupFragment extends Fragment
 
                     Log.i(this.getClass().getName(), "click floatingActionButton player add to tournament");
 
-                    AddLocalPlayerToTournamentDialog dialog = new AddLocalPlayerToTournamentDialog();
+                    AddTournamentPlayerDialog dialog = new AddTournamentPlayerDialog();
                     dialog.setTargetFragment(TournamentSetupFragment.this, 1);
 
                     Bundle bundle = new Bundle();
-                    bundle.putParcelable(AddLocalPlayerToTournamentDialog.BUNDLE_TOURNAMENT, tournament);
+                    bundle.putParcelable(AddTournamentPlayerDialog.BUNDLE_TOURNAMENT, tournament);
                     dialog.setArguments(bundle);
 
                     FragmentManager supportFragmentManager = getChildFragmentManager();
@@ -126,17 +124,27 @@ public class TournamentSetupFragment extends Fragment
     @Override
     public void addTournamentPlayer(TournamentPlayer tournamentPlayer) {
 
-        Log.i(this.getClass().getName(), "manually player added to tournament");
+        tournamentPlayerListFragment.addPlayer(tournamentPlayer);
     }
 
 
     @Override
-    public void onAvailablePlayerListItemClicked(Player player) {
+    public void clickTournamentPlayerListItem(TournamentPlayer tournamentPlayer) {
+    }
 
-        Log.i(this.getClass().getName(), "clicked on available player to add: " + player);
 
-        if (tournamentPlayerListFragment != null) {
-            tournamentPlayerListFragment.addPlayer(player);
-        }
+    @Override
+    public void clickAvailablePlayerListItem(Player player) {
+
+        AddTournamentPlayerDialog dialog = new AddTournamentPlayerDialog();
+        dialog.setTargetFragment(this, 1);
+
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(AddTournamentPlayerDialog.BUNDLE_TOURNAMENT, tournament);
+        bundle.putParcelable(AddTournamentPlayerDialog.BUNDLE_PLAYER, player);
+        dialog.setArguments(bundle);
+
+        FragmentManager supportFragmentManager = getChildFragmentManager();
+        dialog.show(supportFragmentManager, this.getClass().getName());
     }
 }

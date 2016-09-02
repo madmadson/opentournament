@@ -15,6 +15,6 @@ public class TournamentPlayerComparator implements Comparator<TournamentPlayer> 
     @Override
     public int compare(TournamentPlayer player1, TournamentPlayer player2) {
 
-        return player2.getNickname().compareTo(player1.getNickname());
+        return player1.getNickname().compareTo(player2.getNickname());
     }
 }

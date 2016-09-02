@@ -68,6 +68,10 @@ public class TournamentPlayerServiceImpl implements TournamentPlayerService {
         contentValues.put(TournamentPlayerTable.COLUMN_TOURNAMENT_ID, tournament.get_id());
         contentValues.put(TournamentPlayerTable.COLUMN_PLAYER_ID, player.get_id());
         contentValues.put(TournamentPlayerTable.COLUMN_PLAYER_ONLINE_UUID, player.getOnlineUUID());
+        contentValues.put(TournamentPlayerTable.COLUMN_FIRSTNAME, player.getFirstname());
+        contentValues.put(TournamentPlayerTable.COLUMN_NICKNAME, player.getNickname());
+        contentValues.put(TournamentPlayerTable.COLUMN_LASTNAME, player.getLastname());
+        Log.i(this.getClass().getName(), "Insert contentValues: " + contentValues.toString());
         db.insert(TournamentPlayerTable.TABLE_TOURNAMENT_PLAYER, null, contentValues);
         db.close();
 

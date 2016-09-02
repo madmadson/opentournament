@@ -1,11 +1,31 @@
 package madson.org.opentournament.domain;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+
 /**
  * Write some fancy Javadoc!
  *
  * @author  Tobias Matt - tmatt@contargo.net
  */
-public class Player {
+public class Player implements Parcelable {
+
+    public static final Creator<Player> CREATOR = new Creator<Player>() {
+
+        @Override
+        public Player createFromParcel(Parcel in) {
+
+            return new Player(in);
+        }
+
+
+        @Override
+        public Player[] newArray(int size) {
+
+            return new Player[size];
+        }
+    };
 
     private long _id;
     private String onlineUUID;
@@ -34,6 +54,17 @@ public class Player {
 
 
     public Player() {
+    }
+
+
+    protected Player(Parcel in) {
+
+        _id = in.readLong();
+        onlineUUID = in.readString();
+        firstname = in.readString();
+        nickname = in.readString();
+        lastname = in.readString();
+        auth_email = in.readString();
     }
 
     public long get_id() {
@@ -126,5 +157,24 @@ public class Player {
         result = 31 * result + (auth_email != null ? auth_email.hashCode() : 0);
 
         return result;
+    }
+
+
+    @Override
+    public int describeContents() {
+
+        return 0;
+    }
+
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+
+        parcel.writeLong(_id);
+        parcel.writeString(onlineUUID);
+        parcel.writeString(firstname);
+        parcel.writeString(nickname);
+        parcel.writeString(lastname);
+        parcel.writeString(auth_email);
     }
 }

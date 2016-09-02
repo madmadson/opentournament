@@ -9,8 +9,6 @@ import java.util.Date;
 
 
 /**
- * Write some fancy Javadoc!
- *
  * @author  Tobias Matt - tmatt@contargo.net
  */
 public class Tournament implements Parcelable {

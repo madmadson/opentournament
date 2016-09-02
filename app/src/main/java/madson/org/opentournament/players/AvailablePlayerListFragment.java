@@ -42,15 +42,16 @@ import java.util.List;
 public class AvailablePlayerListFragment extends Fragment {
 
     public static final String BUNDLE_TOURNAMENT = "tournament";
-    public static final String PLAYERS_CHILD = "players";
 
-    private LocalPlayerListAdapter localPlayerListAdapter;
-
-    private AvailablePlayerListItemListener mListener;
     private Tournament tournament;
+
+    private TournamentSetupEventListener mListener;
     private RecyclerView mOnlinePlayerRecyclerView;
     private DatabaseReference mFirebaseDatabaseReference;
+
+    // list adapters for both online and offline lists of players
     private OnlinePlayerListAdapter onlinePlayerListAdapter;
+    private LocalPlayerListAdapter localPlayerListAdapter;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the fragment (e.g. upon screen orientation
@@ -152,8 +153,8 @@ public class AvailablePlayerListFragment extends Fragment {
         super.onAttach(context);
 
         // mlistener to call when player is clicked
-        if (getParentFragment() instanceof AvailablePlayerListItemListener) {
-            mListener = (AvailablePlayerListItemListener) getParentFragment();
+        if (getParentFragment() instanceof TournamentSetupFragment) {
+            mListener = (TournamentSetupEventListener) getParentFragment();
         }
     }
 
@@ -190,11 +191,6 @@ public class AvailablePlayerListFragment extends Fragment {
             };
             runnable.run();
         }
-    }
-
-    public interface AvailablePlayerListItemListener {
-
-        void onAvailablePlayerListItemClicked(Player player);
     }
 
     private class PlayerFilterTextWatcher implements TextWatcher {

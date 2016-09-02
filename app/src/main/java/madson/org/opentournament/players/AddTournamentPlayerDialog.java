@@ -35,21 +35,24 @@ import madson.org.opentournament.utility.BaseApplication;
 
 
 /**
- * Dialog for adding new local players to tournament.
+ * Dialog for adding new tournament players.
  *
  * @author  Tobias Matt - tmatt@contargo.net
  */
-public class AddLocalPlayerToTournamentDialog extends DialogFragment {
+public class AddTournamentPlayerDialog extends DialogFragment {
 
     public static final String BUNDLE_TOURNAMENT = "tournament";
+    public static final String BUNDLE_PLAYER = "player";
+
     private CoordinatorLayout coordinatorLayout;
-    private TournamentPlayerAddListener mListener;
+    private TournamentSetupEventListener mListener;
 
     private EditText firstnameEditText;
     private EditText nicknameEditText;
     private EditText lastnameEditText;
 
     private Tournament tournament;
+    private Player player;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -90,8 +93,6 @@ public class AddLocalPlayerToTournamentDialog extends DialogFragment {
         if (bundle != null && bundle.getParcelable(BUNDLE_TOURNAMENT) != null) {
             tournament = bundle.getParcelable(BUNDLE_TOURNAMENT);
 
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-
             // Get the layout inflater
             LayoutInflater inflater = getActivity().getLayoutInflater();
 
@@ -100,6 +101,18 @@ public class AddLocalPlayerToTournamentDialog extends DialogFragment {
             firstnameEditText = (EditText) dialogView.findViewById(R.id.new_player_firstname);
             nicknameEditText = (EditText) dialogView.findViewById(R.id.new_player_nickname);
             lastnameEditText = (EditText) dialogView.findViewById(R.id.new_player_lastname);
+
+            if (bundle.getParcelable(BUNDLE_PLAYER) != null) {
+                player = bundle.getParcelable(BUNDLE_PLAYER);
+
+                if (player != null) {
+                    firstnameEditText.setText(player.getFirstname());
+                    nicknameEditText.setText(player.getNickname());
+                    firstnameEditText.setText(player.getLastname());
+                }
+            }
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
             TournamentService tournamentService = ((BaseApplication) getActivity().getApplication())
                 .getTournamentService();
@@ -113,7 +126,7 @@ public class AddLocalPlayerToTournamentDialog extends DialogFragment {
                         @Override
                         public void onClick(DialogInterface dialog, int id) {
 
-                            AddLocalPlayerToTournamentDialog.this.getDialog().cancel();
+                            AddTournamentPlayerDialog.this.getDialog().cancel();
                         }
                     });
 
@@ -139,7 +152,7 @@ public class AddLocalPlayerToTournamentDialog extends DialogFragment {
                     @Override
                     public void onClick(View v) {
 
-                        Log.i(this.getClass().getName(), "add new player");
+                        Log.i(this.getClass().getName(), "add new tournament_player");
 
                         String firstname = firstnameEditText.getText().toString();
                         String nickname = nicknameEditText.getText().toString();
@@ -195,10 +208,5 @@ public class AddLocalPlayerToTournamentDialog extends DialogFragment {
                     }
                 });
         }
-    }
-
-    public interface TournamentPlayerAddListener {
-
-        void addTournamentPlayer(TournamentPlayer tournamentPlayer);
     }
 }

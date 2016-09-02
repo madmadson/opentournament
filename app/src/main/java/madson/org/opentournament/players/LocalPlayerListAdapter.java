@@ -29,7 +29,7 @@ import java.util.List;
 public class LocalPlayerListAdapter extends RecyclerView.Adapter<LocalPlayerListAdapter.ViewHolder>
     implements Filterable {
 
-    private AvailablePlayerListFragment.AvailablePlayerListItemListener mListener;
+    private TournamentSetupEventListener mListener;
     private List<Player> originalPlayerList;
     private List<Player> filteredPlayerList;
     private ItemFilter mFilter = new ItemFilter();
@@ -38,8 +38,7 @@ public class LocalPlayerListAdapter extends RecyclerView.Adapter<LocalPlayerList
      * @param  playerList  list of players to show
      * @param  mListener  maybe null when no listener is needed
      */
-    public LocalPlayerListAdapter(List<Player> playerList,
-        AvailablePlayerListFragment.AvailablePlayerListItemListener mListener) {
+    public LocalPlayerListAdapter(List<Player> playerList, TournamentSetupEventListener mListener) {
 
         this.mListener = mListener;
         this.originalPlayerList = playerList;
@@ -126,12 +125,11 @@ public class LocalPlayerListAdapter extends RecyclerView.Adapter<LocalPlayerList
         @Override
         public void onClick(View v) {
 
-            Log.i(v.getClass().getName(), "remove player from local player list: " + player);
+            Log.i(v.getClass().getName(), "click available offline player : " + player);
 
             // call listener if set
             if (mListener != null) {
-                mListener.onAvailablePlayerListItemClicked(player);
-                remove(player);
+                mListener.clickAvailablePlayerListItem(player);
             }
         }
     }

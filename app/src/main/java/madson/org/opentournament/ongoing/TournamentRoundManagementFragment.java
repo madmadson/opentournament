@@ -21,9 +21,7 @@ import madson.org.opentournament.players.AvailablePlayerListFragment;
 import madson.org.opentournament.players.TournamentPlayerListFragment;
 
 
-public class TournamentRoundManagementFragment extends Fragment
-    implements AvailablePlayerListFragment.AvailablePlayerListItemListener,
-        TournamentPlayerListFragment.TournamentPlayerListItemListener, GameListFragment.GameResultEnteredListener {
+public class TournamentRoundManagementFragment extends Fragment implements GameListFragment.GameResultEnteredListener {
 
     public static final String BUNDLE_TOURNAMENT = "tournament";
     public static final String BUNDLE_ROUND = "round";
@@ -109,33 +107,6 @@ public class TournamentRoundManagementFragment extends Fragment
 
         availablePlayerListFragment = new AvailablePlayerListFragment();
         availablePlayerListFragment.setArguments(bundleForAllPlayers);
-    }
-
-
-    @Override
-    public void onAvailablePlayerListItemClicked(Player player) {
-
-        Log.i(this.getClass().getName(), "clicked on available player to add: " + player);
-
-        if (tournamentPlayerListFragment != null) {
-            tournamentPlayerListFragment.addPlayer(player);
-        }
-    }
-
-
-    @Override
-    public void onTournamentPlayerListItemClicked(long player_id) {
-
-        Log.i(this.getClass().getName(), "clicked on tournament player to remove: " + player_id);
-
-        if (availablePlayerListFragment != null) {
-            availablePlayerListFragment.addPlayer(player_id);
-        }
-
-        // for the heading
-        if (tournamentPlayerListFragment != null) {
-            tournamentPlayerListFragment.removePlayer();
-        }
     }
 
 

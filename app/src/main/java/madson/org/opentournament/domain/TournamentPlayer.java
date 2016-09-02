@@ -1,5 +1,8 @@
 package madson.org.opentournament.domain;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -10,7 +13,23 @@ import java.util.UUID;
  *
  * @author  Tobias Matt - tmatt@contargo.net
  */
-public class TournamentPlayer {
+public class TournamentPlayer implements Parcelable {
+
+    public static final Creator<TournamentPlayer> CREATOR = new Creator<TournamentPlayer>() {
+
+        @Override
+        public TournamentPlayer createFromParcel(Parcel in) {
+
+            return new TournamentPlayer(in);
+        }
+
+
+        @Override
+        public TournamentPlayer[] newArray(int size) {
+
+            return new TournamentPlayer[size];
+        }
+    };
 
     private long _id;
     private String online_uuid;
@@ -52,6 +71,23 @@ public class TournamentPlayer {
         this.nickname = player.getNickname();
 
         listOfOpponents = new ArrayList<>();
+    }
+
+
+    protected TournamentPlayer(Parcel in) {
+
+        _id = in.readLong();
+        online_uuid = in.readString();
+        tournament_id = in.readLong();
+        tournament_online_uid = in.readString();
+        player_id = in.readLong();
+        player_online_uuid = in.readString();
+        firstname = in.readString();
+        nickname = in.readString();
+        lastname = in.readString();
+        teamname = in.readString();
+        faction = in.readString();
+        meta = in.readString();
     }
 
     public long get_id() {
@@ -263,7 +299,31 @@ public class TournamentPlayer {
             + ", teamname='" + teamname + '\''
             + ", faction='" + faction + '\''
             + ", meta='" + meta + '\''
-            + ", player_onlineUUID='" + getPlayer_online_uuid() + '\''
             + ", listOfOpponents=" + listOfOpponents + '}';
+    }
+
+
+    @Override
+    public int describeContents() {
+
+        return 0;
+    }
+
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+
+        parcel.writeLong(_id);
+        parcel.writeString(online_uuid);
+        parcel.writeLong(tournament_id);
+        parcel.writeString(tournament_online_uid);
+        parcel.writeLong(player_id);
+        parcel.writeString(player_online_uuid);
+        parcel.writeString(firstname);
+        parcel.writeString(nickname);
+        parcel.writeString(lastname);
+        parcel.writeString(teamname);
+        parcel.writeString(faction);
+        parcel.writeString(meta);
     }
 }

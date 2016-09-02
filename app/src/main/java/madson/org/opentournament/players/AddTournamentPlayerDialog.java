@@ -23,6 +23,7 @@ import android.view.View;
 
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Player;
@@ -50,6 +51,7 @@ public class AddTournamentPlayerDialog extends DialogFragment {
     private EditText firstnameEditText;
     private EditText nicknameEditText;
     private EditText lastnameEditText;
+    private Spinner factionSpinner;
 
     private Tournament tournament;
     private Player player;
@@ -68,6 +70,7 @@ public class AddTournamentPlayerDialog extends DialogFragment {
 
         super.onAttach(context);
 
+        // target fragment have to be set and must be TournamentSetupFragment
         if (getTargetFragment() instanceof TournamentSetupFragment) {
             mListener = (TournamentSetupFragment) getTargetFragment();
         }
@@ -96,11 +99,12 @@ public class AddTournamentPlayerDialog extends DialogFragment {
             // Get the layout inflater
             LayoutInflater inflater = getActivity().getLayoutInflater();
 
-            View dialogView = inflater.inflate(R.layout.dialog_add_local_tournament_player, null);
+            View dialogView = inflater.inflate(R.layout.dialog_add_tournament_player, null);
 
-            firstnameEditText = (EditText) dialogView.findViewById(R.id.new_player_firstname);
-            nicknameEditText = (EditText) dialogView.findViewById(R.id.new_player_nickname);
-            lastnameEditText = (EditText) dialogView.findViewById(R.id.new_player_lastname);
+            firstnameEditText = (EditText) dialogView.findViewById(R.id.dialog_add_tournament_player_firstname);
+            nicknameEditText = (EditText) dialogView.findViewById(R.id.dialog_add_tournament_player_nickname);
+            lastnameEditText = (EditText) dialogView.findViewById(R.id.dialog_add_tournament_player_lastname);
+            factionSpinner = (Spinner) dialogView.findViewById(R.id.dialog_add_tournament_player_faction_spinner);
 
             if (bundle.getParcelable(BUNDLE_PLAYER) != null) {
                 player = bundle.getParcelable(BUNDLE_PLAYER);
@@ -108,7 +112,7 @@ public class AddTournamentPlayerDialog extends DialogFragment {
                 if (player != null) {
                     firstnameEditText.setText(player.getFirstname());
                     nicknameEditText.setText(player.getNickname());
-                    firstnameEditText.setText(player.getLastname());
+                    lastnameEditText.setText(player.getLastname());
                 }
             }
 

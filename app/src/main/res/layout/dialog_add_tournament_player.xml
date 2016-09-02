@@ -6,23 +6,29 @@
     android:padding="@dimen/player_card_padding">
 
     <EditText
-        android:id="@+id/new_player_firstname"
+        android:id="@+id/dialog_add_tournament_player_firstname"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/label_firstname"
         android:layout_gravity="center_horizontal" />
 
     <EditText
-        android:id="@+id/new_player_nickname"
+        android:id="@+id/dialog_add_tournament_player_nickname"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/label_nickname"
         android:layout_gravity="center_horizontal" />
 
     <EditText
-        android:id="@+id/new_player_lastname"
+        android:id="@+id/dialog_add_tournament_player_lastname"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/label_lastname"
         android:layout_gravity="center_horizontal" />
+
+    <Spinner
+        android:id="@+id/dialog_add_tournament_player_faction_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:entries="@array/factions"/>
 </LinearLayout>

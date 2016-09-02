@@ -40,6 +40,8 @@ public class TournamentManagementFragment extends Fragment
 
         super.onCreate(savedInstanceState);
 
+        setRetainInstance(true);
+
         tournamentListsFragment = new TournamentListsFragment();
 
         FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();

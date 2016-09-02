@@ -71,6 +71,8 @@ public class TournamentListsFragment extends Fragment {
 
         super.onCreate(savedInstanceState);
 
+        setRetainInstance(true);
+
         // Initialize Firebase Auth
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
     }

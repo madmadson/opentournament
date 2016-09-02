@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="devTournaments">
-        <item>HeavyMetalDays</item>
-        <item>CoinOfEvil</item>
-        <item>ClogCon</item>
+    <string-array name="factions">
+        <item>Cygnar</item>
+        <item>Khador</item>
+        <item>Menoth</item>
+        <item>Cryx</item>
+        <item>Retribution</item>
+        <item>Mercenaries</item>
+        <item>Trollbloods</item>
+        <item>Circle</item>
+        <item>Skorne</item>
+        <item>Legion</item>
+        <item>Minions</item>
     </string-array>
-    <string-array name="menu_options">
-        <item>Home</item>
-        <item>Tournaments</item>
-        <item>Players</item>
-    </string-array>
-        
+ 
 </resources>

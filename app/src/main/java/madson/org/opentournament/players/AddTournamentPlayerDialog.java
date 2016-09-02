@@ -25,6 +25,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import com.jaredrummler.materialspinner.MaterialSpinner;
 
 import madson.org.opentournament.R;
@@ -37,6 +43,7 @@ import madson.org.opentournament.service.TournamentService;
 import madson.org.opentournament.utility.BaseActivity;
 import madson.org.opentournament.utility.BaseApplication;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -62,6 +69,7 @@ public class AddTournamentPlayerDialog extends DialogFragment {
 
     private Tournament tournament;
     private Player player;
+    private DatabaseReference mFirebaseDatabaseReference;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -119,7 +127,34 @@ public class AddTournamentPlayerDialog extends DialogFragment {
             TournamentPlayerService tournamentPlayerService = ((BaseApplication) getActivity().getApplication())
                 .getTournamentPlayerService();
 
-            List<String> listOfAllTeamNames = tournamentPlayerService.getAllTeamNamesForTournament(tournament);
+            final List<String> listOfAllTeamNames = tournamentPlayerService.getAllTeamNamesForTournament(tournament);
+
+            if (tournament.getOnlineUUID() != null && (((BaseActivity) getActivity()).isConnected())) {
+                mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
+
+                final ValueEventListener tournamentPlayerListener = new ValueEventListener() {
+
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+
+                        for (DataSnapshot teamname : dataSnapshot.getChildren()) {
+                            if (!listOfAllTeamNames.contains(teamname.getKey())) {
+                                listOfAllTeamNames.add(teamname.getKey());
+                            }
+                        }
+                    }
+
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                    }
+                };
+
+                DatabaseReference child = mFirebaseDatabaseReference.child("tournaments/" + tournament.getOnlineUUID()
+                        + "/teams");
+
+                child.addValueEventListener(tournamentPlayerListener);
+            }
 
             teamnameSpinner = (MaterialSpinner) dialogView.findViewById(R.id.dialog_add_tournament_player_teamname);
 
@@ -247,7 +282,13 @@ public class AddTournamentPlayerDialog extends DialogFragment {
                             TournamentPlayer tournamentPlayer = new TournamentPlayer(player, tournament);
 
                             tournamentPlayer.setFaction(factionSpinner.getText().toString());
-                            tournamentPlayer.setTeamname(teamnameSpinner.getText().toString());
+
+                            if (teamnameSpinner.getText() != "-") {
+                                tournamentPlayer.setTeamname(teamnameSpinner.getText().toString());
+                            }
+
+                            dialog.dismiss();
+
                             tournamentPlayerService.addTournamentPlayerToTournament(tournamentPlayer, tournament);
 
                             if (tournament.getOnlineUUID() != null && (((BaseActivity) getActivity()).isConnected())) {
@@ -266,8 +307,6 @@ public class AddTournamentPlayerDialog extends DialogFragment {
                             .setBackgroundColor(getContext().getResources().getColor(R.color.colorAccent));
 
                             snackbar.show();
-
-                            dialog.dismiss();
                         } else {
                             Log.i(this.getClass().getName(), "validation failed");
 

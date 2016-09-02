@@ -84,7 +84,7 @@
     <string name="label_add_teamname">add new teamname</string>
     <string name="team_name">Team name</string>
     <string name="faction">Faction</string>
-    <string name="no_team">no team</string>
+    <string name="no_team">-</string>
     <string name="add_new_team">Add new team name</string>
 
 
@@ -130,8 +130,7 @@
     <string name="toast_sign_in_anonymously">Sign in anonymously</string>
     <string name="toast_no_connection">no connection possible</string>
     <string name="toast_sign_out_no_connection">you cant sign out when no internet</string>
-    <string name="offline_text">you are offline - cannot load online tournaments</string>
-    <string name="delete_tournament">Delete Tournament</string>
+     <string name="delete_tournament">Delete Tournament</string>
     <string name="dialof_confirm_draw">Sure draw?</string>
     <string name="dialog_confirm_delete_tournament">Sure delete tournament? You cannot recover any data if you confirm.</string>
     <string name="dialog_confirm_convert_to_online_tournament">Please confirm convertions to online tournament</string>
@@ -139,6 +138,11 @@
     <string name="nav_player_list">Tournament Players</string>
     <string name="label_fullname">fullname</string>
     <string name="success_tournament_player_is_online">Tournament saved online</string>
+
+    <!-- offline stuff -->
+    <string name="offline_text">you are offline - cannot load online tournaments</string>
+    <string name="tournament_player_offline_text">You are offline and try to manage an online tournament. \nCannot load online tournament players \nIf you have a local instance, please use that tournament instead</string>
+    <string name="no_tournament_players">No players for tournament found</string>
 
 
 </resources>

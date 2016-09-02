@@ -1,5 +1,7 @@
 package madson.org.opentournament.players;
 
+import android.content.Context;
+
 import android.support.v7.widget.RecyclerView;
 
 import android.util.Log;
@@ -54,12 +56,17 @@ public class TournamentPlayerListAdapter extends RecyclerView.Adapter<Tournament
         final TournamentPlayer player = tournamentPlayerList.get(position);
         holder.setPlayer(player);
         holder.getPlayerNumber().setText(String.valueOf(position + 1));
+        holder.getTeamname().setText(player.getTeamname());
         holder.getPlayerNameInList()
             .setText(player.getFirstname() + " \"" + player.getNickname() + "\" " + player.getLastname());
 
         // mark online player
         if (player.getPlayer_online_uuid() != null) {
             holder.getOnlineIcon().setVisibility(View.VISIBLE);
+        }
+
+        if (mListener != null) {
+            mListener.tournamentPlayerListHeading();
         }
     }
 
@@ -78,14 +85,28 @@ public class TournamentPlayerListAdapter extends RecyclerView.Adapter<Tournament
      */
     public void add(TournamentPlayer tournamentPlayer) {
 
-        tournamentPlayerList.add(tournamentPlayer);
-        notifyDataSetChanged();
+        if (!tournamentPlayerList.contains(tournamentPlayer)) {
+            tournamentPlayerList.add(tournamentPlayer);
+            notifyDataSetChanged();
+        }
+    }
+
+
+    public boolean contains(TournamentPlayer player) {
+
+        if (player != null) {
+            return tournamentPlayerList.contains(player);
+        } else {
+            return false;
+        }
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private TextView playerNameInList;
         private TextView playerNumber;
+        private TextView teamname;
+
         private ImageView onlineIcon;
         private TournamentPlayer player;
 
@@ -95,7 +116,8 @@ public class TournamentPlayerListAdapter extends RecyclerView.Adapter<Tournament
             v.setOnClickListener(this);
 
             playerNumber = (TextView) v.findViewById(R.id.tournament_player_row_player_number);
-            playerNameInList = (TextView) v.findViewById(R.id.tournament_player_row_name);
+            playerNameInList = (TextView) v.findViewById(R.id.tournament_player_fullname);
+            teamname = (TextView) v.findViewById(R.id.tournament_player_teamname);
             onlineIcon = (ImageView) v.findViewById(R.id.tournament_player_row_online_icon);
         }
 
@@ -120,6 +142,12 @@ public class TournamentPlayerListAdapter extends RecyclerView.Adapter<Tournament
         public ImageView getOnlineIcon() {
 
             return onlineIcon;
+        }
+
+
+        public TextView getTeamname() {
+
+            return teamname;
         }
 
 

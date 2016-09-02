@@ -3,6 +3,11 @@ package madson.org.opentournament.domain;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 
 /**
  * Write some fancy Javadoc!
@@ -33,6 +38,9 @@ public class Player implements Parcelable {
     private String firstname;
     private String nickname;
     private String lastname;
+
+    // list of tournaments player played. Note: online online persistent
+    private Map<String, Boolean> tournaments = new HashMap<>();
 
     private String auth_email;
 
@@ -66,6 +74,18 @@ public class Player implements Parcelable {
         lastname = in.readString();
         auth_email = in.readString();
     }
+
+    public Map<String, Boolean> getTournaments() {
+
+        return tournaments;
+    }
+
+
+    public void setTournaments(Map<String, Boolean> tournaments) {
+
+        this.tournaments = tournaments;
+    }
+
 
     public long get_id() {
 

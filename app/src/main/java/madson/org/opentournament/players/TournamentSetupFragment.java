@@ -154,4 +154,12 @@ public class TournamentSetupFragment extends Fragment implements TournamentSetup
         FragmentManager supportFragmentManager = getChildFragmentManager();
         dialog.show(supportFragmentManager, this.getClass().getName());
     }
+
+
+    @Override
+    public void tournamentPlayerListHeading() {
+
+        Log.i(this.getClass().getName(), "update heading");
+        tournamentPlayerListFragment.updateHeading();
+    }
 }

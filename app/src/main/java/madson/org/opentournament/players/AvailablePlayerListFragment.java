@@ -96,8 +96,12 @@ public class AvailablePlayerListFragment extends Fragment {
                             String player_online_uuid = playerSnapShot.getKey();
 
                             Player player = playerSnapShot.getValue(Player.class);
-                            player.setOnlineUUID(player_online_uuid);
-                            onlinePlayerListAdapter.addPlayer(player);
+
+                            if (player != null && !player.getTournaments().containsKey(tournament.getOnlineUUID())) {
+                                player.setOnlineUUID(player_online_uuid);
+
+                                onlinePlayerListAdapter.addPlayer(player);
+                            }
                         }
                     }
 

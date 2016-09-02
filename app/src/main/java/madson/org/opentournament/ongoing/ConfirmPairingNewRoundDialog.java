@@ -43,8 +43,6 @@ public class ConfirmPairingNewRoundDialog extends DialogFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-
-        setRetainInstance(true);
     }
 
 

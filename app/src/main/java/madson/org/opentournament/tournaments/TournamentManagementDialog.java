@@ -76,13 +76,10 @@ public class TournamentManagementDialog extends DialogFragment {
 
         super.onCreate(savedInstanceState);
 
-        setRetainInstance(true);
-
         coordinatorLayout = (CoordinatorLayout) getActivity().findViewById(R.id.coordinator_main);
 
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
         dateFormatter = DateFormat.getDateInstance(DateFormat.DEFAULT, Locale.getDefault());
-        super.onCreate(savedInstanceState);
     }
 
 
@@ -430,8 +427,11 @@ public class TournamentManagementDialog extends DialogFragment {
 
         super.onAttach(context);
 
-        if (getTargetFragment() instanceof TournamentManagementFragment) {
-            mListener = (TournamentManagementFragment) getTargetFragment();
+        // click on new tournament
+        if (getParentFragment() instanceof TournamentManagementFragment) {
+            mListener = (TournamentManagementFragment) getParentFragment();
+        } else if (getParentFragment().getParentFragment() instanceof TournamentManagementFragment) {
+            mListener = (TournamentManagementFragment) getParentFragment().getParentFragment();
         }
     }
 

@@ -59,8 +59,6 @@ public class AvailablePlayerListFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-
-        setRetainInstance(true);
     }
 
 

@@ -60,8 +60,6 @@ public class TournamentSetupFragment extends Fragment implements TournamentSetup
     public void onCreate(@Nullable Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-
-        setRetainInstance(true);
     }
 
 
@@ -97,7 +95,6 @@ public class TournamentSetupFragment extends Fragment implements TournamentSetup
                     Log.i(this.getClass().getName(), "click floatingActionButton player add to tournament");
 
                     AddTournamentPlayerDialog dialog = new AddTournamentPlayerDialog();
-                    dialog.setTargetFragment(TournamentSetupFragment.this, 1);
 
                     Bundle bundle = new Bundle();
                     bundle.putParcelable(AddTournamentPlayerDialog.BUNDLE_TOURNAMENT, tournament);
@@ -148,7 +145,6 @@ public class TournamentSetupFragment extends Fragment implements TournamentSetup
     public void clickAvailablePlayerListItem(Player player) {
 
         AddTournamentPlayerDialog dialog = new AddTournamentPlayerDialog();
-        dialog.setTargetFragment(this, 1);
 
         Bundle bundle = new Bundle();
         bundle.putParcelable(AddTournamentPlayerDialog.BUNDLE_TOURNAMENT, tournament);

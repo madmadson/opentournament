@@ -40,8 +40,6 @@ public class TournamentManagementFragment extends Fragment
 
         super.onCreate(savedInstanceState);
 
-        setRetainInstance(true);
-
         tournamentListsFragment = new TournamentListsFragment();
 
         FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
@@ -78,7 +76,6 @@ public class TournamentManagementFragment extends Fragment
                     Log.i(this.getClass().getName(), "click floatingActionButton tournament management");
 
                     TournamentManagementDialog dialog = new TournamentManagementDialog();
-                    dialog.setTargetFragment(TournamentManagementFragment.this, 1);
 
                     FragmentManager supportFragmentManager = getChildFragmentManager();
                     dialog.show(supportFragmentManager, "tournament management new tournament");

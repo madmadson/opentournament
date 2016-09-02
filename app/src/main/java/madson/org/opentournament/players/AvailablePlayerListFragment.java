@@ -4,6 +4,8 @@ import android.content.Context;
 
 import android.os.Bundle;
 
+import android.support.annotation.Nullable;
+
 import android.support.v4.app.Fragment;
 
 import android.support.v7.widget.LinearLayoutManager;
@@ -53,17 +55,12 @@ public class AvailablePlayerListFragment extends Fragment {
     private OnlinePlayerListAdapter onlinePlayerListAdapter;
     private LocalPlayerListAdapter localPlayerListAdapter;
 
-    /**
-     * Mandatory empty constructor for the fragment manager to instantiate the fragment (e.g. upon screen orientation
-     * changes).
-     */
-    public AvailablePlayerListFragment() {
-    }
-
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+
+        setRetainInstance(true);
     }
 
 

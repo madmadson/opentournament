@@ -48,6 +48,15 @@ public class RoundChangeButtonFragment extends Fragment {
     private NextOrPrevious next_or_previous;
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+
+        super.onCreate(savedInstanceState);
+
+        setRetainInstance(true);
+    }
+
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         Bundle bundle = getArguments();

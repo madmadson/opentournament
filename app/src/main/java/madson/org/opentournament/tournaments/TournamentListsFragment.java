@@ -59,13 +59,6 @@ public class TournamentListsFragment extends Fragment {
     private TournamentListAdapter localTournamentListAdapter;
     private FirebaseRecyclerAdapter<Tournament, TournamentViewHolder> mFirebaseTournamentAdapter;
 
-    /**
-     * Mandatory empty constructor for the fragment manager to instantiate the fragment (e.g. upon screen orientation
-     * changes).
-     */
-    public TournamentListsFragment() {
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
 

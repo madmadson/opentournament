@@ -6,6 +6,8 @@ import android.content.DialogInterface;
 
 import android.os.Bundle;
 
+import android.support.annotation.Nullable;
+
 import android.support.v4.app.DialogFragment;
 
 import android.support.v7.app.AlertDialog;
@@ -36,6 +38,15 @@ public class ConfirmPairingNewRoundDialog extends DialogFragment {
 
     private Tournament tournament;
     private int round_for_pairing;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+
+        super.onCreate(savedInstanceState);
+
+        setRetainInstance(true);
+    }
+
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {

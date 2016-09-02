@@ -10,6 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import madson.org.opentournament.R;
 
 
@@ -19,6 +21,15 @@ import madson.org.opentournament.R;
  * @author  Tobias Matt - tmatt@contargo.net
  */
 public class TournamentListHeaderFragment extends Fragment {
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+
+        super.onCreate(savedInstanceState);
+
+        setRetainInstance(true);
+    }
+
 
     @Nullable
     @Override

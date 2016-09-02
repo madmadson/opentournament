@@ -3,12 +3,15 @@ package madson.org.opentournament.ongoing;
 import android.app.Activity;
 import android.app.Dialog;
 
+import android.content.Context;
 import android.content.DialogInterface;
 
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+
+import android.support.annotation.Nullable;
 
 import android.support.v4.app.DialogFragment;
 
@@ -66,6 +69,15 @@ public class EnterResultForGameDialog extends DialogFragment {
     private Game game;
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+
+        super.onCreate(savedInstanceState);
+
+        setRetainInstance(true);
+    }
+
+
+    @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
         Bundle bundle = getArguments();
@@ -100,7 +112,7 @@ public class EnterResultForGameDialog extends DialogFragment {
 
 
     @Override
-    public void onAttach(Activity activity) {
+    public void onAttach(Context activity) {
 
         super.onAttach(activity);
 

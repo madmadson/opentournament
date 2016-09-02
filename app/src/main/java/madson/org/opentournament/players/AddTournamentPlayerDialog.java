@@ -59,9 +59,10 @@ public class AddTournamentPlayerDialog extends DialogFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
 
+        super.onCreate(savedInstanceState);
         coordinatorLayout = (CoordinatorLayout) getActivity().findViewById(R.id.coordinator_main);
 
-        super.onCreate(savedInstanceState);
+        setRetainInstance(true);
     }
 
 

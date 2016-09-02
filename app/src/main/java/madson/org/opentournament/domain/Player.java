@@ -103,6 +103,42 @@ public class Player implements Parcelable {
     }
 
 
+    public void setFirstname(String firstname) {
+
+        this.firstname = firstname;
+    }
+
+
+    public void setNickname(String nickname) {
+
+        this.nickname = nickname;
+    }
+
+
+    public void setLastname(String lastname) {
+
+        this.lastname = lastname;
+    }
+
+
+    public void set_id(long _id) {
+
+        this._id = _id;
+    }
+
+
+    public String getAuth_email() {
+
+        return auth_email;
+    }
+
+
+    public void setAuth_email(String auth_email) {
+
+        this.auth_email = auth_email;
+    }
+
+
     @Override
     public String toString() {
 

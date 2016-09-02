@@ -19,8 +19,6 @@
         android:background="?android:attr/selectableItemBackground"
         android:padding="@dimen/player_card_padding">
 
-       
-    
         <TextView
             android:id="@+id/tournament_player_row_player_number"
             android:layout_width="wrap_content"

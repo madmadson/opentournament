@@ -33,7 +33,7 @@ public interface TournamentPlayerService {
      * @param  player  player instance
      * @param  tournament  tournament
      */
-    TournamentPlayer addPlayerToTournament(Player player, Tournament tournament);
+    void addTournamentPlayerToTournament(TournamentPlayer player, Tournament tournament);
 
 
     /**
@@ -43,4 +43,23 @@ public interface TournamentPlayerService {
      * @param  tournament
      */
     void removePlayerFromTournament(Player player, Tournament tournament);
+
+
+    /**
+     * Get all team names on tournament players in specific tournament.
+     *
+     * @param  tournament
+     *
+     * @return
+     */
+    List<String> getAllTeamNamesForTournament(Tournament tournament);
+
+
+    /**
+     * Push it to firebase.
+     *
+     * @param  tournamentPlayer
+     * @param  tournament
+     */
+    void setTournamentPlayerToFirebase(TournamentPlayer tournamentPlayer, Tournament tournament);
 }

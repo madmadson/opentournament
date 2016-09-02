@@ -23,7 +23,9 @@ import android.view.View;
 
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Spinner;
+import android.widget.ImageButton;
+
+import com.jaredrummler.materialspinner.MaterialSpinner;
 
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Player;
@@ -32,7 +34,10 @@ import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.service.PlayerService;
 import madson.org.opentournament.service.TournamentPlayerService;
 import madson.org.opentournament.service.TournamentService;
+import madson.org.opentournament.utility.BaseActivity;
 import madson.org.opentournament.utility.BaseApplication;
+
+import java.util.List;
 
 
 /**
@@ -51,7 +56,9 @@ public class AddTournamentPlayerDialog extends DialogFragment {
     private EditText firstnameEditText;
     private EditText nicknameEditText;
     private EditText lastnameEditText;
-    private Spinner factionSpinner;
+    private MaterialSpinner factionSpinner;
+    private MaterialSpinner teamnameSpinner;
+    private ImageButton addNewTeamnameButton;
 
     private Tournament tournament;
     private Player player;
@@ -103,7 +110,22 @@ public class AddTournamentPlayerDialog extends DialogFragment {
             firstnameEditText = (EditText) dialogView.findViewById(R.id.dialog_add_tournament_player_firstname);
             nicknameEditText = (EditText) dialogView.findViewById(R.id.dialog_add_tournament_player_nickname);
             lastnameEditText = (EditText) dialogView.findViewById(R.id.dialog_add_tournament_player_lastname);
-            factionSpinner = (Spinner) dialogView.findViewById(R.id.dialog_add_tournament_player_faction_spinner);
+
+            factionSpinner = (MaterialSpinner) dialogView.findViewById(
+                    R.id.dialog_add_tournament_player_faction_spinner);
+
+            factionSpinner.setItems(getResources().getStringArray(R.array.factions));
+
+            TournamentPlayerService tournamentPlayerService = ((BaseApplication) getActivity().getApplication())
+                .getTournamentPlayerService();
+
+            List<String> listOfAllTeamNames = tournamentPlayerService.getAllTeamNamesForTournament(tournament);
+
+            teamnameSpinner = (MaterialSpinner) dialogView.findViewById(R.id.dialog_add_tournament_player_teamname);
+
+            listOfAllTeamNames.add(0, getString(R.string.no_team));
+
+            teamnameSpinner.setItems(listOfAllTeamNames);
 
             if (bundle.getParcelable(BUNDLE_PLAYER) != null) {
                 player = bundle.getParcelable(BUNDLE_PLAYER);
@@ -114,6 +136,48 @@ public class AddTournamentPlayerDialog extends DialogFragment {
                     lastnameEditText.setText(player.getLastname());
                 }
             }
+
+            addNewTeamnameButton = (ImageButton) dialogView.findViewById(
+                    R.id.dialog_add_tournament_player_add_new_team);
+
+            addNewTeamnameButton.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View view) {
+
+                        final EditText newTeamNameEditText = new EditText(getContext());
+
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                        final AlertDialog newTeamNameDialog = builder.setView(newTeamNameEditText)
+                            .setTitle(R.string.add_new_team)
+                            .setPositiveButton(R.string.dialog_save, new DialogInterface.OnClickListener() {
+
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                                            // nothing
+                                        }
+                                    })
+                            .setNeutralButton(R.string.dialog_cancel, null)
+                            .create();
+                        newTeamNameDialog.show();
+
+                        newTeamNameDialog.getButton(DialogInterface.BUTTON_POSITIVE)
+                        .setOnClickListener(new View.OnClickListener() {
+
+                                @Override
+                                public void onClick(View view) {
+
+                                    if (newTeamNameEditText.getText().length() != 0) {
+                                        teamnameSpinner.setText(newTeamNameEditText.getText());
+                                        newTeamNameDialog.dismiss();
+                                    } else {
+                                        newTeamNameEditText.setError(getString(R.string.validation_error_empty));
+                                    }
+                                }
+                            });
+                    }
+                });
 
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
@@ -162,17 +226,38 @@ public class AddTournamentPlayerDialog extends DialogFragment {
                         String lastname = lastnameEditText.getText().toString();
 
                         if (!firstname.isEmpty() && !nickname.isEmpty() && !lastname.isEmpty()) {
-                            Player player = new Player(firstname, nickname, lastname);
-
-                            PlayerService playerService = ((BaseApplication) getActivity().getApplication())
-                                .getPlayerService();
-                            playerService.createLocalPlayer(player);
-
                             TournamentPlayerService tournamentPlayerService =
                                 ((BaseApplication) getActivity().getApplication()).getTournamentPlayerService();
 
-                            TournamentPlayer tournamentPlayer = tournamentPlayerService.addPlayerToTournament(player,
-                                    tournament);
+                            if (player == null) {
+                                Log.i(this.getClass().getName(), "add new local player.");
+
+                                Player newLocalPlayer = new Player();
+                                newLocalPlayer.setFirstname(firstname);
+                                newLocalPlayer.setFirstname(nickname);
+                                newLocalPlayer.setFirstname(lastname);
+
+                                PlayerService playerService = ((BaseApplication) getActivity().getApplication())
+                                    .getPlayerService();
+                                playerService.createLocalPlayer(newLocalPlayer);
+
+                                player = newLocalPlayer;
+                            }
+
+                            TournamentPlayer tournamentPlayer = new TournamentPlayer(player, tournament);
+
+                            tournamentPlayer.setFaction(factionSpinner.getText().toString());
+                            tournamentPlayer.setTeamname(teamnameSpinner.getText().toString());
+                            tournamentPlayerService.addTournamentPlayerToTournament(tournamentPlayer, tournament);
+
+                            if (tournament.getOnlineUUID() != null && (((BaseActivity) getActivity()).isConnected())) {
+                                // do it online!
+                                tournamentPlayerService.setTournamentPlayerToFirebase(tournamentPlayer, tournament);
+                            } else {
+                                if (mListener != null) {
+                                    mListener.addTournamentPlayer(tournamentPlayer);
+                                }
+                            }
 
                             Snackbar snackbar = Snackbar.make(coordinatorLayout, R.string.success_new_player_inserted,
                                     Snackbar.LENGTH_LONG);
@@ -181,10 +266,6 @@ public class AddTournamentPlayerDialog extends DialogFragment {
                             .setBackgroundColor(getContext().getResources().getColor(R.color.colorAccent));
 
                             snackbar.show();
-
-                            if (mListener != null) {
-                                mListener.addTournamentPlayer(tournamentPlayer);
-                            }
 
                             dialog.dismiss();
                         } else {

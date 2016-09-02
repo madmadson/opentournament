@@ -72,14 +72,22 @@
     <string name="button_start_tournament">Start</string>
     
     <!-- Tournament Player List -->
-    <string name="heading_tournament_player">Player in offline tournament: (%1$d)</string>
+    <string name="heading_tournament_player">Player in %2$s tournament: (%1$d)</string>
     <string name="button_pair_round">Pair \n round %1$d</string>
     <string name="button_change_round">show \n round %1$d</string>
     <string name="pairing_divider">:</string>
     <string name="heading_online_players">Players from online database</string>
     <string name="heading_local_players">Players from local database (only visible for you)</string>
     <string name="filter_player">Player filter:</string>
-    
+    <string name="label_faction">faction</string>
+    <string name="label_teamname">teamname</string>
+    <string name="label_add_teamname">add new teamname</string>
+    <string name="team_name">Team name</string>
+    <string name="faction">Faction</string>
+    <string name="no_team">no team</string>
+    <string name="add_new_team">Add new team name</string>
+
+
     <!-- Pairing table -->
     <string name="heading_pairing_for_round">Pairing round: %1$d</string>
     
@@ -130,6 +138,7 @@
     <string name="success_convert_to_online_tournament">successfully convert local tournament to online</string>
     <string name="nav_player_list">Tournament Players</string>
     <string name="label_fullname">fullname</string>
+    <string name="success_tournament_player_is_online">Tournament saved online</string>
 
 
 </resources>

@@ -97,7 +97,8 @@ public class TournamentPlayerListFragment extends Fragment {
         List<TournamentPlayer> players = tournamentPlayerService.getAllPlayersForTournament(tournament);
 
         heading = (TextView) view.findViewById(R.id.heading_tournament_players);
-        heading.setText(getString(R.string.heading_tournament_player, players.size()));
+        heading.setText(getString(R.string.heading_tournament_player, players.size(),
+                tournament.getOnlineUUID() == null ? "offline" : "online"));
 
         tournamentPlayerListAdapter = new TournamentPlayerListAdapter(players, null);
 
@@ -130,7 +131,9 @@ public class TournamentPlayerListFragment extends Fragment {
 
                                 TournamentPlayer player = dataSnapshot.getValue(TournamentPlayer.class);
 
-                                tournamentPlayerListAdapter.add(player);
+                                if (player != null) {
+                                    tournamentPlayerListAdapter.add(player);
+                                }
                             }
 
 
@@ -150,7 +153,7 @@ public class TournamentPlayerListFragment extends Fragment {
         };
 
         DatabaseReference child = mFirebaseDatabaseReference.child("tournaments/" + tournament.getOnlineUUID()
-                + "/players");
+                + "/tournament_players");
 
         child.addValueEventListener(tournamentPlayerListener);
     }
@@ -160,16 +163,10 @@ public class TournamentPlayerListFragment extends Fragment {
 
         Log.i(this.getClass().getName(), "add player to tournament player list: " + player);
 
-        // local tournament
-        if (tournament.getOnlineUUID() == null) {
-            if (tournamentPlayerListAdapter != null) {
-                heading.setText(getString(R.string.heading_tournament_player,
-                        tournamentPlayerListAdapter.getItemCount()));
+        if (tournamentPlayerListAdapter != null) {
+            heading.setText(getString(R.string.heading_tournament_player, tournamentPlayerListAdapter.getItemCount()));
 
-                tournamentPlayerListAdapter.add(player);
-            }
-        } else {
-            // online tournament
+            tournamentPlayerListAdapter.add(player);
         }
     }
 

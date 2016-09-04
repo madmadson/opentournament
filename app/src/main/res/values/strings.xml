@@ -56,8 +56,8 @@
     <string name="nav_tournament_setup">Tournament Setup</string>
     <string name="nav_round_tab">Round %1$d</string>
     <string name="nav_home_activity">Home</string>
-    <string name="nav_tournament_final">Final Results</string>ch
-    <string name="search_player">Search players</string>
+    <string name="nav_tournament_final">Final Results</string>
+    <string name="search_player">Filter players</string>
 
     <string name="label_firstname">firstname</string>
     <string name="label_nickname">nickname</string>
@@ -78,7 +78,6 @@
     <string name="pairing_divider">:</string>
     <string name="heading_online_players">Players from online database</string>
     <string name="heading_local_players">Players from local database (only visible for you)</string>
-    <string name="filter_player">Player filter:</string>
     <string name="label_faction">faction</string>
     <string name="label_teamname">teamname</string>
     <string name="label_add_teamname">add new teamname</string>
@@ -143,6 +142,7 @@
     <string name="offline_text">you are offline - cannot load online tournaments</string>
     <string name="tournament_player_offline_text">You are offline and try to manage an online tournament. \nCannot load online tournament players \nIf you have a local instance, please use that tournament instead</string>
     <string name="no_tournament_players">No players for tournament found</string>
+    <string name="no_available_players_for_tournament">No players found</string>
 
 
 </resources>

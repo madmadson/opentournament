@@ -21,6 +21,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -32,7 +34,6 @@ import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
-import madson.org.opentournament.service.OngoingTournamentService;
 import madson.org.opentournament.service.PlayerService;
 import madson.org.opentournament.service.TournamentPlayerService;
 import madson.org.opentournament.utility.BaseActivity;
@@ -55,6 +56,10 @@ public class AvailablePlayerListFragment extends Fragment {
     private OnlinePlayerListAdapter onlinePlayerListAdapter;
     private LocalPlayerListAdapter localPlayerListAdapter;
 
+    private ProgressBar progressBar;
+    private TextView noLocalTournamentPlayersTextView;
+    private TextView noOnlineTournamentPlayersTextView;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
 
@@ -65,7 +70,7 @@ public class AvailablePlayerListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_player_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_available_player_list, container, false);
 
         Bundle bundle = getArguments();
 
@@ -73,6 +78,9 @@ public class AvailablePlayerListFragment extends Fragment {
             tournament = bundle.getParcelable(BUNDLE_TOURNAMENT);
 
             EditText filterPlayer = (EditText) view.findViewById(R.id.input_filter_player);
+            progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
+            noLocalTournamentPlayersTextView = (TextView) view.findViewById(R.id.no_local_available_players);
+            noOnlineTournamentPlayersTextView = (TextView) view.findViewById(R.id.no_online_available_players);
 
             filterPlayer.addTextChangedListener(new PlayerFilterTextWatcher());
 
@@ -101,7 +109,15 @@ public class AvailablePlayerListFragment extends Fragment {
                                 player.setOnlineUUID(player_online_uuid);
 
                                 onlinePlayerListAdapter.addPlayer(player);
+                                noOnlineTournamentPlayersTextView.setVisibility(View.GONE);
                             }
+
+                            progressBar.setVisibility(View.GONE);
+                        }
+
+                        if (!dataSnapshot.getChildren().iterator().hasNext()) {
+                            progressBar.setVisibility(View.GONE);
+                            noOnlineTournamentPlayersTextView.setVisibility(View.GONE);
                         }
                     }
 
@@ -116,10 +132,17 @@ public class AvailablePlayerListFragment extends Fragment {
                 child.addValueEventListener(playerListener);
 
                 mOnlinePlayerRecyclerView.setAdapter(onlinePlayerListAdapter);
+            } else {
+                progressBar.setVisibility(View.GONE);
+                view.findViewById(R.id.tournament_player_offline_text).setVisibility(View.VISIBLE);
             }
 
             PlayerService playerService = ((BaseApplication) getActivity().getApplication()).getPlayerService();
             List<Player> localPlayers = playerService.getAllLocalPlayers();
+
+            if (localPlayers.size() > 0) {
+                noLocalTournamentPlayersTextView.setVisibility(View.GONE);
+            }
 
             RecyclerView localPlayerRecyclerView = (RecyclerView) view.findViewById(
                     R.id.local_player_list_recycler_view);

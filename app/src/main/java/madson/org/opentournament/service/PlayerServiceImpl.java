@@ -144,6 +144,7 @@ public class PlayerServiceImpl implements PlayerService {
     @Override
     public List<Player> getAllLocalPlayersNotInTournament(List<TournamentPlayer> listOfPlayers) {
 
+
         ArrayList<Player> players = new ArrayList<>();
 
         String filterString = "";

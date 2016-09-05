@@ -133,6 +133,31 @@ public class TournamentPlayerServiceImpl implements TournamentPlayerService {
 
 
     @Override
+    public List<String> getAllPlayersOnlineUUIDForTournament(Tournament tournament) {
+
+        List<String> playersOnlineUUIDs = new ArrayList<>();
+        SQLiteDatabase readableDatabase = openTournamentDBHelper.getReadableDatabase();
+
+        Cursor cursor = readableDatabase.query(TournamentPlayerTable.TABLE_TOURNAMENT_PLAYER,
+                new String[] { TournamentPlayerTable.COLUMN_PLAYER_ONLINE_UUID }, "tournament_id  = ?",
+                new String[] { Long.toString(tournament.get_id()) }, null, null, null);
+
+        cursor.moveToFirst();
+
+        while (!cursor.isAfterLast()) {
+            playersOnlineUUIDs.add(cursor.getString(0));
+
+            cursor.moveToNext();
+        }
+
+        cursor.close();
+        readableDatabase.close();
+
+        return playersOnlineUUIDs;
+    }
+
+
+    @Override
     public void addTournamentPlayerToTournament(TournamentPlayer player, Tournament tournament) {
 
         SQLiteDatabase db = openTournamentDBHelper.getWritableDatabase();

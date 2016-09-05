@@ -62,4 +62,14 @@ public interface TournamentPlayerService {
      * @param  tournament
      */
     void setTournamentPlayerToFirebase(TournamentPlayer tournamentPlayer, Tournament tournament);
+
+
+    /**
+     * all player UUID from players already in tournament.
+     *
+     * @param  tournament
+     *
+     * @return
+     */
+    List<String> getAllPlayersOnlineUUIDForTournament(Tournament tournament);
 }

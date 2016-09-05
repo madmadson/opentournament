@@ -43,7 +43,6 @@ import madson.org.opentournament.service.TournamentService;
 import madson.org.opentournament.utility.BaseActivity;
 import madson.org.opentournament.utility.BaseApplication;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -298,6 +297,10 @@ public class AddTournamentPlayerDialog extends DialogFragment {
                                 if (mListener != null) {
                                     mListener.addTournamentPlayer(tournamentPlayer);
                                 }
+                            }
+
+                            if (mListener != null) {
+                                mListener.removeAvailablePlayer(player);
                             }
 
                             Snackbar snackbar = Snackbar.make(coordinatorLayout, R.string.success_new_player_inserted,

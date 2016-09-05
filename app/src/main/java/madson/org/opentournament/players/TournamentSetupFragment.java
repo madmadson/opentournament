@@ -162,4 +162,11 @@ public class TournamentSetupFragment extends Fragment implements TournamentSetup
         Log.i(this.getClass().getName(), "update heading");
         tournamentPlayerListFragment.updateHeading();
     }
+
+
+    @Override
+    public void removeAvailablePlayer(Player player) {
+
+        availablePlayerListFragment.removePlayer(player);
+    }
 }

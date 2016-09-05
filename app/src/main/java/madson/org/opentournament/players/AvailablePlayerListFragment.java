@@ -81,6 +81,9 @@ public class AvailablePlayerListFragment extends BaseFragment {
             noLocalTournamentPlayersTextView = (TextView) view.findViewById(R.id.no_local_available_players);
             noOnlineTournamentPlayersTextView = (TextView) view.findViewById(R.id.no_online_available_players);
 
+            TournamentPlayerService tournamentPlayerService = getBaseApplication().getTournamentPlayerService();
+            PlayerService playerService = getBaseApplication().getPlayerService();
+
             filterPlayer.addTextChangedListener(new PlayerFilterTextWatcher());
 
             if (((BaseActivity) getActivity()).isConnected()) {
@@ -91,6 +94,9 @@ public class AvailablePlayerListFragment extends BaseFragment {
                 LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
                 mOnlinePlayerRecyclerView.setLayoutManager(linearLayoutManager);
                 onlinePlayerListAdapter = new OnlinePlayerListAdapter(mListener);
+
+                final List<String> alreadyPlayingPlayersUUIDs =
+                    tournamentPlayerService.getAllPlayersOnlineUUIDForTournament(tournament);
 
                 ValueEventListener playerListener = new ValueEventListener() {
 
@@ -107,16 +113,19 @@ public class AvailablePlayerListFragment extends BaseFragment {
                             if (player != null && !player.getTournaments().containsKey(tournament.getOnlineUUID())) {
                                 player.setOnlineUUID(player_online_uuid);
 
-                                onlinePlayerListAdapter.addPlayer(player);
+                                if (!alreadyPlayingPlayersUUIDs.contains(player_online_uuid)) {
+                                    onlinePlayerListAdapter.addPlayer(player);
+                                }
+
                                 noOnlineTournamentPlayersTextView.setVisibility(View.GONE);
                             }
 
                             progressBar.setVisibility(View.GONE);
                         }
 
-                        if (!dataSnapshot.getChildren().iterator().hasNext()) {
+                        if (onlinePlayerListAdapter.getItemCount() == 0) {
                             progressBar.setVisibility(View.GONE);
-                            noOnlineTournamentPlayersTextView.setVisibility(View.GONE);
+                            noOnlineTournamentPlayersTextView.setVisibility(View.VISIBLE);
                         }
                     }
 
@@ -136,13 +145,9 @@ public class AvailablePlayerListFragment extends BaseFragment {
                 view.findViewById(R.id.tournament_player_offline_text).setVisibility(View.VISIBLE);
             }
 
-            TournamentPlayerService tournamentPlayerService = ((BaseApplication) getActivity().getApplication())
-                .getTournamentPlayerService();
-            List<TournamentPlayer> alreadyPlayingPlayers = tournamentPlayerService.getAllPlayersForTournament(
+            List<TournamentPlayer> allPlayersForTournament = tournamentPlayerService.getAllPlayersForTournament(
                     tournament);
-
-            PlayerService playerService = ((BaseApplication) getActivity().getApplication()).getPlayerService();
-            List<Player> allLocalPlayers = playerService.getAllLocalPlayersNotInTournament(alreadyPlayingPlayers);
+            List<Player> allLocalPlayers = playerService.getAllLocalPlayersNotInTournament(allPlayersForTournament);
 
             if (allLocalPlayers.size() > 0) {
                 noLocalTournamentPlayersTextView.setVisibility(View.GONE);
@@ -193,8 +198,7 @@ public class AvailablePlayerListFragment extends BaseFragment {
         Log.i(this.getClass().getName(), "add player to tournament player list: " + player_id);
 
         if (localPlayerListAdapter != null) {
-            final BaseApplication application = (BaseApplication) getActivity().getApplication();
-            final Player player = application.getPlayerService().getPlayerForId(player_id);
+            final Player player = getBaseApplication().getPlayerService().getPlayerForId(player_id);
             localPlayerListAdapter.add(player);
 
             Runnable runnable = new Runnable() {
@@ -204,10 +208,24 @@ public class AvailablePlayerListFragment extends BaseFragment {
 
                     Log.i(this.getClass().getName(), "remove player from tournament ");
 
-                    application.getTournamentPlayerService().removePlayerFromTournament(player, tournament);
+                    getBaseApplication().getTournamentPlayerService().removePlayerFromTournament(player, tournament);
                 }
             };
             runnable.run();
+        }
+    }
+
+
+    public void removePlayer(Player player) {
+
+        Log.i(this.getClass().getName(), "remove player from tournament: " + player);
+
+        if (localPlayerListAdapter != null) {
+            if (player.getOnlineUUID() == null) {
+                localPlayerListAdapter.remove(player);
+            } else {
+                onlinePlayerListAdapter.removePlayer(player);
+            }
         }
     }
 

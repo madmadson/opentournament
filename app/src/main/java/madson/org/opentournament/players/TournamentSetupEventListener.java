@@ -21,4 +21,7 @@ public interface TournamentSetupEventListener {
 
 
     void tournamentPlayerListHeading();
+
+
+    void removeAvailablePlayer(Player player);
 }

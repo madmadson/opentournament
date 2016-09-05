@@ -141,6 +141,46 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
 
+    @Override
+    public List<Player> getAllLocalPlayersNotInTournament(List<TournamentPlayer> listOfPlayers) {
+
+        ArrayList<Player> players = new ArrayList<>();
+
+        String filterString = "";
+
+        for (TournamentPlayer player : listOfPlayers) {
+            String playerId = String.valueOf(player.getPlayer_id()) + ",";
+
+            filterString += playerId;
+        }
+
+        SQLiteDatabase readableDatabase = openTournamentDBHelper.getReadableDatabase();
+
+        if (listOfPlayers.size() > 0) {
+            filterString = filterString.substring(0, filterString.length() - 1);
+
+            Cursor cursor = readableDatabase.query(PlayerTable.TABLE_PLAYER, allColumns,
+                    "_id  NOT IN (" + filterString + ")", null, null, null, null);
+
+            cursor.moveToFirst();
+
+            while (!cursor.isAfterLast()) {
+                Player player = cursorToPlayer(cursor);
+
+                players.add(player);
+                cursor.moveToNext();
+            }
+
+            cursor.close();
+            readableDatabase.close();
+
+            return players;
+        } else {
+            return getAllLocalPlayers();
+        }
+    }
+
+
     private void createPlayer(ContentValues contentValues) {
 
         SQLiteDatabase writableDatabase = openTournamentDBHelper.getWritableDatabase();

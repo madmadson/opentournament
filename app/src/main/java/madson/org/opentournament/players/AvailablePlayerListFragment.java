@@ -6,8 +6,6 @@ import android.os.Bundle;
 
 import android.support.annotation.Nullable;
 
-import android.support.v4.app.Fragment;
-
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
@@ -38,11 +36,12 @@ import madson.org.opentournament.service.PlayerService;
 import madson.org.opentournament.service.TournamentPlayerService;
 import madson.org.opentournament.utility.BaseActivity;
 import madson.org.opentournament.utility.BaseApplication;
+import madson.org.opentournament.utility.BaseFragment;
 
 import java.util.List;
 
 
-public class AvailablePlayerListFragment extends Fragment {
+public class AvailablePlayerListFragment extends BaseFragment {
 
     public static final String BUNDLE_TOURNAMENT = "tournament";
 
@@ -137,10 +136,15 @@ public class AvailablePlayerListFragment extends Fragment {
                 view.findViewById(R.id.tournament_player_offline_text).setVisibility(View.VISIBLE);
             }
 
-            PlayerService playerService = ((BaseApplication) getActivity().getApplication()).getPlayerService();
-            List<Player> localPlayers = playerService.getAllLocalPlayers();
+            TournamentPlayerService tournamentPlayerService = ((BaseApplication) getActivity().getApplication())
+                .getTournamentPlayerService();
+            List<TournamentPlayer> alreadyPlayingPlayers = tournamentPlayerService.getAllPlayersForTournament(
+                    tournament);
 
-            if (localPlayers.size() > 0) {
+            PlayerService playerService = ((BaseApplication) getActivity().getApplication()).getPlayerService();
+            List<Player> allLocalPlayers = playerService.getAllLocalPlayersNotInTournament(alreadyPlayingPlayers);
+
+            if (allLocalPlayers.size() > 0) {
                 noLocalTournamentPlayersTextView.setVisibility(View.GONE);
             }
 
@@ -152,16 +156,8 @@ public class AvailablePlayerListFragment extends Fragment {
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
             localPlayerRecyclerView.setLayoutManager(linearLayoutManager);
 
-            TournamentPlayerService tournamentPlayerService = ((BaseApplication) getActivity().getApplication())
-                .getTournamentPlayerService();
-            List<TournamentPlayer> alreadyPlayingPlayers = tournamentPlayerService.getAllPlayersForTournament(
-                    tournament);
-
-            // TODO: remove localplayers from tournament players
-            localPlayers.removeAll(alreadyPlayingPlayers);
-
             // listener may be null
-            localPlayerListAdapter = new LocalPlayerListAdapter(localPlayers, mListener);
+            localPlayerListAdapter = new LocalPlayerListAdapter(allLocalPlayers, mListener);
             localPlayerRecyclerView.setAdapter(localPlayerListAdapter);
         }
 

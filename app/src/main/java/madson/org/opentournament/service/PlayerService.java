@@ -1,8 +1,8 @@
 package madson.org.opentournament.service;
 
-import android.database.Cursor;
-
 import madson.org.opentournament.domain.Player;
+import madson.org.opentournament.domain.Tournament;
+import madson.org.opentournament.domain.TournamentPlayer;
 
 import java.util.List;
 
@@ -38,4 +38,12 @@ public interface PlayerService {
      * @return  list with all players
      */
     List<Player> getAllLocalPlayers();
+
+
+    /**
+     * @param  listOfPlayers
+     *
+     * @return
+     */
+    List<Player> getAllLocalPlayersNotInTournament(List<TournamentPlayer> listOfPlayers);
 }

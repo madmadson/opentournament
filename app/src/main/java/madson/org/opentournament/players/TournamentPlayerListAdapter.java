@@ -1,9 +1,5 @@
 package madson.org.opentournament.players;
 
-import android.content.Context;
-import android.content.DialogInterface;
-
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 
 import android.util.Log;
@@ -16,7 +12,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import madson.org.opentournament.R;
-import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.TournamentPlayer;
 
 import java.util.List;
@@ -58,7 +53,8 @@ public class TournamentPlayerListAdapter extends RecyclerView.Adapter<Tournament
         final TournamentPlayer player = tournamentPlayerList.get(position);
         holder.setPlayer(player);
         holder.getPlayerNumber().setText(String.valueOf(position + 1));
-        holder.getTeamname().setText(player.getTeamname());
+        holder.getTeamName().setText(player.getTeamname());
+        holder.getFaction().setText(player.getFaction());
         holder.getPlayerNameInList()
             .setText(player.getFirstname() + " \"" + player.getNickname() + "\" " + player.getLastname());
 
@@ -111,9 +107,11 @@ public class TournamentPlayerListAdapter extends RecyclerView.Adapter<Tournament
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
+        private TextView faction;
+        private ImageView accountIcon;
         private TextView playerNameInList;
         private TextView playerNumber;
-        private TextView teamname;
+        private TextView teamName;
 
         private ImageView onlineIcon;
         private TournamentPlayer player;
@@ -125,8 +123,10 @@ public class TournamentPlayerListAdapter extends RecyclerView.Adapter<Tournament
 
             playerNumber = (TextView) v.findViewById(R.id.tournament_player_row_player_number);
             playerNameInList = (TextView) v.findViewById(R.id.tournament_player_fullname);
-            teamname = (TextView) v.findViewById(R.id.tournament_player_teamname);
+            teamName = (TextView) v.findViewById(R.id.tournament_player_teamname);
+            faction = (TextView) v.findViewById(R.id.tournament_player_row_faction);
             onlineIcon = (ImageView) v.findViewById(R.id.tournament_player_row_online_icon);
+            accountIcon = (ImageView) v.findViewById(R.id.tournament_player_row_account_icon);
         }
 
         public TextView getPlayerNameInList() {
@@ -153,9 +153,21 @@ public class TournamentPlayerListAdapter extends RecyclerView.Adapter<Tournament
         }
 
 
-        public TextView getTeamname() {
+        public TextView getTeamName() {
 
-            return teamname;
+            return teamName;
+        }
+
+
+        public TextView getFaction() {
+
+            return faction;
+        }
+
+
+        public ImageView getAccountIcon() {
+
+            return accountIcon;
         }
 
 

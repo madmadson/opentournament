@@ -5,6 +5,8 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 
+import android.graphics.Typeface;
+
 import android.os.Bundle;
 
 import android.support.annotation.Nullable;
@@ -168,6 +170,12 @@ public class AddTournamentPlayerDialog extends DialogFragment {
                     firstnameEditText.setText(player.getFirstname());
                     nicknameEditText.setText(player.getNickname());
                     lastnameEditText.setText(player.getLastname());
+                    firstnameEditText.setEnabled(false);
+                    nicknameEditText.setEnabled(false);
+                    lastnameEditText.setEnabled(false);
+                    firstnameEditText.setTypeface(Typeface.DEFAULT_BOLD);
+                    nicknameEditText.setTypeface(Typeface.DEFAULT_BOLD);
+                    lastnameEditText.setTypeface(Typeface.DEFAULT_BOLD);
                 }
             }
 
@@ -260,18 +268,22 @@ public class AddTournamentPlayerDialog extends DialogFragment {
                                 ((BaseApplication) getActivity().getApplication()).getTournamentPlayerService();
 
                             if (player == null) {
-                                Log.i(this.getClass().getName(), "addTournamentPlayer new local player.");
+                                Log.i(this.getClass().getName(), "add new local player.");
 
                                 Player newLocalPlayer = new Player();
                                 newLocalPlayer.setFirstname(firstname);
-                                newLocalPlayer.setFirstname(nickname);
-                                newLocalPlayer.setFirstname(lastname);
+                                newLocalPlayer.setNickname(nickname);
+                                newLocalPlayer.setLastname(lastname);
 
                                 PlayerService playerService = ((BaseApplication) getActivity().getApplication())
                                     .getPlayerService();
                                 playerService.createLocalPlayer(newLocalPlayer);
 
                                 player = newLocalPlayer;
+                            } else {
+                                if (mListener != null) {
+                                    mListener.removeAvailablePlayer(player);
+                                }
                             }
 
                             TournamentPlayer tournamentPlayer = new TournamentPlayer(player, tournament);
@@ -293,10 +305,6 @@ public class AddTournamentPlayerDialog extends DialogFragment {
                                 if (mListener != null) {
                                     mListener.addTournamentPlayer(tournamentPlayer);
                                 }
-                            }
-
-                            if (mListener != null) {
-                                mListener.removeAvailablePlayer(player);
                             }
 
                             Snackbar snackbar = Snackbar.make(coordinatorLayout, R.string.success_new_player_inserted,

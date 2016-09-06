@@ -34,13 +34,6 @@ public class TournamentServiceImpl implements TournamentService {
 
     private OpenTournamentDBHelper openTournamentDBHelper;
 
-    private String[] allColumns = {
-        TournamentTable.COLUMN_ID, TournamentTable.COLUMN_NAME, TournamentTable.COLUMN_LOCATION,
-        TournamentTable.COLUMN_DATE, TournamentTable.COLUMN_MAX_NUMBER_OF_PLAYERS, TournamentTable.COLUMN_ACTUAL_ROUND,
-        TournamentTable.COLUMN_ONLINE_UUID, TournamentTable.COLUMN_CREATOR, TournamentTable.COLUMN_CREATOR_EMAIL,
-        TournamentTable.COLUMN_TOURNAMENT_TYPE
-    };
-
     public TournamentServiceImpl(Context context) {
 
         Log.i(TournamentServiceImpl.class.getName(), "TournamentServiceImpl Constructor");
@@ -65,14 +58,15 @@ public class TournamentServiceImpl implements TournamentService {
     private void createMockTournaments() {
 
         insertTournament(1, "Coin of Evil", "Ludwigsburg", new DateTime(2016, 3, 10, 10, 8).toDate(), 32, null, null,
-            null);
-        insertTournament(2, "HMDZ", "Oberhausen", new DateTime(2016, 5, 20, 10, 0).toDate(), 0, null, null, null);
-        insertTournament(3, "Dead Fish", "Heidelberg", new DateTime(2016, 7, 15, 10, 0).toDate(), 16, null, null, null);
+            null, 8);
+        insertTournament(2, "HMDZ", "Oberhausen", new DateTime(2016, 5, 20, 10, 0).toDate(), 0, null, null, null, 0);
+        insertTournament(3, "Dead Fish", "Heidelberg", new DateTime(2016, 7, 15, 10, 0).toDate(), 16, null, null, null,
+            0);
     }
 
 
     private void insertTournament(int id, String name, String location, Date date, int maxPlayer, String onlineUUID,
-        String creator, String creatorEmail) {
+        String creator, String creatorEmail, int actualPlayers) {
 
         ContentValues contentValues = new ContentValues();
 
@@ -89,6 +83,7 @@ public class TournamentServiceImpl implements TournamentService {
         contentValues.put(TournamentTable.COLUMN_CREATOR, creator);
         contentValues.put(TournamentTable.COLUMN_CREATOR_EMAIL, creatorEmail);
         contentValues.put(TournamentTable.COLUMN_TOURNAMENT_TYPE, "WARMACHINE");
+        contentValues.put(TournamentTable.COLUMN_ACTUAL_PLAYERS, actualPlayers);
 
         SQLiteDatabase writableDatabase = openTournamentDBHelper.getWritableDatabase();
 
@@ -142,12 +137,13 @@ public class TournamentServiceImpl implements TournamentService {
             tournament.setDateOfTournament(dateTime.toDate());
         }
 
-        tournament.setMaxNumberOfPlayers(cursor.getInt(4));
-        tournament.setActualRound(cursor.getInt(5));
+        tournament.setActualRound(cursor.getInt(4));
+        tournament.setMaxNumberOfPlayers(cursor.getInt(5));
         tournament.setOnlineUUID(cursor.getString(6));
         tournament.setCreatorName(cursor.getString(7));
         tournament.setCreatorEmail(cursor.getString(8));
         tournament.setTournamentTyp(cursor.getString(9));
+        tournament.setActualPlayers(cursor.getInt(10));
 
         return tournament;
     }
@@ -196,10 +192,10 @@ public class TournamentServiceImpl implements TournamentService {
 
         Log.i(this.getClass().getName(), "update online tournament in firebase: " + tournament);
 
-        DatabaseReference referenceForTournamentToDelete = FirebaseDatabase.getInstance()
+        DatabaseReference referenceForTournament = FirebaseDatabase.getInstance()
                 .getReference("tournaments/" + tournament.getOnlineUUID());
 
-        referenceForTournamentToDelete.setValue(tournament);
+        referenceForTournament.setValue(tournament);
     }
 
 
@@ -210,8 +206,8 @@ public class TournamentServiceImpl implements TournamentService {
 
         SQLiteDatabase readableDatabase = openTournamentDBHelper.getReadableDatabase();
 
-        Cursor cursor = readableDatabase.query(TournamentTable.TABLE_TOURNAMENTS, allColumns, null, null, null, null,
-                null);
+        Cursor cursor = readableDatabase.query(TournamentTable.TABLE_TOURNAMENTS,
+                TournamentTable.ALL_COLS_FOR_TOURNAMENT, null, null, null, null, null);
 
         cursor.moveToFirst();
 
@@ -236,7 +232,7 @@ public class TournamentServiceImpl implements TournamentService {
 
         insertTournament(0, tournament.getName(), tournament.getLocation(), tournament.getDateOfTournament(),
             tournament.getMaxNumberOfPlayers(), tournament.getOnlineUUID(), tournament.getCreatorName(),
-            tournament.getCreatorEmail());
+            tournament.getCreatorEmail(), tournament.getActualPlayers());
     }
 
 

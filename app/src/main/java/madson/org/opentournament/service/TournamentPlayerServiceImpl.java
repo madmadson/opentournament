@@ -9,8 +9,11 @@ import android.database.sqlite.SQLiteDatabase;
 
 import android.util.Log;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import madson.org.opentournament.db.OpenTournamentDBHelper;
 import madson.org.opentournament.db.TournamentPlayerTable;
@@ -54,6 +57,11 @@ public class TournamentPlayerServiceImpl implements TournamentPlayerService {
 
         db.delete(TournamentPlayerTable.TABLE_TOURNAMENT_PLAYER, "tournament_id  = ?  AND  player_id = ? ",
             new String[] { String.valueOf(tournament.get_id()), String.valueOf(player.get_id()) });
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(TournamentTable.COLUMN_ACTUAL_PLAYERS, tournament.getActualPlayers() - 1);
+        db.update(TournamentTable.TABLE_TOURNAMENTS, contentValues, "_id = ?",
+            new String[] { String.valueOf(tournament.get_id()) });
 
         db.close();
     }
@@ -129,6 +137,32 @@ public class TournamentPlayerServiceImpl implements TournamentPlayerService {
                 .getReference("tournaments/" + tournament.getOnlineUUID() + "/tournament_players/" + uuid.toString());
 
         referenceInTournament.setValue(true);
+
+        // update actual players on tournament
+        final DatabaseReference referenceActualRoundInTournament = FirebaseDatabase.getInstance()
+                .getReference("tournaments/" + tournament.getOnlineUUID() + "/actualPlayers");
+
+        final ValueEventListener actualPlayerListener = new ValueEventListener() {
+
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                Integer actualPlayers = dataSnapshot.getValue(Integer.class);
+                referenceActualRoundInTournament.setValue(actualPlayers + 1);
+            }
+
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        };
+
+        DatabaseReference child = FirebaseDatabase.getInstance()
+                .getReference()
+                .child("tournaments/" + tournament.getOnlineUUID()
+                    + "/actualPlayers");
+
+        child.addListenerForSingleValueEvent(actualPlayerListener);
     }
 
 
@@ -158,7 +192,7 @@ public class TournamentPlayerServiceImpl implements TournamentPlayerService {
 
 
     @Override
-    public void removeTournamentPlayerFromFirebase(TournamentPlayer tournamentPlayer, Tournament tournament) {
+    public void removeTournamentPlayerFromFirebase(TournamentPlayer tournamentPlayer, final Tournament tournament) {
 
         Log.i(this.getClass().getName(), "delete online tournament tournamentPlayer in firebase: " + tournamentPlayer);
 
@@ -178,6 +212,32 @@ public class TournamentPlayerServiceImpl implements TournamentPlayerService {
                 .getReference("tournament_players/" + tournamentPlayer.getOnline_uuid());
 
         referenceTournamentPlayerToDelete.removeValue();
+
+        // update actual players on tournament
+        final DatabaseReference referenceActualRoundInTournament = FirebaseDatabase.getInstance()
+                .getReference("tournaments/" + tournament.getOnlineUUID() + "/actualPlayers");
+
+        final ValueEventListener actualPlayerListener = new ValueEventListener() {
+
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                Integer actualPlayers = dataSnapshot.getValue(Integer.class);
+                referenceActualRoundInTournament.setValue(actualPlayers - 1);
+            }
+
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        };
+
+        DatabaseReference child = FirebaseDatabase.getInstance()
+                .getReference()
+                .child("tournaments/" + tournament.getOnlineUUID()
+                    + "/actualPlayers");
+
+        child.addListenerForSingleValueEvent(actualPlayerListener);
     }
 
 
@@ -212,6 +272,13 @@ public class TournamentPlayerServiceImpl implements TournamentPlayerService {
         contentValues.put(TournamentPlayerTable.COLUMN_FACTION, player.getFaction());
 
         db.insert(TournamentPlayerTable.TABLE_TOURNAMENT_PLAYER, null, contentValues);
+
+        contentValues.clear();
+
+        contentValues.put(TournamentTable.COLUMN_ACTUAL_PLAYERS, tournament.getActualPlayers() + 1);
+        db.update(TournamentTable.TABLE_TOURNAMENTS, contentValues, "_id = ?",
+            new String[] { String.valueOf(tournament.get_id()) });
+
         db.close();
     }
 

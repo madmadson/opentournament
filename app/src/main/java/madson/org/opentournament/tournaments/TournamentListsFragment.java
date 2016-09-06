@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import android.os.Bundle;
+import android.os.Handler;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -91,7 +92,7 @@ public class TournamentListsFragment extends Fragment {
                 public int getItemCount() {
 
                     if (super.getItemCount() == 0) {
-                        noOnlineTournamentsFoundTextView.setVisibility(ProgressBar.GONE);
+                        noOnlineTournamentsFoundTextView.setVisibility(View.VISIBLE);
                     }
 
                     return super.getItemCount();
@@ -116,7 +117,8 @@ public class TournamentListsFragment extends Fragment {
                     viewHolder.getTournamentLocationInList().setText(tournament.getLocation());
 
                     viewHolder.getTournamentPlayersInList()
-                        .setText("0/" + String.valueOf(tournament.getMaxNumberOfPlayers()));
+                        .setText(String.valueOf(tournament.getActualPlayers()) + "/"
+                            + String.valueOf(tournament.getMaxNumberOfPlayers()));
 
                     if (currentUser != null && currentUser.getEmail() != null) {
                         if (currentUser.getEmail().equals(tournament.getCreatorEmail())) {
@@ -138,6 +140,20 @@ public class TournamentListsFragment extends Fragment {
                     }
                 }
             };
+
+            Runnable r = new Runnable() {
+
+                @Override
+                public void run() {
+
+                    if (mFirebaseTournamentAdapter.getItemCount() == 0) {
+                        mProgressBar.setVisibility(View.GONE);
+                    }
+                }
+            };
+
+            Handler h = new Handler();
+            h.postDelayed(r, 2000);
 
             mOnlineTournamentRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
             mOnlineTournamentRecyclerView.setAdapter(mFirebaseTournamentAdapter);
@@ -268,7 +284,9 @@ public class TournamentListsFragment extends Fragment {
                 holder.getTournamentDateInList().setText(formattedDate);
             }
 
-            holder.getTournamentPlayersInList().setText("0/" + String.valueOf(tournament.getMaxNumberOfPlayers()));
+            holder.getTournamentPlayersInList()
+                .setText(String.valueOf(tournament.getActualPlayers()) + "/"
+                    + String.valueOf(tournament.getMaxNumberOfPlayers()));
             holder.getEditTournamentButton().setOnClickListener(new View.OnClickListener() {
 
                     @Override

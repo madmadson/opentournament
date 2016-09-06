@@ -35,6 +35,7 @@ public class Tournament implements Parcelable {
 
     private String name;
     private String location;
+    private int actualPlayers;
     private int maxNumberOfPlayers;
     private Date dateOfTournament;
     private int actualRound;
@@ -61,6 +62,7 @@ public class Tournament implements Parcelable {
         this.name = tournament.getName();
         this.location = tournament.getLocation();
         this.maxNumberOfPlayers = tournament.getMaxNumberOfPlayers();
+        this.actualPlayers = tournament.getActualPlayers();
         this.dateOfTournament = tournament.getDateOfTournament();
         this.actualRound = tournament.getActualRound();
         this.onlineUUID = tournament.getOnlineUUID();
@@ -82,6 +84,18 @@ public class Tournament implements Parcelable {
         creatorEmail = in.readString();
         dateOfTournament = new Date(in.readLong());
     }
+
+    public int getActualPlayers() {
+
+        return actualPlayers;
+    }
+
+
+    public void setActualPlayers(int actualPlayers) {
+
+        this.actualPlayers = actualPlayers;
+    }
+
 
     /**
      * Excluded in josn sending to server.

@@ -212,17 +212,19 @@ public class TournamentPlayerListFragment extends Fragment {
 
     public void addPlayer(TournamentPlayer player) {
 
-        Log.i(this.getClass().getName(), "add player to tournament player list: " + player);
+        Log.i(this.getClass().getName(), "addTournamentPlayer player to tournament player list: " + player);
 
         if (tournamentPlayerListAdapter != null) {
-            tournamentPlayerListAdapter.add(player);
+            tournamentPlayerListAdapter.addTournamentPlayer(player);
         }
     }
 
 
-    public void removePlayer() {
+    public void removePlayer(TournamentPlayer player) {
 
         heading.setText(getString(R.string.heading_tournament_player, tournamentPlayerListAdapter.getItemCount(),
                 tournament.getOnlineUUID() == null ? "offline" : "online"));
+
+        tournamentPlayerListAdapter.removeTournamentPlayer(player);
     }
 }

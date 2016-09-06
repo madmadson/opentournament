@@ -137,7 +137,7 @@ public class OngoingTournamentActivity extends BaseActivity {
                 // show online tournament player list
                 return TournamentPlayerListFragment.newInstance(tournament);
             } else if (position == 0) {
-                // setup to add players to tournament
+                // setup to addTournamentPlayer players to tournament
                 return TournamentSetupFragment.newInstance(tournament);
             } else {
                 tournamentRoundManagementFragment = TournamentRoundManagementFragment.newInstance(position, tournament);

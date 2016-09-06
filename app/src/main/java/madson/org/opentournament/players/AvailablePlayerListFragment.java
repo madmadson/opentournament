@@ -35,7 +35,6 @@ import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.service.PlayerService;
 import madson.org.opentournament.service.TournamentPlayerService;
 import madson.org.opentournament.utility.BaseActivity;
-import madson.org.opentournament.utility.BaseApplication;
 import madson.org.opentournament.utility.BaseFragment;
 
 import java.util.List;
@@ -193,12 +192,13 @@ public class AvailablePlayerListFragment extends BaseFragment {
     }
 
 
-    public void addPlayer(final long player_id) {
+    public void addPlayer(TournamentPlayer tournamentPlayer) {
 
-        Log.i(this.getClass().getName(), "add player to tournament player list: " + player_id);
+        Log.i(this.getClass().getName(), " player removed from tournament player list: " + tournamentPlayer);
 
-        if (localPlayerListAdapter != null) {
-            final Player player = getBaseApplication().getPlayerService().getPlayerForId(player_id);
+        if (tournamentPlayer.getOnline_uuid() == null) {
+            final Player player = getBaseApplication().getPlayerService()
+                    .getPlayerForId(tournamentPlayer.getPlayer_id());
             localPlayerListAdapter.add(player);
 
             Runnable runnable = new Runnable() {
@@ -206,23 +206,26 @@ public class AvailablePlayerListFragment extends BaseFragment {
                 @Override
                 public void run() {
 
-                    Log.i(this.getClass().getName(), "remove player from tournament ");
+                    Log.i(this.getClass().getName(), "removePlayer player from tournament ");
 
                     getBaseApplication().getTournamentPlayerService().removePlayerFromTournament(player, tournament);
                 }
             };
             runnable.run();
+        } else {
+            getBaseApplication().getTournamentPlayerService()
+                .removeTournamentPlayerFromFirebase(tournamentPlayer, tournament);
         }
     }
 
 
     public void removePlayer(Player player) {
 
-        Log.i(this.getClass().getName(), "remove player from tournament: " + player);
+        Log.i(this.getClass().getName(), "removePlayer player from tournament: " + player);
 
         if (localPlayerListAdapter != null) {
             if (player.getOnlineUUID() == null) {
-                localPlayerListAdapter.remove(player);
+                localPlayerListAdapter.removePlayer(player);
             } else {
                 onlinePlayerListAdapter.removePlayer(player);
             }

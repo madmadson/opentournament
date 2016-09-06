@@ -158,6 +158,30 @@ public class TournamentPlayerServiceImpl implements TournamentPlayerService {
 
 
     @Override
+    public void removeTournamentPlayerFromFirebase(TournamentPlayer tournamentPlayer, Tournament tournament) {
+
+        Log.i(this.getClass().getName(), "delete online tournament tournamentPlayer in firebase: " + tournamentPlayer);
+
+        DatabaseReference referencePlayerInTournamentToDelete = FirebaseDatabase.getInstance()
+                .getReference("tournaments/" + tournament.getOnlineUUID() + "/tournament_players/"
+                    + tournamentPlayer.getOnline_uuid());
+
+        referencePlayerInTournamentToDelete.removeValue();
+
+        DatabaseReference referenceInPlayerToTournamentToDelete = FirebaseDatabase.getInstance()
+                .getReference("players/" + tournamentPlayer.getPlayer_online_uuid() + "/tournaments/"
+                    + tournament.getOnlineUUID());
+
+        referenceInPlayerToTournamentToDelete.removeValue();
+
+        DatabaseReference referenceTournamentPlayerToDelete = FirebaseDatabase.getInstance()
+                .getReference("tournament_players/" + tournamentPlayer.getOnline_uuid());
+
+        referenceTournamentPlayerToDelete.removeValue();
+    }
+
+
+    @Override
     public void addTournamentPlayerToTournament(TournamentPlayer player, Tournament tournament) {
 
         SQLiteDatabase db = openTournamentDBHelper.getWritableDatabase();

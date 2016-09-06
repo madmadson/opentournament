@@ -64,14 +64,14 @@ public class TournamentServiceImpl implements TournamentService {
 
     private void createMockTournaments() {
 
-        createTournament(1, "Coin of Evil", "Ludwigsburg", new DateTime(2016, 3, 10, 10, 8).toDate(), 32, null, null,
+        insertTournament(1, "Coin of Evil", "Ludwigsburg", new DateTime(2016, 3, 10, 10, 8).toDate(), 32, null, null,
             null);
-        createTournament(2, "HMDZ", "Oberhausen", new DateTime(2016, 5, 20, 10, 0).toDate(), 0, null, null, null);
-        createTournament(3, "Dead Fish", "Heidelberg", new DateTime(2016, 7, 15, 10, 0).toDate(), 16, null, null, null);
+        insertTournament(2, "HMDZ", "Oberhausen", new DateTime(2016, 5, 20, 10, 0).toDate(), 0, null, null, null);
+        insertTournament(3, "Dead Fish", "Heidelberg", new DateTime(2016, 7, 15, 10, 0).toDate(), 16, null, null, null);
     }
 
 
-    private void createTournament(int id, String name, String location, Date date, int maxPlayer, String onlineUUID,
+    private void insertTournament(int id, String name, String location, Date date, int maxPlayer, String onlineUUID,
         String creator, String creatorEmail) {
 
         ContentValues contentValues = new ContentValues();
@@ -89,7 +89,12 @@ public class TournamentServiceImpl implements TournamentService {
         contentValues.put(TournamentTable.COLUMN_CREATOR, creator);
         contentValues.put(TournamentTable.COLUMN_CREATOR_EMAIL, creatorEmail);
         contentValues.put(TournamentTable.COLUMN_TOURNAMENT_TYPE, "WARMACHINE");
-        createTournament(contentValues);
+
+        SQLiteDatabase writableDatabase = openTournamentDBHelper.getWritableDatabase();
+
+        writableDatabase.insert(TournamentTable.TABLE_TOURNAMENTS, null, contentValues);
+
+        writableDatabase.close();
     }
 
 
@@ -145,17 +150,6 @@ public class TournamentServiceImpl implements TournamentService {
         tournament.setTournamentTyp(cursor.getString(9));
 
         return tournament;
-    }
-
-
-    @Override
-    public void createTournament(ContentValues contentValues) {
-
-        SQLiteDatabase writableDatabase = openTournamentDBHelper.getWritableDatabase();
-
-        writableDatabase.insert(TournamentTable.TABLE_TOURNAMENTS, null, contentValues);
-
-        writableDatabase.close();
     }
 
 
@@ -240,7 +234,7 @@ public class TournamentServiceImpl implements TournamentService {
 
         Log.i(this.getClass().getName(), "create tournament: " + tournament);
 
-        createTournament(0, tournament.getName(), tournament.getLocation(), tournament.getDateOfTournament(),
+        insertTournament(0, tournament.getName(), tournament.getLocation(), tournament.getDateOfTournament(),
             tournament.getMaxNumberOfPlayers(), tournament.getOnlineUUID(), tournament.getCreatorName(),
             tournament.getCreatorEmail());
     }
@@ -281,9 +275,9 @@ public class TournamentServiceImpl implements TournamentService {
 
         Log.i(this.getClass().getName(), "delete online tournament in firebase: " + tournament);
 
-        DatabaseReference refernceForTournamentToDelete = FirebaseDatabase.getInstance()
+        DatabaseReference referneceForTournamentToDelete = FirebaseDatabase.getInstance()
                 .getReference("tournaments/" + tournament.getOnlineUUID());
 
-        refernceForTournamentToDelete.removeValue();
+        referneceForTournamentToDelete.removeValue();
     }
 }

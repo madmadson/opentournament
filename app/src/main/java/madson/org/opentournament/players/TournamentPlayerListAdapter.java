@@ -1,7 +1,9 @@
 package madson.org.opentournament.players;
 
 import android.content.Context;
+import android.content.DialogInterface;
 
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 
 import android.util.Log;
@@ -83,12 +85,20 @@ public class TournamentPlayerListAdapter extends RecyclerView.Adapter<Tournament
      *
      * @param  tournamentPlayer
      */
-    public void add(TournamentPlayer tournamentPlayer) {
+    public void addTournamentPlayer(TournamentPlayer tournamentPlayer) {
 
         if (!tournamentPlayerList.contains(tournamentPlayer)) {
             tournamentPlayerList.add(tournamentPlayer);
             notifyDataSetChanged();
         }
+    }
+
+
+    public void removeTournamentPlayer(TournamentPlayer tournamentPlayer) {
+
+        int position = tournamentPlayerList.indexOf(tournamentPlayer);
+        tournamentPlayerList.remove(position);
+        notifyItemRemoved(position);
     }
 
 
@@ -154,7 +164,7 @@ public class TournamentPlayerListAdapter extends RecyclerView.Adapter<Tournament
         @Override
         public void onClick(View v) {
 
-            Log.i(v.getClass().getName(), "remove player from tournament player list: " + player);
+            Log.i(v.getClass().getName(), "removePlayer player from tournament player list: " + player);
 
             if (mListener != null) {
                 mListener.clickTournamentPlayerListItem(player);

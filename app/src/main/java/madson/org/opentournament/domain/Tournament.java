@@ -3,6 +3,8 @@ package madson.org.opentournament.domain;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.firebase.database.Exclude;
+
 import org.joda.time.DateTime;
 
 import java.util.Date;
@@ -30,6 +32,7 @@ public class Tournament implements Parcelable {
     };
 
     private long _id;
+
     private String name;
     private String location;
     private int maxNumberOfPlayers;
@@ -80,6 +83,12 @@ public class Tournament implements Parcelable {
         dateOfTournament = new Date(in.readLong());
     }
 
+    /**
+     * Excluded in josn sending to server.
+     *
+     * @return
+     */
+    @Exclude
     public long get_id() {
 
         return _id;

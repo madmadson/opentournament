@@ -253,7 +253,7 @@ public class AddTournamentPlayerDialog extends DialogFragment {
                     @Override
                     public void onClick(View v) {
 
-                        Log.i(this.getClass().getName(), "add new tournament_player");
+                        Log.i(this.getClass().getName(), "addTournamentPlayer new tournament_player");
 
                         String firstname = firstnameEditText.getText().toString();
                         String nickname = nicknameEditText.getText().toString();
@@ -264,7 +264,7 @@ public class AddTournamentPlayerDialog extends DialogFragment {
                                 ((BaseApplication) getActivity().getApplication()).getTournamentPlayerService();
 
                             if (player == null) {
-                                Log.i(this.getClass().getName(), "add new local player.");
+                                Log.i(this.getClass().getName(), "addTournamentPlayer new local player.");
 
                                 Player newLocalPlayer = new Player();
                                 newLocalPlayer.setFirstname(firstname);

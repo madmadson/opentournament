@@ -72,4 +72,13 @@ public interface TournamentPlayerService {
      * @return
      */
     List<String> getAllPlayersOnlineUUIDForTournament(Tournament tournament);
+
+
+    /**
+     * Remove data from firebase.
+     *
+     * @param  player
+     * @param  tournament
+     */
+    void removeTournamentPlayerFromFirebase(TournamentPlayer player, Tournament tournament);
 }

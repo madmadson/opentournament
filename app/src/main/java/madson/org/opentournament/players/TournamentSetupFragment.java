@@ -1,5 +1,7 @@
 package madson.org.opentournament.players;
 
+import android.content.DialogInterface;
+
 import android.os.Bundle;
 
 import android.support.annotation.Nullable;
@@ -9,6 +11,8 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+
+import android.support.v7.app.AlertDialog;
 
 import android.util.Log;
 
@@ -21,6 +25,7 @@ import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.utility.BaseActivity;
+import madson.org.opentournament.utility.BaseFragment;
 
 
 /**
@@ -92,7 +97,8 @@ public class TournamentSetupFragment extends Fragment implements TournamentSetup
                 @Override
                 public void onClick(View v) {
 
-                    Log.i(this.getClass().getName(), "click floatingActionButton player add to tournament");
+                    Log.i(this.getClass().getName(),
+                        "click floatingActionButton player addTournamentPlayer to tournament");
 
                     AddTournamentPlayerDialog dialog = new AddTournamentPlayerDialog();
 
@@ -137,7 +143,24 @@ public class TournamentSetupFragment extends Fragment implements TournamentSetup
 
 
     @Override
-    public void clickTournamentPlayerListItem(TournamentPlayer tournamentPlayer) {
+    public void clickTournamentPlayerListItem(final TournamentPlayer tournamentPlayer) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        final AlertDialog confirmDialog = builder.setTitle(R.string.confirm_remove_tournament_player)
+                .setPositiveButton(R.string.dialog_save, new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                                Log.i(this.getClass().getName(), "removePlayer player from tournament");
+                                tournamentPlayerListFragment.removePlayer(tournamentPlayer);
+                                availablePlayerListFragment.addPlayer(tournamentPlayer);
+                                tournamentPlayerListFragment.updateHeading();
+                            }
+                        })
+                .setNeutralButton(R.string.dialog_cancel, null)
+                .create();
+        confirmDialog.show();
     }
 
 

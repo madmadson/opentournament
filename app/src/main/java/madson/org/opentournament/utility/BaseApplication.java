@@ -99,8 +99,8 @@ public abstract class BaseApplication extends Application {
 
 
     /**
-     * Returns the list of used third-party libraries. Override {@link #getAdditionalLibraries()} to add libraries used
-     * by a specific app.
+     * Returns the list of used third-party libraries. Override {@link #getAdditionalLibraries()} to addTournamentPlayer
+     * libraries used by a specific app.
      *
      * @return  the list of {@link LibraryItem}s for this app.
      */

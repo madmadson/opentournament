@@ -26,12 +26,6 @@ public interface TournamentService {
 
 
     /**
-     * @param  contentValues  the content
-     */
-    void createTournament(ContentValues contentValues);
-
-
-    /**
      * @return  all tournaments
      */
     List<Tournament> getTournaments();
@@ -46,8 +40,8 @@ public interface TournamentService {
 
 
     /**
-     * Pushes a tournament to online services. Clones given tournament and add meta data for online instance. given
-     * tournament will not be manipulated
+     * Pushes a tournament to online services. Clones given tournament and addTournamentPlayer meta data for online
+     * instance. given tournament will not be manipulated
      *
      * @param  tournament
      */

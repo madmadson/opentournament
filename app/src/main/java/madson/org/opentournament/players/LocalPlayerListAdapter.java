@@ -82,7 +82,7 @@ public class LocalPlayerListAdapter extends RecyclerView.Adapter<LocalPlayerList
     }
 
 
-    public void remove(Player player) {
+    public void removePlayer(Player player) {
 
         int position = filteredPlayerList.indexOf(player);
         filteredPlayerList.remove(position);
@@ -162,7 +162,7 @@ public class LocalPlayerListAdapter extends RecyclerView.Adapter<LocalPlayerList
                 if (filterablePlayer.getFirstname().toLowerCase().contains(filterString)
                         || filterablePlayer.getNickname().toLowerCase().contains(filterString)
                         || filterablePlayer.getLastname().toLowerCase().contains(filterString)) {
-                    Log.i(this.getClass().getName(), "add to players: " + filterablePlayer.toString());
+                    Log.i(this.getClass().getName(), "addTournamentPlayer to players: " + filterablePlayer.toString());
                     newListOfPlayers.add(filterablePlayer);
                 }
             }

@@ -163,7 +163,7 @@ public class OnlinePlayerListAdapter extends RecyclerView.Adapter<OnlinePlayerLi
                 if (filterablePlayer.getFirstname().toLowerCase().contains(filterString)
                         || filterablePlayer.getNickname().toLowerCase().contains(filterString)
                         || filterablePlayer.getLastname().toLowerCase().contains(filterString)) {
-                    Log.i(this.getClass().getName(), "add to players: " + filterablePlayer.toString());
+                    Log.i(this.getClass().getName(), "addTournamentPlayer to players: " + filterablePlayer.toString());
                     newListOfPlayers.add(filterablePlayer);
                 }
             }

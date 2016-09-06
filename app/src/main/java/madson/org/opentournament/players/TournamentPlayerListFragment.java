@@ -111,7 +111,7 @@ public class TournamentPlayerListFragment extends Fragment {
 
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.tournament_player_list_recycler_view);
 
-        List<TournamentPlayer> localPlayers = new ArrayList<>();
+        List<TournamentPlayer> localTournamentPlayers = new ArrayList<>();
 
         // load tournaments from server OR load them from local database
         if (tournament.getOnlineUUID() != null) {
@@ -125,7 +125,11 @@ public class TournamentPlayerListFragment extends Fragment {
 
             TournamentPlayerService tournamentPlayerService = ((BaseApplication) getActivity().getApplication())
                 .getTournamentPlayerService();
-            localPlayers = tournamentPlayerService.getAllPlayersForTournament(tournament);
+            localTournamentPlayers = tournamentPlayerService.getAllPlayersForTournament(tournament);
+
+            if (localTournamentPlayers.size() > 0) {
+                noTournamentPlayersTextView.setVisibility(View.GONE);
+            }
         }
 
         recyclerView.setHasFixedSize(true);
@@ -133,7 +137,7 @@ public class TournamentPlayerListFragment extends Fragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(linearLayoutManager);
 
-        tournamentPlayerListAdapter = new TournamentPlayerListAdapter(localPlayers, mListener);
+        tournamentPlayerListAdapter = new TournamentPlayerListAdapter(localTournamentPlayers, mListener);
 
         recyclerView.setAdapter(tournamentPlayerListAdapter);
 

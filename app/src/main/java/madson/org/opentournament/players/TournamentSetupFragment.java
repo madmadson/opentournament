@@ -2,6 +2,8 @@ package madson.org.opentournament.players;
 
 import android.content.DialogInterface;
 
+import android.graphics.drawable.Drawable;
+
 import android.os.Bundle;
 
 import android.support.annotation.Nullable;
@@ -20,10 +22,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.Button;
+
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
+import madson.org.opentournament.ongoing.ConfirmPairingNewRoundDialog;
 import madson.org.opentournament.utility.BaseActivity;
 import madson.org.opentournament.utility.BaseFragment;
 
@@ -111,6 +116,28 @@ public class TournamentSetupFragment extends Fragment implements TournamentSetup
                 }
             });
 
+        Button startButton = (Button) view.findViewById(R.id.start_tournament);
+        startButton.setText(getString(R.string.button_start_tournament));
+
+        Drawable chevron = getContext().getResources().getDrawable(R.drawable.ic_chevron_right_black_24dp);
+        startButton.setCompoundDrawablesWithIntrinsicBounds(null, null, chevron, null);
+
+        startButton.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+
+                    ConfirmStartTournamentDialog dialog = new ConfirmStartTournamentDialog();
+
+                    Bundle bundleForConfirmPairNewRoundDialog = new Bundle();
+                    bundleForConfirmPairNewRoundDialog.putParcelable(ConfirmPairingNewRoundDialog.BUNDLE_TOURNAMENT,
+                        tournament);
+
+                    FragmentManager supportFragmentManager = getActivity().getSupportFragmentManager();
+                    dialog.show(supportFragmentManager, "ConfirmPairingDialog");
+                }
+            });
+
         return view;
     }
 
@@ -147,7 +174,7 @@ public class TournamentSetupFragment extends Fragment implements TournamentSetup
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         final AlertDialog confirmDialog = builder.setTitle(R.string.confirm_remove_tournament_player)
-                .setPositiveButton(R.string.dialog_save, new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.dialog_confirm, new DialogInterface.OnClickListener() {
 
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {

@@ -146,6 +146,8 @@
     <string name="no_available_players_for_tournament">No online players found</string>
     <string name="confirm_remove_tournament_player">Sure remove player from tournament?</string>
     <string name="tournament_online_heading">Players in tournament</string>
+    <string name="dialog_confirm">confirm</string>
+    <string name="confirm_start_tournament_title">Tournament should start?</string>
 
 
 </resources>

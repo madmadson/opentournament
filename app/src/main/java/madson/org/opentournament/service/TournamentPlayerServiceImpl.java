@@ -58,8 +58,15 @@ public class TournamentPlayerServiceImpl implements TournamentPlayerService {
         db.delete(TournamentPlayerTable.TABLE_TOURNAMENT_PLAYER, "tournament_id  = ?  AND  player_id = ? ",
             new String[] { String.valueOf(tournament.get_id()), String.valueOf(player.get_id()) });
 
+        Cursor cursor = db.query(TournamentTable.TABLE_TOURNAMENTS,
+                new String[] { TournamentTable.COLUMN_ACTUAL_PLAYERS }, "_id  = ?",
+                new String[] { Long.toString(tournament.get_id()) }, null, null, null);
+
+        cursor.moveToFirst();
+
+        int actualPlayers = cursor.getInt(0);
         ContentValues contentValues = new ContentValues();
-        contentValues.put(TournamentTable.COLUMN_ACTUAL_PLAYERS, tournament.getActualPlayers() - 1);
+        contentValues.put(TournamentTable.COLUMN_ACTUAL_PLAYERS, actualPlayers - 1);
         db.update(TournamentTable.TABLE_TOURNAMENTS, contentValues, "_id = ?",
             new String[] { String.valueOf(tournament.get_id()) });
 
@@ -252,6 +259,18 @@ public class TournamentPlayerServiceImpl implements TournamentPlayerService {
                 String.valueOf(tournament.get_id()), String.valueOf(tournamentPlayer.getPlayer_online_uuid())
             });
 
+        Cursor cursor = db.query(TournamentTable.TABLE_TOURNAMENTS,
+                new String[] { TournamentTable.COLUMN_ACTUAL_PLAYERS }, "_id  = ?",
+                new String[] { Long.toString(tournament.get_id()) }, null, null, null);
+
+        cursor.moveToFirst();
+
+        int actualPlayers = cursor.getInt(0);
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(TournamentTable.COLUMN_ACTUAL_PLAYERS, actualPlayers - 1);
+        db.update(TournamentTable.TABLE_TOURNAMENTS, contentValues, "_id = ?",
+            new String[] { String.valueOf(tournament.get_id()) });
+
         db.close();
     }
 
@@ -275,7 +294,14 @@ public class TournamentPlayerServiceImpl implements TournamentPlayerService {
 
         contentValues.clear();
 
-        contentValues.put(TournamentTable.COLUMN_ACTUAL_PLAYERS, tournament.getActualPlayers() + 1);
+        Cursor cursor = db.query(TournamentTable.TABLE_TOURNAMENTS,
+                new String[] { TournamentTable.COLUMN_ACTUAL_PLAYERS }, "_id  = ?",
+                new String[] { Long.toString(tournament.get_id()) }, null, null, null);
+
+        cursor.moveToFirst();
+
+        int actualPlayers = cursor.getInt(0);
+        contentValues.put(TournamentTable.COLUMN_ACTUAL_PLAYERS, actualPlayers + 1);
         db.update(TournamentTable.TABLE_TOURNAMENTS, contentValues, "_id = ?",
             new String[] { String.valueOf(tournament.get_id()) });
 

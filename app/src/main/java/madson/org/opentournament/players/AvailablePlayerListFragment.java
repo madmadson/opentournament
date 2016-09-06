@@ -249,25 +249,27 @@ public class AvailablePlayerListFragment extends BaseFragment {
                 }
             };
             runnable.run();
-        }
 
-        if (tournamentPlayer.getPlayer_online_uuid() == null) {
-            final Player player = getBaseApplication().getPlayerService()
-                    .getPlayerForId(tournamentPlayer.getPlayer_id());
+            // additionally remove it from local database
+            if (tournamentPlayer.getPlayer_online_uuid() == null) {
+                final Player player = getBaseApplication().getPlayerService()
+                        .getPlayerForId(tournamentPlayer.getPlayer_id());
 
-            localPlayerListAdapter.add(player);
+                localPlayerListAdapter.add(player);
 
-            Runnable runnable = new Runnable() {
+                Runnable runnable2 = new Runnable() {
 
-                @Override
-                public void run() {
+                    @Override
+                    public void run() {
 
-                    Log.i(this.getClass().getName(), "removePlayer player from tournament ");
+                        Log.i(this.getClass().getName(), "removePlayer player from tournament ");
 
-                    getBaseApplication().getTournamentPlayerService().removePlayerFromTournament(player, tournament);
-                }
-            };
-            runnable.run();
+                        getBaseApplication().getTournamentPlayerService()
+                            .removePlayerFromTournament(player, tournament);
+                    }
+                };
+                runnable2.run();
+            }
         }
 
         checkIfNoPlayerTextView();

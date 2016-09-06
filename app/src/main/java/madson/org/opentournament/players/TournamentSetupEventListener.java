@@ -20,8 +20,5 @@ public interface TournamentSetupEventListener {
     void clickAvailablePlayerListItem(Player player);
 
 
-    void tournamentPlayerListHeading();
-
-
     void removeAvailablePlayer(Player player);
 }

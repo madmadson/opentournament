@@ -215,12 +215,8 @@ public class AddTournamentPlayerDialog extends DialogFragment {
 
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
-            TournamentService tournamentService = ((BaseApplication) getActivity().getApplication())
-                .getTournamentService();
-            Tournament tournamentForId = tournamentService.getTournamentForId(tournament.get_id());
-
             builder.setView(dialogView)
-                .setTitle(getString(R.string.new_player_tournament_title, tournamentForId.getName()))
+                .setTitle(getString(R.string.new_player_tournament_title, tournament.getName()))
                 .setPositiveButton(R.string.dialog_save, null)
                 .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
 

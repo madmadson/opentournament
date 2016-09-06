@@ -51,8 +51,8 @@
         android:paddingTop="16dp"
         android:paddingBottom="16dp"
         android:textStyle="bold"
-        android:id="@+id/offline_text"
-        android:text="@string/offline_text"
+        android:id="@+id/offline_player_text"
+        android:text="@string/offline_player_text"
         android:visibility="gone"/>
     
 

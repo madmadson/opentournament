@@ -77,7 +77,6 @@ public class LocalPlayerListAdapter extends RecyclerView.Adapter<LocalPlayerList
     public void add(Player item) {
 
         originalPlayerList.add(item);
-        filteredPlayerList.add(item);
         notifyDataSetChanged();
     }
 
@@ -100,6 +99,7 @@ public class LocalPlayerListAdapter extends RecyclerView.Adapter<LocalPlayerList
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private TextView playerNameInList;
+        private TextView noPlayerFound;
         private Player player;
 
         public ViewHolder(CardView v) {
@@ -108,6 +108,7 @@ public class LocalPlayerListAdapter extends RecyclerView.Adapter<LocalPlayerList
             v.setOnClickListener(this);
 
             playerNameInList = (TextView) v.findViewById(R.id.available_player_name);
+            noPlayerFound = (TextView) v.findViewById(R.id.no_local_available_players);
         }
 
         public TextView getPlayerNameInList() {
@@ -131,6 +132,12 @@ public class LocalPlayerListAdapter extends RecyclerView.Adapter<LocalPlayerList
             if (mListener != null) {
                 mListener.clickAvailablePlayerListItem(player);
             }
+        }
+
+
+        public TextView getNoPlayerFound() {
+
+            return noPlayerFound;
         }
     }
 

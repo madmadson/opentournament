@@ -107,7 +107,6 @@ public class TournamentPlayerListFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_tournament_player_list, container, false);
         progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
-        heading = (TextView) view.findViewById(R.id.heading_tournament_players);
         noTournamentPlayersTextView = (TextView) view.findViewById(R.id.no_tournament_players);
 
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.tournament_player_list_recycler_view);
@@ -202,14 +201,6 @@ public class TournamentPlayerListFragment extends Fragment {
     }
 
 
-    public void updateHeading() {
-
-        heading.setText(getString(R.string.heading_tournament_player, tournamentPlayerListAdapter.getItemCount(),
-                tournament.getOnlineUUID() == null ? "offline" : "online"));
-        noTournamentPlayersTextView.setVisibility(View.GONE);
-    }
-
-
     public void addPlayer(TournamentPlayer player) {
 
         Log.i(this.getClass().getName(), "addTournamentPlayer player to tournament player list: " + player);
@@ -221,9 +212,6 @@ public class TournamentPlayerListFragment extends Fragment {
 
 
     public void removePlayer(TournamentPlayer player) {
-
-        heading.setText(getString(R.string.heading_tournament_player, tournamentPlayerListAdapter.getItemCount(),
-                tournament.getOnlineUUID() == null ? "offline" : "online"));
 
         tournamentPlayerListAdapter.removeTournamentPlayer(player);
     }

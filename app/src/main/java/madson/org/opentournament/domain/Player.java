@@ -233,4 +233,17 @@ public class Player implements Parcelable {
         parcel.writeString(lastname);
         parcel.writeString(auth_email);
     }
+
+
+    public static Player fromTournamentPlayer(TournamentPlayer tournamentPlayer) {
+
+        Player player = new Player();
+
+        player.setOnlineUUID(tournamentPlayer.getPlayer_online_uuid());
+        player.setFirstname(tournamentPlayer.getFirstname());
+        player.setNickname(tournamentPlayer.getNickname());
+        player.setLastname(tournamentPlayer.getLastname());
+
+        return player;
+    }
 }

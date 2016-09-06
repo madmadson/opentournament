@@ -192,29 +192,81 @@ public class AvailablePlayerListFragment extends BaseFragment {
     }
 
 
-    public void addPlayer(TournamentPlayer tournamentPlayer) {
+    public void addPlayer(final TournamentPlayer tournamentPlayer) {
 
         Log.i(this.getClass().getName(), " player removed from tournament player list: " + tournamentPlayer);
 
-        if (tournamentPlayer.getOnline_uuid() == null) {
-            final Player player = getBaseApplication().getPlayerService()
-                    .getPlayerForId(tournamentPlayer.getPlayer_id());
-            localPlayerListAdapter.add(player);
+        if (tournament.getOnlineUUID() == null) {
+            if (tournamentPlayer.getPlayer_online_uuid() == null) {
+                final Player player = getBaseApplication().getPlayerService()
+                        .getPlayerForId(tournamentPlayer.getPlayer_id());
+
+                localPlayerListAdapter.add(player);
+
+                Runnable runnable = new Runnable() {
+
+                    @Override
+                    public void run() {
+
+                        Log.i(this.getClass().getName(), "removePlayer player from tournament ");
+
+                        getBaseApplication().getTournamentPlayerService()
+                            .removePlayerFromTournament(player, tournament);
+                    }
+                };
+                runnable.run();
+            } else {
+                Player player = Player.fromTournamentPlayer(tournamentPlayer);
+                player.setOnlineUUID(tournamentPlayer.getPlayer_online_uuid());
+                onlinePlayerListAdapter.addPlayer(player);
+
+                Runnable runnable = new Runnable() {
+
+                    @Override
+                    public void run() {
+
+                        Log.i(this.getClass().getName(), "removePlayer online player from offline tournament ");
+
+                        getBaseApplication().getTournamentPlayerService()
+                            .removeOnlinePlayerFromTournament(tournamentPlayer, tournament);
+                    }
+                };
+                runnable.run();
+            }
+        } else {
+            getBaseApplication().getTournamentPlayerService()
+                .removeTournamentPlayerFromFirebase(tournamentPlayer, tournament);
 
             Runnable runnable = new Runnable() {
 
                 @Override
                 public void run() {
 
-                    Log.i(this.getClass().getName(), "removePlayer player from tournament ");
+                    Log.i(this.getClass().getName(), "removePlayer online player from online tournament ");
 
-                    getBaseApplication().getTournamentPlayerService().removePlayerFromTournament(player, tournament);
+                    getBaseApplication().getTournamentPlayerService()
+                        .removeOnlinePlayerFromTournament(tournamentPlayer, tournament);
                 }
             };
             runnable.run();
+        }
+
+        checkIfNoPlayerTextView();
+    }
+
+
+    private void checkIfNoPlayerTextView() {
+
+        if (localPlayerListAdapter.getItemCount() == 0) {
+            noLocalTournamentPlayersTextView.setVisibility(View.VISIBLE);
         } else {
-            getBaseApplication().getTournamentPlayerService()
-                .removeTournamentPlayerFromFirebase(tournamentPlayer, tournament);
+            noLocalTournamentPlayersTextView.setVisibility(View.GONE);
+        }
+
+        if (onlinePlayerListAdapter.getItemCount() == 0) {
+            noOnlineTournamentPlayersTextView.setVisibility(View.VISIBLE);
+        } else {
+            noOnlineTournamentPlayersTextView.setVisibility(View.GONE);
         }
     }
 
@@ -223,13 +275,13 @@ public class AvailablePlayerListFragment extends BaseFragment {
 
         Log.i(this.getClass().getName(), "removePlayer player from tournament: " + player);
 
-        if (localPlayerListAdapter != null) {
-            if (player.getOnlineUUID() == null) {
-                localPlayerListAdapter.removePlayer(player);
-            } else {
-                onlinePlayerListAdapter.removePlayer(player);
-            }
+        if (player.getOnlineUUID() == null) {
+            localPlayerListAdapter.removePlayer(player);
+        } else {
+            onlinePlayerListAdapter.removePlayer(player);
         }
+
+        checkIfNoPlayerTextView();
     }
 
     private class PlayerFilterTextWatcher implements TextWatcher {

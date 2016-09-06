@@ -65,10 +65,8 @@ public class TournamentPlayerListAdapter extends RecyclerView.Adapter<Tournament
         // mark online player
         if (player.getPlayer_online_uuid() != null) {
             holder.getOnlineIcon().setVisibility(View.VISIBLE);
-        }
-
-        if (mListener != null) {
-            mListener.tournamentPlayerListHeading();
+        } else {
+            holder.getOnlineIcon().setVisibility(View.GONE);
         }
     }
 

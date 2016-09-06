@@ -140,10 +140,12 @@
 
     <!-- offline stuff -->
     <string name="offline_text">you are offline - cannot load online tournaments</string>
+    <string name="offline_player_text">you are offline - cannot load online players</string>
     <string name="tournament_player_offline_text">You are offline and try to manage an online tournament. \nCannot load online tournament players \nIf you have a local instance, please use that tournament instead</string>
     <string name="no_tournament_players">No players for tournament found</string>
     <string name="no_available_players_for_tournament">No online players found</string>
     <string name="confirm_remove_tournament_player">Sure remove player from tournament?</string>
+    <string name="tournament_online_heading">Players in tournament</string>
 
 
 </resources>

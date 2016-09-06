@@ -81,4 +81,11 @@ public interface TournamentPlayerService {
      * @param  tournament
      */
     void removeTournamentPlayerFromFirebase(TournamentPlayer player, Tournament tournament);
+
+
+    /**
+     * @param  tournamentPlayer
+     * @param  tournament
+     */
+    void removeOnlinePlayerFromTournament(TournamentPlayer tournamentPlayer, Tournament tournament);
 }

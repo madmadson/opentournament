@@ -153,9 +153,9 @@ public class TournamentSetupFragment extends Fragment implements TournamentSetup
                             public void onClick(DialogInterface dialogInterface, int i) {
 
                                 Log.i(this.getClass().getName(), "removePlayer player from tournament");
-                                tournamentPlayerListFragment.removePlayer(tournamentPlayer);
                                 availablePlayerListFragment.addPlayer(tournamentPlayer);
-                                tournamentPlayerListFragment.updateHeading();
+
+                                tournamentPlayerListFragment.removePlayer(tournamentPlayer);
                             }
                         })
                 .setNeutralButton(R.string.dialog_cancel, null)
@@ -176,14 +176,6 @@ public class TournamentSetupFragment extends Fragment implements TournamentSetup
 
         FragmentManager supportFragmentManager = getChildFragmentManager();
         dialog.show(supportFragmentManager, this.getClass().getName());
-    }
-
-
-    @Override
-    public void tournamentPlayerListHeading() {
-
-        Log.i(this.getClass().getName(), "update heading");
-        tournamentPlayerListFragment.updateHeading();
     }
 
 

@@ -45,9 +45,6 @@
                 android:layout_below="@id/tournament_player_fullname"
                 android:text="testishafdoihsaofhsaodhodah"
                 android:layout_marginLeft="15dp"/>
-            
-            
-
         </RelativeLayout>
 
         <TextView

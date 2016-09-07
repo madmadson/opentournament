@@ -279,13 +279,19 @@ public class Tournament implements Parcelable {
 
         Tournament that = (Tournament) o;
 
-        return _id == that._id;
+        if (_id != that._id)
+            return false;
+
+        return onlineUUID != null ? onlineUUID.equals(that.onlineUUID) : that.onlineUUID == null;
     }
 
 
     @Override
     public int hashCode() {
 
-        return (int) (_id ^ (_id >>> 32));
+        int result = (int) (_id ^ (_id >>> 32));
+        result = 31 * result + (onlineUUID != null ? onlineUUID.hashCode() : 0);
+
+        return result;
     }
 }

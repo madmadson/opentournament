@@ -115,16 +115,15 @@ public class AvailablePlayerListFragment extends BaseFragment {
                                 if (!alreadyPlayingPlayersUUIDs.contains(player_online_uuid)) {
                                     onlinePlayerListAdapter.addPlayer(player);
                                 }
-
-                                noOnlineTournamentPlayersTextView.setVisibility(View.GONE);
                             }
-
-                            progressBar.setVisibility(View.GONE);
                         }
 
+                        progressBar.setVisibility(View.GONE);
+
                         if (onlinePlayerListAdapter.getItemCount() == 0) {
-                            progressBar.setVisibility(View.GONE);
                             noOnlineTournamentPlayersTextView.setVisibility(View.VISIBLE);
+                        } else {
+                            noOnlineTournamentPlayersTextView.setVisibility(View.GONE);
                         }
                     }
 

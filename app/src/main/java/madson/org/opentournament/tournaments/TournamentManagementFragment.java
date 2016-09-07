@@ -29,9 +29,7 @@ import madson.org.opentournament.utility.BaseActivity;
 import madson.org.opentournament.utility.BaseApplication;
 
 
-public class TournamentManagementFragment extends Fragment
-    implements TournamentListsFragment.TournamentListItemListener,
-        TournamentManagementDialog.TournamentChangedListener {
+public class TournamentManagementFragment extends Fragment implements TournamentManagementEventListener {
 
     private TournamentListsFragment tournamentListsFragment;
 
@@ -98,22 +96,36 @@ public class TournamentManagementFragment extends Fragment
 
 
     @Override
-    public void tournamentChangedEvent(Tournament tournament) {
+    public void onTournamentChangedEvent(Tournament tournament) {
 
         tournamentListsFragment.getLocalTournamentListAdapter().replace(tournament);
     }
 
 
     @Override
-    public void tournamentAddedEvent(Tournament tournament) {
+    public void onTournamentAddedEvent(Tournament tournament) {
 
         tournamentListsFragment.getLocalTournamentListAdapter().add(tournament);
     }
 
 
     @Override
-    public void tournamentDeletedEvent(Tournament tournament) {
+    public void onTournamentDeletedEvent(Tournament tournament) {
 
         tournamentListsFragment.getLocalTournamentListAdapter().remove(tournament);
+    }
+
+
+    @Override
+    public void onTournamentEditClicked(Tournament tournament) {
+
+        TournamentManagementDialog dialog = new TournamentManagementDialog();
+
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(TournamentManagementDialog.BUNDLE_TOURNAMENT, tournament);
+        dialog.setArguments(bundle);
+
+        FragmentManager supportFragmentManager = getChildFragmentManager();
+        dialog.show(supportFragmentManager, "tournament management edit dialog tournament");
     }
 }

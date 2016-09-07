@@ -33,6 +33,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Tournament;
+import madson.org.opentournament.players.TournamentSetupFragment;
 import madson.org.opentournament.service.TournamentService;
 import madson.org.opentournament.utility.BaseActivity;
 import madson.org.opentournament.utility.BaseApplication;
@@ -68,7 +69,7 @@ public class TournamentManagementDialog extends DialogFragment {
     private DateFormat dateFormatter;
     private DatePickerDialog datePickerDialog;
     private FirebaseUser currentUser;
-    private TournamentChangedListener mListener;
+    private TournamentManagementEventListener mListener;
     private TextView tournamentInfoConvertToOnlineTournament;
 
     @Override
@@ -80,6 +81,28 @@ public class TournamentManagementDialog extends DialogFragment {
 
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
         dateFormatter = DateFormat.getDateInstance(DateFormat.DEFAULT, Locale.getDefault());
+    }
+
+
+    @Override
+    public void onAttach(Context context) {
+
+        super.onAttach(context);
+
+        if (getParentFragment() instanceof TournamentManagementEventListener) {
+            mListener = (TournamentManagementEventListener) getParentFragment();
+        }
+    }
+
+
+    @Override
+    public void onDetach() {
+
+        super.onDetach();
+
+        if (mListener != null) {
+            mListener = null;
+        }
     }
 
 
@@ -164,9 +187,7 @@ public class TournamentManagementDialog extends DialogFragment {
             tournamentNameEditText.setText(tournament.getName());
             tournamentLocationEditText.setText(tournament.getLocation());
 
-            if (tournament.getDateOfTournament() == null) {
-                tournamentDateEditText.setText(dateFormatter.format(DateTime.now().toDate()));
-            } else {
+            if (tournament.getDateOfTournament() != null) {
                 tournamentDateEditText.setText(dateFormatter.format(tournament.getDateOfTournament()));
             }
 
@@ -259,12 +280,15 @@ public class TournamentManagementDialog extends DialogFragment {
                                                 Log.i(this.getClass().getName(), "tournament deletion confirmed");
 
                                                 if (tournament.getOnlineUUID() == null) {
+                                                    Log.e(this.getClass().getName(), "tournament deletion offline");
+
                                                     tournamentService.deleteTournament(tournament.get_id());
 
                                                     if (mListener != null) {
-                                                        mListener.tournamentDeletedEvent(tournament);
+                                                        mListener.onTournamentDeletedEvent(tournament);
                                                     }
                                                 } else {
+                                                    Log.e(this.getClass().getName(), "tournament deletion online");
                                                     tournamentService.removeTournamentInFirebase(tournament);
                                                 }
 
@@ -332,7 +356,7 @@ public class TournamentManagementDialog extends DialogFragment {
                 tournamentService.updateTournament(tournament);
 
                 if (mListener != null) {
-                    mListener.tournamentChangedEvent(tournament);
+                    mListener.onTournamentChangedEvent(tournament);
                 }
 
                 // after push to firebase with meta data
@@ -364,7 +388,7 @@ public class TournamentManagementDialog extends DialogFragment {
             tournamentService.updateTournament(tournament);
 
             if (mListener != null) {
-                mListener.tournamentChangedEvent(tournament);
+                mListener.onTournamentChangedEvent(tournament);
             }
         }
     }
@@ -416,44 +440,8 @@ public class TournamentManagementDialog extends DialogFragment {
             tournamentService.createTournament(newTournament);
 
             if (mListener != null) {
-                mListener.tournamentAddedEvent(newTournament);
+                mListener.onTournamentAddedEvent(newTournament);
             }
         }
-    }
-
-
-    @Override
-    public void onAttach(Context context) {
-
-        super.onAttach(context);
-
-        // click on new tournament
-        if (getParentFragment() instanceof TournamentManagementFragment) {
-            mListener = (TournamentManagementFragment) getParentFragment();
-        } else if (getParentFragment().getParentFragment() instanceof TournamentManagementFragment) {
-            mListener = (TournamentManagementFragment) getParentFragment().getParentFragment();
-        }
-    }
-
-
-    @Override
-    public void onDetach() {
-
-        super.onDetach();
-
-        if (mListener != null) {
-            mListener = null;
-        }
-    }
-
-    public interface TournamentChangedListener {
-
-        void tournamentChangedEvent(Tournament tournament);
-
-
-        void tournamentAddedEvent(Tournament tournament);
-
-
-        void tournamentDeletedEvent(Tournament tournament);
     }
 }

@@ -1,10 +1,8 @@
 package madson.org.opentournament.tournaments;
 
 import android.content.Context;
-import android.content.Intent;
 
 import android.os.Bundle;
-import android.os.Handler;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -22,23 +20,22 @@ import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.firebase.ui.database.FirebaseRecyclerAdapter;
-
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import madson.org.opentournament.R;
+import madson.org.opentournament.db.FirebaseReferences;
 import madson.org.opentournament.domain.Tournament;
-import madson.org.opentournament.ongoing.OngoingTournamentActivity;
 import madson.org.opentournament.service.TournamentService;
 import madson.org.opentournament.utility.BaseActivity;
 import madson.org.opentournament.utility.BaseApplication;
 
 import java.text.DateFormat;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -47,26 +44,20 @@ import java.util.Locale;
 
 public class TournamentListsFragment extends Fragment {
 
-    public static final String TOURNAMENTS_CHILD = "tournaments";
-
-    private static TournamentListItemListener mListener;
+    private TournamentManagementEventListener mListener;
     private DatabaseReference mFirebaseDatabaseReference;
     private ProgressBar mProgressBar;
     private TextView noOnlineTournamentsFoundTextView;
-    private RecyclerView mOnlineTournamentRecyclerView;
     private DateFormat dateFormatter = DateFormat.getDateInstance(DateFormat.DEFAULT, Locale.getDefault());
-    private FirebaseUser currentUser;
 
     private TournamentListAdapter localTournamentListAdapter;
-    private FirebaseRecyclerAdapter<Tournament, TournamentViewHolder> mFirebaseTournamentAdapter;
+    private RecyclerView mOnlineTournamentsRecyclerView;
+    private OnlineTournamentListAdapter onlineTournmantListAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-
-        // Initialize Firebase Auth
-        currentUser = FirebaseAuth.getInstance().getCurrentUser();
     }
 
 
@@ -75,88 +66,85 @@ public class TournamentListsFragment extends Fragment {
 
         final View view = inflater.inflate(R.layout.fragment_tournament_list, container, false);
 
-        // tournaments from server
-
         mProgressBar = (ProgressBar) view.findViewById(R.id.progressBar);
         noOnlineTournamentsFoundTextView = (TextView) view.findViewById(R.id.no_online_tournaments);
 
         if (((BaseActivity) getActivity()).isConnected()) {
-            mOnlineTournamentRecyclerView = (RecyclerView) view.findViewById(R.id.online_tournament_list_recycler_view);
+            mOnlineTournamentsRecyclerView = (RecyclerView) view.findViewById(
+                    R.id.online_tournament_list_recycler_view);
+            mOnlineTournamentsRecyclerView.setHasFixedSize(true);
             mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
 
-            mFirebaseTournamentAdapter = new FirebaseRecyclerAdapter<Tournament, TournamentViewHolder>(Tournament.class,
-                    R.layout.row_tournament, TournamentViewHolder.class,
-                    mFirebaseDatabaseReference.child(TOURNAMENTS_CHILD)) {
+            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+            mOnlineTournamentsRecyclerView.setLayoutManager(linearLayoutManager);
+            onlineTournmantListAdapter = new OnlineTournamentListAdapter(mListener);
 
-                @Override
-                public int getItemCount() {
+            DatabaseReference firebaseTournaments = mFirebaseDatabaseReference.getRef()
+                    .child(FirebaseReferences.TOURNAMENTS);
+            firebaseTournaments.addChildEventListener(new ChildEventListener() {
 
-                    if (super.getItemCount() == 0) {
-                        noOnlineTournamentsFoundTextView.setVisibility(View.VISIBLE);
-                    }
+                    @Override
+                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
-                    return super.getItemCount();
-                }
+                        String tournament_online_uuid = dataSnapshot.getKey();
 
+                        Tournament tournament = dataSnapshot.getValue(Tournament.class);
 
-                @Override
-                protected void populateViewHolder(TournamentViewHolder viewHolder, final Tournament tournament,
-                    int position) {
-
-                    mProgressBar.setVisibility(ProgressBar.GONE);
-                    noOnlineTournamentsFoundTextView.setVisibility(View.GONE);
-
-                    viewHolder.setTournament(tournament);
-                    viewHolder.getTournamentNameInList().setText(tournament.getName());
-
-                    if (tournament.getDateOfTournament() != null) {
-                        String formattedDate = dateFormatter.format(tournament.getDateOfTournament());
-                        viewHolder.getTournamentDateInList().setText(formattedDate);
-                    }
-
-                    viewHolder.getTournamentLocationInList().setText(tournament.getLocation());
-
-                    viewHolder.getTournamentPlayersInList()
-                        .setText(String.valueOf(tournament.getActualPlayers()) + "/"
-                            + String.valueOf(tournament.getMaxNumberOfPlayers()));
-
-                    if (currentUser != null && currentUser.getEmail() != null) {
-                        if (currentUser.getEmail().equals(tournament.getCreatorEmail())) {
-                            viewHolder.getEditTournamentButton().setOnClickListener(new View.OnClickListener() {
-
-                                    @Override
-                                    public void onClick(View v) {
-
-                                        editTournamentDialog(v, tournament);
-                                    }
-                                });
-                        } else {
-                            // only creator should do action
-                            viewHolder.getEditTournamentButton().setVisibility(View.INVISIBLE);
+                        if (tournament != null) {
+                            tournament.setOnlineUUID(tournament_online_uuid);
+                            onlineTournmantListAdapter.addTournament(tournament);
                         }
-                    } else {
-                        // no user no fun
-                        viewHolder.getEditTournamentButton().setVisibility(View.INVISIBLE);
-                    }
-                }
-            };
 
-            Runnable r = new Runnable() {
-
-                @Override
-                public void run() {
-
-                    if (mFirebaseTournamentAdapter.getItemCount() == 0) {
                         mProgressBar.setVisibility(View.GONE);
+
+                        if (onlineTournmantListAdapter.getItemCount() > 0) {
+                            noOnlineTournamentsFoundTextView.setVisibility(View.GONE);
+                        }
                     }
-                }
-            };
 
-            Handler h = new Handler();
-            h.postDelayed(r, 2000);
 
-            mOnlineTournamentRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-            mOnlineTournamentRecyclerView.setAdapter(mFirebaseTournamentAdapter);
+                    @Override
+                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                        String tournament_online_uuid = dataSnapshot.getKey();
+
+                        Tournament tournament = dataSnapshot.getValue(Tournament.class);
+
+                        if (tournament != null) {
+                            tournament.setOnlineUUID(tournament_online_uuid);
+                            onlineTournmantListAdapter.replaceTournament(tournament);
+                        }
+                    }
+
+
+                    @Override
+                    public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                        String tournament_online_uuid = dataSnapshot.getKey();
+
+                        Tournament tournament = dataSnapshot.getValue(Tournament.class);
+
+                        if (tournament != null) {
+                            tournament.setOnlineUUID(tournament_online_uuid);
+                            onlineTournmantListAdapter.removeTournament(tournament);
+                        }
+
+                        if (onlineTournmantListAdapter.getItemCount() == 0) {
+                            noOnlineTournamentsFoundTextView.setVisibility(View.VISIBLE);
+                        }
+                    }
+
+
+                    @Override
+                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                    }
+
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                    }
+                });
+            mOnlineTournamentsRecyclerView.setAdapter(onlineTournmantListAdapter);
         } else {
             mProgressBar.setVisibility(ProgressBar.GONE);
 
@@ -179,9 +167,9 @@ public class TournamentListsFragment extends Fragment {
 
         getChildFragmentManager().beginTransaction().add(R.id.row_tournament_header_container, headerFragment).commit();
 
-        Collections.sort(localTournaments, new TournamentListComparator());
+        Collections.sort(localTournaments, new TournamentComparator());
 
-        localTournamentListAdapter = new TournamentListAdapter(localTournaments);
+        localTournamentListAdapter = new TournamentListAdapter(localTournaments, mListener);
 
         recyclerView.setAdapter(localTournamentListAdapter);
 
@@ -194,11 +182,8 @@ public class TournamentListsFragment extends Fragment {
 
         super.onAttach(context);
 
-        if (getParentFragment() instanceof TournamentListItemListener) {
-            mListener = (TournamentListItemListener) getParentFragment();
-        } else {
-            throw new RuntimeException(getParentFragment().toString()
-                + " must implement TournamentListItemListener");
+        if (getParentFragment() instanceof TournamentManagementEventListener) {
+            mListener = (TournamentManagementEventListener) getParentFragment();
         }
     }
 
@@ -214,50 +199,20 @@ public class TournamentListsFragment extends Fragment {
     }
 
 
-    public FirebaseRecyclerAdapter<Tournament, TournamentViewHolder> getOnlineTournamentAdapter() {
-
-        return mFirebaseTournamentAdapter;
-    }
-
-
     public TournamentListAdapter getLocalTournamentListAdapter() {
 
         return localTournamentListAdapter;
     }
 
-
-    private void editTournamentDialog(View v, Tournament tournament) {
-
-        Log.i(v.getClass().getName(), "tournament edit:" + tournament);
-
-        TournamentManagementDialog dialog = new TournamentManagementDialog();
-
-        if (getParentFragment() instanceof TournamentManagementFragment) {
-            dialog.setTargetFragment(getParentFragment(), 1);
-        } else {
-            new RuntimeException("parent must be management fragement");
-        }
-
-        Bundle bundle = new Bundle();
-        bundle.putParcelable(TournamentManagementDialog.BUNDLE_TOURNAMENT, tournament);
-        dialog.setArguments(bundle);
-
-        FragmentManager supportFragmentManager = getChildFragmentManager();
-        dialog.show(supportFragmentManager, "tournament management edit dialog tournament");
-    }
-
-    public interface TournamentListItemListener {
-
-        void onTournamentListItemClicked(Tournament tournament);
-    }
-
     public class TournamentListAdapter extends RecyclerView.Adapter<TournamentViewHolder> {
 
         private List<Tournament> mDataset;
+        private TournamentManagementEventListener mListener;
 
-        public TournamentListAdapter(List<Tournament> myDataset) {
+        public TournamentListAdapter(List<Tournament> myDataset, TournamentManagementEventListener mListener) {
 
             mDataset = myDataset;
+            this.mListener = mListener;
         }
 
         @Override
@@ -292,7 +247,7 @@ public class TournamentListsFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
 
-                        editTournamentDialog(v, tournament);
+                        mListener.onTournamentEditClicked(tournament);
                     }
                 });
         }
@@ -307,8 +262,9 @@ public class TournamentListsFragment extends Fragment {
 
         public void add(Tournament item) {
 
-            mDataset.add(0, item);
-            notifyItemInserted(0);
+            mDataset.add(item);
+            Collections.sort(mDataset, new TournamentComparator());
+            notifyDataSetChanged();
         }
 
 
@@ -316,6 +272,7 @@ public class TournamentListsFragment extends Fragment {
 
             int position = mDataset.indexOf(item);
             mDataset.set(position, item);
+            Collections.sort(mDataset, new TournamentComparator());
             notifyItemChanged(position, item);
         }
 
@@ -324,11 +281,12 @@ public class TournamentListsFragment extends Fragment {
 
             int position = mDataset.indexOf(item);
             mDataset.remove(position);
-            notifyItemRemoved(position);
+            Collections.sort(mDataset, new TournamentComparator());
+            notifyDataSetChanged();
         }
     }
 
-    public static class TournamentViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class TournamentViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private ImageButton editTournamentButton;
         private TextView tournamentNameInList;
@@ -391,15 +349,6 @@ public class TournamentListsFragment extends Fragment {
         public TextView getTournamentDateInList() {
 
             return tournamentDateInList;
-        }
-    }
-
-    private class TournamentListComparator implements Comparator<Tournament> {
-
-        @Override
-        public int compare(Tournament t1, Tournament t2) {
-
-            return t1.getDateOfTournament().getTime() > t2.getDateOfTournament().getTime() ? 1 : 0;
         }
     }
 }

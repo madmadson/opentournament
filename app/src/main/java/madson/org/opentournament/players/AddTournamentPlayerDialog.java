@@ -85,7 +85,6 @@ public class AddTournamentPlayerDialog extends DialogFragment {
 
         super.onAttach(context);
 
-        // target fragment have to be set and must be TournamentSetupFragment -> both are on etup
         if (getParentFragment() instanceof TournamentSetupFragment) {
             mListener = (TournamentSetupFragment) getParentFragment();
         }

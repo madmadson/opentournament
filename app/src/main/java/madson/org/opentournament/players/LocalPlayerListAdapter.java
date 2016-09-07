@@ -81,12 +81,15 @@ public class LocalPlayerListAdapter extends RecyclerView.Adapter<LocalPlayerList
     }
 
 
-    public void removePlayer(Player player) {
+    public int removePlayer(Player player) {
 
         int position = filteredPlayerList.indexOf(player);
         filteredPlayerList.remove(position);
 
         notifyItemRemoved(position);
+        notifyItemRangeChanged(position, filteredPlayerList.size());
+
+        return position;
     }
 
 

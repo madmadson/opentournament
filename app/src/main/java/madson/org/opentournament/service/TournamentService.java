@@ -36,7 +36,7 @@ public interface TournamentService {
      *
      * @param  tournament
      */
-    void createTournament(Tournament tournament);
+    Tournament createTournament(Tournament tournament);
 
 
     /**

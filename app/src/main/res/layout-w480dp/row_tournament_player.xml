@@ -53,7 +53,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerInParent="true"
-            android:paddingRight="80dp"
+            android:paddingRight="120dp"
             android:text="cygnar"/>
         <!-- Account may be introduce with tournament players later -->
         <ImageView

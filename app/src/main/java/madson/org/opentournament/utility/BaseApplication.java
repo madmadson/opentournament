@@ -59,6 +59,8 @@ public abstract class BaseApplication extends Application {
         JodaTimeAndroid.init(this);
         FacebookSdk.sdkInitialize(getApplicationContext());
 
+        // NOTE: order of service wiring matters!
+
         if (playerService == null) {
             playerService = new PlayerServiceImpl(getApplicationContext());
         }
@@ -71,12 +73,13 @@ public abstract class BaseApplication extends Application {
             ongoingTournamentService = new OngoingTournamentServiceImpl(getApplicationContext());
         }
 
-        if (rankingService == null) {
-            rankingService = new RankingServiceImpl(getApplicationContext());
-        }
-
         if (tournamentPlayerService == null) {
             tournamentPlayerService = new TournamentPlayerServiceImpl(getApplicationContext());
+        }
+
+        // depend on tournamentPlayerService -> to do ranking -_-
+        if (rankingService == null) {
+            rankingService = new RankingServiceImpl(getApplicationContext());
         }
 
         if (httpRequester == null) {

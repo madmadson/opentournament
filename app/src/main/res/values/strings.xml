@@ -57,7 +57,7 @@
     <string name="nav_round_tab">Round %1$d</string>
     <string name="nav_home_activity">Home</string>
     <string name="nav_tournament_final">Final Results</string>
-    <string name="search_player">Filter players</string>
+    <string name="search_player">Filter available players</string>
 
     <string name="label_firstname">firstname</string>
     <string name="label_nickname">nickname</string>

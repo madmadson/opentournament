@@ -57,6 +57,7 @@ public class AvailablePlayerListFragment extends BaseFragment {
     private ProgressBar progressBar;
     private TextView noLocalTournamentPlayersTextView;
     private TextView noOnlineTournamentPlayersTextView;
+    private RecyclerView localPlayerRecyclerView;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -151,8 +152,7 @@ public class AvailablePlayerListFragment extends BaseFragment {
                 noLocalTournamentPlayersTextView.setVisibility(View.GONE);
             }
 
-            RecyclerView localPlayerRecyclerView = (RecyclerView) view.findViewById(
-                    R.id.local_player_list_recycler_view);
+            localPlayerRecyclerView = (RecyclerView) view.findViewById(R.id.local_player_list_recycler_view);
 
             localPlayerRecyclerView.setHasFixedSize(true);
 
@@ -296,7 +296,8 @@ public class AvailablePlayerListFragment extends BaseFragment {
         Log.i(this.getClass().getName(), "removePlayer player from tournament: " + player);
 
         if (player.getOnlineUUID() == null) {
-            localPlayerListAdapter.removePlayer(player);
+            int indexOfPlayerAdapter = localPlayerListAdapter.removePlayer(player);
+            localPlayerRecyclerView.removeViewAt(indexOfPlayerAdapter);
         } else {
             onlinePlayerListAdapter.removePlayer(player);
         }

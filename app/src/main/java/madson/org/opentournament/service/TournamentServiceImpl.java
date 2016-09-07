@@ -65,8 +65,8 @@ public class TournamentServiceImpl implements TournamentService {
     }
 
 
-    private void insertTournament(int id, String name, String location, Date date, int maxPlayer, String onlineUUID,
-        String creator, String creatorEmail, int actualPlayers) {
+    private Tournament insertTournament(int id, String name, String location, Date date, int maxPlayer,
+        String onlineUUID, String creator, String creatorEmail, int actualPlayers) {
 
         ContentValues contentValues = new ContentValues();
 
@@ -87,9 +87,13 @@ public class TournamentServiceImpl implements TournamentService {
 
         SQLiteDatabase writableDatabase = openTournamentDBHelper.getWritableDatabase();
 
-        writableDatabase.insert(TournamentTable.TABLE_TOURNAMENTS, null, contentValues);
+        long newId = writableDatabase.insert(TournamentTable.TABLE_TOURNAMENTS, null, contentValues);
 
         writableDatabase.close();
+
+        Tournament newTournament = getTournamentForId(newId);
+
+        return newTournament;
     }
 
 
@@ -226,13 +230,13 @@ public class TournamentServiceImpl implements TournamentService {
 
 
     @Override
-    public void createTournament(Tournament tournament) {
+    public Tournament createTournament(Tournament tournament) {
 
         Log.i(this.getClass().getName(), "create tournament: " + tournament);
 
-        insertTournament(0, tournament.getName(), tournament.getLocation(), tournament.getDateOfTournament(),
-            tournament.getMaxNumberOfPlayers(), tournament.getOnlineUUID(), tournament.getCreatorName(),
-            tournament.getCreatorEmail(), tournament.getActualPlayers());
+        return insertTournament(0, tournament.getName(), tournament.getLocation(), tournament.getDateOfTournament(),
+                tournament.getMaxNumberOfPlayers(), tournament.getOnlineUUID(), tournament.getCreatorName(),
+                tournament.getCreatorEmail(), tournament.getActualPlayers());
     }
 
 

@@ -212,11 +212,19 @@ public class TournamentPlayerListFragment extends Fragment {
         if (tournamentPlayerListAdapter != null) {
             tournamentPlayerListAdapter.addTournamentPlayer(player);
         }
+
+        if (tournamentPlayerListAdapter.getItemCount() > 0) {
+            noTournamentPlayersTextView.setVisibility(View.GONE);
+        }
     }
 
 
     public void removePlayer(TournamentPlayer player) {
 
         tournamentPlayerListAdapter.removeTournamentPlayer(player);
+
+        if (tournamentPlayerListAdapter.getItemCount() == 0) {
+            noTournamentPlayersTextView.setVisibility(View.VISIBLE);
+        }
     }
 }

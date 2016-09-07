@@ -295,12 +295,12 @@ public class AddTournamentPlayerDialog extends DialogFragment {
 
                             dialog.dismiss();
 
-                            tournamentPlayerService.addTournamentPlayerToTournament(tournamentPlayer, tournament);
-
                             if (tournament.getOnlineUUID() != null && (((BaseActivity) getActivity()).isConnected())) {
                                 // do it online!
                                 tournamentPlayerService.setTournamentPlayerToFirebase(tournamentPlayer, tournament);
                             } else {
+                                tournamentPlayerService.addTournamentPlayerToTournament(tournamentPlayer, tournament);
+
                                 if (mListener != null) {
                                     mListener.addTournamentPlayer(tournamentPlayer);
                                 }

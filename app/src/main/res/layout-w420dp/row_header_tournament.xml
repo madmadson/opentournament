@@ -17,14 +17,24 @@
         android:textStyle="bold"
         android:id="@+id/header_tournament_name" 
         android:text="@string/header_tournament_name"/>
-    
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_alignParentLeft="true"
-        android:layout_marginLeft="250dp"
+        android:layout_marginLeft="220dp"
+        android:textColor="@color/colorPrimary"
+        android:textStyle="bold"
+        android:id="@+id/header_tournament_location"
+        android:text="@string/header_tournament_location"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="350dp"
         android:textColor="@color/colorPrimary"
         android:textStyle="bold"
         android:id="@+id/header_tournament_date"

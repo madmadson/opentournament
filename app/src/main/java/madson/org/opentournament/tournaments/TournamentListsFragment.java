@@ -3,6 +3,7 @@ package madson.org.opentournament.tournaments;
 import android.content.Context;
 
 import android.os.Bundle;
+import android.os.Handler;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -145,6 +146,21 @@ public class TournamentListsFragment extends Fragment {
                     }
                 });
             mOnlineTournamentsRecyclerView.setAdapter(onlineTournmantListAdapter);
+
+            Runnable runnable = new Runnable() {
+
+                @Override
+                public void run() {
+
+                    if (onlineTournmantListAdapter.getItemCount() == 0) {
+                        mProgressBar.setVisibility(View.GONE);
+                        noOnlineTournamentsFoundTextView.setVisibility(View.VISIBLE);
+                    }
+                }
+            };
+
+            Handler handler = new Handler();
+            handler.postDelayed(runnable, 2000);
         } else {
             mProgressBar.setVisibility(ProgressBar.GONE);
 
@@ -232,7 +248,10 @@ public class TournamentListsFragment extends Fragment {
 
             holder.setTournament(tournament);
             holder.getTournamentNameInList().setText(tournament.getName());
-            holder.getTournamentLocationInList().setText(tournament.getLocation());
+
+            if (holder.getTournamentLocationInList() != null) {
+                holder.getTournamentLocationInList().setText(tournament.getLocation());
+            }
 
             if (tournament.getDateOfTournament() != null) {
                 String formattedDate = dateFormatter.format(tournament.getDateOfTournament());
@@ -242,14 +261,17 @@ public class TournamentListsFragment extends Fragment {
             holder.getTournamentPlayersInList()
                 .setText(String.valueOf(tournament.getActualPlayers()) + "/"
                     + String.valueOf(tournament.getMaxNumberOfPlayers()));
-            holder.getEditTournamentButton().setOnClickListener(new View.OnClickListener() {
 
-                    @Override
-                    public void onClick(View v) {
+            if (holder.getEditTournamentButton() != null) {
+                holder.getEditTournamentButton().setOnClickListener(new View.OnClickListener() {
 
-                        mListener.onTournamentEditClicked(tournament);
-                    }
-                });
+                        @Override
+                        public void onClick(View v) {
+
+                            mListener.onTournamentEditClicked(tournament);
+                        }
+                    });
+            }
         }
 
 

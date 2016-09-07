@@ -17,18 +17,13 @@ import com.google.firebase.database.ValueEventListener;
 
 import madson.org.opentournament.db.OpenTournamentDBHelper;
 import madson.org.opentournament.db.TournamentPlayerTable;
-import madson.org.opentournament.db.TournamentTable;
-import madson.org.opentournament.db.warmachine.GameTable;
 import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.players.TournamentPlayerComparator;
 
-import org.joda.time.DateTime;
-
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 

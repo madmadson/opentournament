@@ -9,4 +9,5 @@ public class FirebaseReferences {
 
     public static final String PLAYERS = "players";
     public static final String TOURNAMENTS = "tournaments";
+    public static final String TOURNAMENT_PLAYERS = "tournament_players";
 }

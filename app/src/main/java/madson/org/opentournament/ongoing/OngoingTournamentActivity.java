@@ -107,6 +107,7 @@ public class OngoingTournamentActivity extends BaseActivity {
         Log.i(this.getClass().getName(), "Add tab to view pager");
 
         mSectionsPagerAdapter.addTabToPager();
+
         mSectionsPagerAdapter.notifyDataSetChanged();
         mViewPager.setCurrentItem(mSectionsPagerAdapter.getCount());
     }

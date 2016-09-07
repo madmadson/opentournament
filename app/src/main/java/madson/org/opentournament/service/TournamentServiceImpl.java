@@ -15,6 +15,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import madson.org.opentournament.db.OpenTournamentDBHelper;
 import madson.org.opentournament.db.TournamentTable;
 import madson.org.opentournament.db.warmachine.GameTable;
+import madson.org.opentournament.db.warmachine.TournamentRankingTable;
 import madson.org.opentournament.domain.Tournament;
 
 import org.joda.time.DateTime;
@@ -43,15 +44,26 @@ public class TournamentServiceImpl implements TournamentService {
         }
 
         deleteAllTournaments();
-        deleteAllTournamentsPairings();
+        deleteAllGamesOfTournament();
+        deleteAllRankingsOfTournament();
         createMockTournaments();
     }
 
-    private void deleteAllTournamentsPairings() {
+    private void deleteAllGamesOfTournament() {
 
         SQLiteDatabase writableDatabase = openTournamentDBHelper.getWritableDatabase();
 
         writableDatabase.delete(GameTable.TABLE_TOURNAMENT_GAME, null, null);
+        writableDatabase.close();
+    }
+
+
+    private void deleteAllRankingsOfTournament() {
+
+        SQLiteDatabase writableDatabase = openTournamentDBHelper.getWritableDatabase();
+
+        writableDatabase.delete(TournamentRankingTable.TABLE_TOURNAMENT_RANKING, null, null);
+        writableDatabase.close();
     }
 
 
@@ -123,6 +135,7 @@ public class TournamentServiceImpl implements TournamentService {
         SQLiteDatabase writableDatabase = openTournamentDBHelper.getWritableDatabase();
 
         writableDatabase.delete(TournamentTable.TABLE_TOURNAMENTS, null, null);
+        writableDatabase.close();
     }
 
 
@@ -200,6 +213,46 @@ public class TournamentServiceImpl implements TournamentService {
                 .getReference("tournaments/" + tournament.getOnlineUUID());
 
         referenceForTournament.setValue(tournament);
+    }
+
+
+    @Override
+    public void increaseActualPlayerForTournament(Tournament tournament) {
+
+        SQLiteDatabase db = openTournamentDBHelper.getWritableDatabase();
+        Cursor cursor = db.query(TournamentTable.TABLE_TOURNAMENTS,
+                new String[] { TournamentTable.COLUMN_ACTUAL_PLAYERS }, "_id  = ?",
+                new String[] { Long.toString(tournament.get_id()) }, null, null, null);
+
+        cursor.moveToFirst();
+
+        int actualPlayers = cursor.getInt(0);
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(TournamentTable.COLUMN_ACTUAL_PLAYERS, actualPlayers + 1);
+        db.update(TournamentTable.TABLE_TOURNAMENTS, contentValues, "_id = ?",
+            new String[] { String.valueOf(tournament.get_id()) });
+
+        db.close();
+    }
+
+
+    @Override
+    public void decreaseActualPlayerForTournament(Tournament tournament) {
+
+        SQLiteDatabase db = openTournamentDBHelper.getWritableDatabase();
+        Cursor cursor = db.query(TournamentTable.TABLE_TOURNAMENTS,
+                new String[] { TournamentTable.COLUMN_ACTUAL_PLAYERS }, "_id  = ?",
+                new String[] { Long.toString(tournament.get_id()) }, null, null, null);
+
+        cursor.moveToFirst();
+
+        int actualPlayers = cursor.getInt(0);
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(TournamentTable.COLUMN_ACTUAL_PLAYERS, actualPlayers - 1);
+        db.update(TournamentTable.TABLE_TOURNAMENTS, contentValues, "_id = ?",
+            new String[] { String.valueOf(tournament.get_id()) });
+
+        db.close();
     }
 
 

@@ -68,7 +68,7 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
         SQLiteDatabase readableDatabase = openTournamentDBHelper.getReadableDatabase();
 
         Cursor cursor = readableDatabase.query(GameTable.TABLE_TOURNAMENT_GAME, GameTable.ALL_COLS_FOR_TOURNAMENT_GAME,
-                "tournament_id  = ? AND round = ?",
+                GameTable.COLUMN_TOURNAMENT_ID + "  = ? AND " + GameTable.COLUMN_TOURNAMENT_ROUND + " = ?",
                 new String[] { String.valueOf(tournament.get_id()), String.valueOf(round) }, null, null, null);
 
         cursor.moveToFirst();

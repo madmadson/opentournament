@@ -211,6 +211,8 @@ public class AvailablePlayerListFragment extends BaseFragment {
 
                         getBaseApplication().getTournamentPlayerService()
                             .removePlayerFromTournament(player, tournament);
+
+                        getBaseApplication().getTournamentService().decreaseActualPlayerForTournament(tournament);
                     }
                 };
                 runnable.run();
@@ -228,6 +230,7 @@ public class AvailablePlayerListFragment extends BaseFragment {
 
                         getBaseApplication().getTournamentPlayerService()
                             .removeOnlinePlayerFromTournament(tournamentPlayer, tournament);
+                        getBaseApplication().getTournamentService().decreaseActualPlayerForTournament(tournament);
                     }
                 };
                 runnable.run();
@@ -235,19 +238,6 @@ public class AvailablePlayerListFragment extends BaseFragment {
         } else {
             getBaseApplication().getTournamentPlayerService()
                 .removeTournamentPlayerFromFirebase(tournamentPlayer, tournament);
-
-            Runnable runnable = new Runnable() {
-
-                @Override
-                public void run() {
-
-                    Log.i(this.getClass().getName(), "removePlayer online player from online tournament ");
-
-                    getBaseApplication().getTournamentPlayerService()
-                        .removeOnlinePlayerFromTournament(tournamentPlayer, tournament);
-                }
-            };
-            runnable.run();
 
             // additionally remove it from local database
             if (tournamentPlayer.getPlayer_online_uuid() == null) {

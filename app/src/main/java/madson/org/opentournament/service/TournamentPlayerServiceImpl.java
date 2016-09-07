@@ -58,18 +58,6 @@ public class TournamentPlayerServiceImpl implements TournamentPlayerService {
         db.delete(TournamentPlayerTable.TABLE_TOURNAMENT_PLAYER, "tournament_id  = ?  AND  player_id = ? ",
             new String[] { String.valueOf(tournament.get_id()), String.valueOf(player.get_id()) });
 
-        Cursor cursor = db.query(TournamentTable.TABLE_TOURNAMENTS,
-                new String[] { TournamentTable.COLUMN_ACTUAL_PLAYERS }, "_id  = ?",
-                new String[] { Long.toString(tournament.get_id()) }, null, null, null);
-
-        cursor.moveToFirst();
-
-        int actualPlayers = cursor.getInt(0);
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(TournamentTable.COLUMN_ACTUAL_PLAYERS, actualPlayers - 1);
-        db.update(TournamentTable.TABLE_TOURNAMENTS, contentValues, "_id = ?",
-            new String[] { String.valueOf(tournament.get_id()) });
-
         db.close();
     }
 
@@ -117,7 +105,7 @@ public class TournamentPlayerServiceImpl implements TournamentPlayerService {
 
         // save TournamentPlayer
         DatabaseReference referenceForNewTournamentPlayer = FirebaseDatabase.getInstance()
-                .getReference("tournament_players/" + uuid.toString());
+                .getReference("tournament_players/" + tournament.getOnlineUUID() + "/" + uuid.toString());
 
         referenceForNewTournamentPlayer.setValue(tournamentPlayer);
 
@@ -216,7 +204,8 @@ public class TournamentPlayerServiceImpl implements TournamentPlayerService {
         referenceInPlayerToTournamentToDelete.removeValue();
 
         DatabaseReference referenceTournamentPlayerToDelete = FirebaseDatabase.getInstance()
-                .getReference("tournament_players/" + tournamentPlayer.getOnline_uuid());
+                .getReference("tournament_players/" + tournament.getOnlineUUID() + "/"
+                    + tournamentPlayer.getOnline_uuid());
 
         referenceTournamentPlayerToDelete.removeValue();
 
@@ -259,18 +248,6 @@ public class TournamentPlayerServiceImpl implements TournamentPlayerService {
                 String.valueOf(tournament.get_id()), String.valueOf(tournamentPlayer.getPlayer_online_uuid())
             });
 
-        Cursor cursor = db.query(TournamentTable.TABLE_TOURNAMENTS,
-                new String[] { TournamentTable.COLUMN_ACTUAL_PLAYERS }, "_id  = ?",
-                new String[] { Long.toString(tournament.get_id()) }, null, null, null);
-
-        cursor.moveToFirst();
-
-        int actualPlayers = cursor.getInt(0);
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(TournamentTable.COLUMN_ACTUAL_PLAYERS, actualPlayers - 1);
-        db.update(TournamentTable.TABLE_TOURNAMENTS, contentValues, "_id = ?",
-            new String[] { String.valueOf(tournament.get_id()) });
-
         db.close();
     }
 
@@ -291,19 +268,6 @@ public class TournamentPlayerServiceImpl implements TournamentPlayerService {
         contentValues.put(TournamentPlayerTable.COLUMN_FACTION, player.getFaction());
 
         db.insert(TournamentPlayerTable.TABLE_TOURNAMENT_PLAYER, null, contentValues);
-
-        contentValues.clear();
-
-        Cursor cursor = db.query(TournamentTable.TABLE_TOURNAMENTS,
-                new String[] { TournamentTable.COLUMN_ACTUAL_PLAYERS }, "_id  = ?",
-                new String[] { Long.toString(tournament.get_id()) }, null, null, null);
-
-        cursor.moveToFirst();
-
-        int actualPlayers = cursor.getInt(0);
-        contentValues.put(TournamentTable.COLUMN_ACTUAL_PLAYERS, actualPlayers + 1);
-        db.update(TournamentTable.TABLE_TOURNAMENTS, contentValues, "_id = ?",
-            new String[] { String.valueOf(tournament.get_id()) });
 
         db.close();
     }

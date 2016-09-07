@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import madson.org.opentournament.db.warmachine.GameTable;
+import madson.org.opentournament.db.warmachine.TournamentRankingTable;
 
 
 /**
@@ -29,6 +30,7 @@ public class OpenTournamentDBHelper extends SQLiteOpenHelper {
         TournamentTable.createTable(db);
         PlayerTable.createTable(db);
         TournamentPlayerTable.createTable(db);
+        TournamentRankingTable.createTable(db);
         GameTable.createTable(db);
     }
 

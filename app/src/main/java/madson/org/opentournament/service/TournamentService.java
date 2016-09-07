@@ -83,4 +83,10 @@ public interface TournamentService {
      * @param  tournament
      */
     void updateTournamentInFirebase(Tournament tournament);
+
+
+    void increaseActualPlayerForTournament(Tournament tournament);
+
+
+    void decreaseActualPlayerForTournament(Tournament tournament);
 }

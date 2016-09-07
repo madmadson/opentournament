@@ -301,6 +301,9 @@ public class AddTournamentPlayerDialog extends DialogFragment {
                             } else {
                                 tournamentPlayerService.addTournamentPlayerToTournament(tournamentPlayer, tournament);
 
+                                ((BaseApplication) getActivity().getApplication()).getTournamentService()
+                                .increaseActualPlayerForTournament(tournament);
+
                                 if (mListener != null) {
                                     mListener.addTournamentPlayer(tournamentPlayer);
                                 }

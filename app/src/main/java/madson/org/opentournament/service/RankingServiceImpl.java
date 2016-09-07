@@ -21,10 +21,12 @@ import madson.org.opentournament.service.warmachine.TournamentRankingComparator;
 import madson.org.opentournament.utility.BaseApplication;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 
 /**
@@ -60,7 +62,7 @@ public class RankingServiceImpl implements RankingService {
         SQLiteDatabase readableDatabase = openTournamentDBHelper.getReadableDatabase();
 
         Cursor cursor = readableDatabase.query(TournamentRankingTable.TABLE_TOURNAMENT_RANKING,
-                TournamentPlayerTable.ALL_COLS_FOR_TOURNAMENT_PLAYER_TABLE,
+                TournamentRankingTable.ALL_COLS_FOR_RANKING,
                 TournamentRankingTable.COLUMN_TOURNAMENT_ID + " = ? AND " + TournamentRankingTable.COLUMN_ROUND
                 + " = ?", new String[] { Long.toString(tournament.get_id()), String.valueOf(round) }, null, null, null);
 
@@ -89,13 +91,13 @@ public class RankingServiceImpl implements RankingService {
 
         Map<Long, TournamentRanking> mapOfRankings = new HashMap<>(allPlayersForTournament.size());
 
-        for (TournamentPlayer player : allPlayersForTournament) {
-            TournamentRanking tournamentRanking = new TournamentRanking(tournament.get_id(), player.get_id(),
-                    round_for_calculation);
-            tournamentRanking.setFirstname(player.getFirstname());
-            tournamentRanking.setNickname(player.getNickname());
-            tournamentRanking.setLastname(player.getLastname());
-            mapOfRankings.put(player.get_id(), tournamentRanking);
+        for (TournamentPlayer tournamentPlayer : allPlayersForTournament) {
+            TournamentRanking tournamentRanking = new TournamentRanking(tournament.get_id(),
+                    tournamentPlayer.getPlayer_id(), round_for_calculation);
+            tournamentRanking.setFirstname(tournamentPlayer.getFirstname());
+            tournamentRanking.setNickname(tournamentPlayer.getNickname());
+            tournamentRanking.setLastname(tournamentPlayer.getLastname());
+            mapOfRankings.put(tournamentPlayer.getPlayer_id(), tournamentRanking);
         }
 
         List<Game> gamesOfPlayerForTournament = getAllGamesForTournamentTillRound(tournament.get_id(),
@@ -178,15 +180,17 @@ public class RankingServiceImpl implements RankingService {
     }
 
 
-    private List<Game> getAllGamesForTournamentTillRound(long tournament_id, int round) {
+    private List<Game> getAllGamesForTournamentTillRound(long tournament_id, int tournament_round) {
 
         List<Game> games = new ArrayList<>();
 
         SQLiteDatabase readableDatabase = openTournamentDBHelper.getReadableDatabase();
 
         Cursor cursor = readableDatabase.query(GameTable.TABLE_TOURNAMENT_GAME, GameTable.ALL_COLS_FOR_TOURNAMENT_GAME,
-                "tournament_id  = ? AND round <= ? AND (player_one_score != 0 OR player_two_score != 0) ",
-                new String[] { String.valueOf(tournament_id), String.valueOf(round) }, null, null, null);
+                GameTable.COLUMN_TOURNAMENT_ID + "  = ? AND " + GameTable.COLUMN_TOURNAMENT_ROUND
+                + " <= ? AND (" + GameTable.COLUMN_PLAYER_ONE_SCORE + " != 0 OR  " + GameTable.COLUMN_PLAYER_TWO_SCORE
+                + " != 0) ", new String[] { String.valueOf(tournament_id), String.valueOf(tournament_round) }, null,
+                null, null);
 
         cursor.moveToFirst();
 
@@ -222,9 +226,9 @@ public class RankingServiceImpl implements RankingService {
         tournamentRanking.setControl_points(cursor.getInt(9));
         tournamentRanking.setVictory_points(cursor.getInt(10));
 
-        tournamentRanking.setFirstname(cursor.getString(8));
-        tournamentRanking.setNickname(cursor.getString(9));
-        tournamentRanking.setLastname(cursor.getString(9));
+        tournamentRanking.setFirstname(cursor.getString(11));
+        tournamentRanking.setNickname(cursor.getString(12));
+        tournamentRanking.setLastname(cursor.getString(13));
 
         return tournamentRanking;
     }

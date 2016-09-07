@@ -57,7 +57,7 @@ public interface OngoingTournamentService {
     /**
      * checks if previous round is finished before new round could be paired.
      *
-     * @param  tournament_id
+     * @param  tournament
      * @param  round
      *
      * @return  if all games are finished or not

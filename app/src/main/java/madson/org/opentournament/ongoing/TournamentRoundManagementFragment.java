@@ -70,53 +70,12 @@ public class TournamentRoundManagementFragment extends Fragment implements GameL
 
         Log.i(this.getClass().getName(), "show round " + round + " of tournament " + tournament);
 
-        if (round == 0) {
-            showPlayerList(fragmentTransaction);
-        } else {
-            showRound(round, fragmentTransaction);
-        }
+        showRound(round, fragmentTransaction);
 
         fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         fragmentTransaction.commit();
 
         return view;
-    }
-
-
-    private void showPlayerList(FragmentTransaction fragmentTransaction) {
-
-        createAvailablePlayerListFragment();
-        fragmentTransaction.replace(R.id.left_fragment_container, availablePlayerListFragment);
-
-        createTournamentPlayerListFragment();
-        fragmentTransaction.replace(R.id.right_fragment_container, tournamentPlayerListFragment);
-
-        nextRoundButtonFragment = createNextRoundFragment(0);
-        fragmentTransaction.replace(R.id.next_round_container, nextRoundButtonFragment);
-
-        if (previousRoundFragment != null) {
-            fragmentTransaction.detach(previousRoundFragment);
-        }
-    }
-
-
-    private void createTournamentPlayerListFragment() {
-
-        tournamentPlayerListFragment = new TournamentPlayerListFragment();
-
-        Bundle bundleForTournamentPlayers = new Bundle();
-        bundleForTournamentPlayers.putParcelable(TournamentPlayerListFragment.BUNDLE_TOURNAMENT, tournament);
-        tournamentPlayerListFragment.setArguments(bundleForTournamentPlayers);
-    }
-
-
-    private void createAvailablePlayerListFragment() {
-
-        Bundle bundleForAllPlayers = new Bundle();
-        bundleForAllPlayers.putParcelable(AvailablePlayerListFragment.BUNDLE_TOURNAMENT, tournament);
-
-        availablePlayerListFragment = new AvailablePlayerListFragment();
-        availablePlayerListFragment.setArguments(bundleForAllPlayers);
     }
 
 
@@ -157,7 +116,7 @@ public class TournamentRoundManagementFragment extends Fragment implements GameL
         gameListFragment = new GameListFragment();
 
         Bundle bundleForPairing = new Bundle();
-        bundleForPairing.putLong(GameListFragment.BUNDLE_TOURNAMENT, tournament.get_id());
+        bundleForPairing.putParcelable(GameListFragment.BUNDLE_TOURNAMENT, tournament);
         bundleForPairing.putInt(GameListFragment.BUNDLE_ROUND, round);
         gameListFragment.setArguments(bundleForPairing);
 
@@ -170,7 +129,7 @@ public class TournamentRoundManagementFragment extends Fragment implements GameL
         rankingForRoundListFragment = new RankingListFragment();
 
         Bundle bundleForRanking = new Bundle();
-        bundleForRanking.putLong(RankingListFragment.BUNDLE_TOURNAMENT, tournament.get_id());
+        bundleForRanking.putParcelable(RankingListFragment.BUNDLE_TOURNAMENT, tournament);
         bundleForRanking.putInt(RankingListFragment.BUNDLE_ROUND, round);
         rankingForRoundListFragment.setArguments(bundleForRanking);
 

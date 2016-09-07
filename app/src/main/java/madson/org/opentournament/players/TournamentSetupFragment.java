@@ -129,12 +129,12 @@ public class TournamentSetupFragment extends Fragment implements TournamentSetup
 
                     ConfirmStartTournamentDialog dialog = new ConfirmStartTournamentDialog();
 
-                    Bundle bundleForConfirmPairNewRoundDialog = new Bundle();
-                    bundleForConfirmPairNewRoundDialog.putParcelable(ConfirmPairingNewRoundDialog.BUNDLE_TOURNAMENT,
-                        tournament);
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelable(ConfirmStartTournamentDialog.BUNDLE_TOURNAMENT, tournament);
+                    dialog.setArguments(bundle);
 
                     FragmentManager supportFragmentManager = getActivity().getSupportFragmentManager();
-                    dialog.show(supportFragmentManager, "ConfirmPairingDialog");
+                    dialog.show(supportFragmentManager, "confirm start tournament");
                 }
             });
 

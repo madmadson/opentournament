@@ -105,10 +105,10 @@ public class ConfirmStartTournamentDialog extends DialogFragment {
                         .getRankingService();
 
                     // first create ranking for complete games
-                    rankingService.createRankingForRound(tournament, 0);
+                    rankingService.createRankingForRound(tournament, 1);
 
                     // now we can create pairings for new round
-                    ongoingTournamentService.createGamesForRound(tournament, 0);
+                    ongoingTournamentService.createGamesForRound(tournament, 1);
 
                     activity.addRoundAfterNewPairing();
 

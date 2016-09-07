@@ -50,7 +50,6 @@ public class TournamentPlayerListFragment extends Fragment {
     private TournamentPlayerListAdapter tournamentPlayerListAdapter;
     private TournamentSetupEventListener mListener;
 
-    private TextView heading;
     private DatabaseReference mFirebaseDatabaseReference;
     private ProgressBar progressBar;
     private TextView noTournamentPlayersTextView;
@@ -160,7 +159,7 @@ public class TournamentPlayerListFragment extends Fragment {
                     onlineTournamentPlayersUUIDs.add(playerSnapshot.getKey());
 
                     DatabaseReference child = mFirebaseDatabaseReference.child("tournament_players/"
-                            + playerSnapshot.getKey());
+                            + tournament.getOnlineUUID() + "/" + playerSnapshot.getKey());
                     child.addValueEventListener(new ValueEventListener() {
 
                             @Override

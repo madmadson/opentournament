@@ -339,9 +339,9 @@ public class Game {
         game.setPlayer_two_control_points(cursor.getInt(15));
         game.setPlayer_two_victory_points(cursor.getInt(16));
 
-        game.setFinished(cursor.getInt(15) == 1);
+        game.setFinished(cursor.getInt(17) == 1);
 
-        game.setScenario(cursor.getString(16));
+        game.setScenario(cursor.getString(18));
 
         return game;
     }

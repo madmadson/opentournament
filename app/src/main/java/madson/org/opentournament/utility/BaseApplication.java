@@ -23,7 +23,6 @@ import madson.org.opentournament.service.TournamentPlayerService;
 import madson.org.opentournament.service.TournamentPlayerServiceImpl;
 import madson.org.opentournament.service.TournamentService;
 import madson.org.opentournament.service.TournamentServiceImpl;
-import madson.org.opentournament.utility.web.HttpRequester;
 
 import net.danlew.android.joda.JodaTimeAndroid;
 
@@ -42,7 +41,6 @@ public abstract class BaseApplication extends Application {
     private static RankingService rankingService;
     private static PlayerService playerService;
     private static TournamentPlayerService tournamentPlayerService;
-    private static HttpRequester httpRequester;
 
     @Override
     public void onCreate() {
@@ -69,21 +67,18 @@ public abstract class BaseApplication extends Application {
             tournamentService = new TournamentServiceImpl(getApplicationContext());
         }
 
-        if (ongoingTournamentService == null) {
-            ongoingTournamentService = new OngoingTournamentServiceImpl(getApplicationContext());
-        }
-
         if (tournamentPlayerService == null) {
             tournamentPlayerService = new TournamentPlayerServiceImpl(getApplicationContext());
+        }
+
+        // depend on tournament service, player service -> to do ranking -_-
+        if (ongoingTournamentService == null) {
+            ongoingTournamentService = new OngoingTournamentServiceImpl(getApplicationContext());
         }
 
         // depend on tournamentPlayerService -> to do ranking -_-
         if (rankingService == null) {
             rankingService = new RankingServiceImpl(getApplicationContext());
-        }
-
-        if (httpRequester == null) {
-            httpRequester = new HttpRequester();
         }
     }
 
@@ -157,15 +152,6 @@ public abstract class BaseApplication extends Application {
     public PlayerService getPlayerService() {
 
         return playerService;
-    }
-
-
-    /**
-     * @return  class for doing rest calls
-     */
-    public HttpRequester getHttpRequester() {
-
-        return httpRequester;
     }
 
 

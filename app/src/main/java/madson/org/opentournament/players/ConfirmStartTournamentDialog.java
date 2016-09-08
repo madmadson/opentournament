@@ -19,7 +19,7 @@ import android.widget.Button;
 
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Tournament;
-import madson.org.opentournament.ongoing.OngoingTournamentActivity;
+import madson.org.opentournament.organize.TournamentOrganizeActivity;
 import madson.org.opentournament.service.OngoingTournamentService;
 import madson.org.opentournament.service.RankingService;
 import madson.org.opentournament.utility.BaseApplication;
@@ -96,7 +96,7 @@ public class ConfirmStartTournamentDialog extends DialogFragment {
                 @Override
                 public void onClick(View v) {
 
-                    OngoingTournamentActivity activity = (OngoingTournamentActivity) getActivity();
+                    TournamentOrganizeActivity activity = (TournamentOrganizeActivity) getActivity();
 
                     OngoingTournamentService ongoingTournamentService =
                         ((BaseApplication) getActivity().getApplication()).getOngoingTournamentService();

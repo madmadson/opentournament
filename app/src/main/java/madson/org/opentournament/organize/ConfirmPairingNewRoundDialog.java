@@ -1,4 +1,4 @@
-package madson.org.opentournament.ongoing;
+package madson.org.opentournament.organize;
 
 import android.app.Dialog;
 
@@ -102,7 +102,7 @@ public class ConfirmPairingNewRoundDialog extends DialogFragment {
 
                     Log.i(this.getClass().getName(), "confirmed pairing for round " + round_for_pairing);
 
-                    OngoingTournamentActivity activity = (OngoingTournamentActivity) getActivity();
+                    TournamentOrganizeActivity activity = (TournamentOrganizeActivity) getActivity();
 
                     OngoingTournamentService ongoingTournamentService =
                         ((BaseApplication) getActivity().getApplication()).getOngoingTournamentService();

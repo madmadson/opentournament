@@ -1,4 +1,4 @@
-package madson.org.opentournament.ongoing;
+package madson.org.opentournament.organize;
 
 import android.os.Bundle;
 
@@ -17,7 +17,6 @@ import android.widget.TextView;
 
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Tournament;
-import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.domain.TournamentRanking;
 import madson.org.opentournament.service.RankingService;
 import madson.org.opentournament.utility.BaseApplication;

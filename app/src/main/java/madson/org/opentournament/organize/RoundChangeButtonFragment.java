@@ -1,4 +1,4 @@
-package madson.org.opentournament.ongoing;
+package madson.org.opentournament.organize;
 
 import android.graphics.drawable.Drawable;
 
@@ -76,7 +76,7 @@ public class RoundChangeButtonFragment extends Fragment {
 
         super.onViewCreated(view, savedInstanceState);
 
-        final OngoingTournamentActivity activity = (OngoingTournamentActivity) getActivity();
+        final TournamentOrganizeActivity activity = (TournamentOrganizeActivity) getActivity();
 
         final OngoingTournamentService ongoingTournamentService = ((BaseApplication) getActivity().getApplication())
             .getOngoingTournamentService();

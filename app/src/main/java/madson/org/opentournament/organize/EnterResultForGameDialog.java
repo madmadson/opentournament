@@ -1,6 +1,5 @@
-package madson.org.opentournament.ongoing;
+package madson.org.opentournament.organize;
 
-import android.app.Activity;
 import android.app.Dialog;
 
 import android.content.Context;
@@ -117,7 +116,7 @@ public class EnterResultForGameDialog extends DialogFragment {
         super.onAttach(activity);
 
         TournamentRoundManagementFragment tournamentRoundManagementFragment =
-            ((OngoingTournamentActivity) getActivity()).getTournamentRoundManagementFragment();
+            ((TournamentOrganizeActivity) getActivity()).getTournamentRoundManagementFragment();
 
         if (tournamentRoundManagementFragment != null) {
             mListener = tournamentRoundManagementFragment;

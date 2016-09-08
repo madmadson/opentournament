@@ -150,7 +150,7 @@ public class OnlineTournamentListAdapter extends RecyclerView.Adapter<OnlineTour
 
             Log.i(this.getClass().getName(), "clicked on online tournament");
 
-            mListener.onTournamentListItemClicked(tournament);
+            mListener.onOnlineTournamentListItemClicked(tournament);
         }
 
 

@@ -1,4 +1,4 @@
-package madson.org.opentournament.ongoing;
+package madson.org.opentournament.organize;
 
 import android.os.Bundle;
 

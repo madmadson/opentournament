@@ -28,9 +28,7 @@ import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
-import madson.org.opentournament.ongoing.ConfirmPairingNewRoundDialog;
 import madson.org.opentournament.utility.BaseActivity;
-import madson.org.opentournament.utility.BaseFragment;
 
 
 /**

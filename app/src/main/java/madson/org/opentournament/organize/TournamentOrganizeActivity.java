@@ -1,4 +1,4 @@
-package madson.org.opentournament.ongoing;
+package madson.org.opentournament.organize;
 
 import android.content.Intent;
 
@@ -24,7 +24,7 @@ import madson.org.opentournament.players.TournamentSetupFragment;
 import madson.org.opentournament.utility.BaseActivity;
 
 
-public class OngoingTournamentActivity extends BaseActivity {
+public class TournamentOrganizeActivity extends BaseActivity {
 
     public static final String EXTRA_TOURNAMENT = "tournament";
 

@@ -28,7 +28,7 @@
         <activity android:name=".SignInActivity" />
 
         <activity
-            android:name=".ongoing.OngoingTournamentActivity"
+            android:name=".organize.TournamentOrganizeActivity"
             android:label="@string/title_activity_tournament_play"
 
             android:parentActivityName=".MainActivity">

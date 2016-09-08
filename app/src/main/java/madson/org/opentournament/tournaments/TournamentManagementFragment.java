@@ -22,11 +22,8 @@ import android.view.ViewGroup;
 
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Tournament;
-import madson.org.opentournament.ongoing.OngoingTournamentActivity;
-import madson.org.opentournament.ongoing.RankingListFragment;
-import madson.org.opentournament.service.TournamentService;
+import madson.org.opentournament.organize.TournamentOrganizeActivity;
 import madson.org.opentournament.utility.BaseActivity;
-import madson.org.opentournament.utility.BaseApplication;
 
 
 public class TournamentManagementFragment extends Fragment implements TournamentManagementEventListener {
@@ -89,8 +86,8 @@ public class TournamentManagementFragment extends Fragment implements Tournament
 
         Log.i(this.getClass().getName(), "clicked on tournament: " + tournament);
 
-        Intent intent = new Intent(getContext(), OngoingTournamentActivity.class);
-        intent.putExtra(OngoingTournamentActivity.EXTRA_TOURNAMENT, tournament);
+        Intent intent = new Intent(getContext(), TournamentOrganizeActivity.class);
+        intent.putExtra(TournamentOrganizeActivity.EXTRA_TOURNAMENT, tournament);
         startActivity(intent);
     }
 
@@ -132,5 +129,10 @@ public class TournamentManagementFragment extends Fragment implements Tournament
 
     @Override
     public void onTournamentUploadClicked(Tournament tournament) {
+    }
+
+
+    @Override
+    public void onOnlineTournamentListItemClicked(Tournament tournament) {
     }
 }

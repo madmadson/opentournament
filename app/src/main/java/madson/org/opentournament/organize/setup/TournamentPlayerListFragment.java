@@ -225,9 +225,7 @@ public class TournamentPlayerListFragment extends Fragment {
 
         Log.i(this.getClass().getName(), "addTournamentPlayer player to tournament player list: " + player);
 
-        if (tournamentPlayerListAdapter != null) {
-            tournamentPlayerListAdapter.addTournamentPlayer(player);
-        }
+        tournamentPlayerListAdapter.addTournamentPlayer(player);
 
         if (tournamentPlayerListAdapter.getItemCount() > 0) {
             noTournamentPlayersTextView.setVisibility(View.GONE);
@@ -236,6 +234,8 @@ public class TournamentPlayerListFragment extends Fragment {
 
 
     public void removePlayer(TournamentPlayer player) {
+
+        Log.i(this.getClass().getName(), "remove TournamentPlayer: " + player);
 
         tournamentPlayerListAdapter.removeTournamentPlayer(player);
 

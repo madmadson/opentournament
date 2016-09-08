@@ -16,7 +16,6 @@
     <string name="header_amount_player">Players</string>
     
     <!--tournament row -->
-
     <string name="players_in_tournament"> %1$d/%2$d</string>
     
     
@@ -157,14 +156,14 @@
     <!-- offline stuff -->
     <string name="offline_text">you are offline - cannot load online tournaments</string>
     <string name="offline_player_text">you are offline - cannot load online players</string>
-    <string name="tournament_player_offline_text">You are offline and try to manage an online tournament. \nCannot load online tournament players \nIf you have a local instance, please use that tournament instead</string>
-    <string name="no_tournament_players">No players for tournament found</string>
-    <string name="no_available_players_for_tournament">No online players found</string>
+   <string name="no_tournament_players">No tournament players found</string>
+
     <string name="confirm_remove_tournament_player">Sure remove player from tournament?</string>
 
     <string name="confirm_start_tournament_title">Tournament should start?</string>
     <string name="header_organised_tournament_action">action</string>
- 
+    <string name="no_available_online_players_for_tournament">No online players found (check filter)</string>
+    <string name="no_available_players_for_tournament">No local players found (check filter)</string>
 
 
 </resources>

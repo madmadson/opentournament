@@ -1,5 +1,7 @@
 package madson.org.opentournament.organize.setup;
 
+import android.content.Context;
+
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 
@@ -28,20 +30,22 @@ import java.util.List;
 public class LocalPlayerListAdapter extends RecyclerView.Adapter<LocalPlayerListAdapter.ViewHolder>
     implements Filterable {
 
+    private Context context;
     private TournamentSetupEventListener mListener;
     private List<Player> originalPlayerList;
     private List<Player> filteredPlayerList;
     private ItemFilter mFilter = new ItemFilter();
 
     /**
-     * @param  playerList  list of players to show
      * @param  mListener  maybe null when no listener is needed
      */
-    public LocalPlayerListAdapter(List<Player> playerList, TournamentSetupEventListener mListener) {
+    public LocalPlayerListAdapter(Context context, TournamentSetupEventListener mListener) {
+
+        this.context = context;
 
         this.mListener = mListener;
-        this.originalPlayerList = playerList;
-        this.filteredPlayerList = playerList;
+        this.originalPlayerList = new ArrayList<>();
+        this.filteredPlayerList = new ArrayList<>();
     }
 
     @Override
@@ -62,7 +66,9 @@ public class LocalPlayerListAdapter extends RecyclerView.Adapter<LocalPlayerList
         final Player player = filteredPlayerList.get(position);
         holder.setPlayer(player);
         holder.getPlayerNameInList()
-            .setText(player.getFirstname() + " \"" + player.getNickname() + "\" " + player.getLastname());
+            .setText(context.getResources()
+                .getString(R.string.tournament_player_name_in_row, player.getFirstname(), player.getNickname(),
+                    player.getLastname()));
     }
 
 
@@ -76,6 +82,15 @@ public class LocalPlayerListAdapter extends RecyclerView.Adapter<LocalPlayerList
     public void add(Player item) {
 
         originalPlayerList.add(item);
+        filteredPlayerList.add(item);
+        notifyDataSetChanged();
+    }
+
+
+    public void addPlayerList(List<Player> allPlayers) {
+
+        filteredPlayerList = allPlayers;
+        originalPlayerList = allPlayers;
         notifyDataSetChanged();
     }
 
@@ -101,7 +116,7 @@ public class LocalPlayerListAdapter extends RecyclerView.Adapter<LocalPlayerList
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private TextView playerNameInList;
-        private TextView noPlayerFound;
+
         private Player player;
 
         public ViewHolder(CardView v) {
@@ -110,7 +125,6 @@ public class LocalPlayerListAdapter extends RecyclerView.Adapter<LocalPlayerList
             v.setOnClickListener(this);
 
             playerNameInList = (TextView) v.findViewById(R.id.available_player_name);
-            noPlayerFound = (TextView) v.findViewById(R.id.no_local_available_players);
         }
 
         public TextView getPlayerNameInList() {
@@ -134,12 +148,6 @@ public class LocalPlayerListAdapter extends RecyclerView.Adapter<LocalPlayerList
             if (mListener != null) {
                 mListener.clickAvailablePlayerListItem(player);
             }
-        }
-
-
-        public TextView getNoPlayerFound() {
-
-            return noPlayerFound;
         }
     }
 

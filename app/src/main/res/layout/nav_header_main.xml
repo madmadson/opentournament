@@ -6,8 +6,8 @@
     android:background="@color/colorPrimary"
     android:orientation="vertical"
     android:paddingBottom="@dimen/main_tick"
-    android:paddingLeft="@dimen/huge_tick"
-    android:paddingRight="@dimen/huge_tick"
+    android:paddingLeft="@dimen/main_tick"
+    android:paddingRight="@dimen/main_tick"
     android:paddingTop="@dimen/main_tick"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 

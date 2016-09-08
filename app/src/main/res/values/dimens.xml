@@ -8,6 +8,7 @@
     <dimen name="small_tick">4dp</dimen>
     
     <dimen name="line_tick">1dp</dimen>
+    <dimen name="large_line_tick">3dp</dimen>
     <dimen name="huge_line_tick">5dp</dimen>
     
     <dimen name="row_header_height">64dp</dimen>
@@ -34,5 +35,6 @@
     <dimen name="organised_tournament_date_margin_left">250dp</dimen>
     <dimen name="organised_tournament_location_margin_left">450dp</dimen>
     
-    
+    <!--Player card-->
+    <dimen name="player_card_view_height">50dp</dimen>
 </resources>

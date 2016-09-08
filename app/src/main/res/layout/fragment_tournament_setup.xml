@@ -14,6 +14,11 @@
             android:layout_height="wrap_content"
             android:id="@+id/tournament_player_fragment_container">
         </FrameLayout>
+        
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/huge_line_tick"
+            android:background="@color/colorPrimaryDark" />
 
         <FrameLayout
             android:layout_width="match_parent"

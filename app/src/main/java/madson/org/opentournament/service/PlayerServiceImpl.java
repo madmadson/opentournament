@@ -74,14 +74,17 @@ public class PlayerServiceImpl implements PlayerService {
 
 
     @Override
-    public void createLocalPlayer(Player player) {
+    public Player createLocalPlayer(Player player) {
 
         ContentValues contentValues = new ContentValues();
         contentValues.put(PlayerTable.COLUMN_FIRSTNAME, player.getFirstname());
         contentValues.put(PlayerTable.COLUMN_NICKNAME, player.getNickname());
         contentValues.put(PlayerTable.COLUMN_LASTNAME, player.getLastname());
 
-        createPlayer(contentValues);
+        long player_id = createPlayer(contentValues);
+        player.set_id(player_id);
+
+        return player;
     }
 
 
@@ -170,13 +173,15 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
 
-    private void createPlayer(ContentValues contentValues) {
+    private long createPlayer(ContentValues contentValues) {
 
         SQLiteDatabase writableDatabase = openTournamentDBHelper.getWritableDatabase();
 
-        writableDatabase.insert(PlayerTable.TABLE_PLAYER, null, contentValues);
+        long insertedId = writableDatabase.insert(PlayerTable.TABLE_PLAYER, null, contentValues);
 
         writableDatabase.close();
+
+        return insertedId;
     }
 
 

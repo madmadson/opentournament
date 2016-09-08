@@ -19,7 +19,7 @@ public interface PlayerService {
      *
      * @param  player
      */
-    void createLocalPlayer(Player player);
+    Player createLocalPlayer(Player player);
 
 
     /**

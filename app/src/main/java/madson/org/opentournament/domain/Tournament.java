@@ -82,7 +82,13 @@ public class Tournament implements Parcelable {
         location = in.readString();
         actualPlayers = in.readInt();
         maxNumberOfPlayers = in.readInt();
-        dateOfTournament = new Date(in.readLong());
+
+        long longFromDate = in.readLong();
+
+        if (longFromDate != 0) {
+            dateOfTournament = new Date(longFromDate);
+        }
+
         actualRound = in.readInt();
         onlineUUID = in.readString();
         creatorName = in.readString();
@@ -109,6 +115,8 @@ public class Tournament implements Parcelable {
 
         if (dateOfTournament != null) {
             parcel.writeLong(dateOfTournament.getTime());
+        } else {
+            parcel.writeLong(0L);
         }
 
         parcel.writeInt(actualRound);

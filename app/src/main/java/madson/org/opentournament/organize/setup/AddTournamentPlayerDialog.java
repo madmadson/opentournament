@@ -40,6 +40,7 @@ import madson.org.opentournament.service.TournamentPlayerService;
 import madson.org.opentournament.utility.BaseActivity;
 import madson.org.opentournament.utility.BaseApplication;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -113,25 +114,39 @@ public class AddTournamentPlayerDialog extends DialogFragment {
             lastnameEditText = (EditText) dialogView.findViewById(R.id.dialog_add_tournament_player_lastname);
 
             factionSpinner = (Spinner) dialogView.findViewById(R.id.dialog_add_tournament_player_faction_spinner);
+            teamnameSpinner = (Spinner) dialogView.findViewById(R.id.dialog_add_tournament_player_teamname);
+
+            addNewTeamnameButton = (ImageButton) dialogView.findViewById(
+                    R.id.dialog_add_tournament_player_add_new_team);
 
             ArrayAdapter<CharSequence> faction_adapter = ArrayAdapter.createFromResource(getActivity(),
                     R.array.factions, android.R.layout.simple_spinner_item);
             faction_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             factionSpinner.setAdapter(faction_adapter);
 
-            TournamentPlayerService tournamentPlayerService = ((BaseApplication) getActivity().getApplication())
-                .getTournamentPlayerService();
-
-            final List<String> listOfAllTeamNames = tournamentPlayerService.getAllTeamNamesForTournament(tournament);
-
-            teamnameSpinner = (Spinner) dialogView.findViewById(R.id.dialog_add_tournament_player_teamname);
-
-            listOfAllTeamNames.add(0, getString(R.string.no_team));
-
-            team_adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, listOfAllTeamNames);
+            team_adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item,
+                    new ArrayList<String>());
             team_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
             teamnameSpinner.setAdapter(team_adapter);
+
+            Runnable runnable = new Runnable() {
+
+                @Override
+                public void run() {
+
+                    TournamentPlayerService tournamentPlayerService = ((BaseApplication) getActivity().getApplication())
+                        .getTournamentPlayerService();
+
+                    final List<String> listOfAllTeamNames = tournamentPlayerService.getAllTeamNamesForTournament(
+                            tournament);
+
+                    listOfAllTeamNames.add(0, getString(R.string.no_team));
+                    team_adapter.addAll(listOfAllTeamNames);
+                    team_adapter.notifyDataSetChanged();
+                }
+            };
+            runnable.run();
 
             if (bundle.getParcelable(BUNDLE_PLAYER) != null) {
                 player = bundle.getParcelable(BUNDLE_PLAYER);
@@ -148,9 +163,6 @@ public class AddTournamentPlayerDialog extends DialogFragment {
                     lastnameEditText.setTypeface(Typeface.DEFAULT_BOLD);
                 }
             }
-
-            addNewTeamnameButton = (ImageButton) dialogView.findViewById(
-                    R.id.dialog_add_tournament_player_add_new_team);
 
             addNewTeamnameButton.setOnClickListener(new View.OnClickListener() {
 
@@ -182,6 +194,7 @@ public class AddTournamentPlayerDialog extends DialogFragment {
 
                                     if (newTeamNameEditText.getText().toString().length() != 0) {
                                         team_adapter.add(newTeamNameEditText.getText().toString());
+                                        team_adapter.notifyDataSetChanged();
                                         teamnameSpinner.setSelection(team_adapter.getCount());
                                         newTeamNameDialog.dismiss();
                                     } else {
@@ -253,9 +266,9 @@ public class AddTournamentPlayerDialog extends DialogFragment {
 
                                         PlayerService playerService = ((BaseApplication) getActivity().getApplication())
                                             .getPlayerService();
-                                        playerService.createLocalPlayer(newLocalPlayer);
+                                        Player newLocalPlayerWithId = playerService.createLocalPlayer(newLocalPlayer);
 
-                                        player = newLocalPlayer;
+                                        player = newLocalPlayerWithId;
                                     } else {
                                         if (mListener != null) {
                                             mListener.removeAvailablePlayer(player);

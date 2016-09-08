@@ -26,6 +26,13 @@
         android:gravity="center"
         android:text="@string/heading_online_players"/>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/line_tick"
+        android:background="@color/colorAccent"
+        android:paddingBottom="@dimen/main_tick"
+        android:paddingTop="@dimen/main_tick" />
+
     <ProgressBar
         android:id="@+id/progressBar"
         style="?android:attr/progressBarStyle"
@@ -43,7 +50,7 @@
         android:paddingBottom="@dimen/main_tick"
         android:textStyle="bold"
         android:id="@+id/no_online_available_players"
-        android:text="@string/no_available_players_for_tournament" />
+        android:text="@string/no_available_online_players_for_tournament" />
     
     <TextView
         android:layout_width="match_parent"
@@ -61,6 +68,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/large_line_tick"
+        android:background="@color/colorPrimaryDark" />
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -71,6 +83,13 @@
         android:id="@+id/heading_local_players"
         android:gravity="center"
         android:text="@string/heading_local_players"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/line_tick"
+        android:background="@color/colorAccent"
+        android:paddingBottom="@dimen/main_tick"
+        android:paddingTop="@dimen/main_tick" />
     
     <TextView
         android:layout_width="wrap_content"

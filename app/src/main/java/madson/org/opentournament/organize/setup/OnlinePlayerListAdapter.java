@@ -1,5 +1,7 @@
 package madson.org.opentournament.organize.setup;
 
+import android.content.Context;
+
 import android.support.v7.widget.RecyclerView;
 
 import android.util.Log;
@@ -29,9 +31,12 @@ public class OnlinePlayerListAdapter extends RecyclerView.Adapter<OnlinePlayerLi
     private List<Player> filteredPlayerList;
 
     private ItemFilter filter;
+    private Context context;
     private TournamentSetupEventListener mListener;
 
-    public OnlinePlayerListAdapter(TournamentSetupEventListener mListener) {
+    public OnlinePlayerListAdapter(Context context, TournamentSetupEventListener mListener) {
+
+        this.context = context;
 
         this.mListener = mListener;
 
@@ -56,7 +61,9 @@ public class OnlinePlayerListAdapter extends RecyclerView.Adapter<OnlinePlayerLi
         final Player player = filteredPlayerList.get(position);
         holder.setPlayer(player);
         holder.getPlayerFullNameInList()
-            .setText(player.getFirstname() + " \"" + player.getNickname() + "\" " + player.getLastname());
+            .setText(context.getResources()
+                .getString(R.string.tournament_player_name_in_row, player.getFirstname(), player.getNickname(),
+                    player.getLastname()));
     }
 
 
@@ -71,21 +78,17 @@ public class OnlinePlayerListAdapter extends RecyclerView.Adapter<OnlinePlayerLi
 
         Log.i(this.getClass().getName(), "player added to adapter ");
 
-        if (!originalPlayerList.contains(player)) {
-            this.filteredPlayerList.add(player);
-            this.originalPlayerList.add(player);
-            notifyDataSetChanged();
-        }
+        this.filteredPlayerList.add(player);
+        notifyDataSetChanged();
     }
 
 
     public void removePlayer(Player player) {
 
         int position = filteredPlayerList.indexOf(player);
-        int positionOriginal = originalPlayerList.indexOf(player);
+
         filteredPlayerList.remove(position);
-        originalPlayerList.remove(positionOriginal);
-        notifyItemRemoved(position);
+        notifyDataSetChanged();
     }
 
 

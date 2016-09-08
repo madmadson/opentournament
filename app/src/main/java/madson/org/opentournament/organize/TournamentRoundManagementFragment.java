@@ -78,38 +78,6 @@ public class TournamentRoundManagementFragment extends Fragment implements GameL
     }
 
 
-    @NonNull
-    private RoundChangeButtonFragment createPreviousRoundFragment(int round) {
-
-        previousRoundFragment = new RoundChangeButtonFragment();
-
-        Bundle bundleForPreviousRound = new Bundle();
-        bundleForPreviousRound.putParcelable(RoundChangeButtonFragment.BUNDLE_TOURNAMENT, tournament);
-        bundleForPreviousRound.putInt(RoundChangeButtonFragment.BUNDLE_ROUND_TO_DISPLAY, (round - 1));
-        bundleForPreviousRound.putString(RoundChangeButtonFragment.BUNDLE_NEXT_OR_PREVIOUS,
-            RoundChangeButtonFragment.NextOrPrevious.PREVIOUS.name());
-        previousRoundFragment.setArguments(bundleForPreviousRound);
-
-        return previousRoundFragment;
-    }
-
-
-    @NonNull
-    private RoundChangeButtonFragment createNextRoundFragment(int round) {
-
-        nextRoundButtonFragment = new RoundChangeButtonFragment();
-
-        Bundle nextRoundButtonBundle = new Bundle();
-        nextRoundButtonBundle.putParcelable(RoundChangeButtonFragment.BUNDLE_TOURNAMENT, tournament);
-        nextRoundButtonBundle.putInt(RoundChangeButtonFragment.BUNDLE_ROUND_TO_DISPLAY, (round + 1));
-        nextRoundButtonBundle.putString(RoundChangeButtonFragment.BUNDLE_NEXT_OR_PREVIOUS,
-            RoundChangeButtonFragment.NextOrPrevious.NEXT.name());
-        nextRoundButtonFragment.setArguments(nextRoundButtonBundle);
-
-        return nextRoundButtonFragment;
-    }
-
-
     private GameListFragment createPairingListFragment(int round) {
 
         gameListFragment = new GameListFragment();
@@ -138,27 +106,11 @@ public class TournamentRoundManagementFragment extends Fragment implements GameL
 
     private void showRound(int round, FragmentTransaction fragmentTransaction) {
 
-        RoundChangeButtonFragment nextRoundFragment = createNextRoundFragment(round);
-        fragmentTransaction.replace(R.id.next_round_container, nextRoundFragment);
-
         GameListFragment gameListFragment = createPairingListFragment(round);
         fragmentTransaction.replace(R.id.left_fragment_container, gameListFragment);
 
         RankingListFragment rankingListFragment = createRankingListFragment(round);
         fragmentTransaction.replace(R.id.right_fragment_container, rankingListFragment);
-
-        RoundChangeButtonFragment previousRoundFragment = createPreviousRoundFragment(round);
-        fragmentTransaction.replace(R.id.previous_round_container, previousRoundFragment);
-
-        View fab = getActivity().findViewById(R.id.fab);
-
-        if (fab != null) {
-            if (round == 0) {
-                fab.setVisibility(View.VISIBLE);
-            } else {
-                fab.setVisibility(View.INVISIBLE);
-            }
-        }
     }
 
 

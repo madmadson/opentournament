@@ -241,19 +241,23 @@ public class TournamentServiceImpl implements TournamentService {
 
 
     @Override
-    public void updateActualRound(Long tournamentId, int round) {
+    public Tournament updateActualRound(Tournament tournament, int round) {
 
-        Log.i(this.getClass().getName(), "update actual round for tournament: " + tournamentId);
+        Log.i(this.getClass().getName(), "update actual round for tournament: " + tournament);
 
         ContentValues contentValues = new ContentValues();
         contentValues.put(TournamentTable.COLUMN_ACTUAL_ROUND, round);
 
         SQLiteDatabase writableDatabase = openTournamentDBHelper.getWritableDatabase();
 
-        writableDatabase.update(TournamentTable.TABLE_TOURNAMENTS, contentValues, "_id = ?",
-            new String[] { String.valueOf(tournamentId) });
+        writableDatabase.update(TournamentTable.TABLE_TOURNAMENTS, contentValues, TournamentTable.COLUMN_ID + " = ?",
+            new String[] { String.valueOf(tournament.get_id()) });
 
         writableDatabase.close();
+
+        tournament.setActualRound(round);
+
+        return tournament;
     }
 
 

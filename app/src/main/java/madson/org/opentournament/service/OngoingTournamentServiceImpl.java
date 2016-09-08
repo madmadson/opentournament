@@ -124,15 +124,8 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
 
         // persist pairing and new round
         insertGames(games);
-        makeTournamentRoundActual(tournament.get_id(), round);
 
         return games;
-    }
-
-
-    private void makeTournamentRoundActual(Long tournamentId, int round) {
-
-        tournamentService.updateActualRound(tournamentId, round);
     }
 
 

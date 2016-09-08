@@ -22,6 +22,7 @@ import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.organize.TournamentOrganizeActivity;
 import madson.org.opentournament.service.OngoingTournamentService;
 import madson.org.opentournament.service.RankingService;
+import madson.org.opentournament.service.TournamentService;
 import madson.org.opentournament.utility.BaseApplication;
 
 
@@ -96,23 +97,39 @@ public class ConfirmStartTournamentDialog extends DialogFragment {
                 @Override
                 public void onClick(View v) {
 
-                    TournamentOrganizeActivity activity = (TournamentOrganizeActivity) getActivity();
+                    Runnable runnable = new Runnable() {
 
-                    OngoingTournamentService ongoingTournamentService =
-                        ((BaseApplication) getActivity().getApplication()).getOngoingTournamentService();
+                        @Override
+                        public void run() {
 
-                    RankingService rankingService = ((BaseApplication) getActivity().getApplication())
-                        .getRankingService();
+                            TournamentOrganizeActivity activity = (TournamentOrganizeActivity) getActivity();
 
-                    // first create ranking for complete games
-                    rankingService.createRankingForRound(tournament, 1);
+                            OngoingTournamentService ongoingTournamentService =
+                                ((BaseApplication) getActivity().getApplication()).getOngoingTournamentService();
 
-                    // now we can create pairings for new round
-                    ongoingTournamentService.createGamesForRound(tournament, 1);
+                            RankingService rankingService = ((BaseApplication) getActivity().getApplication())
+                                .getRankingService();
 
-                    activity.addRoundAfterNewPairing();
+                            TournamentService tournamentService = ((BaseApplication) getActivity().getApplication())
+                                .getTournamentService();
 
-                    dialog.dismiss();
+                            // first create ranking for complete games
+                            rankingService.createRankingForRound(tournament, 1);
+
+                            // now we can create pairings for new round
+                            ongoingTournamentService.createGamesForRound(tournament, 1);
+
+                            // last thing update tournament
+                            Tournament tournament = tournamentService.updateActualRound(
+                                    ConfirmStartTournamentDialog.this.tournament, 1);
+
+                            // update activity
+                            activity.addNewRoundToTournament(tournament);
+
+                            dialog.dismiss();
+                        }
+                    };
+                    runnable.run();
                 }
             });
     }

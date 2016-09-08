@@ -66,10 +66,10 @@ public interface TournamentService {
 
 
     /**
-     * @param  tournamentId
+     * @param  tournament
      * @param  round
      */
-    void updateActualRound(Long tournamentId, int round);
+    Tournament updateActualRound(Tournament tournament, int round);
 
 
     /**

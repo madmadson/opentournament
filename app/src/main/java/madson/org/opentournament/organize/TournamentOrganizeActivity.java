@@ -88,13 +88,16 @@ public class TournamentOrganizeActivity extends BaseActivity {
                 supportActionBar.setTitle(tournament.getName());
             }
 
-            mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+            mSectionsPagerAdapter = new SectionsPagerAdapter(tournament, getSupportFragmentManager());
 
             mViewPager = (ViewPager) findViewById(R.id.container);
             mViewPager.setAdapter(mSectionsPagerAdapter);
 
             TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
             tabLayout.setupWithViewPager(mViewPager);
+
+            // set tab to actual round
+            mViewPager.setCurrentItem(tournament.getActualRound());
         }
     }
 
@@ -105,9 +108,16 @@ public class TournamentOrganizeActivity extends BaseActivity {
     }
 
 
-    public void addRoundAfterNewPairing() {
+    /**
+     * handles lifecycle of tournament.
+     *
+     * @param  tournament
+     */
+    public void addNewRoundToTournament(Tournament tournament) {
 
         Log.i(this.getClass().getName(), "Add tab to view pager");
+
+        mSectionsPagerAdapter.setTournamentToOrganize(tournament);
 
         mSectionsPagerAdapter.addTabToPager();
 
@@ -124,18 +134,21 @@ public class TournamentOrganizeActivity extends BaseActivity {
     private class SectionsPagerAdapter extends FragmentPagerAdapter {
 
         private int amountOfTabs;
+        private Tournament tournamentToOrganize;
 
-        public SectionsPagerAdapter(FragmentManager fm) {
+        public SectionsPagerAdapter(Tournament tournament, FragmentManager fm) {
 
             super(fm);
+            this.tournamentToOrganize = tournament;
 
-            amountOfTabs = tournament.getActualRound() + 1;
+            amountOfTabs = tournamentToOrganize.getActualRound() + 1;
         }
 
         @Override
         public Fragment getItem(int position) {
 
-            Log.i(this.getClass().getName(), "create tournament fragment: " + tournament + " on position: " + position);
+            Log.i(this.getClass().getName(),
+                "create tournament fragment: " + tournamentToOrganize + " on position: " + position);
 
             // TODO: refactor to own activity -> tournamentWatchingActivity or something
 //            if (position == 0 && checkIfOnlineTournamentAndUserNotCreator()) {
@@ -144,9 +157,10 @@ public class TournamentOrganizeActivity extends BaseActivity {
 //            }
             if (position == 0) {
                 // setup to addTournamentPlayer players to tournament
-                return TournamentSetupFragment.newInstance(tournament);
+                return TournamentSetupFragment.newInstance(tournamentToOrganize);
             } else {
-                tournamentRoundManagementFragment = TournamentRoundManagementFragment.newInstance(position, tournament);
+                tournamentRoundManagementFragment = TournamentRoundManagementFragment.newInstance(position,
+                        tournamentToOrganize);
 
                 return tournamentRoundManagementFragment;
             }
@@ -174,6 +188,18 @@ public class TournamentOrganizeActivity extends BaseActivity {
         public void addTabToPager() {
 
             amountOfTabs = amountOfTabs + 1;
+        }
+
+
+        public Tournament getTournamentToOrganize() {
+
+            return tournamentToOrganize;
+        }
+
+
+        public void setTournamentToOrganize(Tournament tournamentToOrganize) {
+
+            this.tournamentToOrganize = tournamentToOrganize;
         }
     }
 }

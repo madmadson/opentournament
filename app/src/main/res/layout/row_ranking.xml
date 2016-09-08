@@ -7,17 +7,17 @@
     android:layout_width="match_parent"
     android:id="@+id/ranking_row_card_view"
     card_view:cardCornerRadius="4dp"
-    android:layout_marginLeft="@dimen/player_card_side_margin"
-    android:layout_marginRight="@dimen/player_card_side_margin"
-    android:layout_marginBottom="@dimen/player_card_top_bottom_margin"
-    android:layout_marginTop="@dimen/player_card_top_bottom_margin">
+    android:layout_marginLeft="@dimen/main_tick"
+    android:layout_marginRight="@dimen/main_tick"
+    android:layout_marginBottom="@dimen/main_tick"
+    android:layout_marginTop="@dimen/main_tick">
 
     <RelativeLayout
         android:id="@+id/lib_card_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?android:attr/selectableItemBackground"
-        android:padding="@dimen/player_card_padding">
+        android:padding="@dimen/main_tick">
 
         <TextView
             android:id="@+id/ranking_row_player_number"
@@ -29,7 +29,7 @@
             android:id="@+id/ranking_row_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="18dp"
+            android:layout_marginLeft="@dimen/main_tick"
             android:layout_toRightOf="@id/ranking_row_player_number"
            />
 
@@ -45,20 +45,20 @@
             android:id="@+id/ranking_row_sos"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="24dp"
+            android:layout_marginLeft="@dimen/main_tick"
             android:layout_toRightOf="@id/ranking_row_score"/>
 
         <TextView
             android:id="@+id/ranking_row_control_points"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="24dp"
+            android:layout_marginLeft="@dimen/main_tick"
             android:layout_toRightOf="@id/ranking_row_sos"/>
         <TextView
             android:id="@+id/ranking_row_victory_points"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="24dp"
+            android:layout_marginLeft="@dimen/main_tick"
             android:layout_toRightOf="@id/ranking_row_control_points"/>
         
     </RelativeLayout>

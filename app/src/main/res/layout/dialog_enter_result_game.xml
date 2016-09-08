@@ -1,10 +1,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="16dp"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp"
-    android:paddingTop="16dp"
+    android:padding="@dimen/main_tick"
     android:orientation="vertical"
     android:descendantFocusability="beforeDescendants"
     android:focusableInTouchMode="true">
@@ -14,10 +11,7 @@
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingBottom="16dp"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:paddingTop="16dp"
+        android:padding="@dimen/main_tick"
         android:orientation="horizontal">
 
         <TextView
@@ -40,10 +34,7 @@
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingBottom="16dp"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:paddingTop="16dp"
+        android:padding="@dimen/main_tick"
         android:orientation="horizontal">
 
         <Button
@@ -66,10 +57,7 @@
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingBottom="16dp"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:paddingTop="16dp"
+        android:padding="@dimen/main_tick"
         android:orientation="horizontal">
         
         <LinearLayout
@@ -85,8 +73,8 @@
    
             <EditText
                 android:id="@+id/result_player_one_control_points"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
+                android:paddingLeft="@dimen/main_tick"
+                android:paddingRight="@dimen/main_tick"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="0"
@@ -122,8 +110,8 @@
                 android:id="@+id/result_player_two_control_points"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
+                android:paddingLeft="@dimen/main_tick"
+                android:paddingRight="@dimen/main_tick"
                 android:text="0"
                 android:focusable="true"
                 android:focusableInTouchMode="true"/>
@@ -142,10 +130,7 @@
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingBottom="16dp"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:paddingTop="16dp"
+        android:padding="@dimen/main_tick"
         android:orientation="horizontal">
 
         <LinearLayout
@@ -161,8 +146,8 @@
 
             <EditText
                 android:id="@+id/result_player_one_victory_points"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
+                android:paddingLeft="@dimen/main_tick"
+                android:paddingRight="@dimen/main_tick"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="0"
@@ -198,8 +183,8 @@
                 android:id="@+id/result_player_two_victory_points"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
+                android:paddingLeft="@dimen/main_tick"
+                android:paddingRight="@dimen/main_tick"
                 android:text="0"
                 android:focusable="true"
                 android:focusableInTouchMode="true"/>

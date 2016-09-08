@@ -4,10 +4,10 @@
     android:layout_height="wrap_content" 
     android:layout_width="match_parent"
     android:orientation="horizontal"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp"
-    android:paddingTop="8dp"
-    android:paddingBottom="8dp">
+    android:paddingLeft="@dimen/main_tick"
+    android:paddingRight="@dimen/main_tick"
+    android:paddingTop="@dimen/small_tick"
+    android:paddingBottom="@dimen/small_tick">
 
     <android.support.v7.widget.CardView
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -24,7 +24,7 @@
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:layout_column="3"
-            android:padding="8dp"
+            android:padding="@dimen/small_tick"
             android:background="?android:attr/selectableItemBackground">
 
             <TextView
@@ -41,7 +41,7 @@
                 android:id="@+id/pairing_player_one_score"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingRight="20dp"
+                android:paddingRight="@dimen/main_tick"
                 android:layout_row="1"
                 android:layout_column="0"
                 android:text="SC 0"/>
@@ -50,7 +50,7 @@
                 android:id="@+id/pairing_player_one_control_points"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingRight="20dp"
+                android:paddingRight="@dimen/main_tick"
                 android:layout_row="1"
                 android:layout_column="1"
                 android:text="CP 0"/>
@@ -59,7 +59,7 @@
                 android:id="@+id/pairing_player_one_victory_points"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingRight="20dp"
+                android:paddingRight="@dimen/main_tick"
                 android:layout_row="1"
                 android:layout_column="2"
                 android:text="VP 0"/>
@@ -107,7 +107,7 @@
                 android:id="@+id/pairing_player_two_score"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingRight="20dp"
+                android:paddingRight="@dimen/main_tick"
                 android:layout_row="1"
                 android:layout_column="0"
                 android:text="SC 0"/>
@@ -116,7 +116,7 @@
                 android:id="@+id/pairing_player_two_control_points"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingRight="20dp"
+                android:paddingRight="@dimen/main_tick"
                 android:layout_row="1"
                 android:layout_column="1"
                 android:text="CP 0"/>
@@ -125,7 +125,7 @@
                 android:id="@+id/pairing_player_two_victory_points"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingRight="20dp"
+                android:paddingRight="@dimen/main_tick"
                 android:layout_row="1"
                 android:layout_column="2"
                 android:text="VP 0"/>

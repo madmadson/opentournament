@@ -3,7 +3,7 @@
     android:orientation="vertical" 
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="@dimen/player_list_padding"
+    android:padding="@dimen/main_tick"
     android:descendantFocusability="beforeDescendants"
     android:focusableInTouchMode="true">
     
@@ -30,8 +30,8 @@
         android:id="@+id/progressBar"
         style="?android:attr/progressBarStyle"
         android:layout_gravity="center_horizontal"
-        android:paddingTop="16dp"
-        android:paddingBottom="16dp"
+        android:paddingTop="@dimen/main_tick"
+        android:paddingBottom="@dimen/main_tick"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
@@ -39,8 +39,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:paddingTop="16dp"
-        android:paddingBottom="16dp"
+        android:paddingTop="@dimen/main_tick"
+        android:paddingBottom="@dimen/main_tick"
         android:textStyle="bold"
         android:id="@+id/no_online_available_players"
         android:text="@string/no_available_players_for_tournament" />
@@ -48,8 +48,8 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="16dp"
-        android:paddingBottom="16dp"
+        android:paddingTop="@dimen/main_tick"
+        android:paddingBottom="@dimen/main_tick"
         android:textStyle="bold"
         android:id="@+id/offline_player_text"
         android:text="@string/offline_player_text"
@@ -64,8 +64,8 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="16dp"
-        android:paddingBottom="16dp"
+        android:paddingTop="@dimen/main_tick"
+        android:paddingBottom="@dimen/main_tick"
         android:textColor="@color/colorPrimary"
         android:textStyle="bold"
         android:id="@+id/heading_local_players"
@@ -76,8 +76,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:paddingTop="16dp"
-        android:paddingBottom="16dp"
+        android:paddingTop="@dimen/main_tick"
+        android:paddingBottom="@dimen/main_tick"
         android:textStyle="bold"
         android:id="@+id/no_local_available_players"
         android:text="@string/no_available_players_for_tournament" />

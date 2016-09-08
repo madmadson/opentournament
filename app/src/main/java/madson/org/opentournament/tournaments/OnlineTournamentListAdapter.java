@@ -57,7 +57,7 @@ public class OnlineTournamentListAdapter extends RecyclerView.Adapter<OnlineTour
     @Override
     public OnlineTournamentViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_tournament, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_online_tournament, parent, false);
 
         return new OnlineTournamentViewHolder(v);
     }
@@ -75,30 +75,13 @@ public class OnlineTournamentListAdapter extends RecyclerView.Adapter<OnlineTour
             viewHolder.getTournamentDateInList().setText(formattedDate);
         }
 
-        viewHolder.getTournamentLocationInList().setText(tournament.getLocation());
+        if (viewHolder.getTournamentLocationInList() != null) {
+            viewHolder.getTournamentLocationInList().setText(tournament.getLocation());
+        }
 
         viewHolder.getTournamentPlayersInList()
             .setText(String.valueOf(tournament.getActualPlayers()) + "/"
                 + String.valueOf(tournament.getMaxNumberOfPlayers()));
-
-        if (currentUser != null && currentUser.getEmail() != null) {
-            if (currentUser.getEmail().equals(tournament.getCreatorEmail())) {
-                viewHolder.getEditTournamentButton().setOnClickListener(new View.OnClickListener() {
-
-                        @Override
-                        public void onClick(View v) {
-
-                            mListener.onTournamentEditClicked(tournament);
-                        }
-                    });
-            } else {
-                // only creator should do action
-                viewHolder.getEditTournamentButton().setVisibility(View.INVISIBLE);
-            }
-        } else {
-            // no user no fun
-            viewHolder.getEditTournamentButton().setVisibility(View.INVISIBLE);
-        }
     }
 
 

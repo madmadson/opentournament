@@ -1,7 +1,5 @@
 <resources>
-    <string name="firebase_url">https://madson-org-opentournament.firebaseio.com</string>
-    <string name="facebook_app_id">1736501436623651</string>
-    <string name="fb_login_protocol_scheme">fb1736501436623651</string>
+    
     
     <string name="app_name">Open Tournament</string>
     <string name="Image_description">Tournaments for everyone!</string>
@@ -9,8 +7,11 @@
     <string name="title_activity_tournament_details">TournamentDetailsActivity</string>
     <string name="title_activity_tournament_play">TournamentPlayActivity</string>
     <string name="action_settings">Settings</string>
-        
-    <!-- Tournament Management -->
+
+    <!-- NAV: Tournament Management -->
+    <string name="heading_online_tournaments">Online tournaments</string>
+    <string name="heading_organized_tournaments">Your organised tournaments</string>
+
     <string name="header_tournament_name">Tournament name</string>
     <string name="header_amount_player">Players</string>
     
@@ -34,8 +35,7 @@
         with your account (email) from every device 
     </string>
     
-    <string name="heading_local_tournaments">- local tournaments (only visible for you) -</string>
-    <string name="heading_online_tournaments">- online tournaments -</string>
+
     
     <!--dialog -->
     <string name="dialog_save">save</string>

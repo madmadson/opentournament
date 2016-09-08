@@ -31,12 +31,19 @@ android {
     }
     
     buildTypes {
+        debug {
+            resValue "string", "facebook_app_id", facebook_app_id
+            resValue "string", "fb_login_protocol_scheme", fb_login_protocol_scheme
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+            resValue "string", "facebook_app_id", facebook_app_id
+            resValue "string", "fb_login_protocol_scheme", fb_login_protocol_scheme
         }
     }
-
+   
 }
 
 dependencies {

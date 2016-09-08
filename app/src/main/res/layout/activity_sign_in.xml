@@ -41,20 +41,20 @@
             android:id="@+id/button_anonymous_sign_in"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/login_form_margin"
+            android:layout_marginTop="@dimen/main_tick"
             android:text="@string/anonymously_sign_in" />
 
         <com.google.android.gms.common.SignInButton
             android:id="@+id/google_sign_in_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" 
-            android:layout_marginTop="@dimen/login_form_margin"/>
+            android:layout_marginTop="@dimen/main_tick"/>
 
         <com.facebook.login.widget.LoginButton
             android:id="@+id/facebook_login_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/login_form_margin"/>
+            android:layout_marginTop="@dimen/main_tick"/>
         
     </LinearLayout>     
 

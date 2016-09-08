@@ -6,34 +6,29 @@
     android:paddingTop="@dimen/main_tick"
     android:paddingBottom="@dimen/main_tick"
     android:background="@drawable/row_item">
-
-    <ImageView
-        android:id="@+id/online_icon"
-        android:src="@drawable/ic_cloud_black_24dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="@dimen/main_tick"
-        />
     
     <TextView
-        android:id="@+id/online_player_full_name" 
+        android:id="@+id/tournament_name" 
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:text="Test"
-        android:layout_toRightOf="@id/online_icon"
         android:layout_marginLeft="@dimen/main_tick"
        />
 
-    <ImageView
-        android:id="@+id/account_icon"
-        android:src="@drawable/ic_account_circle_black_36dp"
+    <TextView
+        android:id="@+id/tournament_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:layout_marginRight="@dimen/main_tick"
+        android:layout_marginLeft="250dp"
         />
 
+    <TextView
+        android:id="@+id/amount_players"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="@dimen/main_tick"
+        android:text="0" />
 </RelativeLayout>

@@ -3,21 +3,21 @@
     android:orientation="vertical" 
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="@dimen/player_card_padding"
+    android:padding="@dimen/main_tick"
     android:descendantFocusability="beforeDescendants"
     android:focusableInTouchMode="true">
 
     <Button
         android:id="@+id/dialog_delete_tournament_button"
         android:drawableLeft="@android:drawable/ic_delete"
-        android:drawablePadding="4dp"
+        android:drawablePadding="@dimen/small_tick"
         android:background="@color/colorPrimaryDark"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/delete_tournament"
         android:textColor="@color/colorTextIcon"
         android:textStyle="bold"
-        android:paddingRight="8dp"
+        android:paddingRight="@dimen/halve_tick"
         android:layout_gravity="right"
         android:visibility="gone"/>
 

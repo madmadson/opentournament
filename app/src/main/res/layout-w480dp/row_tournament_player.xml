@@ -7,10 +7,10 @@
     android:layout_width="match_parent"
     android:id="@+id/tournament_player_row_card_view"
     card_view:cardCornerRadius="4dp"
-    android:layout_marginLeft="@dimen/player_card_side_margin"
-    android:layout_marginRight="@dimen/player_card_side_margin"
-    android:layout_marginBottom="@dimen/player_card_top_bottom_margin"
-    android:layout_marginTop="@dimen/player_card_top_bottom_margin">
+    android:layout_marginLeft="@dimen/main_tick"
+    android:layout_marginRight="@dimen/main_tick"
+    android:layout_marginBottom="@dimen/main_tick"
+    android:layout_marginTop="@dimen/main_tick">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -20,7 +20,7 @@
             android:id="@+id/tournament_player_row_player_number"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" 
-            android:paddingLeft="16dp"
+            android:paddingLeft="@dimen/main_tick"
             android:layout_alignParentLeft="true"
             android:layout_centerInParent="true"
             android:layout_gravity="center_vertical"/>
@@ -37,14 +37,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textStyle="bold"
-                android:layout_marginLeft="15dp"/>
+                android:layout_marginLeft="@dimen/main_tick"/>
 
             <TextView
                 android:id="@+id/tournament_player_teamname"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/tournament_player_fullname"
-                android:layout_marginLeft="15dp"/>
+                android:layout_marginLeft="@dimen/main_tick"/>
         </RelativeLayout>
 
         <TextView
@@ -74,7 +74,7 @@
             android:layout_gravity="center_vertical"
             android:layout_alignParentRight="true"
             android:layout_centerInParent="true"
-            android:paddingRight="10dp"
+            android:paddingRight="@dimen/main_tick"
             android:visibility="gone" />
    
     </RelativeLayout>

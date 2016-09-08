@@ -1,22 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingTop="@dimen/main_tick">
+    android:layout_height="match_parent">
 
     <TextView
         android:id="@+id/heading_game_for_round"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
+        android:paddingTop="@dimen/main_tick"
+        android:paddingBottom="@dimen/main_tick"
+        android:gravity="center"
         android:textAppearance="@android:style/TextAppearance.Large" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/line_tick"
+        android:background="@color/colorAccent"
+        android:paddingBottom="@dimen/main_tick"
+        android:paddingTop="@dimen/main_tick" />
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="@dimen/main_tick"
+        android:paddingBottom="@dimen/main_tick">
+        
+        <Button
+            android:id="@+id/button_upload_games"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+ 
+            android:drawableLeft="@drawable/ic_cloud_upload_white_24dp"
+            android:drawablePadding="@dimen/halve_tick"
+            android:background="@color/colorPrimaryDark"
+            android:layout_marginLeft="@dimen/main_tick"
+            android:text="@string/upload_games"
+            android:paddingRight="@dimen/halve_tick"
+            android:paddingLeft="@dimen/halve_tick"
+            android:textColor="@color/colorTextIcon"
+            android:textStyle="bold"
+            android:layout_gravity="right" />
+
+        <Button
+            android:id="@+id/button_repair_games"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/ic_refresh_white_24dp"
+            android:drawablePadding="@dimen/halve_tick"
+            android:background="@color/colorPrimaryDark"
+            android:layout_marginLeft="@dimen/main_tick"
+            android:text="@string/pair_again"
+            android:paddingRight="@dimen/halve_tick"
+            android:paddingLeft="@dimen/halve_tick"
+            android:textColor="@color/colorTextIcon"
+            android:textStyle="bold"
+            android:layout_gravity="right" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/line_tick"
+        android:background="@color/colorAccent"
+        android:paddingBottom="@dimen/main_tick"
+        android:paddingTop="@dimen/main_tick" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/game_list_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:scrollbars="vertical"
-        android:layout_below="@id/heading_game_for_round"/>
+        android:scrollbars="vertical" />
 
-</RelativeLayout>
+</LinearLayout>

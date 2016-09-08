@@ -102,8 +102,8 @@
 
 
     <!-- Pairing table -->
-    <string name="heading_pairing_for_round">Pairing round: %1$d</string>
-    
+    <string name="heading_games_for_round">Games round: %1$d</string>
+    <string name="upload_games">upload</string>
     
     <!-- confirm pairing dialog -->
     <string name="confirm">confirm</string>
@@ -164,6 +164,7 @@
     <string name="header_organised_tournament_action">action</string>
     <string name="no_available_online_players_for_tournament">No online players found (check filter)</string>
     <string name="no_available_players_for_tournament">No local players found (check filter)</string>
+    <string name="pair_again">pair again</string>
 
 
 </resources>

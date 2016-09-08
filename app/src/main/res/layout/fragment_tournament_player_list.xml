@@ -7,7 +7,8 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="@dimen/main_tick"
+        android:paddingTop="@dimen/halve_tick"
+        android:paddingBottom="@dimen/halve_tick"
         android:orientation="horizontal">
         
         <TextView
@@ -20,13 +21,14 @@
             android:textAppearance="@android:style/TextAppearance.Medium" />
         
         <Button android:id="@+id/start_tournament_button"
-            android:drawableLeft="@android:drawable/ic_media_play"
-            android:background="@color/colorPrimaryDark"
-            android:drawablePadding="@dimen/small_tick"
-            android:text="@string/start_tournament"
-            android:textColor="@color/colorTextIcon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:drawableLeft="@android:drawable/ic_media_play"
+            android:drawablePadding="@dimen/small_tick"
+            android:background="@color/colorPrimaryDark"
+            android:text="@string/start_tournament"
+            android:textColor="@color/colorTextIcon"
+            android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/main_tick"
             android:paddingRight="@dimen/halve_tick"
             android:layout_alignParentRight="true"/>

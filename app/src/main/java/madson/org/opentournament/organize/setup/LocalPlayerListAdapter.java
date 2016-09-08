@@ -1,4 +1,4 @@
-package madson.org.opentournament.players;
+package madson.org.opentournament.organize.setup;
 
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -15,7 +15,6 @@ import android.widget.TextView;
 
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Player;
-import madson.org.opentournament.domain.Tournament;
 
 import java.util.ArrayList;
 import java.util.List;

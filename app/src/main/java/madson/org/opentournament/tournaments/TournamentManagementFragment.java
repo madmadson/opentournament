@@ -35,14 +35,12 @@ import madson.org.opentournament.utility.BaseApplication;
 public class TournamentManagementFragment extends Fragment implements TournamentManagementEventListener {
 
     private TournamentListsFragment tournamentListsFragment;
-    private CoordinatorLayout coordinatorLayout;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
 
-        coordinatorLayout = (CoordinatorLayout) getActivity().findViewById(R.id.coordinator_main);
         tournamentListsFragment = new TournamentListsFragment();
 
         FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
@@ -163,6 +161,8 @@ public class TournamentManagementFragment extends Fragment implements Tournament
                                         tournamentService.updateTournamentInFirebase(tournament);
                                     }
 
+                                    CoordinatorLayout coordinatorLayout = ((BaseActivity) getActivity())
+                                        .getCoordinatorLayout();
                                     Snackbar snackbar = Snackbar.make(coordinatorLayout,
                                             R.string.success_upload_tournament, Snackbar.LENGTH_LONG);
                                     snackbar.getView()
@@ -181,5 +181,7 @@ public class TournamentManagementFragment extends Fragment implements Tournament
 
     @Override
     public void onOnlineTournamentListItemClicked(Tournament tournament) {
+
+        // TODO: create own activity for "passiv" tournament watching
     }
 }

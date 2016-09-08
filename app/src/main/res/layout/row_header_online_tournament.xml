@@ -8,13 +8,13 @@
     android:background="@drawable/row_item">
 
     <TextView
+        android:id="@+id/header_tournament_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_alignParentLeft="true"
         android:textColor="@color/colorPrimary"
         android:textStyle="bold"
-        android:id="@+id/header_tournament_name" 
         android:text="@string/header_tournament_name"
         android:layout_marginLeft="@dimen/main_tick"/>
 
@@ -35,7 +35,7 @@
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
         android:textColor="@color/colorPrimary"
-        android:layout_marginRight="@dimen/small_tick"
+        android:layout_marginRight="@dimen/main_tick"
         android:textStyle="bold"
         android:id="@+id/header_amount_players"
         android:text="@string/header_amount_player"/>

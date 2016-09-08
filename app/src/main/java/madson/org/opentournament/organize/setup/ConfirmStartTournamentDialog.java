@@ -1,4 +1,4 @@
-package madson.org.opentournament.players;
+package madson.org.opentournament.organize.setup;
 
 import android.app.Dialog;
 

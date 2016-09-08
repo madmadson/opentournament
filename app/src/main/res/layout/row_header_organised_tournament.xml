@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout 
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/rootView"
     android:layout_width="match_parent"
@@ -8,23 +8,34 @@
     android:background="@drawable/row_item">
 
     <TextView
+        android:id="@+id/header_organised_tournament_action"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_alignParentLeft="true"
-        android:layout_marginLeft="75dp"
+        android:layout_marginLeft="@dimen/main_tick"
         android:textColor="@color/colorPrimary"
         android:textStyle="bold"
-        android:id="@+id/header_tournament_name" 
-        android:text="@string/header_tournament_name"/>
-    
+        android:text="@string/header_organised_tournament_action"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_alignParentLeft="true"
-        android:layout_marginLeft="250dp"
+        android:layout_marginLeft="@dimen/organised_tournament_name_margin_left"
+        android:textColor="@color/colorPrimary"
+        android:textStyle="bold"
+        android:id="@+id/header_tournament_name"
+        android:text="@string/header_tournament_name"/>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="@dimen/organised_tournament_date_margin_left"
         android:textColor="@color/colorPrimary"
         android:textStyle="bold"
         android:id="@+id/header_tournament_date"
@@ -34,9 +45,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="@dimen/organised_tournament_location_margin_left"
+        android:textColor="@color/colorPrimary"
+        android:textStyle="bold"
+        android:id="@+id/header_tournament_location"
+        android:text="@string/header_tournament_location"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
         android:textColor="@color/colorPrimary"
-        android:layout_marginRight="@dimen/small_tick"
+        android:layout_marginRight="@dimen/main_tick"
         android:textStyle="bold"
         android:id="@+id/header_amount_players"
         android:text="@string/header_amount_player"/>

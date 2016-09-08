@@ -17,8 +17,8 @@ import android.view.ViewGroup;
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.warmachine.Game;
-import madson.org.opentournament.players.AvailablePlayerListFragment;
-import madson.org.opentournament.players.TournamentPlayerListFragment;
+import madson.org.opentournament.organize.setup.AvailablePlayerListFragment;
+import madson.org.opentournament.organize.setup.TournamentPlayerListFragment;
 
 
 public class TournamentRoundManagementFragment extends Fragment implements GameListFragment.GameResultEnteredListener {

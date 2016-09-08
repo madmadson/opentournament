@@ -1,4 +1,4 @@
-package madson.org.opentournament.players;
+package madson.org.opentournament.organize.setup;
 
 import android.app.Dialog;
 
@@ -23,17 +23,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Spinner;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
-import com.jaredrummler.materialspinner.MaterialSpinner;
 
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Player;
@@ -41,7 +37,6 @@ import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.service.PlayerService;
 import madson.org.opentournament.service.TournamentPlayerService;
-import madson.org.opentournament.service.TournamentService;
 import madson.org.opentournament.utility.BaseActivity;
 import madson.org.opentournament.utility.BaseApplication;
 
@@ -58,25 +53,23 @@ public class AddTournamentPlayerDialog extends DialogFragment {
     public static final String BUNDLE_TOURNAMENT = "tournament";
     public static final String BUNDLE_PLAYER = "player";
 
-    private CoordinatorLayout coordinatorLayout;
     private TournamentSetupEventListener mListener;
 
     private EditText firstnameEditText;
     private EditText nicknameEditText;
     private EditText lastnameEditText;
-    private MaterialSpinner factionSpinner;
-    private MaterialSpinner teamnameSpinner;
+    private Spinner factionSpinner;
+    private Spinner teamnameSpinner;
     private ImageButton addNewTeamnameButton;
 
     private Tournament tournament;
     private Player player;
-    private DatabaseReference mFirebaseDatabaseReference;
+    private ArrayAdapter<String> team_adapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        coordinatorLayout = (CoordinatorLayout) getActivity().findViewById(R.id.coordinator_main);
     }
 
 
@@ -119,48 +112,26 @@ public class AddTournamentPlayerDialog extends DialogFragment {
             nicknameEditText = (EditText) dialogView.findViewById(R.id.dialog_add_tournament_player_nickname);
             lastnameEditText = (EditText) dialogView.findViewById(R.id.dialog_add_tournament_player_lastname);
 
-            factionSpinner = (MaterialSpinner) dialogView.findViewById(
-                    R.id.dialog_add_tournament_player_faction_spinner);
+            factionSpinner = (Spinner) dialogView.findViewById(R.id.dialog_add_tournament_player_faction_spinner);
 
-            factionSpinner.setItems(getResources().getStringArray(R.array.factions));
+            ArrayAdapter<CharSequence> faction_adapter = ArrayAdapter.createFromResource(getActivity(),
+                    R.array.factions, android.R.layout.simple_spinner_item);
+            faction_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            factionSpinner.setAdapter(faction_adapter);
 
             TournamentPlayerService tournamentPlayerService = ((BaseApplication) getActivity().getApplication())
                 .getTournamentPlayerService();
 
             final List<String> listOfAllTeamNames = tournamentPlayerService.getAllTeamNamesForTournament(tournament);
 
-            if (tournament.getOnlineUUID() != null && (((BaseActivity) getActivity()).isConnected())) {
-                mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
-
-                final ValueEventListener tournamentPlayerListener = new ValueEventListener() {
-
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-
-                        for (DataSnapshot teamname : dataSnapshot.getChildren()) {
-                            if (!listOfAllTeamNames.contains(teamname.getKey())) {
-                                listOfAllTeamNames.add(teamname.getKey());
-                            }
-                        }
-                    }
-
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                    }
-                };
-
-                DatabaseReference child = mFirebaseDatabaseReference.child("tournaments/" + tournament.getOnlineUUID()
-                        + "/teams");
-
-                child.addValueEventListener(tournamentPlayerListener);
-            }
-
-            teamnameSpinner = (MaterialSpinner) dialogView.findViewById(R.id.dialog_add_tournament_player_teamname);
+            teamnameSpinner = (Spinner) dialogView.findViewById(R.id.dialog_add_tournament_player_teamname);
 
             listOfAllTeamNames.add(0, getString(R.string.no_team));
 
-            teamnameSpinner.setItems(listOfAllTeamNames);
+            team_adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, listOfAllTeamNames);
+            team_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+            teamnameSpinner.setAdapter(team_adapter);
 
             if (bundle.getParcelable(BUNDLE_PLAYER) != null) {
                 player = bundle.getParcelable(BUNDLE_PLAYER);
@@ -209,8 +180,9 @@ public class AddTournamentPlayerDialog extends DialogFragment {
                                 @Override
                                 public void onClick(View view) {
 
-                                    if (newTeamNameEditText.getText().length() != 0) {
-                                        teamnameSpinner.setText(newTeamNameEditText.getText());
+                                    if (newTeamNameEditText.getText().toString().length() != 0) {
+                                        team_adapter.add(newTeamNameEditText.getText().toString());
+                                        teamnameSpinner.setSelection(team_adapter.getCount());
                                         newTeamNameDialog.dismiss();
                                     } else {
                                         newTeamNameEditText.setError(getString(R.string.validation_error_empty));
@@ -223,7 +195,7 @@ public class AddTournamentPlayerDialog extends DialogFragment {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
             builder.setView(dialogView)
-                .setTitle(getString(R.string.new_player_tournament_title, tournament.getName()))
+                .setTitle(getString(R.string.new_player_tournament_title))
                 .setPositiveButton(R.string.dialog_save, null)
                 .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
 
@@ -258,64 +230,69 @@ public class AddTournamentPlayerDialog extends DialogFragment {
 
                         Log.i(this.getClass().getName(), "addTournamentPlayer new tournament_player");
 
-                        String firstname = firstnameEditText.getText().toString();
-                        String nickname = nicknameEditText.getText().toString();
-                        String lastname = lastnameEditText.getText().toString();
+                        final String firstname = firstnameEditText.getText().toString();
+                        final String nickname = nicknameEditText.getText().toString();
+                        final String lastname = lastnameEditText.getText().toString();
 
                         if (!firstname.isEmpty() && !nickname.isEmpty() && !lastname.isEmpty()) {
-                            TournamentPlayerService tournamentPlayerService =
-                                ((BaseApplication) getActivity().getApplication()).getTournamentPlayerService();
+                            Runnable runnable = new Runnable() {
 
-                            if (player == null) {
-                                Log.i(this.getClass().getName(), "add new local player.");
+                                @Override
+                                public void run() {
 
-                                Player newLocalPlayer = new Player();
-                                newLocalPlayer.setFirstname(firstname);
-                                newLocalPlayer.setNickname(nickname);
-                                newLocalPlayer.setLastname(lastname);
+                                    TournamentPlayerService tournamentPlayerService =
+                                        ((BaseApplication) getActivity().getApplication()).getTournamentPlayerService();
 
-                                PlayerService playerService = ((BaseApplication) getActivity().getApplication())
-                                    .getPlayerService();
-                                playerService.createLocalPlayer(newLocalPlayer);
+                                    if (player == null) {
+                                        Log.i(this.getClass().getName(), "add new local player.");
 
-                                player = newLocalPlayer;
-                            } else {
-                                if (mListener != null) {
-                                    mListener.removeAvailablePlayer(player);
+                                        Player newLocalPlayer = new Player();
+                                        newLocalPlayer.setFirstname(firstname);
+                                        newLocalPlayer.setNickname(nickname);
+                                        newLocalPlayer.setLastname(lastname);
+
+                                        PlayerService playerService = ((BaseApplication) getActivity().getApplication())
+                                            .getPlayerService();
+                                        playerService.createLocalPlayer(newLocalPlayer);
+
+                                        player = newLocalPlayer;
+                                    } else {
+                                        if (mListener != null) {
+                                            mListener.removeAvailablePlayer(player);
+                                        }
+                                    }
+
+                                    TournamentPlayer tournamentPlayer = new TournamentPlayer(player, tournament);
+
+                                    tournamentPlayer.setFaction(factionSpinner.getSelectedItem().toString());
+
+                                    if (teamnameSpinner.getSelectedItem() != "-") {
+                                        tournamentPlayer.setTeamname(teamnameSpinner.getSelectedItem().toString());
+                                    }
+
+                                    tournamentPlayerService.addTournamentPlayerToTournament(tournamentPlayer,
+                                        tournament);
+
+                                    ((BaseApplication) getActivity().getApplication()).getTournamentService()
+                                    .increaseActualPlayerForTournament(tournament);
+
+                                    if (mListener != null) {
+                                        mListener.addTournamentPlayer(tournamentPlayer);
+                                    }
+
+                                    Snackbar snackbar = Snackbar.make(
+                                            ((BaseActivity) getActivity()).getCoordinatorLayout(),
+                                            R.string.success_new_player_inserted, Snackbar.LENGTH_LONG);
+
+                                    snackbar.getView()
+                                    .setBackgroundColor(getContext().getResources().getColor(R.color.colorAccent));
+
+                                    snackbar.show();
+
+                                    dialog.dismiss();
                                 }
-                            }
-
-                            TournamentPlayer tournamentPlayer = new TournamentPlayer(player, tournament);
-
-                            tournamentPlayer.setFaction(factionSpinner.getText().toString());
-
-                            if (teamnameSpinner.getText() != "-") {
-                                tournamentPlayer.setTeamname(teamnameSpinner.getText().toString());
-                            }
-
-                            dialog.dismiss();
-
-                            if (tournament.getOnlineUUID() != null && (((BaseActivity) getActivity()).isConnected())) {
-                                // do it online!
-                                tournamentPlayerService.setTournamentPlayerToFirebase(tournamentPlayer, tournament);
-                            } else {
-                                tournamentPlayerService.addTournamentPlayerToTournament(tournamentPlayer, tournament);
-
-                                ((BaseApplication) getActivity().getApplication()).getTournamentService()
-                                .increaseActualPlayerForTournament(tournament);
-
-                                if (mListener != null) {
-                                    mListener.addTournamentPlayer(tournamentPlayer);
-                                }
-                            }
-
-                            Snackbar snackbar = Snackbar.make(coordinatorLayout, R.string.success_new_player_inserted,
-                                    Snackbar.LENGTH_LONG);
-
-                            snackbar.getView()
-                            .setBackgroundColor(getContext().getResources().getColor(R.color.colorAccent));
-
-                            snackbar.show();
+                            };
+                            runnable.run();
                         } else {
                             Log.i(this.getClass().getName(), "validation failed");
 

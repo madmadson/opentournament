@@ -1,12 +1,15 @@
-package madson.org.opentournament.players;
+package madson.org.opentournament.organize.setup;
 
 import android.content.Context;
+
+import android.graphics.drawable.Drawable;
 
 import android.os.Bundle;
 
 import android.support.annotation.Nullable;
 
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,6 +20,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -27,6 +31,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import madson.org.opentournament.R;
+import madson.org.opentournament.db.FirebaseReferences;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.service.TournamentPlayerService;
@@ -34,6 +39,8 @@ import madson.org.opentournament.utility.BaseActivity;
 import madson.org.opentournament.utility.BaseApplication;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -51,7 +58,7 @@ public class TournamentPlayerListFragment extends Fragment {
     private TournamentSetupEventListener mListener;
 
     private DatabaseReference mFirebaseDatabaseReference;
-    private ProgressBar progressBar;
+
     private TextView noTournamentPlayersTextView;
 
     public static TournamentPlayerListFragment newInstance(Tournament tournament) {
@@ -105,40 +112,52 @@ public class TournamentPlayerListFragment extends Fragment {
         }
 
         View view = inflater.inflate(R.layout.fragment_tournament_player_list, container, false);
-        progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
         noTournamentPlayersTextView = (TextView) view.findViewById(R.id.no_tournament_players);
 
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.tournament_player_list_recycler_view);
-
-        List<TournamentPlayer> localTournamentPlayers = new ArrayList<>();
-
-        // load tournaments from server OR load them from local database
-        if (tournament.getOnlineUUID() != null) {
-            if (((BaseActivity) getActivity()).isConnected()) {
-                loadOnlineTournamentPlayers();
-            } else {
-                view.findViewById(R.id.tournament_player_offline_text).setVisibility(View.VISIBLE);
-            }
-        } else {
-            progressBar.setVisibility(View.GONE);
-
-            TournamentPlayerService tournamentPlayerService = ((BaseApplication) getActivity().getApplication())
-                .getTournamentPlayerService();
-            localTournamentPlayers = tournamentPlayerService.getAllPlayersForTournament(tournament);
-
-            if (localTournamentPlayers.size() > 0) {
-                noTournamentPlayersTextView.setVisibility(View.GONE);
-            }
-        }
-
         recyclerView.setHasFixedSize(true);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(linearLayoutManager);
 
-        tournamentPlayerListAdapter = new TournamentPlayerListAdapter(localTournamentPlayers, mListener);
-
+        tournamentPlayerListAdapter = new TournamentPlayerListAdapter(getActivity(), mListener);
         recyclerView.setAdapter(tournamentPlayerListAdapter);
+
+        Runnable runnable = new Runnable() {
+
+            @Override
+            public void run() {
+
+                TournamentPlayerService tournamentPlayerService = ((BaseApplication) getActivity().getApplication())
+                    .getTournamentPlayerService();
+                List<TournamentPlayer> localTournamentPlayers = tournamentPlayerService.getAllPlayersForTournament(
+                        tournament);
+
+                if (localTournamentPlayers.size() > 0) {
+                    noTournamentPlayersTextView.setVisibility(View.GONE);
+                    Collections.sort(localTournamentPlayers, new TournamentPlayerComparator());
+                    tournamentPlayerListAdapter.addTournamentPlayers(localTournamentPlayers);
+                }
+            }
+        };
+        runnable.run();
+
+        Button startButton = (Button) view.findViewById(R.id.start_tournament_button);
+        startButton.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+
+                    ConfirmStartTournamentDialog dialog = new ConfirmStartTournamentDialog();
+
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelable(ConfirmStartTournamentDialog.BUNDLE_TOURNAMENT, tournament);
+                    dialog.setArguments(bundle);
+
+                    FragmentManager supportFragmentManager = getActivity().getSupportFragmentManager();
+                    dialog.show(supportFragmentManager, "confirm start tournament");
+                }
+            });
 
         return view;
     }
@@ -158,8 +177,8 @@ public class TournamentPlayerListFragment extends Fragment {
                 for (DataSnapshot playerSnapshot : dataSnapshot.getChildren()) {
                     onlineTournamentPlayersUUIDs.add(playerSnapshot.getKey());
 
-                    DatabaseReference child = mFirebaseDatabaseReference.child("tournament_players/"
-                            + tournament.getOnlineUUID() + "/" + playerSnapshot.getKey());
+                    DatabaseReference child = mFirebaseDatabaseReference.child(FirebaseReferences.TOURNAMENT_PLAYERS
+                            + "/" + tournament.getOnlineUUID() + "/" + playerSnapshot.getKey());
                     child.addValueEventListener(new ValueEventListener() {
 
                             @Override
@@ -172,7 +191,6 @@ public class TournamentPlayerListFragment extends Fragment {
                                     addPlayer(player);
                                 }
 
-                                progressBar.setVisibility(View.GONE);
                                 noTournamentPlayersTextView.setVisibility(View.GONE);
                             }
 
@@ -184,7 +202,6 @@ public class TournamentPlayerListFragment extends Fragment {
                 }
 
                 if (!dataSnapshot.getChildren().iterator().hasNext()) {
-                    progressBar.setVisibility(View.GONE);
                     noTournamentPlayersTextView.setVisibility(View.VISIBLE);
                 }
             }

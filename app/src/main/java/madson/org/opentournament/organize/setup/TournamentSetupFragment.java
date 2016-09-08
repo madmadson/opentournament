@@ -1,4 +1,4 @@
-package madson.org.opentournament.players;
+package madson.org.opentournament.organize.setup;
 
 import android.content.DialogInterface;
 
@@ -81,10 +81,10 @@ public class TournamentSetupFragment extends Fragment implements TournamentSetup
         FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
 
         createAvailablePlayerListFragment();
-        fragmentTransaction.replace(R.id.left_fragment_container, availablePlayerListFragment);
+        fragmentTransaction.replace(R.id.available_player_fragment_container, availablePlayerListFragment);
 
         createTournamentPlayerListFragment();
-        fragmentTransaction.replace(R.id.right_fragment_container, tournamentPlayerListFragment);
+        fragmentTransaction.replace(R.id.tournament_player_fragment_container, tournamentPlayerListFragment);
 
         Log.i(this.getClass().getName(), "show setup for  tournament " + tournament);
 
@@ -111,28 +111,6 @@ public class TournamentSetupFragment extends Fragment implements TournamentSetup
 
                     FragmentManager supportFragmentManager = getChildFragmentManager();
                     dialog.show(supportFragmentManager, "tournament setup new player");
-                }
-            });
-
-        Button startButton = (Button) view.findViewById(R.id.start_tournament);
-        startButton.setText(getString(R.string.button_start_tournament));
-
-        Drawable chevron = getContext().getResources().getDrawable(R.drawable.ic_chevron_right_black_24dp);
-        startButton.setCompoundDrawablesWithIntrinsicBounds(null, null, chevron, null);
-
-        startButton.setOnClickListener(new View.OnClickListener() {
-
-                @Override
-                public void onClick(View v) {
-
-                    ConfirmStartTournamentDialog dialog = new ConfirmStartTournamentDialog();
-
-                    Bundle bundle = new Bundle();
-                    bundle.putParcelable(ConfirmStartTournamentDialog.BUNDLE_TOURNAMENT, tournament);
-                    dialog.setArguments(bundle);
-
-                    FragmentManager supportFragmentManager = getActivity().getSupportFragmentManager();
-                    dialog.show(supportFragmentManager, "confirm start tournament");
                 }
             });
 

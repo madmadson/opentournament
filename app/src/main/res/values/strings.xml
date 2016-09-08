@@ -55,6 +55,7 @@
     <!--dialog -->
     <string name="dialog_save">save</string>
     <string name="dialog_cancel">cancel</string>
+    <string name="dialog_confirm">confirm</string>
     
     <!-- Tournament management dialog-->
     <string name="dialog_edit_tournament">Edit tournament</string>
@@ -76,12 +77,16 @@
     
     <!-- New Player For Tournament dialog-->
     <string name="validation_error_empty">Field cant not be empty</string>
-    <string name="success_new_player_inserted">New Player inserted</string>
-    <string name="new_player_tournament_title">New player for tournament: %1$s</string>
+    <string name="success_new_player_inserted">Successfully tournament player added</string>
+    <string name="new_player_tournament_title">New tournament player</string>
     <string name="tournament_player_additional_data_title">Additional data for player</string>
-    <string name="button_start_tournament">Start</string>
     
     <!-- Tournament Player List -->
+    <string name="tournament_player_list_heading">Tournament Players</string>
+    <string name="start_tournament">START</string>
+
+    <string name="tournament_player_name_in_row">%1$s \"%2$s\" %3$s</string>
+    
     <string name="heading_tournament_player">Player in %2$s tournament: (%1$d)</string>
     <string name="button_pair_round">Pair \n round %1$d</string>
     <string name="button_change_round">show \n round %1$d</string>
@@ -91,8 +96,8 @@
     <string name="label_faction">faction</string>
     <string name="label_teamname">teamname</string>
     <string name="label_add_teamname">add new teamname</string>
-    <string name="team_name">Team name</string>
-    <string name="faction">Faction</string>
+    <string name="team_name">Team:</string>
+    <string name="faction">Faction:</string>
     <string name="no_team">-</string>
     <string name="add_new_team">Add new team name</string>
 
@@ -115,7 +120,7 @@
     <string name="sign_out">Sign Out</string>
     <string name="user_name">anonymous</string>
 
-
+    <!-- about-->
     <string name="material_design_icons_id" translatable="false">material-design-icons</string>
     <string name="material_design_icons_name" translatable="false">Material Design Icons</string>
     <string name="material_design_icons_author" translatable="false">Austin Andrews</string>
@@ -123,6 +128,8 @@
     <string name="material_design_icons_url" translatable="false">https://materialdesignicons.com/</string>
     <string name="about_used_libraries">Used Open Source libraries:</string>
     <string name="about">about</string>
+    
+    
     <string name="header_tournament_location">Location</string>
     <string name="header_tournament_date">Date</string>
     <string name="heading_tournmant_players">Tournament players</string>
@@ -154,11 +161,10 @@
     <string name="no_tournament_players">No players for tournament found</string>
     <string name="no_available_players_for_tournament">No online players found</string>
     <string name="confirm_remove_tournament_player">Sure remove player from tournament?</string>
-    <string name="tournament_online_heading">Players in tournament</string>
-    <string name="dialog_confirm">confirm</string>
+
     <string name="confirm_start_tournament_title">Tournament should start?</string>
     <string name="header_organised_tournament_action">action</string>
-
+ 
 
 
 </resources>

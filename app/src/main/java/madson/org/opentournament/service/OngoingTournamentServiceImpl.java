@@ -11,19 +11,15 @@ import android.util.Log;
 
 import madson.org.opentournament.db.OpenTournamentDBHelper;
 import madson.org.opentournament.db.warmachine.GameTable;
-import madson.org.opentournament.db.warmachine.TournamentRankingTable;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
-import madson.org.opentournament.domain.TournamentRanking;
 import madson.org.opentournament.domain.warmachine.Game;
-import madson.org.opentournament.players.TournamentPlayerComparator;
+import madson.org.opentournament.organize.setup.TournamentPlayerComparator;
 import madson.org.opentournament.utility.BaseApplication;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 
 /**

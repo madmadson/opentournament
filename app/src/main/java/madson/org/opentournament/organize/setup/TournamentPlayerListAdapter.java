@@ -1,4 +1,6 @@
-package madson.org.opentournament.players;
+package madson.org.opentournament.organize.setup;
+
+import android.content.Context;
 
 import android.support.v7.widget.RecyclerView;
 
@@ -14,6 +16,7 @@ import android.widget.TextView;
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.TournamentPlayer;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -24,23 +27,22 @@ import java.util.List;
  */
 public class TournamentPlayerListAdapter extends RecyclerView.Adapter<TournamentPlayerListAdapter.ViewHolder> {
 
+    private Context context;
     private TournamentSetupEventListener mListener;
-    private List<TournamentPlayer> tournamentPlayerList;
+    private List<TournamentPlayer> tournamentPlayerList = new ArrayList<>();
 
-    public TournamentPlayerListAdapter(List<TournamentPlayer> tournamentPlayerList,
-        TournamentSetupEventListener mListener) {
+    public TournamentPlayerListAdapter(Context context, TournamentSetupEventListener mListener) {
+
+        this.context = context;
 
         this.mListener = mListener;
-        this.tournamentPlayerList = tournamentPlayerList;
     }
 
     @Override
     public TournamentPlayerListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        // create a new view
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_tournament_player, parent, false);
 
-        // set the view's size, margins, paddings and layout parameters
         ViewHolder vh = new ViewHolder(v);
 
         return vh;
@@ -55,15 +57,20 @@ public class TournamentPlayerListAdapter extends RecyclerView.Adapter<Tournament
         holder.getPlayerNumber().setText(String.valueOf(position + 1));
         holder.getTeamName().setText(player.getTeamname());
         holder.getFaction().setText(player.getFaction());
-        holder.getPlayerNameInList()
-            .setText(player.getFirstname() + " \"" + player.getNickname() + "\" " + player.getLastname());
 
-        // mark online player
-        if (player.getPlayer_online_uuid() != null) {
-            holder.getOnlineIcon().setVisibility(View.VISIBLE);
-        } else {
-            holder.getOnlineIcon().setVisibility(View.GONE);
-        }
+        String firstname = player.getFirstname();
+        String nickname = player.getNickname();
+        String lastname = player.getLastname();
+        holder.getPlayerNameInList()
+            .setText(context.getResources()
+                .getString(R.string.tournament_player_name_in_row, firstname, nickname, lastname));
+
+//        // mark online player
+//        if (player.getPlayer_online_uuid() != null) {
+//            holder.getOnlineIcon().setVisibility(View.VISIBLE);
+//        } else {
+//            holder.getOnlineIcon().setVisibility(View.GONE);
+//        }
     }
 
 
@@ -103,6 +110,13 @@ public class TournamentPlayerListAdapter extends RecyclerView.Adapter<Tournament
         } else {
             return false;
         }
+    }
+
+
+    public void addTournamentPlayers(List<TournamentPlayer> localTournamentPlayers) {
+
+        tournamentPlayerList = localTournamentPlayers;
+        notifyDataSetChanged();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

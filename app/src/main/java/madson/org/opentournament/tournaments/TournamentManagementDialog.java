@@ -75,7 +75,7 @@ public class TournamentManagementDialog extends DialogFragment {
 
         super.onCreate(savedInstanceState);
 
-        coordinatorLayout = (CoordinatorLayout) getActivity().findViewById(R.id.coordinator_main);
+        coordinatorLayout = ((BaseActivity) getActivity()).getCoordinatorLayout();
 
         dateFormatter = DateFormat.getDateInstance(DateFormat.DEFAULT, Locale.getDefault());
     }

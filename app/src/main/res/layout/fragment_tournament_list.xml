@@ -1,96 +1,108 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" 
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="@color/colorPrimary"
-        android:paddingTop="@dimen/main_tick"
-        android:paddingBottom="@dimen/main_tick"
-        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
-        android:id="@+id/heading_online_tournaments"
-        android:gravity="center"
-        android:text="@string/heading_online_tournaments"/>
-    
-    <FrameLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-        <include
-            android:id="@+id/row_header_online_tournament"
-            layout="@layout/row_header_online_tournament"/>
-    </FrameLayout>
-    
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/main_tick"
-        android:textStyle="bold"    
-        android:id="@+id/offline_text"
-        android:text="@string/offline_text"
-        android:visibility="gone"/>
 
-    <TextView
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/main_tick"
-        android:textStyle="bold"
-        android:id="@+id/no_online_tournaments"
-        android:text="@string/no_online_tournaments_found" 
-        android:visibility="gone"/>
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <ProgressBar
-        android:id="@+id/progressBar"
-        style="?android:attr/progressBarStyle"
-        android:layout_gravity="center_horizontal"
-        android:paddingTop="@dimen/main_tick"
-        android:paddingBottom="@dimen/main_tick"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-    
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/online_tournament_list_recycler_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/heading_online_tournaments"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingBottom="@dimen/main_tick"
+            android:paddingTop="@dimen/main_tick"
+            android:text="@string/heading_online_tournaments"
+            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
+            android:textColor="@color/colorPrimary" />
 
-    <View
-        android:layout_width="match_parent"                                     
-        android:layout_marginTop="@dimen/main_tick"
-        android:layout_height="@dimen/huge_line_tick"
-        android:background="@color/colorPrimaryDark" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/line_tick"
+            android:background="@color/colorAccent"
+            android:paddingBottom="@dimen/main_tick"
+            android:paddingTop="@dimen/main_tick" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="@color/colorPrimary"
-        android:paddingTop="@dimen/main_tick"
-        android:paddingBottom="@dimen/main_tick"
-        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large" 
-        android:id="@+id/heading_local_tournaments"
-        android:gravity="center"
-        android:text="@string/heading_organized_tournaments"/>
-    
-    <View
-        android:layout_width="match_parent"
-        android:paddingBottom="@dimen/main_tick"
-        android:paddingTop="@dimen/main_tick"
-        android:layout_height="@dimen/line_tick"
-        android:background="@color/colorAccent" />
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
 
+            <include
+                android:id="@+id/row_header_online_tournament"
+                layout="@layout/row_header_online_tournament" />
+        </FrameLayout>
 
-    <FrameLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-        <include
-            android:id="@+id/row_header_organised_tournament"
-            layout="@layout/row_header_organised_tournament"/>
-    </FrameLayout>
-    
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/local_tournament_list_recycler_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-    
-</LinearLayout>
+        <TextView
+            android:id="@+id/offline_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/main_tick"
+            android:text="@string/offline_text"
+            android:textStyle="bold"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/no_online_tournaments"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/main_tick"
+            android:text="@string/no_online_tournaments_found"
+            android:textStyle="bold"
+            android:visibility="gone" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:paddingBottom="@dimen/main_tick"
+            android:paddingTop="@dimen/main_tick" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/online_tournament_list_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/huge_line_tick"
+            android:background="@color/colorPrimaryDark" />
+
+        <TextView
+            android:id="@+id/heading_local_tournaments"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingBottom="@dimen/main_tick"
+            android:paddingTop="@dimen/main_tick"
+            android:text="@string/heading_organized_tournaments"
+            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
+            android:textColor="@color/colorPrimary" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/line_tick"
+            android:background="@color/colorAccent"
+            android:paddingBottom="@dimen/main_tick"
+            android:paddingTop="@dimen/main_tick" />
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <include
+                android:id="@+id/row_header_organised_tournament"
+                layout="@layout/row_header_organised_tournament" />
+        </FrameLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/local_tournament_list_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+</ScrollView>

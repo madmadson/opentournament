@@ -1,4 +1,4 @@
-package madson.org.opentournament.players;
+package madson.org.opentournament.organize.setup;
 
 import android.support.v7.widget.RecyclerView;
 
@@ -11,13 +11,8 @@ import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.TextView;
 
-import com.firebase.ui.database.FirebaseRecyclerAdapter;
-
-import com.google.firebase.database.Query;
-
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Player;
-import madson.org.opentournament.domain.Tournament;
 
 import java.util.ArrayList;
 import java.util.List;

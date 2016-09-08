@@ -20,7 +20,7 @@ import madson.org.opentournament.db.TournamentPlayerTable;
 import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
-import madson.org.opentournament.players.TournamentPlayerComparator;
+import madson.org.opentournament.organize.setup.TournamentPlayerComparator;
 
 import java.util.ArrayList;
 import java.util.Collections;

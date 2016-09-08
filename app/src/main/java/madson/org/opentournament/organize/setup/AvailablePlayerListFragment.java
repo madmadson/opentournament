@@ -1,4 +1,4 @@
-package madson.org.opentournament.players;
+package madson.org.opentournament.organize.setup;
 
 import android.content.Context;
 
@@ -139,9 +139,6 @@ public class AvailablePlayerListFragment extends BaseFragment {
                 child.addValueEventListener(playerListener);
 
                 mOnlinePlayerRecyclerView.setAdapter(onlinePlayerListAdapter);
-            } else {
-                progressBar.setVisibility(View.GONE);
-                view.findViewById(R.id.tournament_player_offline_text).setVisibility(View.VISIBLE);
             }
 
             List<TournamentPlayer> allPlayersForTournament = tournamentPlayerService.getAllPlayersForTournament(

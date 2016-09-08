@@ -4,25 +4,35 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     
-    <TextView
-        android:id="@+id/heading_tournament_players"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:text="@string/tournament_online_heading"
         android:paddingTop="@dimen/main_tick"
-        android:textAppearance="@android:style/TextAppearance.Medium" />
-
-    <ProgressBar
-        android:id="@+id/progressBar"
-        style="?android:attr/progressBarStyle"
-        android:layout_gravity="center_horizontal"
-        android:paddingTop="@dimen/main_tick"
-        android:paddingBottom="@dimen/main_tick"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="visible"/>
-
+        android:orientation="horizontal">
+        
+        <TextView
+            android:id="@+id/heading_tournament_players"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/main_tick"
+            android:text="@string/tournament_player_list_heading"
+            android:textAppearance="@android:style/TextAppearance.Medium" />
+        
+        <Button android:id="@+id/start_tournament_button"
+            android:drawableLeft="@android:drawable/ic_media_play"
+            android:background="@color/colorPrimaryDark"
+            android:drawablePadding="@dimen/small_tick"
+            android:text="@string/start_tournament"
+            android:textColor="@color/colorTextIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/main_tick"
+            android:paddingRight="@dimen/halve_tick"
+            android:layout_alignParentRight="true"/>
+        
+    </RelativeLayout>
+    
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -32,22 +42,12 @@
         android:textStyle="bold"
         android:id="@+id/no_tournament_players"
         android:text="@string/no_tournament_players" />
-
-    <TextView
-        android:id="@+id/tournament_player_offline_text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/main_tick"
-        android:textStyle="bold"
-        android:text="@string/tournament_player_offline_text"
-        android:visibility="gone"/>
     
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/tournament_player_list_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:scrollbars="vertical"
-        android:layout_below="@id/heading_tournament_players"/>
+        android:scrollbars="vertical" />
 
 </LinearLayout>

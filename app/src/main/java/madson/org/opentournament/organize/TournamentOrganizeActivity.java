@@ -19,11 +19,14 @@ import android.view.Menu;
 
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Tournament;
-import madson.org.opentournament.players.TournamentPlayerListFragment;
-import madson.org.opentournament.players.TournamentSetupFragment;
+import madson.org.opentournament.organize.setup.TournamentPlayerListFragment;
+import madson.org.opentournament.organize.setup.TournamentSetupFragment;
 import madson.org.opentournament.utility.BaseActivity;
 
 
+/**
+ * Activity for tournament organiser.
+ */
 public class TournamentOrganizeActivity extends BaseActivity {
 
     public static final String EXTRA_TOURNAMENT = "tournament";
@@ -134,10 +137,12 @@ public class TournamentOrganizeActivity extends BaseActivity {
 
             Log.i(this.getClass().getName(), "create tournament fragment: " + tournament + " on position: " + position);
 
-            if (position == 0 && checkIfOnlineTournamentAndUserNotCreator()) {
-                // show online tournament player list
-                return TournamentPlayerListFragment.newInstance(tournament);
-            } else if (position == 0) {
+            // TODO: refactor to own activity -> tournamentWatchingActivity or something
+//            if (position == 0 && checkIfOnlineTournamentAndUserNotCreator()) {
+//                // show online tournament player list
+//                return TournamentPlayerListFragment.newInstance(tournament);
+//            }
+            if (position == 0) {
                 // setup to addTournamentPlayer players to tournament
                 return TournamentSetupFragment.newInstance(tournament);
             } else {
@@ -145,13 +150,6 @@ public class TournamentOrganizeActivity extends BaseActivity {
 
                 return tournamentRoundManagementFragment;
             }
-        }
-
-
-        private boolean checkIfOnlineTournamentAndUserNotCreator() {
-
-            return tournament.getOnlineUUID() != null
-                && !tournament.getCreatorEmail().equals(getCurrentFireBaseUser().getEmail());
         }
 
 

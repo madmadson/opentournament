@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.os.Handler;
 
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -26,7 +25,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import madson.org.opentournament.R;
 import madson.org.opentournament.db.FirebaseReferences;
@@ -38,7 +36,6 @@ import madson.org.opentournament.utility.BaseApplication;
 import java.text.DateFormat;
 
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 
@@ -78,7 +75,7 @@ public class TournamentListsFragment extends Fragment {
 
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
             mOnlineTournamentsRecyclerView.setLayoutManager(linearLayoutManager);
-            onlineTournmantListAdapter = new OnlineTournamentListAdapter(mListener);
+            onlineTournmantListAdapter = new OnlineTournamentListAdapter(getActivity(), mListener);
 
             DatabaseReference firebaseTournaments = mFirebaseDatabaseReference.getRef()
                     .child(FirebaseReferences.TOURNAMENTS);
@@ -179,10 +176,6 @@ public class TournamentListsFragment extends Fragment {
         TournamentService tournamentService = ((BaseApplication) getActivity().getApplication()).getTournamentService();
         List<Tournament> localTournaments = tournamentService.getTournaments();
 
-        TournamentListHeaderFragment headerFragment = new TournamentListHeaderFragment();
-
-        getChildFragmentManager().beginTransaction().add(R.id.row_tournament_header_container, headerFragment).commit();
-
         Collections.sort(localTournaments, new TournamentComparator());
 
         localTournamentListAdapter = new TournamentListAdapter(localTournaments, mListener);
@@ -234,7 +227,7 @@ public class TournamentListsFragment extends Fragment {
         @Override
         public TournamentViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_tournament, parent, false);
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_organised_tournament, parent, false);
             TournamentViewHolder vh = new TournamentViewHolder(v);
 
             return vh;

@@ -15,6 +15,15 @@
     <string name="header_tournament_name">Tournament name</string>
     <string name="header_amount_player">Players</string>
     
+    <!--tournament row -->
+
+    <string name="players_in_tournament"> %1$d/%2$d</string>
+    
+    
+    <!-- tournament management dialog -->
+    <string name="solo_tournament">Solo tournament</string>
+    <string name="team_tournament">Team tournament</string>
+
     <string name="tournamentName">Tournament name</string>
     <string name="tournamentDescription">Tournament location</string>
     <string name="tournamentDate">Date of tournament</string>
@@ -43,7 +52,7 @@
     
     <!-- Tournament management dialog-->
     <string name="dialog_edit_tournament">Edit tournament</string>
-    <string name="dialog_new_tournament">New tournament</string>
+    <string name="dialog_organize_tournament">Organize your own tournament</string>
     
     <string name="label_tournament_name">tournament name</string>
     <string name="label_tournament_max_players">max players</string>
@@ -148,6 +157,8 @@
     <string name="tournament_online_heading">Players in tournament</string>
     <string name="dialog_confirm">confirm</string>
     <string name="confirm_start_tournament_title">Tournament should start?</string>
+    <string name="header_organised_tournament_action">action</string>
+
 
 
 </resources>

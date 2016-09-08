@@ -1,5 +1,7 @@
 package madson.org.opentournament.tournaments;
 
+import android.content.Context;
+
 import android.os.Bundle;
 
 import android.support.v4.app.FragmentManager;
@@ -34,18 +36,24 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 
+import static android.provider.Settings.Global.getString;
+
 
 /**
  * @author  Tobias Matt - tmatt@contargo.net
  */
 public class OnlineTournamentListAdapter extends RecyclerView.Adapter<OnlineTournamentListAdapter.OnlineTournamentViewHolder> {
 
+    private Context context;
+
     private List<Tournament> mDataset;
     private DateFormat dateFormatter = DateFormat.getDateInstance(DateFormat.DEFAULT, Locale.getDefault());
     private FirebaseUser currentUser;
     private TournamentManagementEventListener mListener;
 
-    public OnlineTournamentListAdapter(TournamentManagementEventListener mListener) {
+    public OnlineTournamentListAdapter(Context context, TournamentManagementEventListener mListener) {
+
+        this.context = context;
 
         this.mListener = mListener;
 
@@ -79,9 +87,10 @@ public class OnlineTournamentListAdapter extends RecyclerView.Adapter<OnlineTour
             viewHolder.getTournamentLocationInList().setText(tournament.getLocation());
         }
 
+        int actualPlayers = tournament.getActualPlayers();
+        int maximalPlayers = tournament.getMaxNumberOfPlayers();
         viewHolder.getTournamentPlayersInList()
-            .setText(String.valueOf(tournament.getActualPlayers()) + "/"
-                + String.valueOf(tournament.getMaxNumberOfPlayers()));
+            .setText(context.getResources().getString(R.string.players_in_tournament, actualPlayers, maximalPlayers));
     }
 
 
@@ -119,7 +128,6 @@ public class OnlineTournamentListAdapter extends RecyclerView.Adapter<OnlineTour
 
     public class OnlineTournamentViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        private ImageButton editTournamentButton;
         private TextView tournamentNameInList;
         private TextView tournamentPlayersInList;
         private TextView tournamentLocationInList;
@@ -131,7 +139,6 @@ public class OnlineTournamentListAdapter extends RecyclerView.Adapter<OnlineTour
             super(v);
             v.setOnClickListener(this);
 
-            editTournamentButton = (ImageButton) v.findViewById(R.id.button_edit_tournament);
             tournamentNameInList = (TextView) v.findViewById(R.id.tournament_name);
             tournamentPlayersInList = (TextView) v.findViewById(R.id.amount_players);
             tournamentLocationInList = (TextView) v.findViewById(R.id.tournament_location);
@@ -150,12 +157,6 @@ public class OnlineTournamentListAdapter extends RecyclerView.Adapter<OnlineTour
         public TextView getTournamentNameInList() {
 
             return tournamentNameInList;
-        }
-
-
-        public ImageButton getEditTournamentButton() {
-
-            return editTournamentButton;
         }
 
 

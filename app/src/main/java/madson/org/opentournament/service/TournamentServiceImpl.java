@@ -17,6 +17,7 @@ import madson.org.opentournament.db.TournamentTable;
 import madson.org.opentournament.db.warmachine.GameTable;
 import madson.org.opentournament.db.warmachine.TournamentRankingTable;
 import madson.org.opentournament.domain.Tournament;
+import madson.org.opentournament.domain.TournamentTyp;
 
 import org.joda.time.DateTime;
 
@@ -70,15 +71,16 @@ public class TournamentServiceImpl implements TournamentService {
     private void createMockTournaments() {
 
         insertTournament(1, "Coin of Evil", "Ludwigsburg", new DateTime(2016, 3, 10, 10, 8).toDate(), 32, null, null,
-            null, 8);
-        insertTournament(2, "HMDZ", "Oberhausen", new DateTime(2016, 5, 20, 10, 0).toDate(), 0, null, null, null, 0);
+            null, 8, TournamentTyp.SOLO.name());
+        insertTournament(2, "HMDZ", "Oberhausen", new DateTime(2016, 5, 20, 10, 0).toDate(), 0, null, null, null, 32,
+            TournamentTyp.TEAM.name());
         insertTournament(3, "Dead Fish", "Heidelberg", new DateTime(2016, 7, 15, 10, 0).toDate(), 16, null, null, null,
-            0);
+            0, TournamentTyp.SOLO.name());
     }
 
 
     private Tournament insertTournament(int id, String name, String location, Date date, int maxPlayer,
-        String onlineUUID, String creator, String creatorEmail, int actualPlayers) {
+        String onlineUUID, String creator, String creatorEmail, int actualPlayers, String tournmanetType) {
 
         ContentValues contentValues = new ContentValues();
 
@@ -94,7 +96,8 @@ public class TournamentServiceImpl implements TournamentService {
         contentValues.put(TournamentTable.COLUMN_ONLINE_UUID, onlineUUID);
         contentValues.put(TournamentTable.COLUMN_CREATOR, creator);
         contentValues.put(TournamentTable.COLUMN_CREATOR_EMAIL, creatorEmail);
-        contentValues.put(TournamentTable.COLUMN_TOURNAMENT_TYPE, "WARMACHINE");
+        contentValues.put(TournamentTable.COLUMN_TOURNAMENT_TYPE, tournmanetType);
+        contentValues.put(TournamentTable.COLUMN_GAME_OR_SPORT_TYPE, "WARMACHINE");
         contentValues.put(TournamentTable.COLUMN_ACTUAL_PLAYERS, actualPlayers);
 
         SQLiteDatabase writableDatabase = openTournamentDBHelper.getWritableDatabase();
@@ -161,6 +164,7 @@ public class TournamentServiceImpl implements TournamentService {
         tournament.setCreatorEmail(cursor.getString(8));
         tournament.setTournamentTyp(cursor.getString(9));
         tournament.setActualPlayers(cursor.getInt(10));
+        tournament.setGameOrSportTyp(cursor.getString(11));
 
         return tournament;
     }
@@ -289,7 +293,7 @@ public class TournamentServiceImpl implements TournamentService {
 
         return insertTournament(0, tournament.getName(), tournament.getLocation(), tournament.getDateOfTournament(),
                 tournament.getMaxNumberOfPlayers(), tournament.getOnlineUUID(), tournament.getCreatorName(),
-                tournament.getCreatorEmail(), tournament.getActualPlayers());
+                tournament.getCreatorEmail(), tournament.getActualPlayers(), tournament.getTournamentTyp());
     }
 
 

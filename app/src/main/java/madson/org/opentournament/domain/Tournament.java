@@ -43,11 +43,13 @@ public class Tournament implements Parcelable {
     private String creatorName;
     private String creatorEmail;
     private TournamentTyp tournamentTyp;
+    private GameOrSportTyp gameOrSportTyp;
 
     // empty constructor
     public Tournament() {
 
-        tournamentTyp = TournamentTyp.WARMACHINE;
+        gameOrSportTyp = GameOrSportTyp.WARMACHINE;
+        tournamentTyp = TournamentTyp.SOLO;
     }
 
 
@@ -69,6 +71,7 @@ public class Tournament implements Parcelable {
         this.creatorName = tournament.getCreatorName();
         this.creatorEmail = tournament.getCreatorEmail();
         this.tournamentTyp = TournamentTyp.valueOf(tournament.getTournamentTyp());
+        this.gameOrSportTyp = GameOrSportTyp.valueOf(tournament.getGameOrSportTyp());
     }
 
 
@@ -77,13 +80,45 @@ public class Tournament implements Parcelable {
         _id = in.readLong();
         name = in.readString();
         location = in.readString();
+        actualPlayers = in.readInt();
         maxNumberOfPlayers = in.readInt();
+        dateOfTournament = new Date(in.readLong());
         actualRound = in.readInt();
         onlineUUID = in.readString();
         creatorName = in.readString();
         creatorEmail = in.readString();
-        dateOfTournament = new Date(in.readLong());
+        setTournamentTyp(in.readString());
+        setGameOrSportTyp(in.readString());
     }
+
+    @Override
+    public int describeContents() {
+
+        return 0;
+    }
+
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+
+        parcel.writeLong(_id);
+        parcel.writeString(name);
+        parcel.writeString(location);
+        parcel.writeInt(actualPlayers);
+        parcel.writeInt(maxNumberOfPlayers);
+
+        if (dateOfTournament != null) {
+            parcel.writeLong(dateOfTournament.getTime());
+        }
+
+        parcel.writeInt(actualRound);
+        parcel.writeString(onlineUUID);
+        parcel.writeString(creatorName);
+        parcel.writeString(creatorEmail);
+        parcel.writeString(getTournamentTyp());
+        parcel.writeString(getGameOrSportTyp());
+    }
+
 
     public int getActualPlayers() {
 
@@ -211,6 +246,18 @@ public class Tournament implements Parcelable {
     }
 
 
+    public String getGameOrSportTyp() {
+
+        return gameOrSportTyp.name();
+    }
+
+
+    public void setGameOrSportTyp(String gameOrSportTyp) {
+
+        this.gameOrSportTyp = GameOrSportTyp.valueOf(gameOrSportTyp);
+    }
+
+
     @Override
     public String toString() {
 
@@ -218,41 +265,15 @@ public class Tournament implements Parcelable {
             + "_id=" + _id
             + ", name='" + name + '\''
             + ", location='" + location + '\''
+            + ", actualPlayers=" + actualPlayers
             + ", maxNumberOfPlayers=" + maxNumberOfPlayers
             + ", dateOfTournament=" + dateOfTournament
             + ", actualRound=" + actualRound
             + ", onlineUUID='" + onlineUUID + '\''
             + ", creatorName='" + creatorName + '\''
             + ", creatorEmail='" + creatorEmail + '\''
-            + ", tournamentTyp=" + tournamentTyp + '}';
-    }
-
-
-    @Override
-    public int describeContents() {
-
-        return 0;
-    }
-
-
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-
-        parcel.writeLong(_id);
-        parcel.writeString(name);
-        parcel.writeString(location);
-        parcel.writeInt(maxNumberOfPlayers);
-        parcel.writeInt(actualRound);
-        parcel.writeString(onlineUUID);
-        parcel.writeString(creatorName);
-        parcel.writeString(creatorEmail);
-
-        if (dateOfTournament != null) {
-            parcel.writeLong(dateOfTournament.getTime());
-        } else {
-            // get today
-            parcel.writeLong(DateTime.now().getMillis());
-        }
+            + ", tournamentTyp=" + tournamentTyp
+            + ", gameOrSportTyp=" + gameOrSportTyp + '}';
     }
 
 

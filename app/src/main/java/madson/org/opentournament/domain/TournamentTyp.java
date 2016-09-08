@@ -4,11 +4,12 @@ import java.io.Serializable;
 
 
 /**
- * Represent type of tournament (warmachine, soccer, chess...).
+ * Represent type of tournament (solo, team, ...).
  *
  * @author  Tobias Matt - tmatt@contargo.net
  */
 public enum TournamentTyp implements Serializable {
 
-    WARMACHINE
+    SOLO,
+    TEAM
 }

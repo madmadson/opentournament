@@ -10,8 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.firebase.auth.FirebaseAuth;
-
 import madson.org.opentournament.R;
 
 
@@ -27,7 +25,7 @@ public class TournamentListHeaderFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
         @Nullable Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.row_header_tournament, container, false);
+        View view = inflater.inflate(R.layout.row_header_online_tournament, container, false);
 
         return view;
     }

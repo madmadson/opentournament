@@ -3,21 +3,26 @@
     android:orientation="vertical" 
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
-    <FrameLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/row_tournament_header_container"/>
-
+    
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/colorPrimary"
-        android:textStyle="bold"
+        android:paddingTop="@dimen/main_tick"
+        android:paddingBottom="@dimen/main_tick"
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
         android:id="@+id/heading_online_tournaments"
         android:gravity="center"
         android:text="@string/heading_online_tournaments"/>
-
+    
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <include
+            android:id="@+id/row_header_online_tournament"
+            layout="@layout/row_header_online_tournament"/>
+    </FrameLayout>
+    
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -50,11 +55,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
+    <View
+        android:layout_width="match_parent"                                     
+        android:layout_marginTop="@dimen/main_tick"
+        android:layout_height="@dimen/huge_line_tick"
+        android:background="@color/colorPrimaryDark" />
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/colorPrimary"
-        android:textStyle="bold"
+        android:paddingTop="@dimen/main_tick"
+        android:paddingBottom="@dimen/main_tick"
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large" 
         android:id="@+id/heading_local_tournaments"
         android:gravity="center"
         android:text="@string/heading_organized_tournaments"/>
@@ -65,6 +78,15 @@
         android:paddingTop="@dimen/main_tick"
         android:layout_height="@dimen/line_tick"
         android:background="@color/colorAccent" />
+
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <include
+            android:id="@+id/row_header_organised_tournament"
+            layout="@layout/row_header_organised_tournament"/>
+    </FrameLayout>
     
     <android.support.v7.widget.RecyclerView
         android:id="@+id/local_tournament_list_recycler_view"

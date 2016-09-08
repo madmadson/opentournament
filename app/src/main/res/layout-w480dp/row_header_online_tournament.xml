@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rootView"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/row_header_height"
+    android:paddingTop="@dimen/main_tick"
+    android:background="@drawable/row_item">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:textColor="@color/colorPrimary"
+        android:textStyle="bold"
+        android:id="@+id/header_tournament_name" 
+        android:text="@string/header_tournament_name"
+        android:layout_marginLeft="@dimen/main_tick"/>
+    
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="@dimen/online_tournament_date_margin_left"
+        android:textColor="@color/colorPrimary"
+        android:textStyle="bold"
+        android:id="@+id/header_tournament_date"
+        android:text="@string/header_tournament_date"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="@dimen/online_tournament_location_margin_left"
+        android:textColor="@color/colorPrimary"
+        android:textStyle="bold"
+        android:id="@+id/header_tournament_location"
+        android:text="@string/header_tournament_location"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:textColor="@color/colorPrimary"
+        android:layout_marginRight="@dimen/main_tick"
+        android:textStyle="bold"
+        android:id="@+id/header_amount_players"
+        android:text="@string/header_amount_player"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colorAccent"
+        android:layout_alignParentBottom="true"/>
+</RelativeLayout>

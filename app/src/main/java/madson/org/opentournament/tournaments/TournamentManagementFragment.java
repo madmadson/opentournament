@@ -1,17 +1,21 @@
 package madson.org.opentournament.tournaments;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 
 import android.os.Bundle;
 
 import android.support.annotation.Nullable;
 
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 
 import android.util.Log;
@@ -23,18 +27,22 @@ import android.view.ViewGroup;
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.organize.TournamentOrganizeActivity;
+import madson.org.opentournament.service.TournamentService;
 import madson.org.opentournament.utility.BaseActivity;
+import madson.org.opentournament.utility.BaseApplication;
 
 
 public class TournamentManagementFragment extends Fragment implements TournamentManagementEventListener {
 
     private TournamentListsFragment tournamentListsFragment;
+    private CoordinatorLayout coordinatorLayout;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
 
+        coordinatorLayout = (CoordinatorLayout) getActivity().findViewById(R.id.coordinator_main);
         tournamentListsFragment = new TournamentListsFragment();
 
         FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
@@ -128,7 +136,46 @@ public class TournamentManagementFragment extends Fragment implements Tournament
 
 
     @Override
-    public void onTournamentUploadClicked(Tournament tournament) {
+    public void onTournamentUploadClicked(final Tournament tournament) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle(R.string.confirm_upload_tournament)
+            .setMessage(R.string.confirm_upload_tournament_text)
+            .setPositiveButton(R.string.dialog_confirm, new DialogInterface.OnClickListener() {
+
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                            Runnable runnable = new Runnable() {
+
+                                @Override
+                                public void run() {
+
+                                    TournamentService tournamentService =
+                                        ((BaseApplication) getActivity().getApplication()).getTournamentService();
+
+                                    if (tournament.getOnlineUUID() == null) {
+                                        Tournament uploadedTournament = tournamentService.createTournamentInFirebase(
+                                                tournament);
+
+                                        onTournamentChangedEvent(uploadedTournament);
+                                    } else {
+                                        tournamentService.updateTournamentInFirebase(tournament);
+                                    }
+
+                                    Snackbar snackbar = Snackbar.make(coordinatorLayout,
+                                            R.string.success_upload_tournament, Snackbar.LENGTH_LONG);
+                                    snackbar.getView()
+                                    .setBackgroundColor(getContext().getResources().getColor(R.color.colorPositive));
+                                    snackbar.show();
+                                }
+                            };
+                            runnable.run();
+                        }
+                    })
+            .setNegativeButton(R.string.dialog_cancel, null);
+
+        builder.show();
     }
 
 

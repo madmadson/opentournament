@@ -12,6 +12,7 @@ import android.util.Log;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import madson.org.opentournament.db.FirebaseReferences;
 import madson.org.opentournament.db.OpenTournamentDBHelper;
 import madson.org.opentournament.db.TournamentTable;
 import madson.org.opentournament.db.warmachine.GameTable;
@@ -49,6 +50,39 @@ public class TournamentServiceImpl implements TournamentService {
         deleteAllRankingsOfTournament();
         createMockTournaments();
     }
+
+    @Override
+    public void updateTournamentInFirebase(Tournament tournament) {
+
+        Log.i(this.getClass().getName(), "update online tournament in firebase: " + tournament);
+
+        DatabaseReference referenceForTournament = FirebaseDatabase.getInstance()
+                .getReference(FirebaseReferences.TOURNAMENTS + "/" + tournament.getGameOrSportTyp() + "/"
+                    + tournament.getOnlineUUID());
+
+        referenceForTournament.setValue(tournament);
+    }
+
+
+    @Override
+    public Tournament createTournamentInFirebase(Tournament tournament) {
+
+        Log.i(this.getClass().getName(), "pushes tournament to online: " + tournament);
+
+        UUID uuid = UUID.randomUUID();
+
+        tournament.setOnlineUUID(uuid.toString());
+
+        insertOnlineUUID(tournament);
+
+        DatabaseReference referenceForNewTournament = FirebaseDatabase.getInstance()
+                .getReference(FirebaseReferences.TOURNAMENTS + "/" + tournament.getGameOrSportTyp() + "/" + uuid);
+
+        referenceForNewTournament.setValue(tournament);
+
+        return tournament;
+    }
+
 
     private void deleteAllGamesOfTournament() {
 
@@ -191,6 +225,21 @@ public class TournamentServiceImpl implements TournamentService {
     }
 
 
+    private void insertOnlineUUID(Tournament tournament) {
+
+        Log.i(this.getClass().getName(), "insert tournament uuid : " + tournament);
+
+        SQLiteDatabase writableDatabase = openTournamentDBHelper.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(TournamentTable.COLUMN_ONLINE_UUID, tournament.getOnlineUUID());
+
+        writableDatabase.update(TournamentTable.TABLE_TOURNAMENTS, contentValues, TournamentTable.COLUMN_ID + " = ?",
+            new String[] { String.valueOf(tournament.get_id()) });
+
+        writableDatabase.close();
+    }
+
+
     @Override
     public void updateActualRound(Long tournamentId, int round) {
 
@@ -205,18 +254,6 @@ public class TournamentServiceImpl implements TournamentService {
             new String[] { String.valueOf(tournamentId) });
 
         writableDatabase.close();
-    }
-
-
-    @Override
-    public void updateTournamentInFirebase(Tournament tournament) {
-
-        Log.i(this.getClass().getName(), "update online tournament in firebase: " + tournament);
-
-        DatabaseReference referenceForTournament = FirebaseDatabase.getInstance()
-                .getReference("tournaments/" + tournament.getOnlineUUID());
-
-        referenceForTournament.setValue(tournament);
     }
 
 
@@ -294,25 +331,6 @@ public class TournamentServiceImpl implements TournamentService {
         return insertTournament(0, tournament.getName(), tournament.getLocation(), tournament.getDateOfTournament(),
                 tournament.getMaxNumberOfPlayers(), tournament.getOnlineUUID(), tournament.getCreatorName(),
                 tournament.getCreatorEmail(), tournament.getActualPlayers(), tournament.getTournamentTyp());
-    }
-
-
-    @Override
-    public void setTournamentToFirebase(Tournament tournament) {
-
-        Log.i(this.getClass().getName(), "pushes tournament to online: " + tournament);
-
-        // avoid manipulate offline tournament
-        Tournament onlineTournament = new Tournament(tournament);
-
-        UUID uuid = UUID.randomUUID();
-
-        onlineTournament.setOnlineUUID(uuid.toString());
-
-        DatabaseReference referenceForNewTournament = FirebaseDatabase.getInstance()
-                .getReference("tournaments/" + uuid);
-
-        referenceForNewTournament.setValue(onlineTournament);
     }
 
 

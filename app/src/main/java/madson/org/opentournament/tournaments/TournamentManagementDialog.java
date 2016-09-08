@@ -271,7 +271,7 @@ public class TournamentManagementDialog extends DialogFragment {
                                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
                                 builder.setTitle(R.string.dialog_confirm_delete_tournament)
-                                .setPositiveButton(R.string.dialog_save, new DialogInterface.OnClickListener() {
+                                .setPositiveButton(R.string.dialog_confirm, new DialogInterface.OnClickListener() {
 
                                             @Override
                                             public void onClick(final DialogInterface sure_draw_dialog, int id) {

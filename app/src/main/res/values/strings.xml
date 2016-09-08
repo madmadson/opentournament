@@ -33,19 +33,25 @@
     <string name="success_create_tournament">Successfully save tournament</string>
     <string name="success_update_tournament">Successfully update tournament</string>
     <string name="success_delete_tournament">Successfully delete tournament</string>
+    <string name="success_upload_tournament">Successfully upload tournament</string>
+    
     
     <string name="dialog_confirm_delete_tournament">
         Sure delete tournament? You cannot recover any data if you confirm.
     </string>
+    <string name="confirm_upload_tournament">Please confirm upload data</string>
+    <string name="confirm_upload_tournament_text">
+        Uploading tournament will enable other people to see your tournament. Only tournament data will be
+        visible in that moment. Updates in your tournament must be published again. Rankings and Games
+        can be published while the tournament takes place.
+    </string>
     
-    <string name="no_online_tournaments_if_anonymous">You cannot create online tournaments anonymously</string>
+    <string name="no_online_tournaments_if_anonymous">
+        You cannot upload tournaments anonymously.\n
+        Please register or sign in with google or facebook.
+    </string>
     <string name="no_online_tournaments_found">No online tournaments found</string>
 
-   
-
-    
-
-    
     <!--dialog -->
     <string name="dialog_save">save</string>
     <string name="dialog_cancel">cancel</string>
@@ -152,7 +158,7 @@
     <string name="dialog_confirm">confirm</string>
     <string name="confirm_start_tournament_title">Tournament should start?</string>
     <string name="header_organised_tournament_action">action</string>
- 
+
 
 
 </resources>

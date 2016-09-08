@@ -28,6 +28,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import madson.org.opentournament.R;
 import madson.org.opentournament.db.FirebaseReferences;
+import madson.org.opentournament.domain.GameOrSportTyp;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.service.TournamentService;
 import madson.org.opentournament.utility.BaseActivity;
@@ -79,7 +80,7 @@ public class TournamentListsFragment extends Fragment {
             onlineTournmantListAdapter = new OnlineTournamentListAdapter(getActivity(), mListener);
 
             DatabaseReference firebaseTournaments = mFirebaseDatabaseReference.getRef()
-                    .child(FirebaseReferences.TOURNAMENTS);
+                    .child(FirebaseReferences.TOURNAMENTS + "/" + GameOrSportTyp.WARMACHINE.name());
             firebaseTournaments.addChildEventListener(new ChildEventListener() {
 
                     @Override

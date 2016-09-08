@@ -42,15 +42,6 @@ public interface TournamentService {
 
 
     /**
-     * Pushes a tournament to online services. Clones given tournament and addTournamentPlayer meta data for online
-     * instance. given tournament will not be manipulated
-     *
-     * @param  tournament
-     */
-    void setTournamentToFirebase(Tournament tournament);
-
-
-    /**
      * Delete tournament for given id.
      *
      * @param  id
@@ -82,9 +73,21 @@ public interface TournamentService {
 
 
     /**
-     * @param  tournament
+     * Update tournament online.
+     *
+     * @param  tournament  to upload
      */
     void updateTournamentInFirebase(Tournament tournament);
+
+
+    /**
+     * Pushes a tournament to online services. Add tournament UUID to tournament.
+     *
+     * @param  tournament  to upload
+     *
+     * @return  uploaded tournament with newly inserted onlineUUID.
+     */
+    Tournament createTournamentInFirebase(Tournament tournament);
 
 
     void increaseActualPlayerForTournament(Tournament tournament);

@@ -90,7 +90,7 @@
             android:id="@+id/tournament_max_players"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/label_tournament_date"
+            android:hint="@string/label_tournament_max_players"
             android:imeOptions="actionNext"
             android:inputType="number"
             android:maxLines="1"
@@ -108,12 +108,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:checked="true"
-                android:text="@string/solo_tournament" />
+                android:text="@string/label_tournament_solo_tournament" />
             <RadioButton
                 android:id="@+id/radio_team_tournament"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/team_tournament" />
+                android:text="@string/label_tournament_team_tournament" />
         </RadioGroup>
 
 </LinearLayout>

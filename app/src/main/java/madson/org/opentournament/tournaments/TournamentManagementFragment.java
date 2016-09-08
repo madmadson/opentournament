@@ -128,4 +128,9 @@ public class TournamentManagementFragment extends Fragment implements Tournament
         FragmentManager supportFragmentManager = getChildFragmentManager();
         dialog.show(supportFragmentManager, "tournament management edit dialog tournament");
     }
+
+
+    @Override
+    public void onTournamentUploadClicked(Tournament tournament) {
+    }
 }

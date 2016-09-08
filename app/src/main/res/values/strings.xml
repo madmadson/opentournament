@@ -21,28 +21,28 @@
     
     
     <!-- tournament management dialog -->
-    <string name="solo_tournament">Solo tournament</string>
-    <string name="team_tournament">Team tournament</string>
+    <string name="dialog_organize_tournament">Organize your own tournament</string>
 
-    <string name="tournamentName">Tournament name</string>
-    <string name="tournamentDescription">Tournament location</string>
-    <string name="tournamentDate">Date of tournament</string>
-    <string name="tournamentNumberOfPlayers">Amount players</string>
-    <string name="textEditTorunamentButton">Edit</string>
-    <string name="textSaveTorunamentButton">Create new tournament</string>
-    <string name="newTournamentSaved">tournament saved</string>
-    <string name="existingTournamentSaved">Edit tournament</string>
+    <string name="label_tournament_name">Tournament name</string>
+    <string name="label_tournament_max_players">Max players</string>
+    <string name="label_tournament_date">Date</string>
+    <string name="label_tournament_location">Location</string>
+    <string name="label_tournament_solo_tournament">Solo tournament</string>
+    <string name="label_tournament_team_tournament">Team tournament</string>
+
+    <string name="success_create_tournament">Successfully save tournament</string>
+    <string name="success_update_tournament">Successfully update tournament</string>
+    <string name="success_delete_tournament">Successfully delete tournament</string>
+    
+    <string name="dialog_confirm_delete_tournament">
+        Sure delete tournament? You cannot recover any data if you confirm.
+    </string>
     
     <string name="no_online_tournaments_if_anonymous">You cannot create online tournaments anonymously</string>
     <string name="no_online_tournaments_found">No online tournaments found</string>
 
-    <string name="success_delete_tournament">Successfuly delete tournament</string>
-    <string name="success_save_online_tournament">Successfuly save online tournament</string>
-    <string name="convert_to_online_tournament">
-        You can convert this tournament to online tournament.
-        Your local tournament will be deleted, but you can manage the tournament
-        with your account (email) from every device 
-    </string>
+   
+
     
 
     
@@ -52,12 +52,7 @@
     
     <!-- Tournament management dialog-->
     <string name="dialog_edit_tournament">Edit tournament</string>
-    <string name="dialog_organize_tournament">Organize your own tournament</string>
     
-    <string name="label_tournament_name">tournament name</string>
-    <string name="label_tournament_max_players">max players</string>
-    <string name="label_tournament_date">date</string>
-    <string name="label_tournament_location">location</string>
     
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -140,7 +135,6 @@
     <string name="toast_sign_out_no_connection">you cant sign out when no internet</string>
      <string name="delete_tournament">Delete Tournament</string>
     <string name="dialof_confirm_draw">Sure draw?</string>
-    <string name="dialog_confirm_delete_tournament">Sure delete tournament? You cannot recover any data if you confirm.</string>
     <string name="dialog_confirm_convert_to_online_tournament">Please confirm convertions to online tournament</string>
     <string name="success_convert_to_online_tournament">successfully convert local tournament to online</string>
     <string name="nav_player_list">Tournament Players</string>
@@ -158,7 +152,7 @@
     <string name="dialog_confirm">confirm</string>
     <string name="confirm_start_tournament_title">Tournament should start?</string>
     <string name="header_organised_tournament_action">action</string>
-
+ 
 
 
 </resources>

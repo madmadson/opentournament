@@ -26,6 +26,8 @@ public interface TournamentService {
 
 
     /**
+     * All tournament in local db.
+     *
      * @return  all tournaments
      */
     List<Tournament> getTournaments();

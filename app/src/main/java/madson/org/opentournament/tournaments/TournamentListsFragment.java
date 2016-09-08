@@ -35,6 +35,7 @@ import madson.org.opentournament.utility.BaseApplication;
 
 import java.text.DateFormat;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
@@ -172,13 +173,21 @@ public class TournamentListsFragment extends Fragment {
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(linearLayoutManager);
+        localTournamentListAdapter = new TournamentListAdapter(mListener);
 
-        TournamentService tournamentService = ((BaseApplication) getActivity().getApplication()).getTournamentService();
-        List<Tournament> localTournaments = tournamentService.getTournaments();
+        Runnable runnable = new Runnable() {
 
-        Collections.sort(localTournaments, new TournamentComparator());
+            @Override
+            public void run() {
 
-        localTournamentListAdapter = new TournamentListAdapter(localTournaments, mListener);
+                TournamentService tournamentService = ((BaseApplication) getActivity().getApplication())
+                    .getTournamentService();
+                List<Tournament> localTournaments = tournamentService.getTournaments();
+                Collections.sort(localTournaments, new TournamentComparator());
+                localTournamentListAdapter.addTournaments(localTournaments);
+            }
+        };
+        runnable.run();
 
         recyclerView.setAdapter(localTournamentListAdapter);
 
@@ -215,12 +224,11 @@ public class TournamentListsFragment extends Fragment {
 
     public class TournamentListAdapter extends RecyclerView.Adapter<TournamentViewHolder> {
 
-        private List<Tournament> mDataset;
+        private List<Tournament> mDataset = new ArrayList<>();
         private TournamentManagementEventListener mListener;
 
-        public TournamentListAdapter(List<Tournament> myDataset, TournamentManagementEventListener mListener) {
+        public TournamentListAdapter(TournamentManagementEventListener mListener) {
 
-            mDataset = myDataset;
             this.mListener = mListener;
         }
 
@@ -252,8 +260,9 @@ public class TournamentListsFragment extends Fragment {
             }
 
             holder.getTournamentPlayersInList()
-                .setText(String.valueOf(tournament.getActualPlayers()) + "/"
-                    + String.valueOf(tournament.getMaxNumberOfPlayers()));
+                .setText(getActivity().getResources()
+                    .getString(R.string.players_in_tournament, tournament.getActualPlayers(),
+                        tournament.getMaxNumberOfPlayers()));
 
             if (holder.getEditTournamentButton() != null) {
                 holder.getEditTournamentButton().setOnClickListener(new View.OnClickListener() {
@@ -262,6 +271,17 @@ public class TournamentListsFragment extends Fragment {
                         public void onClick(View v) {
 
                             mListener.onTournamentEditClicked(tournament);
+                        }
+                    });
+            }
+
+            if (holder.getUploadTournamentButton() != null) {
+                holder.getUploadTournamentButton().setOnClickListener(new View.OnClickListener() {
+
+                        @Override
+                        public void onClick(View v) {
+
+                            mListener.onTournamentUploadClicked(tournament);
                         }
                     });
             }
@@ -292,6 +312,14 @@ public class TournamentListsFragment extends Fragment {
         }
 
 
+        public void addTournaments(List<Tournament> listOfTournaments) {
+
+            mDataset = listOfTournaments;
+
+            notifyDataSetChanged();
+        }
+
+
         public void remove(Tournament item) {
 
             int position = mDataset.indexOf(item);
@@ -303,6 +331,7 @@ public class TournamentListsFragment extends Fragment {
 
     public class TournamentViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
+        private ImageButton uploadTournamentButton;
         private ImageButton editTournamentButton;
         private TextView tournamentNameInList;
         private TextView tournamentPlayersInList;
@@ -316,6 +345,7 @@ public class TournamentListsFragment extends Fragment {
             v.setOnClickListener(this);
 
             editTournamentButton = (ImageButton) v.findViewById(R.id.button_edit_tournament);
+            uploadTournamentButton = (ImageButton) v.findViewById(R.id.button_upload_tournament);
             tournamentNameInList = (TextView) v.findViewById(R.id.tournament_name);
             tournamentPlayersInList = (TextView) v.findViewById(R.id.amount_players);
             tournamentLocationInList = (TextView) v.findViewById(R.id.tournament_location);
@@ -334,6 +364,12 @@ public class TournamentListsFragment extends Fragment {
         public TextView getTournamentNameInList() {
 
             return tournamentNameInList;
+        }
+
+
+        public ImageButton getUploadTournamentButton() {
+
+            return uploadTournamentButton;
         }
 
 

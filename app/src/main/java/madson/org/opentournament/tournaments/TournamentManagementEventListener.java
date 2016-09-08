@@ -25,4 +25,7 @@ public interface TournamentManagementEventListener {
 
 
     void onTournamentEditClicked(Tournament tournament);
+
+
+    void onTournamentUploadClicked(Tournament tournament);
 }

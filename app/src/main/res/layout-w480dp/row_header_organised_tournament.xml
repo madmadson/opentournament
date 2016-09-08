@@ -58,7 +58,7 @@
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
         android:textColor="@color/colorPrimary"
-        android:layout_marginRight="@dimen/small_tick"
+        android:layout_marginRight="@dimen/main_tick"
         android:textStyle="bold"
         android:id="@+id/header_amount_players"
         android:text="@string/header_amount_player"/>

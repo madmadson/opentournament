@@ -59,7 +59,7 @@
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
             android:layout_marginRight="@dimen/main_tick"
-            android:text="0" />
+           />
     </RelativeLayout>
     <View
         android:layout_width="match_parent"

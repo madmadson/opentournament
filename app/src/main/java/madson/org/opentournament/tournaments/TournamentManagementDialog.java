@@ -216,6 +216,15 @@ public class TournamentManagementDialog extends DialogFragment {
                         String tournamentName = tournamentNameEditText.getText().toString();
                         String location = tournamentLocationEditText.getText().toString();
                         String date = tournamentDateEditText.getText().toString();
+
+                        String tournamentType = "";
+
+                        if (tournamentTypeTeamRadio.isChecked()) {
+                            tournamentType = TournamentTyp.TEAM.name();
+                        } else if (tournamentTypeSoloRadio.isChecked()) {
+                            tournamentType = TournamentTyp.SOLO.name();
+                        }
+
                         Date parsed_date = null;
 
                         try {
@@ -228,9 +237,11 @@ public class TournamentManagementDialog extends DialogFragment {
 
                         if (!tournamentName.isEmpty()) {
                             if (tournament == null) {
-                                createNewTournament(tournamentName, location, date, parsed_date, maxPlayers);
+                                createNewTournament(tournamentName, location, date, parsed_date, maxPlayers,
+                                    tournamentType);
                             } else {
-                                updateTournament(tournamentName, location, date, parsed_date, maxPlayers);
+                                updateTournament(tournamentName, location, date, parsed_date, maxPlayers,
+                                    tournamentType);
                             }
 
                             dialog.dismiss();
@@ -263,36 +274,38 @@ public class TournamentManagementDialog extends DialogFragment {
                                 .setPositiveButton(R.string.dialog_save, new DialogInterface.OnClickListener() {
 
                                             @Override
-                                            public void onClick(DialogInterface sure_draw_dialog, int id) {
-
-                                                TournamentService tournamentService =
-                                                    ((BaseApplication) getActivity().getApplication())
-                                                    .getTournamentService();
+                                            public void onClick(final DialogInterface sure_draw_dialog, int id) {
 
                                                 Log.i(this.getClass().getName(), "tournament deletion confirmed");
 
-                                                if (tournament.getOnlineUUID() == null) {
-                                                    Log.e(this.getClass().getName(), "tournament deletion offline");
+                                                Runnable runnable = new Runnable() {
 
-                                                    tournamentService.deleteTournament(tournament.get_id());
+                                                    @Override
+                                                    public void run() {
 
-                                                    if (mListener != null) {
-                                                        mListener.onTournamentDeletedEvent(tournament);
+                                                        TournamentService tournamentService =
+                                                            ((BaseApplication) getActivity().getApplication())
+                                                            .getTournamentService();
+
+                                                        tournamentService.deleteTournament(tournament.get_id());
+
+                                                        if (mListener != null) {
+                                                            mListener.onTournamentDeletedEvent(tournament);
+                                                        }
+
+                                                        Snackbar snackbar = Snackbar.make(coordinatorLayout,
+                                                                R.string.success_delete_tournament,
+                                                                Snackbar.LENGTH_LONG);
+                                                        snackbar.getView()
+                                                        .setBackgroundColor(
+                                                            getContext().getResources().getColor(R.color.colorAccent));
+                                                        snackbar.show();
+
+                                                        sure_draw_dialog.dismiss();
+                                                        dialog.dismiss();
                                                     }
-                                                } else {
-                                                    Log.e(this.getClass().getName(), "tournament deletion online");
-                                                    tournamentService.removeTournamentInFirebase(tournament);
-                                                }
-
-                                                Snackbar snackbar = Snackbar.make(coordinatorLayout,
-                                                        R.string.success_delete_tournament, Snackbar.LENGTH_LONG);
-                                                snackbar.getView()
-                                                .setBackgroundColor(
-                                                    getContext().getResources().getColor(R.color.colorAccent));
-                                                snackbar.show();
-
-                                                sure_draw_dialog.dismiss();
-                                                dialog.dismiss();
+                                                };
+                                                runnable.run();
                                             }
                                         })
                                 .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
@@ -315,90 +328,79 @@ public class TournamentManagementDialog extends DialogFragment {
     /**
      * ************************* UPDATE TOURNAMENT.*************************
      */
-    private void updateTournament(String tournamentName, String location, String date, Date parsed_date,
-        String maxPlayers) {
+    private void updateTournament(final String tournamentName, final String location, final String date,
+        final Date parsed_date, final String maxPlayers, final String tournamentType) {
 
-        tournament.setName(tournamentName);
+        Runnable runnable = new Runnable() {
 
-        if (!location.isEmpty()) {
-            tournament.setLocation(location);
-        } else {
-            tournament.setLocation("unknown");
-        }
+            @Override
+            public void run() {
 
-        if (!date.isEmpty()) {
-            tournament.setDateOfTournament(parsed_date);
-        } else {
-            tournament.setDateOfTournament(null);
-        }
+                fillTournamentWithdata(tournament, tournamentName, location, date, parsed_date, maxPlayers,
+                    tournamentType);
 
-        if (!maxPlayers.isEmpty()) {
-            tournament.setMaxNumberOfPlayers(Integer.valueOf(maxPlayers));
-        } else {
-            tournament.setMaxNumberOfPlayers(0);
-        }
+                final TournamentService tournamentService = ((BaseApplication) getActivity().getApplication())
+                    .getTournamentService();
 
-        final TournamentService tournamentService = ((BaseApplication) getActivity().getApplication())
-            .getTournamentService();
+                tournamentService.updateTournament(tournament);
 
-        // convert to online tournament
+                if (mListener != null) {
+                    mListener.onTournamentChangedEvent(tournament);
+                }
 
-        if (tournament.getOnlineUUID() == null) {
-            // first update local
-            tournamentService.updateTournament(tournament);
-
-            if (mListener != null) {
-                mListener.onTournamentChangedEvent(tournament);
+                Snackbar snackbar = Snackbar.make(coordinatorLayout, R.string.success_update_tournament,
+                        Snackbar.LENGTH_LONG);
+                snackbar.getView().setBackgroundColor(getContext().getResources().getColor(R.color.colorPositive));
+                snackbar.show();
             }
-
-            // after push to firebase with meta data
-            FirebaseUser currentFireBaseUser = ((BaseActivity) getActivity()).getCurrentFireBaseUser();
-
-            if (currentFireBaseUser != null) {
-                tournament.setCreatorName(currentFireBaseUser.getDisplayName());
-                tournament.setCreatorEmail(currentFireBaseUser.getEmail());
-            } else {
-                tournament.setCreatorName("anonymous");
-                tournament.setCreatorEmail("anonymous");
-            }
-
-            tournamentService.setTournamentToFirebase(tournament);
-
-            Snackbar snackbar = Snackbar.make(coordinatorLayout, R.string.success_convert_to_online_tournament,
-                    Snackbar.LENGTH_LONG);
-            snackbar.getView().setBackgroundColor(getContext().getResources().getColor(R.color.colorAccent));
-            snackbar.show();
-        } else {
-            tournamentService.updateTournamentInFirebase(tournament);
-
-            Snackbar snackbar = Snackbar.make(coordinatorLayout, R.string.success_save_online_tournament,
-                    Snackbar.LENGTH_LONG);
-            snackbar.getView().setBackgroundColor(getContext().getResources().getColor(R.color.colorAccent));
-            snackbar.show();
-        }
-
-        tournamentService.updateTournament(tournament);
-
-        if (mListener != null) {
-            mListener.onTournamentChangedEvent(tournament);
-        }
+        };
+        runnable.run();
     }
 
 
     /**
      * *****************NEW TOURNAMENT.****************************
      */
-    private void createNewTournament(String tournamentName, String location, String date, Date parsed_date,
-        String maxPlayers) {
+    private void createNewTournament(final String tournamentName, final String location, final String date,
+        final Date parsed_date, final String maxPlayers, final String tournamentType) {
 
-        Tournament newTournament = new Tournament();
+        Runnable runnable = new Runnable() {
+
+            @Override
+            public void run() {
+
+                Tournament newTournament = new Tournament();
+
+                fillTournamentWithdata(newTournament, tournamentName, location, date, parsed_date, maxPlayers,
+                    tournamentType);
+
+                TournamentService tournamentService = ((BaseApplication) getActivity().getApplication())
+                    .getTournamentService();
+                tournamentService.createTournament(newTournament);
+
+                if (mListener != null) {
+                    mListener.onTournamentAddedEvent(newTournament);
+                }
+
+                Snackbar snackbar = Snackbar.make(coordinatorLayout, R.string.success_create_tournament,
+                        Snackbar.LENGTH_LONG);
+                snackbar.getView().setBackgroundColor(getContext().getResources().getColor(R.color.colorPositive));
+                snackbar.show();
+            }
+        };
+        runnable.run();
+    }
+
+
+    private void fillTournamentWithdata(Tournament newTournament, String tournamentName, String location, String date,
+        Date parsed_date, String maxPlayers, String tournamentType) {
 
         newTournament.setName(tournamentName);
 
         if (!location.isEmpty()) {
             newTournament.setLocation(location);
         } else {
-            newTournament.setLocation("unknown");
+            newTournament.setLocation(null);
         }
 
         if (!date.isEmpty()) {
@@ -413,7 +415,11 @@ public class TournamentManagementDialog extends DialogFragment {
             newTournament.setMaxNumberOfPlayers(0);
         }
 
-        TournamentService tournamentService = ((BaseApplication) getActivity().getApplication()).getTournamentService();
+        if (!tournamentType.isEmpty()) {
+            newTournament.setTournamentTyp(tournamentType);
+        } else {
+            newTournament.setTournamentTyp(TournamentTyp.SOLO.name());
+        }
 
         FirebaseUser currentFireBaseUser = ((BaseActivity) getActivity()).getCurrentFireBaseUser();
 
@@ -423,14 +429,6 @@ public class TournamentManagementDialog extends DialogFragment {
         } else {
             newTournament.setCreatorName("anonymous");
             newTournament.setCreatorEmail("anonymous");
-        }
-
-        tournamentService.setTournamentToFirebase(newTournament);
-
-        tournamentService.createTournament(newTournament);
-
-        if (mListener != null) {
-            mListener.onTournamentAddedEvent(newTournament);
         }
     }
 }

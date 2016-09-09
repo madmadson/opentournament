@@ -2,6 +2,8 @@ package madson.org.opentournament.domain.warmachine;
 
 import android.database.Cursor;
 
+import madson.org.opentournament.domain.TournamentPlayer;
+
 
 /**
  * Represent one game (for one round in tournament).
@@ -13,12 +15,12 @@ public class Game {
     private long _id;
     private String online_uuid;
     private long tournament_id;
-    private String tournament_online_uuid;
     private int tournament_round;
 
     private long player_one_id;
     private String player_one_online_uuid;
     private String player_one_full_name;
+    private TournamentPlayer player1;
     private int player_one_score;
     private int player_one_control_points;
     private int player_one_victory_points;
@@ -26,6 +28,7 @@ public class Game {
     private long player_two_id;
     private String player_two_online_uuid;
     private String player_two_full_name;
+    private TournamentPlayer player2;
     private int player_two_score;
     private int player_two_control_points;
     private int player_two_victory_points;
@@ -48,12 +51,6 @@ public class Game {
     public long getTournament_id() {
 
         return tournament_id;
-    }
-
-
-    public String getTournament_online_uuid() {
-
-        return tournament_online_uuid;
     }
 
 
@@ -165,12 +162,6 @@ public class Game {
     }
 
 
-    public void setTournament_online_uuid(String tournament_online_uuid) {
-
-        this.tournament_online_uuid = tournament_online_uuid;
-    }
-
-
     public void setTournament_round(int tournament_round) {
 
         this.tournament_round = tournament_round;
@@ -268,7 +259,7 @@ public class Game {
             + "_id=" + _id
             + ", online_uuid='" + online_uuid + '\''
             + ", tournament_id=" + tournament_id
-            + ", tournament_online_uuid='" + tournament_online_uuid + '\''
+
             + ", tournament_round=" + tournament_round
             + ", player_one_id=" + player_one_id
             + ", player_one_online_uuid='" + player_one_online_uuid + '\''
@@ -322,27 +313,50 @@ public class Game {
         game.set_id(cursor.getInt(0));
         game.setOnline_uuid(cursor.getString(1));
         game.setTournament_id(cursor.getInt(2));
-        game.setTournament_online_uuid(cursor.getString(3));
-        game.setTournament_round(cursor.getInt(4));
+        game.setTournament_round(cursor.getInt(3));
 
-        game.setPlayer_one_id(cursor.getInt(5));
-        game.setPlayer_one_online_uuid(cursor.getString(6));
-        game.setPlayer_one_full_name(cursor.getString(7));
-        game.setPlayer_one_score(cursor.getInt(8));
-        game.setPlayer_one_control_points(cursor.getInt(9));
-        game.setPlayer_one_victory_points(cursor.getInt(10));
+        game.setPlayer_one_id(cursor.getInt(4));
+        game.setPlayer_one_online_uuid(cursor.getString(5));
 
-        game.setPlayer_two_id(cursor.getInt(11));
-        game.setPlayer_two_online_uuid(cursor.getString(12));
-        game.setPlayer_two_full_name(cursor.getString(13));
-        game.setPlayer_two_score(cursor.getInt(14));
-        game.setPlayer_two_control_points(cursor.getInt(15));
-        game.setPlayer_two_victory_points(cursor.getInt(16));
+        game.setPlayer_one_score(cursor.getInt(6));
+        game.setPlayer_one_control_points(cursor.getInt(7));
+        game.setPlayer_one_victory_points(cursor.getInt(8));
 
-        game.setFinished(cursor.getInt(17) == 1);
+        game.setPlayer_two_id(cursor.getInt(9));
+        game.setPlayer_two_online_uuid(cursor.getString(10));
 
-        game.setScenario(cursor.getString(18));
+        game.setPlayer_two_score(cursor.getInt(11));
+        game.setPlayer_two_control_points(cursor.getInt(12));
+        game.setPlayer_two_victory_points(cursor.getInt(13));
+
+        game.setFinished(cursor.getInt(14) == 1);
+
+        game.setScenario(cursor.getString(15));
 
         return game;
+    }
+
+
+    public TournamentPlayer getPlayer1() {
+
+        return player1;
+    }
+
+
+    public void setPlayer1(TournamentPlayer player1) {
+
+        this.player1 = player1;
+    }
+
+
+    public TournamentPlayer getPlayer2() {
+
+        return player2;
+    }
+
+
+    public void setPlayer2(TournamentPlayer player2) {
+
+        this.player2 = player2;
     }
 }

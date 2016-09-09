@@ -9,15 +9,14 @@
     card_view:cardCornerRadius="4dp"
     android:layout_marginLeft="@dimen/main_tick"
     android:layout_marginRight="@dimen/main_tick"
-    android:layout_marginBottom="@dimen/main_tick"
-    android:layout_marginTop="@dimen/main_tick">
+    android:layout_marginBottom="@dimen/small_tick"
+    android:layout_marginTop="@dimen/small_tick">
 
     <RelativeLayout
         android:id="@+id/lib_card_content"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?android:attr/selectableItemBackground"
-        android:padding="@dimen/main_tick">
+        android:layout_height="match_parent"
+        android:background="?android:attr/selectableItemBackground">
 
         <TextView
             android:id="@+id/ranking_row_player_number"
@@ -25,13 +24,28 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"/>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/main_tick"
+        android:layout_centerInParent="true"
+        android:layout_alignParentLeft="true">
+        
         <TextView
             android:id="@+id/ranking_row_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/main_tick"
-            android:layout_toRightOf="@id/ranking_row_player_number"
+          
            />
+        <TextView
+            android:id="@+id/tournament_player_teamname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+      
+            android:layout_marginLeft="@dimen/main_tick"/>
+    </RelativeLayout>
 
         <TextView
             android:id="@+id/ranking_row_score"

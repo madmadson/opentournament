@@ -24,7 +24,9 @@ import madson.org.opentournament.organize.setup.TournamentPlayerComparator;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 
@@ -288,6 +290,37 @@ public class TournamentPlayerServiceImpl implements TournamentPlayerService {
         }
 
         Collections.sort(players, new TournamentPlayerComparator());
+
+        cursor.close();
+        readableDatabase.close();
+
+        return players;
+    }
+
+
+    @Override
+    public Map<String, TournamentPlayer> getAllPlayerMapForTournament(Tournament tournament) {
+
+        Map<String, TournamentPlayer> players = new HashMap<>();
+        SQLiteDatabase readableDatabase = openTournamentDBHelper.getReadableDatabase();
+
+        Cursor cursor = readableDatabase.query(TournamentPlayerTable.TABLE_TOURNAMENT_PLAYER,
+                TournamentPlayerTable.ALL_COLS_FOR_TOURNAMENT_PLAYER_TABLE, "tournament_id  = ?",
+                new String[] { Long.toString(tournament.get_id()) }, null, null, null);
+
+        cursor.moveToFirst();
+
+        while (!cursor.isAfterLast()) {
+            TournamentPlayer tournamentPlayer = cursorToTournamentPlayer(cursor);
+
+            if (tournamentPlayer.getPlayer_online_uuid() != null) {
+                players.put(tournamentPlayer.getPlayer_online_uuid(), tournamentPlayer);
+            } else {
+                players.put(String.valueOf(tournamentPlayer.getPlayer_id()), tournamentPlayer);
+            }
+
+            cursor.moveToNext();
+        }
 
         cursor.close();
         readableDatabase.close();

@@ -1,5 +1,7 @@
 package madson.org.opentournament.organize;
 
+import android.content.Context;
+
 import android.os.Bundle;
 
 import android.support.annotation.Nullable;
@@ -21,6 +23,7 @@ import madson.org.opentournament.domain.TournamentRanking;
 import madson.org.opentournament.service.RankingService;
 import madson.org.opentournament.utility.BaseApplication;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -35,13 +38,12 @@ public class RankingListFragment extends Fragment {
     public static final String BUNDLE_ROUND = "round";
     private Tournament tournament;
     private int round;
+    private RankingListAdapter rankingListAdapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-
-        setRetainInstance(true);
     }
 
 
@@ -60,42 +62,50 @@ public class RankingListFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_ranking_list, container, false);
 
-        RankingService rankingService = ((BaseApplication) getActivity().getApplication()).getRankingService();
-
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.ranking_list_recycler_view);
-
         recyclerView.setHasFixedSize(true);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(linearLayoutManager);
 
-        List<TournamentRanking> rankingsForRound = rankingService.getTournamentRankingForRound(tournament, round);
-
         TextView heading = (TextView) view.findViewById(R.id.heading_ranking_for_round);
-
-        if (round != 0) {
-            heading.setText(getString(R.string.heading_ranking_for_round, (round - 1)));
-        } else {
-            heading.setText(getString(R.string.heading_tournmant_players));
-        }
+        heading.setText(getString(R.string.heading_ranking_for_round, round));
 
         RankingListHeaderFragment headerFragment = new RankingListHeaderFragment();
-
         getChildFragmentManager().beginTransaction().add(R.id.row_ranking_header_container, headerFragment).commit();
 
-        RankingListAdapter rankingListAdapter = new RankingListAdapter(rankingsForRound);
+        rankingListAdapter = new RankingListAdapter(getActivity());
         recyclerView.setAdapter(rankingListAdapter);
+
+        Runnable runnable = new Runnable() {
+
+            @Override
+            public void run() {
+
+                RankingService rankingService = ((BaseApplication) getActivity().getApplication()).getRankingService();
+
+                List<TournamentRanking> rankingsForRound = rankingService.getTournamentRankingForRound(tournament,
+                        round);
+
+                rankingListAdapter.setRankings(rankingsForRound);
+            }
+        };
+
+        runnable.run();
 
         return view;
     }
 
     private class RankingListAdapter extends RecyclerView.Adapter<RankingListAdapter.ViewHolder> {
 
-        private final List<TournamentRanking> rankingList;
+        private List<TournamentRanking> rankingList;
+        private Context context;
 
-        public RankingListAdapter(List<TournamentRanking> ranking) {
+        public RankingListAdapter(Context context) {
 
-            this.rankingList = ranking;
+            this.context = context;
+
+            this.rankingList = new ArrayList<>();
         }
 
         @Override
@@ -115,6 +125,7 @@ public class RankingListFragment extends Fragment {
         public void onBindViewHolder(RankingListAdapter.ViewHolder holder, int position) {
 
             final TournamentRanking ranking = rankingList.get(position);
+
             holder.setRanking(ranking);
             holder.getRankingNumber().setText(String.valueOf(position + 1));
             holder.getScore().setText(String.valueOf(ranking.getScore()));
@@ -122,7 +133,9 @@ public class RankingListFragment extends Fragment {
             holder.getCp().setText(String.valueOf(ranking.getControl_points()));
             holder.getVp().setText(String.valueOf(ranking.getVictory_points()));
             holder.getPlayerNameInList()
-                .setText(ranking.getFirstname() + " \"" + ranking.getNickname() + "\" " + ranking.getLastname());
+                .setText(context.getResources()
+                    .getString(R.string.tournament_player_name_in_row, ranking.getFirstname(), ranking.getNickname(),
+                        ranking.getLastname()));
         }
 
 
@@ -130,6 +143,13 @@ public class RankingListFragment extends Fragment {
         public int getItemCount() {
 
             return rankingList.size();
+        }
+
+
+        public void setRankings(List<TournamentRanking> rankingsForRound) {
+
+            rankingList = rankingsForRound;
+            notifyDataSetChanged();
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder {

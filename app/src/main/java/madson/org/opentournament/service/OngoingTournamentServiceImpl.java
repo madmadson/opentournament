@@ -20,6 +20,7 @@ import madson.org.opentournament.utility.BaseApplication;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -60,6 +61,9 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
     @Override
     public List<Game> getGamesForRound(Tournament tournament, int round) {
 
+        Map<String, TournamentPlayer> allPlayerMapForTournament = tournamentPlayerService.getAllPlayerMapForTournament(
+                tournament);
+
         List<Game> games = new ArrayList<>();
         SQLiteDatabase readableDatabase = openTournamentDBHelper.getReadableDatabase();
 
@@ -70,8 +74,21 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
         cursor.moveToFirst();
 
         while (!cursor.isAfterLast()) {
-            Game pairing = Game.cursorToGame(cursor);
-            games.add(pairing);
+            Game game = Game.cursorToGame(cursor);
+
+            if (game.getPlayer_one_online_uuid() != null) {
+                game.setPlayer1(allPlayerMapForTournament.get(game.getPlayer_one_online_uuid()));
+            } else {
+                game.setPlayer1(allPlayerMapForTournament.get(String.valueOf(game.getPlayer_one_id())));
+            }
+
+            if (game.getPlayer_two_online_uuid() != null) {
+                game.setPlayer2(allPlayerMapForTournament.get(game.getPlayer_one_online_uuid()));
+            } else {
+                game.setPlayer2(allPlayerMapForTournament.get(String.valueOf(game.getPlayer_two_id())));
+            }
+
+            games.add(game);
             cursor.moveToNext();
         }
 
@@ -106,16 +123,26 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
             game.setTournament_round(round);
 
             TournamentPlayer player_one = players.get(i);
+
             game.setPlayer_one_id(player_one.getPlayer_id());
-            game.setPlayer_one_full_name(player_one.getFirstname() + " \"" + player_one.getNickname() + "\" "
-                + player_one.getLastname());
+
+            if (player_one.getPlayer_online_uuid() != null) {
+                game.setPlayer_one_online_uuid(player_one.getOnline_uuid());
+            }
+
+            game.setPlayer1(player_one);
 
             Log.i(this.getClass().getName(), "player2:" + players.get(i + 1));
 
             TournamentPlayer player_two = players.get(i + 1);
+
+            if (player_one.getPlayer_online_uuid() != null) {
+                game.setPlayer_one_online_uuid(player_one.getOnline_uuid());
+            }
+
+            game.setPlayer2(player_two);
+
             game.setPlayer_two_id(player_two.getPlayer_id());
-            game.setPlayer_two_full_name(player_two.getFirstname() + " \"" + player_two.getNickname() + "\" "
-                + player_two.getLastname());
 
             games.add(game);
         }
@@ -137,23 +164,23 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
         SQLiteDatabase readableDatabase = openTournamentDBHelper.getReadableDatabase();
 
         Cursor cursor = readableDatabase.query(GameTable.TABLE_TOURNAMENT_GAME, GameTable.ALL_COLS_FOR_TOURNAMENT_GAME,
-                "_id  = ? ", new String[] { String.valueOf(game_id) }, null, null, null);
+                GameTable.COLUMN_ID + " = ? ", new String[] { String.valueOf(game_id) }, null, null, null);
 
         cursor.moveToFirst();
 
-        Game pairing = null;
+        Game game = null;
 
         while (!cursor.isAfterLast()) {
-            pairing = Game.cursorToGame(cursor);
+            game = Game.cursorToGame(cursor);
             cursor.moveToNext();
         }
 
         cursor.close();
         readableDatabase.close();
 
-        Log.i(this.getClass().getName(), "pairing loaded sucessfully: " + pairing);
+        Log.i(this.getClass().getName(), "game loaded sucessfully: " + game);
 
-        return pairing;
+        return game;
     }
 
 
@@ -175,7 +202,7 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
         contentValues.put(GameTable.COLUMN_PLAYER_TWO_VICTORY_POINTS, game.getPlayer_two_victory_points());
         contentValues.put(GameTable.COLUMN_FINISHED, game.isFinished());
 
-        db.update(GameTable.TABLE_TOURNAMENT_GAME, contentValues, "_id = ? ",
+        db.update(GameTable.TABLE_TOURNAMENT_GAME, contentValues, GameTable.COLUMN_ID + " = ? ",
             new String[] { String.valueOf(game.get_id()) });
     }
 
@@ -201,14 +228,17 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
 
         SQLiteDatabase db = openTournamentDBHelper.getWritableDatabase();
 
-        for (Game pairing : games) {
+        for (Game game : games) {
             ContentValues contentValues = new ContentValues();
-            contentValues.put(GameTable.COLUMN_TOURNAMENT_ID, pairing.getTournament_id());
-            contentValues.put(GameTable.COLUMN_PLAYER_ONE_ID, pairing.getPlayer_one_id());
-            contentValues.put(GameTable.COLUMN_PLAYER_TWO_ID, pairing.getPlayer_two_id());
-            contentValues.put(GameTable.COLUMN_PLAYER_ONE_FULL_NAME, pairing.getPlayer_one_full_name());
-            contentValues.put(GameTable.COLUMN_PLAYER_TWO_FULL_NAME, pairing.getPlayer_two_full_name());
-            contentValues.put(GameTable.COLUMN_TOURNAMENT_ROUND, pairing.getTournament_round());
+            contentValues.put(GameTable.COLUMN_TOURNAMENT_ID, game.getTournament_id());
+            contentValues.put(GameTable.COLUMN_TOURNAMENT_ROUND, game.getTournament_round());
+
+            contentValues.put(GameTable.COLUMN_PLAYER_ONE_ID, game.getPlayer_one_id());
+            contentValues.put(GameTable.COLUMN_PLAYER_ONE_ONLINE_UUID, game.getPlayer_one_online_uuid());
+
+            contentValues.put(GameTable.COLUMN_PLAYER_TWO_ID, game.getPlayer_two_id());
+            contentValues.put(GameTable.COLUMN_PLAYER_TWO_ONLINE_UUID, game.getPlayer_two_online_uuid());
+
             db.insert(GameTable.TABLE_TOURNAMENT_GAME, null, contentValues);
         }
 

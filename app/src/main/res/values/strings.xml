@@ -165,6 +165,7 @@
     <string name="no_available_online_players_for_tournament">No online players found (check filter)</string>
     <string name="no_available_players_for_tournament">No local players found (check filter)</string>
     <string name="pair_again">pair again</string>
+    <string name="next_round">Next Round</string>
 
 
 </resources>

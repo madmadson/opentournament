@@ -17,6 +17,13 @@
         android:layout_height="wrap_content"
         android:id="@+id/row_ranking_header_container"/>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/line_tick"
+        android:background="@color/colorAccent"
+        android:paddingBottom="@dimen/main_tick"
+        android:paddingTop="@dimen/main_tick" />
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/ranking_list_recycler_view"
         android:layout_width="match_parent"

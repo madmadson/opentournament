@@ -1,5 +1,7 @@
 package madson.org.opentournament.organize;
 
+import android.content.Context;
+
 import android.os.Bundle;
 
 import android.support.v4.app.FragmentActivity;
@@ -18,8 +20,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import madson.org.opentournament.R;
+import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.domain.warmachine.Game;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -30,24 +34,31 @@ import java.util.List;
  */
 public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHolder> {
 
-    private List<Game> pairingsForTournament;
-    private FragmentActivity context;
+    private List<Game> gamesForRound;
+    private Context context;
 
-    public GameListAdapter(List<Game> pairingsForTournament, FragmentActivity activity) {
+    public GameListAdapter(Context context) {
 
-        this.pairingsForTournament = pairingsForTournament;
-        context = activity;
+        this.gamesForRound = new ArrayList<>();
+        this.context = context;
     }
 
     public void updateGame(Game game) {
 
-        if (pairingsForTournament.contains(game)) {
-            int indexOfGame = pairingsForTournament.indexOf(game);
+        if (gamesForRound.contains(game)) {
+            int indexOfGame = gamesForRound.indexOf(game);
 
-            pairingsForTournament.remove(game);
-            pairingsForTournament.add(indexOfGame, game);
+            gamesForRound.remove(game);
+            gamesForRound.add(indexOfGame, game);
             notifyDataSetChanged();
         }
+    }
+
+
+    public void setGames(List<Game> games) {
+
+        this.gamesForRound = games;
+        notifyDataSetChanged();
     }
 
 
@@ -63,7 +74,7 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHo
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
 
-        final Game game = pairingsForTournament.get(position);
+        final Game game = gamesForRound.get(position);
         holder.setPairing(game);
 
         if (game.isFinished()) {
@@ -78,12 +89,20 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHo
                         : context.getResources().getColor(R.color.colorLoose));
         }
 
-        holder.getPlayerOneNameInList().setText(String.valueOf(game.getPlayer_one_full_name()));
+        TournamentPlayer player1 = game.getPlayer1();
+        holder.getPlayerOneNameInList()
+            .setText(context.getResources()
+                .getString(R.string.tournament_player_name_in_row, player1.getFirstname(), player1.getNickname(),
+                    player1.getLastname()));
         holder.getPlayerOneScore().setText("WIN: " + String.valueOf(game.getPlayer_one_score()));
         holder.getPlayerOneControlPoints().setText("CP: " + String.valueOf(game.getPlayer_one_control_points()));
         holder.getPlayerOneVictoryPoints().setText("VP: " + String.valueOf(game.getPlayer_one_victory_points()));
 
-        holder.getPlayerTwoNameInList().setText(String.valueOf(game.getPlayer_two_full_name()));
+        TournamentPlayer player2 = game.getPlayer2();
+        holder.getPlayerTwoNameInList()
+            .setText(context.getResources()
+                .getString(R.string.tournament_player_name_in_row, player2.getFirstname(), player2.getNickname(),
+                    player2.getLastname()));
         holder.getPlayerTwoScore().setText("WIN: " + String.valueOf(game.getPlayer_two_score()));
         holder.getPlayerTwoControlPoints().setText("CP: " + String.valueOf(game.getPlayer_two_control_points()));
         holder.getPlayerTwoVictoryPoints().setText("VP: " + String.valueOf(game.getPlayer_two_victory_points()));
@@ -93,7 +112,7 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHo
     @Override
     public int getItemCount() {
 
-        return pairingsForTournament.size();
+        return gamesForRound.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

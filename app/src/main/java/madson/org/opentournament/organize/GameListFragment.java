@@ -25,8 +25,6 @@ import java.util.List;
 
 
 /**
- * Write some fancy Javadoc!
- *
  * @author  Tobias Matt - tmatt@contargo.net
  */
 public class GameListFragment extends Fragment {
@@ -59,24 +57,31 @@ public class GameListFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_game_list, container, false);
 
-        OngoingTournamentService ongoingTournamentService = ((BaseApplication) getActivity().getApplication())
-            .getOngoingTournamentService();
-
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.game_list_recycler_view);
-
         recyclerView.setHasFixedSize(true);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(linearLayoutManager);
 
-        List<Game> pairingsForTournament = ongoingTournamentService.getGamesForRound(tournament, round);
-
         TextView heading = (TextView) view.findViewById(R.id.heading_game_for_round);
         heading.setText(getString(R.string.heading_games_for_round, round));
 
-        gameListAdapter = new GameListAdapter(pairingsForTournament, getActivity());
-
+        gameListAdapter = new GameListAdapter(getActivity());
         recyclerView.setAdapter(gameListAdapter);
+
+        Runnable runnable = new Runnable() {
+
+            @Override
+            public void run() {
+
+                OngoingTournamentService ongoingTournamentService = ((BaseApplication) getActivity().getApplication())
+                    .getOngoingTournamentService();
+
+                List<Game> gamesForRound = ongoingTournamentService.getGamesForRound(tournament, round);
+                gameListAdapter.setGames(gamesForRound);
+            }
+        };
+        runnable.run();
 
         return view;
     }

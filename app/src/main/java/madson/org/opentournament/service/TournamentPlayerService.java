@@ -7,6 +7,7 @@ import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
 
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -25,6 +26,14 @@ public interface TournamentPlayerService {
      * @return  list of all players
      */
     List<TournamentPlayer> getAllPlayersForTournament(Tournament tournament);
+
+
+    /**
+     * @param  tournament  tournament
+     *
+     * @return  map of all players; tournament player id is key
+     */
+    Map<String, TournamentPlayer> getAllPlayerMapForTournament(Tournament tournament);
 
 
     /**

@@ -31,12 +31,22 @@
             android:background="?android:attr/selectableItemBackground">
 
             <TextView
-                android:id="@+id/pairing_player_one_name"
+                android:id="@+id/player_one_name"
                 android:layout_gravity="center_horizontal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/small_tick"
                 android:layout_marginBottom="@dimen/small_tick"
+                android:gravity="center_vertical" />
+
+            <TextView
+                android:id="@+id/player_one_faction"
+                android:layout_gravity="center_horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/small_tick"
+                android:layout_marginBottom="@dimen/small_tick"
+                android:textAppearance="?android:attr/textAppearanceMedium"
                 android:gravity="center_vertical" />
 
             <View
@@ -104,12 +114,22 @@
             android:background="?android:attr/selectableItemBackground">
 
             <TextView
-                android:id="@+id/pairing_player_two_name"
+                android:id="@+id/player_two_name"
                 android:layout_gravity="center_horizontal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/small_tick"
                 android:layout_marginBottom="@dimen/small_tick"
+                android:gravity="center_vertical" />
+
+            <TextView
+                android:id="@+id/player_two_faction"
+                android:layout_gravity="center_horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/small_tick"
+                android:layout_marginBottom="@dimen/small_tick"
+                android:textAppearance="?android:attr/textAppearanceMedium"
                 android:gravity="center_vertical" />
 
             <View

@@ -4,7 +4,6 @@ import android.content.Context;
 
 import android.os.Bundle;
 
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 
 import android.support.v7.app.AppCompatActivity;
@@ -75,7 +74,7 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHo
     public void onBindViewHolder(ViewHolder holder, int position) {
 
         final Game game = gamesForRound.get(position);
-        holder.setPairing(game);
+        holder.setGame(game);
 
         if (game.isFinished()) {
             ;
@@ -94,18 +93,28 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHo
             .setText(context.getResources()
                 .getString(R.string.tournament_player_name_in_row, player1.getFirstname(), player1.getNickname(),
                     player1.getLastname()));
-        holder.getPlayerOneScore().setText("WIN: " + String.valueOf(game.getPlayer_one_score()));
-        holder.getPlayerOneControlPoints().setText("CP: " + String.valueOf(game.getPlayer_one_control_points()));
-        holder.getPlayerOneVictoryPoints().setText("VP: " + String.valueOf(game.getPlayer_one_victory_points()));
+        holder.getPlayerOneFaction().setText(player1.getFaction());
+
+        holder.getPlayerOneScore()
+            .setText(context.getResources().getString(R.string.game_win, game.getPlayer_one_score()));
+        holder.getPlayerOneControlPoints()
+            .setText(context.getResources().getString(R.string.game_cp, game.getPlayer_one_control_points()));
+        holder.getPlayerOneVictoryPoints()
+            .setText(context.getResources().getString(R.string.game_vp, game.getPlayer_one_victory_points()));
 
         TournamentPlayer player2 = game.getPlayer2();
         holder.getPlayerTwoNameInList()
             .setText(context.getResources()
                 .getString(R.string.tournament_player_name_in_row, player2.getFirstname(), player2.getNickname(),
                     player2.getLastname()));
-        holder.getPlayerTwoScore().setText("WIN: " + String.valueOf(game.getPlayer_two_score()));
-        holder.getPlayerTwoControlPoints().setText("CP: " + String.valueOf(game.getPlayer_two_control_points()));
-        holder.getPlayerTwoVictoryPoints().setText("VP: " + String.valueOf(game.getPlayer_two_victory_points()));
+        holder.getPlayerTwoFaction().setText(player2.getFaction());
+
+        holder.getPlayerTwoScore()
+            .setText(context.getResources().getString(R.string.game_win, game.getPlayer_two_score()));
+        holder.getPlayerTwoControlPoints()
+            .setText(context.getResources().getString(R.string.game_cp, game.getPlayer_two_control_points()));
+        holder.getPlayerTwoVictoryPoints()
+            .setText(context.getResources().getString(R.string.game_vp, game.getPlayer_two_victory_points()));
     }
 
 
@@ -117,11 +126,12 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHo
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        private Game pairing;
+        private Game game;
 
         private CardView playerOneCardView;
 
         private TextView playerOneNameInList;
+        private TextView playerOneFaction;
         private TextView playerOneScore;
         private TextView playerOneControlPoints;
         private TextView playerOneVictoryPoints;
@@ -129,6 +139,7 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHo
         private CardView playerTwoCardView;
 
         private TextView playerTwoNameInList;
+        private TextView playerTwoFaction;
         private TextView playerTwoScore;
         private TextView playerTwoControlPoints;
         private TextView playerTwoVictoryPoints;
@@ -142,12 +153,14 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHo
             playerOneCardView = (CardView) v.findViewById(R.id.game_list_player_one_card_view);
             playerTwoCardView = (CardView) v.findViewById(R.id.game_list_player_two_card_view);
 
-            playerOneNameInList = (TextView) v.findViewById(R.id.pairing_player_one_name);
+            playerOneNameInList = (TextView) v.findViewById(R.id.player_one_name);
+            playerOneFaction = (TextView) v.findViewById(R.id.player_one_faction);
             playerOneScore = (TextView) v.findViewById(R.id.pairing_player_one_score);
             playerOneControlPoints = (TextView) v.findViewById(R.id.pairing_player_one_control_points);
             playerOneVictoryPoints = (TextView) v.findViewById(R.id.pairing_player_one_victory_points);
 
-            playerTwoNameInList = (TextView) v.findViewById(R.id.pairing_player_two_name);
+            playerTwoNameInList = (TextView) v.findViewById(R.id.player_two_name);
+            playerTwoFaction = (TextView) v.findViewById(R.id.player_two_faction);
             playerTwoScore = (TextView) v.findViewById(R.id.pairing_player_two_score);
             playerTwoControlPoints = (TextView) v.findViewById(R.id.pairing_player_two_control_points);
             playerTwoVictoryPoints = (TextView) v.findViewById(R.id.pairing_player_two_victory_points);
@@ -156,12 +169,12 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHo
         @Override
         public void onClick(View v) {
 
-            Log.i(v.getClass().getName(), "pairing clicked: " + pairing);
+            Log.i(v.getClass().getName(), "game clicked: " + game);
 
             EnterResultForGameDialog dialog = new EnterResultForGameDialog();
 
             Bundle resultForPairingResult = new Bundle();
-            resultForPairingResult.putLong(EnterResultForGameDialog.BUNDLE_GAME_ID, pairing.get_id());
+            resultForPairingResult.putParcelable(EnterResultForGameDialog.BUNDLE_GAME, game);
             dialog.setArguments(resultForPairingResult);
 
             FragmentManager supportFragmentManager = ((AppCompatActivity) v.getContext()).getSupportFragmentManager();
@@ -169,9 +182,9 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHo
         }
 
 
-        public void setPairing(Game pairing) {
+        public void setGame(Game game) {
 
-            this.pairing = pairing;
+            this.game = game;
         }
 
 
@@ -232,6 +245,18 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHo
         public TextView getPlayerOneScore() {
 
             return playerOneScore;
+        }
+
+
+        public TextView getPlayerTwoFaction() {
+
+            return playerTwoFaction;
+        }
+
+
+        public TextView getPlayerOneFaction() {
+
+            return playerOneFaction;
         }
     }
 }

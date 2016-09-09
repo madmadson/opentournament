@@ -105,10 +105,15 @@
     <string name="heading_games_for_round">Games round: %1$d</string>
     <string name="upload_games">upload</string>
     
-    <!-- confirm pairing dialog -->
+    <!-- confirm game dialog -->
     <string name="confirm">confirm</string>
     <string name="confirm_pairing_title">Pairing round: %1$d</string>
 
+    <!-- game card -->
+    <string name="game_win">WIN: %1$d</string>
+    <string name="game_cp">CP: %1$d</string>
+    <string name="game_vp">VP: %1$d</string>
+    
     <!-- result entering dialog -->
     <string name="result">confirm</string>
     <string name="result_pairing_title">RESULT</string>
@@ -166,6 +171,7 @@
     <string name="no_available_players_for_tournament">No local players found (check filter)</string>
     <string name="pair_again">pair again</string>
     <string name="next_round">Next Round</string>
+ 
 
 
 </resources>

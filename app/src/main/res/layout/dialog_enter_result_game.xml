@@ -1,200 +1,219 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="@dimen/main_tick"
-    android:orientation="vertical"
-    android:descendantFocusability="beforeDescendants"
-    android:focusableInTouchMode="true">
-    
-    <!-- Players -->
-    
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="@dimen/main_tick"
-        android:orientation="horizontal">
+        android:descendantFocusability="beforeDescendants"
+        android:focusableInTouchMode="true"
+        android:orientation="vertical"
+        android:padding="@dimen/main_tick">
+
+        <!-- Player 1 -->
 
         <TextView
             android:id="@+id/result_player_one_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:text="Player 1 " />
-
-        <TextView
-            android:id="@+id/result_player_two_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:text="Player 2" />
-    </RelativeLayout>
-
-    <!-- Winning buttons-->
-
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="@dimen/main_tick"
-        android:orientation="horizontal">
+            android:layout_gravity="center_horizontal"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <Button
             android:id="@+id/result_player_one_win_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
+            android:layout_gravity="center_horizontal"
             android:text="Player 1 win" />
-        
-        <Button
-            android:id="@+id/result_player_two_win_button"
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/line_tick"
+            android:background="@color/colorAccent"
+            android:paddingBottom="@dimen/main_tick"
+            android:paddingTop="@dimen/main_tick" />
+
+        <!-- Control Points-->
+
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:text="Player 2 win" />
-    </RelativeLayout>
+            android:layout_centerInParent="true"
+            android:layout_gravity="center_horizontal"
+            android:text="ControlPoints" />
 
-    <!-- Control Points-->
-
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="@dimen/main_tick"
-        android:orientation="horizontal">
-        
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true">
+            android:layout_gravity="center_horizontal">
 
             <ImageButton
                 android:id="@+id/result_player_one_inc_control_points"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_add_black_24dp"/>
-   
+
+                android:src="@drawable/ic_add_black_24dp" />
+
             <EditText
                 android:id="@+id/result_player_one_control_points"
-                android:paddingLeft="@dimen/main_tick"
-                android:paddingRight="@dimen/main_tick"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="0"
                 android:focusable="true"
-                android:focusableInTouchMode="true"/>
+                android:focusableInTouchMode="true"
+                android:paddingLeft="@dimen/main_tick"
+                android:paddingRight="@dimen/main_tick"
+                android:text="0" />
 
             <ImageButton
                 android:id="@+id/result_player_one_dec_control_points"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_remove_black_24dp"/>
+                android:src="@drawable/ic_remove_black_24dp" />
         </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/line_tick"
+            android:background="@color/colorAccent"
+            android:paddingBottom="@dimen/main_tick"
+            android:paddingTop="@dimen/main_tick" />
+
+        <!-- Victory Points-->
 
         <TextView
-            android:id="@+id/ControlPointsLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="ControlPoints" />
-        
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true">
-            
-            <ImageButton
-                android:id="@+id/result_player_two_inc_control_points"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_add_black_24dp"/>
-
-            <EditText
-                android:id="@+id/result_player_two_control_points"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingLeft="@dimen/main_tick"
-                android:paddingRight="@dimen/main_tick"
-                android:text="0"
-                android:focusable="true"
-                android:focusableInTouchMode="true"/>
-
-            <ImageButton
-                android:id="@+id/result_player_two_dec_control_points"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_remove_black_24dp"/>
-        </LinearLayout>
-    </RelativeLayout>
-
-
-    <!-- Victory Points-->
-
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="@dimen/main_tick"
-        android:orientation="horizontal">
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true">
-
-            <ImageButton
-                android:id="@+id/result_player_one_inc_victory_points"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_add_black_24dp"/>
-
-            <EditText
-                android:id="@+id/result_player_one_victory_points"
-                android:paddingLeft="@dimen/main_tick"
-                android:paddingRight="@dimen/main_tick"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="0"
-                android:focusable="true"
-                android:focusableInTouchMode="true"/>
-
-            <ImageButton
-                android:id="@+id/result_player_one_dec_victory_points"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_remove_black_24dp"/>
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/VictoryPointsLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
+            android:layout_gravity="center_horizontal"
             android:text="Victory Points" />
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true">
+            android:layout_gravity="center_horizontal">
+
+            <ImageButton
+                android:id="@+id/result_player_one_inc_victory_points"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_add_black_24dp" />
+
+            <EditText
+                android:id="@+id/result_player_one_victory_points"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:paddingLeft="@dimen/main_tick"
+                android:paddingRight="@dimen/main_tick"
+                android:text="0" />
+
+            <ImageButton
+                android:id="@+id/result_player_one_dec_victory_points"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_remove_black_24dp" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/huge_line_tick"
+            android:background="@color/colorPrimaryDark" />
+
+        <TextView
+            android:id="@+id/result_player_two_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <Button
+            android:id="@+id/result_player_two_win_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="Player 2 win" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/line_tick"
+            android:background="@color/colorAccent"
+            android:paddingBottom="@dimen/main_tick"
+            android:paddingTop="@dimen/main_tick" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="ControlPoints" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal">
+
+            <ImageButton
+                android:id="@+id/result_player_two_inc_control_points"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_add_black_24dp" />
+
+            <EditText
+                android:id="@+id/result_player_two_control_points"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:paddingLeft="@dimen/main_tick"
+                android:paddingRight="@dimen/main_tick"
+                android:text="0" />
+
+            <ImageButton
+                android:id="@+id/result_player_two_dec_control_points"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_remove_black_24dp" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/line_tick"
+            android:background="@color/colorAccent"
+            android:paddingBottom="@dimen/main_tick"
+            android:paddingTop="@dimen/main_tick" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="Victory Points" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal">
 
             <ImageButton
                 android:id="@+id/result_player_two_inc_victory_points"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_add_black_24dp"/>
+                android:src="@drawable/ic_add_black_24dp" />
 
             <EditText
                 android:id="@+id/result_player_two_victory_points"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
                 android:paddingLeft="@dimen/main_tick"
                 android:paddingRight="@dimen/main_tick"
-                android:text="0"
-                android:focusable="true"
-                android:focusableInTouchMode="true"/>
+                android:text="0" />
 
             <ImageButton
                 android:id="@+id/result_player_two_dec_victory_points"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_remove_black_24dp"/>
+                android:src="@drawable/ic_remove_black_24dp" />
         </LinearLayout>
-    </RelativeLayout>
- 
-</LinearLayout>
+
+    </LinearLayout>
+</ScrollView>

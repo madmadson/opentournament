@@ -159,7 +159,7 @@ public class TournamentListsFragment extends Fragment {
             };
 
             Handler handler = new Handler();
-            handler.postDelayed(runnable, 2000);
+            handler.postDelayed(runnable, 5000);
         } else {
             mProgressBar.setVisibility(ProgressBar.GONE);
 
@@ -255,7 +255,7 @@ public class TournamentListsFragment extends Fragment {
                 holder.getTournamentLocationInList().setText(tournament.getLocation());
             }
 
-            if (tournament.getDateOfTournament() != null) {
+            if (holder.getTournamentDateInList() != null && tournament.getDateOfTournament() != null) {
                 String formattedDate = dateFormatter.format(tournament.getDateOfTournament());
                 holder.getTournamentDateInList().setText(formattedDate);
             }

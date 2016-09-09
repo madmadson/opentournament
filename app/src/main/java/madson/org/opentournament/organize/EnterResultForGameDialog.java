@@ -27,6 +27,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import madson.org.opentournament.R;
+import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.domain.warmachine.Game;
 import madson.org.opentournament.service.OngoingTournamentService;
 import madson.org.opentournament.utility.BaseApplication;
@@ -42,7 +43,7 @@ import java.util.TimerTask;
  */
 public class EnterResultForGameDialog extends DialogFragment {
 
-    public static final String BUNDLE_GAME_ID = "game_id";
+    public static final String BUNDLE_GAME = "game";
     private static final Integer MIN_CONTROL_POINTS = 0;
     private static final Integer MAX_CONTROL_POINTS = 5;
 
@@ -61,8 +62,6 @@ public class EnterResultForGameDialog extends DialogFragment {
         DECREASE
     }
 
-    private long game_id;
-
     private GameListFragment.GameResultEnteredListener mListener;
 
     private Game game;
@@ -71,8 +70,6 @@ public class EnterResultForGameDialog extends DialogFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-
-        setRetainInstance(true);
     }
 
 
@@ -82,13 +79,10 @@ public class EnterResultForGameDialog extends DialogFragment {
         Bundle bundle = getArguments();
 
         if (bundle != null) {
-            game_id = bundle.getLong(BUNDLE_GAME_ID);
+            game = bundle.getParcelable(BUNDLE_GAME);
         }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        OngoingTournamentService ongoingTournamentService = ((BaseApplication) getActivity().getApplication())
-            .getOngoingTournamentService();
-        game = ongoingTournamentService.getGameForId(game_id);
 
         // Get the layout inflater
         LayoutInflater inflater = getActivity().getLayoutInflater();
@@ -120,8 +114,6 @@ public class EnterResultForGameDialog extends DialogFragment {
 
         if (tournamentRoundManagementFragment != null) {
             mListener = tournamentRoundManagementFragment;
-        } else {
-            throw new RuntimeException("TournamentRoundManagementFragment must be available");
         }
     }
 
@@ -172,8 +164,15 @@ public class EnterResultForGameDialog extends DialogFragment {
             final ImageButton button_decrease_player_two_victory_points = (ImageButton) dialog.findViewById(
                     R.id.result_player_two_dec_victory_points);
 
-            text_name_player_one.setText(game.getPlayer_one_full_name());
-            text_name_player_two.setText(game.getPlayer_two_full_name());
+            TournamentPlayer player1 = game.getPlayer1();
+            TournamentPlayer player2 = game.getPlayer2();
+
+            text_name_player_one.setText(getContext().getResources()
+                .getString(R.string.tournament_player_name_in_row, player1.getFirstname(), player1.getNickname(),
+                    player1.getLastname()));
+            text_name_player_two.setText(getContext().getResources()
+                .getString(R.string.tournament_player_name_in_row, player2.getFirstname(), player2.getNickname(),
+                    player2.getLastname()));
 
             if (game.getPlayer_one_score() == 1) {
                 setPlayerToWinner(1, text_name_player_one, text_name_player_two);

@@ -2,6 +2,9 @@ package madson.org.opentournament.domain.warmachine;
 
 import android.database.Cursor;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import madson.org.opentournament.domain.TournamentPlayer;
 
 
@@ -10,7 +13,23 @@ import madson.org.opentournament.domain.TournamentPlayer;
  *
  * @author  Tobias Matt - tmatt@contargo.net
  */
-public class Game {
+public class Game implements Parcelable {
+
+    public static final Creator<Game> CREATOR = new Creator<Game>() {
+
+        @Override
+        public Game createFromParcel(Parcel in) {
+
+            return new Game(in);
+        }
+
+
+        @Override
+        public Game[] newArray(int size) {
+
+            return new Game[size];
+        }
+    };
 
     private long _id;
     private String online_uuid;
@@ -19,7 +38,6 @@ public class Game {
 
     private long player_one_id;
     private String player_one_online_uuid;
-    private String player_one_full_name;
     private TournamentPlayer player1;
     private int player_one_score;
     private int player_one_control_points;
@@ -27,7 +45,6 @@ public class Game {
 
     private long player_two_id;
     private String player_two_online_uuid;
-    private String player_two_full_name;
     private TournamentPlayer player2;
     private int player_two_score;
     private int player_two_control_points;
@@ -35,6 +52,32 @@ public class Game {
 
     private boolean finished;
     private String scenario;
+
+    protected Game(Parcel in) {
+
+        _id = in.readLong();
+        online_uuid = in.readString();
+        tournament_id = in.readLong();
+        tournament_round = in.readInt();
+        player_one_id = in.readLong();
+        player_one_online_uuid = in.readString();
+        player1 = in.readParcelable(TournamentPlayer.class.getClassLoader());
+        player_one_score = in.readInt();
+        player_one_control_points = in.readInt();
+        player_one_victory_points = in.readInt();
+        player_two_id = in.readLong();
+        player_two_online_uuid = in.readString();
+        player2 = in.readParcelable(TournamentPlayer.class.getClassLoader());
+        player_two_score = in.readInt();
+        player_two_control_points = in.readInt();
+        player_two_victory_points = in.readInt();
+        finished = in.readByte() != 0;
+        scenario = in.readString();
+    }
+
+
+    public Game() {
+    }
 
     public long get_id() {
 
@@ -72,12 +115,6 @@ public class Game {
     }
 
 
-    public String getPlayer_one_full_name() {
-
-        return player_one_full_name;
-    }
-
-
     public int getPlayer_one_score() {
 
         return player_one_score;
@@ -105,12 +142,6 @@ public class Game {
     public String getPlayer_two_online_uuid() {
 
         return player_two_online_uuid;
-    }
-
-
-    public String getPlayer_two_full_name() {
-
-        return player_two_full_name;
     }
 
 
@@ -180,12 +211,6 @@ public class Game {
     }
 
 
-    public void setPlayer_one_full_name(String player_one_full_name) {
-
-        this.player_one_full_name = player_one_full_name;
-    }
-
-
     public void setPlayer_one_score(int player_one_score) {
 
         this.player_one_score = player_one_score;
@@ -213,12 +238,6 @@ public class Game {
     public void setPlayer_two_online_uuid(String player_two_online_uuid) {
 
         this.player_two_online_uuid = player_two_online_uuid;
-    }
-
-
-    public void setPlayer_two_full_name(String player_two_full_name) {
-
-        this.player_two_full_name = player_two_full_name;
     }
 
 
@@ -263,13 +282,12 @@ public class Game {
             + ", tournament_round=" + tournament_round
             + ", player_one_id=" + player_one_id
             + ", player_one_online_uuid='" + player_one_online_uuid + '\''
-            + ", player_one_full_name='" + player_one_full_name + '\''
+
             + ", player_one_score=" + player_one_score
             + ", player_one_control_points=" + player_one_control_points
             + ", player_one_victory_points=" + player_one_victory_points
             + ", player_two_id=" + player_two_id
             + ", player_two_online_uuid='" + player_two_online_uuid + '\''
-            + ", player_two_full_name='" + player_two_full_name + '\''
             + ", player_two_score=" + player_two_score
             + ", player_two_control_points=" + player_two_control_points
             + ", player_two_victory_points=" + player_two_victory_points
@@ -358,5 +376,36 @@ public class Game {
     public void setPlayer2(TournamentPlayer player2) {
 
         this.player2 = player2;
+    }
+
+
+    @Override
+    public int describeContents() {
+
+        return 0;
+    }
+
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+
+        dest.writeLong(_id);
+        dest.writeString(online_uuid);
+        dest.writeLong(tournament_id);
+        dest.writeInt(tournament_round);
+        dest.writeLong(player_one_id);
+        dest.writeString(player_one_online_uuid);
+        dest.writeParcelable(player1, flags);
+        dest.writeInt(player_one_score);
+        dest.writeInt(player_one_control_points);
+        dest.writeInt(player_one_victory_points);
+        dest.writeLong(player_two_id);
+        dest.writeString(player_two_online_uuid);
+        dest.writeParcelable(player2, flags);
+        dest.writeInt(player_two_score);
+        dest.writeInt(player_two_control_points);
+        dest.writeInt(player_two_victory_points);
+        dest.writeByte((byte) (finished ? 1 : 0));
+        dest.writeString(scenario);
     }
 }

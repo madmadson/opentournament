@@ -83,7 +83,7 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
             }
 
             if (game.getPlayer_two_online_uuid() != null) {
-                game.setPlayer2(allPlayerMapForTournament.get(game.getPlayer_one_online_uuid()));
+                game.setPlayer2(allPlayerMapForTournament.get(game.getPlayer_two_online_uuid()));
             } else {
                 game.setPlayer2(allPlayerMapForTournament.get(String.valueOf(game.getPlayer_two_id())));
             }

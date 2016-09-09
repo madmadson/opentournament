@@ -29,18 +29,6 @@
         android:id="@+id/header_tournament_name"
         android:text="@string/header_tournament_name"/>
 
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_alignParentLeft="true"
-        android:layout_marginLeft="@dimen/organised_tournament_date_margin_left"
-        android:textColor="@color/colorPrimary"
-        android:textStyle="bold"
-        android:id="@+id/header_tournament_date"
-        android:text="@string/header_tournament_date"/>
-
     
     <TextView
         android:layout_width="wrap_content"

@@ -25,7 +25,7 @@ public class TournamentRankingComparator implements Comparator<TournamentRanking
         } else if (ranking2.getVictory_points() - ranking1.getVictory_points() != 0) {
             return ranking2.getVictory_points() - ranking1.getVictory_points();
         } else {
-            return ranking2.getLastname().compareTo(ranking1.getLastname());
+            return 0;
         }
     }
 }

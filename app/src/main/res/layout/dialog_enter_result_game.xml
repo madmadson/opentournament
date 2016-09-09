@@ -51,7 +51,6 @@
                 android:id="@+id/result_player_one_inc_control_points"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
                 android:src="@drawable/ic_add_black_24dp" />
 
             <EditText

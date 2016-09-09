@@ -2,11 +2,10 @@ package madson.org.opentournament.domain;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.DoubleStream;
 
 
 /**
- * Represent ranking after specific round of tournament.
+ * Represent ranking after specific tournament_round of tournament.
  *
  * @author  Tobias Matt - tmatt@contargo.net
  */
@@ -16,22 +15,17 @@ public class TournamentRanking {
     private String online_uuid;
 
     private long tournament_id;
-    private String tournament_online_uuid;
+    private int tournament_round;
+
     private long player_id;
     private String player_online_uuid;
-    private int round;
+
+    private TournamentPlayer tournamentPlayer;
 
     private int score;
     private int sos;
     private int control_points;
     private int victory_points;
-
-    // used for shortcut not always go for names
-    private String firstname;
-    private String nickname;
-    private String lastname;
-
-    private String player_onlineUUID;
 
     // online needed for sos calculation
     private List<Long> listOfOpponentsPlayerIds = new ArrayList<>();
@@ -40,52 +34,12 @@ public class TournamentRanking {
 
         this.tournament_id = tournament_id;
         this.player_id = player_id;
-        this.round = round;
-    }
-
-
-    /**
-     * constructor to enable player to tournament mapping.
-     *
-     * @param  player
-     * @param  tournament
-     */
-    public TournamentRanking(Player player, Tournament tournament) {
-
-        this.player_id = player.get_id();
-        this.player_onlineUUID = player.getOnlineUUID();
-        this.firstname = player.getFirstname();
-        this.lastname = player.getLastname();
-        this.nickname = player.getNickname();
+        this.tournament_round = round;
     }
 
 
     public TournamentRanking() {
     }
-
-    public String getOnline_uuid() {
-
-        return online_uuid;
-    }
-
-
-    public void setOnline_uuid(String online_uuid) {
-
-        this.online_uuid = online_uuid;
-    }
-
-
-    public String getTournament_online_uuid() {
-
-        return tournament_online_uuid;
-    }
-
-
-    public void setTournament_online_uuid(String tournament_online_uuid) {
-
-        this.tournament_online_uuid = tournament_online_uuid;
-    }
-
 
     public String getPlayer_online_uuid() {
 
@@ -99,6 +53,30 @@ public class TournamentRanking {
     }
 
 
+    public TournamentPlayer getTournamentPlayer() {
+
+        return tournamentPlayer;
+    }
+
+
+    public void setTournamentPlayer(TournamentPlayer tournamentPlayer) {
+
+        this.tournamentPlayer = tournamentPlayer;
+    }
+
+
+    public String getOnline_uuid() {
+
+        return online_uuid;
+    }
+
+
+    public void setOnline_uuid(String online_uuid) {
+
+        this.online_uuid = online_uuid;
+    }
+
+
     public long get_id() {
 
         return _id;
@@ -108,18 +86,6 @@ public class TournamentRanking {
     public void set_id(long _id) {
 
         this._id = _id;
-    }
-
-
-    public void setPlayer_onlineUUID(String player_onlineUUID) {
-
-        this.player_onlineUUID = player_onlineUUID;
-    }
-
-
-    public String getPlayer_onlineUUID() {
-
-        return player_onlineUUID;
     }
 
 
@@ -183,15 +149,15 @@ public class TournamentRanking {
     }
 
 
-    public int getRound() {
+    public int getTournament_round() {
 
-        return round;
+        return tournament_round;
     }
 
 
-    public void setRound(int round) {
+    public void setTournament_round(int tournament_round) {
 
-        this.round = round;
+        this.tournament_round = tournament_round;
     }
 
 
@@ -207,42 +173,6 @@ public class TournamentRanking {
     }
 
 
-    public String getFirstname() {
-
-        return firstname;
-    }
-
-
-    public void setFirstname(String firstname) {
-
-        this.firstname = firstname;
-    }
-
-
-    public String getNickname() {
-
-        return nickname;
-    }
-
-
-    public void setNickname(String nickname) {
-
-        this.nickname = nickname;
-    }
-
-
-    public String getLastname() {
-
-        return lastname;
-    }
-
-
-    public void setLastname(String lastname) {
-
-        this.lastname = lastname;
-    }
-
-
     @Override
     public String toString() {
 
@@ -250,18 +180,14 @@ public class TournamentRanking {
             + "_id=" + _id
             + ", online_uuid='" + online_uuid + '\''
             + ", tournament_id=" + tournament_id
-            + ", tournament_online_uuid='" + tournament_online_uuid + '\''
+            + ", tournament_round=" + tournament_round
             + ", player_id=" + player_id
             + ", player_online_uuid='" + player_online_uuid + '\''
-            + ", round=" + round
             + ", score=" + score
             + ", sos=" + sos
             + ", control_points=" + control_points
             + ", victory_points=" + victory_points
-            + ", firstname='" + firstname + '\''
-            + ", nickname='" + nickname + '\''
-            + ", lastname='" + lastname + '\''
-            + ", player_onlineUUID='" + player_onlineUUID + '\'' + '}';
+            + ", listOfOpponentsPlayerIds=" + listOfOpponentsPlayerIds + '}';
     }
 
 

@@ -42,4 +42,5 @@
     <!-- Enter game result -->
     
     <dimen name="padding_input_labels">32dp</dimen>
+    <dimen name="ranking_scorings_padding">150dp</dimen>
 </resources>

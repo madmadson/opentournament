@@ -87,8 +87,8 @@
     <string name="tournament_player_name_in_row">%1$s \"%2$s\" %3$s</string>
     
     <string name="heading_tournament_player">Player in %2$s tournament: (%1$d)</string>
-    <string name="button_pair_round">Pair \n round %1$d</string>
-    <string name="button_change_round">show \n round %1$d</string>
+    <string name="button_pair_round">Pair \n tournament_round %1$d</string>
+    <string name="button_change_round">show \n tournament_round %1$d</string>
     <string name="game_divider">vs</string>
     <string name="heading_online_players">Players from online database</string>
     <string name="heading_local_players">Players from local database (only visible for you)</string>
@@ -102,12 +102,12 @@
 
 
     <!-- Pairing table -->
-    <string name="heading_games_for_round">Games round: %1$d</string>
+    <string name="heading_games_for_round">Games tournament_round: %1$d</string>
     <string name="upload_games">upload</string>
     
     <!-- confirm game dialog -->
     <string name="confirm">confirm</string>
-    <string name="confirm_pairing_title">Pairing round: %1$d</string>
+    <string name="confirm_pairing_title">Pairing tournament_round: %1$d</string>
 
     <!-- game card -->
     <string name="game_win">WIN: %1$d</string>
@@ -117,7 +117,7 @@
     <!-- result entering dialog -->
     <string name="result">confirm</string>
     <string name="result_pairing_title">RESULT</string>
-    <string name="heading_ranking_for_round">Ranking after round: %1$d</string>
+    <string name="heading_ranking_for_round">Ranking after tournament_round: %1$d</string>
     <string name="tournaments">Manage Tournaments</string>
     <string name="title_tournament_management">Tournament Management</string>
     <string name="sign_in">Sign in</string>

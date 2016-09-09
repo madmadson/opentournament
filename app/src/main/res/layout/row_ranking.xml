@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_gravity="center"
-    android:layout_height="wrap_content"
+    android:layout_height="@dimen/player_card_view_height"
     android:layout_width="match_parent"
     android:id="@+id/ranking_row_card_view"
     card_view:cardCornerRadius="4dp"
@@ -13,67 +13,173 @@
     android:layout_marginTop="@dimen/small_tick">
 
     <RelativeLayout
-        android:id="@+id/lib_card_content"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="?android:attr/selectableItemBackground">
-
+        android:layout_height="match_parent">
+        
         <TextView
             android:id="@+id/ranking_row_player_number"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/small_tick"
             android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"/>
+            android:layout_centerInParent="true"
+            android:layout_gravity="center_vertical"/>
 
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingLeft="@dimen/main_tick"
-        android:layout_centerInParent="true"
-        android:layout_alignParentLeft="true">
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/main_tick"
+            android:layout_centerInParent="true"
+            android:layout_alignParentLeft="true">
+
+            <TextView
+                android:id="@+id/ranking_row_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:layout_marginLeft="@dimen/main_tick"/>
+
+            <TextView
+                android:id="@+id/ranking_player_teamname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/ranking_row_name"
+                android:layout_marginLeft="@dimen/main_tick"/>
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:paddingRight="@dimen/ranking_scorings_padding"
+            android:layout_centerVertical="true">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingRight="@dimen/main_tick"
+                android:layout_centerInParent="true"
+                android:layout_alignParentLeft="true">
+
+                <TextView
+                    android:id="@+id/ranking_row_sc_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:textSize="12sp"
+                    android:text="SC"/>
+
+                <TextView
+                    android:id="@+id/ranking_row_score"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/ranking_row_sc_label"
+                    android:layout_alignParentLeft="true"
+                    />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingRight="@dimen/main_tick"
+                android:layout_centerInParent="true"
+                android:layout_alignParentLeft="true">
+
+                <TextView
+                    android:id="@+id/ranking_row_sos_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:textSize="12sp"
+                    android:text="SOS"/>
+
+                <TextView
+                    android:id="@+id/ranking_row_sos"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/ranking_row_sos_label"
+                    android:layout_alignParentLeft="true"
+                    />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingRight="@dimen/main_tick"
+                android:layout_centerInParent="true"
+                android:layout_alignParentLeft="true">
+
+                <TextView
+                    android:id="@+id/ranking_row_cp_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:textSize="12sp"
+                    android:text="CP"/>
+
+                <TextView
+                    android:id="@+id/ranking_row_control_points"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/ranking_row_cp_label"
+                    android:layout_alignParentLeft="true"
+                    />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingRight="@dimen/main_tick"
+                android:layout_centerInParent="true"
+                android:layout_alignParentLeft="true">
+
+                <TextView
+                    android:id="@+id/ranking_row_vp_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:textSize="12sp"
+                    android:text="VP"/>
+
+                <TextView
+                    android:id="@+id/ranking_row_victory_points"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/ranking_row_vp_label"
+                    android:layout_alignParentLeft="true"
+                    />
+            </RelativeLayout>
         
-        <TextView
-            android:id="@+id/ranking_row_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/main_tick"
-          
-           />
-        <TextView
-            android:id="@+id/tournament_player_teamname"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-      
-            android:layout_marginLeft="@dimen/main_tick"/>
-    </RelativeLayout>
+        </LinearLayout>
 
-        <TextView
-            android:id="@+id/ranking_row_score"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="360dp"
-            />
+            android:layout_alignParentRight="true"
+            android:paddingRight="@dimen/main_tick"
+            android:layout_centerVertical="true">
 
-        <TextView
-            android:id="@+id/ranking_row_sos"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/main_tick"
-            android:layout_toRightOf="@id/ranking_row_score"/>
-
-        <TextView
-            android:id="@+id/ranking_row_control_points"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/main_tick"
-            android:layout_toRightOf="@id/ranking_row_sos"/>
-        <TextView
-            android:id="@+id/ranking_row_victory_points"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/main_tick"
-            android:layout_toRightOf="@id/ranking_row_control_points"/>
+            <TextView
+                android:id="@+id/ranking_player_faction"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="cygnar"
+                android:layout_marginRight="@dimen/small_tick"/>
+            <!-- Account may be introduce with tournament players later -->
+            <ImageView
+                android:id="@+id/tournament_player_row_account_icon"
+                android:src="@drawable/ic_account_circle_black_24dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="@dimen/small_tick"/>
+            <ImageView
+                android:id="@+id/tournament_player_row_online_icon"
+                android:src="@drawable/ic_cloud_black_24dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/small_tick"/>
+        </LinearLayout>
         
     </RelativeLayout>
 </android.support.v7.widget.CardView>

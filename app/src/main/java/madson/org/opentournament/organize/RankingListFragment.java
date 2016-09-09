@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Tournament;
+import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.domain.TournamentRanking;
 import madson.org.opentournament.service.RankingService;
 import madson.org.opentournament.utility.BaseApplication;
@@ -132,10 +133,16 @@ public class RankingListFragment extends Fragment {
             holder.getSos().setText(String.valueOf(ranking.getSos()));
             holder.getCp().setText(String.valueOf(ranking.getControl_points()));
             holder.getVp().setText(String.valueOf(ranking.getVictory_points()));
+
+            TournamentPlayer tournamentPlayer = ranking.getTournamentPlayer();
+
             holder.getPlayerNameInList()
                 .setText(context.getResources()
-                    .getString(R.string.tournament_player_name_in_row, ranking.getFirstname(), ranking.getNickname(),
-                        ranking.getLastname()));
+                    .getString(R.string.tournament_player_name_in_row, tournamentPlayer.getFirstname(),
+                        tournamentPlayer.getNickname(), tournamentPlayer.getLastname()));
+
+            holder.getPlayerTeamNameInList().setText(tournamentPlayer.getTeamname());
+            holder.getPlayerFactionInList().setText(tournamentPlayer.getFaction());
         }
 
 
@@ -154,10 +161,12 @@ public class RankingListFragment extends Fragment {
 
         public class ViewHolder extends RecyclerView.ViewHolder {
 
-            private final TextView score;
-            private final TextView sos;
-            private final TextView cp;
-            private final TextView vp;
+            private TextView playerFactionInList;
+            private TextView score;
+            private TextView sos;
+            private TextView cp;
+            private TextView vp;
+            private TextView playerTeamNameInList;
             private TournamentRanking ranking;
             private TextView playerNumber;
             private TextView playerNameInList;
@@ -167,6 +176,8 @@ public class RankingListFragment extends Fragment {
                 super(itemView);
 
                 playerNameInList = (TextView) itemView.findViewById(R.id.ranking_row_name);
+                playerTeamNameInList = (TextView) itemView.findViewById(R.id.ranking_player_teamname);
+                playerFactionInList = (TextView) itemView.findViewById(R.id.ranking_player_faction);
                 playerNumber = (TextView) itemView.findViewById(R.id.ranking_row_player_number);
                 score = (TextView) itemView.findViewById(R.id.ranking_row_score);
                 sos = (TextView) itemView.findViewById(R.id.ranking_row_sos);
@@ -213,6 +224,18 @@ public class RankingListFragment extends Fragment {
             public TextView getVp() {
 
                 return vp;
+            }
+
+
+            public TextView getPlayerTeamNameInList() {
+
+                return playerTeamNameInList;
+            }
+
+
+            public TextView getPlayerFactionInList() {
+
+                return playerFactionInList;
             }
         }
     }

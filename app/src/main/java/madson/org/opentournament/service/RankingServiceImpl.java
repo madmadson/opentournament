@@ -10,7 +10,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import madson.org.opentournament.db.OpenTournamentDBHelper;
-import madson.org.opentournament.db.TournamentPlayerTable;
 import madson.org.opentournament.db.warmachine.GameTable;
 import madson.org.opentournament.db.warmachine.TournamentRankingTable;
 import madson.org.opentournament.domain.Tournament;
@@ -21,12 +20,10 @@ import madson.org.opentournament.service.warmachine.TournamentRankingComparator;
 import madson.org.opentournament.utility.BaseApplication;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 
 /**
@@ -58,12 +55,16 @@ public class RankingServiceImpl implements RankingService {
 
         Log.i(this.getClass().getName(), "get ranking for round -> for ranking list/ final standings");
 
+        Map<String, TournamentPlayer> allPlayerMapForTournament = tournamentPlayerService.getAllPlayerMapForTournament(
+                tournament);
+
         List<TournamentRanking> rankingsForRound = new ArrayList<>();
         SQLiteDatabase readableDatabase = openTournamentDBHelper.getReadableDatabase();
 
         Cursor cursor = readableDatabase.query(TournamentRankingTable.TABLE_TOURNAMENT_RANKING,
-                TournamentRankingTable.ALL_COLS_FOR_RANKING,
-                TournamentRankingTable.COLUMN_TOURNAMENT_ID + " = ? AND " + TournamentRankingTable.COLUMN_ROUND
+                TournamentRankingTable.ALL_COLS_FOR_TOURNAMENT_RANKING,
+                TournamentRankingTable.COLUMN_TOURNAMENT_ID + " = ? AND "
+                + TournamentRankingTable.COLUMN_TOURNAMENT_ROUND
                 + " = ?", new String[] { Long.toString(tournament.get_id()), String.valueOf(round) }, null, null, null);
 
         cursor.moveToFirst();
@@ -71,10 +72,19 @@ public class RankingServiceImpl implements RankingService {
         while (!cursor.isAfterLast()) {
             TournamentRanking tournamentRanking = cursorToTournamentRanking(cursor);
 
+            if (tournamentRanking.getPlayer_online_uuid() != null) {
+                tournamentRanking.setTournamentPlayer(allPlayerMapForTournament.get(
+                        tournamentRanking.getPlayer_online_uuid()));
+            } else {
+                tournamentRanking.setTournamentPlayer(allPlayerMapForTournament.get(
+                        String.valueOf(tournamentRanking.getPlayer_id())));
+            }
+
             rankingsForRound.add(tournamentRanking);
             cursor.moveToNext();
         }
 
+        // THE RANKING!
         Collections.sort(rankingsForRound, new TournamentRankingComparator());
 
         cursor.close();
@@ -94,9 +104,7 @@ public class RankingServiceImpl implements RankingService {
         for (TournamentPlayer tournamentPlayer : allPlayersForTournament) {
             TournamentRanking tournamentRanking = new TournamentRanking(tournament.get_id(),
                     tournamentPlayer.getPlayer_id(), round_for_calculation);
-            tournamentRanking.setFirstname(tournamentPlayer.getFirstname());
-            tournamentRanking.setNickname(tournamentPlayer.getNickname());
-            tournamentRanking.setLastname(tournamentPlayer.getLastname());
+            tournamentRanking.setTournamentPlayer(tournamentPlayer);
             mapOfRankings.put(tournamentPlayer.getPlayer_id(), tournamentRanking);
         }
 
@@ -161,17 +169,13 @@ public class RankingServiceImpl implements RankingService {
             ContentValues contentValues = new ContentValues();
             contentValues.put(TournamentRankingTable.COLUMN_TOURNAMENT_ID, ranking.getTournament_id());
             contentValues.put(TournamentRankingTable.COLUMN_PLAYER_ID, ranking.getPlayer_id());
-            contentValues.put(TournamentRankingTable.COLUMN_ROUND, ranking.getRound());
+            contentValues.put(TournamentRankingTable.COLUMN_TOURNAMENT_ROUND, ranking.getTournament_round());
 
             contentValues.put(TournamentRankingTable.COLUMN_SCORE, ranking.getScore());
             contentValues.put(TournamentRankingTable.COLUMN_CONTROL_POINTS, ranking.getControl_points());
             contentValues.put(TournamentRankingTable.COLUMN_VICTORY_POINTS, ranking.getVictory_points());
 
             contentValues.put(TournamentRankingTable.COLUMN_SOS, ranking.getSos());
-
-            contentValues.put(TournamentRankingTable.COLUMN_FIRSTNAME, ranking.getFirstname());
-            contentValues.put(TournamentRankingTable.COLUMN_NICKNAME, ranking.getNickname());
-            contentValues.put(TournamentRankingTable.COLUMN_LASTNAME, ranking.getLastname());
 
             db.insert(TournamentRankingTable.TABLE_TOURNAMENT_RANKING, null, contentValues);
         }
@@ -214,21 +218,15 @@ public class RankingServiceImpl implements RankingService {
         tournamentRanking.setOnline_uuid(cursor.getString(1));
 
         tournamentRanking.setTournament_id(cursor.getInt(2));
-        tournamentRanking.setTournament_online_uuid(cursor.getString(3));
+        tournamentRanking.setTournament_round(cursor.getInt(3));
 
         tournamentRanking.setPlayer_id(cursor.getInt(4));
-        tournamentRanking.setPlayer_onlineUUID(cursor.getString(5));
+        tournamentRanking.setPlayer_online_uuid(cursor.getString(5));
 
-        tournamentRanking.setRound(cursor.getInt(6));
-
-        tournamentRanking.setScore(cursor.getInt(7));
-        tournamentRanking.setSos(cursor.getInt(8));
-        tournamentRanking.setControl_points(cursor.getInt(9));
-        tournamentRanking.setVictory_points(cursor.getInt(10));
-
-        tournamentRanking.setFirstname(cursor.getString(11));
-        tournamentRanking.setNickname(cursor.getString(12));
-        tournamentRanking.setLastname(cursor.getString(13));
+        tournamentRanking.setScore(cursor.getInt(6));
+        tournamentRanking.setSos(cursor.getInt(7));
+        tournamentRanking.setControl_points(cursor.getInt(8));
+        tournamentRanking.setVictory_points(cursor.getInt(9));
 
         return tournamentRanking;
     }

@@ -13,6 +13,8 @@ import com.facebook.FacebookSdk;
 import madson.org.opentournament.R;
 import madson.org.opentournament.about.AppInfo;
 import madson.org.opentournament.about.LibraryItem;
+import madson.org.opentournament.organize.TournamentEventListener;
+import madson.org.opentournament.organize.setup.TournamentSetupEventListener;
 import madson.org.opentournament.service.OngoingTournamentService;
 import madson.org.opentournament.service.OngoingTournamentServiceImpl;
 import madson.org.opentournament.service.PlayerService;
@@ -41,6 +43,7 @@ public abstract class BaseApplication extends Application {
     private static RankingService rankingService;
     private static PlayerService playerService;
     private static TournamentPlayerService tournamentPlayerService;
+    private TournamentEventListener tournamentEventListener;
 
     @Override
     public void onCreate() {
@@ -170,5 +173,17 @@ public abstract class BaseApplication extends Application {
     public TournamentPlayerService getTournamentPlayerService() {
 
         return tournamentPlayerService;
+    }
+
+
+    public TournamentEventListener getTournamentEventListener() {
+
+        return tournamentEventListener;
+    }
+
+
+    public void setTournamentEventListener(TournamentEventListener tournamentEventListener) {
+
+        this.tournamentEventListener = tournamentEventListener;
     }
 }

@@ -36,6 +36,7 @@ import madson.org.opentournament.R;
 import madson.org.opentournament.db.FirebaseReferences;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
+import madson.org.opentournament.organize.TournamentEventListener;
 import madson.org.opentournament.organize.TournamentOrganizeActivity;
 import madson.org.opentournament.service.TournamentPlayerService;
 import madson.org.opentournament.utility.BaseActivity;
@@ -52,7 +53,7 @@ import java.util.List;
  *
  * @author  Tobias Matt - tmatt@contargo.net
  */
-public class TournamentPlayerListFragment extends Fragment {
+public class TournamentPlayerListFragment extends Fragment implements TournamentEventListener {
 
     public static final String BUNDLE_TOURNAMENT = "tournament";
 
@@ -78,6 +79,8 @@ public class TournamentPlayerListFragment extends Fragment {
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
+
+        ((BaseActivity) getActivity()).getBaseApplication().setTournamentEventListener(this);
 
         super.onCreate(savedInstanceState);
     }
@@ -253,8 +256,11 @@ public class TournamentPlayerListFragment extends Fragment {
     }
 
 
-    public void setVisibilityStartButtonToGone() {
+    @Override
+    public void startRound(int roundToStart) {
 
-        startButton.setVisibility(View.GONE);
+        if (roundToStart == 1) {
+            startButton.setVisibility(View.GONE);
+        }
     }
 }

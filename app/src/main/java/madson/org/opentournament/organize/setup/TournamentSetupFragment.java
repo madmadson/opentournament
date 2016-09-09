@@ -187,10 +187,4 @@ public class TournamentSetupFragment extends Fragment implements TournamentSetup
 
         availablePlayerListFragment.removePlayer(player);
     }
-
-
-    public TournamentPlayerListFragment getTournamentPlayerListFragment() {
-
-        return tournamentPlayerListFragment;
-    }
 }

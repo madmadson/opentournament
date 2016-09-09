@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
 
 import android.support.v7.app.AlertDialog;
 
@@ -20,6 +19,7 @@ import android.widget.Button;
 
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Tournament;
+import madson.org.opentournament.organize.TournamentEventListener;
 import madson.org.opentournament.organize.TournamentOrganizeActivity;
 import madson.org.opentournament.service.OngoingTournamentService;
 import madson.org.opentournament.service.RankingService;
@@ -128,9 +128,10 @@ public class ConfirmStartTournamentDialog extends DialogFragment {
                             activity.setTournamentToTabView(tournament);
 
                             // set visibility of start button
-                            activity.getTournamentSetupFragment()
-                            .getTournamentPlayerListFragment()
-                            .setVisibilityStartButtonToGone();
+                            TournamentEventListener tournamentEventListener = activity.getBaseApplication()
+                                .getTournamentEventListener();
+
+                            tournamentEventListener.startRound(1);
 
                             dialog.dismiss();
                         }

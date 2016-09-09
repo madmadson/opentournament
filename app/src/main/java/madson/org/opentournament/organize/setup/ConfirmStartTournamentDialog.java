@@ -124,7 +124,7 @@ public class ConfirmStartTournamentDialog extends DialogFragment {
                                     ConfirmStartTournamentDialog.this.tournament, 1);
 
                             // update activity
-                            activity.addNewRoundToTournament(tournament);
+                            activity.setTournamentToTabView(tournament);
 
                             dialog.dismiss();
                         }

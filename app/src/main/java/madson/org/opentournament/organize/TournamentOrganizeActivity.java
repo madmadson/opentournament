@@ -89,7 +89,7 @@ public class TournamentOrganizeActivity extends BaseActivity {
                 supportActionBar.setTitle(tournament.getName());
             }
 
-            mSectionsPagerAdapter = new SectionsPagerAdapter(tournament, getSupportFragmentManager());
+            mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
             mViewPager = (ViewPager) findViewById(R.id.container);
             mViewPager.setAdapter(mSectionsPagerAdapter);
@@ -103,11 +103,10 @@ public class TournamentOrganizeActivity extends BaseActivity {
                 @Override
                 public void run() {
 
-                    Log.i(this.getClass().getName(), "clicked on tournament: " + tournament);
-
                     TournamentService tournamentService = getBaseApplication().getTournamentService();
                     Tournament actualTournament = tournamentService.getTournamentForId(tournament.get_id());
-                    tournament = actualTournament;
+                    Log.i(this.getClass().getName(), "set actual tournament");
+                    mSectionsPagerAdapter.setTournamentToOrganize(actualTournament);
                     mViewPager.setCurrentItem(actualTournament.getActualRound());
                 }
             };
@@ -124,19 +123,13 @@ public class TournamentOrganizeActivity extends BaseActivity {
 
     /**
      * handles lifecycle of tournament.
-     *
-     * @param  tournament
      */
-    public void addNewRoundToTournament(Tournament tournament) {
+    public void setTournamentToTabView(Tournament actualTournament) {
 
-        Log.i(this.getClass().getName(), "Add tab to view pager");
+        Log.i(this.getClass().getName(), "set actual tournament");
 
-        mSectionsPagerAdapter.setTournamentToOrganize(tournament);
-
-        mSectionsPagerAdapter.addTabToPager();
-
-        mSectionsPagerAdapter.notifyDataSetChanged();
-        mViewPager.setCurrentItem(mSectionsPagerAdapter.getCount());
+        mSectionsPagerAdapter.setTournamentToOrganize(actualTournament);
+        mViewPager.setCurrentItem(actualTournament.getActualRound());
     }
 
 
@@ -147,15 +140,11 @@ public class TournamentOrganizeActivity extends BaseActivity {
 
     private class SectionsPagerAdapter extends FragmentPagerAdapter {
 
-        private int amountOfTabs;
         private Tournament tournamentToOrganize;
 
-        public SectionsPagerAdapter(Tournament tournament, FragmentManager fm) {
+        public SectionsPagerAdapter(FragmentManager fm) {
 
             super(fm);
-            this.tournamentToOrganize = tournament;
-
-            amountOfTabs = tournamentToOrganize.getActualRound() + 1;
         }
 
         @Override
@@ -170,7 +159,6 @@ public class TournamentOrganizeActivity extends BaseActivity {
 //                return TournamentPlayerListFragment.newInstance(tournament);
 //            }
             if (position == 0) {
-                // setup to addTournamentPlayer players to tournament
                 return TournamentSetupFragment.newInstance(tournamentToOrganize);
             } else {
                 tournamentRoundManagementFragment = TournamentRoundManagementFragment.newInstance(position,
@@ -184,7 +172,11 @@ public class TournamentOrganizeActivity extends BaseActivity {
         @Override
         public int getCount() {
 
-            return amountOfTabs;
+            if (tournamentToOrganize != null) {
+                return tournamentToOrganize.getActualRound() + 1;
+            } else {
+                return 0;
+            }
         }
 
 
@@ -199,21 +191,11 @@ public class TournamentOrganizeActivity extends BaseActivity {
         }
 
 
-        public void addTabToPager() {
-
-            amountOfTabs = amountOfTabs + 1;
-        }
-
-
-        public Tournament getTournamentToOrganize() {
-
-            return tournamentToOrganize;
-        }
-
-
         public void setTournamentToOrganize(Tournament tournamentToOrganize) {
 
             this.tournamentToOrganize = tournamentToOrganize;
+
+            mSectionsPagerAdapter.notifyDataSetChanged();
         }
     }
 }

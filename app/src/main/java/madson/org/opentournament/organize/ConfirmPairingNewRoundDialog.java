@@ -129,7 +129,7 @@ public class ConfirmPairingNewRoundDialog extends DialogFragment {
                             Tournament updatedTournament = tournamentService.updateActualRound(tournament,
                                     round_for_pairing);
 
-                            activity.addNewRoundToTournament(updatedTournament);
+                            activity.setTournamentToTabView(updatedTournament);
 
                             dialog.dismiss();
                         }

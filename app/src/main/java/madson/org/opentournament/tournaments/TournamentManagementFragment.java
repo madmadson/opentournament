@@ -90,23 +90,9 @@ public class TournamentManagementFragment extends Fragment implements Tournament
     @Override
     public void onTournamentListItemClicked(final Tournament tournament) {
 
-        Runnable runnable = new Runnable() {
-
-            @Override
-            public void run() {
-
-                Log.i(this.getClass().getName(), "clicked on tournament: " + tournament);
-
-                TournamentService tournamentService = ((BaseActivity) getActivity()).getBaseApplication()
-                        .getTournamentService();
-                Tournament actualTournament = tournamentService.getTournamentForId(tournament.get_id());
-
-                Intent intent = new Intent(getContext(), TournamentOrganizeActivity.class);
-                intent.putExtra(TournamentOrganizeActivity.EXTRA_TOURNAMENT, actualTournament);
-                startActivity(intent);
-            }
-        };
-        runnable.run();
+        Intent intent = new Intent(getContext(), TournamentOrganizeActivity.class);
+        intent.putExtra(TournamentOrganizeActivity.EXTRA_TOURNAMENT, tournament);
+        startActivity(intent);
     }
 
 

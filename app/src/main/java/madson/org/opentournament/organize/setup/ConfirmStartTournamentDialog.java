@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
 
 import android.support.v7.app.AlertDialog;
 
@@ -125,6 +126,11 @@ public class ConfirmStartTournamentDialog extends DialogFragment {
 
                             // update activity
                             activity.setTournamentToTabView(tournament);
+
+                            // set visibility of start button
+                            activity.getTournamentSetupFragment()
+                            .getTournamentPlayerListFragment()
+                            .setVisibilityStartButtonToGone();
 
                             dialog.dismiss();
                         }

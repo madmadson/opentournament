@@ -1,5 +1,7 @@
 package madson.org.opentournament.organize.setup;
 
+import android.app.Notification;
+
 import android.content.Context;
 
 import android.graphics.drawable.Drawable;
@@ -34,6 +36,7 @@ import madson.org.opentournament.R;
 import madson.org.opentournament.db.FirebaseReferences;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
+import madson.org.opentournament.organize.TournamentOrganizeActivity;
 import madson.org.opentournament.service.TournamentPlayerService;
 import madson.org.opentournament.utility.BaseActivity;
 import madson.org.opentournament.utility.BaseApplication;
@@ -60,6 +63,7 @@ public class TournamentPlayerListFragment extends Fragment {
     private DatabaseReference mFirebaseDatabaseReference;
 
     private TextView noTournamentPlayersTextView;
+    private Button startButton;
 
     public static TournamentPlayerListFragment newInstance(Tournament tournament) {
 
@@ -142,7 +146,7 @@ public class TournamentPlayerListFragment extends Fragment {
         };
         runnable.run();
 
-        Button startButton = (Button) view.findViewById(R.id.start_tournament_button);
+        startButton = (Button) view.findViewById(R.id.start_tournament_button);
         startButton.setOnClickListener(new View.OnClickListener() {
 
                 @Override
@@ -158,6 +162,10 @@ public class TournamentPlayerListFragment extends Fragment {
                     dialog.show(supportFragmentManager, "confirm start tournament");
                 }
             });
+
+        if (tournament.getActualRound() > 0) {
+            startButton.setVisibility(View.GONE);
+        }
 
         return view;
     }
@@ -242,5 +250,11 @@ public class TournamentPlayerListFragment extends Fragment {
         if (tournamentPlayerListAdapter.getItemCount() == 0) {
             noTournamentPlayersTextView.setVisibility(View.VISIBLE);
         }
+    }
+
+
+    public void setVisibilityStartButtonToGone() {
+
+        startButton.setVisibility(View.GONE);
     }
 }

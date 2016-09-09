@@ -37,6 +37,7 @@ public class TournamentOrganizeActivity extends BaseActivity {
 
     private TournamentRoundManagementFragment tournamentRoundManagementFragment;
     private Tournament tournament;
+    private TournamentSetupFragment tournamentSetupFragment;
 
     @Override
     public boolean useTabLayout() {
@@ -138,6 +139,12 @@ public class TournamentOrganizeActivity extends BaseActivity {
         mViewPager.setCurrentItem(roundNumber);
     }
 
+
+    public TournamentSetupFragment getTournamentSetupFragment() {
+
+        return tournamentSetupFragment;
+    }
+
     private class SectionsPagerAdapter extends FragmentPagerAdapter {
 
         private Tournament tournamentToOrganize;
@@ -159,7 +166,9 @@ public class TournamentOrganizeActivity extends BaseActivity {
 //                return TournamentPlayerListFragment.newInstance(tournament);
 //            }
             if (position == 0) {
-                return TournamentSetupFragment.newInstance(tournamentToOrganize);
+                tournamentSetupFragment = TournamentSetupFragment.newInstance(tournamentToOrganize);
+
+                return tournamentSetupFragment;
             } else {
                 tournamentRoundManagementFragment = TournamentRoundManagementFragment.newInstance(position,
                         tournamentToOrganize);

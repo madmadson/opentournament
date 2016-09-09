@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_gravity="center"
-    android:layout_height="@dimen/player_card_view_height_3_row"
+    android:layout_height="@dimen/player_card_view_height"
     android:layout_width="match_parent"
     android:id="@+id/ranking_row_card_view"
     card_view:cardCornerRadius="4dp"
@@ -45,21 +45,13 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/ranking_row_name"
                 android:layout_marginLeft="@dimen/main_tick"/>
-
-            <TextView
-                android:id="@+id/ranking_player_faction"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/ranking_player_teamname"
-                android:layout_marginLeft="@dimen/main_tick"/>
         </RelativeLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:paddingRight="@dimen/halve_tick"
-            android:paddingTop="@dimen/main_tick"
+            android:paddingRight="@dimen/ranking_scorings_padding"
             android:layout_centerVertical="true">
 
             <RelativeLayout
@@ -159,7 +151,35 @@
             </RelativeLayout>
         
         </LinearLayout>
-        
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:paddingRight="@dimen/main_tick"
+            android:layout_centerVertical="true">
+
+            <TextView
+                android:id="@+id/ranking_player_faction"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="cygnar"
+                android:layout_marginRight="@dimen/small_tick"/>
+            <!-- Account may be introduce with tournament players later -->
+            <ImageView
+                android:id="@+id/tournament_player_row_account_icon"
+                android:src="@drawable/ic_account_circle_black_24dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="@dimen/small_tick"/>
+            <ImageView
+                android:id="@+id/tournament_player_row_online_icon"
+                android:src="@drawable/ic_cloud_black_24dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/small_tick"/>
+        </LinearLayout>
         
     </RelativeLayout>
 </android.support.v7.widget.CardView>

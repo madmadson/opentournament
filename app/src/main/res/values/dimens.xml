@@ -43,4 +43,6 @@
     
     <dimen name="padding_input_labels">32dp</dimen>
     <dimen name="ranking_scorings_padding">150dp</dimen>
+
+    <dimen name="player_card_view_height_3_row">90dp</dimen>
 </resources>

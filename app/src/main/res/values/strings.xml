@@ -89,7 +89,7 @@
     <string name="heading_tournament_player">Player in %2$s tournament: (%1$d)</string>
     <string name="button_pair_round">Pair \n round %1$d</string>
     <string name="button_change_round">show \n round %1$d</string>
-    <string name="pairing_divider">:</string>
+    <string name="game_divider">vs</string>
     <string name="heading_online_players">Players from online database</string>
     <string name="heading_local_players">Players from local database (only visible for you)</string>
     <string name="label_faction">faction</string>

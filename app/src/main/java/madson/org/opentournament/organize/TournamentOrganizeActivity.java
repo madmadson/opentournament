@@ -21,6 +21,7 @@ import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.organize.setup.TournamentPlayerListFragment;
 import madson.org.opentournament.organize.setup.TournamentSetupFragment;
+import madson.org.opentournament.service.TournamentService;
 import madson.org.opentournament.utility.BaseActivity;
 
 
@@ -97,7 +98,20 @@ public class TournamentOrganizeActivity extends BaseActivity {
             tabLayout.setupWithViewPager(mViewPager);
 
             // set tab to actual round
-            mViewPager.setCurrentItem(tournament.getActualRound());
+            Runnable runnable = new Runnable() {
+
+                @Override
+                public void run() {
+
+                    Log.i(this.getClass().getName(), "clicked on tournament: " + tournament);
+
+                    TournamentService tournamentService = getBaseApplication().getTournamentService();
+                    Tournament actualTournament = tournamentService.getTournamentForId(tournament.get_id());
+                    tournament = actualTournament;
+                    mViewPager.setCurrentItem(actualTournament.getActualRound());
+                }
+            };
+            runnable.run();
         }
     }
 

@@ -1,10 +1,7 @@
 package madson.org.opentournament.organize.setup;
 
-import android.app.Notification;
-
 import android.content.Context;
-
-import android.graphics.drawable.Drawable;
+import android.content.DialogInterface;
 
 import android.os.Bundle;
 
@@ -13,6 +10,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
@@ -23,7 +21,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.Button;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
@@ -34,17 +31,17 @@ import com.google.firebase.database.ValueEventListener;
 
 import madson.org.opentournament.R;
 import madson.org.opentournament.db.FirebaseReferences;
+import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.organize.ConfirmPairingNewRoundDialog;
 import madson.org.opentournament.organize.TournamentEventListener;
-import madson.org.opentournament.organize.TournamentOrganizeActivity;
+import madson.org.opentournament.service.PlayerService;
 import madson.org.opentournament.service.TournamentPlayerService;
 import madson.org.opentournament.utility.BaseActivity;
 import madson.org.opentournament.utility.BaseApplication;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -156,15 +153,61 @@ public class TournamentPlayerListFragment extends Fragment implements Tournament
                 @Override
                 public void onClick(View v) {
 
-                    ConfirmPairingNewRoundDialog dialog = new ConfirmPairingNewRoundDialog();
+                    if (tournamentPlayerListAdapter.getItemCount() % 2 == 1) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                        builder.setTitle(R.string.uneven_player_message)
+                        .setPositiveButton(R.string.dialog_confirm_and_start, new DialogInterface.OnClickListener() {
 
-                    Bundle bundle = new Bundle();
-                    bundle.putParcelable(ConfirmPairingNewRoundDialog.BUNDLE_TOURNAMENT, tournament);
-                    bundle.putInt(ConfirmPairingNewRoundDialog.BUNDLE_ROUND_TO_DISPLAY, 1);
-                    dialog.setArguments(bundle);
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
 
-                    FragmentManager supportFragmentManager = getActivity().getSupportFragmentManager();
-                    dialog.show(supportFragmentManager, "confirm start tournament");
+                                        Runnable runnable = new Runnable() {
+
+                                            @Override
+                                            public void run() {
+
+                                                TournamentPlayerService tournamentPlayerService =
+                                                    ((BaseApplication) getActivity().getApplication())
+                                                    .getTournamentPlayerService();
+
+                                                Player dummyTournamentPlayer = new Player();
+                                                dummyTournamentPlayer.setFirstname("Dummy");
+                                                dummyTournamentPlayer.setNickname("THE HAMMER");
+                                                dummyTournamentPlayer.setLastname("Player");
+
+                                                PlayerService playerService =
+                                                    ((BaseApplication) getActivity().getApplication())
+                                                    .getPlayerService();
+                                                Player newLocalPlayerWithId = playerService.createLocalPlayer(
+                                                        dummyTournamentPlayer);
+
+                                                TournamentPlayer tournamentPlayer = new TournamentPlayer(
+                                                        newLocalPlayerWithId, tournament);
+
+                                                tournamentPlayerService.addTournamentPlayerToTournament(
+                                                    tournamentPlayer, tournament);
+
+                                                ((BaseApplication) getActivity().getApplication())
+                                                .getTournamentService().increaseActualPlayerForTournament(tournament);
+                                                tournamentPlayerListAdapter.addTournamentPlayer(tournamentPlayer);
+                                            }
+                                        };
+                                        runnable.run();
+                                    }
+                                })
+                        .setNegativeButton(R.string.dialog_cancel, null)
+                        .show();
+                    } else {
+                        ConfirmPairingNewRoundDialog dialog = new ConfirmPairingNewRoundDialog();
+
+                        Bundle bundle = new Bundle();
+                        bundle.putParcelable(ConfirmPairingNewRoundDialog.BUNDLE_TOURNAMENT, tournament);
+                        bundle.putInt(ConfirmPairingNewRoundDialog.BUNDLE_ROUND_TO_DISPLAY, 1);
+                        dialog.setArguments(bundle);
+
+                        FragmentManager supportFragmentManager = getActivity().getSupportFragmentManager();
+                        dialog.show(supportFragmentManager, "confirm start tournament");
+                    }
                 }
             });
 

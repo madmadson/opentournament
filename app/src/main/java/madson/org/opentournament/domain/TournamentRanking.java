@@ -27,7 +27,6 @@ public class TournamentRanking {
     private int control_points;
     private int victory_points;
 
-    // online needed for sos calculation
     private List<String> listOfOpponentsPlayerIds = new ArrayList<>();
 
     public TournamentRanking() {

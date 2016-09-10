@@ -55,6 +55,7 @@
     <string name="dialog_save">save</string>
     <string name="dialog_cancel">cancel</string>
     <string name="dialog_confirm">confirm</string>
+    <string name="dialog_confirm_and_start">confirm and start</string>
     
     <!-- Tournament management dialog-->
     <string name="dialog_edit_tournament">Edit tournament</string>
@@ -174,4 +175,5 @@
  
     <!--Caution dynamic generated keys of pairing options -->
 <string name="pairing_option_player_not_play_twice_against_each_other">Player don\'t play twice against each other</string>
+    <string name="uneven_player_message">Uneven players in tournament.  Should a dummy player be inserted for you?</string>
 </resources>

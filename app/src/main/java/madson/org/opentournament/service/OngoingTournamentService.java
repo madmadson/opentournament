@@ -1,5 +1,6 @@
 package madson.org.opentournament.service;
 
+import madson.org.opentournament.domain.PairingOption;
 import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
@@ -32,10 +33,12 @@ public interface OngoingTournamentService {
      * @param  tournament  tournament
      * @param  round  the round calculated for
      * @param  rankingForRound
+     * @param  pairingOptions
      *
      * @return  new create list of pairings
      */
-    List<Game> createGamesForRound(Tournament tournament, int round, Map<String, TournamentRanking> rankingForRound);
+    List<Game> createGamesForRound(Tournament tournament, int round, Map<String, TournamentRanking> rankingForRound,
+        List<PairingOption> pairingOptions);
 
 
     /**

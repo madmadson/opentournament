@@ -107,7 +107,7 @@
     
     <!-- confirm game dialog -->
     <string name="confirm">confirm</string>
-    <string name="confirm_pairing_title">Pairing tournament_round: %1$d</string>
+    <string name="confirm_pairing_title">Pairing round: %1$d</string>
 
     <!-- game card -->
     <string name="game_win">WIN: %1$d</string>
@@ -172,6 +172,6 @@
     <string name="pair_again">pair again</string>
     <string name="next_round">Next Round</string>
  
-
-
+    <!--Caution dynamic generated keys of pairing options -->
+<string name="pairing_option_player_not_play_twice_against_each_other">Player don\'t play twice against each other</string>
 </resources>

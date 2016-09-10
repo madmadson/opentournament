@@ -13,6 +13,10 @@ import com.facebook.FacebookSdk;
 import madson.org.opentournament.R;
 import madson.org.opentournament.about.AppInfo;
 import madson.org.opentournament.about.LibraryItem;
+import madson.org.opentournament.config.MapOfPairingConfig;
+import madson.org.opentournament.domain.GameOrSportTyp;
+import madson.org.opentournament.domain.PairingOption;
+import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.organize.TournamentEventListener;
 import madson.org.opentournament.organize.setup.TournamentSetupEventListener;
 import madson.org.opentournament.service.OngoingTournamentService;
@@ -31,6 +35,7 @@ import net.danlew.android.joda.JodaTimeAndroid;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -185,5 +190,23 @@ public abstract class BaseApplication extends Application {
     public void setTournamentEventListener(TournamentEventListener tournamentEventListener) {
 
         this.tournamentEventListener = tournamentEventListener;
+    }
+
+
+    public List<PairingOption> getPairingOptionsForTournament(Tournament tournament) {
+
+        ArrayList<PairingOption> returnedPairingOptions = new ArrayList<>();
+        MapOfPairingConfig pairingConfigs = new MapOfPairingConfig();
+
+        Map<GameOrSportTyp, PairingOption> pairingOptions = pairingConfigs.getPairingOptions();
+
+        for (Map.Entry<GameOrSportTyp, PairingOption> pairingEntry : pairingOptions.entrySet()) {
+            if (pairingEntry.getKey().name().equals(GameOrSportTyp.ALL.name())
+                    || pairingEntry.getKey().name().equals(tournament.getGameOrSportTyp())) {
+                returnedPairingOptions.add(pairingEntry.getValue());
+            }
+        }
+
+        return returnedPairingOptions;
     }
 }

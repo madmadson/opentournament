@@ -89,11 +89,18 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHo
         }
 
         TournamentPlayer player1 = game.getPlayer1();
-        holder.getPlayerOneNameInList()
-            .setText(context.getResources()
-                .getString(R.string.tournament_player_name_in_row, player1.getFirstname(), player1.getNickname(),
-                    player1.getLastname()));
-        holder.getPlayerOneFaction().setText(player1.getFaction());
+
+        if (player1 != null) {
+            holder.getPlayerOneNameInList()
+                .setText(context.getResources()
+                    .getString(R.string.tournament_player_name_in_row, player1.getFirstname(), player1.getNickname(),
+                        player1.getLastname()));
+            holder.getPlayerOneFaction().setText(player1.getFaction());
+        } else {
+            holder.getPlayerOneNameInList()
+                .setText(context.getResources()
+                    .getString(R.string.tournament_player_name_in_row, "Dummy", "THE KING", "Player"));
+        }
 
         holder.getPlayerOneScore()
             .setText(context.getResources().getString(R.string.game_win, game.getPlayer_one_score()));
@@ -103,11 +110,18 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHo
             .setText(context.getResources().getString(R.string.game_vp, game.getPlayer_one_victory_points()));
 
         TournamentPlayer player2 = game.getPlayer2();
-        holder.getPlayerTwoNameInList()
-            .setText(context.getResources()
-                .getString(R.string.tournament_player_name_in_row, player2.getFirstname(), player2.getNickname(),
-                    player2.getLastname()));
-        holder.getPlayerTwoFaction().setText(player2.getFaction());
+
+        if (player2 != null) {
+            holder.getPlayerTwoNameInList()
+                .setText(context.getResources()
+                    .getString(R.string.tournament_player_name_in_row, player2.getFirstname(), player2.getNickname(),
+                        player2.getLastname()));
+            holder.getPlayerTwoFaction().setText(player2.getFaction());
+        } else {
+            holder.getPlayerTwoNameInList()
+                .setText(context.getResources()
+                    .getString(R.string.tournament_player_name_in_row, "Dummy", "THE HAMMER", "Player"));
+        }
 
         holder.getPlayerTwoScore()
             .setText(context.getResources().getString(R.string.game_win, game.getPlayer_two_score()));

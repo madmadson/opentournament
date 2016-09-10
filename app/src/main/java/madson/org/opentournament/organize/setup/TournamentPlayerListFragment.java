@@ -36,6 +36,7 @@ import madson.org.opentournament.R;
 import madson.org.opentournament.db.FirebaseReferences;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
+import madson.org.opentournament.organize.ConfirmPairingNewRoundDialog;
 import madson.org.opentournament.organize.TournamentEventListener;
 import madson.org.opentournament.organize.TournamentOrganizeActivity;
 import madson.org.opentournament.service.TournamentPlayerService;
@@ -155,10 +156,11 @@ public class TournamentPlayerListFragment extends Fragment implements Tournament
                 @Override
                 public void onClick(View v) {
 
-                    ConfirmStartTournamentDialog dialog = new ConfirmStartTournamentDialog();
+                    ConfirmPairingNewRoundDialog dialog = new ConfirmPairingNewRoundDialog();
 
                     Bundle bundle = new Bundle();
-                    bundle.putParcelable(ConfirmStartTournamentDialog.BUNDLE_TOURNAMENT, tournament);
+                    bundle.putParcelable(ConfirmPairingNewRoundDialog.BUNDLE_TOURNAMENT, tournament);
+                    bundle.putInt(ConfirmPairingNewRoundDialog.BUNDLE_ROUND_TO_DISPLAY, 1);
                     dialog.setArguments(bundle);
 
                     FragmentManager supportFragmentManager = getActivity().getSupportFragmentManager();

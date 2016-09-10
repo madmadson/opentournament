@@ -4,6 +4,7 @@ import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentRanking;
 
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -26,5 +27,5 @@ public interface RankingService {
      * @param  tournament  the tournament
      * @param  round_number  round number till calculation
      */
-    void createRankingForRound(Tournament tournament, int round_number);
+    Map<String, TournamentRanking> createRankingForRound(Tournament tournament, int round_number);
 }

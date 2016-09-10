@@ -7,6 +7,7 @@ import madson.org.opentournament.domain.TournamentRanking;
 import madson.org.opentournament.domain.warmachine.Game;
 
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -30,10 +31,11 @@ public interface OngoingTournamentService {
      *
      * @param  tournament  tournament
      * @param  round  the round calculated for
+     * @param  rankingForRound
      *
      * @return  new create list of pairings
      */
-    List<Game> createGamesForRound(Tournament tournament, int round);
+    List<Game> createGamesForRound(Tournament tournament, int round, Map<String, TournamentRanking> rankingForRound);
 
 
     /**

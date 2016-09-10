@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.Button;
 import android.widget.TextView;
 
 import madson.org.opentournament.R;
@@ -82,6 +84,24 @@ public class GameListFragment extends Fragment {
             }
         };
         runnable.run();
+
+        Button startTournamentButton = (Button) view.findViewById(R.id.button_start_next_round);
+        startTournamentButton.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+
+                    ConfirmPairingNewRoundDialog dialog = new ConfirmPairingNewRoundDialog();
+
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelable(ConfirmPairingNewRoundDialog.BUNDLE_TOURNAMENT, tournament);
+                    bundle.putInt(ConfirmPairingNewRoundDialog.BUNDLE_ROUND_TO_DISPLAY, round + 1);
+                    dialog.setArguments(bundle);
+
+                    FragmentManager supportFragmentManager = getActivity().getSupportFragmentManager();
+                    dialog.show(supportFragmentManager, "confirm  pair next round tournament");
+                }
+            });
 
         return view;
     }

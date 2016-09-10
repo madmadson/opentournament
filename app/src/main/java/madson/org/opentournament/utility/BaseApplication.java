@@ -74,14 +74,14 @@ public abstract class BaseApplication extends Application {
             tournamentPlayerService = new TournamentPlayerServiceImpl(getApplicationContext());
         }
 
-        // depend on tournament service, player service -> to do ranking -_-
-        if (ongoingTournamentService == null) {
-            ongoingTournamentService = new OngoingTournamentServiceImpl(getApplicationContext());
-        }
-
         // depend on tournamentPlayerService -> to do ranking -_-
         if (rankingService == null) {
             rankingService = new RankingServiceImpl(getApplicationContext());
+        }
+
+        // depend on tournament service, player service, ranking -> must pair games
+        if (ongoingTournamentService == null) {
+            ongoingTournamentService = new OngoingTournamentServiceImpl(getApplicationContext());
         }
     }
 

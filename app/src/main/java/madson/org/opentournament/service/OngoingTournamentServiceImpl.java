@@ -13,11 +13,14 @@ import madson.org.opentournament.db.OpenTournamentDBHelper;
 import madson.org.opentournament.db.warmachine.GameTable;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
+import madson.org.opentournament.domain.TournamentRanking;
 import madson.org.opentournament.domain.warmachine.Game;
 import madson.org.opentournament.organize.setup.TournamentPlayerComparator;
+import madson.org.opentournament.service.warmachine.TournamentRankingComparator;
 import madson.org.opentournament.utility.BaseApplication;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -34,6 +37,7 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
     private PlayerService playerService;
     private TournamentService tournamentService;
     private TournamentPlayerService tournamentPlayerService;
+    private RankingService rankingService;
 
     public OngoingTournamentServiceImpl(Context context) {
 
@@ -55,6 +59,10 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
 
         if (tournamentPlayerService == null) {
             tournamentPlayerService = application.getTournamentPlayerService();
+        }
+
+        if (rankingService == null) {
+            rankingService = application.getRankingService();
         }
     }
 
@@ -100,50 +108,46 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
 
 
     @Override
-    public List<Game> createGamesForRound(Tournament tournament, int round) {
+    public List<Game> createGamesForRound(Tournament tournament, int round,
+        Map<String, TournamentRanking> rankingForRound) {
 
-        List<TournamentPlayer> players = tournamentPlayerService.getAllPlayersForTournament(tournament);
+        List<TournamentRanking> rankings = new ArrayList<>(rankingForRound.values());
 
-        // uneven number of players
-        if (players.size() % 2 == 1) {
-            TournamentPlayer warmachineTournamentDummyPlayer = new TournamentPlayer();
-            players.add(warmachineTournamentDummyPlayer);
+        // uneven number of rankings (players)
+        if (rankings.size() % 2 == 1) {
+            TournamentRanking warmachineTournamentDummyPlayer = new TournamentRanking();
+            rankings.add(warmachineTournamentDummyPlayer);
         }
 
-        Collections.shuffle(players);
-        Collections.sort(players, new TournamentPlayerComparator());
+        Collections.shuffle(rankings);
+        Collections.sort(rankings, new TournamentRankingComparator());
 
-        List<Game> games = new ArrayList<>(players.size() / 2);
+        List<Game> games = new ArrayList<>(rankings.size() / 2);
 
-        for (int i = 0; i <= (players.size() - 1); i = i + 2) {
-            Log.i(this.getClass().getName(), "player1:" + players.get(i));
+        for (int i = 0; i <= (rankings.size() - 1); i = i + 2) {
+            Log.i(this.getClass().getName(), "player1:" + rankings.get(i));
 
             Game game = new Game();
             game.setTournament_id(tournament.get_id());
             game.setTournament_round(round);
 
-            TournamentPlayer player_one = players.get(i);
+            TournamentRanking player_one = rankings.get(i);
+
+            game.setPlayer1(player_one.getTournamentPlayer());
 
             game.setPlayer_one_id(player_one.getPlayer_id());
+            game.setPlayer_one_online_uuid(player_one.getPlayer_online_uuid());
 
-            if (player_one.getPlayer_online_uuid() != null) {
-                game.setPlayer_one_online_uuid(player_one.getOnline_uuid());
-            }
+            Log.i(this.getClass().getName(), "player2:" + rankings.get(i + 1));
 
-            game.setPlayer1(player_one);
+            TournamentRanking player_two = rankings.get(i + 1);
 
-            Log.i(this.getClass().getName(), "player2:" + players.get(i + 1));
-
-            TournamentPlayer player_two = players.get(i + 1);
-
-            if (player_one.getPlayer_online_uuid() != null) {
-                game.setPlayer_one_online_uuid(player_one.getOnline_uuid());
-            }
-
-            game.setPlayer2(player_two);
+            game.setPlayer2(player_two.getTournamentPlayer());
 
             game.setPlayer_two_id(player_two.getPlayer_id());
+            game.setPlayer_two_online_uuid(player_two.getPlayer_online_uuid());
 
+            Log.i(this.getClass().getName(), "game created: " + game);
             games.add(game);
         }
 

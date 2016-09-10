@@ -28,15 +28,7 @@ public class TournamentRanking {
     private int victory_points;
 
     // online needed for sos calculation
-    private List<Long> listOfOpponentsPlayerIds = new ArrayList<>();
-
-    public TournamentRanking(long tournament_id, long player_id, int round) {
-
-        this.tournament_id = tournament_id;
-        this.player_id = player_id;
-        this.tournament_round = round;
-    }
-
+    private List<String> listOfOpponentsPlayerIds = new ArrayList<>();
 
     public TournamentRanking() {
     }
@@ -191,7 +183,7 @@ public class TournamentRanking {
     }
 
 
-    public List<Long> getListOfOpponentsPlayerIds() {
+    public List<String> getListOfOpponentsPlayerIds() {
 
         return listOfOpponentsPlayerIds;
     }

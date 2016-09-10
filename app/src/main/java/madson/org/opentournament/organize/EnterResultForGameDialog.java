@@ -167,12 +167,23 @@ public class EnterResultForGameDialog extends DialogFragment {
             TournamentPlayer player1 = game.getPlayer1();
             TournamentPlayer player2 = game.getPlayer2();
 
-            text_name_player_one.setText(getContext().getResources()
-                .getString(R.string.tournament_player_name_in_row, player1.getFirstname(), player1.getNickname(),
-                    player1.getLastname()));
-            text_name_player_two.setText(getContext().getResources()
-                .getString(R.string.tournament_player_name_in_row, player2.getFirstname(), player2.getNickname(),
-                    player2.getLastname()));
+            if (player1 != null) {
+                text_name_player_one.setText(getActivity().getResources()
+                    .getString(R.string.tournament_player_name_in_row, player1.getFirstname(), player1.getNickname(),
+                        player1.getLastname()));
+            } else {
+                text_name_player_one.setText(getActivity().getResources()
+                    .getString(R.string.tournament_player_name_in_row, "Dummy", "THE KING", "Player"));
+            }
+
+            if (player2 != null) {
+                text_name_player_two.setText(getActivity().getResources()
+                    .getString(R.string.tournament_player_name_in_row, player2.getFirstname(), player2.getNickname(),
+                        player2.getLastname()));
+            } else {
+                text_name_player_two.setText(getActivity().getResources()
+                    .getString(R.string.tournament_player_name_in_row, "Dummy", "THE HAMMER", "Player"));
+            }
 
             if (game.getPlayer_one_score() == 1) {
                 setPlayerToWinner(1, text_name_player_one, text_name_player_two);

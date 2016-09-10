@@ -21,10 +21,13 @@ import android.widget.Button;
 
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Tournament;
+import madson.org.opentournament.domain.TournamentRanking;
 import madson.org.opentournament.service.OngoingTournamentService;
 import madson.org.opentournament.service.RankingService;
 import madson.org.opentournament.service.TournamentService;
 import madson.org.opentournament.utility.BaseApplication;
+
+import java.util.Map;
 
 
 /**
@@ -120,16 +123,24 @@ public class ConfirmPairingNewRoundDialog extends DialogFragment {
                                 .getTournamentService();
 
                             // first create ranking for complete games
-                            rankingService.createRankingForRound(tournament, round_for_pairing);
+                            Map<String, TournamentRanking> rankingForRound = rankingService.createRankingForRound(
+                                    tournament, round_for_pairing);
 
                             // now we can create pairings for new round
-                            ongoingTournamentService.createGamesForRound(tournament, round_for_pairing);
+                            ongoingTournamentService.createGamesForRound(tournament, round_for_pairing,
+                                rankingForRound);
 
                             // last thing update tournament
                             Tournament updatedTournament = tournamentService.updateActualRound(tournament,
                                     round_for_pairing);
 
                             activity.setTournamentToTabView(updatedTournament);
+
+                            // set visibility of start button
+                            TournamentEventListener tournamentEventListener = activity.getBaseApplication()
+                                .getTournamentEventListener();
+
+                            tournamentEventListener.startRound(round_for_pairing);
 
                             dialog.dismiss();
                         }

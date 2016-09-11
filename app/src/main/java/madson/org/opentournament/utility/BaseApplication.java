@@ -35,8 +35,11 @@ import net.danlew.android.joda.JodaTimeAndroid;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 
 /**
@@ -50,6 +53,8 @@ public abstract class BaseApplication extends Application {
     private static PlayerService playerService;
     private static TournamentPlayerService tournamentPlayerService;
     private TournamentEventListener tournamentEventListener;
+
+    private Set<TournamentEventListener> tournamentEventListeners = new HashSet<>();
 
     @Override
     public void onCreate() {
@@ -182,15 +187,49 @@ public abstract class BaseApplication extends Application {
     }
 
 
-    public TournamentEventListener getTournamentEventListener() {
+    /**
+     * Registers a listener .
+     *
+     * @param  listener
+     */
+    public void registerTournamentEventListener(TournamentEventListener listener) {
 
-        return tournamentEventListener;
+        tournamentEventListeners.add(listener);
     }
 
 
-    public void setTournamentEventListener(TournamentEventListener tournamentEventListener) {
+    /**
+     * Unregister the given listener from notifications.
+     *
+     * @param  listener
+     */
+    public void unregisterOrderChangeListener(TournamentEventListener listener) {
 
-        this.tournamentEventListener = tournamentEventListener;
+        tournamentEventListeners.remove(listener);
+    }
+
+
+    public void notifyNextRoundPaired(int roundToStart) {
+
+        // iterate over a copy of the listeners to enable the listeners to unregister themselves on notifications
+        Set<TournamentEventListener> listeners = new HashSet<>(tournamentEventListeners);
+        Iterator<TournamentEventListener> iterator = listeners.iterator();
+
+        while (iterator.hasNext()) {
+            iterator.next().startRound(roundToStart);
+        }
+    }
+
+
+    public void notifyPairAgain(int roundToStart) {
+
+        // iterate over a copy of the listeners to enable the listeners to unregister themselves on notifications
+        Set<TournamentEventListener> listeners = new HashSet<>(tournamentEventListeners);
+        Iterator<TournamentEventListener> iterator = listeners.iterator();
+
+        while (iterator.hasNext()) {
+            iterator.next().pairRoundAgain(roundToStart);
+        }
     }
 
 

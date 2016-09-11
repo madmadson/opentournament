@@ -78,7 +78,7 @@ public class TournamentPlayerListFragment extends Fragment implements Tournament
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
 
-        ((BaseActivity) getActivity()).getBaseApplication().setTournamentEventListener(this);
+        ((BaseActivity) getActivity()).getBaseApplication().registerTournamentEventListener(this);
 
         super.onCreate(savedInstanceState);
     }

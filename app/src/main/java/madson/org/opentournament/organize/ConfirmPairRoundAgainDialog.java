@@ -186,10 +186,7 @@ public class ConfirmPairRoundAgainDialog extends DialogFragment {
                                     "pairing failed. Delete pairing, games for round and say something to user :) ");
                             }
 
-                            TournamentEventListener tournamentEventListener = activity.getBaseApplication()
-                                .getTournamentEventListener();
-
-                            tournamentEventListener.pairRoundAgain(round_for_pairing);
+                            activity.getBaseApplication().notifyPairAgain(round_for_pairing);
 
                             dialog.dismiss();
                         }

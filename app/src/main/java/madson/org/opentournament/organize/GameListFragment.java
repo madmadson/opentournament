@@ -22,6 +22,7 @@ import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.warmachine.Game;
 import madson.org.opentournament.service.OngoingTournamentService;
+import madson.org.opentournament.utility.BaseActivity;
 import madson.org.opentournament.utility.BaseApplication;
 
 import java.util.List;
@@ -30,16 +31,20 @@ import java.util.List;
 /**
  * @author  Tobias Matt - tmatt@contargo.net
  */
-public class GameListFragment extends Fragment {
+public class GameListFragment extends Fragment implements TournamentEventListener {
 
     public static final String BUNDLE_TOURNAMENT = "tournament";
     public static final String BUNDLE_ROUND = "round";
     private Tournament tournament;
     private int round;
     private GameListAdapter gameListAdapter;
+    private Button nextRoundButton;
+    private Button pairRoundAgainButton;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
+
+        ((BaseActivity) getActivity()).getBaseApplication().registerTournamentEventListener(this);
 
         super.onCreate(savedInstanceState);
     }
@@ -86,7 +91,7 @@ public class GameListFragment extends Fragment {
         };
         runnable.run();
 
-        Button pairRoundAgainButton = (Button) view.findViewById(R.id.button_pair_again);
+        pairRoundAgainButton = (Button) view.findViewById(R.id.button_pair_again);
         pairRoundAgainButton.setOnClickListener(new View.OnClickListener() {
 
                 @Override
@@ -111,13 +116,13 @@ public class GameListFragment extends Fragment {
                 }
             });
 
-        Button nextRoundButton = (Button) view.findViewById(R.id.button_start_next_round);
+        nextRoundButton = (Button) view.findViewById(R.id.button_start_next_round);
         nextRoundButton.setOnClickListener(new View.OnClickListener() {
 
                 @Override
                 public void onClick(View v) {
 
-                    if (!gameListAdapter.allGamesAreFinished()) {
+                    if (gameListAdapter.allGamesAreFinished()) {
                         ConfirmPairingNewRoundDialog dialog = new ConfirmPairingNewRoundDialog();
 
                         Bundle bundle = new Bundle();
@@ -143,6 +148,24 @@ public class GameListFragment extends Fragment {
     public void updateGameInList(Game game) {
 
         gameListAdapter.updateGame(game);
+    }
+
+
+    @Override
+    public void startRound(int roundToStart) {
+
+        if (roundToStart == round + 1) {
+            nextRoundButton.setVisibility(View.GONE);
+            pairRoundAgainButton.setVisibility(View.GONE);
+        }
+    }
+
+
+    @Override
+    public void pairRoundAgain(int round_for_pairing) {
+
+        // nothing
+
     }
 
     public interface GameResultEnteredListener {

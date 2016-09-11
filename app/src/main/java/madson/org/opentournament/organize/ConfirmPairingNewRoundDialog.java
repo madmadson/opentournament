@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.FragmentActivity;
 
 import android.support.v7.app.AlertDialog;
 
@@ -28,14 +27,11 @@ import madson.org.opentournament.R;
 import madson.org.opentournament.domain.PairingOption;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentRanking;
-import madson.org.opentournament.domain.warmachine.Game;
 import madson.org.opentournament.service.OngoingTournamentService;
 import madson.org.opentournament.service.RankingService;
 import madson.org.opentournament.service.TournamentService;
 import madson.org.opentournament.utility.BaseApplication;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 
@@ -203,10 +199,7 @@ public class ConfirmPairingNewRoundDialog extends DialogFragment {
                             activity.setTournamentToTabView(updatedTournament);
 
                             // set visibility of start button
-                            TournamentEventListener tournamentEventListener = activity.getBaseApplication()
-                                .getTournamentEventListener();
-
-                            tournamentEventListener.startRound(round_for_pairing);
+                            activity.getBaseApplication().notifyNextRoundPaired(round_for_pairing);
 
                             dialog.dismiss();
                         }

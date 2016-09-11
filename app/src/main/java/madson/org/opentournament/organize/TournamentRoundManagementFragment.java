@@ -51,7 +51,7 @@ public class TournamentRoundManagementFragment extends Fragment implements GameL
 
         super.onCreate(savedInstanceState);
 
-        ((BaseActivity) getActivity()).getBaseApplication().setTournamentEventListener(this);
+        ((BaseActivity) getActivity()).getBaseApplication().registerTournamentEventListener(this);
     }
 
 

@@ -147,7 +147,7 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHo
             }
         }
 
-        return false;
+        return true;
     }
 
 

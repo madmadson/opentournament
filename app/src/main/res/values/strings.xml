@@ -175,4 +175,5 @@
     <!--Caution dynamic generated keys of pairing options -->
 <string name="pairing_option_player_not_play_twice_against_each_other">Player don\'t play twice against each other</string>
     <string name="uneven_player_message">Uneven players in tournament.  Should a dummy player be inserted for you?</string>
+    <string name="not_all_games_fineshed">Not all games are finished. Please insert results before pair next round.</string>
 </resources>

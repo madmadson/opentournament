@@ -138,6 +138,18 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHo
         return gamesForRound.size();
     }
 
+
+    public boolean allGamesAreFinished() {
+
+        for (Game game : gamesForRound) {
+            if (!game.isFinished()) {
+                return false;
+            }
+        }
+
+        return false;
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private Game game;

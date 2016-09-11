@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
@@ -85,21 +86,30 @@ public class GameListFragment extends Fragment {
         };
         runnable.run();
 
-        Button startTournamentButton = (Button) view.findViewById(R.id.button_start_next_round);
-        startTournamentButton.setOnClickListener(new View.OnClickListener() {
+        Button pairRoundAgainButton = (Button) view.findViewById(R.id.button_pair_again);
+
+        Button nextRoundButton = (Button) view.findViewById(R.id.button_start_next_round);
+        nextRoundButton.setOnClickListener(new View.OnClickListener() {
 
                 @Override
                 public void onClick(View v) {
 
-                    ConfirmPairingNewRoundDialog dialog = new ConfirmPairingNewRoundDialog();
+                    if (gameListAdapter.allGamesAreFinished()) {
+                        ConfirmPairingNewRoundDialog dialog = new ConfirmPairingNewRoundDialog();
 
-                    Bundle bundle = new Bundle();
-                    bundle.putParcelable(ConfirmPairingNewRoundDialog.BUNDLE_TOURNAMENT, tournament);
-                    bundle.putInt(ConfirmPairingNewRoundDialog.BUNDLE_ROUND_TO_DISPLAY, round + 1);
-                    dialog.setArguments(bundle);
+                        Bundle bundle = new Bundle();
+                        bundle.putParcelable(ConfirmPairingNewRoundDialog.BUNDLE_TOURNAMENT, tournament);
+                        bundle.putInt(ConfirmPairingNewRoundDialog.BUNDLE_ROUND_TO_DISPLAY, round + 1);
+                        dialog.setArguments(bundle);
 
-                    FragmentManager supportFragmentManager = getActivity().getSupportFragmentManager();
-                    dialog.show(supportFragmentManager, "confirm  pair next round tournament");
+                        FragmentManager supportFragmentManager = getActivity().getSupportFragmentManager();
+                        dialog.show(supportFragmentManager, "confirm  pair next round tournament");
+                    } else {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                        builder.setTitle(R.string.not_all_games_fineshed)
+                        .setPositiveButton(R.string.dialog_confirm, null)
+                        .show();
+                    }
                 }
             });
 

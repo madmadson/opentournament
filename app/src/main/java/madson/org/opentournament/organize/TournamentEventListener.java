@@ -5,11 +5,14 @@ import madson.org.opentournament.domain.TournamentPlayer;
 
 
 /**
- * Events for tournament setup.
+ * Events for tournament.
  *
  * @author  Tobias Matt - tmatt@contargo.net
  */
 public interface TournamentEventListener {
 
     void startRound(int roundToStart);
+
+
+    void pairRoundAgain(int round_for_pairing);
 }

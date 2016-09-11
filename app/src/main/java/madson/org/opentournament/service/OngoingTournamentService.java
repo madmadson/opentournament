@@ -68,4 +68,11 @@ public interface OngoingTournamentService {
      * @return  if all games are finished or not
      */
     boolean checkAllGamesAreFinishedForRound(Tournament tournament, int round);
+
+
+    /**
+     * @param  tournament
+     * @param  round_for_pairing
+     */
+    void deleteGamesForRound(Tournament tournament, int round_for_pairing);
 }

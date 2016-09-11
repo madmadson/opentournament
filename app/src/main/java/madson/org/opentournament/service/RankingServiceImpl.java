@@ -10,6 +10,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import madson.org.opentournament.db.OpenTournamentDBHelper;
+import madson.org.opentournament.db.TournamentTable;
 import madson.org.opentournament.db.warmachine.GameTable;
 import madson.org.opentournament.db.warmachine.TournamentRankingTable;
 import madson.org.opentournament.domain.Tournament;
@@ -179,6 +180,21 @@ public class RankingServiceImpl implements RankingService {
         insertRankingForRound(mapOfRankings);
 
         return mapOfRankings;
+    }
+
+
+    @Override
+    public void deleteRankingForRound(Tournament tournament, int roundToDelete) {
+
+        Log.i(this.getClass().getName(),
+            "delete  ranking for round: " + roundToDelete + " in tournament : " + tournament);
+
+        SQLiteDatabase writableDatabase = openTournamentDBHelper.getWritableDatabase();
+
+        writableDatabase.delete(TournamentRankingTable.TABLE_TOURNAMENT_RANKING,
+            TournamentRankingTable.COLUMN_TOURNAMENT_ID + " = ? AND " + TournamentRankingTable.COLUMN_TOURNAMENT_ROUND
+            + " = ?", new String[] { String.valueOf(tournament.get_id()), String.valueOf(roundToDelete) });
+        writableDatabase.close();
     }
 
 

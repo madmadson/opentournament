@@ -28,4 +28,11 @@ public interface RankingService {
      * @param  round_number  round number till calculation
      */
     Map<String, TournamentRanking> createRankingForRound(Tournament tournament, int round_number);
+
+
+    /**
+     * @param  tournament
+     * @param  round_for_pairing
+     */
+    void deleteRankingForRound(Tournament tournament, int round_for_pairing);
 }

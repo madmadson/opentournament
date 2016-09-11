@@ -108,6 +108,7 @@
     <!-- confirm game dialog -->
     <string name="confirm">confirm</string>
     <string name="confirm_pairing_title">Pairing round: %1$d</string>
+    <string name="confirm_pair_round_again_title">Pair round %1$d again</string>
 
     <!-- game card -->
     <string name="game_win">WIN: %1$d</string>
@@ -173,7 +174,13 @@
     <string name="next_round">Next Round</string>
  
     <!--Caution dynamic generated keys of pairing options -->
-<string name="pairing_option_player_not_play_twice_against_each_other">Player don\'t play twice against each other</string>
+    <string name="pairing_option_player_not_play_twice_against_each_other">Player don\'t play twice against each other</string>
+   
+   
     <string name="uneven_player_message">Uneven players in tournament.  Should a dummy player be inserted for you?</string>
+   
+   
     <string name="not_all_games_fineshed">Not all games are finished. Please insert results before pair next round.</string>
+    <string name="at_least_one_game_started">At least one game is finished</string>
+
 </resources>

@@ -300,4 +300,11 @@ public class TournamentPlayerListFragment extends Fragment implements Tournament
             startButton.setVisibility(View.GONE);
         }
     }
+
+
+    @Override
+    public void pairRoundAgain(int round_for_pairing) {
+
+        // nothing
+    }
 }

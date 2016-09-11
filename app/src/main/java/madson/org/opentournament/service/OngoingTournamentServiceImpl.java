@@ -12,6 +12,7 @@ import android.util.Log;
 import madson.org.opentournament.config.MapOfPairingConfig;
 import madson.org.opentournament.db.OpenTournamentDBHelper;
 import madson.org.opentournament.db.warmachine.GameTable;
+import madson.org.opentournament.db.warmachine.TournamentRankingTable;
 import madson.org.opentournament.domain.PairingOption;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
@@ -260,6 +261,21 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
         }
 
         return allGamesFinished;
+    }
+
+
+    @Override
+    public void deleteGamesForRound(Tournament tournament, int roundToDelete) {
+
+        Log.i(this.getClass().getName(),
+            "delete  ranking for round: " + roundToDelete + " in tournament : " + tournament);
+
+        SQLiteDatabase writableDatabase = openTournamentDBHelper.getWritableDatabase();
+
+        writableDatabase.delete(GameTable.TABLE_TOURNAMENT_GAME,
+            GameTable.COLUMN_TOURNAMENT_ID + " = ? AND " + GameTable.COLUMN_TOURNAMENT_ROUND
+            + " = ?", new String[] { String.valueOf(tournament.get_id()), String.valueOf(roundToDelete) });
+        writableDatabase.close();
     }
 
 

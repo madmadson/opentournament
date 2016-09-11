@@ -354,9 +354,9 @@ public class TournamentServiceImpl implements TournamentService {
 
         Log.i(this.getClass().getName(), "delete online tournament in firebase: " + tournament);
 
-        DatabaseReference referneceForTournamentToDelete = FirebaseDatabase.getInstance()
+        DatabaseReference referenceForTournamentToDelete = FirebaseDatabase.getInstance()
                 .getReference("tournaments/" + tournament.getOnlineUUID());
 
-        referneceForTournamentToDelete.removeValue();
+        referenceForTournamentToDelete.removeValue();
     }
 }

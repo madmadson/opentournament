@@ -150,6 +150,18 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHo
         return false;
     }
 
+
+    public boolean atLeastOneGameStarted() {
+
+        for (Game game : gamesForRound) {
+            if (game.isFinished()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private Game game;

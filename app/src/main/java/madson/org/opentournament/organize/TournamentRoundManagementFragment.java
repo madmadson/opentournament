@@ -19,9 +19,11 @@ import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.warmachine.Game;
 import madson.org.opentournament.organize.setup.AvailablePlayerListFragment;
 import madson.org.opentournament.organize.setup.TournamentPlayerListFragment;
+import madson.org.opentournament.utility.BaseActivity;
 
 
-public class TournamentRoundManagementFragment extends Fragment implements GameListFragment.GameResultEnteredListener {
+public class TournamentRoundManagementFragment extends Fragment implements GameListFragment.GameResultEnteredListener,
+    TournamentEventListener {
 
     public static final String BUNDLE_TOURNAMENT = "tournament";
     public static final String BUNDLE_ROUND = "round";
@@ -29,10 +31,6 @@ public class TournamentRoundManagementFragment extends Fragment implements GameL
     private Tournament tournament;
     private int round;
 
-    private TournamentPlayerListFragment tournamentPlayerListFragment;
-    private AvailablePlayerListFragment availablePlayerListFragment;
-    private RoundChangeButtonFragment nextRoundButtonFragment;
-    private RoundChangeButtonFragment previousRoundFragment;
     private GameListFragment gameListFragment;
     private RankingListFragment rankingForRoundListFragment;
 
@@ -53,7 +51,7 @@ public class TournamentRoundManagementFragment extends Fragment implements GameL
 
         super.onCreate(savedInstanceState);
 
-        setRetainInstance(true);
+        ((BaseActivity) getActivity()).getBaseApplication().setTournamentEventListener(this);
     }
 
 
@@ -122,5 +120,24 @@ public class TournamentRoundManagementFragment extends Fragment implements GameL
         if (gameListFragment != null) {
             gameListFragment.updateGameInList(game);
         }
+    }
+
+
+    @Override
+    public void startRound(int roundToStart) {
+
+        // nothing
+    }
+
+
+    @Override
+    public void pairRoundAgain(int roundPairedAgainFor) {
+
+        FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
+
+        showRound(roundPairedAgainFor, fragmentTransaction);
+
+        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        fragmentTransaction.commit();
     }
 }

@@ -87,6 +87,29 @@ public class GameListFragment extends Fragment {
         runnable.run();
 
         Button pairRoundAgainButton = (Button) view.findViewById(R.id.button_pair_again);
+        pairRoundAgainButton.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+
+                    if (!gameListAdapter.atLeastOneGameStarted()) {
+                        ConfirmPairRoundAgainDialog dialog = new ConfirmPairRoundAgainDialog();
+
+                        Bundle bundle = new Bundle();
+                        bundle.putParcelable(ConfirmPairingNewRoundDialog.BUNDLE_TOURNAMENT, tournament);
+                        bundle.putInt(ConfirmPairingNewRoundDialog.BUNDLE_ROUND_TO_DISPLAY, round);
+                        dialog.setArguments(bundle);
+
+                        FragmentManager supportFragmentManager = getActivity().getSupportFragmentManager();
+                        dialog.show(supportFragmentManager, "confirm  pair round again");
+                    } else {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                        builder.setTitle(R.string.at_least_one_game_started)
+                        .setPositiveButton(R.string.dialog_confirm, null)
+                        .show();
+                    }
+                }
+            });
 
         Button nextRoundButton = (Button) view.findViewById(R.id.button_start_next_round);
         nextRoundButton.setOnClickListener(new View.OnClickListener() {
@@ -94,7 +117,7 @@ public class GameListFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
 
-                    if (gameListAdapter.allGamesAreFinished()) {
+                    if (!gameListAdapter.allGamesAreFinished()) {
                         ConfirmPairingNewRoundDialog dialog = new ConfirmPairingNewRoundDialog();
 
                         Bundle bundle = new Bundle();
@@ -103,7 +126,7 @@ public class GameListFragment extends Fragment {
                         dialog.setArguments(bundle);
 
                         FragmentManager supportFragmentManager = getActivity().getSupportFragmentManager();
-                        dialog.show(supportFragmentManager, "confirm  pair next round tournament");
+                        dialog.show(supportFragmentManager, "confirm  pair next round");
                     } else {
                         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                         builder.setTitle(R.string.not_all_games_fineshed)

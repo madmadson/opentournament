@@ -156,7 +156,11 @@ public class TournamentSetupFragment extends Fragment implements TournamentSetup
                             public void onClick(DialogInterface dialogInterface, int i) {
 
                                 Log.i(this.getClass().getName(), "removePlayer player from tournament");
-                                availablePlayerListFragment.addPlayer(tournamentPlayer);
+
+                                // dummy player are not persistent
+                                if (!tournamentPlayer.getDummy()) {
+                                    availablePlayerListFragment.addPlayer(tournamentPlayer);
+                                }
 
                                 tournamentPlayerListFragment.removePlayer(tournamentPlayer);
                             }

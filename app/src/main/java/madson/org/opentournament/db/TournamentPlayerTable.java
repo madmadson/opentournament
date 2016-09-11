@@ -23,13 +23,14 @@ public class TournamentPlayerTable {
      * 7: teamname
      * 8: faction
      * 9: meta
+     * 10: dummy
      */
     public static final String[] ALL_COLS_FOR_TOURNAMENT_PLAYER_TABLE = {
         TournamentPlayerTable.COLUMN_ID, TournamentPlayerTable.COLUMN_TOURNAMENT_ID,
         TournamentPlayerTable.COLUMN_PLAYER_ID, TournamentPlayerTable.COLUMN_PLAYER_ONLINE_UUID,
         TournamentPlayerTable.COLUMN_FIRSTNAME, TournamentPlayerTable.COLUMN_NICKNAME,
         TournamentPlayerTable.COLUMN_LASTNAME, TournamentPlayerTable.COLUMN_TEAMNAME,
-        TournamentPlayerTable.COLUMN_FACTION, TournamentPlayerTable.COLUMN_META
+        TournamentPlayerTable.COLUMN_FACTION, TournamentPlayerTable.COLUMN_META, TournamentPlayerTable.COLUMN_DUMMY
     };
 
     public static final String TABLE_TOURNAMENT_PLAYER = "tournament_player";
@@ -48,6 +49,8 @@ public class TournamentPlayerTable {
     public static final String COLUMN_FACTION = "faction";
     public static final String COLUMN_META = "meta";
 
+    public static final String COLUMN_DUMMY = "dummy";
+
     public static void createTable(SQLiteDatabase db) {
 
         Log.i(TournamentPlayerTable.class.getName(), "create tournament_player table");
@@ -56,7 +59,7 @@ public class TournamentPlayerTable {
             + " (" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_TOURNAMENT_ID + " INTEGER,"
             + COLUMN_PLAYER_ID + " INTEGER, " + COLUMN_PLAYER_ONLINE_UUID + " TEXT," + COLUMN_FIRSTNAME
             + " TEXT, " + COLUMN_NICKNAME + " TEXT, " + COLUMN_LASTNAME + " TEXT, " + COLUMN_TEAMNAME + " TEXT, "
-            + COLUMN_FACTION + " TEXT, " + COLUMN_META + " TEXT) ");
+            + COLUMN_FACTION + " TEXT, " + COLUMN_META + " TEXT, " + COLUMN_DUMMY + " INTEGER)");
     }
 
 

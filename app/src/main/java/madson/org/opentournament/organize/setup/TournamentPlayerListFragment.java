@@ -170,26 +170,18 @@ public class TournamentPlayerListFragment extends Fragment implements Tournament
                                                     ((BaseApplication) getActivity().getApplication())
                                                     .getTournamentPlayerService();
 
-                                                Player dummyTournamentPlayer = new Player();
+                                                TournamentPlayer dummyTournamentPlayer = new TournamentPlayer();
                                                 dummyTournamentPlayer.setFirstname("Dummy");
                                                 dummyTournamentPlayer.setNickname("THE HAMMER");
                                                 dummyTournamentPlayer.setLastname("Player");
-
-                                                PlayerService playerService =
-                                                    ((BaseApplication) getActivity().getApplication())
-                                                    .getPlayerService();
-                                                Player newLocalPlayerWithId = playerService.createLocalPlayer(
-                                                        dummyTournamentPlayer);
-
-                                                TournamentPlayer tournamentPlayer = new TournamentPlayer(
-                                                        newLocalPlayerWithId, tournament);
+                                                dummyTournamentPlayer.setDummy(true);
 
                                                 tournamentPlayerService.addTournamentPlayerToTournament(
-                                                    tournamentPlayer, tournament);
+                                                    dummyTournamentPlayer, tournament);
 
                                                 ((BaseApplication) getActivity().getApplication())
                                                 .getTournamentService().increaseActualPlayerForTournament(tournament);
-                                                tournamentPlayerListAdapter.addTournamentPlayer(tournamentPlayer);
+                                                tournamentPlayerListAdapter.addTournamentPlayer(dummyTournamentPlayer);
                                             }
                                         };
                                         runnable.run();

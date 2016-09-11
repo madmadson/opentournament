@@ -86,12 +86,6 @@ public class RoundChangeButtonFragment extends Fragment {
 
         Button changeRoundButton = (Button) view.findViewById(R.id.change_round_button);
 
-        if (next_or_previous.equals(NextOrPrevious.NEXT) && pairingsForRoundToDisplay.isEmpty()) {
-            changeRoundButton.setText(getString(R.string.button_pair_round, round_to_display));
-        } else {
-            changeRoundButton.setText(getString(R.string.button_change_round, round_to_display));
-        }
-
         setChevron(changeRoundButton);
 
         changeRoundButton.setOnClickListener(new View.OnClickListener() {

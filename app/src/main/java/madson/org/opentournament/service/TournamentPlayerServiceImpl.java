@@ -263,6 +263,7 @@ public class TournamentPlayerServiceImpl implements TournamentPlayerService {
         contentValues.put(TournamentPlayerTable.COLUMN_LASTNAME, player.getLastname());
         contentValues.put(TournamentPlayerTable.COLUMN_TEAMNAME, player.getTeamname());
         contentValues.put(TournamentPlayerTable.COLUMN_FACTION, player.getFaction());
+        contentValues.put(TournamentPlayerTable.COLUMN_DUMMY, player.getDummy());
 
         db.insert(TournamentPlayerTable.TABLE_TOURNAMENT_PLAYER, null, contentValues);
 
@@ -355,6 +356,7 @@ public class TournamentPlayerServiceImpl implements TournamentPlayerService {
         contentValues.put(TournamentPlayerTable.COLUMN_TEAMNAME, teamname);
         contentValues.put(TournamentPlayerTable.COLUMN_FACTION, faction);
         contentValues.put(TournamentPlayerTable.COLUMN_META, meta);
+        contentValues.put(TournamentPlayerTable.COLUMN_DUMMY, false);
 
         db.insert(TournamentPlayerTable.TABLE_TOURNAMENT_PLAYER, null, contentValues);
     }
@@ -381,6 +383,7 @@ public class TournamentPlayerServiceImpl implements TournamentPlayerService {
         tournamentPlayer.setTeamname(cursor.getString(7));
         tournamentPlayer.setFaction(cursor.getString(8));
         tournamentPlayer.setMeta(cursor.getString(9));
+        tournamentPlayer.setDummy(cursor.getInt(10) != 0);
 
         return tournamentPlayer;
     }

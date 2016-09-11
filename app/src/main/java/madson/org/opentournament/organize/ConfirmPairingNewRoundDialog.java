@@ -28,6 +28,7 @@ import madson.org.opentournament.R;
 import madson.org.opentournament.domain.PairingOption;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentRanking;
+import madson.org.opentournament.domain.warmachine.Game;
 import madson.org.opentournament.service.OngoingTournamentService;
 import madson.org.opentournament.service.RankingService;
 import madson.org.opentournament.service.TournamentService;
@@ -50,7 +51,7 @@ public class ConfirmPairingNewRoundDialog extends DialogFragment {
 
     private Tournament tournament;
     private int round_for_pairing;
-    private List<PairingOption> pairingOptions;
+    private Map<String, PairingOption> pairingOptions;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -92,10 +93,10 @@ public class ConfirmPairingNewRoundDialog extends DialogFragment {
 
         pairingOptions = ((BaseApplication) getActivity().getApplication()).getPairingOptionsForTournament(tournament);
 
-        for (int i = 0; i < pairingOptions.size(); i++) {
+        for (final PairingOption option : pairingOptions.values()) {
             TextView textView = new TextView(getActivity());
 
-            String pairingOptionName = pairingOptions.get(i).getPairingOptionName();
+            String pairingOptionName = option.getPairingOptionName();
             textView.setText(getStringResourceByName(pairingOptionName));
             textView.setLayoutParams(params);
             container.addView(textView);
@@ -107,14 +108,14 @@ public class ConfirmPairingNewRoundDialog extends DialogFragment {
                     public void onClick(View v) {
 
                         if (toggleButton.isChecked()) {
-                            pairingOptions.get(v.getId()).setActive(true);
+                            option.setActive(true);
                         } else {
-                            pairingOptions.get(v.getId()).setActive(false);
+                            option.setActive(false);
                         }
                     }
                 });
-            toggleButton.setId(i);
-            toggleButton.setChecked(pairingOptions.get(i).isDefaultPairing());
+
+            toggleButton.setChecked(option.isDefaultPairing());
             toggleButton.setLayoutParams(params);
             container.addView(toggleButton);
         }
@@ -187,8 +188,13 @@ public class ConfirmPairingNewRoundDialog extends DialogFragment {
                                     tournament, round_for_pairing);
 
                             // now we can create pairings for new round
-                            ongoingTournamentService.createGamesForRound(tournament, round_for_pairing, rankingForRound,
-                                pairingOptions);
+                            boolean success = ongoingTournamentService.createGamesForRound(tournament,
+                                    round_for_pairing, rankingForRound, pairingOptions);
+
+                            if (!success) {
+                                Log.e(this.getClass().getName(),
+                                    "pairing failed. Delete pairing, games for round and say something to user :) ");
+                            }
 
                             // last thing update tournament
                             Tournament updatedTournament = tournamentService.updateActualRound(tournament,

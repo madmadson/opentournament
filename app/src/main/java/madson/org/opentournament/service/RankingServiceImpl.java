@@ -128,7 +128,9 @@ public class RankingServiceImpl implements RankingService {
                 playerOneRanking = mapOfRankings.get(String.valueOf(game.getPlayer_one_id()));
             }
 
-            playerOneRanking.setScore(playerOneRanking.getScore() + game.getPlayer_one_score());
+            int newPlayerOneScore = playerOneRanking.getScore() + game.getPlayer_one_score();
+            playerOneRanking.setScore(newPlayerOneScore);
+
             playerOneRanking.setControl_points(playerOneRanking.getControl_points()
                 + game.getPlayer_one_control_points());
             playerOneRanking.setVictory_points(playerOneRanking.getVictory_points()
@@ -142,8 +144,6 @@ public class RankingServiceImpl implements RankingService {
                 playerTwoRanking = mapOfRankings.get(String.valueOf(game.getPlayer_two_id()));
             }
 
-            // DUMMY player fix
-
             playerTwoRanking.setScore(playerTwoRanking.getScore() + game.getPlayer_two_score());
             playerTwoRanking.setControl_points(playerTwoRanking.getControl_points()
                 + game.getPlayer_two_control_points());
@@ -152,19 +152,25 @@ public class RankingServiceImpl implements RankingService {
 
             // overwrite map && SOS
             if (game.getPlayer_one_online_uuid() != null) {
-                playerOneRanking.getListOfOpponentsPlayerIds().add(playerOneRanking.getPlayer_online_uuid());
-                mapOfRankings.put(playerOneRanking.getPlayer_online_uuid(), playerOneRanking);
+                playerTwoRanking.getListOfOpponentsPlayerIds().add(playerOneRanking.getPlayer_online_uuid());
             } else {
-                playerOneRanking.getListOfOpponentsPlayerIds().add(String.valueOf(playerOneRanking.getPlayer_id()));
-                mapOfRankings.put(String.valueOf(playerOneRanking.getPlayer_id()), playerOneRanking);
+                playerTwoRanking.getListOfOpponentsPlayerIds().add(String.valueOf(game.getPlayer_one_id()));
             }
 
             if (game.getPlayer_two_online_uuid() != null) {
-                playerTwoRanking.getListOfOpponentsPlayerIds().add(playerTwoRanking.getPlayer_online_uuid());
-                mapOfRankings.put(playerTwoRanking.getPlayer_online_uuid(), playerTwoRanking);
+                playerOneRanking.getListOfOpponentsPlayerIds().add(playerTwoRanking.getPlayer_online_uuid());
             } else {
-                playerTwoRanking.getListOfOpponentsPlayerIds().add(String.valueOf(playerOneRanking.getPlayer_id()));
-                mapOfRankings.put(String.valueOf(playerTwoRanking.getPlayer_id()), playerTwoRanking);
+                playerOneRanking.getListOfOpponentsPlayerIds().add(String.valueOf(game.getPlayer_two_id()));
+            }
+
+            if (game.getPlayer_one_online_uuid() != null) {
+            } else {
+                mapOfRankings.put(String.valueOf(game.getPlayer_one_id()), playerOneRanking);
+            }
+
+            if (game.getPlayer_two_online_uuid() != null) {
+            } else {
+                mapOfRankings.put(String.valueOf(game.getPlayer_two_id()), playerTwoRanking);
             }
         }
 

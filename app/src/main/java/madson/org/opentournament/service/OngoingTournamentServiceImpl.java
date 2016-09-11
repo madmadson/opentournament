@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import android.util.Log;
 
+import madson.org.opentournament.config.MapOfPairingConfig;
 import madson.org.opentournament.db.OpenTournamentDBHelper;
 import madson.org.opentournament.db.warmachine.GameTable;
 import madson.org.opentournament.domain.PairingOption;
@@ -16,11 +17,11 @@ import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.domain.TournamentRanking;
 import madson.org.opentournament.domain.warmachine.Game;
-import madson.org.opentournament.service.warmachine.TournamentRankingComparator;
 import madson.org.opentournament.utility.BaseApplication;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -107,44 +108,79 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
 
 
     @Override
-    public List<Game> createGamesForRound(Tournament tournament, int round,
-        Map<String, TournamentRanking> rankingForRound, List<PairingOption> pairingOptions) {
+    public boolean createGamesForRound(Tournament tournament, int round, Map<String, TournamentRanking> rankingForRound,
+        Map<String, PairingOption> pairingOptions) {
 
         List<TournamentRanking> rankings = new ArrayList<>(rankingForRound.values());
 
-        // uneven number of rankings (players)
-        if (rankings.size() % 2 == 1) {
-            TournamentRanking warmachineTournamentDummyPlayer = new TournamentRanking();
-            rankings.add(warmachineTournamentDummyPlayer);
-        }
-
         Collections.shuffle(rankings);
-        Collections.sort(rankings, new TournamentRankingComparator());
+        Collections.sort(rankings, new Comparator<TournamentRanking>() {
+
+                @Override
+                public int compare(TournamentRanking o1, TournamentRanking o2) {
+
+                    return o2.getScore() - o1.getScore();
+                }
+            });
 
         List<Game> games = new ArrayList<>(rankings.size() / 2);
 
-        for (int i = 0; i <= (rankings.size() - 1); i = i + 2) {
-            Log.i(this.getClass().getName(), "player1:" + rankings.get(i));
-
+        // make games for every 2 players
+        while (rankings.size() > 0) {
             Game game = new Game();
             game.setTournament_id(tournament.get_id());
             game.setTournament_round(round);
 
-            TournamentRanking player_one = rankings.get(i);
-
+            // get first one with highest score
+            TournamentRanking player_one = rankings.get(0);
             game.setPlayer1(player_one.getTournamentPlayer());
-
             game.setPlayer_one_id(player_one.getPlayer_id());
             game.setPlayer_one_online_uuid(player_one.getPlayer_online_uuid());
 
-            Log.i(this.getClass().getName(), "player2:" + rankings.get(i + 1));
+            rankings.remove(player_one);
 
-            TournamentRanking player_two = rankings.get(i + 1);
+            List<String> listOfOpponentsPlayerIds = player_one.getListOfOpponentsPlayerIds();
 
-            game.setPlayer2(player_two.getTournamentPlayer());
+            TournamentRanking player_two = null;
 
-            game.setPlayer_two_id(player_two.getPlayer_id());
-            game.setPlayer_two_online_uuid(player_two.getPlayer_online_uuid());
+            if (pairingOptions.containsKey(MapOfPairingConfig.PLAYER_NOT_PLAY_TWICE_AGAINST_EACH_OVER)
+                    && pairingOptions.get(MapOfPairingConfig.PLAYER_NOT_PLAY_TWICE_AGAINST_EACH_OVER)
+                    .isActive()) {
+                // search for first player player one has not played against
+                for (TournamentRanking secondPlayer : rankings) {
+                    if (secondPlayer.getPlayer_online_uuid() != null) {
+                        if (!listOfOpponentsPlayerIds.contains(secondPlayer.getPlayer_online_uuid())) {
+                            player_two = secondPlayer;
+                            game.setPlayer2(secondPlayer.getTournamentPlayer());
+                            game.setPlayer_two_id(secondPlayer.getPlayer_id());
+                            game.setPlayer_two_online_uuid(secondPlayer.getPlayer_online_uuid());
+
+                            break;
+                        }
+                    } else {
+                        if (!listOfOpponentsPlayerIds.contains(String.valueOf(secondPlayer.getPlayer_id()))) {
+                            player_two = secondPlayer;
+                            game.setPlayer2(secondPlayer.getTournamentPlayer());
+                            game.setPlayer_two_id(secondPlayer.getPlayer_id());
+                            game.setPlayer_two_online_uuid(secondPlayer.getPlayer_online_uuid());
+
+                            break;
+                        }
+                    }
+                }
+            } else {
+                player_two = rankings.get(0);
+                game.setPlayer2(player_two.getTournamentPlayer());
+                game.setPlayer_two_id(player_two.getPlayer_id());
+                game.setPlayer_two_online_uuid(player_two.getPlayer_online_uuid());
+            }
+
+            // pairing failed
+            if (player_two == null) {
+                return false;
+            }
+
+            rankings.remove(player_two);
 
             Log.i(this.getClass().getName(), "game created: " + game);
             games.add(game);
@@ -155,7 +191,7 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
         // persist pairing and new round
         insertGames(games);
 
-        return games;
+        return true;
     }
 
 

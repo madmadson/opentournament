@@ -35,10 +35,10 @@ public interface OngoingTournamentService {
      * @param  rankingForRound
      * @param  pairingOptions
      *
-     * @return  new create list of pairings
+     * @return  if pairing was successfully
      */
-    List<Game> createGamesForRound(Tournament tournament, int round, Map<String, TournamentRanking> rankingForRound,
-        List<PairingOption> pairingOptions);
+    boolean createGamesForRound(Tournament tournament, int round, Map<String, TournamentRanking> rankingForRound,
+        Map<String, PairingOption> pairingOptions);
 
 
     /**

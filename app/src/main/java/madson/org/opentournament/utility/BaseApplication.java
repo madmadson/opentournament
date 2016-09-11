@@ -34,6 +34,7 @@ import net.danlew.android.joda.JodaTimeAndroid;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -193,9 +194,9 @@ public abstract class BaseApplication extends Application {
     }
 
 
-    public List<PairingOption> getPairingOptionsForTournament(Tournament tournament) {
+    public Map<String, PairingOption> getPairingOptionsForTournament(Tournament tournament) {
 
-        ArrayList<PairingOption> returnedPairingOptions = new ArrayList<>();
+        Map<String, PairingOption> returnedPairingOptions = new HashMap();
         MapOfPairingConfig pairingConfigs = new MapOfPairingConfig();
 
         Map<GameOrSportTyp, PairingOption> pairingOptions = pairingConfigs.getPairingOptions();
@@ -203,7 +204,7 @@ public abstract class BaseApplication extends Application {
         for (Map.Entry<GameOrSportTyp, PairingOption> pairingEntry : pairingOptions.entrySet()) {
             if (pairingEntry.getKey().name().equals(GameOrSportTyp.ALL.name())
                     || pairingEntry.getKey().name().equals(tournament.getGameOrSportTyp())) {
-                returnedPairingOptions.add(pairingEntry.getValue());
+                returnedPairingOptions.put(pairingEntry.getValue().getPairingOptionName(), pairingEntry.getValue());
             }
         }
 

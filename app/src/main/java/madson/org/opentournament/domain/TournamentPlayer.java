@@ -54,9 +54,6 @@ public class TournamentPlayer implements Parcelable {
     private List<Integer> listOfPlayedPlayingFields;
 
     public TournamentPlayer() {
-
-        listOfOpponents = new ArrayList<>();
-        listOfPlayedPlayingFields = new ArrayList<>();
     }
 
 
@@ -73,9 +70,6 @@ public class TournamentPlayer implements Parcelable {
         this.firstname = player.getFirstname();
         this.lastname = player.getLastname();
         this.nickname = player.getNickname();
-
-        listOfOpponents = new ArrayList<>();
-        listOfPlayedPlayingFields = new ArrayList<>();
     }
 
 
@@ -167,18 +161,6 @@ public class TournamentPlayer implements Parcelable {
     }
 
 
-    public List<Long> getListOfOpponents() {
-
-        return listOfOpponents;
-    }
-
-
-    public void setListOfOpponents(List<Long> listOfOpponents) {
-
-        this.listOfOpponents = listOfOpponents;
-    }
-
-
     public String getTeamname() {
 
         return teamname;
@@ -263,12 +245,6 @@ public class TournamentPlayer implements Parcelable {
     }
 
 
-    public List<Integer> getListOfPlayedPlayingFields() {
-
-        return listOfPlayedPlayingFields;
-    }
-
-
     @Override
     public boolean equals(Object o) {
 
@@ -322,9 +298,7 @@ public class TournamentPlayer implements Parcelable {
             + ", teamname='" + teamname + '\''
             + ", faction='" + faction + '\''
             + ", meta='" + meta + '\''
-            + ", dummy=" + dummy
-            + ", listOfOpponents=" + listOfOpponents
-            + ", listOfPlayedPlayingFields=" + listOfPlayedPlayingFields + '}';
+            + ", dummy=" + dummy + '}';
     }
 
 

@@ -272,31 +272,6 @@ public class Game implements Parcelable {
 
 
     @Override
-    public String toString() {
-
-        return "Game{"
-            + "_id=" + _id
-            + ", online_uuid='" + online_uuid + '\''
-            + ", tournament_id=" + tournament_id
-            + ", tournament_round=" + tournament_round
-            + ", player_one_id=" + player_one_id
-            + ", player_one_online_uuid='" + player_one_online_uuid + '\''
-            + ", player1=" + player1
-            + ", player_one_score=" + player_one_score
-            + ", player_one_control_points=" + player_one_control_points
-            + ", player_one_victory_points=" + player_one_victory_points
-            + ", player_two_id=" + player_two_id
-            + ", player_two_online_uuid='" + player_two_online_uuid + '\''
-            + ", player2=" + player2
-            + ", player_two_score=" + player_two_score
-            + ", player_two_control_points=" + player_two_control_points
-            + ", player_two_victory_points=" + player_two_victory_points
-            + ", finished=" + finished
-            + ", scenario='" + scenario + '\'' + '}';
-    }
-
-
-    @Override
     public boolean equals(Object o) {
 
         if (this == o)
@@ -407,5 +382,30 @@ public class Game implements Parcelable {
         dest.writeInt(player_two_victory_points);
         dest.writeByte((byte) (finished ? 1 : 0));
         dest.writeString(scenario);
+    }
+
+
+    @Override
+    public String toString() {
+
+        return "Game{"
+            + "_id=" + _id
+            + ", online_uuid='" + online_uuid + '\''
+            + ", tournament_id=" + tournament_id
+            + ", tournament_round=" + tournament_round
+            + ", player_one_id=" + player_one_id
+            + ", player_one_online_uuid='" + player_one_online_uuid + '\''
+            + ", player1=" + player1
+            + ", player_one_score=" + player_one_score
+            + ", player_one_control_points=" + player_one_control_points
+            + ", player_one_victory_points=" + player_one_victory_points
+            + ", player_two_id=" + player_two_id
+            + ", player_two_online_uuid='" + player_two_online_uuid + '\''
+            + ", player2=" + player2
+            + ", player_two_score=" + player_two_score
+            + ", player_two_control_points=" + player_two_control_points
+            + ", player_two_victory_points=" + player_two_victory_points
+            + ", finished=" + finished
+            + ", scenario='" + scenario + '\'' + '}';
     }
 }

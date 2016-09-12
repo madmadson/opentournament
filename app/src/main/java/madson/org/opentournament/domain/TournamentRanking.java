@@ -1,5 +1,7 @@
 package madson.org.opentournament.domain;
 
+import com.google.firebase.database.Exclude;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,6 +34,7 @@ public class TournamentRanking {
     public TournamentRanking() {
     }
 
+    @Exclude
     public String getPlayer_online_uuid() {
 
         return player_online_uuid;
@@ -56,6 +59,7 @@ public class TournamentRanking {
     }
 
 
+    @Exclude
     public String getOnline_uuid() {
 
         return online_uuid;
@@ -68,6 +72,7 @@ public class TournamentRanking {
     }
 
 
+    @Exclude
     public long get_id() {
 
         return _id;
@@ -80,6 +85,7 @@ public class TournamentRanking {
     }
 
 
+    @Exclude
     public long getPlayer_id() {
 
         return player_id;
@@ -140,6 +146,7 @@ public class TournamentRanking {
     }
 
 
+    @Exclude
     public int getTournament_round() {
 
         return tournament_round;

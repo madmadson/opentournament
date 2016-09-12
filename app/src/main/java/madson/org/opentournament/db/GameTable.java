@@ -1,10 +1,8 @@
-package madson.org.opentournament.db.warmachine;
+package madson.org.opentournament.db;
 
 import android.database.sqlite.SQLiteDatabase;
 
 import android.util.Log;
-
-import madson.org.opentournament.db.TournamentPlayerTable;
 
 
 /**

@@ -2,7 +2,6 @@ package madson.org.opentournament.organize;
 
 import android.os.Bundle;
 
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import android.support.v4.app.Fragment;
@@ -15,10 +14,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import madson.org.opentournament.R;
+import madson.org.opentournament.domain.Game;
 import madson.org.opentournament.domain.Tournament;
-import madson.org.opentournament.domain.warmachine.Game;
-import madson.org.opentournament.organize.setup.AvailablePlayerListFragment;
-import madson.org.opentournament.organize.setup.TournamentPlayerListFragment;
 import madson.org.opentournament.utility.BaseActivity;
 
 

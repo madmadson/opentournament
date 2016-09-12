@@ -35,4 +35,12 @@ public interface RankingService {
      * @param  round_for_pairing
      */
     void deleteRankingForRound(Tournament tournament, int round_for_pairing);
+
+
+    /**
+     * upload rankings to firbase.
+     *
+     * @param  tournament
+     */
+    void uploadRankingsForTournament(Tournament tournament);
 }

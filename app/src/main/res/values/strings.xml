@@ -45,6 +45,11 @@
         can be published while the tournament takes place.
     </string>
     
+     <string name="confirm_upload_games_text">
+        Uploading games will enable other people to see actual games and ranking of tournament. 
+        Only the actual state will be published now. If you change any games or pairings please publish again. 
+    </string>
+    
     <string name="no_online_tournaments_if_anonymous">
         You cannot upload tournaments anonymously.\n
         Please register or sign in with google or facebook.

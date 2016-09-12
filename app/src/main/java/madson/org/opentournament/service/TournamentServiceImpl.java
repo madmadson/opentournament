@@ -13,10 +13,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import madson.org.opentournament.db.FirebaseReferences;
+import madson.org.opentournament.db.GameTable;
 import madson.org.opentournament.db.OpenTournamentDBHelper;
+import madson.org.opentournament.db.TournamentRankingTable;
 import madson.org.opentournament.db.TournamentTable;
-import madson.org.opentournament.db.warmachine.GameTable;
-import madson.org.opentournament.db.warmachine.TournamentRankingTable;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentTyp;
 
@@ -65,20 +65,28 @@ public class TournamentServiceImpl implements TournamentService {
 
 
     @Override
-    public Tournament createTournamentInFirebase(Tournament tournament) {
+    public Tournament uploadTournament(Tournament tournament) {
 
         Log.i(this.getClass().getName(), "pushes tournament to online: " + tournament);
 
-        UUID uuid = UUID.randomUUID();
+        if (tournament.getOnlineUUID() == null) {
+            UUID uuid = UUID.randomUUID();
 
-        tournament.setOnlineUUID(uuid.toString());
+            tournament.setOnlineUUID(uuid.toString());
 
-        insertOnlineUUID(tournament);
+            insertOnlineUUID(tournament);
 
-        DatabaseReference referenceForNewTournament = FirebaseDatabase.getInstance()
-                .getReference(FirebaseReferences.TOURNAMENTS + "/" + tournament.getGameOrSportTyp() + "/" + uuid);
+            DatabaseReference referenceForNewTournament = FirebaseDatabase.getInstance()
+                    .getReference(FirebaseReferences.TOURNAMENTS + "/" + tournament.getGameOrSportTyp() + "/" + uuid);
 
-        referenceForNewTournament.setValue(tournament);
+            referenceForNewTournament.setValue(tournament);
+        } else {
+            DatabaseReference referenceForUpdateTournament = FirebaseDatabase.getInstance()
+                    .getReference(FirebaseReferences.TOURNAMENTS + "/" + tournament.getGameOrSportTyp() + "/"
+                        + tournament.getOnlineUUID());
+
+            referenceForUpdateTournament.setValue(tournament);
+        }
 
         return tournament;
     }

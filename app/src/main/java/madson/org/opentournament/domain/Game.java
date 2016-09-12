@@ -1,11 +1,11 @@
-package madson.org.opentournament.domain.warmachine;
+package madson.org.opentournament.domain;
 
 import android.database.Cursor;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import madson.org.opentournament.domain.TournamentPlayer;
+import com.google.firebase.database.Exclude;
 
 
 /**
@@ -79,6 +79,7 @@ public class Game implements Parcelable {
     public Game() {
     }
 
+    @Exclude
     public long get_id() {
 
         return _id;
@@ -91,6 +92,7 @@ public class Game implements Parcelable {
     }
 
 
+    @Exclude
     public long getTournament_id() {
 
         return tournament_id;
@@ -103,6 +105,7 @@ public class Game implements Parcelable {
     }
 
 
+    @Exclude
     public long getPlayer_one_id() {
 
         return player_one_id;
@@ -133,6 +136,7 @@ public class Game implements Parcelable {
     }
 
 
+    @Exclude
     public long getPlayer_two_id() {
 
         return player_two_id;

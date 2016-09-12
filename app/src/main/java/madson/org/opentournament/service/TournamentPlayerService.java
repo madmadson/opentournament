@@ -65,15 +65,6 @@ public interface TournamentPlayerService {
 
 
     /**
-     * Push it to firebase.
-     *
-     * @param  tournamentPlayer
-     * @param  tournament
-     */
-    void setTournamentPlayerToFirebase(TournamentPlayer tournamentPlayer, Tournament tournament);
-
-
-    /**
      * all player UUID from players already in tournament.
      *
      * @param  tournament
@@ -84,17 +75,14 @@ public interface TournamentPlayerService {
 
 
     /**
-     * Remove data from firebase.
-     *
-     * @param  player
-     * @param  tournament
-     */
-    void removeTournamentPlayerFromFirebase(TournamentPlayer player, Tournament tournament);
-
-
-    /**
      * @param  tournamentPlayer
      * @param  tournament
      */
     void removeOnlinePlayerFromTournament(TournamentPlayer tournamentPlayer, Tournament tournament);
+
+
+    /**
+     * @param  tournament
+     */
+    void uploadTournamentPlayers(Tournament tournament);
 }

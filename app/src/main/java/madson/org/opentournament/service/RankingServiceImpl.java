@@ -9,14 +9,17 @@ import android.database.sqlite.SQLiteDatabase;
 
 import android.util.Log;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import madson.org.opentournament.db.FirebaseReferences;
+import madson.org.opentournament.db.GameTable;
 import madson.org.opentournament.db.OpenTournamentDBHelper;
-import madson.org.opentournament.db.TournamentTable;
-import madson.org.opentournament.db.warmachine.GameTable;
-import madson.org.opentournament.db.warmachine.TournamentRankingTable;
+import madson.org.opentournament.db.TournamentRankingTable;
+import madson.org.opentournament.domain.Game;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.domain.TournamentRanking;
-import madson.org.opentournament.domain.warmachine.Game;
 import madson.org.opentournament.service.warmachine.TournamentRankingComparator;
 import madson.org.opentournament.utility.BaseApplication;
 
@@ -25,6 +28,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 
 /**
@@ -195,6 +199,33 @@ public class RankingServiceImpl implements RankingService {
             TournamentRankingTable.COLUMN_TOURNAMENT_ID + " = ? AND " + TournamentRankingTable.COLUMN_TOURNAMENT_ROUND
             + " = ?", new String[] { String.valueOf(tournament.get_id()), String.valueOf(roundToDelete) });
         writableDatabase.close();
+    }
+
+
+    @Override
+    public void uploadRankingsForTournament(Tournament tournament) {
+
+        int actualRound = tournament.getActualRound();
+
+        DatabaseReference referenceForRankingToDelete = FirebaseDatabase.getInstance()
+                .getReference(FirebaseReferences.TOURNAMENT_RANKINGS + "/" + tournament.getOnlineUUID());
+        referenceForRankingToDelete.removeValue();
+
+        for (int i = 1; i <= actualRound; i++) {
+            List<TournamentRanking> tournamentRankingForRound = getTournamentRankingForRound(tournament, i);
+
+            Log.i(this.getClass().getName(), "pushes rankings to firebase online: " + tournamentRankingForRound);
+
+            for (TournamentRanking ranking : tournamentRankingForRound) {
+                UUID uuid = UUID.randomUUID();
+
+                DatabaseReference referenceForRankings = FirebaseDatabase.getInstance()
+                        .getReference(FirebaseReferences.TOURNAMENT_RANKINGS + "/" + tournament.getOnlineUUID()
+                            + "/" + i + "/" + uuid);
+
+                referenceForRankings.setValue(ranking);
+            }
+        }
     }
 
 

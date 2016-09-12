@@ -27,8 +27,8 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import madson.org.opentournament.R;
+import madson.org.opentournament.domain.Game;
 import madson.org.opentournament.domain.TournamentPlayer;
-import madson.org.opentournament.domain.warmachine.Game;
 import madson.org.opentournament.service.OngoingTournamentService;
 import madson.org.opentournament.utility.BaseApplication;
 

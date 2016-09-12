@@ -15,11 +15,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import madson.org.opentournament.db.FirebaseReferences;
 import madson.org.opentournament.db.OpenTournamentDBHelper;
 import madson.org.opentournament.db.TournamentPlayerTable;
 import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
+import madson.org.opentournament.domain.TournamentRanking;
 import madson.org.opentournament.organize.setup.TournamentPlayerComparator;
 
 import java.util.ArrayList;
@@ -92,73 +94,6 @@ public class TournamentPlayerServiceImpl implements TournamentPlayerService {
 
 
     @Override
-    public void setTournamentPlayerToFirebase(TournamentPlayer tournamentPlayer, Tournament tournament) {
-
-        Log.i(this.getClass().getName(), "pushes tournament player online: " + tournament);
-
-        UUID uuid = UUID.randomUUID();
-
-        tournamentPlayer.setOnline_uuid(uuid.toString());
-
-        // save TournamentPlayer
-        DatabaseReference referenceForNewTournamentPlayer = FirebaseDatabase.getInstance()
-                .getReference("tournament_players/" + tournament.getOnlineUUID() + "/" + uuid.toString());
-
-        referenceForNewTournamentPlayer.setValue(tournamentPlayer);
-
-        if (tournamentPlayer.getPlayer_online_uuid() != null) {
-            // save reference to player
-            DatabaseReference referenceToNewPlayerTournamentEntry = FirebaseDatabase.getInstance()
-                    .getReference("players/" + tournamentPlayer.getPlayer_online_uuid() + "/tournaments/"
-                        + tournament.getOnlineUUID());
-
-            referenceToNewPlayerTournamentEntry.setValue(true);
-        }
-
-        // save teamname
-        if (!tournamentPlayer.getTeamname().isEmpty()) {
-            DatabaseReference referenceToNewPlayerTournamentEntry = FirebaseDatabase.getInstance()
-                    .getReference("tournaments/" + tournament.getOnlineUUID() + "/teamnames/"
-                        + tournamentPlayer.getTeamname());
-
-            referenceToNewPlayerTournamentEntry.setValue(true);
-        }
-
-        // save reference to tournament
-        DatabaseReference referenceInTournament = FirebaseDatabase.getInstance()
-                .getReference("tournaments/" + tournament.getOnlineUUID() + "/tournament_players/" + uuid.toString());
-
-        referenceInTournament.setValue(true);
-
-        // update actual players on tournament
-        final DatabaseReference referenceActualRoundInTournament = FirebaseDatabase.getInstance()
-                .getReference("tournaments/" + tournament.getOnlineUUID() + "/actualPlayers");
-
-        final ValueEventListener actualPlayerListener = new ValueEventListener() {
-
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                Integer actualPlayers = dataSnapshot.getValue(Integer.class);
-                referenceActualRoundInTournament.setValue(actualPlayers + 1);
-            }
-
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-            }
-        };
-
-        DatabaseReference child = FirebaseDatabase.getInstance()
-                .getReference()
-                .child("tournaments/" + tournament.getOnlineUUID()
-                    + "/actualPlayers");
-
-        child.addListenerForSingleValueEvent(actualPlayerListener);
-    }
-
-
-    @Override
     public List<String> getAllPlayersOnlineUUIDForTournament(Tournament tournament) {
 
         List<String> playersOnlineUUIDs = new ArrayList<>();
@@ -180,57 +115,6 @@ public class TournamentPlayerServiceImpl implements TournamentPlayerService {
         readableDatabase.close();
 
         return playersOnlineUUIDs;
-    }
-
-
-    @Override
-    public void removeTournamentPlayerFromFirebase(TournamentPlayer tournamentPlayer, final Tournament tournament) {
-
-        Log.i(this.getClass().getName(), "delete online tournament tournamentPlayer in firebase: " + tournamentPlayer);
-
-        DatabaseReference referencePlayerInTournamentToDelete = FirebaseDatabase.getInstance()
-                .getReference("tournaments/" + tournament.getOnlineUUID() + "/tournament_players/"
-                    + tournamentPlayer.getOnline_uuid());
-
-        referencePlayerInTournamentToDelete.removeValue();
-
-        DatabaseReference referenceInPlayerToTournamentToDelete = FirebaseDatabase.getInstance()
-                .getReference("players/" + tournamentPlayer.getPlayer_online_uuid() + "/tournaments/"
-                    + tournament.getOnlineUUID());
-
-        referenceInPlayerToTournamentToDelete.removeValue();
-
-        DatabaseReference referenceTournamentPlayerToDelete = FirebaseDatabase.getInstance()
-                .getReference("tournament_players/" + tournament.getOnlineUUID() + "/"
-                    + tournamentPlayer.getOnline_uuid());
-
-        referenceTournamentPlayerToDelete.removeValue();
-
-        // update actual players on tournament
-        final DatabaseReference referenceActualRoundInTournament = FirebaseDatabase.getInstance()
-                .getReference("tournaments/" + tournament.getOnlineUUID() + "/actualPlayers");
-
-        final ValueEventListener actualPlayerListener = new ValueEventListener() {
-
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                Integer actualPlayers = dataSnapshot.getValue(Integer.class);
-                referenceActualRoundInTournament.setValue(actualPlayers - 1);
-            }
-
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-            }
-        };
-
-        DatabaseReference child = FirebaseDatabase.getInstance()
-                .getReference()
-                .child("tournaments/" + tournament.getOnlineUUID()
-                    + "/actualPlayers");
-
-        child.addListenerForSingleValueEvent(actualPlayerListener);
     }
 
 
@@ -278,7 +162,8 @@ public class TournamentPlayerServiceImpl implements TournamentPlayerService {
         SQLiteDatabase readableDatabase = openTournamentDBHelper.getReadableDatabase();
 
         Cursor cursor = readableDatabase.query(TournamentPlayerTable.TABLE_TOURNAMENT_PLAYER,
-                TournamentPlayerTable.ALL_COLS_FOR_TOURNAMENT_PLAYER_TABLE, "tournament_id  = ?",
+                TournamentPlayerTable.ALL_COLS_FOR_TOURNAMENT_PLAYER_TABLE,
+                TournamentPlayerTable.COLUMN_TOURNAMENT_ID + "  = ?",
                 new String[] { Long.toString(tournament.get_id()) }, null, null, null);
 
         cursor.moveToFirst();
@@ -306,7 +191,8 @@ public class TournamentPlayerServiceImpl implements TournamentPlayerService {
         SQLiteDatabase readableDatabase = openTournamentDBHelper.getReadableDatabase();
 
         Cursor cursor = readableDatabase.query(TournamentPlayerTable.TABLE_TOURNAMENT_PLAYER,
-                TournamentPlayerTable.ALL_COLS_FOR_TOURNAMENT_PLAYER_TABLE, "tournament_id  = ?",
+                TournamentPlayerTable.ALL_COLS_FOR_TOURNAMENT_PLAYER_TABLE,
+                TournamentPlayerTable.COLUMN_TOURNAMENT_ID + " = ?",
                 new String[] { Long.toString(tournament.get_id()) }, null, null, null);
 
         cursor.moveToFirst();
@@ -384,7 +270,53 @@ public class TournamentPlayerServiceImpl implements TournamentPlayerService {
         tournamentPlayer.setFaction(cursor.getString(8));
         tournamentPlayer.setMeta(cursor.getString(9));
         tournamentPlayer.setDummy(cursor.getInt(10) != 0);
+        tournamentPlayer.setOnline_uuid(cursor.getString(11));
 
         return tournamentPlayer;
+    }
+
+
+    @Override
+    public void uploadTournamentPlayers(Tournament tournament) {
+
+        List<TournamentPlayer> allPlayersForTournament = getAllPlayersForTournament(tournament);
+        Log.i(this.getClass().getName(), "pushes tournament players to firebase: " + allPlayersForTournament);
+
+        for (TournamentPlayer player : allPlayersForTournament) {
+            if (player.getOnline_uuid() == null) {
+                UUID uuid = UUID.randomUUID();
+
+                player.setOnline_uuid(uuid.toString());
+
+                DatabaseReference referenceForNewTournamentPlayer = FirebaseDatabase.getInstance()
+                        .getReference(FirebaseReferences.TOURNAMENT_PLAYERS + "/" + tournament.getOnlineUUID() + "/"
+                            + uuid);
+
+                referenceForNewTournamentPlayer.setValue(player);
+                addOnlineUUIDToTournamentPlayer(player);
+            } else {
+                String online_uuid = player.getOnline_uuid();
+
+                DatabaseReference referenceForUpdateTournamentPlayer = FirebaseDatabase.getInstance()
+                        .getReference(FirebaseReferences.TOURNAMENT_PLAYERS + "/" + tournament.getOnlineUUID() + "/"
+                            + online_uuid);
+
+                referenceForUpdateTournamentPlayer.setValue(player);
+            }
+        }
+    }
+
+
+    private void addOnlineUUIDToTournamentPlayer(TournamentPlayer player) {
+
+        SQLiteDatabase db = openTournamentDBHelper.getWritableDatabase();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(TournamentPlayerTable.COLUMN_ONLINE_UUID, player.getOnline_uuid());
+
+        db.update(TournamentPlayerTable.TABLE_TOURNAMENT_PLAYER, contentValues,
+            TournamentPlayerTable.COLUMN_ID + " = ?", new String[] { String.valueOf(player.get_id()) });
+
+        db.close();
     }
 }

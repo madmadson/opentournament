@@ -19,8 +19,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import madson.org.opentournament.R;
+import madson.org.opentournament.domain.Game;
 import madson.org.opentournament.domain.TournamentPlayer;
-import madson.org.opentournament.domain.warmachine.Game;
 
 import java.util.ArrayList;
 import java.util.List;

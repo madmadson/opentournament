@@ -87,7 +87,7 @@ public interface TournamentService {
      *
      * @return  uploaded tournament with newly inserted onlineUUID.
      */
-    Tournament createTournamentInFirebase(Tournament tournament);
+    Tournament uploadTournament(Tournament tournament);
 
 
     void increaseActualPlayerForTournament(Tournament tournament);

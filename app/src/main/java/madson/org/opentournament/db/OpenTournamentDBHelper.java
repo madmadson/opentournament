@@ -5,9 +5,6 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import madson.org.opentournament.db.warmachine.GameTable;
-import madson.org.opentournament.db.warmachine.TournamentRankingTable;
-
 
 /**
  * Management for opentournament database.

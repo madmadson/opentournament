@@ -218,6 +218,7 @@ public class Tournament implements Parcelable {
     }
 
 
+    @Exclude
     public String getOnlineUUID() {
 
         return onlineUUID;

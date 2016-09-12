@@ -1,11 +1,9 @@
 package madson.org.opentournament.service;
 
+import madson.org.opentournament.domain.Game;
 import madson.org.opentournament.domain.PairingOption;
-import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.Tournament;
-import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.domain.TournamentRanking;
-import madson.org.opentournament.domain.warmachine.Game;
 
 import java.util.List;
 import java.util.Map;
@@ -75,4 +73,10 @@ public interface OngoingTournamentService {
      * @param  round_for_pairing
      */
     void deleteGamesForRound(Tournament tournament, int round_for_pairing);
+
+
+    /**
+     * @param  uploadedTournament
+     */
+    void uploadGames(Tournament uploadedTournament);
 }

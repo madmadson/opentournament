@@ -9,15 +9,18 @@ import android.database.sqlite.SQLiteDatabase;
 
 import android.util.Log;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import madson.org.opentournament.config.MapOfPairingConfig;
+import madson.org.opentournament.db.FirebaseReferences;
+import madson.org.opentournament.db.GameTable;
 import madson.org.opentournament.db.OpenTournamentDBHelper;
-import madson.org.opentournament.db.warmachine.GameTable;
-import madson.org.opentournament.db.warmachine.TournamentRankingTable;
+import madson.org.opentournament.domain.Game;
 import madson.org.opentournament.domain.PairingOption;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.domain.TournamentRanking;
-import madson.org.opentournament.domain.warmachine.Game;
 import madson.org.opentournament.utility.BaseApplication;
 
 import java.util.ArrayList;
@@ -25,6 +28,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 
 /**
@@ -276,6 +280,31 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
             GameTable.COLUMN_TOURNAMENT_ID + " = ? AND " + GameTable.COLUMN_TOURNAMENT_ROUND
             + " = ?", new String[] { String.valueOf(tournament.get_id()), String.valueOf(roundToDelete) });
         writableDatabase.close();
+    }
+
+
+    @Override
+    public void uploadGames(Tournament uploadedTournament) {
+
+        int actualRound = uploadedTournament.getActualRound();
+
+        DatabaseReference referenceForGamesToDelete = FirebaseDatabase.getInstance()
+                .getReference(FirebaseReferences.TOURNAMENT_GAMES + "/" + uploadedTournament.getOnlineUUID());
+        referenceForGamesToDelete.removeValue();
+
+        for (int i = 1; i <= actualRound; i++) {
+            List<Game> allGamesForRound = getGamesForRound(uploadedTournament, i);
+
+            for (Game game : allGamesForRound) {
+                UUID uuid = UUID.randomUUID();
+
+                DatabaseReference referenceForGames = FirebaseDatabase.getInstance()
+                        .getReference(FirebaseReferences.TOURNAMENT_GAMES + "/" + uploadedTournament.getOnlineUUID()
+                            + "/" + i + "/" + uuid);
+
+                referenceForGames.setValue(game);
+            }
+        }
     }
 
 

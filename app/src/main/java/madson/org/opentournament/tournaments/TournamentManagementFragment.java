@@ -151,8 +151,7 @@ public class TournamentManagementFragment extends Fragment implements Tournament
                                         ((BaseApplication) getActivity().getApplication()).getTournamentService();
 
                                     if (tournament.getOnlineUUID() == null) {
-                                        Tournament uploadedTournament = tournamentService.createTournamentInFirebase(
-                                                tournament);
+                                        Tournament uploadedTournament = tournamentService.uploadTournament(tournament);
 
                                         onTournamentChangedEvent(uploadedTournament);
                                     } else {

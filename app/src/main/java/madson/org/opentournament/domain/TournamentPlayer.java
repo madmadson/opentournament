@@ -3,6 +3,8 @@ package madson.org.opentournament.domain;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.firebase.database.Exclude;
+
 import java.util.List;
 
 
@@ -87,6 +89,7 @@ public class TournamentPlayer implements Parcelable {
         meta = in.readString();
     }
 
+    @Exclude
     public long get_id() {
 
         return _id;
@@ -99,6 +102,7 @@ public class TournamentPlayer implements Parcelable {
     }
 
 
+    @Exclude
     public long getTournament_id() {
 
         return tournament_id;
@@ -111,6 +115,7 @@ public class TournamentPlayer implements Parcelable {
     }
 
 
+    @Exclude
     public long getPlayer_id() {
 
         return player_id;
@@ -207,6 +212,7 @@ public class TournamentPlayer implements Parcelable {
     }
 
 
+    @Exclude
     public String getTournament_online_uid() {
 
         return tournament_online_uid;

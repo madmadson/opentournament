@@ -1,5 +1,7 @@
 package madson.org.opentournament.organize;
 
+import android.content.DialogInterface;
+
 import android.os.Bundle;
 
 import android.support.annotation.Nullable;
@@ -19,9 +21,10 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import madson.org.opentournament.R;
+import madson.org.opentournament.domain.Game;
 import madson.org.opentournament.domain.Tournament;
-import madson.org.opentournament.domain.warmachine.Game;
 import madson.org.opentournament.service.OngoingTournamentService;
+import madson.org.opentournament.tasks.TournamentUploadTask;
 import madson.org.opentournament.utility.BaseActivity;
 import madson.org.opentournament.utility.BaseApplication;
 
@@ -40,6 +43,7 @@ public class GameListFragment extends Fragment implements TournamentEventListene
     private GameListAdapter gameListAdapter;
     private Button nextRoundButton;
     private Button pairRoundAgainButton;
+    private Button uploadGamesButton;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -113,6 +117,29 @@ public class GameListFragment extends Fragment implements TournamentEventListene
                         .setPositiveButton(R.string.dialog_confirm, null)
                         .show();
                     }
+                }
+            });
+
+        uploadGamesButton = (Button) view.findViewById(R.id.button_upload_games);
+        uploadGamesButton.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setTitle(R.string.confirm_upload_tournament)
+                    .setView(R.layout.dialog_upload_games)
+                    .setPositiveButton(R.string.dialog_save, new DialogInterface.OnClickListener() {
+
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                    new TournamentUploadTask((BaseApplication) getActivity().getApplication(),
+                                        tournament).execute();
+                                }
+                            })
+                    .setNegativeButton(R.string.dialog_cancel, null)
+                    .show();
                 }
             });
 

@@ -148,26 +148,42 @@ public class TournamentSetupFragment extends Fragment implements TournamentSetup
     @Override
     public void clickTournamentPlayerListItem(final TournamentPlayer tournamentPlayer) {
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        final AlertDialog confirmDialog = builder.setTitle(R.string.confirm_remove_tournament_player)
-                .setPositiveButton(R.string.dialog_confirm, new DialogInterface.OnClickListener() {
+        if (tournament.getActualRound() == 0) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            final AlertDialog confirmDialog = builder.setTitle(R.string.confirm_remove_tournament_player)
+                    .setPositiveButton(R.string.dialog_confirm, new DialogInterface.OnClickListener() {
 
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
 
-                                Log.i(this.getClass().getName(), "removePlayer player from tournament");
+                                    Log.i(this.getClass().getName(), "removePlayer player from tournament");
 
-                                // dummy player are not persistent
-                                if (!tournamentPlayer.isDummy()) {
-                                    availablePlayerListFragment.addPlayer(tournamentPlayer);
+                                    // dummy player are not persistent
+                                    if (!tournamentPlayer.isDummy()) {
+                                        availablePlayerListFragment.addPlayer(tournamentPlayer);
+                                    }
+
+                                    tournamentPlayerListFragment.removePlayer(tournamentPlayer);
                                 }
+                            })
+                    .setNeutralButton(R.string.dialog_cancel, null)
+                    .create();
+            confirmDialog.show();
+        } else {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            final AlertDialog confirmDialog = builder.setTitle(R.string.confirm_drop_tournament_player)
+                    .setPositiveButton(R.string.dialog_confirm, new DialogInterface.OnClickListener() {
 
-                                tournamentPlayerListFragment.removePlayer(tournamentPlayer);
-                            }
-                        })
-                .setNeutralButton(R.string.dialog_cancel, null)
-                .create();
-        confirmDialog.show();
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+
+                                    // TODO implement drop player
+                                }
+                            })
+                    .setNeutralButton(R.string.dialog_cancel, null)
+                    .create();
+            confirmDialog.show();
+        }
     }
 
 

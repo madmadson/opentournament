@@ -187,5 +187,6 @@
    
     <string name="not_all_games_fineshed">Not all games are finished. Please insert results before pair next round.</string>
     <string name="at_least_one_game_started">At least one game is finished</string>
+    <string name="confirm_drop_tournament_player">Confirm drop player</string>
 
 </resources>

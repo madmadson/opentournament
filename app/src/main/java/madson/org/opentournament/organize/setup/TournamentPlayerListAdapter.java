@@ -65,12 +65,12 @@ public class TournamentPlayerListAdapter extends RecyclerView.Adapter<Tournament
             .setText(context.getResources()
                 .getString(R.string.tournament_player_name_in_row, firstname, nickname, lastname));
 
-//        // mark online player
-//        if (player.getPlayer_online_uuid() != null) {
-//            holder.getOnlineIcon().setVisibility(View.VISIBLE);
-//        } else {
-//            holder.getOnlineIcon().setVisibility(View.GONE);
-//        }
+        // mark online player
+        if (player.getPlayer_online_uuid() != null) {
+            holder.getOnlineIcon().setVisibility(View.VISIBLE);
+        } else {
+            holder.getOnlineIcon().setVisibility(View.GONE);
+        }
     }
 
 
@@ -99,7 +99,7 @@ public class TournamentPlayerListAdapter extends RecyclerView.Adapter<Tournament
 
         int position = tournamentPlayerList.indexOf(tournamentPlayer);
         tournamentPlayerList.remove(position);
-        notifyItemRemoved(position);
+        notifyDataSetChanged();
     }
 
 
@@ -122,7 +122,7 @@ public class TournamentPlayerListAdapter extends RecyclerView.Adapter<Tournament
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private TextView faction;
-        private ImageView accountIcon;
+
         private TextView playerNameInList;
         private TextView playerNumber;
         private TextView teamName;
@@ -140,7 +140,6 @@ public class TournamentPlayerListAdapter extends RecyclerView.Adapter<Tournament
             teamName = (TextView) v.findViewById(R.id.tournament_player_teamname);
             faction = (TextView) v.findViewById(R.id.tournament_player_row_faction);
             onlineIcon = (ImageView) v.findViewById(R.id.tournament_player_row_online_icon);
-            accountIcon = (ImageView) v.findViewById(R.id.tournament_player_row_account_icon);
         }
 
         public TextView getPlayerNameInList() {
@@ -176,12 +175,6 @@ public class TournamentPlayerListAdapter extends RecyclerView.Adapter<Tournament
         public TextView getFaction() {
 
             return faction;
-        }
-
-
-        public ImageView getAccountIcon() {
-
-            return accountIcon;
         }
 
 

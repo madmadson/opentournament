@@ -242,7 +242,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     public void replaceFragment(Fragment fragment) {
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-
+        transaction.setTransition(FragmentTransaction.TRANSIT_NONE);
         transaction.replace(R.id.content_main, fragment);
 
         transaction.commit();

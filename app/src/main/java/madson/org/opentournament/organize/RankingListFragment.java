@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import madson.org.opentournament.R;
@@ -143,6 +144,12 @@ public class RankingListFragment extends Fragment {
 
             holder.getPlayerTeamNameInList().setText(tournamentPlayer.getTeamname());
             holder.getPlayerFactionInList().setText(tournamentPlayer.getFaction());
+
+            if (ranking.getPlayer_online_uuid() != null) {
+                if (holder.getOnlineIcon() != null) {
+                    holder.getOnlineIcon().setVisibility(View.VISIBLE);
+                }
+            }
         }
 
 
@@ -161,6 +168,7 @@ public class RankingListFragment extends Fragment {
 
         public class ViewHolder extends RecyclerView.ViewHolder {
 
+            private ImageView onlineIcon;
             private TextView playerFactionInList;
             private TextView score;
             private TextView sos;
@@ -183,6 +191,7 @@ public class RankingListFragment extends Fragment {
                 sos = (TextView) itemView.findViewById(R.id.ranking_row_sos);
                 cp = (TextView) itemView.findViewById(R.id.ranking_row_control_points);
                 vp = (TextView) itemView.findViewById(R.id.ranking_row_victory_points);
+                onlineIcon = (ImageView) itemView.findViewById(R.id.ranking_row_online_icon);
             }
 
             public void setRanking(TournamentRanking ranking) {
@@ -230,6 +239,12 @@ public class RankingListFragment extends Fragment {
             public TextView getPlayerTeamNameInList() {
 
                 return playerTeamNameInList;
+            }
+
+
+            public ImageView getOnlineIcon() {
+
+                return onlineIcon;
             }
 
 

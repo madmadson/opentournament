@@ -82,26 +82,19 @@ public class LocalPlayerListAdapter extends RecyclerView.Adapter<LocalPlayerList
     public void add(Player item) {
 
         originalPlayerList.add(item);
-        filteredPlayerList.add(item);
-        notifyDataSetChanged();
     }
 
 
     public void addPlayerList(List<Player> allPlayers) {
 
-        filteredPlayerList = allPlayers;
         originalPlayerList = allPlayers;
-        notifyDataSetChanged();
     }
 
 
     public int removePlayer(Player player) {
 
-        int position = filteredPlayerList.indexOf(player);
-        filteredPlayerList.remove(position);
-
-        notifyItemRemoved(position);
-        notifyItemRangeChanged(position, filteredPlayerList.size());
+        int position = originalPlayerList.indexOf(player);
+        originalPlayerList.remove(position);
 
         return position;
     }
@@ -169,7 +162,7 @@ public class LocalPlayerListAdapter extends RecyclerView.Adapter<LocalPlayerList
             final List<Player> list = originalPlayerList;
 
             int count = list.size();
-            final ArrayList<Player> newListOfPlayers = new ArrayList<>(count);
+            final List<Player> newListOfPlayers = new ArrayList<>(count);
 
             Player filterablePlayer;
 

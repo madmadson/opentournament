@@ -263,7 +263,7 @@ public class TournamentPlayerServiceImpl implements TournamentPlayerService {
         contentValues.put(TournamentPlayerTable.COLUMN_LASTNAME, player.getLastname());
         contentValues.put(TournamentPlayerTable.COLUMN_TEAMNAME, player.getTeamname());
         contentValues.put(TournamentPlayerTable.COLUMN_FACTION, player.getFaction());
-        contentValues.put(TournamentPlayerTable.COLUMN_DUMMY, player.getDummy());
+        contentValues.put(TournamentPlayerTable.COLUMN_DUMMY, player.isDummy());
 
         db.insert(TournamentPlayerTable.TABLE_TOURNAMENT_PLAYER, null, contentValues);
 

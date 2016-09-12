@@ -3,9 +3,7 @@ package madson.org.opentournament.domain;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 
 /**
@@ -48,7 +46,7 @@ public class TournamentPlayer implements Parcelable {
     private String faction;
     private String meta;
 
-    private Boolean dummy;
+    private boolean dummy;
 
     private List<Long> listOfOpponents;
     private List<Integer> listOfPlayedPlayingFields;
@@ -233,13 +231,13 @@ public class TournamentPlayer implements Parcelable {
     }
 
 
-    public Boolean getDummy() {
+    public boolean isDummy() {
 
         return dummy;
     }
 
 
-    public void setDummy(Boolean dummy) {
+    public void setDummy(boolean dummy) {
 
         this.dummy = dummy;
     }

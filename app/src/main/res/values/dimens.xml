@@ -34,6 +34,8 @@
     <dimen name="organised_tournament_name_margin_left">100dp</dimen>
     <dimen name="organised_tournament_date_margin_left">250dp</dimen>
     <dimen name="organised_tournament_location_margin_left">450dp</dimen>
+
+    <dimen name="organize_tournament_list_height">190dp</dimen>
     
     <!--Player card-->
     <dimen name="player_card_view_height">50dp</dimen>
@@ -45,4 +47,5 @@
     <dimen name="ranking_scorings_padding">150dp</dimen>
 
     <dimen name="player_card_view_height_3_row">90dp</dimen>
+   
 </resources>

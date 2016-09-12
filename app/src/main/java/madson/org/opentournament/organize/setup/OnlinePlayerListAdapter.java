@@ -78,16 +78,16 @@ public class OnlinePlayerListAdapter extends RecyclerView.Adapter<OnlinePlayerLi
 
         Log.i(this.getClass().getName(), "player added to adapter ");
 
-        this.filteredPlayerList.add(player);
+        this.originalPlayerList.add(player);
         notifyDataSetChanged();
     }
 
 
     public void removePlayer(Player player) {
 
-        int position = filteredPlayerList.indexOf(player);
+        int position = originalPlayerList.indexOf(player);
 
-        filteredPlayerList.remove(position);
+        originalPlayerList.remove(position);
         notifyDataSetChanged();
     }
 

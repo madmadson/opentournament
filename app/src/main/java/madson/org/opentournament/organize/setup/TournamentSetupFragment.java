@@ -158,7 +158,7 @@ public class TournamentSetupFragment extends Fragment implements TournamentSetup
                                 Log.i(this.getClass().getName(), "removePlayer player from tournament");
 
                                 // dummy player are not persistent
-                                if (!tournamentPlayer.getDummy()) {
+                                if (!tournamentPlayer.isDummy()) {
                                     availablePlayerListFragment.addPlayer(tournamentPlayer);
                                 }
 

@@ -50,7 +50,8 @@
         android:paddingBottom="@dimen/main_tick"
         android:textStyle="bold"
         android:id="@+id/no_online_available_players"
-        android:text="@string/no_available_online_players_for_tournament" />
+        android:text="@string/no_available_online_players_for_tournament" 
+        android:visibility="gone"/>
     
     <TextView
         android:layout_width="match_parent"

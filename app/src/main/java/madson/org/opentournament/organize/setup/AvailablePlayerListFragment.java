@@ -3,6 +3,7 @@ package madson.org.opentournament.organize.setup;
 import android.content.Context;
 
 import android.os.Bundle;
+import android.os.Handler;
 
 import android.support.annotation.Nullable;
 
@@ -19,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.EditText;
+import android.widget.Filter;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -109,6 +111,8 @@ public class AvailablePlayerListFragment extends BaseFragment {
                         Log.i(this.getClass().getName(), "players loaded from firebase");
 
                         for (DataSnapshot playerSnapShot : dataSnapshot.getChildren()) {
+                            progressBar.setVisibility(View.GONE);
+
                             String player_online_uuid = playerSnapShot.getKey();
 
                             Player player = playerSnapShot.getValue(Player.class);
@@ -118,16 +122,10 @@ public class AvailablePlayerListFragment extends BaseFragment {
 
                                 if (!alreadyPlayingPlayersUUIDs.contains(player_online_uuid)) {
                                     onlinePlayerListAdapter.addPlayer(player);
+                                    onlinePlayerListAdapter.getFilter()
+                                        .filter(filterPlayerTextView.getText().toString());
                                 }
                             }
-                        }
-
-                        progressBar.setVisibility(View.GONE);
-
-                        if (onlinePlayerListAdapter.getItemCount() == 0) {
-                            noOnlineTournamentPlayersTextView.setVisibility(View.VISIBLE);
-                        } else {
-                            noOnlineTournamentPlayersTextView.setVisibility(View.GONE);
                         }
                     }
 
@@ -142,6 +140,21 @@ public class AvailablePlayerListFragment extends BaseFragment {
                 child.addValueEventListener(playerListener);
 
                 mOnlinePlayerRecyclerView.setAdapter(onlinePlayerListAdapter);
+
+                Runnable runnable = new Runnable() {
+
+                    @Override
+                    public void run() {
+
+                        if (onlinePlayerListAdapter.getItemCount() == 0) {
+                            progressBar.setVisibility(View.GONE);
+                            noOnlineTournamentPlayersTextView.setVisibility(View.VISIBLE);
+                        }
+                    }
+                };
+
+                Handler handler = new Handler();
+                handler.postDelayed(runnable, 5000);
             }
 
             localPlayerRecyclerView = (RecyclerView) view.findViewById(R.id.local_player_list_recycler_view);
@@ -165,10 +178,21 @@ public class AvailablePlayerListFragment extends BaseFragment {
                     List<Player> allLocalPlayers = playerService.getAllLocalPlayersNotInTournament(
                             allPlayersForTournament);
 
-                    if (allLocalPlayers.size() > 0) {
-                        noLocalTournamentPlayersTextView.setVisibility(View.GONE);
-                        localPlayerListAdapter.addPlayerList(allLocalPlayers);
-                    }
+                    localPlayerListAdapter.addPlayerList(allLocalPlayers);
+                    localPlayerListAdapter.getFilter()
+                        .filter(filterPlayerTextView.getText().toString(), new Filter.FilterListener() {
+
+                                @Override
+                                public void onFilterComplete(int count) {
+
+                                    if (count == 0) {
+                                        noLocalTournamentPlayersTextView.setVisibility(View.VISIBLE);
+                                    } else {
+                                        noLocalTournamentPlayersTextView.setVisibility(View.GONE);
+                                    }
+                                }
+                                ;
+                            });
                 }
             };
             runnable.run();
@@ -210,7 +234,19 @@ public class AvailablePlayerListFragment extends BaseFragment {
                     .getPlayerForId(tournamentPlayer.getPlayer_id());
 
             localPlayerListAdapter.add(player);
-            localPlayerListAdapter.getFilter().filter(filterPlayerTextView.getText().toString());
+            localPlayerListAdapter.getFilter()
+                .filter(filterPlayerTextView.getText().toString(), new Filter.FilterListener() {
+
+                        @Override
+                        public void onFilterComplete(int count) {
+
+                            if (count == 0) {
+                                noLocalTournamentPlayersTextView.setVisibility(View.VISIBLE);
+                            } else {
+                                noLocalTournamentPlayersTextView.setVisibility(View.GONE);
+                            }
+                        }
+                    });
 
             Runnable runnable = new Runnable() {
 
@@ -229,7 +265,19 @@ public class AvailablePlayerListFragment extends BaseFragment {
             Player player = Player.fromTournamentPlayer(tournamentPlayer);
             player.setOnlineUUID(tournamentPlayer.getPlayer_online_uuid());
             onlinePlayerListAdapter.addPlayer(player);
-            onlinePlayerListAdapter.getFilter().filter(filterPlayerTextView.getText().toString());
+            onlinePlayerListAdapter.getFilter()
+                .filter(filterPlayerTextView.getText().toString(), new Filter.FilterListener() {
+
+                        @Override
+                        public void onFilterComplete(int count) {
+
+                            if (count == 0) {
+                                noOnlineTournamentPlayersTextView.setVisibility(View.VISIBLE);
+                            } else {
+                                noOnlineTournamentPlayersTextView.setVisibility(View.GONE);
+                            }
+                        }
+                    });
 
             Runnable runnable = new Runnable() {
 
@@ -245,24 +293,6 @@ public class AvailablePlayerListFragment extends BaseFragment {
             };
             runnable.run();
         }
-
-        checkIfNoPlayerTextView();
-    }
-
-
-    private void checkIfNoPlayerTextView() {
-
-        if (localPlayerListAdapter.getItemCount() == 0) {
-            noLocalTournamentPlayersTextView.setVisibility(View.VISIBLE);
-        } else {
-            noLocalTournamentPlayersTextView.setVisibility(View.GONE);
-        }
-
-        if (onlinePlayerListAdapter.getItemCount() == 0) {
-            noOnlineTournamentPlayersTextView.setVisibility(View.VISIBLE);
-        } else {
-            noOnlineTournamentPlayersTextView.setVisibility(View.GONE);
-        }
     }
 
 
@@ -273,11 +303,35 @@ public class AvailablePlayerListFragment extends BaseFragment {
         if (player.getOnlineUUID() == null) {
             int indexOfPlayerAdapter = localPlayerListAdapter.removePlayer(player);
             localPlayerRecyclerView.removeViewAt(indexOfPlayerAdapter);
+            localPlayerListAdapter.getFilter()
+                .filter(filterPlayerTextView.getText().toString(), new Filter.FilterListener() {
+
+                        @Override
+                        public void onFilterComplete(int count) {
+
+                            if (count == 0) {
+                                noLocalTournamentPlayersTextView.setVisibility(View.VISIBLE);
+                            } else {
+                                noLocalTournamentPlayersTextView.setVisibility(View.GONE);
+                            }
+                        }
+                    });
         } else {
             onlinePlayerListAdapter.removePlayer(player);
-        }
+            onlinePlayerListAdapter.getFilter()
+                .filter(filterPlayerTextView.getText().toString(), new Filter.FilterListener() {
 
-        checkIfNoPlayerTextView();
+                        @Override
+                        public void onFilterComplete(int count) {
+
+                            if (count == 0) {
+                                noOnlineTournamentPlayersTextView.setVisibility(View.VISIBLE);
+                            } else {
+                                noOnlineTournamentPlayersTextView.setVisibility(View.GONE);
+                            }
+                        }
+                    });
+        }
     }
 
     private class PlayerFilterTextWatcher implements TextWatcher {
@@ -291,8 +345,30 @@ public class AvailablePlayerListFragment extends BaseFragment {
         public void onTextChanged(CharSequence s, int start, int before, int count) {
 
             Log.i(this.getClass().getName(), "filtered by: " + s.toString());
-            localPlayerListAdapter.getFilter().filter(s.toString());
-            onlinePlayerListAdapter.getFilter().filter(s.toString());
+            localPlayerListAdapter.getFilter().filter(s.toString(), new Filter.FilterListener() {
+
+                    @Override
+                    public void onFilterComplete(int count) {
+
+                        if (count == 0) {
+                            noLocalTournamentPlayersTextView.setVisibility(View.VISIBLE);
+                        } else {
+                            noLocalTournamentPlayersTextView.setVisibility(View.GONE);
+                        }
+                    }
+                });
+            onlinePlayerListAdapter.getFilter().filter(s.toString(), new Filter.FilterListener() {
+
+                    @Override
+                    public void onFilterComplete(int count) {
+
+                        if (count == 0) {
+                            noOnlineTournamentPlayersTextView.setVisibility(View.VISIBLE);
+                        } else {
+                            noOnlineTournamentPlayersTextView.setVisibility(View.GONE);
+                        }
+                    }
+                });
         }
 
 

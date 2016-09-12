@@ -9,7 +9,7 @@
     <string name="action_settings">Einstellungen</string>
 
     <!-- NAV: Tournament Management -->
-    <string name="heading_online_tournaments">Onnline Turniere</string>
+    <string name="heading_online_tournaments">Online Turniere</string>
     <string name="heading_organized_tournaments">Deine Turniere</string>
     
 </resources>

@@ -102,6 +102,11 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/local_tournament_list_recycler_view"
             android:layout_width="match_parent"
-            android:layout_height="200dp" />
+            android:layout_height="@dimen/organize_tournament_list_height" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/huge_line_tick"
+            android:background="@color/colorPrimaryDark" />
     </LinearLayout>
 </ScrollView>

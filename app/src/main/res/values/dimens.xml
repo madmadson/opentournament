@@ -47,5 +47,7 @@
     <dimen name="ranking_scorings_padding">150dp</dimen>
 
     <dimen name="player_card_view_height_3_row">90dp</dimen>
-   
+    <dimen name="sign_in_input_fields_width">400dp</dimen>
+    
+    <dimen name="text_extra_large">30sp</dimen>
 </resources>

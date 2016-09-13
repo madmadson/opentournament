@@ -18,18 +18,21 @@ package madson.org.opentournament;
 import android.app.Activity;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 
 import android.os.Bundle;
 
 import android.support.annotation.NonNull;
 
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 
 import android.text.TextUtils;
 
 import android.util.Log;
 
+import android.view.LayoutInflater;
 import android.view.View;
 
 import android.widget.EditText;
@@ -62,6 +65,8 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+
+import madson.org.opentournament.utility.BaseActivity;
 
 
 public class SignInActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener,
@@ -128,8 +133,9 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
                     getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
-        mGoogleApiClient = new GoogleApiClient.Builder(this).enableAutoManage(this /* FragmentActivity */,
-                this /* OnConnectionFailedListener */).addApi(Auth.GOOGLE_SIGN_IN_API, gso).build();
+        mGoogleApiClient = new GoogleApiClient.Builder(this).enableAutoManage(this, this)
+            .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build();
 
         // username password
 
@@ -173,33 +179,61 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
                 @Override
                 public void onClick(View v) {
 
-                    if (!validateForm()) {
-                        return;
-                    }
+                    LayoutInflater inflater = SignInActivity.this.getLayoutInflater();
+                    final View dialogView = inflater.inflate(R.layout.dialog_create_account, null);
 
-                    mFirebaseAuth.createUserWithEmailAndPassword(mEmailField.getText().toString(),
-                            mPasswordField.getText().toString())
-                    .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(SignInActivity.this);
+                    final AlertDialog dialog = builder.setTitle(R.string.create_account)
+                        .setView(dialogView)
+                        .setPositiveButton(R.string.dialog_save, null)
+                        .setNegativeButton(R.string.dialog_cancel, null)
+                        .create();
+                    dialog.show();
+
+                    dialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
 
                             @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
+                            public void onClick(View v) {
 
-                                if (task != null) {
-                                    if (!task.isSuccessful()) {
-                                        if (task.getException() != null) {
-                                            String fail_message = task.getException().getMessage();
-                                            Toast.makeText(SignInActivity.this, fail_message, Toast.LENGTH_LONG).show();
-                                        }
-                                    } else {
-                                        Toast.makeText(SignInActivity.this, R.string.success_create_account,
-                                            Toast.LENGTH_LONG)
-                                        .show();
-                                        startActivity(new Intent(SignInActivity.this, MainActivity.class));
-                                    }
+                                final EditText emailForNewAccount = (EditText) dialogView.findViewById(
+                                        R.id.create_account_field_email);
+
+                                if (TextUtils.isEmpty(emailForNewAccount.getText())) {
+                                    emailForNewAccount.setError("Required.");
+                                } else {
+                                    emailForNewAccount.setError(null);
+                                    mFirebaseAuth.createUserWithEmailAndPassword(
+                                            emailForNewAccount.getText().toString(), "temptemp")
+                                    .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+
+                                            @Override
+                                            public void onComplete(@NonNull Task<AuthResult> task) {
+
+                                                if (task != null) {
+                                                    if (!task.isSuccessful()) {
+                                                        if (task.getException() != null) {
+                                                            String fail_message = task.getException().getMessage();
+                                                            Toast.makeText(SignInActivity.this, fail_message,
+                                                                Toast.LENGTH_LONG)
+                                                            .show();
+                                                        }
+                                                    } else {
+                                                        Toast.makeText(SignInActivity.this,
+                                                            R.string.success_create_account, Toast.LENGTH_LONG)
+                                                        .show();
+                                                        mFirebaseAuth.sendPasswordResetEmail(
+                                                            emailForNewAccount.getText().toString());
+                                                    }
+
+                                                    dialog.dismiss();
+                                                }
+                                            }
+                                        });
                                 }
                             }
                         });
                 }
+                ;
             });
     }
 

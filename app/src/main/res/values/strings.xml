@@ -194,11 +194,15 @@
     <string name="at_least_one_game_started">At least one game is finished</string>
     <string name="confirm_drop_tournament_player">Confirm drop player</string>
     
-    <string name="create_account">create account</string>
+    <string name="create_account">Create New Account</string>
     <string name="hint_email">Email</string>
     <string name="hint_password">Password</string>
     <string name="failed">failed</string>
-    <string name="success_create_account">Sucess create account</string>
+    <string name="success_create_account">Your account has been created successfully. We have sent you an email for setting your password.</string>
     <string name="success_login">sucessfully loged in</string>
+    <string name="label_password">password</string>
+    <string name="label_email">email</string>
+    <string name="one_click_sign_in">One Click Sign In</string>
+    <string name="create_account_text">After confirm email you get an email with your initial password</string>
 
 </resources>

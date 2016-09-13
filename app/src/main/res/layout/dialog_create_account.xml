@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/pairing_dialog_layout"
+    android:orientation="vertical" 
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:descendantFocusability="beforeDescendants"
+    android:focusableInTouchMode="true">
+    
+    <TextView
+        android:id="@+id/confirm_pairing_dialog"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="@string/create_account_text"
+        android:layout_centerHorizontal="true"
+        android:padding="@dimen/main_tick"
+        android:textStyle="bold"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/huge_line_tick"
+        android:background="@color/colorPrimaryDark" />
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/email_parent"
+        android:layout_width="@dimen/sign_in_input_fields_width"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/main_tick"
+        android:layout_centerHorizontal="true">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/create_account_field_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/label_email"
+            android:imeOptions="actionNext"
+            android:inputType="textEmailAddress"
+            android:maxLines="1"
+            android:singleLine="true" />
+
+    </android.support.design.widget.TextInputLayout>
+
+</LinearLayout>

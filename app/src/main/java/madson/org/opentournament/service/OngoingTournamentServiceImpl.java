@@ -148,23 +148,48 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
 
             TournamentRanking player_two = null;
 
-            if (pairingOptions.containsKey(MapOfPairingConfig.PLAYER_NOT_PLAY_TWICE_AGAINST_EACH_OVER)
-                    && pairingOptions.get(MapOfPairingConfig.PLAYER_NOT_PLAY_TWICE_AGAINST_EACH_OVER)
-                    .isActive()) {
+            boolean playerDontPlayTwiceAgainstEachOther = pairingOptions.containsKey(
+                    MapOfPairingConfig.PLAYER_NOT_PLAY_TWICE_AGAINST_EACH_OVER)
+                && pairingOptions.get(MapOfPairingConfig.PLAYER_NOT_PLAY_TWICE_AGAINST_EACH_OVER).isActive();
+
+            boolean playerWithSameTeamDontPlayAgainstEachOther = pairingOptions.containsKey(
+                    MapOfPairingConfig.PLAYER_WITH_SAME_TEAM_NOT_PLAY_AGAINST_EACH_OTHER)
+                && pairingOptions.get(MapOfPairingConfig.PLAYER_WITH_SAME_TEAM_NOT_PLAY_AGAINST_EACH_OTHER)
+                    .isActive();
+
+            if (!pairingOptions.isEmpty()) {
                 // search for first player player one has not played against
                 for (TournamentRanking secondPlayer : rankings) {
-                    if (secondPlayer.getPlayer_online_uuid() != null) {
-                        if (!listOfOpponentsPlayerIds.contains(secondPlayer.getPlayer_online_uuid())) {
+                    if (playerDontPlayTwiceAgainstEachOther && playerWithSameTeamDontPlayAgainstEachOther) {
+                        // need to look in opponents player list
+                        if (!listOfOpponentsPlayerIds.contains(secondPlayer.getRealPlayerId())
+                                && !player_one.getTournamentPlayer()
+                                .getTeamname()
+                                .equals(secondPlayer.getTournamentPlayer().getTeamname())) {
                             player_two = secondPlayer;
+
                             game.setPlayer2(secondPlayer.getTournamentPlayer());
                             game.setPlayer_two_id(secondPlayer.getPlayer_id());
                             game.setPlayer_two_online_uuid(secondPlayer.getPlayer_online_uuid());
 
                             break;
                         }
-                    } else {
-                        if (!listOfOpponentsPlayerIds.contains(String.valueOf(secondPlayer.getPlayer_id()))) {
+                    } else if (playerDontPlayTwiceAgainstEachOther && !playerWithSameTeamDontPlayAgainstEachOther) {
+                        if (!listOfOpponentsPlayerIds.contains(secondPlayer.getRealPlayerId())) {
                             player_two = secondPlayer;
+
+                            game.setPlayer2(secondPlayer.getTournamentPlayer());
+                            game.setPlayer_two_id(secondPlayer.getPlayer_id());
+                            game.setPlayer_two_online_uuid(secondPlayer.getPlayer_online_uuid());
+
+                            break;
+                        }
+                    } else if (!playerDontPlayTwiceAgainstEachOther && playerWithSameTeamDontPlayAgainstEachOther) {
+                        if (!player_one.getTournamentPlayer()
+                                .getTeamname()
+                                .equals(secondPlayer.getTournamentPlayer().getTeamname())) {
+                            player_two = secondPlayer;
+
                             game.setPlayer2(secondPlayer.getTournamentPlayer());
                             game.setPlayer_two_id(secondPlayer.getPlayer_id());
                             game.setPlayer_two_online_uuid(secondPlayer.getPlayer_online_uuid());
@@ -173,6 +198,7 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
                         }
                     }
                 }
+                // no pairing options
             } else {
                 player_two = rankings.get(0);
                 game.setPlayer2(player_two.getTournamentPlayer());

@@ -238,12 +238,14 @@ public abstract class BaseApplication extends Application {
         Map<String, PairingOption> returnedPairingOptions = new HashMap();
         MapOfPairingConfig pairingConfigs = new MapOfPairingConfig();
 
-        Map<GameOrSportTyp, PairingOption> pairingOptions = pairingConfigs.getPairingOptions();
+        Map<GameOrSportTyp, List<PairingOption>> pairingOptions = pairingConfigs.getPairingOptions();
 
-        for (Map.Entry<GameOrSportTyp, PairingOption> pairingEntry : pairingOptions.entrySet()) {
+        for (Map.Entry<GameOrSportTyp, List<PairingOption>> pairingEntry : pairingOptions.entrySet()) {
             if (pairingEntry.getKey().name().equals(GameOrSportTyp.ALL.name())
                     || pairingEntry.getKey().name().equals(tournament.getGameOrSportTyp())) {
-                returnedPairingOptions.put(pairingEntry.getValue().getPairingOptionName(), pairingEntry.getValue());
+                for (PairingOption option : pairingEntry.getValue()) {
+                    returnedPairingOptions.put(option.getPairingOptionName(), option);
+                }
             }
         }
 

@@ -185,8 +185,9 @@
  
     <!--Caution dynamic generated keys of pairing options -->
     <string name="pairing_option_player_not_play_twice_against_each_other">Player don\'t play twice against each other</string>
-   
-   
+    <string name="pairing_option_player_with_same_team_not_play_against_each_other">Player in same team don\'t play against each other</string>
+
+
     <string name="uneven_player_message">Uneven players in tournament.  Should a dummy player be inserted for you?</string>
    
    
@@ -199,10 +200,11 @@
     <string name="hint_password">Password</string>
     <string name="failed">failed</string>
     <string name="success_create_account">Your account has been created successfully. We have sent you an email for setting your password.</string>
-    <string name="success_login">sucessfully loged in</string>
+    <string name="success_login">Login Successful</string>
     <string name="label_password">password</string>
     <string name="label_email">email</string>
     <string name="one_click_sign_in">One Click Sign In</string>
     <string name="create_account_text">After confirm email you get an email with your initial password</string>
+    <string name="info_pairing_options">You can set the pairing options for each pairing</string>
 
 </resources>

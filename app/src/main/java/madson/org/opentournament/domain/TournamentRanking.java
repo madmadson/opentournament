@@ -41,6 +41,17 @@ public class TournamentRanking {
     }
 
 
+    @Exclude
+    public String getRealPlayerId() {
+
+        if (player_online_uuid != null) {
+            return player_online_uuid;
+        } else {
+            return String.valueOf(player_id);
+        }
+    }
+
+
     public void setPlayer_online_uuid(String player_online_uuid) {
 
         this.player_online_uuid = player_online_uuid;

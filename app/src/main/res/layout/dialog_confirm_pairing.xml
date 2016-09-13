@@ -11,12 +11,21 @@
         android:id="@+id/confirm_pairing_dialog"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Explain Text"/>
+        android:text="@string/info_pairing_options"
+        android:layout_centerHorizontal="true"
+        android:padding="@dimen/main_tick"
+        android:textStyle="bold"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/huge_line_tick"
+        android:background="@color/colorPrimaryDark" />
 
     <LinearLayout
         android:id="@+id/pairing_options_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="@dimen/main_tick"
         android:orientation="vertical">
         
     </LinearLayout>

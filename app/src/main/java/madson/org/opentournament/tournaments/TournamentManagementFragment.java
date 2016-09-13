@@ -17,6 +17,7 @@ import android.support.v4.app.FragmentTransaction;
 
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 
 import android.util.Log;
 
@@ -24,10 +25,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.ProgressBar;
+
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.organize.TournamentOrganizeActivity;
 import madson.org.opentournament.service.TournamentService;
+import madson.org.opentournament.tasks.TournamentUploadTask;
 import madson.org.opentournament.utility.BaseActivity;
 import madson.org.opentournament.utility.BaseApplication;
 
@@ -134,45 +138,28 @@ public class TournamentManagementFragment extends Fragment implements Tournament
     @Override
     public void onTournamentUploadClicked(final Tournament tournament) {
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle(R.string.confirm_upload_tournament)
-            .setMessage(R.string.confirm_upload_tournament_text)
-            .setPositiveButton(R.string.dialog_confirm, new DialogInterface.OnClickListener() {
+        if (((BaseActivity) getActivity()).isConnected()) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle(R.string.confirm_upload_tournament)
+                .setMessage(R.string.confirm_upload_tournament_text)
+                .setPositiveButton(R.string.dialog_confirm, new DialogInterface.OnClickListener() {
 
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
 
-                            Runnable runnable = new Runnable() {
+                                Toolbar toolbar = ((BaseActivity) getActivity()).getToolbar();
+                                ProgressBar progressBar = (ProgressBar) toolbar.findViewById(R.id.toolbar_progress_bar);
+                                new TournamentUploadTask((BaseApplication) getActivity().getApplication(), tournament,
+                                    progressBar).execute();
+                            }
+                        })
+                .setNegativeButton(R.string.dialog_cancel, null);
 
-                                @Override
-                                public void run() {
-
-                                    TournamentService tournamentService =
-                                        ((BaseApplication) getActivity().getApplication()).getTournamentService();
-
-                                    if (tournament.getOnlineUUID() == null) {
-                                        Tournament uploadedTournament = tournamentService.uploadTournament(tournament);
-
-                                        onTournamentChangedEvent(uploadedTournament);
-                                    } else {
-                                        tournamentService.updateTournamentInFirebase(tournament);
-                                    }
-
-                                    CoordinatorLayout coordinatorLayout = ((BaseActivity) getActivity())
-                                        .getCoordinatorLayout();
-                                    Snackbar snackbar = Snackbar.make(coordinatorLayout,
-                                            R.string.success_upload_tournament, Snackbar.LENGTH_LONG);
-                                    snackbar.getView()
-                                    .setBackgroundColor(getContext().getResources().getColor(R.color.colorPositive));
-                                    snackbar.show();
-                                }
-                            };
-                            runnable.run();
-                        }
-                    })
-            .setNegativeButton(R.string.dialog_cancel, null);
-
-        builder.show();
+            builder.show();
+        } else {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle(R.string.offline_text).setPositiveButton(R.string.dialog_confirm, null).show();
+        }
     }
 
 

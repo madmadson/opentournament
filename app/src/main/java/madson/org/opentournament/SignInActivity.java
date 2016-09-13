@@ -15,6 +15,8 @@
  */
 package madson.org.opentournament;
 
+import android.app.Activity;
+
 import android.content.Context;
 import android.content.Intent;
 
@@ -24,10 +26,13 @@ import android.support.annotation.NonNull;
 
 import android.support.v7.app.AppCompatActivity;
 
+import android.text.TextUtils;
+
 import android.util.Log;
 
 import android.view.View;
 
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
@@ -72,12 +77,12 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
     // Firebase instance variables
     private FirebaseAuth mFirebaseAuth;
 
-    private String mUsername;
-    private String mPhotoUrl;
     private LoginButton mFacebookSignInButton;
     private CallbackManager callbackManager;
 
     private FirebaseAuth.AuthStateListener mAuthListener;
+    private EditText mEmailField;
+    private EditText mPasswordField;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,6 +113,7 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
         // Assign fields
         mGoogleSignInButton = (SignInButton) findViewById(R.id.google_sign_in_button);
         mFacebookSignInButton = (LoginButton) findViewById(R.id.facebook_login_button);
+
         findViewById(R.id.button_anonymous_sign_in).setOnClickListener(this);
 
         // Set click listeners
@@ -124,6 +130,103 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
                 .build();
         mGoogleApiClient = new GoogleApiClient.Builder(this).enableAutoManage(this /* FragmentActivity */,
                 this /* OnConnectionFailedListener */).addApi(Auth.GOOGLE_SIGN_IN_API, gso).build();
+
+        // username password
+
+        mEmailField = (EditText) findViewById(R.id.field_email);
+        mPasswordField = (EditText) findViewById(R.id.field_password);
+
+        findViewById(R.id.email_sign_in_button).setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+
+                    if (!validateForm()) {
+                        return;
+                    }
+
+                    mFirebaseAuth.signInWithEmailAndPassword(mEmailField.getText().toString(),
+                            mPasswordField.getText().toString())
+                    .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+
+                                if (task != null) {
+                                    if (!task.isSuccessful()) {
+                                        if (task.getException() != null) {
+                                            String fail_message = task.getException().getMessage();
+                                            Toast.makeText(SignInActivity.this, fail_message, Toast.LENGTH_LONG).show();
+                                        }
+                                    } else {
+                                        Toast.makeText(SignInActivity.this, R.string.success_login, Toast.LENGTH_LONG)
+                                        .show();
+                                        startActivity(new Intent(SignInActivity.this, MainActivity.class));
+                                    }
+                                }
+                            }
+                        });
+                }
+            });
+        findViewById(R.id.email_create_account_button).setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+
+                    if (!validateForm()) {
+                        return;
+                    }
+
+                    mFirebaseAuth.createUserWithEmailAndPassword(mEmailField.getText().toString(),
+                            mPasswordField.getText().toString())
+                    .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+
+                                if (task != null) {
+                                    if (!task.isSuccessful()) {
+                                        if (task.getException() != null) {
+                                            String fail_message = task.getException().getMessage();
+                                            Toast.makeText(SignInActivity.this, fail_message, Toast.LENGTH_LONG).show();
+                                        }
+                                    } else {
+                                        Toast.makeText(SignInActivity.this, R.string.success_create_account,
+                                            Toast.LENGTH_LONG)
+                                        .show();
+                                        startActivity(new Intent(SignInActivity.this, MainActivity.class));
+                                    }
+                                }
+                            }
+                        });
+                }
+            });
+    }
+
+
+    private boolean validateForm() {
+
+        boolean valid = true;
+
+        String email = mEmailField.getText().toString();
+
+        if (TextUtils.isEmpty(email)) {
+            mEmailField.setError("Required.");
+            valid = false;
+        } else {
+            mEmailField.setError(null);
+        }
+
+        String password = mPasswordField.getText().toString();
+
+        if (TextUtils.isEmpty(password)) {
+            mPasswordField.setError("Required.");
+            valid = false;
+        } else {
+            mPasswordField.setError(null);
+        }
+
+        return valid;
     }
 
 

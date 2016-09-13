@@ -149,12 +149,17 @@
     <string name="header_ranking_score">sc</string>
     <string name="header_ranking_sos">sos</string>
     <string name="header_ranking_cp">cp</string>
-    <string name="header_ranking_vp">vp</string>
+    <string name="header_ranking_vp">vp</string>    
 
     <!-- Sign in -->
-    <string name="anonymously_sign_in">anonymously sign in</string>
+    <string name="login_with_facebook">Login with Facebook</string>
+    <string name="login_with_google">Login with Google+</string>
+    <string name="login_with_twitter">Login with Twitter</string>
+    <string name="login_with_password">Login with Password</string>
+    <string name="login_anonymously">Login Anonymously</string>
+    
     <string name="toast_sign_in_anonymously">Sign in anonymously</string>
-    <string name="toast_no_connection">No connection to internet possible. You can't use OpenTournament online data or upload functionality. Offline Tournament organisation is possible</string>
+    <string name="toast_no_connection">No connection to internet possible. You can\'t use OpenTournament online data or upload functionality. Offline Tournament organisation is possible</string>
     <string name="toast_sign_out_no_connection">you cant sign out when no internet</string>
      <string name="delete_tournament">Delete Tournament</string>
     <string name="dialof_confirm_draw">Sure draw?</string>
@@ -188,5 +193,12 @@
     <string name="not_all_games_fineshed">Not all games are finished. Please insert results before pair next round.</string>
     <string name="at_least_one_game_started">At least one game is finished</string>
     <string name="confirm_drop_tournament_player">Confirm drop player</string>
+    
+    <string name="create_account">create account</string>
+    <string name="hint_email">Email</string>
+    <string name="hint_password">Password</string>
+    <string name="failed">failed</string>
+    <string name="success_create_account">Sucess create account</string>
+    <string name="success_login">sucessfully loged in</string>
 
 </resources>

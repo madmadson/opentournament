@@ -56,7 +56,7 @@ public class TournamentManagementFragment extends Fragment implements Tournament
 
         super.onActivityCreated(savedInstanceState);
 
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.title_tournament_management);
+        ((BaseActivity) getActivity()).getToolbar().setTitle(R.string.title_tournament_management);
     }
 
 

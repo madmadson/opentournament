@@ -1,6 +1,14 @@
 package madson.org.opentournament.tasks;
 
+import android.app.ActionBar;
+
 import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.Looper;
+
+import android.view.View;
+
+import android.widget.ProgressBar;
 
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.service.OngoingTournamentService;
@@ -19,12 +27,21 @@ public class TournamentUploadTask extends AsyncTask<Void, Void, Void> {
 
     private BaseApplication application;
     private Tournament tournament;
+    private ProgressBar progressBar;
 
-    public TournamentUploadTask(BaseApplication application, Tournament tournament) {
+    public TournamentUploadTask(BaseApplication application, Tournament tournament, ProgressBar progressBar) {
 
         this.application = application;
         this.tournament = tournament;
+        this.progressBar = progressBar;
     }
+
+    @Override
+    protected void onPreExecute() {
+
+        progressBar.setVisibility(View.VISIBLE);
+    }
+
 
     @Override
     protected Void doInBackground(Void... params) {
@@ -45,5 +62,7 @@ public class TournamentUploadTask extends AsyncTask<Void, Void, Void> {
 
     @Override
     protected void onPostExecute(Void aVoid) {
+
+        progressBar.setVisibility(View.GONE);
     }
 }

@@ -5,14 +5,14 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:lib="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="?attr/actionBarSize"
+    android:layout_height="?android:attr/actionBarSize"
     lib:theme="@style/AppThemeDark"
     lib:popupTheme="@style/AppThemeLight">
 
     <ProgressBar
         android:id="@+id/toolbar_progress_bar"
-        android:layout_width="?attr/actionBarSize"
-        android:layout_height="?attr/actionBarSize"
+        android:layout_width="?android:attr/actionBarSize"
+        android:layout_height="?android:attr/actionBarSize"
         android:layout_gravity="right"
         android:layout_marginRight="@dimen/main_tick"
         android:indeterminate="true"

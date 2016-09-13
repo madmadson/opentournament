@@ -12,12 +12,14 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import madson.org.opentournament.R;
@@ -67,7 +69,7 @@ public class GameListFragment extends Fragment implements TournamentEventListene
             round = bundle.getInt(BUNDLE_ROUND);
         }
 
-        View view = inflater.inflate(R.layout.fragment_game_list, container, false);
+        final View view = inflater.inflate(R.layout.fragment_game_list, container, false);
 
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.game_list_recycler_view);
         recyclerView.setHasFixedSize(true);
@@ -126,20 +128,29 @@ public class GameListFragment extends Fragment implements TournamentEventListene
                 @Override
                 public void onClick(View v) {
 
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                    builder.setTitle(R.string.confirm_upload_tournament)
-                    .setView(R.layout.dialog_upload_games)
-                    .setPositiveButton(R.string.dialog_save, new DialogInterface.OnClickListener() {
+                    if (((BaseActivity) getActivity()).isConnected()) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                        builder.setTitle(R.string.confirm_upload_tournament)
+                        .setView(R.layout.dialog_upload_games)
+                        .setPositiveButton(R.string.dialog_save, new DialogInterface.OnClickListener() {
 
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
 
-                                    new TournamentUploadTask((BaseApplication) getActivity().getApplication(),
-                                        tournament).execute();
-                                }
-                            })
-                    .setNegativeButton(R.string.dialog_cancel, null)
-                    .show();
+                                        Toolbar toolbar = ((BaseActivity) getActivity()).getToolbar();
+                                        ProgressBar progressBar = (ProgressBar) toolbar.findViewById(
+                                                R.id.toolbar_progress_bar);
+
+                                        new TournamentUploadTask((BaseApplication) getActivity().getApplication(),
+                                            tournament, progressBar).execute();
+                                    }
+                                })
+                        .setNegativeButton(R.string.dialog_cancel, null)
+                        .show();
+                    } else {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                        builder.setTitle(R.string.offline_text).setPositiveButton(R.string.dialog_confirm, null).show();
+                    }
                 }
             });
 

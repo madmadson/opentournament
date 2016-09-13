@@ -48,6 +48,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 
 import com.google.firebase.auth.AuthCredential;
@@ -202,17 +203,24 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
                     startActivity(new Intent(context, MainActivity.class));
                 } else {
                     Log.e(TAG, "signInAnonymously", task.getException());
-                    Toast.makeText(SignInActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
                 }
             }
         };
-        authResultTask.addOnCompleteListener(this, signInAnonymously);
 
-        if (mFirebaseAuth.getCurrentUser() == null) {
-            Log.i(this.getClass().getName(), "no connection possible to firebase");
-            Toast.makeText(SignInActivity.this, R.string.toast_no_connection, Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(context, MainActivity.class));
-        }
+        Task<AuthResult> authResultTask1 = authResultTask.addOnCompleteListener(this, signInAnonymously);
+
+        authResultTask1.addOnFailureListener(new OnFailureListener() {
+
+                @Override
+                public void onFailure(@NonNull Exception e) {
+
+                    if (mFirebaseAuth.getCurrentUser() == null) {
+                        Log.i(this.getClass().getName(), "no connection possible to firebase");
+                        Toast.makeText(SignInActivity.this, R.string.toast_no_connection, Toast.LENGTH_LONG).show();
+                        startActivity(new Intent(context, MainActivity.class));
+                    }
+                }
+            });
     }
 
 

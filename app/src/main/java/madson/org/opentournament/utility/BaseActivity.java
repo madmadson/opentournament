@@ -219,15 +219,19 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
             return true;
         } else if (id == R.id.toolbar_menu_sign_out) {
-            if (isConnected() || mFirebaseAuth != null) {
+            if (isConnected() && mFirebaseAuth != null) {
                 mFirebaseAuth.signOut();
                 LoginManager.getInstance().logOut();
 
                 Auth.GoogleSignInApi.signOut(mGoogleApiClient);
                 mUsername = ANONYMOUS_USER;
                 startActivity(new Intent(this, SignInActivity.class));
-            } else {
-                Log.i(this.getClass().getName(), "wign out when no internet");
+            } else if (isConnected() && mFirebaseAuth == null) {
+                startActivity(new Intent(this, SignInActivity.class));
+            }
+
+            if (!isConnected()) {
+                Log.i(this.getClass().getName(), "sign out when no internet");
                 Toast.makeText(BaseActivity.this, R.string.toast_sign_out_no_connection, Toast.LENGTH_SHORT).show();
             }
         } else if (id == R.id.toolbar_menu_about) {

@@ -90,14 +90,15 @@ public class ConfirmPairRoundAgainDialog extends DialogFragment {
         pairingOptions = ((BaseApplication) getActivity().getApplication()).getPairingOptionsForTournament(tournament);
 
         for (final PairingOption option : pairingOptions.values()) {
-            TextView textView = new TextView(getActivity());
+            View pairingOption = inflater.inflate(R.layout.view_pairing_option, null);
+
+            TextView pairingOptionText = (TextView) pairingOption.findViewById(R.id.view_pairing_text);
 
             String pairingOptionName = option.getPairingOptionName();
-            textView.setText(getStringResourceByName(pairingOptionName));
-            textView.setLayoutParams(params);
-            container.addView(textView);
+            pairingOptionText.setText(getStringResourceByName(pairingOptionName));
 
-            final ToggleButton toggleButton = new ToggleButton(getActivity());
+            final ToggleButton toggleButton = (ToggleButton) pairingOption.findViewById(
+                    R.id.view_pairing_toggle_button);
             toggleButton.setOnClickListener(new View.OnClickListener() {
 
                     @Override
@@ -112,8 +113,8 @@ public class ConfirmPairRoundAgainDialog extends DialogFragment {
                 });
 
             toggleButton.setChecked(option.isDefaultPairing());
-            toggleButton.setLayoutParams(params);
-            container.addView(toggleButton);
+
+            container.addView(pairingOption);
         }
 
         String title = getString(R.string.confirm_pair_round_again_title, round_for_pairing);
@@ -155,6 +156,7 @@ public class ConfirmPairRoundAgainDialog extends DialogFragment {
                 @Override
                 public void onClick(View v) {
 
+                    // TODO: async task
                     Runnable runnable = new Runnable() {
 
                         @Override

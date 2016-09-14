@@ -1,5 +1,7 @@
 package madson.org.opentournament.organize;
 
+import android.content.Context;
+
 import android.os.Bundle;
 
 import android.support.annotation.Nullable;
@@ -44,11 +46,19 @@ public class TournamentRoundManagementFragment extends Fragment implements GameL
 
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onAttach(Context context) {
 
-        super.onCreate(savedInstanceState);
-
+        super.onAttach(context);
         ((BaseActivity) getActivity()).getBaseApplication().registerTournamentEventListener(this);
+    }
+
+
+    @Override
+    public void onDetach() {
+
+        super.onDetach();
+
+        ((BaseActivity) getActivity()).getBaseApplication().unregisterTournamentEventListener(this);
     }
 
 
@@ -130,11 +140,13 @@ public class TournamentRoundManagementFragment extends Fragment implements GameL
     @Override
     public void pairRoundAgain(int roundPairedAgainFor) {
 
-        FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
+        if (roundPairedAgainFor == round) {
+            FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
 
-        showRound(roundPairedAgainFor, fragmentTransaction);
+            showRound(roundPairedAgainFor, fragmentTransaction);
 
-        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-        fragmentTransaction.commit();
+            fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+            fragmentTransaction.commit();
+        }
     }
 }

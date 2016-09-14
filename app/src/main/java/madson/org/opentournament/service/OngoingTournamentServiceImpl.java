@@ -157,7 +157,7 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
                 && pairingOptions.get(MapOfPairingConfig.PLAYER_WITH_SAME_TEAM_NOT_PLAY_AGAINST_EACH_OTHER)
                     .isActive();
 
-            if (!pairingOptions.isEmpty()) {
+            if (pairingOptionsPresent(pairingOptions)) {
                 // search for first player player one has not played against
                 for (TournamentRanking secondPlayer : rankings) {
                     if (playerDontPlayTwiceAgainstEachOther && playerWithSameTeamDontPlayAgainstEachOther) {
@@ -223,6 +223,18 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
         insertGames(games);
 
         return true;
+    }
+
+
+    private boolean pairingOptionsPresent(Map<String, PairingOption> pairingOptions) {
+
+        for (PairingOption pairingOption : pairingOptions.values()) {
+            if (pairingOption.isActive()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
 

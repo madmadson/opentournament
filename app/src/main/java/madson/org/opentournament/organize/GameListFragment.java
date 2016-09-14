@@ -1,5 +1,6 @@
 package madson.org.opentournament.organize;
 
+import android.content.Context;
 import android.content.DialogInterface;
 
 import android.os.Bundle;
@@ -48,11 +49,18 @@ public class GameListFragment extends Fragment implements TournamentEventListene
     private Button uploadGamesButton;
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onAttach(Context context) {
 
+        super.onAttach(context);
         ((BaseActivity) getActivity()).getBaseApplication().registerTournamentEventListener(this);
+    }
 
-        super.onCreate(savedInstanceState);
+
+    @Override
+    public void onDetach() {
+
+        super.onDetach();
+        ((BaseActivity) getActivity()).getBaseApplication().unregisterTournamentEventListener(this);
     }
 
 

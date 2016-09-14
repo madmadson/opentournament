@@ -194,18 +194,22 @@ public abstract class BaseApplication extends Application {
      */
     public void registerTournamentEventListener(TournamentEventListener listener) {
 
-        tournamentEventListeners.add(listener);
+        if (!tournamentEventListeners.contains(listener)) {
+            tournamentEventListeners.add(listener);
+        }
     }
 
 
     /**
-     * Unregister the given listener from notifications.
+     * Registers a listener .
      *
      * @param  listener
      */
-    public void unregisterOrderChangeListener(TournamentEventListener listener) {
+    public void unregisterTournamentEventListener(TournamentEventListener listener) {
 
-        tournamentEventListeners.remove(listener);
+        if (tournamentEventListeners.contains(listener)) {
+            tournamentEventListeners.remove(listener);
+        }
     }
 
 

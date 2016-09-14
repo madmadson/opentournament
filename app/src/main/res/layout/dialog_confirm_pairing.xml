@@ -16,6 +16,17 @@
         android:padding="@dimen/main_tick"
         android:textStyle="bold"/>
 
+    <TextView
+        android:id="@+id/confirm_dialog_notice"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="@string/info_more_rounds_than_expected"
+        android:layout_centerHorizontal="true"
+        android:padding="@dimen/main_tick"
+        android:textColor="@color/colorWarning"
+        android:textSize="@dimen/library_text_large"
+        android:textStyle="bold|italic"/>
+
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/huge_line_tick"

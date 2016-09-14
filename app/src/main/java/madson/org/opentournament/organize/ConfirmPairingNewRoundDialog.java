@@ -9,9 +9,12 @@ import android.os.Bundle;
 
 import android.support.annotation.Nullable;
 
+import android.support.design.widget.Snackbar;
+
 import android.support.v4.app.DialogFragment;
 
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.Toolbar;
 
 import android.util.Log;
 
@@ -20,6 +23,7 @@ import android.view.View;
 
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
@@ -30,6 +34,8 @@ import madson.org.opentournament.domain.TournamentRanking;
 import madson.org.opentournament.service.OngoingTournamentService;
 import madson.org.opentournament.service.RankingService;
 import madson.org.opentournament.service.TournamentService;
+import madson.org.opentournament.tasks.PairNewRoundTask;
+import madson.org.opentournament.utility.BaseActivity;
 import madson.org.opentournament.utility.BaseApplication;
 
 import java.util.Map;
@@ -162,50 +168,18 @@ public class ConfirmPairingNewRoundDialog extends DialogFragment {
                 @Override
                 public void onClick(View v) {
 
-                    Runnable runnable = new Runnable() {
+                    BaseApplication application = (BaseApplication) getActivity().getApplication();
+                    Toolbar toolbar = ((BaseActivity) getActivity()).getToolbar();
 
-                        @Override
-                        public void run() {
+                    Snackbar snackbar = Snackbar.make(((BaseActivity) getActivity()).getCoordinatorLayout(),
+                            R.string.empty, Snackbar.LENGTH_LONG);
 
-                            Log.i(this.getClass().getName(), "confirmed pairing for round " + round_for_pairing);
+                    ProgressBar progressBar = (ProgressBar) toolbar.findViewById(R.id.toolbar_progress_bar);
+                    TournamentOrganizeActivity activity = (TournamentOrganizeActivity) getActivity();
+                    new PairNewRoundTask(activity, application, tournament, snackbar, progressBar, false,
+                        pairingOptions).execute();
 
-                            TournamentOrganizeActivity activity = (TournamentOrganizeActivity) getActivity();
-
-                            OngoingTournamentService ongoingTournamentService =
-                                ((BaseApplication) getActivity().getApplication()).getOngoingTournamentService();
-
-                            RankingService rankingService = ((BaseApplication) getActivity().getApplication())
-                                .getRankingService();
-
-                            TournamentService tournamentService = ((BaseApplication) getActivity().getApplication())
-                                .getTournamentService();
-
-                            // first create ranking for complete games
-                            Map<String, TournamentRanking> rankingForRound = rankingService.createRankingForRound(
-                                    tournament, round_for_pairing);
-
-                            // now we can create pairings for new round
-                            boolean success = ongoingTournamentService.createGamesForRound(tournament,
-                                    round_for_pairing, rankingForRound, pairingOptions);
-
-                            if (!success) {
-                                Log.e(this.getClass().getName(),
-                                    "pairing failed. Delete pairing, games for round and say something to user :) ");
-                            }
-
-                            // last thing update tournament
-                            Tournament updatedTournament = tournamentService.updateActualRound(tournament,
-                                    round_for_pairing);
-
-                            activity.setTournamentToTabView(updatedTournament);
-
-                            // set visibility of start button
-                            activity.getBaseApplication().notifyNextRoundPaired(round_for_pairing);
-
-                            dialog.dismiss();
-                        }
-                    };
-                    runnable.run();
+                    dialog.dismiss();
                 }
             });
     }

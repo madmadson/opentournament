@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.Menu;
 
 import madson.org.opentournament.R;
+import madson.org.opentournament.domain.Game;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.organize.setup.TournamentPlayerListFragment;
 import madson.org.opentournament.organize.setup.TournamentSetupFragment;
@@ -28,7 +29,7 @@ import madson.org.opentournament.utility.BaseActivity;
 /**
  * Activity for tournament organiser.
  */
-public class TournamentOrganizeActivity extends BaseActivity {
+public class TournamentOrganizeActivity extends BaseActivity implements TournamentEventListener {
 
     public static final String EXTRA_TOURNAMENT = "tournament";
 
@@ -43,6 +44,15 @@ public class TournamentOrganizeActivity extends BaseActivity {
     public boolean useTabLayout() {
 
         return true;
+    }
+
+
+    @Override
+    protected void onDestroy() {
+
+        super.onDestroy();
+
+        getBaseApplication().unregisterTournamentEventListener(this);
     }
 
 
@@ -74,6 +84,8 @@ public class TournamentOrganizeActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+
+        getBaseApplication().registerTournamentEventListener(this);
 
         Intent intent = getIntent();
 
@@ -122,27 +134,27 @@ public class TournamentOrganizeActivity extends BaseActivity {
     }
 
 
-    /**
-     * handles lifecycle of tournament.
-     */
-    public void setTournamentToTabView(Tournament actualTournament) {
+    @Override
+    public void startRound(int roundToStart, Tournament tournament) {
 
         Log.i(this.getClass().getName(), "set actual tournament");
 
-        mSectionsPagerAdapter.setTournamentToOrganize(actualTournament);
-        mViewPager.setCurrentItem(actualTournament.getActualRound());
+        mSectionsPagerAdapter.setTournamentToOrganize(tournament);
+        mViewPager.setCurrentItem(tournament.getActualRound());
     }
 
 
-    public void setRoundTabToRoundNumber(int roundNumber) {
+    @Override
+    public void pairRoundAgain(int round_for_pairing) {
 
-        mViewPager.setCurrentItem(roundNumber);
+        // nothing
     }
 
 
-    public TournamentSetupFragment getTournamentSetupFragment() {
+    @Override
+    public void pairingChanged(Game game1, Game game2) {
 
-        return tournamentSetupFragment;
+        // nothing
     }
 
     private class SectionsPagerAdapter extends FragmentPagerAdapter {

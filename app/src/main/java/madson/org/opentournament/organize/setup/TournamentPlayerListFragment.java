@@ -304,7 +304,7 @@ public class TournamentPlayerListFragment extends Fragment implements Tournament
 
 
     @Override
-    public void startRound(int roundToStart) {
+    public void startRound(int roundToStart, Tournament tournament) {
 
         if (roundToStart == 1) {
             startButton.setVisibility(View.GONE);

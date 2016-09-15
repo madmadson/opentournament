@@ -3,6 +3,7 @@ package madson.org.opentournament.organize;
 import android.content.Context;
 import android.content.DialogInterface;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import android.support.annotation.Nullable;
@@ -27,6 +28,7 @@ import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Game;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.service.OngoingTournamentService;
+import madson.org.opentournament.tasks.LoadGameListTask;
 import madson.org.opentournament.tasks.TournamentUploadTask;
 import madson.org.opentournament.utility.BaseActivity;
 import madson.org.opentournament.utility.BaseApplication;
@@ -91,19 +93,8 @@ public class GameListFragment extends Fragment implements TournamentEventListene
         gameListAdapter = new GameListAdapter((BaseActivity) getActivity());
         recyclerView.setAdapter(gameListAdapter);
 
-        Runnable runnable = new Runnable() {
-
-            @Override
-            public void run() {
-
-                OngoingTournamentService ongoingTournamentService = ((BaseApplication) getActivity().getApplication())
-                    .getOngoingTournamentService();
-
-                List<Game> gamesForRound = ongoingTournamentService.getGamesForRound(tournament, round);
-                gameListAdapter.setGames(gamesForRound);
-            }
-        };
-        runnable.run();
+        new LoadGameListTask(((BaseActivity) getActivity()).getBaseApplication(), tournament, round, gameListAdapter)
+            .execute();
 
         pairRoundAgainButton = (Button) view.findViewById(R.id.button_pair_again);
         pairRoundAgainButton.setOnClickListener(new View.OnClickListener() {
@@ -198,12 +189,10 @@ public class GameListFragment extends Fragment implements TournamentEventListene
 
 
     @Override
-    public void startRound(int roundToStart) {
+    public void startRound(int roundToStart, Tournament tournament) {
 
-        if (roundToStart == round + 1) {
-            nextRoundButton.setVisibility(View.GONE);
-            pairRoundAgainButton.setVisibility(View.GONE);
-        }
+        nextRoundButton.setVisibility(View.GONE);
+        pairRoundAgainButton.setVisibility(View.GONE);
     }
 
 

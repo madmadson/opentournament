@@ -45,6 +45,7 @@ public class PlayerServiceImpl implements PlayerService {
         SQLiteDatabase writableDatabase = openTournamentDBHelper.getWritableDatabase();
 
         writableDatabase.delete(PlayerTable.TABLE_PLAYER, null, null);
+        writableDatabase.close();
     }
 
 
@@ -146,10 +147,10 @@ public class PlayerServiceImpl implements PlayerService {
             filterString += playerId;
         }
 
-        SQLiteDatabase readableDatabase = openTournamentDBHelper.getReadableDatabase();
-
         if (listOfPlayers.size() > 0) {
             filterString = filterString.substring(0, filterString.length() - 1);
+
+            SQLiteDatabase readableDatabase = openTournamentDBHelper.getReadableDatabase();
 
             Cursor cursor = readableDatabase.query(PlayerTable.TABLE_PLAYER, allColumns,
                     "_id  NOT IN (" + filterString + ")", null, null, null, null);

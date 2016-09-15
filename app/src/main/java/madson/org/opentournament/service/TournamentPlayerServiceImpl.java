@@ -245,6 +245,8 @@ public class TournamentPlayerServiceImpl implements TournamentPlayerService {
         contentValues.put(TournamentPlayerTable.COLUMN_DUMMY, false);
 
         db.insert(TournamentPlayerTable.TABLE_TOURNAMENT_PLAYER, null, contentValues);
+
+        db.close();
     }
 
 
@@ -252,6 +254,8 @@ public class TournamentPlayerServiceImpl implements TournamentPlayerService {
 
         SQLiteDatabase db = openTournamentDBHelper.getWritableDatabase();
         db.delete(TournamentPlayerTable.TABLE_TOURNAMENT_PLAYER, null, null);
+
+        db.close();
     }
 
 

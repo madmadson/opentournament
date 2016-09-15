@@ -46,6 +46,9 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHo
     private final Drawable enterShape;
     private final Drawable normalShape;
     private final Drawable startShape;
+    private final Drawable winnerShape;
+    private final Drawable looserShape;
+
     private List<Game> gamesForRound;
     private BaseActivity activity;
 
@@ -57,6 +60,9 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHo
         enterShape = activity.getResources().getDrawable(R.drawable.shape_droptarget_entered);
         normalShape = activity.getResources().getDrawable(R.drawable.shape_normal);
         startShape = activity.getResources().getDrawable(R.drawable.shape_droptarget_started);
+
+        winnerShape = activity.getResources().getDrawable(R.drawable.shape_winner);
+        looserShape = activity.getResources().getDrawable(R.drawable.shape_looser);
     }
 
     public void updateGame(Game game) {
@@ -95,13 +101,9 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHo
 
         if (game.isFinished()) {
             holder.getPlayerOneCardView()
-                .setCardBackgroundColor(game.getPlayer_one_score() == 1
-                        ? activity.getResources().getColor(R.color.colorWin)
-                        : activity.getResources().getColor(R.color.colorLoose));
+                .setBackgroundDrawable(game.getPlayer_one_score() == 1 ? winnerShape : looserShape);
             holder.getPlayerTwoCardView()
-                .setCardBackgroundColor(game.getPlayer_two_score() == 1
-                        ? activity.getResources().getColor(R.color.colorWin)
-                        : activity.getResources().getColor(R.color.colorLoose));
+                .setBackgroundDrawable(game.getPlayer_two_score() == 1 ? winnerShape : looserShape);
         }
 
         TournamentPlayer player1 = game.getPlayer1();
@@ -173,26 +175,6 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHo
         }
 
         return false;
-    }
-
-
-    private TournamentPlayer getOtherPlayerForGame(Game game, String playerId) {
-
-        if (game.getPlayer1().getRealPlayerId().equals(playerId)) {
-            return game.getPlayer2();
-        } else {
-            return game.getPlayer1();
-        }
-    }
-
-
-    private TournamentPlayer getPlayerForGameAndId(Game game, String playerId) {
-
-        if (game.getPlayer1().getRealPlayerId().equals(playerId)) {
-            return game.getPlayer1();
-        } else {
-            return game.getPlayer2();
-        }
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

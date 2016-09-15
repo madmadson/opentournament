@@ -1,7 +1,5 @@
 package madson.org.opentournament.tasks;
 
-import android.content.Context;
-
 import android.graphics.Color;
 
 import android.os.AsyncTask;
@@ -20,9 +18,7 @@ import madson.org.opentournament.domain.TournamentRanking;
 import madson.org.opentournament.organize.TournamentOrganizeActivity;
 import madson.org.opentournament.service.OngoingTournamentService;
 import madson.org.opentournament.service.RankingService;
-import madson.org.opentournament.service.TournamentPlayerService;
 import madson.org.opentournament.service.TournamentService;
-import madson.org.opentournament.utility.BaseActivity;
 import madson.org.opentournament.utility.BaseApplication;
 
 import java.util.Map;
@@ -42,6 +38,7 @@ public class PairNewRoundTask extends AsyncTask<Void, Void, Boolean> {
     private ProgressBar progressBar;
     private boolean pairAgain;
     private Map<String, PairingOption> pairingOptions;
+    private Tournament updatedTournament;
 
     public PairNewRoundTask(TournamentOrganizeActivity activity, BaseApplication application, Tournament tournament,
         Snackbar snackbar, ProgressBar progressBar, boolean pairAgain, Map<String, PairingOption> pairingOptions) {
@@ -69,8 +66,7 @@ public class PairNewRoundTask extends AsyncTask<Void, Void, Boolean> {
         RankingService rankingService = application.getRankingService();
         OngoingTournamentService ongoingTournamentService = application.getOngoingTournamentService();
 
-        boolean success = false;
-        ;
+        boolean success;
 
         if (pairAgain) {
             rankingService.deleteRankingForRound(tournament, tournament.getActualRound());
@@ -88,6 +84,10 @@ public class PairNewRoundTask extends AsyncTask<Void, Void, Boolean> {
 
             success = ongoingTournamentService.createGamesForRound(tournament, next_round, rankingForRound,
                     pairingOptions);
+
+            TournamentService tournamentService = application.getTournamentService();
+
+            updatedTournament = tournamentService.updateActualRound(tournament, tournament.getActualRound() + 1);
         }
 
         return success;
@@ -102,13 +102,7 @@ public class PairNewRoundTask extends AsyncTask<Void, Void, Boolean> {
         if (pairAgain) {
             application.notifyPairAgain(tournament.getActualRound());
         } else {
-            application.notifyNextRoundPaired(tournament.getActualRound() + 1);
-
-            TournamentService tournamentService = application.getTournamentService();
-
-            Tournament updatedTournament = tournamentService.updateActualRound(tournament,
-                    tournament.getActualRound() + 1);
-            activity.setTournamentToTabView(updatedTournament);
+            application.notifyNextRoundPaired(tournament.getActualRound() + 1, updatedTournament);
         }
 
         if (successful) {

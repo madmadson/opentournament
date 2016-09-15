@@ -131,7 +131,7 @@ public class TournamentRoundManagementFragment extends Fragment implements GameL
 
 
     @Override
-    public void startRound(int roundToStart) {
+    public void startRound(int roundToStart, Tournament tournament) {
 
         // nothing
     }

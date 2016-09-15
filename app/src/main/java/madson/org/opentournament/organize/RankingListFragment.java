@@ -22,7 +22,7 @@ import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.domain.TournamentRanking;
-import madson.org.opentournament.service.RankingService;
+import madson.org.opentournament.tasks.LoadRankingListTask;
 import madson.org.opentournament.utility.BaseApplication;
 
 import java.util.ArrayList;
@@ -79,26 +79,13 @@ public class RankingListFragment extends Fragment {
         rankingListAdapter = new RankingListAdapter(getActivity());
         recyclerView.setAdapter(rankingListAdapter);
 
-        Runnable runnable = new Runnable() {
-
-            @Override
-            public void run() {
-
-                RankingService rankingService = ((BaseApplication) getActivity().getApplication()).getRankingService();
-
-                List<TournamentRanking> rankingsForRound = rankingService.getTournamentRankingForRound(tournament,
-                        round);
-
-                rankingListAdapter.setRankings(rankingsForRound);
-            }
-        };
-
-        runnable.run();
+        new LoadRankingListTask((BaseApplication) getActivity().getApplication(), tournament, round, rankingListAdapter)
+            .execute();
 
         return view;
     }
 
-    private class RankingListAdapter extends RecyclerView.Adapter<RankingListAdapter.ViewHolder> {
+    public class RankingListAdapter extends RecyclerView.Adapter<RankingListAdapter.ViewHolder> {
 
         private List<TournamentRanking> rankingList;
         private Context context;

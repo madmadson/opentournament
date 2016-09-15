@@ -100,7 +100,9 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
 
                 allPlayerMapForTournament.put(game.getRealPlayerOneId(), playerOne);
                 allPlayerMapForTournament.put(game.getRealPlayerTwoId(), playerTwo);
-            } else {
+            }
+
+            if (game.getTournament_round() == round) {
                 game.setPlayer1(allPlayerMapForTournament.get(game.getRealPlayerOneId()));
                 game.setPlayer2(allPlayerMapForTournament.get(game.getRealPlayerTwoId()));
 
@@ -324,6 +326,8 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
 
         db.update(GameTable.TABLE_TOURNAMENT_GAME, contentValues, GameTable.COLUMN_ID + " = ? ",
             new String[] { String.valueOf(game.get_id()) });
+
+        db.close();
 
         return game;
     }

@@ -2,6 +2,7 @@ package madson.org.opentournament.organize;
 
 import madson.org.opentournament.domain.Game;
 import madson.org.opentournament.domain.Player;
+import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
 
 
@@ -12,7 +13,7 @@ import madson.org.opentournament.domain.TournamentPlayer;
  */
 public interface TournamentEventListener {
 
-    void startRound(int roundToStart);
+    void startRound(int roundToStart, Tournament tournament);
 
 
     void pairRoundAgain(int round_for_pairing);

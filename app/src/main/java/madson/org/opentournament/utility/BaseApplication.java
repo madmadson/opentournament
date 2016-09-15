@@ -214,14 +214,14 @@ public abstract class BaseApplication extends Application {
     }
 
 
-    public void notifyNextRoundPaired(int roundToStart) {
+    public void notifyNextRoundPaired(int roundToStart, Tournament updatedTournament) {
 
         // iterate over a copy of the listeners to enable the listeners to unregister themselves on notifications
         Set<TournamentEventListener> listeners = new HashSet<>(tournamentEventListeners);
         Iterator<TournamentEventListener> iterator = listeners.iterator();
 
         while (iterator.hasNext()) {
-            iterator.next().startRound(roundToStart);
+            iterator.next().startRound(roundToStart, updatedTournament);
         }
     }
 

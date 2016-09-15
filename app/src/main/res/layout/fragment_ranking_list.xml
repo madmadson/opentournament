@@ -1,21 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:paddingTop="@dimen/main_tick">
 
-    <TextView
-        android:id="@+id/heading_ranking_for_round"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:textAppearance="@android:style/TextAppearance.Large" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/heading_ranking_for_round"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textAppearance="@android:style/TextAppearance.Large" />
+
+        <Button
+            android:id="@+id/button_end_tournament"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/main_tick"
+            android:background="@color/colorPositive"
+            android:drawableLeft="@drawable/ic_done_all_black_24dp"
+            android:drawablePadding="@dimen/halve_tick"
+            android:paddingLeft="@dimen/halve_tick"
+            android:paddingRight="@dimen/halve_tick"
+            android:text="@string/end_tournament"
+            android:textColor="@color/colorBlack"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
 
     <FrameLayout
+        android:id="@+id/row_ranking_header_container"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/row_ranking_header_container"/>
+        android:layout_height="wrap_content" />
 
     <View
         android:layout_width="match_parent"
@@ -28,7 +49,7 @@
         android:id="@+id/ranking_list_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:scrollbars="vertical"
-        android:layout_below="@id/heading_ranking_for_round"/>
+        android:layout_below="@id/heading_ranking_for_round"
+        android:scrollbars="vertical" />
 
 </LinearLayout>

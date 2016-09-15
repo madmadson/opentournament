@@ -94,4 +94,10 @@ public interface TournamentService {
 
 
     void decreaseActualPlayerForTournament(Tournament tournament);
+
+
+    /**
+     * @param  tournament
+     */
+    void endTournament(Tournament tournament);
 }

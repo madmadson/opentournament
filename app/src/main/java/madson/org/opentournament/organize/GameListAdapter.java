@@ -1,6 +1,7 @@
 package madson.org.opentournament.organize;
 
 import android.content.ClipData;
+import android.content.DialogInterface;
 
 import android.graphics.drawable.Drawable;
 
@@ -10,6 +11,7 @@ import android.support.design.widget.Snackbar;
 
 import android.support.v4.app.FragmentManager;
 
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -375,8 +377,8 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHo
 
                 case DragEvent.ACTION_DROP:
 
-                    Game draggedGame = (Game) event.getLocalState();
-                    CharSequence playerOneOrTwo = event.getClipData().getItemAt(0).getText();
+                    final Game draggedGame = (Game) event.getLocalState();
+                    final CharSequence playerOneOrTwo = event.getClipData().getItemAt(0).getText();
 
                     TournamentPlayer draggedPlayer = null;
                     TournamentPlayer draggedPlayerOpponent = null;
@@ -397,6 +399,9 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHo
                         droppedPlayer = droppedGame.getPlayer2();
                         droppedPlayerOpponent = droppedGame.getPlayer1();
                     }
+
+                    final TournamentPlayer draggedPlayerFinal = draggedPlayer;
+                    final TournamentPlayer droppedPlayerFinal = droppedPlayer;
 
                     if (draggedPlayer.getListOfOpponentsIds().contains(droppedPlayerOpponent.getRealPlayerId())) {
                         String playerOne = activity.getResources()
@@ -425,28 +430,44 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHo
                                     .getString(R.string.player_already_played_each_other, playerOne, playerTwo),
                                 Snackbar.LENGTH_LONG);
                         snackbar.getView().setBackgroundColor(activity.getResources().getColor(R.color.colorNeutral));
+
                         snackbar.show();
                     } else {
-                        if (playerOneOrTwo.equals("1")) {
-                            draggedGame.setPlayer1(droppedPlayer);
-                        } else {
-                            draggedGame.setPlayer2(droppedPlayer);
-                        }
+                        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+                        builder.setTitle(R.string.confirm_swap_player)
+                            .setPositiveButton(R.string.dialog_confirm, new DialogInterface.OnClickListener() {
 
-                        if (droppedPlayerIndex == 1) {
-                            droppedGame.setPlayer1(draggedPlayer);
-                        } else {
-                            droppedGame.setPlayer2(draggedPlayer);
-                        }
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
 
-                        Toolbar toolbar = activity.getToolbar();
-                        ProgressBar progressBar = (ProgressBar) toolbar.findViewById(R.id.toolbar_progress_bar);
-                        Snackbar snackbar = Snackbar.make((activity).getCoordinatorLayout(),
-                                activity.getResources().getString(R.string.player_swapped_successfully),
-                                Snackbar.LENGTH_LONG);
-                        snackbar.getView().setBackgroundColor(activity.getResources().getColor(R.color.colorPositive));
-                        new SwapPlayersTask((BaseApplication) activity.getApplication(), draggedGame, droppedGame,
-                            progressBar, snackbar).execute();
+                                            if (playerOneOrTwo.equals("1")) {
+                                                draggedGame.setPlayer1(droppedPlayerFinal);
+                                            } else {
+                                                draggedGame.setPlayer2(droppedPlayerFinal);
+                                            }
+
+                                            if (droppedPlayerIndex == 1) {
+                                                droppedGame.setPlayer1(draggedPlayerFinal);
+                                            } else {
+                                                droppedGame.setPlayer2(draggedPlayerFinal);
+                                            }
+
+                                            Toolbar toolbar = activity.getToolbar();
+                                            ProgressBar progressBar = (ProgressBar) toolbar.findViewById(
+                                                    R.id.toolbar_progress_bar);
+                                            Snackbar snackbar = Snackbar.make((activity).getCoordinatorLayout(),
+                                                    activity.getResources()
+                                                        .getString(R.string.player_swapped_successfully),
+                                                    Snackbar.LENGTH_LONG);
+                                            snackbar.getView()
+                                            .setBackgroundColor(
+                                                activity.getResources().getColor(R.color.colorPositive));
+                                            new SwapPlayersTask((BaseApplication) activity.getApplication(),
+                                                draggedGame, droppedGame, progressBar, snackbar).execute();
+                                        }
+                                    })
+                            .setNegativeButton(R.string.dialog_cancel, null)
+                            .show();
                     }
 
                     break;

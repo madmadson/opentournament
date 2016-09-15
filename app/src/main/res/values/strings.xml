@@ -212,5 +212,8 @@
     <string name="info_more_rounds_than_expected">You try to pair for more rounds than expected.</string>
     <string name="player_already_played_each_other">%1$s already played against %2$s</string>
     <string name="player_swapped_successfully">Player swapped successful</string>
+    <string name="end_tournament">end Tournament</string>
+    <string name="confirm_swap_player">confirm swap player</string>
+    <string name="tournament_ended_successful">tournament ended successfully</string>
 
 </resources>

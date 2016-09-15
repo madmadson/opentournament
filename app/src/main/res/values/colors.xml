@@ -22,4 +22,5 @@
     <color name="colorAction">#1d75b8</color>
     
     <color name="colorLightGrey">#E0E0E0</color>
+    <color name="colorBlack">#000000</color>
 </resources>

@@ -5,8 +5,6 @@ import android.os.Parcelable;
 
 import com.google.firebase.database.Exclude;
 
-import org.joda.time.DateTime;
-
 import java.util.Date;
 
 
@@ -44,6 +42,7 @@ public class Tournament implements Parcelable {
     private String creatorEmail;
     private TournamentTyp tournamentTyp;
     private GameOrSportTyp gameOrSportTyp;
+    private String state;
 
     // empty constructor
     public Tournament() {
@@ -72,6 +71,7 @@ public class Tournament implements Parcelable {
         this.creatorEmail = tournament.getCreatorEmail();
         this.tournamentTyp = TournamentTyp.valueOf(tournament.getTournamentTyp());
         this.gameOrSportTyp = GameOrSportTyp.valueOf(tournament.getGameOrSportTyp());
+        this.state = tournament.getState();
     }
 
 
@@ -95,6 +95,7 @@ public class Tournament implements Parcelable {
         creatorEmail = in.readString();
         setTournamentTyp(in.readString());
         setGameOrSportTyp(in.readString());
+        state = in.readString();
     }
 
     @Override
@@ -125,6 +126,7 @@ public class Tournament implements Parcelable {
         parcel.writeString(creatorEmail);
         parcel.writeString(getTournamentTyp());
         parcel.writeString(getGameOrSportTyp());
+        parcel.writeString(state);
     }
 
 
@@ -167,6 +169,12 @@ public class Tournament implements Parcelable {
     public String getName() {
 
         return name;
+    }
+
+
+    public String getState() {
+
+        return state;
     }
 
 
@@ -282,7 +290,8 @@ public class Tournament implements Parcelable {
             + ", creatorName='" + creatorName + '\''
             + ", creatorEmail='" + creatorEmail + '\''
             + ", tournamentTyp=" + tournamentTyp
-            + ", gameOrSportTyp=" + gameOrSportTyp + '}';
+            + ", gameOrSportTyp=" + gameOrSportTyp
+            + ", state='" + state + '\'' + '}';
     }
 
 
@@ -323,5 +332,11 @@ public class Tournament implements Parcelable {
         result = 31 * result + (onlineUUID != null ? onlineUUID.hashCode() : 0);
 
         return result;
+    }
+
+
+    public void setState(String state) {
+
+        this.state = state;
     }
 }

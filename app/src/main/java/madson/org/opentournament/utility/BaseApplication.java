@@ -14,6 +14,7 @@ import madson.org.opentournament.R;
 import madson.org.opentournament.about.AppInfo;
 import madson.org.opentournament.about.LibraryItem;
 import madson.org.opentournament.config.MapOfPairingConfig;
+import madson.org.opentournament.domain.Game;
 import madson.org.opentournament.domain.GameOrSportTyp;
 import madson.org.opentournament.domain.PairingOption;
 import madson.org.opentournament.domain.Tournament;
@@ -254,5 +255,16 @@ public abstract class BaseApplication extends Application {
         }
 
         return returnedPairingOptions;
+    }
+
+
+    public void notifyPairingChanged(Game game1, Game game2) {
+
+        Set<TournamentEventListener> listeners = new HashSet<>(tournamentEventListeners);
+        Iterator<TournamentEventListener> iterator = listeners.iterator();
+
+        while (iterator.hasNext()) {
+            iterator.next().pairingChanged(game1, game2);
+        }
     }
 }

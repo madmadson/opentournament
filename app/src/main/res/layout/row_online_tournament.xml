@@ -10,8 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/row_item_height_content"
         android:paddingTop="@dimen/main_tick"
-        android:paddingBottom="@dimen/main_tick"
-        android:background="@drawable/row_item">
+        android:paddingBottom="@dimen/main_tick">
     <TextView
         android:id="@+id/tournament_name" 
         android:layout_width="wrap_content"

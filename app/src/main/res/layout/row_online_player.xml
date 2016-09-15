@@ -4,8 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/row_header_height"
     android:paddingTop="@dimen/main_tick"
-    android:paddingBottom="@dimen/main_tick"
-    android:background="@drawable/row_item">
+    android:paddingBottom="@dimen/main_tick">
 
     <ImageView
         android:id="@+id/online_icon"

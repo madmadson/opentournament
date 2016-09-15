@@ -1,44 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/pairing_dialog_layout"
-    android:orientation="vertical" 
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:descendantFocusability="beforeDescendants"
-    android:focusableInTouchMode="true">
-    
-    <TextView
-        android:id="@+id/confirm_pairing_dialog"
+    android:layout_height="match_parent">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/pairing_dialog_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/info_pairing_options"
-        android:layout_centerHorizontal="true"
-        android:padding="@dimen/main_tick"
-        android:textStyle="bold"/>
-
-    <TextView
-        android:id="@+id/confirm_dialog_notice"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/info_more_rounds_than_expected"
-        android:layout_centerHorizontal="true"
-        android:padding="@dimen/main_tick"
-        android:textColor="@color/colorWarning"
-        android:textSize="@dimen/library_text_large"
-        android:textStyle="bold|italic"/>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/huge_line_tick"
-        android:background="@color/colorPrimaryDark" />
-
-    <LinearLayout
-        android:id="@+id/pairing_options_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/main_tick"
+        android:descendantFocusability="beforeDescendants"
+        android:focusableInTouchMode="true"
         android:orientation="vertical">
-        
-    </LinearLayout>
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/confirm_pairing_dialog"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true"
+            android:padding="@dimen/main_tick"
+            android:text="@string/info_pairing_options"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/confirm_dialog_too_much_rounds"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true"
+            android:padding="@dimen/main_tick"
+            android:text="@string/info_more_rounds_than_expected"
+            android:textColor="@color/colorWarning"
+            android:textSize="@dimen/library_text_large"
+            android:textStyle="bold|italic" 
+            android:visibility="gone"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/huge_line_tick"
+            android:background="@color/colorPrimaryDark" />
+
+        <LinearLayout
+            android:id="@+id/pairing_options_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/main_tick">
+
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

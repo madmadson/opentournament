@@ -5,6 +5,7 @@ import android.os.Parcelable;
 
 import com.google.firebase.database.Exclude;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -50,8 +51,7 @@ public class TournamentPlayer implements Parcelable {
 
     private boolean dummy;
 
-    private List<Long> listOfOpponents;
-    private List<Integer> listOfPlayedPlayingFields;
+    private List<String> opponentsPlayerIds = new ArrayList<>();
 
     public TournamentPlayer() {
     }
@@ -249,6 +249,17 @@ public class TournamentPlayer implements Parcelable {
     }
 
 
+    @Exclude
+    public String getRealPlayerId() {
+
+        if (player_online_uuid != null) {
+            return player_online_uuid;
+        } else {
+            return String.valueOf(player_id);
+        }
+    }
+
+
     @Override
     public boolean equals(Object o) {
 
@@ -329,5 +340,11 @@ public class TournamentPlayer implements Parcelable {
         parcel.writeString(faction);
         parcel.writeString(meta);
         parcel.writeInt(dummy ? 0 : 1);
+    }
+
+
+    public List<String> getListOfOpponentsIds() {
+
+        return opponentsPlayerIds;
     }
 }

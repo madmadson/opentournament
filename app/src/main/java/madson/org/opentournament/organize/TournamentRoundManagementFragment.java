@@ -149,4 +149,11 @@ public class TournamentRoundManagementFragment extends Fragment implements GameL
             fragmentTransaction.commit();
         }
     }
+
+
+    @Override
+    public void pairingChanged(Game game1, Game game2) {
+
+        // nothing
+    }
 }

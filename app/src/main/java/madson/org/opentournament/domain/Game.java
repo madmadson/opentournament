@@ -412,4 +412,26 @@ public class Game implements Parcelable {
             + ", finished=" + finished
             + ", scenario='" + scenario + '\'' + '}';
     }
+
+
+    @Exclude
+    public String getRealPlayerOneId() {
+
+        if (player_one_online_uuid != null) {
+            return player_one_online_uuid;
+        } else {
+            return String.valueOf(player_one_id);
+        }
+    }
+
+
+    @Exclude
+    public String getRealPlayerTwoId() {
+
+        if (player_two_online_uuid != null) {
+            return player_two_online_uuid;
+        } else {
+            return String.valueOf(player_two_id);
+        }
+    }
 }

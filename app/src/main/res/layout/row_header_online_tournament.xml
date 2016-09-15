@@ -4,8 +4,7 @@
     android:id="@+id/rootView"
     android:layout_width="match_parent"
     android:layout_height="@dimen/row_header_height"
-    android:paddingTop="@dimen/main_tick"
-    android:background="@drawable/row_item">
+    android:paddingTop="@dimen/main_tick">
 
     <TextView
         android:id="@+id/header_tournament_name"

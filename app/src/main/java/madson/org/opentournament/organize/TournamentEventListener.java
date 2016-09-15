@@ -1,5 +1,6 @@
 package madson.org.opentournament.organize;
 
+import madson.org.opentournament.domain.Game;
 import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.TournamentPlayer;
 
@@ -15,4 +16,7 @@ public interface TournamentEventListener {
 
 
     void pairRoundAgain(int round_for_pairing);
+
+
+    void pairingChanged(Game game1, Game game2);
 }

@@ -31,6 +31,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import madson.org.opentournament.R;
 import madson.org.opentournament.db.FirebaseReferences;
+import madson.org.opentournament.domain.Game;
 import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
@@ -313,6 +314,13 @@ public class TournamentPlayerListFragment extends Fragment implements Tournament
 
     @Override
     public void pairRoundAgain(int round_for_pairing) {
+
+        // nothing
+    }
+
+
+    @Override
+    public void pairingChanged(Game game1, Game game2) {
 
         // nothing
     }

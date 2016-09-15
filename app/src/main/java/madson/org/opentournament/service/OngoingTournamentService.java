@@ -3,6 +3,7 @@ package madson.org.opentournament.service;
 import madson.org.opentournament.domain.Game;
 import madson.org.opentournament.domain.PairingOption;
 import madson.org.opentournament.domain.Tournament;
+import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.domain.TournamentRanking;
 
 import java.util.List;
@@ -54,7 +55,7 @@ public interface OngoingTournamentService {
      *
      * @param  game
      */
-    void saveGameResult(Game game);
+    Game saveGameResult(Game game);
 
 
     /**
@@ -79,4 +80,13 @@ public interface OngoingTournamentService {
      * @param  uploadedTournament
      */
     void uploadGames(Tournament uploadedTournament);
+
+
+    /**
+     * @param  game1
+     * @param  game2
+     * @param  playerOneId
+     * @param  playerTwoId
+     */
+    void tournamentPlayerSwap(Game game1, Game game2, String playerOneId, String playerTwoId);
 }

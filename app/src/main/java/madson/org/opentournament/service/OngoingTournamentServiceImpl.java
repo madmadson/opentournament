@@ -7,7 +7,7 @@ import android.database.Cursor;
 
 import android.database.sqlite.SQLiteDatabase;
 
-import android.service.notification.NotificationListenerService;
+import android.support.annotation.NonNull;
 
 import android.util.Log;
 
@@ -79,38 +79,41 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
         Map<String, TournamentPlayer> allPlayerMapForTournament = tournamentPlayerService.getAllPlayerMapForTournament(
                 tournament);
 
-        List<Game> games = new ArrayList<>();
+        List<Game> gamesToReturn = new ArrayList<>();
         SQLiteDatabase readableDatabase = openTournamentDBHelper.getReadableDatabase();
 
         Cursor cursor = readableDatabase.query(GameTable.TABLE_TOURNAMENT_GAME, GameTable.ALL_COLS_FOR_TOURNAMENT_GAME,
-                GameTable.COLUMN_TOURNAMENT_ID + "  = ? AND " + GameTable.COLUMN_TOURNAMENT_ROUND + " = ?",
-                new String[] { String.valueOf(tournament.get_id()), String.valueOf(round) }, null, null, null);
+                GameTable.COLUMN_TOURNAMENT_ID + "  = ? ", new String[] { String.valueOf(tournament.get_id()) }, null,
+                null, null);
 
         cursor.moveToFirst();
 
         while (!cursor.isAfterLast()) {
             Game game = Game.cursorToGame(cursor);
 
-            if (game.getPlayer_one_online_uuid() != null) {
-                game.setPlayer1(allPlayerMapForTournament.get(game.getPlayer_one_online_uuid()));
+            if (game.getTournament_round() < round) {
+                TournamentPlayer playerOne = allPlayerMapForTournament.get(game.getRealPlayerOneId());
+                TournamentPlayer playerTwo = allPlayerMapForTournament.get(game.getRealPlayerTwoId());
+
+                playerOne.getListOfOpponentsIds().add(playerTwo.getRealPlayerId());
+                playerTwo.getListOfOpponentsIds().add(playerOne.getRealPlayerId());
+
+                allPlayerMapForTournament.put(game.getRealPlayerOneId(), playerOne);
+                allPlayerMapForTournament.put(game.getRealPlayerTwoId(), playerTwo);
             } else {
-                game.setPlayer1(allPlayerMapForTournament.get(String.valueOf(game.getPlayer_one_id())));
+                game.setPlayer1(allPlayerMapForTournament.get(game.getRealPlayerOneId()));
+                game.setPlayer2(allPlayerMapForTournament.get(game.getRealPlayerTwoId()));
+
+                gamesToReturn.add(game);
             }
 
-            if (game.getPlayer_two_online_uuid() != null) {
-                game.setPlayer2(allPlayerMapForTournament.get(game.getPlayer_two_online_uuid()));
-            } else {
-                game.setPlayer2(allPlayerMapForTournament.get(String.valueOf(game.getPlayer_two_id())));
-            }
-
-            games.add(game);
             cursor.moveToNext();
         }
 
         cursor.close();
         readableDatabase.close();
 
-        return games;
+        return gamesToReturn;
     }
 
 
@@ -153,53 +156,41 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
                 game.setTournament_round(round);
 
                 // get first one with highest score
-                TournamentRanking player_one = copyRanking.get(playerOneCounter);
-                game.setPlayer1(player_one.getTournamentPlayer());
-                game.setPlayer_one_id(player_one.getPlayer_id());
-                game.setPlayer_one_online_uuid(player_one.getPlayer_online_uuid());
+                TournamentRanking playerOneRanking = copyRanking.get(playerOneCounter);
+                List<String> listOfOpponentsPlayerIds = playerOneRanking.getListOfOpponentsPlayerIds();
 
-                copyRanking.remove(player_one);
+                game.setPlayer1(playerOneRanking.getTournamentPlayer());
+                game.setPlayer_one_id(playerOneRanking.getPlayer_id());
+                game.setPlayer_one_online_uuid(playerOneRanking.getPlayer_online_uuid());
 
-                List<String> listOfOpponentsPlayerIds = player_one.getListOfOpponentsPlayerIds();
+                copyRanking.remove(playerOneRanking);
 
                 TournamentRanking player_two = null;
 
                 if (pairingOptionsPresent(pairingOptions)) {
                     // search for first player player one has not played against
-                    for (TournamentRanking secondPlayer : copyRanking) {
+                    for (TournamentRanking secondPlayerRanking : copyRanking) {
                         if (playerDontPlayTwiceAgainstEachOther && playerWithSameTeamDontPlayAgainstEachOther) {
                             // need to look in opponents player list
-                            if (!listOfOpponentsPlayerIds.contains(secondPlayer.getRealPlayerId())
-                                    && !player_one.getTournamentPlayer()
+                            if (!listOfOpponentsPlayerIds.contains(secondPlayerRanking.getRealPlayerId())
+                                    && !playerOneRanking.getTournamentPlayer()
                                     .getTeamname()
-                                    .equals(secondPlayer.getTournamentPlayer().getTeamname())) {
-                                player_two = secondPlayer;
-
-                                game.setPlayer2(secondPlayer.getTournamentPlayer());
-                                game.setPlayer_two_id(secondPlayer.getPlayer_id());
-                                game.setPlayer_two_online_uuid(secondPlayer.getPlayer_online_uuid());
+                                    .equals(secondPlayerRanking.getTournamentPlayer().getTeamname())) {
+                                player_two = setPlayerTwo(game, secondPlayerRanking);
 
                                 break;
                             }
                         } else if (playerDontPlayTwiceAgainstEachOther && !playerWithSameTeamDontPlayAgainstEachOther) {
-                            if (!listOfOpponentsPlayerIds.contains(secondPlayer.getRealPlayerId())) {
-                                player_two = secondPlayer;
-
-                                game.setPlayer2(secondPlayer.getTournamentPlayer());
-                                game.setPlayer_two_id(secondPlayer.getPlayer_id());
-                                game.setPlayer_two_online_uuid(secondPlayer.getPlayer_online_uuid());
+                            if (!listOfOpponentsPlayerIds.contains(secondPlayerRanking.getRealPlayerId())) {
+                                player_two = setPlayerTwo(game, secondPlayerRanking);
 
                                 break;
                             }
                         } else if (!playerDontPlayTwiceAgainstEachOther && playerWithSameTeamDontPlayAgainstEachOther) {
-                            if (!player_one.getTournamentPlayer()
+                            if (!playerOneRanking.getTournamentPlayer()
                                     .getTeamname()
-                                    .equals(secondPlayer.getTournamentPlayer().getTeamname())) {
-                                player_two = secondPlayer;
-
-                                game.setPlayer2(secondPlayer.getTournamentPlayer());
-                                game.setPlayer_two_id(secondPlayer.getPlayer_id());
-                                game.setPlayer_two_online_uuid(secondPlayer.getPlayer_online_uuid());
+                                    .equals(secondPlayerRanking.getTournamentPlayer().getTeamname())) {
+                                player_two = setPlayerTwo(game, secondPlayerRanking);
 
                                 break;
                             }
@@ -240,6 +231,20 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
         insertGames(games);
 
         return true;
+    }
+
+
+    @NonNull
+    private TournamentRanking setPlayerTwo(Game game, TournamentRanking secondPlayerRanking) {
+
+        TournamentRanking player_two;
+        player_two = secondPlayerRanking;
+
+        game.setPlayer2(secondPlayerRanking.getTournamentPlayer());
+        game.setPlayer_two_id(secondPlayerRanking.getPlayer_id());
+        game.setPlayer_two_online_uuid(secondPlayerRanking.getPlayer_online_uuid());
+
+        return player_two;
     }
 
 
@@ -284,13 +289,29 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
 
 
     @Override
-    public void saveGameResult(Game game) {
+    public Game saveGameResult(Game game) {
 
         Log.i(this.getClass().getName(), "save game: " + game);
 
         SQLiteDatabase db = openTournamentDBHelper.getWritableDatabase();
 
         ContentValues contentValues = new ContentValues();
+
+        if (game.getPlayer1().getPlayer_online_uuid() != null) {
+            contentValues.put(GameTable.COLUMN_PLAYER_ONE_ONLINE_UUID, game.getPlayer1().getPlayer_online_uuid());
+            game.setPlayer_one_online_uuid(game.getPlayer1().getPlayer_online_uuid());
+        } else {
+            contentValues.put(GameTable.COLUMN_PLAYER_ONE_ID, game.getPlayer1().getPlayer_id());
+            game.setPlayer_one_id(game.getPlayer1().getPlayer_id());
+        }
+
+        if (game.getPlayer1().getPlayer_online_uuid() != null) {
+            contentValues.put(GameTable.COLUMN_PLAYER_TWO_ONLINE_UUID, game.getPlayer2().getPlayer_online_uuid());
+            game.setPlayer_two_online_uuid(game.getPlayer2().getPlayer_online_uuid());
+        } else {
+            contentValues.put(GameTable.COLUMN_PLAYER_TWO_ID, game.getPlayer2().getPlayer_id());
+            game.setPlayer_two_id(game.getPlayer2().getPlayer_id());
+        }
 
         contentValues.put(GameTable.COLUMN_PLAYER_ONE_SCORE, game.getPlayer_one_score());
         contentValues.put(GameTable.COLUMN_PLAYER_ONE_CONTROL_POINTS, game.getPlayer_one_control_points());
@@ -303,6 +324,8 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
 
         db.update(GameTable.TABLE_TOURNAMENT_GAME, contentValues, GameTable.COLUMN_ID + " = ? ",
             new String[] { String.valueOf(game.get_id()) });
+
+        return game;
     }
 
 
@@ -360,6 +383,11 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
                 referenceForGames.setValue(game);
             }
         }
+    }
+
+
+    @Override
+    public void tournamentPlayerSwap(Game game1, Game game2, String playerOneId, String playerTwoId) {
     }
 
 

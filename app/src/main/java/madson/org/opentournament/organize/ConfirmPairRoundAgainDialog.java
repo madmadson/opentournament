@@ -16,8 +16,6 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 
-import android.util.Log;
-
 import android.view.LayoutInflater;
 import android.view.View;
 
@@ -30,10 +28,6 @@ import android.widget.ToggleButton;
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.PairingOption;
 import madson.org.opentournament.domain.Tournament;
-import madson.org.opentournament.domain.TournamentRanking;
-import madson.org.opentournament.service.OngoingTournamentService;
-import madson.org.opentournament.service.RankingService;
-import madson.org.opentournament.service.TournamentService;
 import madson.org.opentournament.tasks.PairNewRoundTask;
 import madson.org.opentournament.utility.BaseActivity;
 import madson.org.opentournament.utility.BaseApplication;
@@ -86,11 +80,11 @@ public class ConfirmPairRoundAgainDialog extends DialogFragment {
         // Get the layout inflater
         LayoutInflater inflater = getActivity().getLayoutInflater();
 
-        if ((Math.pow(2, tournament.getActualRound())) > tournament.getActualPlayers()) {
-            String blub = "more rounds than expected";
-        }
-
         View dialogView = inflater.inflate(R.layout.dialog_confirm_pairing, null);
+
+        if ((Math.pow(2, tournament.getActualRound())) > tournament.getActualPlayers()) {
+            dialogView.findViewById(R.id.confirm_dialog_too_much_rounds).setVisibility(View.VISIBLE);
+        }
 
         LinearLayout container = (LinearLayout) dialogView.findViewById(R.id.pairing_options_container);
 

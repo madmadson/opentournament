@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/row_header_height"
     android:paddingTop="@dimen/main_tick"
-    android:background="@drawable/row_item">
+ >
 
     <TextView
         android:id="@+id/header_organised_tournament_action"

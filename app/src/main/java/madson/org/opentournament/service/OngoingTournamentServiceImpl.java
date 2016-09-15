@@ -7,6 +7,8 @@ import android.database.Cursor;
 
 import android.database.sqlite.SQLiteDatabase;
 
+import android.service.notification.NotificationListenerService;
+
 import android.util.Log;
 
 import com.google.firebase.database.DatabaseReference;
@@ -118,104 +120,119 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
 
         List<TournamentRanking> rankings = new ArrayList<>(rankingForRound.values());
 
-        Collections.shuffle(rankings);
-        Collections.sort(rankings, new Comparator<TournamentRanking>() {
+        boolean playerDontPlayTwiceAgainstEachOther = pairingOptions.containsKey(
+                MapOfPairingConfig.PLAYER_NOT_PLAY_TWICE_AGAINST_EACH_OVER)
+            && pairingOptions.get(MapOfPairingConfig.PLAYER_NOT_PLAY_TWICE_AGAINST_EACH_OVER).isActive();
 
-                @Override
-                public int compare(TournamentRanking o1, TournamentRanking o2) {
-
-                    return o2.getScore() - o1.getScore();
-                }
-            });
+        boolean playerWithSameTeamDontPlayAgainstEachOther = pairingOptions.containsKey(
+                MapOfPairingConfig.PLAYER_WITH_SAME_TEAM_NOT_PLAY_AGAINST_EACH_OTHER)
+            && pairingOptions.get(MapOfPairingConfig.PLAYER_WITH_SAME_TEAM_NOT_PLAY_AGAINST_EACH_OTHER)
+                .isActive();
 
         List<Game> games = new ArrayList<>(rankings.size() / 2);
 
-        // make games for every 2 players
-        while (rankings.size() > 0) {
-            Game game = new Game();
-            game.setTournament_id(tournament.get_id());
-            game.setTournament_round(round);
+        int playerOneCounter = 0;
 
-            // get first one with highest score
-            TournamentRanking player_one = rankings.get(0);
-            game.setPlayer1(player_one.getTournamentPlayer());
-            game.setPlayer_one_id(player_one.getPlayer_id());
-            game.setPlayer_one_online_uuid(player_one.getPlayer_online_uuid());
+        while (rankings.size() / 2 > games.size()) {
+            Collections.shuffle(rankings);
+            Collections.sort(rankings, new Comparator<TournamentRanking>() {
 
-            rankings.remove(player_one);
+                    @Override
+                    public int compare(TournamentRanking o1, TournamentRanking o2) {
 
-            List<String> listOfOpponentsPlayerIds = player_one.getListOfOpponentsPlayerIds();
+                        return o2.getScore() - o1.getScore();
+                    }
+                });
 
-            TournamentRanking player_two = null;
+            List<TournamentRanking> copyRanking = new ArrayList<>(rankings);
 
-            boolean playerDontPlayTwiceAgainstEachOther = pairingOptions.containsKey(
-                    MapOfPairingConfig.PLAYER_NOT_PLAY_TWICE_AGAINST_EACH_OVER)
-                && pairingOptions.get(MapOfPairingConfig.PLAYER_NOT_PLAY_TWICE_AGAINST_EACH_OVER).isActive();
+            // make games for every 2 players
+            while (copyRanking.size() > 0) {
+                Game game = new Game();
+                game.setTournament_id(tournament.get_id());
+                game.setTournament_round(round);
 
-            boolean playerWithSameTeamDontPlayAgainstEachOther = pairingOptions.containsKey(
-                    MapOfPairingConfig.PLAYER_WITH_SAME_TEAM_NOT_PLAY_AGAINST_EACH_OTHER)
-                && pairingOptions.get(MapOfPairingConfig.PLAYER_WITH_SAME_TEAM_NOT_PLAY_AGAINST_EACH_OTHER)
-                    .isActive();
+                // get first one with highest score
+                TournamentRanking player_one = copyRanking.get(playerOneCounter);
+                game.setPlayer1(player_one.getTournamentPlayer());
+                game.setPlayer_one_id(player_one.getPlayer_id());
+                game.setPlayer_one_online_uuid(player_one.getPlayer_online_uuid());
 
-            if (pairingOptionsPresent(pairingOptions)) {
-                // search for first player player one has not played against
-                for (TournamentRanking secondPlayer : rankings) {
-                    if (playerDontPlayTwiceAgainstEachOther && playerWithSameTeamDontPlayAgainstEachOther) {
-                        // need to look in opponents player list
-                        if (!listOfOpponentsPlayerIds.contains(secondPlayer.getRealPlayerId())
-                                && !player_one.getTournamentPlayer()
-                                .getTeamname()
-                                .equals(secondPlayer.getTournamentPlayer().getTeamname())) {
-                            player_two = secondPlayer;
+                copyRanking.remove(player_one);
 
-                            game.setPlayer2(secondPlayer.getTournamentPlayer());
-                            game.setPlayer_two_id(secondPlayer.getPlayer_id());
-                            game.setPlayer_two_online_uuid(secondPlayer.getPlayer_online_uuid());
+                List<String> listOfOpponentsPlayerIds = player_one.getListOfOpponentsPlayerIds();
 
-                            break;
-                        }
-                    } else if (playerDontPlayTwiceAgainstEachOther && !playerWithSameTeamDontPlayAgainstEachOther) {
-                        if (!listOfOpponentsPlayerIds.contains(secondPlayer.getRealPlayerId())) {
-                            player_two = secondPlayer;
+                TournamentRanking player_two = null;
 
-                            game.setPlayer2(secondPlayer.getTournamentPlayer());
-                            game.setPlayer_two_id(secondPlayer.getPlayer_id());
-                            game.setPlayer_two_online_uuid(secondPlayer.getPlayer_online_uuid());
+                if (pairingOptionsPresent(pairingOptions)) {
+                    // search for first player player one has not played against
+                    for (TournamentRanking secondPlayer : copyRanking) {
+                        if (playerDontPlayTwiceAgainstEachOther && playerWithSameTeamDontPlayAgainstEachOther) {
+                            // need to look in opponents player list
+                            if (!listOfOpponentsPlayerIds.contains(secondPlayer.getRealPlayerId())
+                                    && !player_one.getTournamentPlayer()
+                                    .getTeamname()
+                                    .equals(secondPlayer.getTournamentPlayer().getTeamname())) {
+                                player_two = secondPlayer;
 
-                            break;
-                        }
-                    } else if (!playerDontPlayTwiceAgainstEachOther && playerWithSameTeamDontPlayAgainstEachOther) {
-                        if (!player_one.getTournamentPlayer()
-                                .getTeamname()
-                                .equals(secondPlayer.getTournamentPlayer().getTeamname())) {
-                            player_two = secondPlayer;
+                                game.setPlayer2(secondPlayer.getTournamentPlayer());
+                                game.setPlayer_two_id(secondPlayer.getPlayer_id());
+                                game.setPlayer_two_online_uuid(secondPlayer.getPlayer_online_uuid());
 
-                            game.setPlayer2(secondPlayer.getTournamentPlayer());
-                            game.setPlayer_two_id(secondPlayer.getPlayer_id());
-                            game.setPlayer_two_online_uuid(secondPlayer.getPlayer_online_uuid());
+                                break;
+                            }
+                        } else if (playerDontPlayTwiceAgainstEachOther && !playerWithSameTeamDontPlayAgainstEachOther) {
+                            if (!listOfOpponentsPlayerIds.contains(secondPlayer.getRealPlayerId())) {
+                                player_two = secondPlayer;
 
-                            break;
+                                game.setPlayer2(secondPlayer.getTournamentPlayer());
+                                game.setPlayer_two_id(secondPlayer.getPlayer_id());
+                                game.setPlayer_two_online_uuid(secondPlayer.getPlayer_online_uuid());
+
+                                break;
+                            }
+                        } else if (!playerDontPlayTwiceAgainstEachOther && playerWithSameTeamDontPlayAgainstEachOther) {
+                            if (!player_one.getTournamentPlayer()
+                                    .getTeamname()
+                                    .equals(secondPlayer.getTournamentPlayer().getTeamname())) {
+                                player_two = secondPlayer;
+
+                                game.setPlayer2(secondPlayer.getTournamentPlayer());
+                                game.setPlayer_two_id(secondPlayer.getPlayer_id());
+                                game.setPlayer_two_online_uuid(secondPlayer.getPlayer_online_uuid());
+
+                                break;
+                            }
                         }
                     }
+                    // no pairing options
+                } else {
+                    player_two = copyRanking.get(0);
+                    game.setPlayer2(player_two.getTournamentPlayer());
+                    game.setPlayer_two_id(player_two.getPlayer_id());
+                    game.setPlayer_two_online_uuid(player_two.getPlayer_online_uuid());
                 }
-                // no pairing options
-            } else {
-                player_two = rankings.get(0);
-                game.setPlayer2(player_two.getTournamentPlayer());
-                game.setPlayer_two_id(player_two.getPlayer_id());
-                game.setPlayer_two_online_uuid(player_two.getPlayer_online_uuid());
+
+                if (player_two == null) {
+                    Log.i(this.getClass().getName(), "no player found. Try again with next player in list");
+
+                    playerOneCounter++;
+
+                    if (playerOneCounter > (copyRanking.size() - 1)) {
+                        playerOneCounter = 0;
+                    }
+
+                    games.clear();
+
+                    break;
+                }
+
+                copyRanking.remove(player_two);
+
+                Log.i(this.getClass().getName(), "game created: " + game);
+                games.add(game);
             }
-
-            // pairing failed
-            if (player_two == null) {
-                return false;
-            }
-
-            rankings.remove(player_two);
-
-            Log.i(this.getClass().getName(), "game created: " + game);
-            games.add(game);
-        }
+        } // main loop
 
         Log.i(this.getClass().getName(), "finished pairing for new round");
 

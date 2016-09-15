@@ -79,27 +79,15 @@ public class PairNewRoundTask extends AsyncTask<Void, Void, Boolean> {
             Map<String, TournamentRanking> rankingForRound = rankingService.createRankingForRound(tournament,
                     tournament.getActualRound());
 
-            for (int i = 0; i < 100000; i++) {
-                success = ongoingTournamentService.createGamesForRound(tournament, tournament.getActualRound(),
-                        rankingForRound, pairingOptions);
-
-                if (success) {
-                    break;
-                }
-            }
+            success = ongoingTournamentService.createGamesForRound(tournament, tournament.getActualRound(),
+                    rankingForRound, pairingOptions);
         } else {
             int next_round = tournament.getActualRound() + 1;
             Map<String, TournamentRanking> rankingForRound = rankingService.createRankingForRound(tournament,
                     next_round);
 
-            for (int i = 0; i < 100000; i++) {
-                success = ongoingTournamentService.createGamesForRound(tournament, next_round, rankingForRound,
-                        pairingOptions);
-
-                if (success) {
-                    break;
-                }
-            }
+            success = ongoingTournamentService.createGamesForRound(tournament, next_round, rankingForRound,
+                    pairingOptions);
         }
 
         return success;

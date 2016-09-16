@@ -136,96 +136,21 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
 
         List<Game> games = new ArrayList<>(rankings.size() / 2);
 
-        int playerOneCounter = 0;
+        Collections.shuffle(rankings);
+        Collections.sort(rankings, new Comparator<TournamentRanking>() {
 
-        while (rankings.size() / 2 > games.size()) {
-            Collections.shuffle(rankings);
-            Collections.sort(rankings, new Comparator<TournamentRanking>() {
+                @Override
+                public int compare(TournamentRanking o1, TournamentRanking o2) {
 
-                    @Override
-                    public int compare(TournamentRanking o1, TournamentRanking o2) {
-
-                        return o2.getScore() - o1.getScore();
-                    }
-                });
-
-            List<TournamentRanking> copyRanking = new ArrayList<>(rankings);
-
-            // make games for every 2 players
-            while (copyRanking.size() > 0) {
-                Game game = new Game();
-                game.setTournament_id(tournament.get_id());
-                game.setTournament_round(round);
-
-                // get first one with highest score
-                TournamentRanking playerOneRanking = copyRanking.get(playerOneCounter);
-                List<String> listOfOpponentsPlayerIds = playerOneRanking.getListOfOpponentsPlayerIds();
-
-                game.setPlayer1(playerOneRanking.getTournamentPlayer());
-                game.setPlayer_one_id(playerOneRanking.getPlayer_id());
-                game.setPlayer_one_online_uuid(playerOneRanking.getPlayer_online_uuid());
-
-                copyRanking.remove(playerOneRanking);
-
-                TournamentRanking player_two = null;
-
-                if (pairingOptionsPresent(pairingOptions)) {
-                    // search for first player player one has not played against
-                    for (TournamentRanking secondPlayerRanking : copyRanking) {
-                        if (playerDontPlayTwiceAgainstEachOther && playerWithSameTeamDontPlayAgainstEachOther) {
-                            // need to look in opponents player list
-                            if (!listOfOpponentsPlayerIds.contains(secondPlayerRanking.getRealPlayerId())
-                                    && !playerOneRanking.getTournamentPlayer()
-                                    .getTeamname()
-                                    .equals(secondPlayerRanking.getTournamentPlayer().getTeamname())) {
-                                player_two = setPlayerTwo(game, secondPlayerRanking);
-
-                                break;
-                            }
-                        } else if (playerDontPlayTwiceAgainstEachOther && !playerWithSameTeamDontPlayAgainstEachOther) {
-                            if (!listOfOpponentsPlayerIds.contains(secondPlayerRanking.getRealPlayerId())) {
-                                player_two = setPlayerTwo(game, secondPlayerRanking);
-
-                                break;
-                            }
-                        } else if (!playerDontPlayTwiceAgainstEachOther && playerWithSameTeamDontPlayAgainstEachOther) {
-                            if (!playerOneRanking.getTournamentPlayer()
-                                    .getTeamname()
-                                    .equals(secondPlayerRanking.getTournamentPlayer().getTeamname())) {
-                                player_two = setPlayerTwo(game, secondPlayerRanking);
-
-                                break;
-                            }
-                        }
-                    }
-                    // no pairing options
-                } else {
-                    player_two = copyRanking.get(0);
-                    game.setPlayer2(player_two.getTournamentPlayer());
-                    game.setPlayer_two_id(player_two.getPlayer_id());
-                    game.setPlayer_two_online_uuid(player_two.getPlayer_online_uuid());
+                    return o2.getScore() - o1.getScore();
                 }
+            });
 
-                if (player_two == null) {
-                    Log.i(this.getClass().getName(), "no player found. Try again with next player in list");
+        List<TournamentRanking> copyRanking = new ArrayList<>(rankings);
 
-                    playerOneCounter++;
+        match(copyRanking, games, tournament, round);
 
-                    if (playerOneCounter > (copyRanking.size() - 1)) {
-                        playerOneCounter = 0;
-                    }
-
-                    games.clear();
-
-                    break;
-                }
-
-                copyRanking.remove(player_two);
-
-                Log.i(this.getClass().getName(), "game created: " + game);
-                games.add(game);
-            }
-        } // main loop
+        Collections.reverse(games);
 
         Log.i(this.getClass().getName(), "finished pairing for new round");
 
@@ -233,6 +158,98 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
         insertGames(games);
 
         return true;
+    }
+
+
+    public boolean match(List<TournamentRanking> players, List<Game> games, Tournament tournament, int round) {
+
+        if (players.isEmpty()) {
+            return true;
+        }
+
+        for (int i = 0; i < players.size() - 1; i++) {
+            TournamentRanking player1 = players.get(i);
+
+            for (int j = i + 1; j < players.size(); j++) {
+                TournamentRanking player2 = players.get(j);
+
+                if (player1.getListOfOpponentsPlayerIds().contains(player2.getRealPlayerId())) {
+                    Log.i(this.getClass().getName(), "" + player1 + " VS " + player2 + " not possible");
+
+                    continue;
+                }
+
+                if (player1.getScore() - 1 > player2.getScore()) {
+                    continue;
+                }
+
+                ArrayList<TournamentRanking> copyPlayer = new ArrayList<>(players);
+                copyPlayer.remove(player1);
+                copyPlayer.remove(player2);
+
+                boolean match = match(copyPlayer, games, tournament, round);
+
+                if (match) {
+                    Game game = new Game();
+
+                    game.setTournament_id(tournament.get_id());
+                    game.setTournament_round(round);
+
+                    game.setPlayer1(player1.getTournamentPlayer());
+                    game.setPlayer_one_id(player1.getPlayer_id());
+                    game.setPlayer_one_online_uuid(player1.getPlayer_online_uuid());
+
+                    game.setPlayer2(player2.getTournamentPlayer());
+                    game.setPlayer_two_id(player2.getPlayer_id());
+                    game.setPlayer_two_online_uuid(player2.getPlayer_online_uuid());
+
+                    games.add(game);
+
+                    return true;
+                }
+            }
+        }
+
+        for (int i = 0; i < players.size() - 1; i++) {
+            TournamentRanking player1 = players.get(i);
+
+            for (int j = i + 1; j < players.size(); j++) {
+                TournamentRanking player2 = players.get(j);
+
+                if (player1.getListOfOpponentsPlayerIds().contains(player2.getRealPlayerId())) {
+                    Log.i(this.getClass().getName(), "" + player1 + " VS " + player2 + " not possible");
+
+                    continue;
+                }
+
+                ArrayList<TournamentRanking> copyPlayer = new ArrayList<>(players);
+                copyPlayer.remove(player1);
+                copyPlayer.remove(player2);
+
+                boolean match = match(copyPlayer, games, tournament, round);
+
+                if (match) {
+                    Game game = new Game();
+
+                    game.setTournament_id(tournament.get_id());
+                    game.setTournament_round(round);
+
+                    game.setPlayer1(player1.getTournamentPlayer());
+                    game.setPlayer_one_id(player1.getPlayer_id());
+                    game.setPlayer_one_online_uuid(player1.getPlayer_online_uuid());
+
+                    game.setPlayer2(player2.getTournamentPlayer());
+                    game.setPlayer_two_id(player2.getPlayer_id());
+                    game.setPlayer_two_online_uuid(player2.getPlayer_online_uuid());
+
+                    games.add(game);
+
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
 

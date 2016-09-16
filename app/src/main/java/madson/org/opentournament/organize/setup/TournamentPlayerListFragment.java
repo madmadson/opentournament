@@ -166,7 +166,7 @@ public class TournamentPlayerListFragment extends Fragment implements Tournament
                     if (tournamentPlayerListAdapter.getItemCount() % 2 == 1) {
                         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                         builder.setTitle(R.string.uneven_player_message)
-                        .setPositiveButton(R.string.dialog_confirm_and_start, new DialogInterface.OnClickListener() {
+                        .setPositiveButton(R.string.dialog_confirm, new DialogInterface.OnClickListener() {
 
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
@@ -306,9 +306,7 @@ public class TournamentPlayerListFragment extends Fragment implements Tournament
     @Override
     public void startRound(int roundToStart, Tournament tournament) {
 
-        if (roundToStart == 1) {
-            startButton.setVisibility(View.GONE);
-        }
+        startButton.setVisibility(View.GONE);
     }
 
 

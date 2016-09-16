@@ -9,17 +9,29 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/main_tick"
+            android:text="@string/action"
+            android:textSize="10sp"
+            android:textStyle="bold" />
+
         <ImageButton
             android:id="@+id/button_toggle_action"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:layout_marginLeft="@dimen/main_tick"
-            android:src="@drawable/ic_keyboard_arrow_down_black_24dp"
-            android:background="@android:color/transparent"/>
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/huge_tick"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_keyboard_arrow_up_black_24dp" />
+
         <TextView
             android:id="@+id/heading_game_for_round"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:paddingBottom="@dimen/main_tick"
@@ -27,85 +39,114 @@
             android:textAppearance="@android:style/TextAppearance.Large" />
     </RelativeLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/line_tick"
-        android:background="@color/colorAccent"
-        android:padding="@dimen/main_tick" />
+    <FrameLayout
 
-    <RelativeLayout
+        android:id="@+id/container_view_toggle_action"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/main_tick"
-        android:orientation="horizontal">
+        android:visibility="visible">
 
-        <Button
-            android:id="@+id/button_pair_again"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:background="@color/colorPrimaryDark"
-            android:drawableLeft="@drawable/ic_refresh_white_24dp"
-            android:drawablePadding="@dimen/halve_tick"
-            android:paddingLeft="@dimen/halve_tick"
-            android:paddingRight="@dimen/halve_tick"
-            android:text="@string/pair_again"
-            android:textColor="@color/colorTextIcon"
-            android:textStyle="bold" />
-    </RelativeLayout>
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/main_tick"
-        android:orientation="horizontal">
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/line_tick"
+                android:background="@color/colorAccent"
+                android:padding="@dimen/main_tick" />
 
-        <Button
-            android:id="@+id/button_upload_games"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:background="@color/colorPrimaryDark"
-            android:drawableLeft="@drawable/ic_cloud_upload_white_24dp"
-            android:drawablePadding="@dimen/halve_tick"
-            android:paddingLeft="@dimen/halve_tick"
-            android:paddingRight="@dimen/halve_tick"
-            android:text="@string/upload_games"
-            android:textColor="@color/colorTextIcon"
-            android:textStyle="bold" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingBottom="@dimen/main_tick"
+                android:paddingTop="@dimen/main_tick">
 
-    </RelativeLayout>
+                <Button
+                    android:id="@+id/button_pair_again"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_gravity="right"
+                    android:layout_marginLeft="@dimen/main_tick"
+                    android:background="@color/colorPrimaryDark"
+                    android:drawableLeft="@drawable/ic_refresh_white_24dp"
+                    android:drawablePadding="@dimen/halve_tick"
+                    android:paddingLeft="@dimen/halve_tick"
+                    android:paddingRight="@dimen/halve_tick"
+                    android:text="@string/pair_again"
+                    android:textColor="@color/colorTextIcon"
+                    android:textStyle="bold" />
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+                <Button
+                    android:id="@+id/button_start_next_round"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="@dimen/main_tick"
+                    android:background="@color/colorPrimaryDark"
+                    android:drawableLeft="@android:drawable/ic_media_play"
+                    android:drawablePadding="@dimen/halve_tick"
+                    android:paddingLeft="@dimen/halve_tick"
+                    android:paddingRight="@dimen/halve_tick"
+                    android:text="@string/next_round"
+                    android:textColor="@color/colorTextIcon"
+                    android:textStyle="bold" />
 
-        <Button
-            android:id="@+id/button_start_next_round"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:background="@color/colorPrimaryDark"
-            android:drawableLeft="@android:drawable/ic_media_play"
-            android:drawablePadding="@dimen/halve_tick"
-            android:paddingLeft="@dimen/halve_tick"
-            android:paddingRight="@dimen/halve_tick"
-            android:text="@string/next_round"
-            android:textColor="@color/colorTextIcon"
-            android:textStyle="bold" />
-    </RelativeLayout>
+            </RelativeLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/line_tick"
-        android:background="@color/colorAccent"
-        android:padding="@dimen/main_tick" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingBottom="@dimen/main_tick"
+                android:paddingTop="@dimen/main_tick">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/game_list_recycler_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:scrollbars="vertical" />
+                <Button
+                    android:id="@+id/button_upload_games"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginLeft="@dimen/main_tick"
+                    android:background="@color/colorPrimaryDark"
+                    android:drawableLeft="@drawable/ic_cloud_upload_white_24dp"
+                    android:drawablePadding="@dimen/halve_tick"
+                    android:paddingLeft="@dimen/halve_tick"
+                    android:paddingRight="@dimen/halve_tick"
+                    android:text="@string/upload_games"
+                    android:textColor="@color/colorTextIcon"
+                    android:textStyle="bold" />
 
-</LinearLayout>
+                <Button
+                    android:id="@+id/button_end_tournament"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="@dimen/main_tick"
+                    android:background="@color/colorPositive"
+                    android:drawableLeft="@drawable/ic_done_all_black_24dp"
+                    android:drawablePadding="@dimen/halve_tick"
+                    android:paddingLeft="@dimen/halve_tick"
+                    android:paddingRight="@dimen/halve_tick"
+                    android:text="@string/end_tournament"
+                    android:textColor="@color/colorBlack"
+                    android:textStyle="bold" />
+            </RelativeLayout>
+        </LinearLayout>
+    </FrameLayout>
+
+<View
+android:layout_width="match_parent"
+android:layout_height="@dimen/line_tick"
+android:background="@color/colorAccent"
+android:padding="@dimen/main_tick" />
+
+<android.support.v7.widget.RecyclerView
+android:id="@+id/game_list_recycler_view"
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+android:scrollbars="vertical" />
+
+    </LinearLayout>

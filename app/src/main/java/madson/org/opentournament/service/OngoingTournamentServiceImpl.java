@@ -45,6 +45,8 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
     private TournamentService tournamentService;
     private TournamentPlayerService tournamentPlayerService;
     private RankingService rankingService;
+    private boolean playerWithSameTeamDontPlayAgainstEachOther;
+    private boolean playerDontPlayTwiceAgainstEachOther;
 
     public OngoingTournamentServiceImpl(Context context) {
 
@@ -177,10 +179,21 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
             for (int j = i + 1; j < players.size(); j++) {
                 TournamentRanking player2 = players.get(j);
 
-                if (player1.getListOfOpponentsPlayerIds().contains(player2.getRealPlayerId())) {
-                    Log.i(this.getClass().getName(), "" + player1 + " VS " + player2 + " not possible");
+                if (playerDontPlayTwiceAgainstEachOther) {
+                    if (player1.getListOfOpponentsPlayerIds().contains(player2.getRealPlayerId())) {
+                        Log.i(this.getClass().getName(), "" + player1 + " VS " + player2 + " not possible");
 
-                    continue;
+                        continue;
+                    }
+                }
+
+                if (playerWithSameTeamDontPlayAgainstEachOther) {
+                    if (player1.getTournamentPlayer().getTeamname().equals(
+                                player2.getTournamentPlayer().getTeamname())) {
+                        Log.i(this.getClass().getName(), "" + player1 + " VS " + player2 + " not possible");
+
+                        continue;
+                    }
                 }
 
                 if (player1.getScore() - 1 > player2.getScore()) {
@@ -220,10 +233,21 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
             for (int j = i + 1; j < players.size(); j++) {
                 TournamentRanking player2 = players.get(j);
 
-                if (player1.getListOfOpponentsPlayerIds().contains(player2.getRealPlayerId())) {
-                    Log.i(this.getClass().getName(), "" + player1 + " VS " + player2 + " not possible");
+                if (playerDontPlayTwiceAgainstEachOther) {
+                    if (player1.getListOfOpponentsPlayerIds().contains(player2.getRealPlayerId())) {
+                        Log.i(this.getClass().getName(), "" + player1 + " VS " + player2 + " not possible");
 
-                    continue;
+                        continue;
+                    }
+                }
+
+                if (playerWithSameTeamDontPlayAgainstEachOther) {
+                    if (player1.getTournamentPlayer().getTeamname().equals(
+                                player2.getTournamentPlayer().getTeamname())) {
+                        Log.i(this.getClass().getName(), "" + player1 + " VS " + player2 + " not possible");
+
+                        continue;
+                    }
                 }
 
                 ArrayList<TournamentRanking> copyPlayer = new ArrayList<>(players);

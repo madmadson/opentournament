@@ -68,25 +68,25 @@ public class TournamentPlayerServiceImpl implements TournamentPlayerService {
 
         SQLiteDatabase readableDatabase = openTournamentDBHelper.getReadableDatabase();
 
-        Cursor cursorWithAllTeamnames = readableDatabase.query(TournamentPlayerTable.TABLE_TOURNAMENT_PLAYER,
+        Cursor cursor = readableDatabase.query(TournamentPlayerTable.TABLE_TOURNAMENT_PLAYER,
                 new String[] { TournamentPlayerTable.COLUMN_TEAMNAME }, "tournament_id  = ?",
                 new String[] { Long.toString(tournament.get_id()) }, null, null, null);
 
-        cursorWithAllTeamnames.moveToFirst();
+        cursor.moveToFirst();
 
-        while (!cursorWithAllTeamnames.isAfterLast()) {
-            String teamname = cursorWithAllTeamnames.getString(0);
+        while (!cursor.isAfterLast()) {
+            String teamname = cursor.getString(0);
 
             if (teamname != null && !teamname.isEmpty() && !listOfTeamnames.contains(teamname)) {
                 listOfTeamnames.add(teamname);
             }
 
-            cursorWithAllTeamnames.moveToNext();
+            cursor.moveToNext();
         }
 
         Collections.sort(listOfTeamnames);
 
-        cursorWithAllTeamnames.close();
+        cursor.close();
         readableDatabase.close();
 
         return listOfTeamnames;

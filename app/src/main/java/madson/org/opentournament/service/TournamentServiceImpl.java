@@ -257,6 +257,7 @@ public class TournamentServiceImpl implements TournamentService {
 
         ContentValues contentValues = new ContentValues();
         contentValues.put(TournamentTable.COLUMN_ACTUAL_ROUND, round);
+        contentValues.put(TournamentTable.COLUMN_STATE, tournament.getState().name());
 
         SQLiteDatabase writableDatabase = openTournamentDBHelper.getWritableDatabase();
 
@@ -266,6 +267,7 @@ public class TournamentServiceImpl implements TournamentService {
         writableDatabase.close();
 
         tournament.setActualRound(round);
+        tournament.setState(Tournament.TournamentState.STARTED);
 
         return tournament;
     }

@@ -78,6 +78,8 @@ public class TournamentRoundManagementFragment extends Fragment implements Tourn
         fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         fragmentTransaction.commit();
 
+        getActivity().findViewById(R.id.fab).setVisibility(View.GONE);
+
         return view;
     }
 

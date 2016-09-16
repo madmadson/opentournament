@@ -1,5 +1,6 @@
 package madson.org.opentournament.organize.setup;
 
+import android.content.Context;
 import android.content.DialogInterface;
 
 import android.graphics.drawable.Drawable;
@@ -25,9 +26,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import madson.org.opentournament.R;
+import madson.org.opentournament.domain.Game;
 import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
+import madson.org.opentournament.organize.TournamentEventListener;
 import madson.org.opentournament.utility.BaseActivity;
 
 
@@ -36,7 +39,7 @@ import madson.org.opentournament.utility.BaseActivity;
  *
  * @author  Tobias Matt - tmatt@contargo.net
  */
-public class TournamentSetupFragment extends Fragment implements TournamentSetupEventListener {
+public class TournamentSetupFragment extends Fragment implements TournamentSetupEventListener, TournamentEventListener {
 
     private static final String BUNDLE_TOURNAMENT = "tournament";
     private Tournament tournament;
@@ -65,9 +68,18 @@ public class TournamentSetupFragment extends Fragment implements TournamentSetup
 
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onAttach(Context context) {
 
-        super.onCreate(savedInstanceState);
+        super.onAttach(context);
+        ((BaseActivity) getActivity()).getBaseApplication().registerTournamentEventListener(this);
+    }
+
+
+    @Override
+    public void onDetach() {
+
+        super.onDetach();
+        ((BaseActivity) getActivity()).getBaseApplication().unregisterTournamentEventListener(this);
     }
 
 
@@ -80,8 +92,10 @@ public class TournamentSetupFragment extends Fragment implements TournamentSetup
 
         FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
 
-        createAvailablePlayerListFragment();
-        fragmentTransaction.replace(R.id.available_player_fragment_container, availablePlayerListFragment);
+        if (tournament.getState().equals(Tournament.TournamentState.PLANED)) {
+            createAvailablePlayerListFragment();
+            fragmentTransaction.replace(R.id.available_player_fragment_container, availablePlayerListFragment);
+        }
 
         createTournamentPlayerListFragment();
         fragmentTransaction.replace(R.id.tournament_player_fragment_container, tournamentPlayerListFragment);
@@ -206,5 +220,32 @@ public class TournamentSetupFragment extends Fragment implements TournamentSetup
     public void removeAvailablePlayer(Player player) {
 
         availablePlayerListFragment.removePlayer(player);
+    }
+
+
+    @Override
+    public void startRound(int roundToStart, Tournament tournament) {
+
+        if (roundToStart == 2) {
+            FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
+
+            fragmentTransaction.remove(availablePlayerListFragment);
+            fragmentTransaction.commit();
+        }
+    }
+
+
+    @Override
+    public void pairRoundAgain(int round_for_pairing) {
+    }
+
+
+    @Override
+    public void pairingChanged(Game game1, Game game2) {
+    }
+
+
+    @Override
+    public void enterGameResultConfirmed(Game game) {
     }
 }

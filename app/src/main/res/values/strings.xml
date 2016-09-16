@@ -60,7 +60,7 @@
     <string name="dialog_save">save</string>
     <string name="dialog_cancel">cancel</string>
     <string name="dialog_confirm">confirm</string>
-    <string name="dialog_confirm_and_start">confirm and start</string>
+
     
     <!-- Tournament management dialog-->
     <string name="dialog_edit_tournament">Edit tournament</string>
@@ -187,10 +187,8 @@
     <string name="pairing_option_player_not_play_twice_against_each_other">Player don\'t play twice against each other</string>
     <string name="pairing_option_player_with_same_team_not_play_against_each_other">Player in same team don\'t play against each other</string>
 
-
-    <string name="uneven_player_message">Uneven players in tournament.  Should a dummy player be inserted for you?</string>
-   
-   
+    <string name="uneven_player_message">Uneven players in tournament. Should a dummy player be inserted for you?</string>
+    
     <string name="not_all_games_finished_next_round">Not all games are finished. Please insert results before pair next round.</string>
     <string name="not_all_games_finished_end_tournament">Not all games are finished. Please insert all results before end tournament.</string>
     <string name="at_least_one_game_started">At least one game is finished</string>

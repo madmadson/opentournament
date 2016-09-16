@@ -11,13 +11,14 @@
 
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"  
-            android:layout_centerVertical="true"
+            android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/main_tick"
-            android:textStyle="bold"
+            android:text="@string/action"
             android:textSize="10sp"
-            android:text="@string/action" />
+            android:textStyle="bold" />
+
         <ImageButton
             android:id="@+id/button_toggle_action"
             android:layout_width="wrap_content"
@@ -50,89 +51,89 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/line_tick"
-            android:background="@color/colorAccent"
-            android:padding="@dimen/main_tick" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/line_tick"
+                android:background="@color/colorAccent"
+                android:padding="@dimen/main_tick" />
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingBottom="@dimen/main_tick"
-            android:paddingTop="@dimen/main_tick">
-
-            <Button
-                android:id="@+id/button_pair_again"
-                android:layout_width="wrap_content"
+            <RelativeLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_gravity="right"
-                android:layout_marginLeft="@dimen/main_tick"
-                android:background="@color/colorPrimaryDark"
-                android:drawableLeft="@drawable/ic_refresh_white_24dp"
-                android:drawablePadding="@dimen/halve_tick"
-                android:paddingLeft="@dimen/halve_tick"
-                android:paddingRight="@dimen/halve_tick"
-                android:text="@string/pair_again"
-                android:textColor="@color/colorTextIcon"
-                android:textStyle="bold" />
+                android:orientation="horizontal"
+                android:paddingBottom="@dimen/main_tick"
+                android:paddingTop="@dimen/main_tick">
 
-            <Button
-                android:id="@+id/button_start_next_round"
-                android:layout_width="wrap_content"
+                <Button
+                    android:id="@+id/button_pair_again"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_gravity="right"
+                    android:layout_marginLeft="@dimen/main_tick"
+                    android:background="@color/colorPrimaryDark"
+                    android:drawableLeft="@drawable/ic_refresh_white_24dp"
+                    android:drawablePadding="@dimen/halve_tick"
+                    android:paddingLeft="@dimen/halve_tick"
+                    android:paddingRight="@dimen/halve_tick"
+                    android:text="@string/pair_again"
+                    android:textColor="@color/colorTextIcon"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/button_start_next_round"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="@dimen/main_tick"
+                    android:background="@color/colorPrimaryDark"
+                    android:drawableLeft="@android:drawable/ic_media_play"
+                    android:drawablePadding="@dimen/halve_tick"
+                    android:paddingLeft="@dimen/halve_tick"
+                    android:paddingRight="@dimen/halve_tick"
+                    android:text="@string/next_round"
+                    android:textColor="@color/colorTextIcon"
+                    android:textStyle="bold" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="@dimen/main_tick"
-                android:background="@color/colorPrimaryDark"
-                android:drawableLeft="@android:drawable/ic_media_play"
-                android:drawablePadding="@dimen/halve_tick"
-                android:paddingLeft="@dimen/halve_tick"
-                android:paddingRight="@dimen/halve_tick"
-                android:text="@string/next_round"
-                android:textColor="@color/colorTextIcon"
-                android:textStyle="bold" />
+                android:orientation="horizontal"
+                android:paddingBottom="@dimen/main_tick"
+                android:paddingTop="@dimen/main_tick">
 
-        </RelativeLayout>
+                <Button
+                    android:id="@+id/button_upload_games"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginLeft="@dimen/main_tick"
+                    android:background="@color/colorPrimaryDark"
+                    android:drawableLeft="@drawable/ic_cloud_upload_white_24dp"
+                    android:drawablePadding="@dimen/halve_tick"
+                    android:paddingLeft="@dimen/halve_tick"
+                    android:paddingRight="@dimen/halve_tick"
+                    android:text="@string/upload_games"
+                    android:textColor="@color/colorTextIcon"
+                    android:textStyle="bold" />
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingBottom="@dimen/main_tick"
-            android:paddingTop="@dimen/main_tick">
-
-            <Button
-                android:id="@+id/button_upload_games"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_marginLeft="@dimen/main_tick"
-                android:background="@color/colorPrimaryDark"
-                android:drawableLeft="@drawable/ic_cloud_upload_white_24dp"
-                android:drawablePadding="@dimen/halve_tick"
-                android:paddingLeft="@dimen/halve_tick"
-                android:paddingRight="@dimen/halve_tick"
-                android:text="@string/upload_games"
-                android:textColor="@color/colorTextIcon"
-                android:textStyle="bold" />
-
-            <Button
-                android:id="@+id/button_end_tournament"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="@dimen/main_tick"
-                android:background="@color/colorPositive"
-                android:drawableLeft="@drawable/ic_done_all_black_24dp"
-                android:drawablePadding="@dimen/halve_tick"
-                android:paddingLeft="@dimen/halve_tick"
-                android:paddingRight="@dimen/halve_tick"
-                android:text="@string/end_tournament"
-                android:textColor="@color/colorBlack"
-                android:textStyle="bold" />
-        </RelativeLayout>
+                <Button
+                    android:id="@+id/button_end_tournament"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="@dimen/main_tick"
+                    android:background="@color/colorPositive"
+                    android:drawableLeft="@drawable/ic_done_all_black_24dp"
+                    android:drawablePadding="@dimen/halve_tick"
+                    android:paddingLeft="@dimen/halve_tick"
+                    android:paddingRight="@dimen/halve_tick"
+                    android:text="@string/end_tournament"
+                    android:textColor="@color/colorBlack"
+                    android:textStyle="bold" />
+            </RelativeLayout>
         </LinearLayout>
     </FrameLayout>
 

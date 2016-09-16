@@ -165,7 +165,7 @@
     <string name="dialof_confirm_draw">Sure draw?</string>
     <string name="dialog_confirm_convert_to_online_tournament">Please confirm convertions to online tournament</string>
     <string name="success_convert_to_online_tournament">successfully convert local tournament to online</string>
-    <string name="nav_player_list">Tournament Players</string>
+    <string name="nav_setup_tab">Tournament Players</string>
     <string name="label_fullname">fullname</string>
     <string name="success_tournament_player_is_online">Tournament saved online</string>
 
@@ -191,7 +191,8 @@
     <string name="uneven_player_message">Uneven players in tournament.  Should a dummy player be inserted for you?</string>
    
    
-    <string name="not_all_games_fineshed">Not all games are finished. Please insert results before pair next round.</string>
+    <string name="not_all_games_finished_next_round">Not all games are finished. Please insert results before pair next round.</string>
+    <string name="not_all_games_finished_end_tournament">Not all games are finished. Please insert all results before end tournament.</string>
     <string name="at_least_one_game_started">At least one game is finished</string>
     <string name="confirm_drop_tournament_player">Confirm drop player</string>
     
@@ -212,8 +213,10 @@
     <string name="info_more_rounds_than_expected">WARNING! \nYou try to pair for more rounds than expected.</string>
     <string name="player_already_played_each_other">%1$s already played against %2$s</string>
     <string name="player_swapped_successfully">Player swapped successful</string>
-    <string name="end_tournament">end Tournament</string>
+    <string name="end_tournament">Really end Tournament?</string>
     <string name="confirm_swap_player">confirm swap player</string>
     <string name="tournament_ended_successful">tournament ended successfully</string>
+    <string name="nav_final_standing_tab">Final standings</string>
+    <string name="action">ACTION</string>
 
 </resources>

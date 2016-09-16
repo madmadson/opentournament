@@ -16,13 +16,15 @@ import android.support.v7.app.ActionBar;
 import android.util.Log;
 
 import android.view.Menu;
+import android.view.ViewGroup;
+
+import android.widget.ProgressBar;
 
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Game;
 import madson.org.opentournament.domain.Tournament;
-import madson.org.opentournament.organize.setup.TournamentPlayerListFragment;
 import madson.org.opentournament.organize.setup.TournamentSetupFragment;
-import madson.org.opentournament.service.TournamentService;
+import madson.org.opentournament.tasks.LoadTournamentTask;
 import madson.org.opentournament.utility.BaseActivity;
 
 
@@ -110,27 +112,10 @@ public class TournamentOrganizeActivity extends BaseActivity implements Tourname
             TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
             tabLayout.setupWithViewPager(mViewPager);
 
-            // set tab to actual round
-            Runnable runnable = new Runnable() {
-
-                @Override
-                public void run() {
-
-                    TournamentService tournamentService = getBaseApplication().getTournamentService();
-                    Tournament actualTournament = tournamentService.getTournamentForId(tournament.get_id());
-                    Log.i(this.getClass().getName(), "set actual tournament");
-                    mSectionsPagerAdapter.setTournamentToOrganize(actualTournament);
-                    mViewPager.setCurrentItem(actualTournament.getActualRound());
-                }
-            };
-            runnable.run();
+            ProgressBar progressBar = (ProgressBar) getToolbar().findViewById(R.id.toolbar_progress_bar);
+            new LoadTournamentTask(getBaseApplication(), tournament, mSectionsPagerAdapter, mViewPager, progressBar)
+                .execute();
         }
-    }
-
-
-    public TournamentRoundManagementFragment getTournamentRoundManagementFragment() {
-
-        return tournamentRoundManagementFragment;
     }
 
 
@@ -164,7 +149,7 @@ public class TournamentOrganizeActivity extends BaseActivity implements Tourname
         // nothing
     }
 
-    private class SectionsPagerAdapter extends FragmentPagerAdapter {
+    public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
         private Tournament tournamentToOrganize;
 
@@ -179,26 +164,18 @@ public class TournamentOrganizeActivity extends BaseActivity implements Tourname
             Log.i(this.getClass().getName(),
                 "create tournament fragment: " + tournamentToOrganize + " on position: " + position);
 
-            if (tournamentToOrganize.getState().equals(Tournament.TournamentState.FINISHED)) {
-                if (position == tournamentToOrganize.getActualRound()) {
-                    return TournamentFinalStandingFragment.newInstance(tournamentToOrganize);
-                } else {
-                    tournamentRoundManagementFragment = TournamentRoundManagementFragment.newInstance(position,
-                            tournamentToOrganize);
+            if (position == 0) {
+                tournamentSetupFragment = TournamentSetupFragment.newInstance(tournamentToOrganize);
 
-                    return tournamentRoundManagementFragment;
-                }
+                return tournamentSetupFragment;
+            } else if (tournamentToOrganize.getState().equals(Tournament.TournamentState.FINISHED)
+                    && position == tournamentToOrganize.getActualRound()) {
+                return TournamentFinalStandingFragment.newInstance(tournamentToOrganize);
             } else {
-                if (position == 0) {
-                    tournamentSetupFragment = TournamentSetupFragment.newInstance(tournamentToOrganize);
+                tournamentRoundManagementFragment = TournamentRoundManagementFragment.newInstance(position,
+                        tournamentToOrganize);
 
-                    return tournamentSetupFragment;
-                } else {
-                    tournamentRoundManagementFragment = TournamentRoundManagementFragment.newInstance(position,
-                            tournamentToOrganize);
-
-                    return tournamentRoundManagementFragment;
-                }
+                return tournamentRoundManagementFragment;
             }
         }
 
@@ -207,11 +184,7 @@ public class TournamentOrganizeActivity extends BaseActivity implements Tourname
         public int getCount() {
 
             if (tournamentToOrganize != null) {
-                if (tournamentToOrganize.getState().equals(Tournament.TournamentState.FINISHED)) {
-                    return tournamentToOrganize.getActualRound();
-                } else {
-                    return tournamentToOrganize.getActualRound() + 1;
-                }
+                return tournamentToOrganize.getActualRound() + 1;
             } else {
                 return 0;
             }
@@ -222,7 +195,10 @@ public class TournamentOrganizeActivity extends BaseActivity implements Tourname
         public CharSequence getPageTitle(int position) {
 
             if (position == 0) {
-                return getApplication().getResources().getString(R.string.nav_player_list);
+                return getApplication().getResources().getString(R.string.nav_setup_tab);
+            } else if (tournamentToOrganize.getState().equals(Tournament.TournamentState.FINISHED)
+                    && position == tournamentToOrganize.getActualRound()) {
+                return getApplication().getResources().getString(R.string.nav_final_standing_tab);
             } else {
                 return getApplication().getResources().getString(R.string.nav_round_tab, position);
             }

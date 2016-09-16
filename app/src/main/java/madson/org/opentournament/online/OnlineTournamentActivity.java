@@ -18,13 +18,10 @@ import android.util.Log;
 import android.view.Menu;
 
 import madson.org.opentournament.R;
-import madson.org.opentournament.domain.Game;
 import madson.org.opentournament.domain.Tournament;
-import madson.org.opentournament.organize.TournamentEventListener;
 import madson.org.opentournament.organize.TournamentRoundManagementFragment;
 import madson.org.opentournament.organize.setup.TournamentPlayerListFragment;
 import madson.org.opentournament.organize.setup.TournamentSetupFragment;
-import madson.org.opentournament.service.TournamentService;
 import madson.org.opentournament.utility.BaseActivity;
 
 
@@ -144,7 +141,7 @@ public class OnlineTournamentActivity extends BaseActivity {
         public CharSequence getPageTitle(int position) {
 
             if (position == 0) {
-                return getApplication().getResources().getString(R.string.nav_player_list);
+                return getApplication().getResources().getString(R.string.nav_setup_tab);
             } else {
                 return getApplication().getResources().getString(R.string.nav_round_tab, position);
             }

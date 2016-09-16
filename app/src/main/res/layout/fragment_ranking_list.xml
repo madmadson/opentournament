@@ -5,33 +5,12 @@
     android:orientation="vertical"
     android:paddingTop="@dimen/main_tick">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:id="@+id/heading_ranking_for_round"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:textAppearance="@android:style/TextAppearance.Large" />
-
-        <Button
-            android:id="@+id/button_end_tournament"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="@dimen/main_tick"
-            android:background="@color/colorPositive"
-            android:drawableLeft="@drawable/ic_done_all_black_24dp"
-            android:drawablePadding="@dimen/halve_tick"
-            android:paddingLeft="@dimen/halve_tick"
-            android:paddingRight="@dimen/halve_tick"
-            android:text="@string/end_tournament"
-            android:textColor="@color/colorBlack"
-            android:textStyle="bold" />
-    </RelativeLayout>
-
+    <TextView
+        android:id="@+id/heading_ranking_for_round"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:textAppearance="@android:style/TextAppearance.Large" />
 
     <FrameLayout
         android:id="@+id/row_ranking_header_container"

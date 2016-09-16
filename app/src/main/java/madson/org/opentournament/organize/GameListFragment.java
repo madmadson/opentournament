@@ -18,6 +18,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -25,6 +27,7 @@ import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Game;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.tasks.LoadGameListTask;
+import madson.org.opentournament.tasks.TournamentEndTask;
 import madson.org.opentournament.tasks.TournamentUploadTask;
 import madson.org.opentournament.utility.BaseActivity;
 import madson.org.opentournament.utility.BaseApplication;
@@ -43,6 +46,9 @@ public class GameListFragment extends Fragment implements TournamentEventListene
     private Button nextRoundButton;
     private Button pairRoundAgainButton;
     private Button uploadGamesButton;
+    private Button endTournamentButton;
+    private ImageButton toggleActionButton;
+    private FrameLayout containerForActions;
 
     @Override
     public void onAttach(Context context) {
@@ -61,7 +67,7 @@ public class GameListFragment extends Fragment implements TournamentEventListene
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
 
         Bundle bundle = getArguments();
 
@@ -90,6 +96,7 @@ public class GameListFragment extends Fragment implements TournamentEventListene
         new LoadGameListTask(((BaseActivity) getActivity()).getBaseApplication(), tournament, round, gameListAdapter)
             .execute();
 
+        containerForActions = (FrameLayout) view.findViewById(R.id.container_view_toggle_action);
         pairRoundAgainButton = (Button) view.findViewById(R.id.button_pair_again);
         pairRoundAgainButton.setOnClickListener(new View.OnClickListener() {
 
@@ -165,12 +172,72 @@ public class GameListFragment extends Fragment implements TournamentEventListene
                         dialog.show(supportFragmentManager, "confirm  pair next round");
                     } else {
                         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                        builder.setTitle(R.string.not_all_games_fineshed)
+                        builder.setTitle(R.string.not_all_games_finished_next_round)
                         .setPositiveButton(R.string.dialog_confirm, null)
                         .show();
                     }
                 }
             });
+
+        endTournamentButton = (Button) view.findViewById(R.id.button_end_tournament);
+        endTournamentButton.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+
+                    if (gameListAdapter.allGamesAreFinished()) {
+                        String message = "";
+
+                        if ((Math.pow(2, tournament.getActualRound())) < tournament.getActualPlayers()) {
+                            message = "We recommend more rounds in this tournament";
+                        }
+
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                        builder.setTitle(R.string.end_tournament)
+                        .setMessage(message)
+                        .setPositiveButton(R.string.dialog_confirm, new DialogInterface.OnClickListener() {
+
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+
+                                        Toolbar toolbar = ((BaseActivity) getActivity()).getToolbar();
+                                        ProgressBar progressBar = (ProgressBar) toolbar.findViewById(
+                                                R.id.toolbar_progress_bar);
+                                        new TournamentEndTask((BaseApplication) getActivity().getApplication(),
+                                            tournament, progressBar).execute();
+                                    }
+                                })
+                        .setNegativeButton(R.string.dialog_cancel, null)
+                        .show();
+                    } else {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                        builder.setTitle(R.string.not_all_games_finished_end_tournament)
+                        .setPositiveButton(R.string.dialog_confirm, null)
+                        .show();
+                    }
+                }
+            });
+        toggleActionButton = (ImageButton) view.findViewById(R.id.button_toggle_action);
+        toggleActionButton.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+
+                    if (containerForActions.isShown()) {
+                        containerForActions.setVisibility(View.GONE);
+                        toggleActionButton.setImageResource(R.drawable.ic_keyboard_arrow_down_black_24dp);
+                    } else {
+                        containerForActions.setVisibility(View.VISIBLE);
+                        toggleActionButton.setImageResource(R.drawable.ic_keyboard_arrow_up_black_24dp);
+                    }
+                }
+            });
+
+        if (tournament.getState().equals(Tournament.TournamentState.FINISHED)) {
+            nextRoundButton.setVisibility(View.GONE);
+            pairRoundAgainButton.setVisibility(View.GONE);
+            endTournamentButton.setVisibility(View.GONE);
+        }
 
         return view;
     }
@@ -187,6 +254,7 @@ public class GameListFragment extends Fragment implements TournamentEventListene
 
         nextRoundButton.setVisibility(View.GONE);
         pairRoundAgainButton.setVisibility(View.GONE);
+        endTournamentButton.setVisibility(View.GONE);
     }
 
 
@@ -210,10 +278,5 @@ public class GameListFragment extends Fragment implements TournamentEventListene
     public void enterGameResultConfirmed(Game game) {
 
         // nothing
-    }
-
-    public interface GameResultEnteredListener {
-
-        void onResultConfirmed(Game game);
     }
 }

@@ -1,7 +1,6 @@
 package madson.org.opentournament.organize;
 
 import android.content.Context;
-import android.content.DialogInterface;
 
 import android.os.Bundle;
 
@@ -9,10 +8,8 @@ import android.support.annotation.Nullable;
 
 import android.support.v4.app.Fragment;
 
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,7 +17,6 @@ import android.view.ViewGroup;
 
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import madson.org.opentournament.R;
@@ -28,8 +24,6 @@ import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.domain.TournamentRanking;
 import madson.org.opentournament.tasks.LoadRankingListTask;
-import madson.org.opentournament.tasks.TournamentEndTask;
-import madson.org.opentournament.utility.BaseActivity;
 import madson.org.opentournament.utility.BaseApplication;
 
 import java.util.ArrayList;
@@ -48,7 +42,6 @@ public class RankingListFragment extends Fragment {
     private Tournament tournament;
     private int round;
     private RankingListAdapter rankingListAdapter;
-    private Button endTournamentButton;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -89,30 +82,6 @@ public class RankingListFragment extends Fragment {
 
         new LoadRankingListTask((BaseApplication) getActivity().getApplication(), tournament, round, rankingListAdapter)
             .execute();
-        endTournamentButton = (Button) view.findViewById(R.id.button_end_tournament);
-        endTournamentButton.setOnClickListener(new View.OnClickListener() {
-
-                @Override
-                public void onClick(View v) {
-
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                    builder.setTitle(R.string.end_tournament)
-                    .setPositiveButton(R.string.dialog_confirm, new DialogInterface.OnClickListener() {
-
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-
-                                    Toolbar toolbar = ((BaseActivity) getActivity()).getToolbar();
-                                    ProgressBar progressBar = (ProgressBar) toolbar.findViewById(
-                                            R.id.toolbar_progress_bar);
-                                    new TournamentEndTask((BaseApplication) getActivity().getApplication(), tournament,
-                                        progressBar).execute();
-                                }
-                            })
-                    .setNegativeButton(R.string.dialog_cancel, null)
-                    .show();
-                }
-            });
 
         return view;
     }

@@ -148,7 +148,11 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
 
         List<TournamentRanking> copyRanking = new ArrayList<>(rankings);
 
-        match(copyRanking, games, tournament, round);
+        boolean match = match(copyRanking, games, tournament, round);
+
+        if (!match) {
+            return false;
+        }
 
         Collections.reverse(games);
 

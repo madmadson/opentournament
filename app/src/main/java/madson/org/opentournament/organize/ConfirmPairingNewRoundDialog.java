@@ -88,10 +88,11 @@ public class ConfirmPairingNewRoundDialog extends DialogFragment {
 
         View dialogView = inflater.inflate(R.layout.dialog_confirm_pairing, null);
 
-        LinearLayout container = (LinearLayout) dialogView.findViewById(R.id.pairing_options_container);
+        if ((Math.pow(2, tournament.getActualRound() + 1)) > tournament.getActualPlayers()) {
+            dialogView.findViewById(R.id.confirm_dialog_too_much_rounds).setVisibility(View.VISIBLE);
+        }
 
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT);
+        LinearLayout container = (LinearLayout) dialogView.findViewById(R.id.pairing_options_container);
 
         pairingOptions = ((BaseApplication) getActivity().getApplication()).getPairingOptionsForTournament(tournament);
 

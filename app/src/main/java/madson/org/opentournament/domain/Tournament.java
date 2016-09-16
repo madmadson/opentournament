@@ -29,6 +29,13 @@ public class Tournament implements Parcelable {
         }
     };
 
+    public enum TournamentState {
+
+        PLANED,
+        STARTED,
+        FINISHED
+    }
+
     private long _id;
 
     private String name;
@@ -71,7 +78,7 @@ public class Tournament implements Parcelable {
         this.creatorEmail = tournament.getCreatorEmail();
         this.tournamentTyp = TournamentTyp.valueOf(tournament.getTournamentTyp());
         this.gameOrSportTyp = GameOrSportTyp.valueOf(tournament.getGameOrSportTyp());
-        this.state = tournament.getState();
+        this.state = tournament.getState().name();
     }
 
 
@@ -172,9 +179,9 @@ public class Tournament implements Parcelable {
     }
 
 
-    public String getState() {
+    public TournamentState getState() {
 
-        return state;
+        return TournamentState.valueOf(state);
     }
 
 
@@ -335,8 +342,8 @@ public class Tournament implements Parcelable {
     }
 
 
-    public void setState(String state) {
+    public void setState(TournamentState state) {
 
-        this.state = state;
+        this.state = state.name();
     }
 }

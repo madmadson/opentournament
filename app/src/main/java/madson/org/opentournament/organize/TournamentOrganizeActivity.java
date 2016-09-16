@@ -179,15 +179,26 @@ public class TournamentOrganizeActivity extends BaseActivity implements Tourname
             Log.i(this.getClass().getName(),
                 "create tournament fragment: " + tournamentToOrganize + " on position: " + position);
 
-            if (position == 0) {
-                tournamentSetupFragment = TournamentSetupFragment.newInstance(tournamentToOrganize);
+            if (tournamentToOrganize.getState().equals(Tournament.TournamentState.FINISHED)) {
+                if (position == tournamentToOrganize.getActualRound()) {
+                    return TournamentFinalStandingFragment.newInstance(tournamentToOrganize);
+                } else {
+                    tournamentRoundManagementFragment = TournamentRoundManagementFragment.newInstance(position,
+                            tournamentToOrganize);
 
-                return tournamentSetupFragment;
+                    return tournamentRoundManagementFragment;
+                }
             } else {
-                tournamentRoundManagementFragment = TournamentRoundManagementFragment.newInstance(position,
-                        tournamentToOrganize);
+                if (position == 0) {
+                    tournamentSetupFragment = TournamentSetupFragment.newInstance(tournamentToOrganize);
 
-                return tournamentRoundManagementFragment;
+                    return tournamentSetupFragment;
+                } else {
+                    tournamentRoundManagementFragment = TournamentRoundManagementFragment.newInstance(position,
+                            tournamentToOrganize);
+
+                    return tournamentRoundManagementFragment;
+                }
             }
         }
 
@@ -196,7 +207,11 @@ public class TournamentOrganizeActivity extends BaseActivity implements Tourname
         public int getCount() {
 
             if (tournamentToOrganize != null) {
-                return tournamentToOrganize.getActualRound() + 1;
+                if (tournamentToOrganize.getState().equals(Tournament.TournamentState.FINISHED)) {
+                    return tournamentToOrganize.getActualRound();
+                } else {
+                    return tournamentToOrganize.getActualRound() + 1;
+                }
             } else {
                 return 0;
             }

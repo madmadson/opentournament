@@ -15,6 +15,7 @@ import android.widget.ProgressBar;
 import madson.org.opentournament.MainActivity;
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Tournament;
+import madson.org.opentournament.domain.TournamentRanking;
 import madson.org.opentournament.organize.TournamentOrganizeActivity;
 import madson.org.opentournament.service.OngoingTournamentService;
 import madson.org.opentournament.service.RankingService;
@@ -22,6 +23,8 @@ import madson.org.opentournament.service.TournamentPlayerService;
 import madson.org.opentournament.service.TournamentService;
 import madson.org.opentournament.utility.BaseActivity;
 import madson.org.opentournament.utility.BaseApplication;
+
+import java.util.Map;
 
 
 /**
@@ -34,15 +37,14 @@ public class TournamentEndTask extends AsyncTask<Void, Void, Void> {
     private BaseApplication application;
     private Tournament tournament;
     private ProgressBar progressBar;
-    private BaseActivity activity;
 
-    public TournamentEndTask(BaseApplication application, Tournament tournament, ProgressBar progressBar,
-        BaseActivity activity) {
+    private int next_round;
+
+    public TournamentEndTask(BaseApplication application, Tournament tournament, ProgressBar progressBar) {
 
         this.application = application;
         this.tournament = tournament;
         this.progressBar = progressBar;
-        this.activity = activity;
     }
 
     @Override
@@ -55,8 +57,14 @@ public class TournamentEndTask extends AsyncTask<Void, Void, Void> {
     @Override
     protected Void doInBackground(Void... params) {
 
-        TournamentService tournamentService = application.getTournamentService();
+        next_round = tournament.getActualRound() + 1;
+        tournament.setActualRound(next_round);
+        tournament.setState(Tournament.TournamentState.FINISHED);
 
+        TournamentService tournamentService = application.getTournamentService();
+        RankingService rankingService = application.getRankingService();
+
+        rankingService.createRankingForRound(tournament, next_round);
         tournamentService.endTournament(tournament);
 
         return null;
@@ -68,7 +76,6 @@ public class TournamentEndTask extends AsyncTask<Void, Void, Void> {
 
         progressBar.setVisibility(View.GONE);
 
-        Intent intent = new Intent(activity, MainActivity.class);
-        activity.startActivity(intent);
+        application.notifyNextRoundPaired(next_round, tournament);
     }
 }

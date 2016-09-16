@@ -141,6 +141,7 @@ public class TournamentServiceImpl implements TournamentService {
         contentValues.put(TournamentTable.COLUMN_TOURNAMENT_TYPE, tournmanetType);
         contentValues.put(TournamentTable.COLUMN_GAME_OR_SPORT_TYPE, "WARMACHINE");
         contentValues.put(TournamentTable.COLUMN_ACTUAL_PLAYERS, actualPlayers);
+        contentValues.put(TournamentTable.COLUMN_STATE, Tournament.TournamentState.PLANED.name());
 
         SQLiteDatabase writableDatabase = openTournamentDBHelper.getWritableDatabase();
 
@@ -207,7 +208,7 @@ public class TournamentServiceImpl implements TournamentService {
         tournament.setTournamentTyp(cursor.getString(9));
         tournament.setActualPlayers(cursor.getInt(10));
         tournament.setGameOrSportTyp(cursor.getString(11));
-        tournament.setState(cursor.getString(12));
+        tournament.setState(Tournament.TournamentState.valueOf(cursor.getString(12)));
 
         return tournament;
     }
@@ -316,7 +317,8 @@ public class TournamentServiceImpl implements TournamentService {
         Log.i(this.getClass().getName(), "update tournament: " + tournament);
 
         ContentValues contentValues = new ContentValues();
-        contentValues.put(TournamentTable.COLUMN_STATE, "finished");
+        contentValues.put(TournamentTable.COLUMN_STATE, Tournament.TournamentState.FINISHED.name());
+        contentValues.put(TournamentTable.COLUMN_ACTUAL_ROUND, tournament.getActualRound());
 
         SQLiteDatabase writableDatabase = openTournamentDBHelper.getWritableDatabase();
 

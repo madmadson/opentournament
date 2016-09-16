@@ -106,7 +106,7 @@ public class RankingListFragment extends Fragment {
                                     ProgressBar progressBar = (ProgressBar) toolbar.findViewById(
                                             R.id.toolbar_progress_bar);
                                     new TournamentEndTask((BaseApplication) getActivity().getApplication(), tournament,
-                                        progressBar, (BaseActivity) getActivity()).execute();
+                                        progressBar).execute();
                                 }
                             })
                     .setNegativeButton(R.string.dialog_cancel, null)

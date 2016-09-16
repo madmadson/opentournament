@@ -53,8 +53,11 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHo
 
     private List<Game> gamesForRound;
     private BaseActivity activity;
+    private int round;
 
-    public GameListAdapter(BaseActivity activity) {
+    public GameListAdapter(BaseActivity activity, int round) {
+
+        this.round = round;
 
         this.gamesForRound = new ArrayList<>();
         this.activity = activity;
@@ -67,9 +70,9 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHo
         looserShape = activity.getResources().getDrawable(R.drawable.shape_looser);
     }
 
-    public void updateGame(Game game) {
+    public void updateGameForRound(Game game) {
 
-        if (gamesForRound.contains(game)) {
+        if (game.getTournament_round() == round) {
             int indexOfGame = gamesForRound.indexOf(game);
 
             gamesForRound.remove(game);
@@ -79,10 +82,13 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHo
     }
 
 
-    public void setGames(List<Game> games) {
+    public void setGamesForRound(List<Game> games, int round) {
 
-        this.gamesForRound = games;
-        notifyDataSetChanged();
+        if (this.round == round) {
+            this.gamesForRound = games;
+
+            notifyDataSetChanged();
+        }
     }
 
 
@@ -138,14 +144,23 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHo
         holder.getPlayerTwoVictoryPoints()
             .setText(activity.getResources().getString(R.string.game_vp, game.getPlayer_two_victory_points()));
 
-        // drag and drop for manually re pair
         holder.getPlayerOneCardView().setOnClickListener(holder);
-        holder.getPlayerOneCardView().setOnLongClickListener(new GameLongClickEventListener(game, 1));
-        holder.getPlayerOneCardView().setOnDragListener(new GameDragListener(game, 1));
-
         holder.getPlayerTwoCardView().setOnClickListener(holder);
-        holder.getPlayerTwoCardView().setOnLongClickListener(new GameLongClickEventListener(game, 2));
-        holder.getPlayerTwoCardView().setOnDragListener(new GameDragListener(game, 2));
+
+        // drag and drop for manually re pair
+        if (!game.isFinished()) {
+            holder.getPlayerOneCardView().setOnLongClickListener(new GameLongClickEventListener(game, 1));
+            holder.getPlayerOneCardView().setOnDragListener(new GameDragListener(game, 1));
+
+            holder.getPlayerTwoCardView().setOnLongClickListener(new GameLongClickEventListener(game, 2));
+            holder.getPlayerTwoCardView().setOnDragListener(new GameDragListener(game, 2));
+        } else {
+            holder.getPlayerOneCardView().setOnLongClickListener(null);
+            holder.getPlayerOneCardView().setOnDragListener(null);
+
+            holder.getPlayerTwoCardView().setOnLongClickListener(null);
+            holder.getPlayerTwoCardView().setOnDragListener(null);
+        }
     }
 
 
@@ -433,41 +448,43 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHo
 
                         snackbar.show();
                     } else {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-                        builder.setTitle(R.string.confirm_swap_player)
-                            .setPositiveButton(R.string.dialog_confirm, new DialogInterface.OnClickListener() {
+                        if (!droppedPlayerFinal.equals(draggedPlayer)) {
+                            AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+                            builder.setTitle(R.string.confirm_swap_player)
+                                .setPositiveButton(R.string.dialog_confirm, new DialogInterface.OnClickListener() {
 
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
 
-                                            if (playerOneOrTwo.equals("1")) {
-                                                draggedGame.setPlayer1(droppedPlayerFinal);
-                                            } else {
-                                                draggedGame.setPlayer2(droppedPlayerFinal);
+                                                if (playerOneOrTwo.equals("1")) {
+                                                    draggedGame.setPlayer1(droppedPlayerFinal);
+                                                } else {
+                                                    draggedGame.setPlayer2(droppedPlayerFinal);
+                                                }
+
+                                                if (droppedPlayerIndex == 1) {
+                                                    droppedGame.setPlayer1(draggedPlayerFinal);
+                                                } else {
+                                                    droppedGame.setPlayer2(draggedPlayerFinal);
+                                                }
+
+                                                Toolbar toolbar = activity.getToolbar();
+                                                ProgressBar progressBar = (ProgressBar) toolbar.findViewById(
+                                                        R.id.toolbar_progress_bar);
+                                                Snackbar snackbar = Snackbar.make((activity).getCoordinatorLayout(),
+                                                        activity.getResources()
+                                                            .getString(R.string.player_swapped_successfully),
+                                                        Snackbar.LENGTH_LONG);
+                                                snackbar.getView()
+                                                .setBackgroundColor(
+                                                    activity.getResources().getColor(R.color.colorPositive));
+                                                new SwapPlayersTask((BaseApplication) activity.getApplication(),
+                                                    draggedGame, droppedGame, progressBar, snackbar).execute();
                                             }
-
-                                            if (droppedPlayerIndex == 1) {
-                                                droppedGame.setPlayer1(draggedPlayerFinal);
-                                            } else {
-                                                droppedGame.setPlayer2(draggedPlayerFinal);
-                                            }
-
-                                            Toolbar toolbar = activity.getToolbar();
-                                            ProgressBar progressBar = (ProgressBar) toolbar.findViewById(
-                                                    R.id.toolbar_progress_bar);
-                                            Snackbar snackbar = Snackbar.make((activity).getCoordinatorLayout(),
-                                                    activity.getResources()
-                                                        .getString(R.string.player_swapped_successfully),
-                                                    Snackbar.LENGTH_LONG);
-                                            snackbar.getView()
-                                            .setBackgroundColor(
-                                                activity.getResources().getColor(R.color.colorPositive));
-                                            new SwapPlayersTask((BaseApplication) activity.getApplication(),
-                                                draggedGame, droppedGame, progressBar, snackbar).execute();
-                                        }
-                                    })
-                            .setNegativeButton(R.string.dialog_cancel, null)
-                            .show();
+                                        })
+                                .setNegativeButton(R.string.dialog_cancel, null)
+                                .show();
+                        }
                     }
 
                     break;

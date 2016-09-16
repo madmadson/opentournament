@@ -324,4 +324,11 @@ public class TournamentPlayerListFragment extends Fragment implements Tournament
 
         // nothing
     }
+
+
+    @Override
+    public void enterGameResultConfirmed(Game game) {
+
+        // nothing
+    }
 }

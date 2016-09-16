@@ -20,4 +20,7 @@ public interface TournamentEventListener {
 
 
     void pairingChanged(Game game1, Game game2);
+
+
+    void enterGameResultConfirmed(Game game);
 }

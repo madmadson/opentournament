@@ -2,15 +2,12 @@ package madson.org.opentournament.organize;
 
 import android.app.Dialog;
 
-import android.content.Context;
 import android.content.DialogInterface;
 
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-
-import android.support.annotation.Nullable;
 
 import android.support.v4.app.DialogFragment;
 
@@ -29,7 +26,7 @@ import android.widget.TextView;
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Game;
 import madson.org.opentournament.domain.TournamentPlayer;
-import madson.org.opentournament.service.OngoingTournamentService;
+import madson.org.opentournament.tasks.SaveGameResultTask;
 import madson.org.opentournament.utility.BaseApplication;
 
 import java.util.Timer;
@@ -62,16 +59,7 @@ public class EnterResultForGameDialog extends DialogFragment {
         DECREASE
     }
 
-    private GameListFragment.GameResultEnteredListener mListener;
-
     private Game game;
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-
-        super.onCreate(savedInstanceState);
-    }
-
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -101,20 +89,6 @@ public class EnterResultForGameDialog extends DialogFragment {
                 });
 
         return builder.create();
-    }
-
-
-    @Override
-    public void onAttach(Context activity) {
-
-        super.onAttach(activity);
-
-        TournamentRoundManagementFragment tournamentRoundManagementFragment =
-            ((TournamentOrganizeActivity) getActivity()).getTournamentRoundManagementFragment();
-
-        if (tournamentRoundManagementFragment != null) {
-            mListener = tournamentRoundManagementFragment;
-        }
     }
 
 
@@ -443,8 +417,8 @@ public class EnterResultForGameDialog extends DialogFragment {
                                     @Override
                                     public void onClick(DialogInterface sure_draw_dialog, int id) {
 
-                                        finishEnterResult(confirm_dialog);
-                                        sure_draw_dialog.cancel();
+                                        new SaveGameResultTask((BaseApplication) getActivity().getApplication(), game,
+                                            confirm_dialog, sure_draw_dialog).execute();
                                     }
                                 })
                         .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
@@ -457,25 +431,10 @@ public class EnterResultForGameDialog extends DialogFragment {
                             });
                         builder.show();
                     } else {
-                        finishEnterResult(confirm_dialog);
+                        new SaveGameResultTask((BaseApplication) getActivity().getApplication(), game, confirm_dialog,
+                            null).execute();
                     }
                 }
             });
-    }
-
-
-    private void finishEnterResult(AlertDialog dialog) {
-
-        game.setFinished(true);
-
-        OngoingTournamentService ongoingTournamentService = ((BaseApplication) getActivity().getApplication())
-            .getOngoingTournamentService();
-
-        ongoingTournamentService.saveGameResult(game);
-
-        // notify game list
-        mListener.onResultConfirmed(game);
-
-        dialog.dismiss();
     }
 }

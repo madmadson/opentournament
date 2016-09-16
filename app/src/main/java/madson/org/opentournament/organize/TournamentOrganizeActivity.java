@@ -157,6 +157,13 @@ public class TournamentOrganizeActivity extends BaseActivity implements Tourname
         // nothing
     }
 
+
+    @Override
+    public void enterGameResultConfirmed(Game game) {
+
+        // nothing
+    }
+
     private class SectionsPagerAdapter extends FragmentPagerAdapter {
 
         private Tournament tournamentToOrganize;
@@ -172,11 +179,6 @@ public class TournamentOrganizeActivity extends BaseActivity implements Tourname
             Log.i(this.getClass().getName(),
                 "create tournament fragment: " + tournamentToOrganize + " on position: " + position);
 
-            // TODO: refactor to own activity -> tournamentWatchingActivity or something
-//            if (position == 0 && checkIfOnlineTournamentAndUserNotCreator()) {
-//                // show online tournament player list
-//                return TournamentPlayerListFragment.newInstance(tournament);
-//            }
             if (position == 0) {
                 tournamentSetupFragment = TournamentSetupFragment.newInstance(tournamentToOrganize);
 

@@ -3,10 +3,7 @@ package madson.org.opentournament.organize;
 import android.content.Context;
 import android.content.DialogInterface;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
-
-import android.support.annotation.Nullable;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -27,13 +24,10 @@ import android.widget.TextView;
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Game;
 import madson.org.opentournament.domain.Tournament;
-import madson.org.opentournament.service.OngoingTournamentService;
 import madson.org.opentournament.tasks.LoadGameListTask;
 import madson.org.opentournament.tasks.TournamentUploadTask;
 import madson.org.opentournament.utility.BaseActivity;
 import madson.org.opentournament.utility.BaseApplication;
-
-import java.util.List;
 
 
 /**
@@ -90,7 +84,7 @@ public class GameListFragment extends Fragment implements TournamentEventListene
         TextView heading = (TextView) view.findViewById(R.id.heading_game_for_round);
         heading.setText(getString(R.string.heading_games_for_round, round));
 
-        gameListAdapter = new GameListAdapter((BaseActivity) getActivity());
+        gameListAdapter = new GameListAdapter((BaseActivity) getActivity(), round);
         recyclerView.setAdapter(gameListAdapter);
 
         new LoadGameListTask(((BaseActivity) getActivity()).getBaseApplication(), tournament, round, gameListAdapter)
@@ -184,7 +178,7 @@ public class GameListFragment extends Fragment implements TournamentEventListene
 
     public void updateGameInList(Game game) {
 
-        gameListAdapter.updateGame(game);
+        gameListAdapter.updateGameForRound(game);
     }
 
 
@@ -207,8 +201,15 @@ public class GameListFragment extends Fragment implements TournamentEventListene
     @Override
     public void pairingChanged(Game game1, Game game2) {
 
-        gameListAdapter.updateGame(game1);
-        gameListAdapter.updateGame(game2);
+        gameListAdapter.updateGameForRound(game1);
+        gameListAdapter.updateGameForRound(game2);
+    }
+
+
+    @Override
+    public void enterGameResultConfirmed(Game game) {
+
+        // nothing
     }
 
     public interface GameResultEnteredListener {

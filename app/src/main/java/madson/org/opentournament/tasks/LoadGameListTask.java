@@ -49,6 +49,6 @@ public class LoadGameListTask extends AsyncTask<Void, Void, Void> {
 
         super.onPostExecute(aVoid);
 
-        gameListAdapter.setGames(gamesForRound);
+        gameListAdapter.setGamesForRound(gamesForRound, round);
     }
 }

@@ -21,8 +21,7 @@ import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.utility.BaseActivity;
 
 
-public class TournamentRoundManagementFragment extends Fragment implements GameListFragment.GameResultEnteredListener,
-    TournamentEventListener {
+public class TournamentRoundManagementFragment extends Fragment implements TournamentEventListener {
 
     public static final String BUNDLE_TOURNAMENT = "tournament";
     public static final String BUNDLE_ROUND = "round";
@@ -120,7 +119,7 @@ public class TournamentRoundManagementFragment extends Fragment implements GameL
 
 
     @Override
-    public void onResultConfirmed(Game game) {
+    public void enterGameResultConfirmed(Game game) {
 
         Log.i(this.getClass().getName(), "game result entered: " + game);
 

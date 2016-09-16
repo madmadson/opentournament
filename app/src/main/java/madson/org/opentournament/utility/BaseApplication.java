@@ -267,4 +267,15 @@ public abstract class BaseApplication extends Application {
             iterator.next().pairingChanged(game1, game2);
         }
     }
+
+
+    public void notifyGameResultEntered(Game gameToSave) {
+
+        Set<TournamentEventListener> listeners = new HashSet<>(tournamentEventListeners);
+        Iterator<TournamentEventListener> iterator = listeners.iterator();
+
+        while (iterator.hasNext()) {
+            iterator.next().enterGameResultConfirmed(gameToSave);
+        }
+    }
 }

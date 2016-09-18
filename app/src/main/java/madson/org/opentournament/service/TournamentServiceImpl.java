@@ -208,7 +208,7 @@ public class TournamentServiceImpl implements TournamentService {
         tournament.setTournamentTyp(cursor.getString(9));
         tournament.setActualPlayers(cursor.getInt(10));
         tournament.setGameOrSportTyp(cursor.getString(11));
-        tournament.setState(Tournament.TournamentState.valueOf(cursor.getString(12)));
+        tournament.setState(cursor.getString(12));
 
         return tournament;
     }
@@ -257,7 +257,7 @@ public class TournamentServiceImpl implements TournamentService {
 
         ContentValues contentValues = new ContentValues();
         contentValues.put(TournamentTable.COLUMN_ACTUAL_ROUND, round);
-        contentValues.put(TournamentTable.COLUMN_STATE, tournament.getState().name());
+        contentValues.put(TournamentTable.COLUMN_STATE, tournament.getState());
 
         SQLiteDatabase writableDatabase = openTournamentDBHelper.getWritableDatabase();
 
@@ -267,7 +267,7 @@ public class TournamentServiceImpl implements TournamentService {
         writableDatabase.close();
 
         tournament.setActualRound(round);
-        tournament.setState(Tournament.TournamentState.STARTED);
+        tournament.setState(Tournament.TournamentState.STARTED.name());
 
         return tournament;
     }

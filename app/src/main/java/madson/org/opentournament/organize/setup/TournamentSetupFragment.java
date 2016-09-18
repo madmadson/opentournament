@@ -92,7 +92,7 @@ public class TournamentSetupFragment extends Fragment implements TournamentSetup
 
         FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
 
-        if (tournament.getState().equals(Tournament.TournamentState.PLANED)) {
+        if (tournament.getState().equals(Tournament.TournamentState.PLANED.name())) {
             createAvailablePlayerListFragment();
             fragmentTransaction.replace(R.id.available_player_fragment_container, availablePlayerListFragment);
         }

@@ -59,7 +59,7 @@ public class TournamentEndTask extends AsyncTask<Void, Void, Void> {
 
         next_round = tournament.getActualRound() + 1;
         tournament.setActualRound(next_round);
-        tournament.setState(Tournament.TournamentState.FINISHED);
+        tournament.setState(Tournament.TournamentState.FINISHED.name());
 
         TournamentService tournamentService = application.getTournamentService();
         RankingService rankingService = application.getRankingService();

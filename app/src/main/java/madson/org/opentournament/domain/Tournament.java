@@ -5,6 +5,8 @@ import android.os.Parcelable;
 
 import com.google.firebase.database.Exclude;
 
+import java.io.Serializable;
+
 import java.util.Date;
 
 
@@ -29,7 +31,7 @@ public class Tournament implements Parcelable {
         }
     };
 
-    public enum TournamentState {
+    public enum TournamentState implements Serializable {
 
         PLANED,
         STARTED,
@@ -78,7 +80,7 @@ public class Tournament implements Parcelable {
         this.creatorEmail = tournament.getCreatorEmail();
         this.tournamentTyp = TournamentTyp.valueOf(tournament.getTournamentTyp());
         this.gameOrSportTyp = GameOrSportTyp.valueOf(tournament.getGameOrSportTyp());
-        this.state = tournament.getState().name();
+        this.state = tournament.getState();
     }
 
 
@@ -179,9 +181,9 @@ public class Tournament implements Parcelable {
     }
 
 
-    public TournamentState getState() {
+    public String getState() {
 
-        return TournamentState.valueOf(state);
+        return state;
     }
 
 
@@ -342,8 +344,8 @@ public class Tournament implements Parcelable {
     }
 
 
-    public void setState(TournamentState state) {
+    public void setState(String state) {
 
-        this.state = state.name();
+        this.state = state;
     }
 }

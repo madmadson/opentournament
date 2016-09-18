@@ -168,7 +168,7 @@ public class TournamentOrganizeActivity extends BaseActivity implements Tourname
                 tournamentSetupFragment = TournamentSetupFragment.newInstance(tournamentToOrganize);
 
                 return tournamentSetupFragment;
-            } else if (tournamentToOrganize.getState().equals(Tournament.TournamentState.FINISHED)
+            } else if (tournamentToOrganize.getState().equals(Tournament.TournamentState.FINISHED.name())
                     && position == tournamentToOrganize.getActualRound()) {
                 return TournamentFinalStandingFragment.newInstance(tournamentToOrganize);
             } else {
@@ -196,7 +196,7 @@ public class TournamentOrganizeActivity extends BaseActivity implements Tourname
 
             if (position == 0) {
                 return getApplication().getResources().getString(R.string.nav_setup_tab);
-            } else if (tournamentToOrganize.getState().equals(Tournament.TournamentState.FINISHED)
+            } else if (tournamentToOrganize.getState().equals(Tournament.TournamentState.FINISHED.name())
                     && position == tournamentToOrganize.getActualRound()) {
                 return getApplication().getResources().getString(R.string.nav_final_standing_tab);
             } else {

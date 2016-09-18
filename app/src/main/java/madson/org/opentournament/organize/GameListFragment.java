@@ -233,7 +233,7 @@ public class GameListFragment extends Fragment implements TournamentEventListene
                 }
             });
 
-        if (tournament.getState().equals(Tournament.TournamentState.FINISHED)) {
+        if (tournament.getState().equals(Tournament.TournamentState.FINISHED.name())) {
             nextRoundButton.setVisibility(View.GONE);
             pairRoundAgainButton.setVisibility(View.GONE);
             endTournamentButton.setVisibility(View.GONE);

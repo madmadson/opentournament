@@ -286,6 +286,10 @@ public class TournamentPlayerServiceImpl implements TournamentPlayerService {
         List<TournamentPlayer> allPlayersForTournament = getAllPlayersForTournament(tournament);
         Log.i(this.getClass().getName(), "pushes tournament players to firebase: " + allPlayersForTournament);
 
+        DatabaseReference referenceFoPlayersToDelete = FirebaseDatabase.getInstance()
+                .getReference(FirebaseReferences.TOURNAMENT_PLAYERS + "/" + tournament.getOnlineUUID());
+        referenceFoPlayersToDelete.removeValue();
+
         for (TournamentPlayer player : allPlayersForTournament) {
             if (player.getOnline_uuid() == null) {
                 UUID uuid = UUID.randomUUID();

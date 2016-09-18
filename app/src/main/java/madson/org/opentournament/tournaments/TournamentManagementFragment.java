@@ -7,16 +7,13 @@ import android.os.Bundle;
 
 import android.support.annotation.Nullable;
 
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 import android.util.Log;
@@ -29,8 +26,8 @@ import android.widget.ProgressBar;
 
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Tournament;
+import madson.org.opentournament.online.OnlineTournamentActivity;
 import madson.org.opentournament.organize.TournamentOrganizeActivity;
-import madson.org.opentournament.service.TournamentService;
 import madson.org.opentournament.tasks.TournamentUploadTask;
 import madson.org.opentournament.utility.BaseActivity;
 import madson.org.opentournament.utility.BaseApplication;
@@ -166,6 +163,9 @@ public class TournamentManagementFragment extends Fragment implements Tournament
     @Override
     public void onOnlineTournamentListItemClicked(Tournament tournament) {
 
-        // TODO: create own activity for "passiv" tournament watching
+        Intent intent = new Intent(getContext(), OnlineTournamentActivity.class);
+        intent.putExtra(OnlineTournamentActivity.EXTRA_TOURNAMENT_GAME_OR_SPORT_TYP, tournament.getGameOrSportTyp());
+        intent.putExtra(OnlineTournamentActivity.EXTRA_TOURNAMENT_UUID, tournament.getOnlineUUID());
+        startActivity(intent);
     }
 }

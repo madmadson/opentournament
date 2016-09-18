@@ -16,13 +16,25 @@ import android.support.v7.app.ActionBar;
 import android.util.Log;
 
 import android.view.Menu;
+import android.view.View;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import madson.org.opentournament.R;
+import madson.org.opentournament.db.FirebaseReferences;
 import madson.org.opentournament.domain.Tournament;
+import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.organize.TournamentRoundManagementFragment;
 import madson.org.opentournament.organize.setup.TournamentPlayerListFragment;
 import madson.org.opentournament.organize.setup.TournamentSetupFragment;
 import madson.org.opentournament.utility.BaseActivity;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -30,14 +42,19 @@ import madson.org.opentournament.utility.BaseActivity;
  */
 public class OnlineTournamentActivity extends BaseActivity {
 
-    public static final String EXTRA_TOURNAMENT = "tournament";
+    public static final String EXTRA_TOURNAMENT_UUID = "tournament_uuid";
+    public static final String EXTRA_TOURNAMENT_GAME_OR_SPORT_TYP = "tournament_game_or_sport_typ";
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
 
+    private DatabaseReference mFirebaseDatabaseReference;
+
     private TournamentRoundManagementFragment tournamentRoundManagementFragment;
-    private Tournament tournament;
     private TournamentSetupFragment tournamentSetupFragment;
+    private String tournament_game_or_sport_typ;
+    private String tournament_uuid;
+    private ActionBar supportActionBar;
 
     @Override
     public boolean useTabLayout() {
@@ -86,30 +103,60 @@ public class OnlineTournamentActivity extends BaseActivity {
 
         Bundle extras = intent.getExtras();
 
-        tournament = (Tournament) extras.get(EXTRA_TOURNAMENT);
+        tournament_uuid = (String) extras.get(EXTRA_TOURNAMENT_UUID);
+        tournament_game_or_sport_typ = (String) extras.get(EXTRA_TOURNAMENT_GAME_OR_SPORT_TYP);
 
-        if (tournament != null) {
-            Log.i(this.getClass().toString(), "tournament opened with id " + tournament);
+        Log.i(this.getClass().toString(), "online tournament opened with uuid " + tournament_uuid);
 
-            ActionBar supportActionBar = getSupportActionBar();
+        supportActionBar = getSupportActionBar();
 
-            if (supportActionBar != null) {
-                supportActionBar.setTitle(tournament.getName());
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+
+        mViewPager = (ViewPager) findViewById(R.id.container);
+        mViewPager.setAdapter(mSectionsPagerAdapter);
+
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(mViewPager);
+
+        loadOnlineTournament();
+    }
+
+
+    private void loadOnlineTournament() {
+
+        mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
+
+        final ValueEventListener tournamentListener = new ValueEventListener() {
+
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                Tournament tournament = dataSnapshot.getValue(Tournament.class);
+
+                if (supportActionBar != null) {
+                    if (tournament != null) {
+                        supportActionBar.setTitle(tournament.getName());
+                    }
+                }
             }
 
-            mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
-            mViewPager = (ViewPager) findViewById(R.id.container);
-            mViewPager.setAdapter(mSectionsPagerAdapter);
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
 
-            TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
-            tabLayout.setupWithViewPager(mViewPager);
-        }
+                Log.e(this.getClass().getName(), "failed to load online players");
+            }
+        };
+
+        DatabaseReference child = mFirebaseDatabaseReference.child(FirebaseReferences.TOURNAMENTS + "/"
+                + tournament_game_or_sport_typ + "/" + tournament_uuid);
+
+        child.addValueEventListener(tournamentListener);
     }
 
     private class SectionsPagerAdapter extends FragmentPagerAdapter {
 
-        private Tournament tournamentToOrganize;
+        public int counter = 1;
 
         public SectionsPagerAdapter(FragmentManager fm) {
 
@@ -119,21 +166,14 @@ public class OnlineTournamentActivity extends BaseActivity {
         @Override
         public Fragment getItem(int position) {
 
-            Log.i(this.getClass().getName(),
-                "create tournament fragment: " + tournamentToOrganize + " on position: " + position);
-
-            return TournamentPlayerListFragment.newInstance(tournament);
+            return OnlineTournamentPlayerListFragment.newInstance(tournament_uuid);
         }
 
 
         @Override
         public int getCount() {
 
-            if (tournamentToOrganize != null) {
-                return tournamentToOrganize.getActualRound() + 1;
-            } else {
-                return 0;
-            }
+            return counter;
         }
 
 

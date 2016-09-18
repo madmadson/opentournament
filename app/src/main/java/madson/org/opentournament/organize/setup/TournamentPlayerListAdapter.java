@@ -4,17 +4,13 @@ import android.content.Context;
 
 import android.support.v7.widget.RecyclerView;
 
-import android.util.Log;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import android.widget.ImageView;
-import android.widget.TextView;
-
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.TournamentPlayer;
+import madson.org.opentournament.players.TournamentPlayerViewHolder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +21,7 @@ import java.util.List;
  *
  * @author  Tobias Matt - tmatt@contargo.net
  */
-public class TournamentPlayerListAdapter extends RecyclerView.Adapter<TournamentPlayerListAdapter.ViewHolder> {
+public class TournamentPlayerListAdapter extends RecyclerView.Adapter<TournamentPlayerViewHolder> {
 
     private Context context;
     private TournamentSetupEventListener mListener;
@@ -39,18 +35,18 @@ public class TournamentPlayerListAdapter extends RecyclerView.Adapter<Tournament
     }
 
     @Override
-    public TournamentPlayerListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public TournamentPlayerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_tournament_player, parent, false);
 
-        ViewHolder vh = new ViewHolder(v);
+        TournamentPlayerViewHolder vh = new TournamentPlayerViewHolder(this, v);
 
         return vh;
     }
 
 
     @Override
-    public void onBindViewHolder(TournamentPlayerListAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(TournamentPlayerViewHolder holder, int position) {
 
         final TournamentPlayer player = tournamentPlayerList.get(position);
         holder.setPlayer(player);
@@ -119,73 +115,9 @@ public class TournamentPlayerListAdapter extends RecyclerView.Adapter<Tournament
         notifyDataSetChanged();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        private TextView faction;
+    public TournamentSetupEventListener getmListener() {
 
-        private TextView playerNameInList;
-        private TextView playerNumber;
-        private TextView teamName;
-
-        private ImageView onlineIcon;
-        private TournamentPlayer player;
-
-        public ViewHolder(View v) {
-
-            super(v);
-            v.setOnClickListener(this);
-
-            playerNumber = (TextView) v.findViewById(R.id.tournament_player_row_player_number);
-            playerNameInList = (TextView) v.findViewById(R.id.tournament_player_fullname);
-            teamName = (TextView) v.findViewById(R.id.tournament_player_teamname);
-            faction = (TextView) v.findViewById(R.id.tournament_player_row_faction);
-            onlineIcon = (ImageView) v.findViewById(R.id.tournament_player_row_online_icon);
-        }
-
-        public TextView getPlayerNameInList() {
-
-            return playerNameInList;
-        }
-
-
-        public void setPlayer(TournamentPlayer player) {
-
-            this.player = player;
-        }
-
-
-        public TextView getPlayerNumber() {
-
-            return playerNumber;
-        }
-
-
-        public ImageView getOnlineIcon() {
-
-            return onlineIcon;
-        }
-
-
-        public TextView getTeamName() {
-
-            return teamName;
-        }
-
-
-        public TextView getFaction() {
-
-            return faction;
-        }
-
-
-        @Override
-        public void onClick(View v) {
-
-            Log.i(v.getClass().getName(), "removePlayer player from tournament player list: " + player);
-
-            if (mListener != null) {
-                mListener.clickTournamentPlayerListItem(player);
-            }
-        }
+        return mListener;
     }
 }

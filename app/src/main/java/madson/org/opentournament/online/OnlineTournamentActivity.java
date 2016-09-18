@@ -138,6 +138,8 @@ public class OnlineTournamentActivity extends BaseActivity {
                         supportActionBar.setTitle(tournament.getName());
                     }
                 }
+
+                mSectionsPagerAdapter.setTournament(tournament);
             }
 
 
@@ -156,7 +158,7 @@ public class OnlineTournamentActivity extends BaseActivity {
 
     private class SectionsPagerAdapter extends FragmentPagerAdapter {
 
-        public int counter = 1;
+        private Tournament tournament;
 
         public SectionsPagerAdapter(FragmentManager fm) {
 
@@ -173,7 +175,11 @@ public class OnlineTournamentActivity extends BaseActivity {
         @Override
         public int getCount() {
 
-            return counter;
+            if (tournament != null) {
+                return (tournament.getActualRound() * 2) + 1;
+            } else {
+                return 1;
+            }
         }
 
 
@@ -183,8 +189,25 @@ public class OnlineTournamentActivity extends BaseActivity {
             if (position == 0) {
                 return getApplication().getResources().getString(R.string.nav_setup_tab);
             } else {
-                return getApplication().getResources().getString(R.string.nav_round_tab, position);
+                if (position % 2 == 1) {
+                    return getApplication().getResources().getString(R.string.nav_games_tab, position);
+                } else {
+                    return getApplication().getResources().getString(R.string.nav_ranking_tab, position - 1);
+                }
             }
+        }
+
+
+        public Tournament getTournament() {
+
+            return tournament;
+        }
+
+
+        public void setTournament(Tournament tournament) {
+
+            this.tournament = tournament;
+            notifyDataSetChanged();
         }
     }
 }

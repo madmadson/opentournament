@@ -71,6 +71,8 @@
     
     <string name="nav_tournament_setup">Tournament Setup</string>
     <string name="nav_round_tab">Round %1$d</string>
+    <string name="nav_games_tab">Games %1$d</string>
+    <string name="nav_ranking_tab">Ranking %1$d</string>
     <string name="nav_home_activity">Home</string>
     <string name="nav_tournament_final">Final Results</string>
     <string name="search_player">Filter available players</string>

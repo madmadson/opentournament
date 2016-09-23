@@ -50,12 +50,20 @@ public class TournamentPlayerServiceImpl implements TournamentPlayerService {
     }
 
     @Override
-    public void removePlayerFromTournament(Player player, Tournament tournament) {
+    public void removePlayerFromTournament(TournamentPlayer player, Tournament tournament) {
 
         SQLiteDatabase db = openTournamentDBHelper.getWritableDatabase();
 
-        db.delete(TournamentPlayerTable.TABLE_TOURNAMENT_PLAYER, "tournament_id  = ?  AND  player_id = ? ",
-            new String[] { String.valueOf(tournament.get_id()), String.valueOf(player.get_id()) });
+        if (player.getPlayer_online_uuid() == null) {
+            db.delete(TournamentPlayerTable.TABLE_TOURNAMENT_PLAYER,
+                TournamentPlayerTable.COLUMN_TOURNAMENT_ID + " = ?  AND  " + TournamentPlayerTable.COLUMN_PLAYER_ID
+                + " = ? ", new String[] { String.valueOf(tournament.get_id()), String.valueOf(player.getPlayer_id()) });
+        } else {
+            db.delete(TournamentPlayerTable.TABLE_TOURNAMENT_PLAYER,
+                TournamentPlayerTable.COLUMN_TOURNAMENT_ID + " = ?  AND  "
+                + TournamentPlayerTable.COLUMN_PLAYER_ONLINE_UUID
+                + " = ? ", new String[] { String.valueOf(tournament.get_id()), player.getPlayer_online_uuid() });
+        }
 
         db.close();
     }

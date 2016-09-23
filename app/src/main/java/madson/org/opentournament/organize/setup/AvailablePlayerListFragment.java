@@ -37,6 +37,7 @@ import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.service.PlayerService;
 import madson.org.opentournament.service.TournamentPlayerService;
+import madson.org.opentournament.tasks.RemoveTournamentPlayerFromTournamentTask;
 import madson.org.opentournament.utility.BaseActivity;
 import madson.org.opentournament.utility.BaseFragment;
 
@@ -247,20 +248,6 @@ public class AvailablePlayerListFragment extends BaseFragment {
                             }
                         }
                     });
-
-            Runnable runnable = new Runnable() {
-
-                @Override
-                public void run() {
-
-                    Log.i(this.getClass().getName(), "removePlayer player from tournament ");
-
-                    getBaseApplication().getTournamentPlayerService().removePlayerFromTournament(player, tournament);
-
-                    getBaseApplication().getTournamentService().decreaseActualPlayerForTournament(tournament);
-                }
-            };
-            runnable.run();
         } else {
             Player player = Player.fromTournamentPlayer(tournamentPlayer);
             player.setOnlineUUID(tournamentPlayer.getPlayer_online_uuid());
@@ -278,20 +265,6 @@ public class AvailablePlayerListFragment extends BaseFragment {
                             }
                         }
                     });
-
-            Runnable runnable = new Runnable() {
-
-                @Override
-                public void run() {
-
-                    Log.i(this.getClass().getName(), "removePlayer online player from offline tournament ");
-
-                    getBaseApplication().getTournamentPlayerService()
-                        .removeOnlinePlayerFromTournament(tournamentPlayer, tournament);
-                    getBaseApplication().getTournamentService().decreaseActualPlayerForTournament(tournament);
-                }
-            };
-            runnable.run();
         }
     }
 

@@ -39,6 +39,7 @@ import madson.org.opentournament.organize.ConfirmPairingNewRoundDialog;
 import madson.org.opentournament.organize.TournamentEventListener;
 import madson.org.opentournament.service.PlayerService;
 import madson.org.opentournament.service.TournamentPlayerService;
+import madson.org.opentournament.tasks.AddDummyPlayerTask;
 import madson.org.opentournament.utility.BaseActivity;
 import madson.org.opentournament.utility.BaseApplication;
 
@@ -171,30 +172,9 @@ public class TournamentPlayerListFragment extends Fragment implements Tournament
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
 
-                                        Runnable runnable = new Runnable() {
-
-                                            @Override
-                                            public void run() {
-
-                                                TournamentPlayerService tournamentPlayerService =
-                                                    ((BaseApplication) getActivity().getApplication())
-                                                    .getTournamentPlayerService();
-
-                                                TournamentPlayer dummyTournamentPlayer = new TournamentPlayer();
-                                                dummyTournamentPlayer.setFirstname("Dummy");
-                                                dummyTournamentPlayer.setNickname("THE HAMMER");
-                                                dummyTournamentPlayer.setLastname("Player");
-                                                dummyTournamentPlayer.setDummy(true);
-
-                                                tournamentPlayerService.addTournamentPlayerToTournament(
-                                                    dummyTournamentPlayer, tournament);
-
-                                                ((BaseApplication) getActivity().getApplication())
-                                                .getTournamentService().increaseActualPlayerForTournament(tournament);
-                                                tournamentPlayerListAdapter.addTournamentPlayer(dummyTournamentPlayer);
-                                            }
-                                        };
-                                        runnable.run();
+                                        BaseApplication application = (BaseApplication) getActivity().getApplication();
+                                        new AddDummyPlayerTask(application, tournament, tournamentPlayerListAdapter)
+                                        .execute();
                                     }
                                 })
                         .setNegativeButton(R.string.dialog_cancel, null)

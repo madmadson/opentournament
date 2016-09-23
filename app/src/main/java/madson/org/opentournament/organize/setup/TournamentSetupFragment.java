@@ -3,11 +3,7 @@ package madson.org.opentournament.organize.setup;
 import android.content.Context;
 import android.content.DialogInterface;
 
-import android.graphics.drawable.Drawable;
-
 import android.os.Bundle;
-
-import android.support.annotation.Nullable;
 
 import android.support.design.widget.FloatingActionButton;
 
@@ -23,15 +19,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import android.widget.Button;
-
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Game;
 import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.organize.TournamentEventListener;
+import madson.org.opentournament.tasks.RemoveTournamentPlayerFromTournamentTask;
 import madson.org.opentournament.utility.BaseActivity;
+import madson.org.opentournament.utility.BaseApplication;
 
 
 /**
@@ -172,12 +168,11 @@ public class TournamentSetupFragment extends Fragment implements TournamentSetup
 
                                     Log.i(this.getClass().getName(), "removePlayer player from tournament");
 
-                                    // dummy player are not persistent
-                                    if (!tournamentPlayer.isDummy()) {
-                                        availablePlayerListFragment.addPlayer(tournamentPlayer);
-                                    }
-
-                                    tournamentPlayerListFragment.removePlayer(tournamentPlayer);
+                                    BaseApplication baseApplication = ((BaseActivity) getActivity())
+                                        .getBaseApplication();
+                                    new RemoveTournamentPlayerFromTournamentTask(baseApplication, tournament,
+                                        tournamentPlayer, tournamentPlayerListFragment, availablePlayerListFragment)
+                                    .execute();
                                 }
                             })
                     .setNeutralButton(R.string.dialog_cancel, null)
@@ -191,7 +186,10 @@ public class TournamentSetupFragment extends Fragment implements TournamentSetup
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
 
-                                    // TODO implement drop player
+                                    BaseApplication baseApplication = ((BaseActivity) getActivity())
+                                        .getBaseApplication();
+                                    new RemoveTournamentPlayerFromTournamentTask(baseApplication, tournament,
+                                        tournamentPlayer, tournamentPlayerListFragment, null).execute();
                                 }
                             })
                     .setNeutralButton(R.string.dialog_cancel, null)

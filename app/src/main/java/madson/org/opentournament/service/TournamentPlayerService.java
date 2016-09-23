@@ -51,7 +51,7 @@ public interface TournamentPlayerService {
      * @param  player
      * @param  tournament
      */
-    void removePlayerFromTournament(Player player, Tournament tournament);
+    void removePlayerFromTournament(TournamentPlayer player, Tournament tournament);
 
 
     /**

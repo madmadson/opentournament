@@ -3,6 +3,8 @@ package madson.org.opentournament.organize;
 import android.content.ClipData;
 import android.content.DialogInterface;
 
+import android.graphics.Color;
+
 import android.graphics.drawable.Drawable;
 
 import android.os.Bundle;
@@ -161,6 +163,12 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHo
             holder.getPlayerTwoCardView().setOnLongClickListener(null);
             holder.getPlayerTwoCardView().setOnDragListener(null);
         }
+
+        if (position % 2 == 0) {
+            holder.getPairingRow().setBackgroundColor(Color.LTGRAY);
+        } else {
+            holder.getPairingRow().setBackgroundColor(Color.WHITE);
+        }
     }
 
 
@@ -196,6 +204,7 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHo
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
+        private View pairingRow;
         private Game game;
 
         private CardView playerOneCardView;
@@ -219,6 +228,8 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHo
             super(v);
 
             v.setOnClickListener(this);
+
+            pairingRow = v.findViewById(R.id.pairing_row);
 
             playerOneCardView = (CardView) v.findViewById(R.id.game_list_player_one_card_view);
             playerTwoCardView = (CardView) v.findViewById(R.id.game_list_player_two_card_view);
@@ -327,6 +338,12 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHo
         public TextView getPlayerOneFaction() {
 
             return playerOneFaction;
+        }
+
+
+        public View getPairingRow() {
+
+            return pairingRow;
         }
     }
 

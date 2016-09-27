@@ -218,5 +218,6 @@
     <string name="tournament_ended_successful">tournament ended successfully</string>
     <string name="nav_final_standing_tab">Final standings</string>
     <string name="action">ACTION</string>
+    <string name="dropped_in_round">Dropped in round %1$d</string>
 
 </resources>

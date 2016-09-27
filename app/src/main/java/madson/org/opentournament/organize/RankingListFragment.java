@@ -2,12 +2,15 @@ package madson.org.opentournament.organize;
 
 import android.content.Context;
 
+import android.graphics.Color;
+
 import android.os.Bundle;
 
 import android.support.annotation.Nullable;
 
 import android.support.v4.app.Fragment;
 
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
@@ -116,7 +119,6 @@ public class RankingListFragment extends Fragment {
 
             final TournamentRanking ranking = rankingList.get(position);
 
-            holder.setRanking(ranking);
             holder.getRankingNumber().setText(String.valueOf(position + 1));
             holder.getScore().setText(String.valueOf(ranking.getScore()));
             holder.getSos().setText(String.valueOf(ranking.getSos()));
@@ -138,6 +140,19 @@ public class RankingListFragment extends Fragment {
                     holder.getOnlineIcon().setVisibility(View.VISIBLE);
                 }
             }
+
+            if (ranking.getTournamentPlayer().getDroppedInRound() != 0) {
+                holder.getDroppedInRound()
+                    .setText(context.getResources()
+                        .getString(R.string.dropped_in_round, ranking.getTournamentPlayer().getDroppedInRound()));
+                holder.getDroppedInRound().setVisibility(View.VISIBLE);
+            }
+
+            if (position % 2 == 0) {
+                holder.getRankingCard().setCardBackgroundColor(Color.LTGRAY);
+            } else {
+                holder.getRankingCard().setCardBackgroundColor(Color.WHITE);
+            }
         }
 
 
@@ -156,6 +171,8 @@ public class RankingListFragment extends Fragment {
 
         public class ViewHolder extends RecyclerView.ViewHolder {
 
+            private CardView rankingCard;
+            private TextView droppedInRound;
             private ImageView onlineIcon;
             private TextView playerFactionInList;
             private TextView score;
@@ -163,7 +180,6 @@ public class RankingListFragment extends Fragment {
             private TextView cp;
             private TextView vp;
             private TextView playerTeamNameInList;
-            private TournamentRanking ranking;
             private TextView playerNumber;
             private TextView playerNameInList;
 
@@ -180,13 +196,9 @@ public class RankingListFragment extends Fragment {
                 cp = (TextView) itemView.findViewById(R.id.ranking_row_control_points);
                 vp = (TextView) itemView.findViewById(R.id.ranking_row_victory_points);
                 onlineIcon = (ImageView) itemView.findViewById(R.id.ranking_row_online_icon);
+                droppedInRound = (TextView) itemView.findViewById(R.id.ranking_dropped_in_round);
+                rankingCard = (CardView) itemView.findViewById(R.id.ranking_row_card_view);
             }
-
-            public void setRanking(TournamentRanking ranking) {
-
-                this.ranking = ranking;
-            }
-
 
             public TextView getRankingNumber() {
 
@@ -239,6 +251,18 @@ public class RankingListFragment extends Fragment {
             public TextView getPlayerFactionInList() {
 
                 return playerFactionInList;
+            }
+
+
+            public TextView getDroppedInRound() {
+
+                return droppedInRound;
+            }
+
+
+            public CardView getRankingCard() {
+
+                return rankingCard;
             }
         }
     }

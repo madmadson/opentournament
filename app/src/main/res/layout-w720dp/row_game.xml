@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/pairing_row"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
@@ -7,176 +8,175 @@
     android:paddingLeft="@dimen/main_tick"
     android:paddingRight="@dimen/main_tick"
     android:paddingTop="@dimen/small_tick">
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_height="wrap_content" 
-    android:layout_width="match_parent"
-    android:orientation="horizontal">
-    
-    <android.support.v7.widget.CardView 
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:card_view="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/game_list_player_one_card_view"
-        android:layout_width="@dimen/game_card_width"
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        card_view:cardCornerRadius="4dp">
+        android:orientation="horizontal">
 
-        <LinearLayout
-            android:id="@+id/pairing_player_one_content"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            >
+        <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/game_list_player_one_card_view"
+            android:layout_width="@dimen/game_card_width"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            card_view:cardCornerRadius="4dp">
 
-            <TextView
-                android:id="@+id/player_one_name"
-                android:layout_gravity="center_horizontal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/small_tick"
-                android:layout_marginBottom="@dimen/small_tick"
-                android:gravity="center_vertical" />
-
-            <TextView
-                android:id="@+id/player_one_faction"
-                android:layout_gravity="center_horizontal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/small_tick"
-                android:layout_marginBottom="@dimen/small_tick"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:gravity="center_vertical" />
-
-            <View
-                android:layout_width="match_parent"
-                android:paddingBottom="@dimen/main_tick"
-                android:paddingTop="@dimen/main_tick"
-                android:layout_height="@dimen/line_tick"
-                android:background="@color/colorDivider" />
-            
-            <RelativeLayout
+            <LinearLayout
+                android:id="@+id/pairing_player_one_content"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal">
-                
-                <TextView
-                    android:id="@+id/pairing_player_one_control_points"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:layout_centerVertical="true"
-                    android:padding="@dimen/small_tick"/>
-                <TextView
-                    android:id="@+id/pairing_player_one_score"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_toLeftOf="@id/pairing_player_one_control_points"
-                    android:paddingRight="@dimen/small_tick"/>
+                android:orientation="vertical"
+                android:textAppearance="?android:attr/textAppearanceLarge">
 
                 <TextView
-                    android:id="@+id/pairing_player_one_victory_points"
+                    android:id="@+id/player_one_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_toRightOf="@id/pairing_player_one_control_points"
-                    android:paddingRight="@dimen/small_tick"/>
-            </RelativeLayout>
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="@dimen/small_tick"
+                    android:layout_marginTop="@dimen/small_tick"
+                    android:gravity="center_vertical" />
 
-        </LinearLayout>
-    </android.support.v7.widget.CardView>
-    
-    <TextView 
-        android:id="@+id/game_divider"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="@string/game_divider"/>
-    
-    <android.support.v7.widget.CardView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:card_view="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/game_list_player_two_card_view"
-        android:layout_height="wrap_content"
-        android:layout_width="240dp"
-        android:layout_alignParentRight="true"
-        card_view:cardCornerRadius="4dp">
+                <TextView
+                    android:id="@+id/player_one_faction"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="@dimen/small_tick"
+                    android:layout_marginTop="@dimen/small_tick"
+                    android:gravity="center_vertical"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
 
-        <LinearLayout
-            android:id="@+id/pairing_player_two_content"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:textAppearance="?android:attr/textAppearanceLarge">
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/line_tick"
+                    android:background="@color/colorDivider"
+                    android:paddingBottom="@dimen/main_tick"
+                    android:paddingTop="@dimen/main_tick" />
 
-            <TextView
-                android:id="@+id/player_two_name"
-                android:layout_gravity="center_horizontal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/small_tick"
-                android:layout_marginBottom="@dimen/small_tick"
-                android:gravity="center_vertical" />
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/player_two_faction"
-                android:layout_gravity="center_horizontal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/small_tick"
-                android:layout_marginBottom="@dimen/small_tick"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:gravity="center_vertical" />
+                    <TextView
+                        android:id="@+id/pairing_player_one_control_points"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_centerVertical="true"
+                        android:padding="@dimen/small_tick" />
 
-            <View
-                android:layout_width="match_parent"
-                android:paddingBottom="@dimen/main_tick"
-                android:paddingTop="@dimen/main_tick"
-                android:layout_height="@dimen/line_tick"
-                android:background="@color/colorDivider" />
+                    <TextView
+                        android:id="@+id/pairing_player_one_score"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toLeftOf="@id/pairing_player_one_control_points"
+                        android:paddingRight="@dimen/small_tick" />
 
-            <RelativeLayout
+                    <TextView
+                        android:id="@+id/pairing_player_one_victory_points"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toRightOf="@id/pairing_player_one_control_points"
+                        android:paddingRight="@dimen/small_tick" />
+                </RelativeLayout>
+
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+        <TextView
+            android:id="@+id/game_divider"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/game_divider"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/game_list_player_two_card_view"
+            android:layout_width="240dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            card_view:cardCornerRadius="4dp">
+
+            <LinearLayout
+                android:id="@+id/pairing_player_two_content"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal">
+                android:orientation="vertical"
+                android:textAppearance="?android:attr/textAppearanceLarge">
 
                 <TextView
-                    android:id="@+id/pairing_player_two_control_points"
+                    android:id="@+id/player_two_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:layout_centerVertical="true"
-                    android:padding="@dimen/small_tick"/>
-                <TextView
-                    android:id="@+id/pairing_player_two_score"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_toLeftOf="@id/pairing_player_two_control_points"
-                    android:paddingRight="@dimen/small_tick"/>
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="@dimen/small_tick"
+                    android:layout_marginTop="@dimen/small_tick"
+                    android:gravity="center_vertical" />
 
                 <TextView
-                    android:id="@+id/pairing_player_two_victory_points"
+                    android:id="@+id/player_two_faction"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_toRightOf="@id/pairing_player_two_control_points"
-                    android:paddingRight="@dimen/small_tick"/>
-            </RelativeLayout>
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="@dimen/small_tick"
+                    android:layout_marginTop="@dimen/small_tick"
+                    android:gravity="center_vertical"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
 
-        </LinearLayout>
-    </android.support.v7.widget.CardView>
-    
-</RelativeLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/line_tick"
+                    android:background="@color/colorDivider"
+                    android:paddingBottom="@dimen/main_tick"
+                    android:paddingTop="@dimen/main_tick" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/pairing_player_two_control_points"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_centerVertical="true"
+                        android:padding="@dimen/small_tick" />
+
+                    <TextView
+                        android:id="@+id/pairing_player_two_score"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toLeftOf="@id/pairing_player_two_control_points"
+                        android:paddingRight="@dimen/small_tick" />
+
+                    <TextView
+                        android:id="@+id/pairing_player_two_victory_points"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toRightOf="@id/pairing_player_two_control_points"
+                        android:paddingRight="@dimen/small_tick" />
+                </RelativeLayout>
+
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+    </RelativeLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/line_tick"
         android:layout_alignParentBottom="true"
-        android:background="@color/colorAccent"
-        android:layout_marginTop="@dimen/halve_tick" />
+        android:layout_marginTop="@dimen/halve_tick"
+        android:background="@color/colorAccent" />
 
 </LinearLayout>

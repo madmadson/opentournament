@@ -23,6 +23,8 @@ public class DropTournamentPlayerFromTournamentTask extends AsyncTask<Void, Void
     private TournamentPlayerListFragment tournamentPlayerListFragment;
     private BaseApplication baseApplication;
 
+    private TournamentPlayer updatedPlayer;
+
     public DropTournamentPlayerFromTournamentTask(BaseApplication baseApplication, Tournament tournament,
         TournamentPlayer player, TournamentPlayerListFragment tournamentPlayerListFragment) {
 
@@ -37,7 +39,7 @@ public class DropTournamentPlayerFromTournamentTask extends AsyncTask<Void, Void
 
         Log.i(this.getClass().getName(), "drop player from tournament ");
 
-        baseApplication.getTournamentPlayerService().dropPlayerFromTournament(player, tournament);
+        updatedPlayer = baseApplication.getTournamentPlayerService().dropPlayerFromTournament(player, tournament);
 
         return null;
     }
@@ -46,6 +48,6 @@ public class DropTournamentPlayerFromTournamentTask extends AsyncTask<Void, Void
     @Override
     protected void onPostExecute(Void aVoid) {
 
-        tournamentPlayerListFragment.removePlayer(player);
+        tournamentPlayerListFragment.updatePlayer(updatedPlayer);
     }
 }

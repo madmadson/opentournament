@@ -38,7 +38,7 @@
     <dimen name="organize_tournament_list_height">190dp</dimen>
     
     <!--Player card-->
-    <dimen name="player_card_view_height">50dp</dimen>
+    <dimen name="player_card_view_height">60dp</dimen>
     <dimen name="game_card_width">240dp</dimen>
     
     <!-- Enter game result -->

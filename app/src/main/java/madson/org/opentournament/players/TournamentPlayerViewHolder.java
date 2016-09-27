@@ -1,5 +1,6 @@
 package madson.org.opentournament.players;
 
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 
 import android.util.Log;
@@ -30,6 +31,8 @@ public class TournamentPlayerViewHolder extends RecyclerView.ViewHolder implemen
 
     private ImageView onlineIcon;
     private TournamentPlayer player;
+    private TextView droppedInRound;
+    private CardView tournamentPlayerCard;
 
     /**
      * used by online tournament list player.
@@ -40,10 +43,13 @@ public class TournamentPlayerViewHolder extends RecyclerView.ViewHolder implemen
 
         super(v);
 
+        tournamentPlayerCard = (CardView) v.findViewById(R.id.tournament_player_row_card_view);
+
         playerNumber = (TextView) v.findViewById(R.id.tournament_player_row_player_number);
         playerNameInList = (TextView) v.findViewById(R.id.tournament_player_fullname);
         teamName = (TextView) v.findViewById(R.id.tournament_player_teamname);
         faction = (TextView) v.findViewById(R.id.tournament_player_row_faction);
+        droppedInRound = (TextView) v.findViewById(R.id.dropped_in_round);
         onlineIcon = (ImageView) v.findViewById(R.id.tournament_player_row_online_icon);
     }
 
@@ -51,6 +57,9 @@ public class TournamentPlayerViewHolder extends RecyclerView.ViewHolder implemen
     public TournamentPlayerViewHolder(TournamentPlayerListAdapter tournamentPlayerListAdapter, View v) {
 
         super(v);
+
+        tournamentPlayerCard = (CardView) v.findViewById(R.id.tournament_player_row_card_view);
+
         this.tournamentPlayerListAdapter = tournamentPlayerListAdapter;
         v.setOnClickListener(this);
 
@@ -58,6 +67,7 @@ public class TournamentPlayerViewHolder extends RecyclerView.ViewHolder implemen
         playerNameInList = (TextView) v.findViewById(R.id.tournament_player_fullname);
         teamName = (TextView) v.findViewById(R.id.tournament_player_teamname);
         faction = (TextView) v.findViewById(R.id.tournament_player_row_faction);
+        droppedInRound = (TextView) v.findViewById(R.id.dropped_in_round);
         onlineIcon = (ImageView) v.findViewById(R.id.tournament_player_row_online_icon);
     }
 
@@ -105,5 +115,17 @@ public class TournamentPlayerViewHolder extends RecyclerView.ViewHolder implemen
         if (tournamentPlayerListAdapter.getmListener() != null) {
             tournamentPlayerListAdapter.getmListener().clickTournamentPlayerListItem(player);
         }
+    }
+
+
+    public TextView getDroppedInRound() {
+
+        return droppedInRound;
+    }
+
+
+    public CardView getTournamentPlayerCard() {
+
+        return tournamentPlayerCard;
     }
 }

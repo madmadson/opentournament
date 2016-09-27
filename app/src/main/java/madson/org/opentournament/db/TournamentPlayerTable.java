@@ -25,6 +25,7 @@ public class TournamentPlayerTable {
      * 9: meta
      * 10: dummy
      * 11: online_uuid
+     * 12: dropped_in_round
      */
     public static final String[] ALL_COLS_FOR_TOURNAMENT_PLAYER_TABLE = {
         TournamentPlayerTable.COLUMN_ID, TournamentPlayerTable.COLUMN_TOURNAMENT_ID,
@@ -32,7 +33,7 @@ public class TournamentPlayerTable {
         TournamentPlayerTable.COLUMN_FIRSTNAME, TournamentPlayerTable.COLUMN_NICKNAME,
         TournamentPlayerTable.COLUMN_LASTNAME, TournamentPlayerTable.COLUMN_TEAMNAME,
         TournamentPlayerTable.COLUMN_FACTION, TournamentPlayerTable.COLUMN_META, TournamentPlayerTable.COLUMN_DUMMY,
-        TournamentPlayerTable.COLUMN_ONLINE_UUID
+        TournamentPlayerTable.COLUMN_ONLINE_UUID, TournamentPlayerTable.COLUMN_DROPPED_IN_ROUND
     };
 
     public static final String TABLE_TOURNAMENT_PLAYER = "tournament_player";
@@ -54,6 +55,7 @@ public class TournamentPlayerTable {
     public static final String COLUMN_DUMMY = "dummy";
 
     public static final String COLUMN_ONLINE_UUID = "online_uuid";
+    public static final String COLUMN_DROPPED_IN_ROUND = "dropped_on_round";
 
     public static void createTable(SQLiteDatabase db) {
 
@@ -64,7 +66,7 @@ public class TournamentPlayerTable {
             + COLUMN_PLAYER_ID + " INTEGER, " + COLUMN_PLAYER_ONLINE_UUID + " TEXT," + COLUMN_FIRSTNAME
             + " TEXT, " + COLUMN_NICKNAME + " TEXT, " + COLUMN_LASTNAME + " TEXT, " + COLUMN_TEAMNAME + " TEXT, "
             + COLUMN_FACTION + " TEXT, " + COLUMN_META + " TEXT, " + COLUMN_DUMMY + " INTEGER, " + COLUMN_ONLINE_UUID
-            + " TEXT)");
+            + " TEXT, " + COLUMN_DROPPED_IN_ROUND + " INTEGER)");
     }
 
 

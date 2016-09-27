@@ -91,5 +91,5 @@ public interface TournamentPlayerService {
      * @param  player
      * @param  tournament
      */
-    void dropPlayerFromTournament(TournamentPlayer player, Tournament tournament);
+    TournamentPlayer dropPlayerFromTournament(TournamentPlayer player, Tournament tournament);
 }

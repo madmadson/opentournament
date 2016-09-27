@@ -2,6 +2,8 @@ package madson.org.opentournament.organize.setup;
 
 import android.content.Context;
 
+import android.graphics.Color;
+
 import android.support.v7.widget.RecyclerView;
 
 import android.view.LayoutInflater;
@@ -67,6 +69,18 @@ public class TournamentPlayerListAdapter extends RecyclerView.Adapter<Tournament
         } else {
             holder.getOnlineIcon().setVisibility(View.GONE);
         }
+
+        if (player.getDroppedInRound() != 0) {
+            holder.getDroppedInRound()
+                .setText(context.getResources().getString(R.string.dropped_in_round, player.getDroppedInRound()));
+            holder.getDroppedInRound().setVisibility(View.VISIBLE);
+        }
+
+        if (position % 2 == 0) {
+            holder.getTournamentPlayerCard().setCardBackgroundColor(Color.LTGRAY);
+        } else {
+            holder.getTournamentPlayerCard().setCardBackgroundColor(Color.WHITE);
+        }
     }
 
 
@@ -119,5 +133,15 @@ public class TournamentPlayerListAdapter extends RecyclerView.Adapter<Tournament
     public TournamentSetupEventListener getmListener() {
 
         return mListener;
+    }
+
+
+    public void updateTournamentPlayer(TournamentPlayer tournamentPlayer) {
+
+        if (tournamentPlayerList.contains(tournamentPlayer)) {
+            tournamentPlayerList.remove(tournamentPlayer);
+            tournamentPlayerList.add(tournamentPlayer);
+            notifyDataSetChanged();
+        }
     }
 }

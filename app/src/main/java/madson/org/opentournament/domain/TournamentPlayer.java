@@ -49,6 +49,8 @@ public class TournamentPlayer implements Parcelable {
     private String faction;
     private String meta;
 
+    private int droppedInRound;
+
     private boolean dummy;
 
     private List<String> opponentsPlayerIds = new ArrayList<>();
@@ -87,6 +89,7 @@ public class TournamentPlayer implements Parcelable {
         teamname = in.readString();
         faction = in.readString();
         meta = in.readString();
+        droppedInRound = in.readInt();
     }
 
     @Exclude
@@ -249,6 +252,18 @@ public class TournamentPlayer implements Parcelable {
     }
 
 
+    public int getDroppedInRound() {
+
+        return droppedInRound;
+    }
+
+
+    public void setDroppedInRound(int droppedInRound) {
+
+        this.droppedInRound = droppedInRound;
+    }
+
+
     @Exclude
     public String getRealPlayerId() {
 
@@ -313,7 +328,9 @@ public class TournamentPlayer implements Parcelable {
             + ", teamname='" + teamname + '\''
             + ", faction='" + faction + '\''
             + ", meta='" + meta + '\''
-            + ", dummy=" + dummy + '}';
+            + ", droppedInRound=" + droppedInRound
+            + ", dummy=" + dummy
+            + ", opponentsPlayerIds=" + opponentsPlayerIds + '}';
     }
 
 
@@ -340,6 +357,7 @@ public class TournamentPlayer implements Parcelable {
         parcel.writeString(faction);
         parcel.writeString(meta);
         parcel.writeInt(dummy ? 0 : 1);
+        parcel.writeInt(droppedInRound);
     }
 
 

@@ -9,11 +9,8 @@ import android.database.sqlite.SQLiteDatabase;
 
 import android.util.Log;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import madson.org.opentournament.db.FirebaseReferences;
 import madson.org.opentournament.db.OpenTournamentDBHelper;
@@ -21,7 +18,6 @@ import madson.org.opentournament.db.TournamentPlayerTable;
 import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
-import madson.org.opentournament.domain.TournamentRanking;
 import madson.org.opentournament.organize.setup.TournamentPlayerComparator;
 
 import java.util.ArrayList;
@@ -283,6 +279,7 @@ public class TournamentPlayerServiceImpl implements TournamentPlayerService {
         tournamentPlayer.setMeta(cursor.getString(9));
         tournamentPlayer.setDummy(cursor.getInt(10) != 0);
         tournamentPlayer.setOnline_uuid(cursor.getString(11));
+        tournamentPlayer.setDroppedInRound(cursor.getInt(12));
 
         return tournamentPlayer;
     }
@@ -324,9 +321,21 @@ public class TournamentPlayerServiceImpl implements TournamentPlayerService {
 
 
     @Override
-    public void dropPlayerFromTournament(TournamentPlayer player, Tournament tournament) {
+    public TournamentPlayer dropPlayerFromTournament(TournamentPlayer player, Tournament tournament) {
 
-        // TODO implement state of tournament player
+        SQLiteDatabase db = openTournamentDBHelper.getWritableDatabase();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(TournamentPlayerTable.COLUMN_DROPPED_IN_ROUND, tournament.getActualRound());
+
+        db.update(TournamentPlayerTable.TABLE_TOURNAMENT_PLAYER, contentValues,
+            TournamentPlayerTable.COLUMN_ID + " = ?", new String[] { String.valueOf(player.get_id()) });
+
+        db.close();
+
+        player.setDroppedInRound(tournament.getActualRound());
+
+        return player;
     }
 
 

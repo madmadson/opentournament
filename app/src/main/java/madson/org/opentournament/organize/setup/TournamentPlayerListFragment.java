@@ -309,4 +309,10 @@ public class TournamentPlayerListFragment extends Fragment implements Tournament
 
         // nothing
     }
+
+
+    public void updatePlayer(TournamentPlayer player) {
+
+        tournamentPlayerListAdapter.updateTournamentPlayer(player);
+    }
 }

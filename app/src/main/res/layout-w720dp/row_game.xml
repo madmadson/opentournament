@@ -9,6 +9,16 @@
     android:paddingRight="@dimen/main_tick"
     android:paddingTop="@dimen/small_tick">
 
+    <TextView
+        android:id="@+id/table_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="@dimen/small_tick"
+        android:layout_marginTop="@dimen/small_tick"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:gravity="center_vertical" />
+
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -20,6 +30,7 @@
             android:layout_width="@dimen/game_card_width"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
+            card_view:cardBackgroundColor="@color/colorBackground"
             card_view:cardCornerRadius="4dp">
 
             <LinearLayout
@@ -102,6 +113,7 @@
             android:layout_width="240dp"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
+            card_view:cardBackgroundColor="@color/colorBackground"
             card_view:cardCornerRadius="4dp">
 
             <LinearLayout

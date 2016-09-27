@@ -1,4 +1,4 @@
-package madson.org.opentournament.players;
+package madson.org.opentournament.viewHolder;
 
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;

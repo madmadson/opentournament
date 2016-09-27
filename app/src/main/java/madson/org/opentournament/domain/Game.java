@@ -36,6 +36,8 @@ public class Game implements Parcelable {
     private long tournament_id;
     private int tournament_round;
 
+    private int playing_field;
+
     private long player_one_id;
     private String player_one_online_uuid;
     private TournamentPlayer player1;
@@ -73,6 +75,7 @@ public class Game implements Parcelable {
         player_two_victory_points = in.readInt();
         finished = in.readByte() != 0;
         scenario = in.readString();
+        playing_field = in.readInt();
     }
 
 
@@ -330,6 +333,8 @@ public class Game implements Parcelable {
 
         game.setScenario(cursor.getString(15));
 
+        game.setPlaying_field(cursor.getInt(16));
+
         return game;
     }
 
@@ -386,6 +391,7 @@ public class Game implements Parcelable {
         dest.writeInt(player_two_victory_points);
         dest.writeByte((byte) (finished ? 1 : 0));
         dest.writeString(scenario);
+        dest.writeInt(playing_field);
     }
 
 
@@ -397,6 +403,7 @@ public class Game implements Parcelable {
             + ", online_uuid='" + online_uuid + '\''
             + ", tournament_id=" + tournament_id
             + ", tournament_round=" + tournament_round
+            + ", playing_field=" + playing_field
             + ", player_one_id=" + player_one_id
             + ", player_one_online_uuid='" + player_one_online_uuid + '\''
             + ", player1=" + player1
@@ -433,5 +440,17 @@ public class Game implements Parcelable {
         } else {
             return String.valueOf(player_two_id);
         }
+    }
+
+
+    public int getPlaying_field() {
+
+        return playing_field;
+    }
+
+
+    public void setPlaying_field(int playing_field) {
+
+        this.playing_field = playing_field;
     }
 }

@@ -418,16 +418,17 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
 
         SQLiteDatabase db = openTournamentDBHelper.getWritableDatabase();
 
-        for (Game game : games) {
+        for (int i = 0; i < games.size(); i++) {
             ContentValues contentValues = new ContentValues();
-            contentValues.put(GameTable.COLUMN_TOURNAMENT_ID, game.getTournament_id());
-            contentValues.put(GameTable.COLUMN_TOURNAMENT_ROUND, game.getTournament_round());
+            contentValues.put(GameTable.COLUMN_TOURNAMENT_ID, games.get(i).getTournament_id());
+            contentValues.put(GameTable.COLUMN_TOURNAMENT_ROUND, games.get(i).getTournament_round());
+            contentValues.put(GameTable.COLUMN_PLAYING_FIELD, i + 1);
 
-            contentValues.put(GameTable.COLUMN_PLAYER_ONE_ID, game.getPlayer_one_id());
-            contentValues.put(GameTable.COLUMN_PLAYER_ONE_ONLINE_UUID, game.getPlayer_one_online_uuid());
+            contentValues.put(GameTable.COLUMN_PLAYER_ONE_ID, games.get(i).getPlayer_one_id());
+            contentValues.put(GameTable.COLUMN_PLAYER_ONE_ONLINE_UUID, games.get(i).getPlayer_one_online_uuid());
 
-            contentValues.put(GameTable.COLUMN_PLAYER_TWO_ID, game.getPlayer_two_id());
-            contentValues.put(GameTable.COLUMN_PLAYER_TWO_ONLINE_UUID, game.getPlayer_two_online_uuid());
+            contentValues.put(GameTable.COLUMN_PLAYER_TWO_ID, games.get(i).getPlayer_two_id());
+            contentValues.put(GameTable.COLUMN_PLAYER_TWO_ONLINE_UUID, games.get(i).getPlayer_two_online_uuid());
 
             db.insert(GameTable.TABLE_TOURNAMENT_GAME, null, contentValues);
         }

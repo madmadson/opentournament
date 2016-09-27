@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.TournamentPlayer;
-import madson.org.opentournament.players.TournamentPlayerViewHolder;
+import madson.org.opentournament.viewHolder.TournamentPlayerViewHolder;
 
 import java.util.ArrayList;
 import java.util.List;

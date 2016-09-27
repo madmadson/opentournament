@@ -29,6 +29,7 @@ public class GameTable {
      * 13: player_two_victory_points
      * 14: game finished
      * 15: scenario
+     * 16: playing_field
      */
     public static final String[] ALL_COLS_FOR_TOURNAMENT_GAME = {
         GameTable.COLUMN_ID, GameTable.COLUMN_ONLINE_UUID, GameTable.COLUMN_TOURNAMENT_ID,
@@ -37,7 +38,7 @@ public class GameTable {
         GameTable.COLUMN_PLAYER_ONE_VICTORY_POINTS, GameTable.COLUMN_PLAYER_TWO_ID,
         GameTable.COLUMN_PLAYER_TWO_ONLINE_UUID, GameTable.COLUMN_PLAYER_TWO_SCORE,
         GameTable.COLUMN_PLAYER_TWO_CONTROL_POINTS, GameTable.COLUMN_PLAYER_TWO_VICTORY_POINTS,
-        GameTable.COLUMN_FINISHED, GameTable.COLUMN_SCENARIO
+        GameTable.COLUMN_FINISHED, GameTable.COLUMN_SCENARIO, GameTable.COLUMN_PLAYING_FIELD
     };
 
     public static final String TABLE_TOURNAMENT_GAME = "game";
@@ -62,6 +63,7 @@ public class GameTable {
 
     public static final String COLUMN_FINISHED = "finished";
     public static final String COLUMN_SCENARIO = "scenario";
+    public static final String COLUMN_PLAYING_FIELD = "playing_field";
 
     public static void createTable(SQLiteDatabase db) {
 
@@ -77,7 +79,7 @@ public class GameTable {
             + " INTEGER, " + COLUMN_PLAYER_TWO_ONLINE_UUID + " TEXT, " + COLUMN_PLAYER_TWO_SCORE + " INTEGER, "
             + COLUMN_PLAYER_TWO_CONTROL_POINTS + " INTEGER, " + COLUMN_PLAYER_TWO_VICTORY_POINTS + " INTEGER, "
             + COLUMN_FINISHED + " INTEGER, " + COLUMN_SCENARIO
-            + " TEXT)");
+            + " TEXT, " + COLUMN_PLAYING_FIELD + " INTEGER)");
     }
 
 

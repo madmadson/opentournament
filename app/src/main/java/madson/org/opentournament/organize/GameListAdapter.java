@@ -35,6 +35,7 @@ import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.tasks.SwapPlayersTask;
 import madson.org.opentournament.utility.BaseActivity;
 import madson.org.opentournament.utility.BaseApplication;
+import madson.org.opentournament.viewHolder.GameViewHolder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +46,7 @@ import java.util.List;
  *
  * @author  Tobias Matt - tmatt@contargo.net
  */
-public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHolder> {
+public class GameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
 
     private final Drawable enterShape;
     private final Drawable normalShape;
@@ -95,19 +96,22 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHo
 
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public GameViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_game, parent, false);
 
-        return new ViewHolder(v);
+        return new GameViewHolder(this, v);
     }
 
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(GameViewHolder holder, int position) {
 
         final Game game = gamesForRound.get(position);
         holder.setGame(game);
+
+        holder.getTableNumber()
+            .setText(activity.getResources().getString(R.string.table_number, game.getPlaying_field()));
 
         if (game.isFinished()) {
             holder.getPlayerOneCardView()
@@ -200,151 +204,6 @@ public class GameListAdapter extends RecyclerView.Adapter<GameListAdapter.ViewHo
         }
 
         return false;
-    }
-
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-
-        private View pairingRow;
-        private Game game;
-
-        private CardView playerOneCardView;
-
-        private TextView playerOneNameInList;
-        private TextView playerOneFaction;
-        private TextView playerOneScore;
-        private TextView playerOneControlPoints;
-        private TextView playerOneVictoryPoints;
-
-        private CardView playerTwoCardView;
-
-        private TextView playerTwoNameInList;
-        private TextView playerTwoFaction;
-        private TextView playerTwoScore;
-        private TextView playerTwoControlPoints;
-        private TextView playerTwoVictoryPoints;
-
-        public ViewHolder(View v) {
-
-            super(v);
-
-            v.setOnClickListener(this);
-
-            pairingRow = v.findViewById(R.id.pairing_row);
-
-            playerOneCardView = (CardView) v.findViewById(R.id.game_list_player_one_card_view);
-            playerTwoCardView = (CardView) v.findViewById(R.id.game_list_player_two_card_view);
-
-            playerOneNameInList = (TextView) v.findViewById(R.id.player_one_name);
-            playerOneFaction = (TextView) v.findViewById(R.id.player_one_faction);
-            playerOneScore = (TextView) v.findViewById(R.id.pairing_player_one_score);
-            playerOneControlPoints = (TextView) v.findViewById(R.id.pairing_player_one_control_points);
-            playerOneVictoryPoints = (TextView) v.findViewById(R.id.pairing_player_one_victory_points);
-
-            playerTwoNameInList = (TextView) v.findViewById(R.id.player_two_name);
-            playerTwoFaction = (TextView) v.findViewById(R.id.player_two_faction);
-            playerTwoScore = (TextView) v.findViewById(R.id.pairing_player_two_score);
-            playerTwoControlPoints = (TextView) v.findViewById(R.id.pairing_player_two_control_points);
-            playerTwoVictoryPoints = (TextView) v.findViewById(R.id.pairing_player_two_victory_points);
-        }
-
-        @Override
-        public void onClick(View v) {
-
-            Log.i(v.getClass().getName(), "game clicked: " + game);
-
-            EnterResultForGameDialog dialog = new EnterResultForGameDialog();
-
-            Bundle resultForPairingResult = new Bundle();
-            resultForPairingResult.putParcelable(EnterResultForGameDialog.BUNDLE_GAME, game);
-            dialog.setArguments(resultForPairingResult);
-
-            FragmentManager supportFragmentManager = ((AppCompatActivity) v.getContext()).getSupportFragmentManager();
-            dialog.show(supportFragmentManager, "enterGameResultDialog");
-        }
-
-
-        public void setGame(Game game) {
-
-            this.game = game;
-        }
-
-
-        public CardView getPlayerOneCardView() {
-
-            return playerOneCardView;
-        }
-
-
-        public CardView getPlayerTwoCardView() {
-
-            return playerTwoCardView;
-        }
-
-
-        public TextView getPlayerOneNameInList() {
-
-            return playerOneNameInList;
-        }
-
-
-        public TextView getPlayerTwoNameInList() {
-
-            return playerTwoNameInList;
-        }
-
-
-        public TextView getPlayerTwoVictoryPoints() {
-
-            return playerTwoVictoryPoints;
-        }
-
-
-        public TextView getPlayerTwoControlPoints() {
-
-            return playerTwoControlPoints;
-        }
-
-
-        public TextView getPlayerTwoScore() {
-
-            return playerTwoScore;
-        }
-
-
-        public TextView getPlayerOneVictoryPoints() {
-
-            return playerOneVictoryPoints;
-        }
-
-
-        public TextView getPlayerOneControlPoints() {
-
-            return playerOneControlPoints;
-        }
-
-
-        public TextView getPlayerOneScore() {
-
-            return playerOneScore;
-        }
-
-
-        public TextView getPlayerTwoFaction() {
-
-            return playerTwoFaction;
-        }
-
-
-        public TextView getPlayerOneFaction() {
-
-            return playerOneFaction;
-        }
-
-
-        public View getPairingRow() {
-
-            return pairingRow;
-        }
     }
 
     private class GameLongClickEventListener implements View.OnLongClickListener {

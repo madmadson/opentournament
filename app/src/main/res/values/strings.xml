@@ -219,5 +219,6 @@
     <string name="nav_final_standing_tab">Final standings</string>
     <string name="action">ACTION</string>
     <string name="dropped_in_round">Dropped in round %1$d</string>
+    <string name="table_number">Table %1$d</string>
 
 </resources>

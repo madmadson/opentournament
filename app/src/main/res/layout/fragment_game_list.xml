@@ -137,16 +137,16 @@
         </LinearLayout>
     </FrameLayout>
 
-<View
-android:layout_width="match_parent"
-android:layout_height="@dimen/line_tick"
-android:background="@color/colorAccent"
-android:padding="@dimen/main_tick" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/line_tick"
+        android:background="@color/colorAccent"
+        android:padding="@dimen/main_tick" />
 
-<android.support.v7.widget.RecyclerView
-android:id="@+id/game_list_recycler_view"
-android:layout_width="match_parent"
-android:layout_height="wrap_content"
-android:scrollbars="vertical" />
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/game_list_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="vertical" />
 
-    </LinearLayout>
+</LinearLayout>

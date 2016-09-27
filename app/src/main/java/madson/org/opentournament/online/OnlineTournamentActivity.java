@@ -168,7 +168,18 @@ public class OnlineTournamentActivity extends BaseActivity {
         @Override
         public Fragment getItem(int position) {
 
-            return OnlineTournamentPlayerListFragment.newInstance(tournament_uuid);
+            // list of all players
+            if (position == 0) {
+                return OnlineTournamentPlayerListFragment.newInstance(tournament_uuid);
+            }
+
+            int round = (position + 1) / 2;
+
+            if (position % 2 == 1) {
+                return OnlineGamesListFragment.newInstance(round, tournament_uuid);
+            } else {
+                return OnlineGamesListFragment.newInstance(round, tournament_uuid);
+            }
         }
 
 

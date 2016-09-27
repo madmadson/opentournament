@@ -1,19 +1,14 @@
 package madson.org.opentournament.online;
 
+import android.graphics.Color;
+
 import android.os.Bundle;
 import android.os.Handler;
 
-import android.support.design.widget.FloatingActionButton;
-
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.ContextCompat;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-
-import android.util.Log;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,27 +17,15 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import madson.org.opentournament.R;
 import madson.org.opentournament.db.FirebaseReferences;
-import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
-import madson.org.opentournament.organize.setup.AddTournamentPlayerDialog;
-import madson.org.opentournament.organize.setup.TournamentPlayerListAdapter;
-import madson.org.opentournament.players.TournamentPlayerViewHolder;
-import madson.org.opentournament.utility.BaseActivity;
-
-import java.util.ArrayList;
-import java.util.List;
+import madson.org.opentournament.viewHolder.TournamentPlayerViewHolder;
 
 
 /**
@@ -121,6 +104,19 @@ public class OnlineTournamentPlayerListFragment extends Fragment {
                     viewHolder.getOnlineIcon().setVisibility(View.VISIBLE);
                 } else {
                     viewHolder.getOnlineIcon().setVisibility(View.GONE);
+                }
+
+                if (player.getDroppedInRound() != 0) {
+                    viewHolder.getDroppedInRound()
+                        .setText(getActivity().getResources()
+                            .getString(R.string.dropped_in_round, player.getDroppedInRound()));
+                    viewHolder.getDroppedInRound().setVisibility(View.VISIBLE);
+                }
+
+                if (position % 2 == 0) {
+                    viewHolder.getTournamentPlayerCard().setCardBackgroundColor(Color.LTGRAY);
+                } else {
+                    viewHolder.getTournamentPlayerCard().setCardBackgroundColor(Color.WHITE);
                 }
             }
         };

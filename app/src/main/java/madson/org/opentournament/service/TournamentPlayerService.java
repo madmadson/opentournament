@@ -85,4 +85,11 @@ public interface TournamentPlayerService {
      * @param  tournament
      */
     void uploadTournamentPlayers(Tournament tournament);
+
+
+    /**
+     * @param  player
+     * @param  tournament
+     */
+    void dropPlayerFromTournament(TournamentPlayer player, Tournament tournament);
 }

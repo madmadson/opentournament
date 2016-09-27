@@ -127,11 +127,11 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
 
         List<TournamentRanking> rankings = new ArrayList<>(rankingForRound.values());
 
-        boolean playerDontPlayTwiceAgainstEachOther = pairingOptions.containsKey(
+        playerDontPlayTwiceAgainstEachOther = pairingOptions.containsKey(
                 MapOfPairingConfig.PLAYER_NOT_PLAY_TWICE_AGAINST_EACH_OVER)
             && pairingOptions.get(MapOfPairingConfig.PLAYER_NOT_PLAY_TWICE_AGAINST_EACH_OVER).isActive();
 
-        boolean playerWithSameTeamDontPlayAgainstEachOther = pairingOptions.containsKey(
+        playerWithSameTeamDontPlayAgainstEachOther = pairingOptions.containsKey(
                 MapOfPairingConfig.PLAYER_WITH_SAME_TEAM_NOT_PLAY_AGAINST_EACH_OTHER)
             && pairingOptions.get(MapOfPairingConfig.PLAYER_WITH_SAME_TEAM_NOT_PLAY_AGAINST_EACH_OTHER)
                 .isActive();
@@ -274,32 +274,6 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
 
                     return true;
                 }
-            }
-        }
-
-        return false;
-    }
-
-
-    @NonNull
-    private TournamentRanking setPlayerTwo(Game game, TournamentRanking secondPlayerRanking) {
-
-        TournamentRanking player_two;
-        player_two = secondPlayerRanking;
-
-        game.setPlayer2(secondPlayerRanking.getTournamentPlayer());
-        game.setPlayer_two_id(secondPlayerRanking.getPlayer_id());
-        game.setPlayer_two_online_uuid(secondPlayerRanking.getPlayer_online_uuid());
-
-        return player_two;
-    }
-
-
-    private boolean pairingOptionsPresent(Map<String, PairingOption> pairingOptions) {
-
-        for (PairingOption pairingOption : pairingOptions.values()) {
-            if (pairingOption.isActive()) {
-                return true;
             }
         }
 

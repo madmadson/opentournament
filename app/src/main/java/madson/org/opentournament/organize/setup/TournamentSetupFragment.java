@@ -25,6 +25,7 @@ import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.organize.TournamentEventListener;
+import madson.org.opentournament.tasks.DropTournamentPlayerFromTournamentTask;
 import madson.org.opentournament.tasks.RemoveTournamentPlayerFromTournamentTask;
 import madson.org.opentournament.utility.BaseActivity;
 import madson.org.opentournament.utility.BaseApplication;
@@ -188,8 +189,8 @@ public class TournamentSetupFragment extends Fragment implements TournamentSetup
 
                                     BaseApplication baseApplication = ((BaseActivity) getActivity())
                                         .getBaseApplication();
-                                    new RemoveTournamentPlayerFromTournamentTask(baseApplication, tournament,
-                                        tournamentPlayer, tournamentPlayerListFragment, null).execute();
+                                    new DropTournamentPlayerFromTournamentTask(baseApplication, tournament,
+                                        tournamentPlayer, tournamentPlayerListFragment).execute();
                                 }
                             })
                     .setNeutralButton(R.string.dialog_cancel, null)

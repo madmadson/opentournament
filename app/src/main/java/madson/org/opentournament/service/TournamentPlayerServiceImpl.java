@@ -323,6 +323,13 @@ public class TournamentPlayerServiceImpl implements TournamentPlayerService {
     }
 
 
+    @Override
+    public void dropPlayerFromTournament(TournamentPlayer player, Tournament tournament) {
+
+        // TODO implement state of tournament player
+    }
+
+
     private void addOnlineUUIDToTournamentPlayer(TournamentPlayer player) {
 
         SQLiteDatabase db = openTournamentDBHelper.getWritableDatabase();

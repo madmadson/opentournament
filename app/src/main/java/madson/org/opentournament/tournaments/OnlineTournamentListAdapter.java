@@ -2,6 +2,8 @@ package madson.org.opentournament.tournaments;
 
 import android.content.Context;
 
+import android.graphics.Color;
+
 import android.os.Bundle;
 
 import android.support.v4.app.FragmentManager;
@@ -48,7 +50,6 @@ public class OnlineTournamentListAdapter extends RecyclerView.Adapter<OnlineTour
 
     private List<Tournament> mDataset;
     private DateFormat dateFormatter = DateFormat.getDateInstance(DateFormat.DEFAULT, Locale.getDefault());
-    private FirebaseUser currentUser;
     private TournamentManagementEventListener mListener;
 
     public OnlineTournamentListAdapter(Context context, TournamentManagementEventListener mListener) {
@@ -58,8 +59,6 @@ public class OnlineTournamentListAdapter extends RecyclerView.Adapter<OnlineTour
         this.mListener = mListener;
 
         this.mDataset = new ArrayList<>();
-
-        currentUser = FirebaseAuth.getInstance().getCurrentUser();
     }
 
     @Override
@@ -91,6 +90,20 @@ public class OnlineTournamentListAdapter extends RecyclerView.Adapter<OnlineTour
         int maximalPlayers = tournament.getMaxNumberOfPlayers();
         viewHolder.getTournamentPlayersInList()
             .setText(context.getResources().getString(R.string.players_in_tournament, actualPlayers, maximalPlayers));
+
+        if (tournament.getState().equals(Tournament.TournamentState.FINISHED.name())) {
+            viewHolder.getTournamentState().setText(R.string.tournament_finished);
+            viewHolder.getTournamentState().setTextColor(Color.BLUE);
+        } else if (tournament.getActualRound() > 0) {
+            viewHolder.getTournamentState().setText(R.string.tournament_started);
+            viewHolder.getTournamentState().setTextColor(Color.GREEN);
+        }
+
+        if (position % 2 == 0) {
+            viewHolder.getRowTournament().setBackgroundColor(Color.LTGRAY);
+        } else {
+            viewHolder.getRowTournament().setBackgroundColor(Color.WHITE);
+        }
     }
 
 
@@ -128,6 +141,8 @@ public class OnlineTournamentListAdapter extends RecyclerView.Adapter<OnlineTour
 
     public class OnlineTournamentViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
+        private TextView tournamentState;
+        private View rowTournament;
         private TextView tournamentNameInList;
         private TextView tournamentPlayersInList;
         private TextView tournamentLocationInList;
@@ -139,10 +154,13 @@ public class OnlineTournamentListAdapter extends RecyclerView.Adapter<OnlineTour
             super(v);
             v.setOnClickListener(this);
 
+            rowTournament = v.findViewById(R.id.row_tournament);
+
             tournamentNameInList = (TextView) v.findViewById(R.id.tournament_name);
             tournamentPlayersInList = (TextView) v.findViewById(R.id.amount_players);
             tournamentLocationInList = (TextView) v.findViewById(R.id.tournament_location);
             tournamentDateInList = (TextView) v.findViewById(R.id.tournament_date);
+            tournamentState = (TextView) v.findViewById(R.id.tournament_state);
         }
 
         @Override
@@ -181,6 +199,18 @@ public class OnlineTournamentListAdapter extends RecyclerView.Adapter<OnlineTour
         public TextView getTournamentDateInList() {
 
             return tournamentDateInList;
+        }
+
+
+        public TextView getTournamentState() {
+
+            return tournamentState;
+        }
+
+
+        public View getRowTournament() {
+
+            return rowTournament;
         }
     }
 }

@@ -29,6 +29,7 @@
     <!-- Tournament list -->
     <dimen name="online_tournament_date_margin_left">250dp</dimen>
     <dimen name="online_tournament_location_margin_left">350dp</dimen>
+    <dimen name="online_tournament_state_margin_left">500dp</dimen>
     
     <dimen name="organised_tournament_name_margin_left">100dp</dimen>
     <dimen name="organised_tournament_date_margin_left">350dp</dimen>

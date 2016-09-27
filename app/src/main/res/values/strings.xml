@@ -213,12 +213,15 @@
     <string name="info_more_rounds_than_expected">WARNING! \nYou try to pair for more rounds than expected.</string>
     <string name="player_already_played_each_other">%1$s already played against %2$s</string>
     <string name="player_swapped_successfully">Player swapped successful</string>
-    <string name="end_tournament">Really end Tournament?</string>
+    <string name="end_tournament">End Tournament</string>
     <string name="confirm_swap_player">confirm swap player</string>
     <string name="tournament_ended_successful">tournament ended successfully</string>
     <string name="nav_final_standing_tab">Final standings</string>
     <string name="action">ACTION</string>
     <string name="dropped_in_round">Dropped in round %1$d</string>
     <string name="table_number">Table %1$d</string>
+    <string name="tournament_started">Ongoing</string>
+    <string name="tournament_finished">Finished</string>
+    <string name="final_standings">Final Standings</string>
 
 </resources>

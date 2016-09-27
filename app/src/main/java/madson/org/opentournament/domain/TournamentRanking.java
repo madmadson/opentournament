@@ -31,6 +31,8 @@ public class TournamentRanking {
 
     private List<String> listOfOpponentsPlayerIds = new ArrayList<>();
 
+    private int rank;
+
     public TournamentRanking() {
     }
 
@@ -203,5 +205,17 @@ public class TournamentRanking {
     public List<String> getListOfOpponentsPlayerIds() {
 
         return listOfOpponentsPlayerIds;
+    }
+
+
+    public int getRank() {
+
+        return rank;
+    }
+
+
+    public void setRank(int rank) {
+
+        this.rank = rank;
     }
 }

@@ -169,7 +169,7 @@ public class TournamentOrganizeActivity extends BaseActivity implements Tourname
 
                 return tournamentSetupFragment;
             } else if (tournamentToOrganize.getState().equals(Tournament.TournamentState.FINISHED.name())
-                    && position == tournamentToOrganize.getActualRound()) {
+                    && position == tournamentToOrganize.getActualRound() + 1) {
                 return TournamentFinalStandingFragment.newInstance(tournamentToOrganize);
             } else {
                 tournamentRoundManagementFragment = TournamentRoundManagementFragment.newInstance(position,
@@ -184,7 +184,11 @@ public class TournamentOrganizeActivity extends BaseActivity implements Tourname
         public int getCount() {
 
             if (tournamentToOrganize != null) {
-                return tournamentToOrganize.getActualRound() + 1;
+                if (tournamentToOrganize.getState().equals(Tournament.TournamentState.FINISHED.name())) {
+                    return tournamentToOrganize.getActualRound() + 2;
+                } else {
+                    return tournamentToOrganize.getActualRound() + 1;
+                }
             } else {
                 return 0;
             }
@@ -197,7 +201,7 @@ public class TournamentOrganizeActivity extends BaseActivity implements Tourname
             if (position == 0) {
                 return getApplication().getResources().getString(R.string.nav_setup_tab);
             } else if (tournamentToOrganize.getState().equals(Tournament.TournamentState.FINISHED.name())
-                    && position == tournamentToOrganize.getActualRound()) {
+                    && position == tournamentToOrganize.getActualRound() + 1) {
                 return getApplication().getResources().getString(R.string.nav_final_standing_tab);
             } else {
                 return getApplication().getResources().getString(R.string.nav_round_tab, position);

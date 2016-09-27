@@ -168,17 +168,20 @@ public class OnlineTournamentActivity extends BaseActivity {
         @Override
         public Fragment getItem(int position) {
 
+            int round = (position + 1) / 2;
+
             // list of all players
             if (position == 0) {
                 return OnlineTournamentPlayerListFragment.newInstance(tournament_uuid);
+            } else if (tournament.getState().equals(Tournament.TournamentState.FINISHED.name())
+                    && tournament.getActualRound() == round) {
+                return OnlineRankingListFragment.newInstance(round, tournament_uuid);
             }
-
-            int round = (position + 1) / 2;
 
             if (position % 2 == 1) {
                 return OnlineGamesListFragment.newInstance(round, tournament_uuid);
             } else {
-                return OnlineGamesListFragment.newInstance(round, tournament_uuid);
+                return OnlineRankingListFragment.newInstance(round, tournament_uuid);
             }
         }
 
@@ -187,7 +190,11 @@ public class OnlineTournamentActivity extends BaseActivity {
         public int getCount() {
 
             if (tournament != null) {
-                return (tournament.getActualRound() * 2) + 1;
+                if (tournament.getState().equals(Tournament.TournamentState.FINISHED.name())) {
+                    return (tournament.getActualRound() * 2);
+                } else {
+                    return (tournament.getActualRound() * 2) + 1;
+                }
             } else {
                 return 1;
             }
@@ -197,15 +204,18 @@ public class OnlineTournamentActivity extends BaseActivity {
         @Override
         public CharSequence getPageTitle(int position) {
 
+            int round = (position + 1) / 2;
+
             if (position == 0) {
                 return getApplication().getResources().getString(R.string.nav_setup_tab);
+            } else if (tournament.getState().equals(Tournament.TournamentState.FINISHED.name())
+                    && tournament.getActualRound() == round) {
+                return getApplication().getResources().getString(R.string.nav_final_standing_tab);
             } else {
-                int tabPos = (position + 1) / 2;
-
                 if (position % 2 == 1) {
-                    return getApplication().getResources().getString(R.string.nav_games_tab, tabPos);
+                    return getApplication().getResources().getString(R.string.nav_games_tab, round);
                 } else {
-                    return getApplication().getResources().getString(R.string.nav_ranking_tab, tabPos);
+                    return getApplication().getResources().getString(R.string.nav_ranking_tab, round);
                 }
             }
         }

@@ -179,14 +179,18 @@ public class RankingServiceImpl implements RankingService {
 
             Log.i(this.getClass().getName(), "pushes rankings to firebase online: " + tournamentRankingForRound);
 
-            for (TournamentRanking ranking : tournamentRankingForRound) {
+            for (int j = 0; j < tournamentRankingForRound.size(); j++) {
                 UUID uuid = UUID.randomUUID();
 
                 DatabaseReference referenceForRankings = FirebaseDatabase.getInstance()
                         .getReference(FirebaseReferences.TOURNAMENT_RANKINGS + "/" + tournament.getOnlineUUID()
                             + "/" + i + "/" + uuid);
 
-                referenceForRankings.setValue(ranking);
+                // for sorting after insert
+                TournamentRanking tournamentRanking = tournamentRankingForRound.get(j);
+                tournamentRanking.setRank(j + 1);
+
+                referenceForRankings.setValue(tournamentRanking);
             }
         }
     }

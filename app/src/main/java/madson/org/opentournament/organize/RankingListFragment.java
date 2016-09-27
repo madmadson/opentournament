@@ -28,6 +28,7 @@ import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.domain.TournamentRanking;
 import madson.org.opentournament.tasks.LoadRankingListTask;
 import madson.org.opentournament.utility.BaseApplication;
+import madson.org.opentournament.viewHolder.TournamentRankingViewHolder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -75,7 +76,13 @@ public class RankingListFragment extends Fragment {
         recyclerView.setLayoutManager(linearLayoutManager);
 
         TextView heading = (TextView) view.findViewById(R.id.heading_ranking_for_round);
-        heading.setText(getString(R.string.heading_ranking_for_round, round));
+
+        if (tournament.getState().equals(Tournament.TournamentState.FINISHED.name())
+                && round == tournament.getActualRound()) {
+            heading.setText(getString(R.string.final_standings));
+        } else {
+            heading.setText(getString(R.string.heading_ranking_for_round, round));
+        }
 
         RankingListHeaderFragment headerFragment = new RankingListHeaderFragment();
         getChildFragmentManager().beginTransaction().add(R.id.row_ranking_header_container, headerFragment).commit();
@@ -89,7 +96,7 @@ public class RankingListFragment extends Fragment {
         return view;
     }
 
-    public class RankingListAdapter extends RecyclerView.Adapter<RankingListAdapter.ViewHolder> {
+    public class RankingListAdapter extends RecyclerView.Adapter<TournamentRankingViewHolder> {
 
         private List<TournamentRanking> rankingList;
         private Context context;
@@ -102,20 +109,20 @@ public class RankingListFragment extends Fragment {
         }
 
         @Override
-        public RankingListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public TournamentRankingViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
             // create a new view
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_ranking, parent, false);
 
             // set the view's size, margins, paddings and layout parameters
-            ViewHolder vh = new ViewHolder(v);
+            TournamentRankingViewHolder vh = new TournamentRankingViewHolder(v);
 
             return vh;
         }
 
 
         @Override
-        public void onBindViewHolder(RankingListAdapter.ViewHolder holder, int position) {
+        public void onBindViewHolder(TournamentRankingViewHolder holder, int position) {
 
             final TournamentRanking ranking = rankingList.get(position);
 
@@ -167,103 +174,6 @@ public class RankingListFragment extends Fragment {
 
             rankingList = rankingsForRound;
             notifyDataSetChanged();
-        }
-
-        public class ViewHolder extends RecyclerView.ViewHolder {
-
-            private CardView rankingCard;
-            private TextView droppedInRound;
-            private ImageView onlineIcon;
-            private TextView playerFactionInList;
-            private TextView score;
-            private TextView sos;
-            private TextView cp;
-            private TextView vp;
-            private TextView playerTeamNameInList;
-            private TextView playerNumber;
-            private TextView playerNameInList;
-
-            public ViewHolder(View itemView) {
-
-                super(itemView);
-
-                playerNameInList = (TextView) itemView.findViewById(R.id.ranking_row_name);
-                playerTeamNameInList = (TextView) itemView.findViewById(R.id.ranking_player_teamname);
-                playerFactionInList = (TextView) itemView.findViewById(R.id.ranking_player_faction);
-                playerNumber = (TextView) itemView.findViewById(R.id.ranking_row_player_number);
-                score = (TextView) itemView.findViewById(R.id.ranking_row_score);
-                sos = (TextView) itemView.findViewById(R.id.ranking_row_sos);
-                cp = (TextView) itemView.findViewById(R.id.ranking_row_control_points);
-                vp = (TextView) itemView.findViewById(R.id.ranking_row_victory_points);
-                onlineIcon = (ImageView) itemView.findViewById(R.id.ranking_row_online_icon);
-                droppedInRound = (TextView) itemView.findViewById(R.id.ranking_dropped_in_round);
-                rankingCard = (CardView) itemView.findViewById(R.id.ranking_row_card_view);
-            }
-
-            public TextView getRankingNumber() {
-
-                return playerNumber;
-            }
-
-
-            public TextView getPlayerNameInList() {
-
-                return playerNameInList;
-            }
-
-
-            public TextView getScore() {
-
-                return score;
-            }
-
-
-            public TextView getSos() {
-
-                return sos;
-            }
-
-
-            public TextView getCp() {
-
-                return cp;
-            }
-
-
-            public TextView getVp() {
-
-                return vp;
-            }
-
-
-            public TextView getPlayerTeamNameInList() {
-
-                return playerTeamNameInList;
-            }
-
-
-            public ImageView getOnlineIcon() {
-
-                return onlineIcon;
-            }
-
-
-            public TextView getPlayerFactionInList() {
-
-                return playerFactionInList;
-            }
-
-
-            public TextView getDroppedInRound() {
-
-                return droppedInRound;
-            }
-
-
-            public CardView getRankingCard() {
-
-                return rankingCard;
-            }
         }
     }
 }

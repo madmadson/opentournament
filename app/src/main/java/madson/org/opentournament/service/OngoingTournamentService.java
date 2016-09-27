@@ -41,16 +41,6 @@ public interface OngoingTournamentService {
 
 
     /**
-     * Get specific pairing.
-     *
-     * @param  game_id
-     *
-     * @return  pairing
-     */
-    Game getGameForId(long game_id);
-
-
-    /**
      * Save result.
      *
      * @param  game
@@ -80,13 +70,4 @@ public interface OngoingTournamentService {
      * @param  uploadedTournament
      */
     void uploadGames(Tournament uploadedTournament);
-
-
-    /**
-     * @param  game1
-     * @param  game2
-     * @param  playerOneId
-     * @param  playerTwoId
-     */
-    void tournamentPlayerSwap(Game game1, Game game2, String playerOneId, String playerTwoId);
 }

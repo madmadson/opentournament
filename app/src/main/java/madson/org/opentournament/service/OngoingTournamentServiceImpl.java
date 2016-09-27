@@ -282,34 +282,6 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
 
 
     @Override
-    public Game getGameForId(long game_id) {
-
-        Log.i(this.getClass().getName(), "get game for id:" + game_id);
-
-        SQLiteDatabase readableDatabase = openTournamentDBHelper.getReadableDatabase();
-
-        Cursor cursor = readableDatabase.query(GameTable.TABLE_TOURNAMENT_GAME, GameTable.ALL_COLS_FOR_TOURNAMENT_GAME,
-                GameTable.COLUMN_ID + " = ? ", new String[] { String.valueOf(game_id) }, null, null, null);
-
-        cursor.moveToFirst();
-
-        Game game = null;
-
-        while (!cursor.isAfterLast()) {
-            game = Game.cursorToGame(cursor);
-            cursor.moveToNext();
-        }
-
-        cursor.close();
-        readableDatabase.close();
-
-        Log.i(this.getClass().getName(), "game loaded sucessfully: " + game);
-
-        return game;
-    }
-
-
-    @Override
     public Game saveGameResult(Game game) {
 
         Log.i(this.getClass().getName(), "save game: " + game);
@@ -406,11 +378,6 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
                 referenceForGames.setValue(game);
             }
         }
-    }
-
-
-    @Override
-    public void tournamentPlayerSwap(Game game1, Game game2, String playerOneId, String playerTwoId) {
     }
 
 

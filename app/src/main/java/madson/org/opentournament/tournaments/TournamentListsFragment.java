@@ -2,6 +2,8 @@ package madson.org.opentournament.tournaments;
 
 import android.content.Context;
 
+import android.graphics.Color;
+
 import android.os.Bundle;
 import android.os.Handler;
 
@@ -159,7 +161,7 @@ public class TournamentListsFragment extends Fragment {
             };
 
             Handler handler = new Handler();
-            handler.postDelayed(runnable, 5000);
+            handler.postDelayed(runnable, 10000);
         } else {
             mProgressBar.setVisibility(ProgressBar.GONE);
 
@@ -286,6 +288,18 @@ public class TournamentListsFragment extends Fragment {
                         }
                     });
             }
+
+            if (tournament.getState().equals(Tournament.TournamentState.FINISHED.name())) {
+                holder.getTournamentState().setText(R.string.tournament_finished);
+            } else if (tournament.getActualRound() > 0) {
+                holder.getTournamentState().setText(R.string.tournament_started);
+            }
+
+            if (position % 2 == 0) {
+                holder.getRowTournament().setBackgroundColor(Color.LTGRAY);
+            } else {
+                holder.getRowTournament().setBackgroundColor(Color.WHITE);
+            }
         }
 
 
@@ -332,6 +346,8 @@ public class TournamentListsFragment extends Fragment {
 
     public class TournamentViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
+        private View rowTournament;
+        private TextView tournamentState;
         private ImageButton uploadTournamentButton;
         private ImageButton editTournamentButton;
         private TextView tournamentNameInList;
@@ -345,12 +361,15 @@ public class TournamentListsFragment extends Fragment {
             super(v);
             v.setOnClickListener(this);
 
+            rowTournament = v.findViewById(R.id.row_tournament);
+
             editTournamentButton = (ImageButton) v.findViewById(R.id.button_edit_tournament);
             uploadTournamentButton = (ImageButton) v.findViewById(R.id.button_upload_tournament);
             tournamentNameInList = (TextView) v.findViewById(R.id.tournament_name);
             tournamentPlayersInList = (TextView) v.findViewById(R.id.amount_players);
             tournamentLocationInList = (TextView) v.findViewById(R.id.tournament_location);
             tournamentDateInList = (TextView) v.findViewById(R.id.tournament_date);
+            tournamentState = (TextView) v.findViewById(R.id.tournament_state);
         }
 
         @Override
@@ -401,6 +420,18 @@ public class TournamentListsFragment extends Fragment {
         public TextView getTournamentDateInList() {
 
             return tournamentDateInList;
+        }
+
+
+        public TextView getTournamentState() {
+
+            return tournamentState;
+        }
+
+
+        public View getRowTournament() {
+
+            return rowTournament;
         }
     }
 }

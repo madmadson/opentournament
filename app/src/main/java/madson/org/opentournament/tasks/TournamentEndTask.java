@@ -58,7 +58,6 @@ public class TournamentEndTask extends AsyncTask<Void, Void, Void> {
     protected Void doInBackground(Void... params) {
 
         next_round = tournament.getActualRound() + 1;
-        tournament.setActualRound(next_round);
         tournament.setState(Tournament.TournamentState.FINISHED.name());
 
         TournamentService tournamentService = application.getTournamentService();

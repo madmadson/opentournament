@@ -92,6 +92,7 @@ public class AvailablePlayerListFragment extends BaseFragment {
             filterPlayerTextView.addTextChangedListener(new PlayerFilterTextWatcher());
 
             if (((BaseActivity) getActivity()).isConnected()) {
+                view.findViewById(R.id.offline_player_text).setVisibility(View.GONE);
                 mOnlinePlayerRecyclerView = (RecyclerView) view.findViewById(R.id.online_player_list_recycler_view);
                 mOnlinePlayerRecyclerView.setHasFixedSize(true);
                 mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
@@ -156,6 +157,8 @@ public class AvailablePlayerListFragment extends BaseFragment {
 
                 Handler handler = new Handler();
                 handler.postDelayed(runnable, 5000);
+            } else {
+                view.findViewById(R.id.offline_player_text).setVisibility(View.VISIBLE);
             }
 
             localPlayerRecyclerView = (RecyclerView) view.findViewById(R.id.local_player_list_recycler_view);

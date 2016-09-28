@@ -2,14 +2,11 @@ package madson.org.opentournament.utility;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
 import android.os.Bundle;
-
-import android.preference.PreferenceManager;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -29,7 +26,6 @@ import android.support.v7.widget.Toolbar;
 
 import android.util.Log;
 
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -41,23 +37,21 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
-import com.facebook.FacebookSdk;
-
 import com.facebook.login.LoginManager;
 
 import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import madson.org.opentournament.AccountFragment;
 import madson.org.opentournament.HomeFragment;
 import madson.org.opentournament.R;
 import madson.org.opentournament.SignInActivity;
 import madson.org.opentournament.about.AboutActivity;
+import madson.org.opentournament.players.PlayerListFragment;
 import madson.org.opentournament.tournaments.TournamentManagementFragment;
 
 
@@ -132,18 +126,12 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
             View headerView = navView.getHeaderView(0);
 
             userAvatar = (ImageView) headerView.findViewById(R.id.drawer_avatar);
-            userDisplayname = (TextView) headerView.findViewById(R.id.drawer_name);
+
             userMail = (TextView) headerView.findViewById(R.id.drawer_mail);
 
             if (mFirebaseUser != null) {
                 if (mFirebaseUser.getPhotoUrl() != null) {
                     Glide.with(this).load(mFirebaseAuth.getCurrentUser().getPhotoUrl()).into(userAvatar);
-                }
-
-                if (mFirebaseUser.getDisplayName() == null) {
-                    userDisplayname.setText(ANONYMOUS_USER);
-                } else {
-                    userDisplayname.setText(mFirebaseUser.getDisplayName());
                 }
 
                 userMail.setText(mFirebaseUser.getEmail());
@@ -190,6 +178,10 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                 replaceFragment(new TournamentManagementFragment());
             } else if (id == R.id.nav_players) {
                 Log.i("Nav", "Open players");
+                replaceFragment(new PlayerListFragment());
+            } else if (id == R.id.nav_account) {
+                Log.i("Nav", "Account");
+                replaceFragment(new AccountFragment());
             }
 
             DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -350,15 +342,6 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
             // Not signed in, launch the Sign In activity
             startActivity(new Intent(this, SignInActivity.class));
             finish();
-
-            return;
-        } else {
-            mUsername = mFirebaseUser.getDisplayName();
-            mFirebaseUser.getPhotoUrl();
-
-            if (mFirebaseUser.getPhotoUrl() != null) {
-                String mPhotoUrl = mFirebaseUser.getPhotoUrl().toString();
-            }
         }
     }
 

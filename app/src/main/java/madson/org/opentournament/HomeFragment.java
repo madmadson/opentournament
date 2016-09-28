@@ -10,6 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import madson.org.opentournament.utility.BaseActivity;
+
 
 public class HomeFragment extends Fragment {
 
@@ -20,5 +22,14 @@ public class HomeFragment extends Fragment {
         final View frag_view = inflater.inflate(R.layout.fragment_home, container, false);
 
         return frag_view;
+    }
+
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+
+        super.onActivityCreated(savedInstanceState);
+
+        ((BaseActivity) getActivity()).getToolbar().setTitle(R.string.title_home);
     }
 }

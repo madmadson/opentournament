@@ -1,6 +1,7 @@
 package madson.org.opentournament;
 
 import android.support.test.espresso.contrib.DrawerActions;
+import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -10,6 +11,10 @@ import android.view.Gravity;
 
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -31,19 +36,91 @@ import static org.hamcrest.CoreMatchers.allOf;
 public class MainActivityStartupTest {
 
     @Rule
-    public ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule(MainActivity.class);
+    public MainActivityTestTestRule mActivityRule = new MainActivityTestTestRule();
 
     @Test
     public void ensureNavigationToTournamentsManagement() {
 
         onView(withId(R.id.drawer_layout)).perform(DrawerActions.open(Gravity.START));
 
-        onView(withText("Manage Tournaments")).perform(click());
+        onView(withText(R.string.drawer_nav_tournaments)).perform(click());
 
         // Check that the text was changed.
         String toolbarTitle = getInstrumentation().getTargetContext().getString(R.string.title_tournament_management);
 
         onView(allOf(isAssignableFrom(TextView.class), withParent(isAssignableFrom(Toolbar.class)))).check(matches(
                 withText(toolbarTitle)));
+    }
+
+
+    @Test
+    public void ensureNavigationToPlayersManagement() {
+
+        onView(withId(R.id.drawer_layout)).perform(DrawerActions.open(Gravity.START));
+
+        onView(withText(R.string.drawer_nav_players)).perform(click());
+
+        // Check that the text was changed.
+        String toolbarTitle = getInstrumentation().getTargetContext().getString(R.string.title_player_management);
+
+        onView(allOf(isAssignableFrom(TextView.class), withParent(isAssignableFrom(Toolbar.class)))).check(matches(
+                withText(toolbarTitle)));
+    }
+
+
+    @Test
+    public void ensureNavigationToHome() {
+
+        onView(withId(R.id.drawer_layout)).perform(DrawerActions.open(Gravity.START));
+
+        onView(withText(R.string.drawer_nav_home)).perform(click());
+
+        // Check that the text was changed.
+        String toolbarTitle = getInstrumentation().getTargetContext().getString(R.string.title_home);
+
+        onView(allOf(isAssignableFrom(TextView.class), withParent(isAssignableFrom(Toolbar.class)))).check(matches(
+                withText(toolbarTitle)));
+    }
+
+
+    @Test
+    public void ensureNavigationToAccountManagement() {
+
+        onView(withId(R.id.drawer_layout)).perform(DrawerActions.open(Gravity.START));
+
+        onView(withText(R.string.drawer_nav_account)).perform(click());
+
+        // Check that the text was changed.
+        String toolbarTitle = getInstrumentation().getTargetContext().getString(R.string.title_account_management);
+
+        onView(allOf(isAssignableFrom(TextView.class), withParent(isAssignableFrom(Toolbar.class)))).check(matches(
+                withText(toolbarTitle)));
+    }
+
+    private class MainActivityTestTestRule extends IntentsTestRule<MainActivity> {
+
+        public MainActivityTestTestRule() {
+
+            super(MainActivity.class, true, true);
+        }
+
+        @Override
+        protected void beforeActivityLaunched() {
+
+            super.beforeActivityLaunched();
+
+            FirebaseAuth mFirebaseAuth = FirebaseAuth.getInstance();
+            mFirebaseAuth.signInAnonymously();
+        }
+
+
+        @Override
+        protected void afterActivityFinished() {
+
+            super.afterActivityFinished();
+
+            FirebaseAuth mFirebaseAuth = FirebaseAuth.getInstance();
+            mFirebaseAuth.signOut();
+        }
     }
 }

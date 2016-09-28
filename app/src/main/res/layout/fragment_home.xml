@@ -8,6 +8,7 @@
                 tools:context="madson.org.opentournament.MainActivity">
     <ImageView
         android:id="@+id/opentournament_logo"
+        android:layout_centerInParent="true" 
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:contentDescription="@string/Image_description"

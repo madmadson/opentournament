@@ -430,5 +430,7 @@ public class TournamentManagementDialog extends DialogFragment {
             newTournament.setCreatorName("anonymous");
             newTournament.setCreatorEmail("anonymous");
         }
+
+        newTournament.setState(Tournament.TournamentState.PLANED.name());
     }
 }

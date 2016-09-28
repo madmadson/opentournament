@@ -76,7 +76,6 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     private CoordinatorLayout coordinatorLayout;
 
     private ImageView userAvatar;
-    private TextView userDisplayname;
     private TextView userMail;
 
     // Auth
@@ -109,7 +108,13 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         getSupportActionBar().setDisplayHomeAsUpEnabled(isDisplayHomeAsUp());
 
         if (isConnected()) {
-            doLogin();
+            mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+
+            if (mFirebaseUser == null) {
+                // Not signed in, launch the Sign In activity
+                startActivity(new Intent(this, SignInActivity.class));
+                finish();
+            }
         }
 
         if (useNavigationDrawer()) {
@@ -131,12 +136,10 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
             if (mFirebaseUser != null) {
                 if (mFirebaseUser.getPhotoUrl() != null) {
-                    Glide.with(this).load(mFirebaseAuth.getCurrentUser().getPhotoUrl()).into(userAvatar);
+                    Glide.with(this).load(mFirebaseUser.getPhotoUrl()).into(userAvatar);
                 }
 
                 userMail.setText(mFirebaseUser.getEmail());
-            } else {
-                userDisplayname.setText(NO_CONNECTION);
             }
         }
     }
@@ -321,28 +324,6 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     public boolean isDisplayHomeAsUp() {
 
         return false;
-    }
-
-
-    private void doLogin() {
-
-        // Set default username is anonymous.
-
-        mUsername = ANONYMOUS_USER;
-
-        mGoogleApiClient = new GoogleApiClient.Builder(this).enableAutoManage(this /* FragmentActivity */,
-                this /* OnConnectionFailedListener */).addApi(Auth.GOOGLE_SIGN_IN_API).build();
-
-        // Initialize Firebase Auth
-        mFirebaseAuth = FirebaseAuth.getInstance();
-
-        mFirebaseUser = mFirebaseAuth.getCurrentUser();
-
-        if (mFirebaseUser == null) {
-            // Not signed in, launch the Sign In activity
-            startActivity(new Intent(this, SignInActivity.class));
-            finish();
-        }
     }
 
 

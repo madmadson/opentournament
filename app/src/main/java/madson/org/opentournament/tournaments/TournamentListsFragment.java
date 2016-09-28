@@ -289,10 +289,12 @@ public class TournamentListsFragment extends Fragment {
                     });
             }
 
-            if (tournament.getState().equals(Tournament.TournamentState.FINISHED.name())) {
-                holder.getTournamentState().setText(R.string.tournament_finished);
-            } else if (tournament.getActualRound() > 0) {
-                holder.getTournamentState().setText(R.string.tournament_started);
+            if (holder.getTournamentState() != null) {
+                if (tournament.getState().equals(Tournament.TournamentState.FINISHED.name())) {
+                    holder.getTournamentState().setText(R.string.tournament_finished);
+                } else if (tournament.getActualRound() > 0) {
+                    holder.getTournamentState().setText(R.string.tournament_started);
+                }
             }
 
             if (position % 2 == 0) {

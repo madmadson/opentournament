@@ -15,8 +15,6 @@
  */
 package madson.org.opentournament;
 
-import android.app.Activity;
-
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -24,6 +22,8 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import android.support.annotation.NonNull;
+
+import android.support.design.widget.TextInputLayout;
 
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -35,7 +35,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
@@ -66,8 +68,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
-import madson.org.opentournament.utility.BaseActivity;
-
 
 public class SignInActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener,
     View.OnClickListener {
@@ -75,25 +75,48 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
     private static final String TAG = "SignInActivity";
     private static final int RC_SIGN_IN = 9001;
 
-    private SignInButton mGoogleSignInButton;
-
     private GoogleApiClient mGoogleApiClient;
 
     // Firebase instance variables
     private FirebaseAuth mFirebaseAuth;
 
-    private LoginButton mFacebookSignInButton;
     private CallbackManager callbackManager;
 
     private FirebaseAuth.AuthStateListener mAuthListener;
     private EditText mEmailField;
     private EditText mPasswordField;
 
+    private TextInputLayout email_parent;
+    private TextInputLayout password_parent;
+
+    private Button email_sign_in_button;
+    private Button email_create_account_button;
+
+    private Button button_anonymous_sign_in;
+    private LoginButton mFacebookSignInButton;
+    private SignInButton mGoogleSignInButton;
+    private ProgressBar progressBar;
+    private View divider;
+    private View oneClickHeading;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
+
+        email_parent = (TextInputLayout) findViewById(R.id.email_parent);
+        password_parent = (TextInputLayout) findViewById(R.id.password_parent);
+        email_parent = (TextInputLayout) findViewById(R.id.email_parent);
+
+        button_anonymous_sign_in = (Button) findViewById(R.id.button_anonymous_sign_in);
+
+        email_sign_in_button = (Button) findViewById(R.id.email_sign_in_button);
+        email_create_account_button = (Button) findViewById(R.id.email_create_account_button);
+
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        divider = findViewById(R.id.divider1);
+        oneClickHeading = findViewById(R.id.one_click_heading);
 
         // Initialize Firebase Auth
         mFirebaseAuth = FirebaseAuth.getInstance();
@@ -158,23 +181,21 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
 
-                                if (task != null) {
-                                    if (!task.isSuccessful()) {
-                                        if (task.getException() != null) {
-                                            String fail_message = task.getException().getMessage();
-                                            Toast.makeText(SignInActivity.this, fail_message, Toast.LENGTH_LONG).show();
-                                        }
-                                    } else {
-                                        Toast.makeText(SignInActivity.this, R.string.success_login, Toast.LENGTH_LONG)
-                                        .show();
-                                        startActivity(new Intent(SignInActivity.this, MainActivity.class));
+                                if (!task.isSuccessful()) {
+                                    if (task.getException() != null) {
+                                        String fail_message = task.getException().getMessage();
+                                        Toast.makeText(SignInActivity.this, fail_message, Toast.LENGTH_LONG).show();
                                     }
+                                } else {
+                                    Toast.makeText(SignInActivity.this, R.string.success_login, Toast.LENGTH_LONG)
+                                    .show();
+                                    startActivity(new Intent(SignInActivity.this, MainActivity.class));
                                 }
                             }
                         });
                 }
             });
-        findViewById(R.id.email_create_account_button).setOnClickListener(new View.OnClickListener() {
+        email_create_account_button.setOnClickListener(new View.OnClickListener() {
 
                 @Override
                 public void onClick(View v) {
@@ -209,24 +230,22 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
                                             @Override
                                             public void onComplete(@NonNull Task<AuthResult> task) {
 
-                                                if (task != null) {
-                                                    if (!task.isSuccessful()) {
-                                                        if (task.getException() != null) {
-                                                            String fail_message = task.getException().getMessage();
-                                                            Toast.makeText(SignInActivity.this, fail_message,
-                                                                Toast.LENGTH_LONG)
-                                                            .show();
-                                                        }
-                                                    } else {
-                                                        Toast.makeText(SignInActivity.this,
-                                                            R.string.success_create_account, Toast.LENGTH_LONG)
+                                                if (!task.isSuccessful()) {
+                                                    if (task.getException() != null) {
+                                                        String fail_message = task.getException().getMessage();
+                                                        Toast.makeText(SignInActivity.this, fail_message,
+                                                            Toast.LENGTH_LONG)
                                                         .show();
-                                                        mFirebaseAuth.sendPasswordResetEmail(
-                                                            emailForNewAccount.getText().toString());
                                                     }
-
-                                                    dialog.dismiss();
+                                                } else {
+                                                    Toast.makeText(SignInActivity.this, R.string.success_create_account,
+                                                        Toast.LENGTH_LONG)
+                                                    .show();
+                                                    mFirebaseAuth.sendPasswordResetEmail(
+                                                        emailForNewAccount.getText().toString());
                                                 }
+
+                                                dialog.dismiss();
                                             }
                                         });
                                 }
@@ -318,10 +337,28 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
         int i = v.getId();
 
         if (i == R.id.google_sign_in_button) {
+            startLoading();
             googleSignIn();
         } else if (i == R.id.button_anonymous_sign_in) {
+            startLoading();
             signInAnonymously(this);
         }
+    }
+
+
+    private void startLoading() {
+
+        password_parent.setVisibility(View.GONE);
+        email_parent.setVisibility(View.GONE);
+        email_sign_in_button.setVisibility(View.GONE);
+        email_create_account_button.setVisibility(View.GONE);
+        button_anonymous_sign_in.setVisibility(View.GONE);
+        mFacebookSignInButton.setVisibility(View.GONE);
+        mGoogleSignInButton.setVisibility(View.GONE);
+        divider.setVisibility(View.GONE);
+        oneClickHeading.setVisibility(View.GONE);
+
+        progressBar.setVisibility(View.VISIBLE);
     }
 
 

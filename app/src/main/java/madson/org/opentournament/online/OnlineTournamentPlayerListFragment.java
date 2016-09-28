@@ -19,12 +19,17 @@ import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import madson.org.opentournament.R;
 import madson.org.opentournament.db.FirebaseReferences;
+import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.TournamentPlayer;
+import madson.org.opentournament.players.PlayerListAdapter;
 import madson.org.opentournament.viewHolder.TournamentPlayerViewHolder;
 
 
@@ -38,7 +43,6 @@ public class OnlineTournamentPlayerListFragment extends Fragment {
     public static final String BUNDLE_TOURNAMENT_UUID = "tournament_uuid";
 
     private DatabaseReference mFirebaseDatabaseReference;
-    private FirebaseRecyclerAdapter<TournamentPlayer, TournamentPlayerViewHolder> mFirebaseAdapter;
     private String tournament_uuid;
     private ProgressBar mProgressBar;
     private TextView noTournamentPlayersTextView;
@@ -74,78 +78,36 @@ public class OnlineTournamentPlayerListFragment extends Fragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(linearLayoutManager);
 
+        final OnlineTournamentPlayerListAdapter playerListAdapter = new OnlineTournamentPlayerListAdapter(
+                getActivity());
+
         mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
 
         DatabaseReference child = mFirebaseDatabaseReference.child(FirebaseReferences.TOURNAMENT_PLAYERS + "/"
                 + tournament_uuid);
 
-        mFirebaseAdapter = new FirebaseRecyclerAdapter<TournamentPlayer, TournamentPlayerViewHolder>(
-                TournamentPlayer.class, R.layout.row_tournament_player, TournamentPlayerViewHolder.class, child) {
-
-            @Override
-            protected void populateViewHolder(TournamentPlayerViewHolder viewHolder, TournamentPlayer player,
-                int position) {
-
-                mProgressBar.setVisibility(ProgressBar.INVISIBLE);
-                viewHolder.setPlayer(player);
-                viewHolder.getPlayerNumber().setText(String.valueOf(position + 1));
-                viewHolder.getTeamName().setText(player.getTeamname());
-                viewHolder.getFaction().setText(player.getFaction());
-
-                String firstname = player.getFirstname();
-                String nickname = player.getNickname();
-                String lastname = player.getLastname();
-                viewHolder.getPlayerNameInList()
-                    .setText(getActivity().getResources()
-                        .getString(R.string.tournament_player_name_in_row, firstname, nickname, lastname));
-
-                // mark online player
-                if (player.getPlayer_online_uuid() != null) {
-                    viewHolder.getOnlineIcon().setVisibility(View.VISIBLE);
-                } else {
-                    viewHolder.getOnlineIcon().setVisibility(View.GONE);
-                }
-
-                if (player.getDroppedInRound() != 0) {
-                    viewHolder.getDroppedInRound()
-                        .setText(getActivity().getResources()
-                            .getString(R.string.dropped_in_round, player.getDroppedInRound()));
-                    viewHolder.getDroppedInRound().setVisibility(View.VISIBLE);
-                }
-
-                if (position % 2 == 0) {
-                    viewHolder.getTournamentPlayerCard().setCardBackgroundColor(Color.LTGRAY);
-                } else {
-                    viewHolder.getTournamentPlayerCard().setCardBackgroundColor(Color.WHITE);
-                }
-            }
-        };
-
-        mFirebaseAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+        child.addValueEventListener(new ValueEventListener() {
 
                 @Override
-                public void onItemRangeRemoved(int positionStart, int itemCount) {
+                public void onDataChange(DataSnapshot dataSnapshot) {
 
-                    super.onItemRangeRemoved(positionStart, itemCount);
+                    for (DataSnapshot playerSnapshot : dataSnapshot.getChildren()) {
+                        TournamentPlayer player = playerSnapshot.getValue(TournamentPlayer.class);
 
-                    if (mFirebaseAdapter.getItemCount() == 0) {
-                        noTournamentPlayersTextView.setVisibility(View.VISIBLE);
+                        if (player != null) {
+                            mProgressBar.setVisibility(View.GONE);
+                            playerListAdapter.addPlayer(player);
+                        }
                     }
                 }
 
 
                 @Override
-                public void onItemRangeInserted(int positionStart, int itemCount) {
-
-                    super.onItemRangeInserted(positionStart, itemCount);
-
-                    if (mFirebaseAdapter.getItemCount() != 0) {
-                        noTournamentPlayersTextView.setVisibility(View.GONE);
-                    }
+                public void onCancelled(DatabaseError databaseError) {
                 }
             });
 
-        recyclerView.setAdapter(mFirebaseAdapter);
+        recyclerView.setAdapter(playerListAdapter);
 
         Handler handler = new Handler();
 
@@ -154,15 +116,12 @@ public class OnlineTournamentPlayerListFragment extends Fragment {
                 @Override
                 public void run() {
 
-                    if (mFirebaseAdapter.getItemCount() == 0) {
+                    if (playerListAdapter.getItemCount() == 0) {
                         mProgressBar.setVisibility(ProgressBar.INVISIBLE);
                         noTournamentPlayersTextView.setVisibility(View.VISIBLE);
                     }
-
-                    mFirebaseAdapter.notifyDataSetChanged();
                 }
             }, 5000);
-        mFirebaseAdapter.notifyDataSetChanged();
 
         return view;
     }

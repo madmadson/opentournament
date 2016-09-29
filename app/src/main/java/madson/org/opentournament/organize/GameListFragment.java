@@ -49,6 +49,7 @@ public class GameListFragment extends Fragment implements TournamentEventListene
     private Button endTournamentButton;
     private ImageButton toggleActionButton;
     private FrameLayout containerForActions;
+    private BaseActivity baseActivity;
 
     @Override
     public void onAttach(Context context) {
@@ -78,6 +79,8 @@ public class GameListFragment extends Fragment implements TournamentEventListene
         if (bundle != null && bundle.getInt(BUNDLE_ROUND) != 0) {
             round = bundle.getInt(BUNDLE_ROUND);
         }
+
+        baseActivity = (BaseActivity) getActivity();
 
         final View view = inflater.inflate(R.layout.fragment_game_list, container, false);
 
@@ -128,7 +131,7 @@ public class GameListFragment extends Fragment implements TournamentEventListene
                 @Override
                 public void onClick(View v) {
 
-                    if (((BaseActivity) getActivity()).isConnected()) {
+                    if (baseActivity.isConnected()) {
                         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                         builder.setTitle(R.string.confirm_upload_tournament)
                         .setView(R.layout.dialog_upload_games)
@@ -137,12 +140,11 @@ public class GameListFragment extends Fragment implements TournamentEventListene
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
 
-                                        Toolbar toolbar = ((BaseActivity) getActivity()).getToolbar();
+                                        Toolbar toolbar = baseActivity.getToolbar();
                                         ProgressBar progressBar = (ProgressBar) toolbar.findViewById(
                                                 R.id.toolbar_progress_bar);
 
-                                        new TournamentUploadTask((BaseApplication) getActivity().getApplication(),
-                                            tournament, progressBar).execute();
+                                        new TournamentUploadTask(baseActivity, tournament, progressBar).execute();
                                     }
                                 })
                         .setNegativeButton(R.string.dialog_cancel, null)
@@ -200,11 +202,11 @@ public class GameListFragment extends Fragment implements TournamentEventListene
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
 
-                                        Toolbar toolbar = ((BaseActivity) getActivity()).getToolbar();
+                                        Toolbar toolbar = baseActivity.getToolbar();
                                         ProgressBar progressBar = (ProgressBar) toolbar.findViewById(
                                                 R.id.toolbar_progress_bar);
-                                        new TournamentEndTask((BaseApplication) getActivity().getApplication(),
-                                            tournament, progressBar).execute();
+                                        new TournamentEndTask(baseActivity.getBaseApplication(), tournament,
+                                            progressBar).execute();
                                     }
                                 })
                         .setNegativeButton(R.string.dialog_cancel, null)

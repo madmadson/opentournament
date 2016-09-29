@@ -1,29 +1,18 @@
 package madson.org.opentournament.tournaments;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 
 import android.graphics.Color;
 
-import android.os.Bundle;
-
-import android.support.v4.app.FragmentManager;
-
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import android.widget.ProgressBar;
-
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.online.OnlineTournamentActivity;
-import madson.org.opentournament.organize.TournamentOrganizeActivity;
-import madson.org.opentournament.tasks.TournamentUploadTask;
 import madson.org.opentournament.utility.BaseActivity;
 import madson.org.opentournament.viewHolder.TournamentViewHolder;
 
@@ -78,7 +67,7 @@ public class OnlineTournamentListAdapter extends RecyclerView.Adapter<Tournament
         }
 
         int actualPlayers = tournament.getActualPlayers();
-        int maximalPlayers = tournament.getMaxNumberOfPlayers();
+        int maximalPlayers = tournament.getMaxNumberOfParticipants();
         viewHolder.getTournamentPlayersInList()
             .setText(baseActivity.getResources()
                 .getString(R.string.players_in_tournament, actualPlayers, maximalPlayers));

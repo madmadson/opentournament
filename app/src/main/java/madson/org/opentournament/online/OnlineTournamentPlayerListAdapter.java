@@ -13,9 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import madson.org.opentournament.R;
-import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.TournamentPlayer;
-import madson.org.opentournament.viewHolder.PlayerViewHolder;
 import madson.org.opentournament.viewHolder.TournamentPlayerViewHolder;
 
 import java.util.ArrayList;
@@ -68,9 +66,9 @@ public class OnlineTournamentPlayerListAdapter extends RecyclerView.Adapter<Tour
 
         // mark online player
         if (player.getPlayer_online_uuid() != null) {
-            viewHolder.getOnlineIcon().setVisibility(View.VISIBLE);
+            viewHolder.getLocalIcon().setVisibility(View.VISIBLE);
         } else {
-            viewHolder.getOnlineIcon().setVisibility(View.GONE);
+            viewHolder.getLocalIcon().setVisibility(View.GONE);
         }
 
         if (player.getDroppedInRound() != 0) {

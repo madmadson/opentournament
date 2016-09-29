@@ -28,6 +28,7 @@ import madson.org.opentournament.R;
 import madson.org.opentournament.db.FirebaseReferences;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
+import madson.org.opentournament.domain.TournamentTyp;
 import madson.org.opentournament.organize.TournamentRoundManagementFragment;
 import madson.org.opentournament.organize.setup.TournamentPlayerListFragment;
 import madson.org.opentournament.organize.setup.TournamentSetupFragment;
@@ -172,7 +173,11 @@ public class OnlineTournamentActivity extends BaseActivity {
 
             // list of all players
             if (position == 0) {
-                return OnlineTournamentPlayerListFragment.newInstance(tournament_uuid);
+                if (tournament.getTournamentTyp().equals(TournamentTyp.SOLO.name())) {
+                    return OnlineTournamentPlayerListFragment.newInstance(tournament_uuid);
+                } else {
+                    return OnlineTournamentTeamListFragment.newInstance(tournament_uuid);
+                }
             } else if (tournament.getState().equals(Tournament.TournamentState.FINISHED.name())
                     && tournament.getActualRound() == round) {
                 return OnlineRankingListFragment.newInstance(round, tournament_uuid);

@@ -51,22 +51,26 @@ public class OrganizedTournamentList extends Fragment implements OrganizeTournam
         baseActivity = (BaseActivity) getActivity();
 
         FloatingActionButton floatingActionButton = ((BaseActivity) getActivity()).getFloatingActionButton();
-        floatingActionButton.setVisibility(View.VISIBLE);
-        floatingActionButton.setImageResource(R.drawable.ic_add_white_24dp);
 
-        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+        if (floatingActionButton != null) {
+            floatingActionButton.setVisibility(View.VISIBLE);
 
-                @Override
-                public void onClick(View v) {
+            floatingActionButton.setImageResource(R.drawable.ic_add_white_24dp);
 
-                    Log.i(this.getClass().getName(), "click floatingActionButton tournament management");
+            floatingActionButton.setOnClickListener(new View.OnClickListener() {
 
-                    OrganizedTournamentEditDialog dialog = new OrganizedTournamentEditDialog();
+                    @Override
+                    public void onClick(View v) {
 
-                    FragmentManager supportFragmentManager = getChildFragmentManager();
-                    dialog.show(supportFragmentManager, "tournament management new tournament");
-                }
-            });
+                        Log.i(this.getClass().getName(), "click floatingActionButton tournament management");
+
+                        OrganizedTournamentEditDialog dialog = new OrganizedTournamentEditDialog();
+
+                        FragmentManager supportFragmentManager = getChildFragmentManager();
+                        dialog.show(supportFragmentManager, "tournament management new tournament");
+                    }
+                });
+        }
     }
 
 

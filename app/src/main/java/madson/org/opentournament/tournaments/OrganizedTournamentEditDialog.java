@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 
 import android.os.Bundle;
 
+import android.support.annotation.IntegerRes;
 import android.support.annotation.Nullable;
 
 import android.support.design.widget.Snackbar;
@@ -23,6 +24,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.RadioButton;
 
 import com.google.firebase.auth.FirebaseUser;
@@ -32,8 +34,8 @@ import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentTyp;
 import madson.org.opentournament.service.TournamentService;
 import madson.org.opentournament.tasks.SaveTournamentTask;
+import madson.org.opentournament.tasks.UpdateTournamentTask;
 import madson.org.opentournament.utility.BaseActivity;
-import madson.org.opentournament.utility.BaseApplication;
 
 import org.joda.time.DateTime;
 
@@ -65,6 +67,10 @@ public class OrganizedTournamentEditDialog extends DialogFragment {
     private RadioButton tournamentTypeSoloRadio;
     private RadioButton tournamentTypeTeamRadio;
     private BaseActivity baseActivity;
+    private ImageButton teamsizeIncreaseButton;
+    private ImageButton teamsizeDecreaseButton;
+    private EditText teamsize;
+    private View teamsizeLayout;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -90,13 +96,57 @@ public class OrganizedTournamentEditDialog extends DialogFragment {
         // Get the layout inflater
         LayoutInflater inflater = getActivity().getLayoutInflater();
 
-        View dialogView = inflater.inflate(R.layout.dialog_tournament_management, null);
+        View dialogView = inflater.inflate(R.layout.dialog_add_tournament, null);
+
+        teamsizeLayout = dialogView.findViewById(R.id.teamsize_layout);
+        teamsizeIncreaseButton = (ImageButton) dialogView.findViewById(R.id.teamsize_increase);
+        teamsizeIncreaseButton.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+
+                    if (Integer.valueOf(teamsize.getText().toString()) < 10) {
+                        Integer integer = Integer.valueOf(teamsize.getText().toString());
+                        teamsize.setText(String.valueOf(integer + 1));
+                    }
+                }
+            });
+        teamsizeDecreaseButton = (ImageButton) dialogView.findViewById(R.id.teamsize_decrease);
+        teamsizeDecreaseButton.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+
+                    if (Integer.valueOf(teamsize.getText().toString()) > 2) {
+                        Integer integer = Integer.valueOf(teamsize.getText().toString());
+                        teamsize.setText(String.valueOf(integer - 1));
+                    }
+                }
+            });
+        teamsize = (EditText) dialogView.findViewById(R.id.teamsize);
 
         tournamentNameEditText = (EditText) dialogView.findViewById(R.id.tournament_name);
         tournamentLocationEditText = (EditText) dialogView.findViewById(R.id.tournament_location);
 
         tournamentTypeSoloRadio = (RadioButton) dialogView.findViewById(R.id.radio_solo_tournament);
+        tournamentTypeSoloRadio.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+
+                    teamsizeLayout.setVisibility(View.GONE);
+                }
+            });
         tournamentTypeTeamRadio = (RadioButton) dialogView.findViewById(R.id.radio_team_tournament);
+
+        tournamentTypeTeamRadio.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+
+                    teamsizeLayout.setVisibility(View.VISIBLE);
+                }
+            });
 
         tournamentDateEditText = (EditText) dialogView.findViewById(R.id.tournament_date);
         tournamentMaxPlayersEditText = (EditText) dialogView.findViewById(R.id.tournament_max_players);
@@ -156,13 +206,15 @@ public class OrganizedTournamentEditDialog extends DialogFragment {
                 tournamentTypeSoloRadio.setChecked(true);
             } else if (tournamentTyp.equals(TournamentTyp.TEAM.name())) {
                 tournamentTypeTeamRadio.setChecked(true);
+                teamsizeLayout.setVisibility(View.VISIBLE);
+                teamsize.setText(String.valueOf(tournament.getTeamSize()));
             }
 
             if (tournament.getDateOfTournament() != null) {
                 tournamentDateEditText.setText(dateFormatter.format(tournament.getDateOfTournament()));
             }
 
-            tournamentMaxPlayersEditText.setText(String.valueOf(tournament.getMaxNumberOfPlayers()));
+            tournamentMaxPlayersEditText.setText(String.valueOf(tournament.getMaxNumberOfParticipants()));
         }
 
         return builder.create();
@@ -303,27 +355,9 @@ public class OrganizedTournamentEditDialog extends DialogFragment {
     private void updateTournament(final String tournamentName, final String location, final String date,
         final Date parsed_date, final String maxPlayers, final String tournamentType) {
 
-        Runnable runnable = new Runnable() {
+        fillTournamentWithData(tournament, tournamentName, location, date, parsed_date, maxPlayers, tournamentType);
 
-            @Override
-            public void run() {
-
-                fillTournamentWithData(tournament, tournamentName, location, date, parsed_date, maxPlayers,
-                    tournamentType);
-
-                final TournamentService tournamentService = baseActivity.getBaseApplication().getTournamentService();
-
-                tournamentService.updateTournament(tournament);
-
-                baseActivity.getBaseApplication().notifyTournamentEdited(tournament);
-
-                Snackbar snackbar = Snackbar.make(baseActivity.getCoordinatorLayout(),
-                        R.string.success_update_tournament, Snackbar.LENGTH_LONG);
-                snackbar.getView().setBackgroundColor(getContext().getResources().getColor(R.color.colorPositive));
-                snackbar.show();
-            }
-        };
-        runnable.run();
+        new UpdateTournamentTask(baseActivity, tournament).execute();
     }
 
 
@@ -357,9 +391,9 @@ public class OrganizedTournamentEditDialog extends DialogFragment {
         }
 
         if (!maxPlayers.isEmpty()) {
-            newTournament.setMaxNumberOfPlayers(Integer.valueOf(maxPlayers));
+            newTournament.setMaxNumberOfParticipants(Integer.valueOf(maxPlayers));
         } else {
-            newTournament.setMaxNumberOfPlayers(0);
+            newTournament.setMaxNumberOfParticipants(0);
         }
 
         if (!tournamentType.isEmpty()) {
@@ -379,5 +413,9 @@ public class OrganizedTournamentEditDialog extends DialogFragment {
         }
 
         newTournament.setState(Tournament.TournamentState.PLANED.name());
+
+        if (tournamentType.equals(TournamentTyp.TEAM.name())) {
+            newTournament.setTeamSize(Integer.valueOf(teamsize.getText().toString()));
+        }
     }
 }

@@ -52,7 +52,15 @@
         android:id="@+id/no_tournament_players"
         android:text="@string/no_tournament_players" />
     
-
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_gravity="center_horizontal"
+        android:paddingTop="@dimen/main_tick"
+        android:paddingBottom="@dimen/main_tick"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    
     <android.support.v7.widget.RecyclerView
         android:id="@+id/tournament_player_list_recycler_view"
         android:layout_width="match_parent"

@@ -18,6 +18,7 @@ import madson.org.opentournament.db.TournamentPlayerTable;
 import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
+import madson.org.opentournament.domain.TournamentTyp;
 import madson.org.opentournament.organize.setup.TournamentPlayerComparator;
 
 import java.util.ArrayList;
@@ -66,9 +67,11 @@ public class TournamentPlayerServiceImpl implements TournamentPlayerService {
 
 
     @Override
-    public List<String> getAllTeamNamesForTournament(Tournament tournament) {
+    public Map<String, Integer> getAllTeamsForTournament(Tournament tournament) {
 
         List<String> listOfTeamnames = new ArrayList<>();
+
+        HashMap<String, Integer> teamnameMap = new HashMap<>();
 
         SQLiteDatabase readableDatabase = openTournamentDBHelper.getReadableDatabase();
 
@@ -81,11 +84,23 @@ public class TournamentPlayerServiceImpl implements TournamentPlayerService {
         while (!cursor.isAfterLast()) {
             String teamname = cursor.getString(0);
 
-            if (teamname != null && !teamname.isEmpty() && !listOfTeamnames.contains(teamname)) {
-                listOfTeamnames.add(teamname);
+            if (teamname != null && !teamname.isEmpty()) {
+                if (!teamnameMap.containsKey(teamname)) {
+                    teamnameMap.put(teamname, 1);
+                } else {
+                    teamnameMap.put(teamname, teamnameMap.get(teamname) + 1);
+                }
             }
 
             cursor.moveToNext();
+        }
+
+        for (String key : teamnameMap.keySet()) {
+            if (tournament.getTournamentTyp().equals(TournamentTyp.TEAM.name())) {
+                listOfTeamnames.add(key + " (" + teamnameMap.get(key) + "/" + tournament.getTeamSize() + ")");
+            } else {
+                listOfTeamnames.add(key + " (" + teamnameMap.get(key) + ")");
+            }
         }
 
         Collections.sort(listOfTeamnames);
@@ -93,7 +108,7 @@ public class TournamentPlayerServiceImpl implements TournamentPlayerService {
         cursor.close();
         readableDatabase.close();
 
-        return listOfTeamnames;
+        return teamnameMap;
     }
 
 
@@ -336,6 +351,22 @@ public class TournamentPlayerServiceImpl implements TournamentPlayerService {
         player.setDroppedInRound(tournament.getActualRound());
 
         return player;
+    }
+
+
+    @Override
+    public void editTournamentPlayer(TournamentPlayer tournamentPlayer, Tournament tournament) {
+
+        SQLiteDatabase db = openTournamentDBHelper.getWritableDatabase();
+        ContentValues contentValues;
+        contentValues = new ContentValues();
+
+        contentValues.put(TournamentPlayerTable.COLUMN_TEAMNAME, tournamentPlayer.getTeamname());
+        contentValues.put(TournamentPlayerTable.COLUMN_FACTION, tournamentPlayer.getFaction());
+
+        db.insert(TournamentPlayerTable.TABLE_TOURNAMENT_PLAYER, null, contentValues);
+
+        db.close();
     }
 
 

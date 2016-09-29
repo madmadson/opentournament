@@ -21,6 +21,7 @@ import android.widget.ProgressBar;
 
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Tournament;
+import madson.org.opentournament.domain.TournamentTyp;
 import madson.org.opentournament.organize.TournamentOrganizeActivity;
 import madson.org.opentournament.tasks.TournamentUploadTask;
 import madson.org.opentournament.utility.BaseActivity;
@@ -67,7 +68,7 @@ public class OrganizedTournamentListAdapter extends RecyclerView.Adapter<Tournam
 
         viewHolder.getTournamentNameInList().setText(tournament.getName());
 
-        if (tournament.getDateOfTournament() != null) {
+        if (viewHolder.getTournamentDateInList() != null) {
             String formattedDate = dateFormatter.format(tournament.getDateOfTournament());
             viewHolder.getTournamentDateInList().setText(formattedDate);
         }
@@ -77,7 +78,7 @@ public class OrganizedTournamentListAdapter extends RecyclerView.Adapter<Tournam
         }
 
         int actualPlayers = tournament.getActualPlayers();
-        int maximalPlayers = tournament.getMaxNumberOfPlayers();
+        int maximalPlayers = tournament.getMaxNumberOfParticipants();
         viewHolder.getTournamentPlayersInList()
             .setText(baseActivity.getResources()
                 .getString(R.string.players_in_tournament, actualPlayers, maximalPlayers));
@@ -126,8 +127,7 @@ public class OrganizedTournamentListAdapter extends RecyclerView.Adapter<Tournam
                                             Toolbar toolbar = baseActivity.getToolbar();
                                             ProgressBar progressBar = (ProgressBar) toolbar.findViewById(
                                                     R.id.toolbar_progress_bar);
-                                            new TournamentUploadTask(baseActivity.getBaseApplication(), tournament,
-                                                progressBar).execute();
+                                            new TournamentUploadTask(baseActivity, tournament, progressBar).execute();
                                         }
                                     })
                             .setNegativeButton(R.string.dialog_cancel, null);
@@ -141,6 +141,12 @@ public class OrganizedTournamentListAdapter extends RecyclerView.Adapter<Tournam
                         }
                     }
                 });
+        }
+
+        if (tournament.getTournamentTyp().equals(TournamentTyp.TEAM.name())) {
+            viewHolder.getTeamIcon().setVisibility(View.VISIBLE);
+        } else {
+            viewHolder.getTeamIcon().setVisibility(View.GONE);
         }
 
         if (position % 2 == 0) {

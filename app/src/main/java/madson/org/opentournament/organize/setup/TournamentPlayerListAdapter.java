@@ -4,6 +4,10 @@ import android.content.Context;
 
 import android.graphics.Color;
 
+import android.os.Bundle;
+
+import android.support.v4.app.FragmentManager;
+
 import android.support.v7.widget.RecyclerView;
 
 import android.view.LayoutInflater;
@@ -11,7 +15,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import madson.org.opentournament.R;
+import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
+import madson.org.opentournament.utility.BaseActivity;
 import madson.org.opentournament.viewHolder.TournamentPlayerViewHolder;
 
 import java.util.ArrayList;
@@ -25,15 +31,18 @@ import java.util.List;
  */
 public class TournamentPlayerListAdapter extends RecyclerView.Adapter<TournamentPlayerViewHolder> {
 
-    private Context context;
+    private BaseActivity baseActivity;
     private TournamentSetupEventListener mListener;
+    private Tournament tournament;
     private List<TournamentPlayer> tournamentPlayerList = new ArrayList<>();
 
-    public TournamentPlayerListAdapter(Context context, TournamentSetupEventListener mListener) {
+    public TournamentPlayerListAdapter(BaseActivity baseActivity, TournamentSetupEventListener mListener,
+        Tournament tournament) {
 
-        this.context = context;
+        this.baseActivity = baseActivity;
 
         this.mListener = mListener;
+        this.tournament = tournament;
     }
 
     @Override
@@ -60,21 +69,38 @@ public class TournamentPlayerListAdapter extends RecyclerView.Adapter<Tournament
         String nickname = player.getNickname();
         String lastname = player.getLastname();
         holder.getPlayerNameInList()
-            .setText(context.getResources()
+            .setText(baseActivity.getResources()
                 .getString(R.string.tournament_player_name_in_row, firstname, nickname, lastname));
 
         // mark online player
         if (player.getPlayer_online_uuid() != null) {
-            holder.getOnlineIcon().setVisibility(View.VISIBLE);
+            holder.getLocalIcon().setVisibility(View.GONE);
         } else {
-            holder.getOnlineIcon().setVisibility(View.GONE);
+            holder.getLocalIcon().setVisibility(View.VISIBLE);
         }
 
         if (player.getDroppedInRound() != 0) {
             holder.getDroppedInRound()
-                .setText(context.getResources().getString(R.string.dropped_in_round, player.getDroppedInRound()));
+                .setText(baseActivity.getResources().getString(R.string.dropped_in_round, player.getDroppedInRound()));
             holder.getDroppedInRound().setVisibility(View.VISIBLE);
         }
+
+        holder.getEditIcon().setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+
+                    AddTournamentPlayerDialog dialog = new AddTournamentPlayerDialog();
+
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelable(AddTournamentPlayerDialog.BUNDLE_TOURNAMENT, tournament);
+                    bundle.putParcelable(AddTournamentPlayerDialog.BUNDLE_TOURNAMENT_PLAYER, player);
+                    dialog.setArguments(bundle);
+
+                    FragmentManager supportFragmentManager = baseActivity.getSupportFragmentManager();
+                    dialog.show(supportFragmentManager, "tournament setup new player");
+                }
+            });
 
         if (position % 2 == 0) {
             holder.getTournamentPlayerCard().setCardBackgroundColor(Color.LTGRAY);

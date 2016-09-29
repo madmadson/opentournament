@@ -113,16 +113,17 @@ public class TournamentServiceImpl implements TournamentService {
     private void createMockTournaments() {
 
         insertTournament(1, "Coin of Evil", "Ludwigsburg", new DateTime(2016, 3, 10, 10, 8).toDate(), 32, null, null,
-            null, 8, TournamentTyp.SOLO.name());
+            null, 8, TournamentTyp.SOLO.name(), 0);
         insertTournament(2, "HMDZ", "Oberhausen", new DateTime(2016, 5, 20, 10, 0).toDate(), 0, null, null, null, 32,
-            TournamentTyp.TEAM.name());
+            TournamentTyp.TEAM.name(), 3);
         insertTournament(3, "Dead Fish", "Heidelberg", new DateTime(2016, 7, 15, 10, 0).toDate(), 16, null, null, null,
-            0, TournamentTyp.SOLO.name());
+            0, TournamentTyp.SOLO.name(), 0);
     }
 
 
     private Tournament insertTournament(int id, String name, String location, Date date, int maxPlayer,
-        String onlineUUID, String creator, String creatorEmail, int actualPlayers, String tournmanetType) {
+        String onlineUUID, String creator, String creatorEmail, int actualPlayers, String tournmanetType,
+        int teamsize) {
 
         ContentValues contentValues = new ContentValues();
 
@@ -142,6 +143,7 @@ public class TournamentServiceImpl implements TournamentService {
         contentValues.put(TournamentTable.COLUMN_GAME_OR_SPORT_TYPE, "WARMACHINE");
         contentValues.put(TournamentTable.COLUMN_ACTUAL_PLAYERS, actualPlayers);
         contentValues.put(TournamentTable.COLUMN_STATE, Tournament.TournamentState.PLANED.name());
+        contentValues.put(TournamentTable.COLUMN_TEAM_SIZE, teamsize);
 
         SQLiteDatabase writableDatabase = openTournamentDBHelper.getWritableDatabase();
 
@@ -201,7 +203,7 @@ public class TournamentServiceImpl implements TournamentService {
         }
 
         tournament.setActualRound(cursor.getInt(4));
-        tournament.setMaxNumberOfPlayers(cursor.getInt(5));
+        tournament.setMaxNumberOfParticipants(cursor.getInt(5));
         tournament.setOnlineUUID(cursor.getString(6));
         tournament.setCreatorName(cursor.getString(7));
         tournament.setCreatorEmail(cursor.getString(8));
@@ -209,6 +211,7 @@ public class TournamentServiceImpl implements TournamentService {
         tournament.setActualPlayers(cursor.getInt(10));
         tournament.setGameOrSportTyp(cursor.getString(11));
         tournament.setState(cursor.getString(12));
+        tournament.setTeamSize(cursor.getInt(13));
 
         return tournament;
     }
@@ -222,9 +225,11 @@ public class TournamentServiceImpl implements TournamentService {
         ContentValues contentValues = new ContentValues();
         contentValues.put(TournamentTable.COLUMN_NAME, tournament.getName());
         contentValues.put(TournamentTable.COLUMN_LOCATION, tournament.getLocation());
+        contentValues.put(TournamentTable.COLUMN_TEAM_SIZE, tournament.getTeamSize());
+        contentValues.put(TournamentTable.COLUMN_TOURNAMENT_TYPE, tournament.getTournamentTyp());
         contentValues.put(TournamentTable.COLUMN_DATE,
             tournament.getDateOfTournament() == null ? null : tournament.getDateOfTournament().getTime());
-        contentValues.put(TournamentTable.COLUMN_MAX_NUMBER_OF_PLAYERS, tournament.getMaxNumberOfPlayers());
+        contentValues.put(TournamentTable.COLUMN_MAX_NUMBER_OF_PLAYERS, tournament.getMaxNumberOfParticipants());
 
         SQLiteDatabase writableDatabase = openTournamentDBHelper.getWritableDatabase();
 
@@ -363,8 +368,9 @@ public class TournamentServiceImpl implements TournamentService {
         Log.i(this.getClass().getName(), "create tournament: " + tournament);
 
         return insertTournament(0, tournament.getName(), tournament.getLocation(), tournament.getDateOfTournament(),
-                tournament.getMaxNumberOfPlayers(), tournament.getOnlineUUID(), tournament.getCreatorName(),
-                tournament.getCreatorEmail(), tournament.getActualPlayers(), tournament.getTournamentTyp());
+                tournament.getMaxNumberOfParticipants(), tournament.getOnlineUUID(), tournament.getCreatorName(),
+                tournament.getCreatorEmail(), tournament.getActualPlayers(), tournament.getTournamentTyp(),
+                tournament.getTeamSize());
     }
 
 

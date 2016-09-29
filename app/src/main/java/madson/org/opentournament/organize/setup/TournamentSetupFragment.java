@@ -223,6 +223,13 @@ public class TournamentSetupFragment extends Fragment implements TournamentSetup
 
 
     @Override
+    public void updateTournmaentPlayer(TournamentPlayer updatedPLayer) {
+
+        tournamentPlayerListFragment.updatePlayer(updatedPLayer);
+    }
+
+
+    @Override
     public void startRound(int roundToStart, Tournament tournament) {
 
         if (roundToStart == 2) {

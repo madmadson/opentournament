@@ -36,8 +36,8 @@
         android:textColor="@color/colorPrimary"
         android:layout_marginRight="@dimen/main_tick"
         android:textStyle="bold"
-        android:id="@+id/header_amount_players"
-        android:text="@string/header_amount_player"/>
+        android:id="@+id/header_remaining_seats"
+        android:text="@string/header_remaining_seats"/>
 
     <View
         android:layout_width="match_parent"

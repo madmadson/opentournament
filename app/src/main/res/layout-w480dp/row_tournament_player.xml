@@ -65,16 +65,22 @@
                 android:id="@+id/tournament_player_row_faction"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="@dimen/small_tick"
-                android:text="cygnar" />
-
+                android:layout_marginRight="@dimen/halve_tick" />
 
             <ImageView
-                android:id="@+id/tournament_player_row_online_icon"
+                android:id="@+id/tournament_player_row_local_icon"
+                android:src="@drawable/ic_cloud_off_black_24dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="@dimen/small_tick"
-                android:src="@drawable/ic_cloud_black_24dp" />
+                android:layout_marginRight="@dimen/halve_tick"
+               />
+
+            <ImageView
+                android:id="@+id/tournament_player_row_edit_icon"
+                android:src="@drawable/ic_build_black_24dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/halve_tick" />
         </LinearLayout>
     </RelativeLayout>
 </android.support.v7.widget.CardView>

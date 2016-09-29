@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" 
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="@dimen/main_tick"
     android:descendantFocusability="beforeDescendants"
-    android:focusableInTouchMode="true">
+    android:focusableInTouchMode="true"
+    android:orientation="vertical"
+    android:padding="@dimen/main_tick">
 
     <Button
         android:id="@+id/dialog_delete_tournament_button"
-        android:drawableLeft="@android:drawable/ic_delete"
-        android:drawablePadding="@dimen/small_tick"
-        android:background="@color/colorPrimaryDark"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:background="@color/colorPrimaryDark"
+        android:drawableLeft="@android:drawable/ic_delete"
+        android:drawablePadding="@dimen/small_tick"
+        android:paddingRight="@dimen/halve_tick"
         android:text="@string/delete_tournament"
         android:textColor="@color/colorTextIcon"
         android:textStyle="bold"
-        android:paddingRight="@dimen/halve_tick"
-        android:layout_gravity="right"
-        android:visibility="gone"/>
-    
-    
-   <android.support.design.widget.TextInputLayout
+        android:visibility="gone" />
+
+
+    <android.support.design.widget.TextInputLayout
         android:id="@+id/tournament_name_parent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -36,9 +36,9 @@
             android:imeOptions="actionNext"
             android:inputType="text"
             android:maxLines="1"
-    
-            android:singleLine="true"/>
-    
+
+            android:singleLine="true" />
+
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
@@ -56,7 +56,7 @@
             android:inputType="text"
             android:maxLines="1"
 
-            android:singleLine="true"/>
+            android:singleLine="true" />
 
     </android.support.design.widget.TextInputLayout>
 
@@ -76,10 +76,10 @@
             android:inputType="none"
             android:maxLines="1"
 
-            android:singleLine="true"/>
+            android:singleLine="true" />
 
     </android.support.design.widget.TextInputLayout>
-    
+
     <android.support.design.widget.TextInputLayout
         android:id="@+id/tournament_max_players_parent"
         android:layout_width="match_parent"
@@ -90,30 +90,74 @@
             android:id="@+id/tournament_max_players"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/label_tournament_max_players"
+            android:hint="@string/label_tournament_max_seats"
             android:imeOptions="actionNext"
             android:inputType="number"
             android:maxLines="1"
 
-            android:singleLine="true"/>
+            android:singleLine="true" />
 
     </android.support.design.widget.TextInputLayout>
 
-        <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+    <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="@dimen/main_tick">
+
+        <RadioButton
+            android:id="@+id/radio_solo_tournament"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <RadioButton
-                android:id="@+id/radio_solo_tournament"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checked="true"
-                android:text="@string/label_tournament_solo_tournament" />
-            <RadioButton
-                android:id="@+id/radio_team_tournament"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/label_tournament_team_tournament" />
-        </RadioGroup>
+            android:checked="true"
+            android:text="@string/label_tournament_solo_tournament" />
 
+        <RadioButton
+            android:id="@+id/radio_team_tournament"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_tournament_team_tournament" />
+    </RadioGroup>
+
+    <LinearLayout
+        android:id="@+id/teamsize_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="@dimen/main_tick"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/label_faction"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/halve_tick"
+            android:paddingTop="@dimen/halve_tick"
+            android:text="@string/label_teamsize"
+            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium" />
+
+        <ImageButton
+            android:id="@+id/teamsize_increase"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_add_black_24dp" />
+
+        <EditText
+            android:id="@+id/teamsize"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+           android:inputType="none"
+            android:paddingLeft="@dimen/main_tick"
+            android:paddingRight="@dimen/main_tick"
+            android:text="5" />
+
+        <ImageButton
+            android:id="@+id/teamsize_decrease"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_remove_black_24dp" />
+
+    </LinearLayout>
 </LinearLayout>

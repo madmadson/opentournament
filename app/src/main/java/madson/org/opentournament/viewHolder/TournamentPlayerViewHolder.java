@@ -22,6 +22,7 @@ import madson.org.opentournament.organize.setup.TournamentPlayerListAdapter;
  */
 public class TournamentPlayerViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
+    private ImageView editIcon;
     private TournamentPlayerListAdapter tournamentPlayerListAdapter;
     private TextView faction;
 
@@ -29,7 +30,7 @@ public class TournamentPlayerViewHolder extends RecyclerView.ViewHolder implemen
     private TextView playerNumber;
     private TextView teamName;
 
-    private ImageView onlineIcon;
+    private ImageView localIcon;
     private TournamentPlayer player;
     private TextView droppedInRound;
     private CardView tournamentPlayerCard;
@@ -50,7 +51,7 @@ public class TournamentPlayerViewHolder extends RecyclerView.ViewHolder implemen
         teamName = (TextView) v.findViewById(R.id.tournament_player_teamname);
         faction = (TextView) v.findViewById(R.id.tournament_player_row_faction);
         droppedInRound = (TextView) v.findViewById(R.id.dropped_in_round);
-        onlineIcon = (ImageView) v.findViewById(R.id.tournament_player_row_online_icon);
+        localIcon = (ImageView) v.findViewById(R.id.tournament_player_row_local_icon);
     }
 
 
@@ -68,7 +69,8 @@ public class TournamentPlayerViewHolder extends RecyclerView.ViewHolder implemen
         teamName = (TextView) v.findViewById(R.id.tournament_player_teamname);
         faction = (TextView) v.findViewById(R.id.tournament_player_row_faction);
         droppedInRound = (TextView) v.findViewById(R.id.dropped_in_round);
-        onlineIcon = (ImageView) v.findViewById(R.id.tournament_player_row_online_icon);
+        localIcon = (ImageView) v.findViewById(R.id.tournament_player_row_local_icon);
+        editIcon = (ImageView) v.findViewById(R.id.tournament_player_row_edit_icon);
     }
 
     public TextView getPlayerNameInList() {
@@ -89,9 +91,9 @@ public class TournamentPlayerViewHolder extends RecyclerView.ViewHolder implemen
     }
 
 
-    public ImageView getOnlineIcon() {
+    public ImageView getLocalIcon() {
 
-        return onlineIcon;
+        return localIcon;
     }
 
 
@@ -127,5 +129,11 @@ public class TournamentPlayerViewHolder extends RecyclerView.ViewHolder implemen
     public CardView getTournamentPlayerCard() {
 
         return tournamentPlayerCard;
+    }
+
+
+    public ImageView getEditIcon() {
+
+        return editIcon;
     }
 }

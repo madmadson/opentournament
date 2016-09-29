@@ -12,4 +12,5 @@ public class FirebaseReferences {
     public static final String TOURNAMENT_PLAYERS = "tournament_players";
     public static final String TOURNAMENT_RANKINGS = "tournament_rankings";
     public static final String TOURNAMENT_GAMES = "tournament_games";
+    public static final String TOURNAMENT_TEAMS = "tournament_teams";
 }

@@ -39,14 +39,12 @@ import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.organize.ConfirmPairingNewRoundDialog;
 import madson.org.opentournament.organize.TournamentEventListener;
-import madson.org.opentournament.service.TournamentPlayerService;
 import madson.org.opentournament.tasks.AddDummyPlayerTask;
 import madson.org.opentournament.tasks.LoadLocalTournamentPlayerTask;
 import madson.org.opentournament.utility.BaseActivity;
 import madson.org.opentournament.utility.BaseApplication;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 
@@ -55,7 +53,7 @@ import java.util.List;
  *
  * @author  Tobias Matt - tmatt@contargo.net
  */
-public class TournamentPlayerListFragment extends Fragment implements TournamentEventListener {
+public class TournamentTeamListFragment extends Fragment implements TournamentEventListener {
 
     public static final String BUNDLE_TOURNAMENT = "tournament";
 
@@ -70,9 +68,9 @@ public class TournamentPlayerListFragment extends Fragment implements Tournament
     private BaseActivity baseActivity;
     private ProgressBar progressbar;
 
-    public static TournamentPlayerListFragment newInstance(Tournament tournament) {
+    public static TournamentTeamListFragment newInstance(Tournament tournament) {
 
-        TournamentPlayerListFragment fragment = new TournamentPlayerListFragment();
+        TournamentTeamListFragment fragment = new TournamentTeamListFragment();
         Bundle args = new Bundle();
         args.putParcelable(BUNDLE_TOURNAMENT, tournament);
         fragment.setArguments(args);

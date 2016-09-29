@@ -67,7 +67,7 @@
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="horizontal">
 
         <TextView
@@ -80,13 +80,22 @@
             android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium" />
 
         <Spinner
-            android:id="@+id/dialog_add_tournament_player_teamname"
+            android:id="@+id/teamname_spinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="70dp"
+            android:layout_below="@id/label_teamname"
             android:layout_marginRight="45dp"
-            android:hint="@string/label_teamname"
-            android:paddingTop="@dimen/halve_tick" />
+            android:layout_marginLeft="@dimen/halve_tick"
+            android:hint="@string/label_teamname" />
+
+        <TextView
+            android:id="@+id/team_members"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingRight="45dp"
+            android:paddingTop="@dimen/halve_tick"
+            android:layout_alignParentRight="true"
+            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium" />
 
         <ImageButton
             android:id="@+id/dialog_add_tournament_player_add_new_team"

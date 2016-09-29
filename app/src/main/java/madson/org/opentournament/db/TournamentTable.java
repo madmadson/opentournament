@@ -29,13 +29,14 @@ public class TournamentTable {
      * 10: actual players
      * 11: game or sport type
      * 12: state
+     * 13: teamsize
      */
     public static final String[] ALL_COLS_FOR_TOURNAMENT = {
         TournamentTable.COLUMN_ID, TournamentTable.COLUMN_NAME, TournamentTable.COLUMN_LOCATION,
         TournamentTable.COLUMN_DATE, TournamentTable.COLUMN_ACTUAL_ROUND, TournamentTable.COLUMN_MAX_NUMBER_OF_PLAYERS,
         TournamentTable.COLUMN_ONLINE_UUID, TournamentTable.COLUMN_CREATOR, TournamentTable.COLUMN_CREATOR_EMAIL,
         TournamentTable.COLUMN_TOURNAMENT_TYPE, TournamentTable.COLUMN_ACTUAL_PLAYERS,
-        TournamentTable.COLUMN_GAME_OR_SPORT_TYPE, TournamentTable.COLUMN_STATE
+        TournamentTable.COLUMN_GAME_OR_SPORT_TYPE, TournamentTable.COLUMN_STATE, TournamentTable.COLUMN_TEAM_SIZE
     };
 
     public static final String TABLE_TOURNAMENTS = "tournament";
@@ -53,6 +54,7 @@ public class TournamentTable {
     public static final String COLUMN_ACTUAL_PLAYERS = "actualPlayers";
     public static final String COLUMN_GAME_OR_SPORT_TYPE = "gameOrSportType";
     public static final String COLUMN_STATE = "state";
+    public static final String COLUMN_TEAM_SIZE = "teamsize";
 
     public static void createTable(SQLiteDatabase db) {
 
@@ -64,7 +66,7 @@ public class TournamentTable {
             + " INTEGER, " + COLUMN_ACTUAL_ROUND + " INTEGER, " + COLUMN_ACTUAL_PLAYERS + " INTEGER, "
             + COLUMN_ONLINE_UUID + " TEXT, " + COLUMN_CREATOR
             + " TEXT, " + COLUMN_CREATOR_EMAIL + " TEXT, " + COLUMN_TOURNAMENT_TYPE + " TEXT, "
-            + COLUMN_GAME_OR_SPORT_TYPE + " TEXT, " + COLUMN_STATE + " TEXT)");
+            + COLUMN_GAME_OR_SPORT_TYPE + " TEXT, " + COLUMN_STATE + " TEXT, " + COLUMN_TEAM_SIZE + " INTEGER)");
     }
 
 

@@ -38,12 +38,14 @@ public class Tournament implements Parcelable {
         FINISHED
     }
 
+    private int teamSize;
+
     private long _id;
 
     private String name;
     private String location;
     private int actualPlayers;
-    private int maxNumberOfPlayers;
+    private int maxNumberOfParticipants;
     private Date dateOfTournament;
     private int actualRound;
     private String onlineUUID;
@@ -71,7 +73,7 @@ public class Tournament implements Parcelable {
         this._id = tournament.get_id();
         this.name = tournament.getName();
         this.location = tournament.getLocation();
-        this.maxNumberOfPlayers = tournament.getMaxNumberOfPlayers();
+        this.maxNumberOfParticipants = tournament.getMaxNumberOfParticipants();
         this.actualPlayers = tournament.getActualPlayers();
         this.dateOfTournament = tournament.getDateOfTournament();
         this.actualRound = tournament.getActualRound();
@@ -81,6 +83,7 @@ public class Tournament implements Parcelable {
         this.tournamentTyp = TournamentTyp.valueOf(tournament.getTournamentTyp());
         this.gameOrSportTyp = GameOrSportTyp.valueOf(tournament.getGameOrSportTyp());
         this.state = tournament.getState();
+        this.teamSize = tournament.getTeamSize();
     }
 
 
@@ -90,7 +93,7 @@ public class Tournament implements Parcelable {
         name = in.readString();
         location = in.readString();
         actualPlayers = in.readInt();
-        maxNumberOfPlayers = in.readInt();
+        maxNumberOfParticipants = in.readInt();
 
         long longFromDate = in.readLong();
 
@@ -105,7 +108,20 @@ public class Tournament implements Parcelable {
         setTournamentTyp(in.readString());
         setGameOrSportTyp(in.readString());
         state = in.readString();
+        teamSize = in.readInt();
     }
+
+    public void setTeamSize(int teamSize) {
+
+        this.teamSize = teamSize;
+    }
+
+
+    public int getTeamSize() {
+
+        return teamSize;
+    }
+
 
     @Override
     public int describeContents() {
@@ -121,7 +137,7 @@ public class Tournament implements Parcelable {
         parcel.writeString(name);
         parcel.writeString(location);
         parcel.writeInt(actualPlayers);
-        parcel.writeInt(maxNumberOfPlayers);
+        parcel.writeInt(maxNumberOfParticipants);
 
         if (dateOfTournament != null) {
             parcel.writeLong(dateOfTournament.getTime());
@@ -136,6 +152,7 @@ public class Tournament implements Parcelable {
         parcel.writeString(getTournamentTyp());
         parcel.writeString(getGameOrSportTyp());
         parcel.writeString(state);
+        parcel.writeInt(teamSize);
     }
 
 
@@ -193,9 +210,9 @@ public class Tournament implements Parcelable {
     }
 
 
-    public int getMaxNumberOfPlayers() {
+    public int getMaxNumberOfParticipants() {
 
-        return maxNumberOfPlayers;
+        return maxNumberOfParticipants;
     }
 
 
@@ -217,9 +234,9 @@ public class Tournament implements Parcelable {
     }
 
 
-    public void setMaxNumberOfPlayers(int maxNumberOfPlayers) {
+    public void setMaxNumberOfParticipants(int maxNumberOfParticipants) {
 
-        this.maxNumberOfPlayers = maxNumberOfPlayers;
+        this.maxNumberOfParticipants = maxNumberOfParticipants;
     }
 
 
@@ -288,11 +305,12 @@ public class Tournament implements Parcelable {
     public String toString() {
 
         return "Tournament{"
-            + "_id=" + _id
+            + "teamSize=" + teamSize
+            + ", _id=" + _id
             + ", name='" + name + '\''
             + ", location='" + location + '\''
             + ", actualPlayers=" + actualPlayers
-            + ", maxNumberOfPlayers=" + maxNumberOfPlayers
+            + ", maxNumberOfParticipants=" + maxNumberOfParticipants
             + ", dateOfTournament=" + dateOfTournament
             + ", actualRound=" + actualRound
             + ", onlineUUID='" + onlineUUID + '\''

@@ -1,21 +1,20 @@
 package madson.org.opentournament.tasks;
 
-import android.app.ActionBar;
-
 import android.os.AsyncTask;
-import android.os.Handler;
-import android.os.Looper;
+
+import android.support.design.widget.Snackbar;
 
 import android.view.View;
 
 import android.widget.ProgressBar;
 
+import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.service.OngoingTournamentService;
 import madson.org.opentournament.service.RankingService;
 import madson.org.opentournament.service.TournamentPlayerService;
 import madson.org.opentournament.service.TournamentService;
-import madson.org.opentournament.utility.BaseApplication;
+import madson.org.opentournament.utility.BaseActivity;
 
 
 /**
@@ -25,13 +24,13 @@ import madson.org.opentournament.utility.BaseApplication;
  */
 public class TournamentUploadTask extends AsyncTask<Void, Void, Void> {
 
-    private BaseApplication application;
+    private BaseActivity baseActivity;
     private Tournament tournament;
     private ProgressBar progressBar;
 
-    public TournamentUploadTask(BaseApplication application, Tournament tournament, ProgressBar progressBar) {
+    public TournamentUploadTask(BaseActivity baseActivity, Tournament tournament, ProgressBar progressBar) {
 
-        this.application = application;
+        this.baseActivity = baseActivity;
         this.tournament = tournament;
         this.progressBar = progressBar;
     }
@@ -46,10 +45,12 @@ public class TournamentUploadTask extends AsyncTask<Void, Void, Void> {
     @Override
     protected Void doInBackground(Void... params) {
 
-        TournamentService tournamentService = application.getTournamentService();
-        TournamentPlayerService tournamentPlayerService = application.getTournamentPlayerService();
-        RankingService rankingService = application.getRankingService();
-        OngoingTournamentService ongoingTournamentService = application.getOngoingTournamentService();
+        TournamentService tournamentService = baseActivity.getBaseApplication().getTournamentService();
+        TournamentPlayerService tournamentPlayerService = baseActivity.getBaseApplication()
+                .getTournamentPlayerService();
+        RankingService rankingService = baseActivity.getBaseApplication().getRankingService();
+        OngoingTournamentService ongoingTournamentService = baseActivity.getBaseApplication()
+                .getOngoingTournamentService();
 
         Tournament actualTournament = tournamentService.getTournamentForId(tournament.get_id());
         Tournament uploadedTournament = tournamentService.uploadTournament(actualTournament);
@@ -65,5 +66,10 @@ public class TournamentUploadTask extends AsyncTask<Void, Void, Void> {
     protected void onPostExecute(Void aVoid) {
 
         progressBar.setVisibility(View.GONE);
+
+        Snackbar snackbar = Snackbar.make(baseActivity.getCoordinatorLayout(), R.string.success_upload_tournament,
+                Snackbar.LENGTH_LONG);
+        snackbar.getView().setBackgroundColor(baseActivity.getResources().getColor(R.color.colorPositive));
+        snackbar.show();
     }
 }

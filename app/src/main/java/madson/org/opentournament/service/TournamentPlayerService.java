@@ -1,6 +1,7 @@
 package madson.org.opentournament.service;
 
 import android.content.ContentValues;
+import android.content.Intent;
 
 import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.Tournament;
@@ -61,7 +62,7 @@ public interface TournamentPlayerService {
      *
      * @return
      */
-    List<String> getAllTeamNamesForTournament(Tournament tournament);
+    Map<String, Integer> getAllTeamsForTournament(Tournament tournament);
 
 
     /**
@@ -92,4 +93,11 @@ public interface TournamentPlayerService {
      * @param  tournament
      */
     TournamentPlayer dropPlayerFromTournament(TournamentPlayer player, Tournament tournament);
+
+
+    /**
+     * @param  tournamentPlayer
+     * @param  tournament
+     */
+    void editTournamentPlayer(TournamentPlayer tournamentPlayer, Tournament tournament);
 }

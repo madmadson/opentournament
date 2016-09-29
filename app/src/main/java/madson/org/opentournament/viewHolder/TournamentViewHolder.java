@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.View;
 
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import madson.org.opentournament.R;
@@ -32,6 +33,7 @@ import madson.org.opentournament.organize.TournamentOrganizeActivity;
  */
 public class TournamentViewHolder extends RecyclerView.ViewHolder {
 
+    private ImageView teamIcon;
     private TextView tournamentState;
     private View rowTournament;
     private TextView tournamentNameInList;
@@ -55,6 +57,8 @@ public class TournamentViewHolder extends RecyclerView.ViewHolder {
         tournamentLocationInList = (TextView) v.findViewById(R.id.tournament_location);
         tournamentDateInList = (TextView) v.findViewById(R.id.tournament_date);
         tournamentState = (TextView) v.findViewById(R.id.tournament_state);
+
+        teamIcon = (ImageView) v.findViewById(R.id.team_tournament_icon);
     }
 
     public TextView getTournamentNameInList() {
@@ -102,5 +106,11 @@ public class TournamentViewHolder extends RecyclerView.ViewHolder {
     public ImageButton getEditTournamentButton() {
 
         return editTournamentButton;
+    }
+
+
+    public ImageView getTeamIcon() {
+
+        return teamIcon;
     }
 }

@@ -20,9 +20,12 @@ import android.widget.ProgressBar;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import madson.org.opentournament.R;
 import madson.org.opentournament.db.FirebaseReferences;
@@ -45,12 +48,10 @@ public class OnlineGamesListFragment extends Fragment {
     public static final String BUNDLE_ROUND = "round";
 
     private DatabaseReference mFirebaseDatabaseReference;
-    private FirebaseRecyclerAdapter<Game, GameViewHolder> mFirebaseAdapter;
+
     private String tournament_uuid;
     private int round;
     private ProgressBar mProgressBar;
-    private Drawable winnerShape;
-    private Drawable looserShape;
 
     public static Fragment newInstance(int round, String tournament_uuid) {
 
@@ -66,9 +67,6 @@ public class OnlineGamesListFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-        winnerShape = getActivity().getResources().getDrawable(R.drawable.shape_winner);
-        looserShape = getActivity().getResources().getDrawable(R.drawable.shape_looser);
 
         Bundle bundle = getArguments();
 
@@ -97,91 +95,30 @@ public class OnlineGamesListFragment extends Fragment {
 
         Query orderedGames = child.orderByChild(GameTable.COLUMN_PLAYING_FIELD);
 
-        mFirebaseAdapter = new FirebaseRecyclerAdapter<Game, GameViewHolder>(Game.class, R.layout.row_game,
-                GameViewHolder.class, orderedGames) {
+        final OnlineGamesListAdapter gamesListAdapter = new OnlineGamesListAdapter(getActivity());
 
-            @Override
-            protected void populateViewHolder(GameViewHolder holder, Game game, int position) {
-
-                mProgressBar.setVisibility(ProgressBar.INVISIBLE);
-
-                holder.setGame(game);
-
-                holder.getTableNumber()
-                    .setText(getActivity().getResources().getString(R.string.table_number, game.getPlaying_field()));
-
-                if (game.isFinished()) {
-                    holder.getPlayerOneCardView()
-                        .setBackgroundDrawable(game.getPlayer_one_score() == 1 ? winnerShape : looserShape);
-                    holder.getPlayerTwoCardView()
-                        .setBackgroundDrawable(game.getPlayer_two_score() == 1 ? winnerShape : looserShape);
-                }
-
-                TournamentPlayer player1 = game.getPlayer1();
-
-                holder.getPlayerOneNameInList()
-                    .setText(getActivity().getResources()
-                        .getString(R.string.tournament_player_name_in_row, player1.getFirstname(),
-                            player1.getNickname(), player1.getLastname()));
-                holder.getPlayerOneFaction().setText(player1.getFaction());
-
-                holder.getPlayerOneScore()
-                    .setText(getActivity().getResources().getString(R.string.game_win, game.getPlayer_one_score()));
-                holder.getPlayerOneControlPoints()
-                    .setText(getActivity().getResources()
-                        .getString(R.string.game_cp, game.getPlayer_one_control_points()));
-                holder.getPlayerOneVictoryPoints()
-                    .setText(getActivity().getResources()
-                        .getString(R.string.game_vp, game.getPlayer_one_victory_points()));
-
-                TournamentPlayer player2 = game.getPlayer2();
-
-                holder.getPlayerTwoNameInList()
-                    .setText(getActivity().getResources()
-                        .getString(R.string.tournament_player_name_in_row, player2.getFirstname(),
-                            player2.getNickname(), player2.getLastname()));
-                holder.getPlayerTwoFaction().setText(player2.getFaction());
-
-                holder.getPlayerTwoScore()
-                    .setText(getActivity().getResources().getString(R.string.game_win, game.getPlayer_two_score()));
-                holder.getPlayerTwoControlPoints()
-                    .setText(getActivity().getResources()
-                        .getString(R.string.game_cp, game.getPlayer_two_control_points()));
-                holder.getPlayerTwoVictoryPoints()
-                    .setText(getActivity().getResources()
-                        .getString(R.string.game_vp, game.getPlayer_two_victory_points()));
-
-                if (position % 2 == 0) {
-                    holder.getPairingRow().setBackgroundColor(Color.LTGRAY);
-                } else {
-                    holder.getPairingRow().setBackgroundColor(Color.WHITE);
-                }
-            }
-        };
-
-        mFirebaseAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+        orderedGames.addValueEventListener(new ValueEventListener() {
 
                 @Override
-                public void onItemRangeRemoved(int positionStart, int itemCount) {
+                public void onDataChange(DataSnapshot dataSnapshot) {
 
-                    super.onItemRangeRemoved(positionStart, itemCount);
+                    for (DataSnapshot playerSnapshot : dataSnapshot.getChildren()) {
+                        Game game = playerSnapshot.getValue(Game.class);
 
-                    if (mFirebaseAdapter.getItemCount() == 0) {
+                        if (game != null) {
+                            mProgressBar.setVisibility(View.GONE);
+                            gamesListAdapter.addGame(game);
+                        }
                     }
                 }
 
 
                 @Override
-                public void onItemRangeInserted(int positionStart, int itemCount) {
-
-                    super.onItemRangeInserted(positionStart, itemCount);
-
-                    if (mFirebaseAdapter.getItemCount() != 0) {
-                    }
+                public void onCancelled(DatabaseError databaseError) {
                 }
             });
 
-        recyclerView.setAdapter(mFirebaseAdapter);
+        recyclerView.setAdapter(gamesListAdapter);
 
         Handler handler = new Handler();
 
@@ -190,14 +127,11 @@ public class OnlineGamesListFragment extends Fragment {
                 @Override
                 public void run() {
 
-                    if (mFirebaseAdapter.getItemCount() == 0) {
-                        mProgressBar.setVisibility(ProgressBar.INVISIBLE);
+                    if (gamesListAdapter.getItemCount() == 0) {
+                        mProgressBar.setVisibility(ProgressBar.GONE);
                     }
-
-                    mFirebaseAdapter.notifyDataSetChanged();
                 }
             }, 5000);
-        mFirebaseAdapter.notifyDataSetChanged();
 
         return view;
     }

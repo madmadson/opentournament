@@ -1,5 +1,7 @@
 package madson.org.opentournament.tournaments;
 
+import android.content.Context;
+
 import android.os.Bundle;
 
 import android.support.annotation.Nullable;
@@ -22,6 +24,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import madson.org.opentournament.R;
+import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.tasks.LoadOrganizedTournamentsTask;
 import madson.org.opentournament.utility.BaseActivity;
 
@@ -32,7 +35,7 @@ import madson.org.opentournament.utility.BaseActivity;
  * @author  Tobias Matt - tmatt@contargo.net
  */
 
-public class OrganizedTournamentList extends Fragment {
+public class OrganizedTournamentList extends Fragment implements OrganizeTournamentEventListener {
 
     private ProgressBar progressBar;
     private TextView noPlayersTextView;
@@ -58,7 +61,7 @@ public class OrganizedTournamentList extends Fragment {
 
                     Log.i(this.getClass().getName(), "click floatingActionButton tournament management");
 
-                    TournamentManagementDialog dialog = new TournamentManagementDialog();
+                    OrganizedTournamentEditDialog dialog = new OrganizedTournamentEditDialog();
 
                     FragmentManager supportFragmentManager = getChildFragmentManager();
                     dialog.show(supportFragmentManager, "tournament management new tournament");
@@ -95,5 +98,42 @@ public class OrganizedTournamentList extends Fragment {
             .execute();
 
         return view;
+    }
+
+
+    @Override
+    public void onAttach(Context context) {
+
+        super.onAttach(context);
+        ((BaseActivity) getActivity()).getBaseApplication().registerOrganizeTournamentListener(this);
+    }
+
+
+    @Override
+    public void onDetach() {
+
+        super.onDetach();
+        ((BaseActivity) getActivity()).getBaseApplication().unregisterOrganizeTournamentListener(this);
+    }
+
+
+    @Override
+    public void onTournamentChangedEvent(Tournament tournament) {
+
+        tournamentListAdapter.replaceTournament(tournament);
+    }
+
+
+    @Override
+    public void onTournamentAddedEvent(Tournament tournament) {
+
+        tournamentListAdapter.addTournament(tournament);
+    }
+
+
+    @Override
+    public void onTournamentDeletedEvent(Tournament tournament) {
+
+        tournamentListAdapter.removeTournament(tournament);
     }
 }

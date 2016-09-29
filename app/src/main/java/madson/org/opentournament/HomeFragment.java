@@ -4,6 +4,8 @@ import android.os.Bundle;
 
 import android.support.annotation.Nullable;
 
+import android.support.design.widget.FloatingActionButton;
+
 import android.support.v4.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -22,6 +24,19 @@ public class HomeFragment extends Fragment {
         final View frag_view = inflater.inflate(R.layout.fragment_home, container, false);
 
         return frag_view;
+    }
+
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+
+        super.onCreate(savedInstanceState);
+
+        FloatingActionButton floatingActionButton = ((BaseActivity) getActivity()).getFloatingActionButton();
+
+        if (floatingActionButton != null) {
+            floatingActionButton.setVisibility(View.GONE);
+        }
     }
 
 

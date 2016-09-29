@@ -16,8 +16,6 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 
-import android.util.Log;
-
 import android.view.LayoutInflater;
 import android.view.View;
 
@@ -30,10 +28,7 @@ import android.widget.ToggleButton;
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.PairingOption;
 import madson.org.opentournament.domain.Tournament;
-import madson.org.opentournament.domain.TournamentRanking;
-import madson.org.opentournament.service.OngoingTournamentService;
-import madson.org.opentournament.service.RankingService;
-import madson.org.opentournament.service.TournamentService;
+import madson.org.opentournament.tasks.LoadTournamentTask;
 import madson.org.opentournament.tasks.PairNewRoundTask;
 import madson.org.opentournament.utility.BaseActivity;
 import madson.org.opentournament.utility.BaseApplication;
@@ -54,11 +49,13 @@ public class ConfirmPairingNewRoundDialog extends DialogFragment {
     private Tournament tournament;
     private int round_for_pairing;
     private Map<String, PairingOption> pairingOptions;
+    private BaseApplication baseApplication;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+        baseApplication = (BaseApplication) getActivity().getApplication();
     }
 
 
@@ -88,13 +85,11 @@ public class ConfirmPairingNewRoundDialog extends DialogFragment {
 
         View dialogView = inflater.inflate(R.layout.dialog_confirm_pairing, null);
 
-        if ((Math.pow(2, tournament.getActualRound() + 1)) > tournament.getActualPlayers()) {
-            dialogView.findViewById(R.id.confirm_dialog_too_much_rounds).setVisibility(View.VISIBLE);
-        }
+        new LoadTournamentTask(baseApplication, dialogView, tournament).execute();
 
         LinearLayout container = (LinearLayout) dialogView.findViewById(R.id.pairing_options_container);
 
-        pairingOptions = ((BaseApplication) getActivity().getApplication()).getPairingOptionsForTournament(tournament);
+        pairingOptions = baseApplication.getPairingOptionsForTournament(tournament);
 
         for (final PairingOption option : pairingOptions.values()) {
             View pairingOption = inflater.inflate(R.layout.view_pairing_option, null);
@@ -169,7 +164,6 @@ public class ConfirmPairingNewRoundDialog extends DialogFragment {
                 @Override
                 public void onClick(View v) {
 
-                    BaseApplication application = (BaseApplication) getActivity().getApplication();
                     Toolbar toolbar = ((BaseActivity) getActivity()).getToolbar();
 
                     Snackbar snackbar = Snackbar.make(((BaseActivity) getActivity()).getCoordinatorLayout(),
@@ -177,7 +171,7 @@ public class ConfirmPairingNewRoundDialog extends DialogFragment {
 
                     ProgressBar progressBar = (ProgressBar) toolbar.findViewById(R.id.toolbar_progress_bar);
                     TournamentOrganizeActivity activity = (TournamentOrganizeActivity) getActivity();
-                    new PairNewRoundTask(activity, application, tournament, snackbar, progressBar, false,
+                    new PairNewRoundTask(activity, baseApplication, tournament, snackbar, progressBar, false,
                         pairingOptions).execute();
 
                     dialog.dismiss();

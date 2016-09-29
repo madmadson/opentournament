@@ -34,7 +34,7 @@ import madson.org.opentournament.db.FirebaseReferences;
 import madson.org.opentournament.db.PlayerTable;
 import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.organize.setup.OnlinePlayerListAdapter;
-import madson.org.opentournament.tournaments.TournamentManagementDialog;
+import madson.org.opentournament.tournaments.OrganizedTournamentEditDialog;
 import madson.org.opentournament.utility.BaseActivity;
 
 
@@ -62,7 +62,7 @@ public class PlayerListFragment extends Fragment {
 
                     Log.i(this.getClass().getName(), "click floatingActionButton tournament management");
 
-                    TournamentManagementDialog dialog = new TournamentManagementDialog();
+                    OrganizedTournamentEditDialog dialog = new OrganizedTournamentEditDialog();
 
                     FragmentManager supportFragmentManager = getChildFragmentManager();
                     dialog.show(supportFragmentManager, "tournament management new tournament");

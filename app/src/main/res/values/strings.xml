@@ -247,5 +247,7 @@
     <string name="change_player">Change player info</string>
     <string name="success_upload_player_data">Successfully upload player data</string>
     <string name="title_organized_tournaments">Organized Tournaments</string>
+    <string name="title_online_tournaments">Online Tournaments</string>
+    <string name="cant_start_tournament_without_players">Cant start tournament without players</string>
 
 </resources>

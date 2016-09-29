@@ -10,10 +10,7 @@ import madson.org.opentournament.domain.TournamentPlayer;
  *
  * @author  Tobias Matt - tmatt@contargo.net
  */
-public interface TournamentManagementEventListener {
-
-    void onTournamentListItemClicked(Tournament tournament);
-
+public interface OrganizeTournamentEventListener {
 
     void onTournamentChangedEvent(Tournament tournament);
 
@@ -22,13 +19,4 @@ public interface TournamentManagementEventListener {
 
 
     void onTournamentDeletedEvent(Tournament tournament);
-
-
-    void onTournamentEditClicked(Tournament tournament);
-
-
-    void onTournamentUploadClicked(Tournament tournament);
-
-
-    void onOnlineTournamentListItemClicked(Tournament tournament);
 }

@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import android.support.annotation.Nullable;
 
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 
@@ -42,6 +43,19 @@ public class AccountFragment extends Fragment {
     private TextInputLayout lastname_parent;
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+
+        super.onCreate(savedInstanceState);
+
+        FloatingActionButton floatingActionButton = ((BaseActivity) getActivity()).getFloatingActionButton();
+
+        if (floatingActionButton != null) {
+            floatingActionButton.setVisibility(View.GONE);
+        }
+    }
+
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         final View view = inflater.inflate(R.layout.fragment_account_management, container, false);
@@ -62,6 +76,7 @@ public class AccountFragment extends Fragment {
         if (user == null || user.isAnonymous()) {
             TextView welcomeText = (TextView) view.findViewById(R.id.welcomeText);
             welcomeText.setText(getActivity().getResources().getString(R.string.please_sign_in_text));
+            progressBar.setVisibility(View.GONE);
         } else {
             final TextView welcomeText = (TextView) view.findViewById(R.id.welcomeText);
             welcomeText.setText(getActivity().getResources()

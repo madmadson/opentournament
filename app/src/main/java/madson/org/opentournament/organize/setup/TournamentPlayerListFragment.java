@@ -7,6 +7,8 @@ import android.os.Bundle;
 
 import android.support.annotation.Nullable;
 
+import android.support.design.widget.Snackbar;
+
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 
@@ -32,12 +34,10 @@ import com.google.firebase.database.ValueEventListener;
 import madson.org.opentournament.R;
 import madson.org.opentournament.db.FirebaseReferences;
 import madson.org.opentournament.domain.Game;
-import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.organize.ConfirmPairingNewRoundDialog;
 import madson.org.opentournament.organize.TournamentEventListener;
-import madson.org.opentournament.service.PlayerService;
 import madson.org.opentournament.service.TournamentPlayerService;
 import madson.org.opentournament.tasks.AddDummyPlayerTask;
 import madson.org.opentournament.utility.BaseActivity;
@@ -164,7 +164,15 @@ public class TournamentPlayerListFragment extends Fragment implements Tournament
                 @Override
                 public void onClick(View v) {
 
-                    if (tournamentPlayerListAdapter.getItemCount() % 2 == 1) {
+                    if (tournamentPlayerListAdapter.getItemCount() == 0) {
+                        Snackbar snackbar = Snackbar.make(((BaseActivity) getActivity()).getCoordinatorLayout(),
+                                R.string.cant_start_tournament_without_players, Snackbar.LENGTH_LONG);
+
+                        snackbar.getView()
+                        .setBackgroundColor(getContext().getResources().getColor(R.color.colorNegative));
+
+                        snackbar.show();
+                    } else if (tournamentPlayerListAdapter.getItemCount() % 2 == 1) {
                         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                         builder.setTitle(R.string.uneven_player_message)
                         .setPositiveButton(R.string.dialog_confirm, new DialogInterface.OnClickListener() {

@@ -30,6 +30,7 @@ import madson.org.opentournament.service.TournamentPlayerService;
 import madson.org.opentournament.service.TournamentPlayerServiceImpl;
 import madson.org.opentournament.service.TournamentService;
 import madson.org.opentournament.service.TournamentServiceImpl;
+import madson.org.opentournament.tournaments.OrganizeTournamentEventListener;
 
 import net.danlew.android.joda.JodaTimeAndroid;
 
@@ -53,9 +54,9 @@ public abstract class BaseApplication extends Application {
     private static RankingService rankingService;
     private static PlayerService playerService;
     private static TournamentPlayerService tournamentPlayerService;
-    private TournamentEventListener tournamentEventListener;
 
     private Set<TournamentEventListener> tournamentEventListeners = new HashSet<>();
+    private Set<OrganizeTournamentEventListener> organizeTournamentEventListeners = new HashSet<>();
 
     @Override
     public void onCreate() {
@@ -214,6 +215,68 @@ public abstract class BaseApplication extends Application {
     }
 
 
+    /**
+     * Registers a listener .
+     *
+     * @param  listener
+     */
+    public void registerOrganizeTournamentListener(OrganizeTournamentEventListener listener) {
+
+        if (!organizeTournamentEventListeners.contains(listener)) {
+            organizeTournamentEventListeners.add(listener);
+        }
+    }
+
+
+    /**
+     * Registers a listener .
+     *
+     * @param  listener
+     */
+    public void unregisterOrganizeTournamentListener(OrganizeTournamentEventListener listener) {
+
+        if (organizeTournamentEventListeners.contains(listener)) {
+            organizeTournamentEventListeners.remove(listener);
+        }
+    }
+
+
+    public void notifyTournamentEdited(Tournament updatedTournament) {
+
+        // iterate over a copy of the listeners to enable the listeners to unregister themselves on notifications
+        HashSet<OrganizeTournamentEventListener> listeners = new HashSet<>(organizeTournamentEventListeners);
+        Iterator<OrganizeTournamentEventListener> iterator = listeners.iterator();
+
+        while (iterator.hasNext()) {
+            iterator.next().onTournamentChangedEvent(updatedTournament);
+        }
+    }
+
+
+    public void notifyTournamentAdded(Tournament addedTournament) {
+
+        // iterate over a copy of the listeners to enable the listeners to unregister themselves on notifications
+        HashSet<OrganizeTournamentEventListener> listeners = new HashSet<>(organizeTournamentEventListeners);
+        Iterator<OrganizeTournamentEventListener> iterator = listeners.iterator();
+
+        while (iterator.hasNext()) {
+            iterator.next().onTournamentAddedEvent(addedTournament);
+        }
+    }
+
+
+    public void notifyTournamentDelete(Tournament deletedTournament) {
+
+        // iterate over a copy of the listeners to enable the listeners to unregister themselves on notifications
+        HashSet<OrganizeTournamentEventListener> listeners = new HashSet<>(organizeTournamentEventListeners);
+        Iterator<OrganizeTournamentEventListener> iterator = listeners.iterator();
+
+        while (iterator.hasNext()) {
+            iterator.next().onTournamentDeletedEvent(deletedTournament);
+        }
+    }
+
+
     public void notifyNextRoundPaired(int roundToStart, Tournament updatedTournament) {
 
         // iterate over a copy of the listeners to enable the listeners to unregister themselves on notifications
@@ -238,26 +301,6 @@ public abstract class BaseApplication extends Application {
     }
 
 
-    public Map<String, PairingOption> getPairingOptionsForTournament(Tournament tournament) {
-
-        Map<String, PairingOption> returnedPairingOptions = new HashMap();
-        MapOfPairingConfig pairingConfigs = new MapOfPairingConfig();
-
-        Map<GameOrSportTyp, List<PairingOption>> pairingOptions = pairingConfigs.getPairingOptions();
-
-        for (Map.Entry<GameOrSportTyp, List<PairingOption>> pairingEntry : pairingOptions.entrySet()) {
-            if (pairingEntry.getKey().name().equals(GameOrSportTyp.ALL.name())
-                    || pairingEntry.getKey().name().equals(tournament.getGameOrSportTyp())) {
-                for (PairingOption option : pairingEntry.getValue()) {
-                    returnedPairingOptions.put(option.getPairingOptionName(), option);
-                }
-            }
-        }
-
-        return returnedPairingOptions;
-    }
-
-
     public void notifyPairingChanged(Game game1, Game game2) {
 
         Set<TournamentEventListener> listeners = new HashSet<>(tournamentEventListeners);
@@ -277,5 +320,25 @@ public abstract class BaseApplication extends Application {
         while (iterator.hasNext()) {
             iterator.next().enterGameResultConfirmed(gameToSave);
         }
+    }
+
+
+    public Map<String, PairingOption> getPairingOptionsForTournament(Tournament tournament) {
+
+        Map<String, PairingOption> returnedPairingOptions = new HashMap();
+        MapOfPairingConfig pairingConfigs = new MapOfPairingConfig();
+
+        Map<GameOrSportTyp, List<PairingOption>> pairingOptions = pairingConfigs.getPairingOptions();
+
+        for (Map.Entry<GameOrSportTyp, List<PairingOption>> pairingEntry : pairingOptions.entrySet()) {
+            if (pairingEntry.getKey().name().equals(GameOrSportTyp.ALL.name())
+                    || pairingEntry.getKey().name().equals(tournament.getGameOrSportTyp())) {
+                for (PairingOption option : pairingEntry.getValue()) {
+                    returnedPairingOptions.put(option.getPairingOptionName(), option);
+                }
+            }
+        }
+
+        return returnedPairingOptions;
     }
 }

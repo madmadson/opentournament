@@ -53,8 +53,8 @@ import madson.org.opentournament.R;
 import madson.org.opentournament.SignInActivity;
 import madson.org.opentournament.about.AboutActivity;
 import madson.org.opentournament.players.PlayerListFragment;
+import madson.org.opentournament.tournaments.OnlineTournamentListFragment;
 import madson.org.opentournament.tournaments.OrganizedTournamentList;
-import madson.org.opentournament.tournaments.TournamentManagementFragment;
 
 
 /**
@@ -81,10 +81,10 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     private TextView userMail;
 
     // Auth
-    private GoogleApiClient mGoogleApiClient;
-    private FirebaseAuth mFirebaseAuth;
+
     private String mUsername = "anonymous";
     private FirebaseUser mFirebaseUser;
+    private GoogleApiClient mGoogleApiClient;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -117,11 +117,8 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                 startActivity(new Intent(this, SignInActivity.class));
                 finish();
             } else {
-                Snackbar snackbar = Snackbar.make(getCoordinatorLayout(), R.string.success_login, Snackbar.LENGTH_LONG);
-
-                snackbar.getView().setBackgroundColor(getResources().getColor(R.color.colorAccent));
-
-                snackbar.show();
+                mGoogleApiClient = new GoogleApiClient.Builder(this).enableAutoManage(this /* FragmentActivity */,
+                        this /* OnConnectionFailedListener */).addApi(Auth.GOOGLE_SIGN_IN_API).build();
             }
         }
 
@@ -186,7 +183,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                 replaceFragment(new HomeFragment());
             } else if (id == R.id.nav_tournaments) {
                 Log.i("Nav", "Open online tournaments");
-                replaceFragment(new TournamentManagementFragment());
+                replaceFragment(new OnlineTournamentListFragment());
             } else if (id == R.id.nav_players) {
                 Log.i("Nav", "Open players");
                 replaceFragment(new PlayerListFragment());
@@ -225,6 +222,8 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
             return true;
         } else if (id == R.id.toolbar_menu_sign_out) {
+            FirebaseAuth mFirebaseAuth = FirebaseAuth.getInstance();
+
             if (isConnected() && mFirebaseAuth != null) {
                 mFirebaseAuth.signOut();
                 LoginManager.getInstance().logOut();
@@ -374,7 +373,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
     public FirebaseUser getCurrentFireBaseUser() {
 
-        return mFirebaseAuth.getCurrentUser();
+        return FirebaseAuth.getInstance().getCurrentUser();
     }
 
 

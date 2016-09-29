@@ -8,6 +8,7 @@ import android.view.View;
 
 import android.widget.ProgressBar;
 
+import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Game;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.organize.GameListAdapter;
@@ -32,6 +33,7 @@ public class LoadTournamentTask extends AsyncTask<Void, Void, Void> {
     private ViewPager pager;
     private ProgressBar progressBar;
     private Tournament actualTournament;
+    private View dialogView;
 
     public LoadTournamentTask(BaseApplication baseApplication, Tournament tournament,
         TournamentOrganizeActivity.SectionsPagerAdapter adapter, ViewPager pager, ProgressBar progressBar) {
@@ -43,12 +45,22 @@ public class LoadTournamentTask extends AsyncTask<Void, Void, Void> {
         this.progressBar = progressBar;
     }
 
+
+    public LoadTournamentTask(BaseApplication baseApplication, View dialogView, Tournament tournament) {
+
+        this.baseApplication = baseApplication;
+        this.dialogView = dialogView;
+        this.tournament = tournament;
+    }
+
     @Override
     protected void onPreExecute() {
 
         super.onPreExecute();
 
-        progressBar.setVisibility(View.VISIBLE);
+        if (progressBar != null) {
+            progressBar.setVisibility(View.VISIBLE);
+        }
     }
 
 
@@ -66,8 +78,20 @@ public class LoadTournamentTask extends AsyncTask<Void, Void, Void> {
     protected void onPostExecute(Void aVoid) {
 
         super.onPostExecute(aVoid);
-        adapter.setTournamentToOrganize(actualTournament);
-        pager.setCurrentItem(actualTournament.getActualRound());
-        progressBar.setVisibility(View.GONE);
+
+        if (adapter != null)
+            adapter.setTournamentToOrganize(actualTournament);
+
+        if (pager != null)
+            pager.setCurrentItem(actualTournament.getActualRound());
+
+        if (progressBar != null)
+            progressBar.setVisibility(View.GONE);
+
+        if (dialogView != null) {
+            if ((Math.pow(2, actualTournament.getActualRound() + 1)) > actualTournament.getActualPlayers()) {
+                dialogView.findViewById(R.id.confirm_dialog_too_much_rounds).setVisibility(View.VISIBLE);
+            }
+        }
     }
 }

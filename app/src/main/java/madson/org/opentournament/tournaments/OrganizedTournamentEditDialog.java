@@ -3,14 +3,12 @@ package madson.org.opentournament.tournaments;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 
-import android.content.Context;
 import android.content.DialogInterface;
 
 import android.os.Bundle;
 
 import android.support.annotation.Nullable;
 
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 
 import android.support.v4.app.DialogFragment;
@@ -33,6 +31,7 @@ import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentTyp;
 import madson.org.opentournament.service.TournamentService;
+import madson.org.opentournament.tasks.SaveTournamentTask;
 import madson.org.opentournament.utility.BaseActivity;
 import madson.org.opentournament.utility.BaseApplication;
 
@@ -51,7 +50,7 @@ import java.util.Locale;
  *
  * @author  Tobias Matt - tmatt@contargo.net
  */
-public class TournamentManagementDialog extends DialogFragment {
+public class OrganizedTournamentEditDialog extends DialogFragment {
 
     public static final String BUNDLE_TOURNAMENT = "tournament";
     private EditText tournamentNameEditText;
@@ -59,47 +58,21 @@ public class TournamentManagementDialog extends DialogFragment {
     private EditText tournamentDateEditText;
     private EditText tournamentMaxPlayersEditText;
 
-    // for snackbars
-    private CoordinatorLayout coordinatorLayout;
-
     private Tournament tournament;
     private DateFormat dateFormatter;
     private DatePickerDialog datePickerDialog;
 
-    private TournamentManagementEventListener mListener;
     private RadioButton tournamentTypeSoloRadio;
     private RadioButton tournamentTypeTeamRadio;
+    private BaseActivity baseActivity;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
 
-        coordinatorLayout = ((BaseActivity) getActivity()).getCoordinatorLayout();
-
+        baseActivity = (BaseActivity) getActivity();
         dateFormatter = DateFormat.getDateInstance(DateFormat.DEFAULT, Locale.getDefault());
-    }
-
-
-    @Override
-    public void onAttach(Context context) {
-
-        super.onAttach(context);
-
-        if (getParentFragment() instanceof TournamentManagementEventListener) {
-            mListener = (TournamentManagementEventListener) getParentFragment();
-        }
-    }
-
-
-    @Override
-    public void onDetach() {
-
-        super.onDetach();
-
-        if (mListener != null) {
-            mListener = null;
-        }
     }
 
 
@@ -169,7 +142,7 @@ public class TournamentManagementDialog extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
 
-                        TournamentManagementDialog.this.getDialog().cancel();
+                        OrganizedTournamentEditDialog.this.getDialog().cancel();
                     }
                 });
 
@@ -284,16 +257,15 @@ public class TournamentManagementDialog extends DialogFragment {
                                                     public void run() {
 
                                                         TournamentService tournamentService =
-                                                            ((BaseApplication) getActivity().getApplication())
-                                                            .getTournamentService();
+                                                            baseActivity.getBaseApplication().getTournamentService();
 
                                                         tournamentService.deleteTournament(tournament.get_id());
 
-                                                        if (mListener != null) {
-                                                            mListener.onTournamentDeletedEvent(tournament);
-                                                        }
+                                                        baseActivity.getBaseApplication()
+                                                        .notifyTournamentDelete(tournament);
 
-                                                        Snackbar snackbar = Snackbar.make(coordinatorLayout,
+                                                        Snackbar snackbar = Snackbar.make(
+                                                                baseActivity.getCoordinatorLayout(),
                                                                 R.string.success_delete_tournament,
                                                                 Snackbar.LENGTH_LONG);
                                                         snackbar.getView()
@@ -336,20 +308,17 @@ public class TournamentManagementDialog extends DialogFragment {
             @Override
             public void run() {
 
-                fillTournamentWithdata(tournament, tournamentName, location, date, parsed_date, maxPlayers,
+                fillTournamentWithData(tournament, tournamentName, location, date, parsed_date, maxPlayers,
                     tournamentType);
 
-                final TournamentService tournamentService = ((BaseApplication) getActivity().getApplication())
-                    .getTournamentService();
+                final TournamentService tournamentService = baseActivity.getBaseApplication().getTournamentService();
 
                 tournamentService.updateTournament(tournament);
 
-                if (mListener != null) {
-                    mListener.onTournamentChangedEvent(tournament);
-                }
+                baseActivity.getBaseApplication().notifyTournamentEdited(tournament);
 
-                Snackbar snackbar = Snackbar.make(coordinatorLayout, R.string.success_update_tournament,
-                        Snackbar.LENGTH_LONG);
+                Snackbar snackbar = Snackbar.make(baseActivity.getCoordinatorLayout(),
+                        R.string.success_update_tournament, Snackbar.LENGTH_LONG);
                 snackbar.getView().setBackgroundColor(getContext().getResources().getColor(R.color.colorPositive));
                 snackbar.show();
             }
@@ -364,35 +333,13 @@ public class TournamentManagementDialog extends DialogFragment {
     private void createNewTournament(final String tournamentName, final String location, final String date,
         final Date parsed_date, final String maxPlayers, final String tournamentType) {
 
-        Runnable runnable = new Runnable() {
-
-            @Override
-            public void run() {
-
-                Tournament newTournament = new Tournament();
-
-                fillTournamentWithdata(newTournament, tournamentName, location, date, parsed_date, maxPlayers,
-                    tournamentType);
-
-                TournamentService tournamentService = ((BaseApplication) getActivity().getApplication())
-                    .getTournamentService();
-                tournamentService.createTournament(newTournament);
-
-                if (mListener != null) {
-                    mListener.onTournamentAddedEvent(newTournament);
-                }
-
-                Snackbar snackbar = Snackbar.make(coordinatorLayout, R.string.success_create_tournament,
-                        Snackbar.LENGTH_LONG);
-                snackbar.getView().setBackgroundColor(getContext().getResources().getColor(R.color.colorPositive));
-                snackbar.show();
-            }
-        };
-        runnable.run();
+        Tournament newTournament = new Tournament();
+        fillTournamentWithData(newTournament, tournamentName, location, date, parsed_date, maxPlayers, tournamentType);
+        new SaveTournamentTask(baseActivity, newTournament).execute();
     }
 
 
-    private void fillTournamentWithdata(Tournament newTournament, String tournamentName, String location, String date,
+    private void fillTournamentWithData(Tournament newTournament, String tournamentName, String location, String date,
         Date parsed_date, String maxPlayers, String tournamentType) {
 
         newTournament.setName(tournamentName);
@@ -421,7 +368,7 @@ public class TournamentManagementDialog extends DialogFragment {
             newTournament.setTournamentTyp(TournamentTyp.SOLO.name());
         }
 
-        FirebaseUser currentFireBaseUser = ((BaseActivity) getActivity()).getCurrentFireBaseUser();
+        FirebaseUser currentFireBaseUser = baseActivity.getCurrentFireBaseUser();
 
         if (currentFireBaseUser != null) {
             newTournament.setCreatorName(currentFireBaseUser.getDisplayName());

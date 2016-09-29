@@ -5,7 +5,7 @@
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <TextView
@@ -66,47 +66,6 @@
             android:id="@+id/online_tournament_list_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/large_line_tick"
-            android:background="@color/colorPrimaryDark" />
-
-        <TextView
-            android:id="@+id/heading_local_tournaments"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:paddingBottom="@dimen/main_tick"
-            android:paddingTop="@dimen/main_tick"
-            android:text="@string/heading_organized_tournaments"
-            android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
-            android:textColor="@color/colorPrimary" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/line_tick"
-            android:background="@color/colorAccent"
-            android:paddingBottom="@dimen/main_tick"
-            android:paddingTop="@dimen/main_tick" />
-
-        <FrameLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-            <include
-                android:id="@+id/row_header_organised_tournament"
-                layout="@layout/row_header_organised_tournament" />
-        </FrameLayout>
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/local_tournament_list_recycler_view"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/organize_tournament_list_height" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/huge_line_tick"
-            android:background="@color/colorPrimaryDark" />
+        
     </LinearLayout>
 </ScrollView>

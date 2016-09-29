@@ -21,6 +21,7 @@ import android.widget.ProgressBar;
 
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Tournament;
+import madson.org.opentournament.online.OnlineTournamentActivity;
 import madson.org.opentournament.organize.TournamentOrganizeActivity;
 import madson.org.opentournament.tasks.TournamentUploadTask;
 import madson.org.opentournament.utility.BaseActivity;
@@ -37,14 +38,14 @@ import java.util.Locale;
 /**
  * @author  Tobias Matt - tmatt@contargo.net
  */
-public class OrganizedTournamentListAdapter extends RecyclerView.Adapter<TournamentViewHolder> {
+public class OnlineTournamentListAdapter extends RecyclerView.Adapter<TournamentViewHolder> {
 
     private BaseActivity baseActivity;
 
     private List<Tournament> mDataset;
     private DateFormat dateFormatter = DateFormat.getDateInstance(DateFormat.DEFAULT, Locale.getDefault());
 
-    public OrganizedTournamentListAdapter(BaseActivity baseActivity) {
+    public OnlineTournamentListAdapter(BaseActivity baseActivity) {
 
         this.baseActivity = baseActivity;
 
@@ -54,7 +55,7 @@ public class OrganizedTournamentListAdapter extends RecyclerView.Adapter<Tournam
     @Override
     public TournamentViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_organised_tournament, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_online_tournament, parent, false);
 
         return new TournamentViewHolder(v);
     }
@@ -85,62 +86,13 @@ public class OrganizedTournamentListAdapter extends RecyclerView.Adapter<Tournam
         if (tournament.getState().equals(Tournament.TournamentState.FINISHED.name())) {
             viewHolder.getTournamentState().setText(R.string.tournament_finished);
             viewHolder.getTournamentState().setTextColor(Color.BLUE);
+            viewHolder.getTournamentState().setVisibility(View.VISIBLE);
         } else if (tournament.getActualRound() > 0) {
             viewHolder.getTournamentState().setText(R.string.tournament_started);
             viewHolder.getTournamentState().setTextColor(Color.GREEN);
-        }
-
-        if (viewHolder.getEditTournamentButton() != null) {
-            viewHolder.getEditTournamentButton().setOnClickListener(new View.OnClickListener() {
-
-                    @Override
-                    public void onClick(View v) {
-
-                        OrganizedTournamentEditDialog dialog = new OrganizedTournamentEditDialog();
-
-                        Bundle bundle = new Bundle();
-                        bundle.putParcelable(OrganizedTournamentEditDialog.BUNDLE_TOURNAMENT, tournament);
-                        dialog.setArguments(bundle);
-
-                        FragmentManager supportFragmentManager = baseActivity.getSupportFragmentManager();
-                        dialog.show(supportFragmentManager, "tournament management edit dialog tournament");
-                    }
-                });
-        }
-
-        if (viewHolder.getUploadTournamentButton() != null) {
-            viewHolder.getUploadTournamentButton().setOnClickListener(new View.OnClickListener() {
-
-                    @Override
-                    public void onClick(View v) {
-
-                        if (baseActivity.isConnected()) {
-                            AlertDialog.Builder builder = new AlertDialog.Builder(baseActivity);
-                            builder.setTitle(R.string.confirm_upload_tournament)
-                            .setMessage(R.string.confirm_upload_tournament_text)
-                            .setPositiveButton(R.string.dialog_confirm, new DialogInterface.OnClickListener() {
-
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-
-                                            Toolbar toolbar = baseActivity.getToolbar();
-                                            ProgressBar progressBar = (ProgressBar) toolbar.findViewById(
-                                                    R.id.toolbar_progress_bar);
-                                            new TournamentUploadTask(baseActivity.getBaseApplication(), tournament,
-                                                progressBar).execute();
-                                        }
-                                    })
-                            .setNegativeButton(R.string.dialog_cancel, null);
-
-                            builder.show();
-                        } else {
-                            AlertDialog.Builder builder = new AlertDialog.Builder(baseActivity);
-                            builder.setTitle(R.string.offline_text)
-                            .setPositiveButton(R.string.dialog_confirm, null)
-                            .show();
-                        }
-                    }
-                });
+            viewHolder.getTournamentState().setVisibility(View.VISIBLE);
+        } else {
+            viewHolder.getTournamentState().setVisibility(View.GONE);
         }
 
         if (position % 2 == 0) {
@@ -154,8 +106,10 @@ public class OrganizedTournamentListAdapter extends RecyclerView.Adapter<Tournam
                 @Override
                 public void onClick(View v) {
 
-                    Intent intent = new Intent(baseActivity, TournamentOrganizeActivity.class);
-                    intent.putExtra(TournamentOrganizeActivity.EXTRA_TOURNAMENT, tournament);
+                    Intent intent = new Intent(baseActivity, OnlineTournamentActivity.class);
+                    intent.putExtra(OnlineTournamentActivity.EXTRA_TOURNAMENT_GAME_OR_SPORT_TYP,
+                        tournament.getGameOrSportTyp());
+                    intent.putExtra(OnlineTournamentActivity.EXTRA_TOURNAMENT_UUID, tournament.getOnlineUUID());
                     baseActivity.startActivity(intent);
                 }
             });
@@ -190,14 +144,6 @@ public class OrganizedTournamentListAdapter extends RecyclerView.Adapter<Tournam
         int index = mDataset.indexOf(tournament);
 
         mDataset.set(index, tournament);
-        Collections.sort(mDataset, new TournamentComparator());
-        notifyDataSetChanged();
-    }
-
-
-    public void addTournaments(List<Tournament> tournaments) {
-
-        mDataset = tournaments;
         Collections.sort(mDataset, new TournamentComparator());
         notifyDataSetChanged();
     }

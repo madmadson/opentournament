@@ -68,6 +68,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
+import java.util.Random;
+
 
 public class SignInActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener,
     View.OnClickListener {
@@ -223,8 +225,11 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
                                     emailForNewAccount.setError("Required.");
                                 } else {
                                     emailForNewAccount.setError(null);
+
+                                    Random rnd = new Random();
+                                    int n = 100000 + rnd.nextInt(900000);
                                     mFirebaseAuth.createUserWithEmailAndPassword(
-                                            emailForNewAccount.getText().toString(), "temptemp")
+                                            emailForNewAccount.getText().toString(), String.valueOf(n))
                                     .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
 
                                             @Override
@@ -373,7 +378,7 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
 
                 if (task.isSuccessful()) {
                     Log.i(TAG, "signInAnonymously:onComplete:" + task.isSuccessful());
-                    Toast.makeText(SignInActivity.this, R.string.toast_sign_in_anonymously, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SignInActivity.this, R.string.success_login, Toast.LENGTH_LONG).show();
                     startActivity(new Intent(context, MainActivity.class));
                 } else {
                     Log.e(TAG, "signInAnonymously", task.getException());
@@ -474,6 +479,7 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
                     Log.w(TAG, "signInWithCredential", task.getException());
                     Toast.makeText(SignInActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
                 } else {
+                    Toast.makeText(SignInActivity.this, R.string.success_login, Toast.LENGTH_LONG).show();
                     startActivity(new Intent(SignInActivity.this, MainActivity.class));
                     finish();
                 }

@@ -2,7 +2,6 @@ package madson.org.opentournament;
 
 import android.support.test.espresso.contrib.DrawerActions;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
-import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import android.support.v7.widget.Toolbar;
@@ -13,8 +12,6 @@ import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -43,7 +40,7 @@ public class MainActivityStartupTest {
 
         onView(withId(R.id.drawer_layout)).perform(DrawerActions.open(Gravity.START));
 
-        onView(withText(R.string.drawer_nav_tournaments)).perform(click());
+        onView(withText(R.string.drawer_nav_online_tournaments)).perform(click());
 
         // Check that the text was changed.
         String toolbarTitle = getInstrumentation().getTargetContext().getString(R.string.title_tournament_management);

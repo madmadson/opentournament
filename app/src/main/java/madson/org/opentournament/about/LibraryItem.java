@@ -110,9 +110,9 @@ public class LibraryItem implements Comparable<LibraryItem> {
     }
 
     /**
-     * OnlineTournamentViewHolder for a {@link LibraryItem} holding the views a library item can have. It prevents the
-     * app from automatically inflate and instantiate a new library card layout for a new item if the layout of the
-     * item's position is already one used to display Library items.
+     * TournamentViewHolder for a {@link LibraryItem} holding the views a library item can have. It prevents the app
+     * from automatically inflate and instantiate a new library card layout for a new item if the layout of the item's
+     * position is already one used to display Library items.
      */
     public static class ViewHolder extends RecyclerView.ViewHolder {
 

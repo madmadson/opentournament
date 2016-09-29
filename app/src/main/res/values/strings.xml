@@ -7,6 +7,16 @@
     <string name="title_activity_tournament_details">TournamentDetailsActivity</string>
     <string name="title_activity_tournament_play">TournamentPlayActivity</string>
     <string name="action_settings">Settings</string>
+    
+    <!-- NAV: drawer -->
+    <string name="drawer_nav_home">Home</string>
+    <string name="drawer_nav_online_tournaments">Online Tournaments</string>
+    <string name="drawer_nav_players">Players</string>
+    <string name="drawer_nav_organized_tournaments">My Tournaments</string>
+
+    <string name="drawer_nav_account">Account</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <!-- NAV: Tournament Management -->
     <string name="heading_online_tournaments">Online tournaments</string>
@@ -66,8 +76,7 @@
     <string name="dialog_edit_tournament">Edit tournament</string>
     
     
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
+    
     
     <string name="nav_tournament_setup">Tournament Setup</string>
     <string name="nav_round_tab">Round %1$d</string>
@@ -126,7 +135,7 @@
     <string name="result">confirm</string>
     <string name="result_pairing_title">RESULT</string>
     <string name="heading_ranking_for_round">Ranking round: %1$d</string>
-    <string name="drawer_nav_tournaments">Manage Tournaments</string>
+
     <string name="title_tournament_management">Tournament Management</string>
     <string name="sign_in">Sign in</string>
     <string name="sign_out">Sign Out</string>
@@ -223,12 +232,11 @@
     <string name="tournament_started">Ongoing</string>
     <string name="tournament_finished">Finished</string>
     <string name="final_standings">Final Standings</string>
-    <string name="drawer_nav_players">Players</string>
-    <string name="drawer_nav_home">Home</string>
+  
     <string name="title_player_management">Players</string>
     <string name="title_home">Home</string>
     <string name="no_online_players">No player found</string>
-    <string name="drawer_nav_account">Account</string>
+
     <string name="title_account_management">Account Management</string>
     <string name="welcome_text">Welcome, %1$s!</string>
     <string name="please_sign_in_text">Please sign in to manage your account</string>
@@ -238,5 +246,6 @@
     <string name="be_a_player">Add me as a player</string>
     <string name="change_player">Change player info</string>
     <string name="success_upload_player_data">Successfully upload player data</string>
+    <string name="title_organized_tournaments">Organized Tournaments</string>
 
 </resources>

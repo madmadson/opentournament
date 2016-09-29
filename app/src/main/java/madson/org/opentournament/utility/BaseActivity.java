@@ -14,6 +14,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -52,6 +53,7 @@ import madson.org.opentournament.R;
 import madson.org.opentournament.SignInActivity;
 import madson.org.opentournament.about.AboutActivity;
 import madson.org.opentournament.players.PlayerListFragment;
+import madson.org.opentournament.tournaments.OrganizedTournamentList;
 import madson.org.opentournament.tournaments.TournamentManagementFragment;
 
 
@@ -114,6 +116,12 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                 // Not signed in, launch the Sign In activity
                 startActivity(new Intent(this, SignInActivity.class));
                 finish();
+            } else {
+                Snackbar snackbar = Snackbar.make(getCoordinatorLayout(), R.string.success_login, Snackbar.LENGTH_LONG);
+
+                snackbar.getView().setBackgroundColor(getResources().getColor(R.color.colorAccent));
+
+                snackbar.show();
             }
         }
 
@@ -177,14 +185,17 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                 Log.i("Nav", "Open home");
                 replaceFragment(new HomeFragment());
             } else if (id == R.id.nav_tournaments) {
-                Log.i("Nav", "Open tournaments");
+                Log.i("Nav", "Open online tournaments");
                 replaceFragment(new TournamentManagementFragment());
             } else if (id == R.id.nav_players) {
                 Log.i("Nav", "Open players");
                 replaceFragment(new PlayerListFragment());
             } else if (id == R.id.nav_account) {
-                Log.i("Nav", "Account");
+                Log.i("Nav", "Open Account Management");
                 replaceFragment(new AccountFragment());
+            } else if (id == R.id.nav_organized_tournaments) {
+                Log.i("Nav", "Open organized tournaments");
+                replaceFragment(new OrganizedTournamentList());
             }
 
             DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

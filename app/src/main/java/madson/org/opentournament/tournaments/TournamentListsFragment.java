@@ -54,7 +54,7 @@ public class TournamentListsFragment extends Fragment {
 
     private TournamentListAdapter localTournamentListAdapter;
     private RecyclerView mOnlineTournamentsRecyclerView;
-    private OnlineTournamentListAdapter onlineTournmantListAdapter;
+    private OrganizedTournamentListAdapter onlineTournmantListAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -79,7 +79,7 @@ public class TournamentListsFragment extends Fragment {
 
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
             mOnlineTournamentsRecyclerView.setLayoutManager(linearLayoutManager);
-            onlineTournmantListAdapter = new OnlineTournamentListAdapter(getActivity(), mListener);
+            onlineTournmantListAdapter = new OrganizedTournamentListAdapter((BaseActivity) getActivity());
 
             DatabaseReference firebaseTournaments = mFirebaseDatabaseReference.getRef()
                     .child(FirebaseReferences.TOURNAMENTS + "/" + GameOrSportTyp.WARMACHINE.name());

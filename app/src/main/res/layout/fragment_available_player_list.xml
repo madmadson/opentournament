@@ -1,110 +1,116 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" 
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="@dimen/main_tick"
-    android:descendantFocusability="beforeDescendants"
-    android:focusableInTouchMode="true">
-    
-    <EditText android:id="@+id/input_filter_player"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/search_player"
-        android:inputType="textVisiblePassword"
-        android:focusable="true" 
-        android:focusableInTouchMode="true"/>
-    
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="16dp"
-        android:paddingBottom="16dp"
-        android:textColor="@color/colorPrimary"
-        android:textStyle="bold"
-        android:id="@+id/heading_online_players"
-        android:gravity="center"
-        android:text="@string/heading_online_players"/>
+    android:layout_height="match_parent">
 
-    <View
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/line_tick"
-        android:background="@color/colorAccent"
-        android:paddingBottom="@dimen/main_tick"
-        android:paddingTop="@dimen/main_tick" />
+        android:layout_height="match_parent"
+        android:descendantFocusability="beforeDescendants"
+        android:focusableInTouchMode="true"
+        android:orientation="vertical"
+        android:padding="@dimen/main_tick">
 
-    <ProgressBar
-        android:id="@+id/progressBar"
-        style="?android:attr/progressBarStyle"
-        android:layout_gravity="center_horizontal"
-        android:paddingTop="@dimen/main_tick"
-        android:paddingBottom="@dimen/main_tick"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        <EditText
+            android:id="@+id/input_filter_player"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:hint="@string/search_player"
+            android:inputType="textVisiblePassword" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:paddingTop="@dimen/main_tick"
-        android:paddingBottom="@dimen/main_tick"
-        android:textStyle="bold"
-        android:id="@+id/no_online_available_players"
-        android:text="@string/no_available_online_players_for_tournament" 
-        android:visibility="gone"/>
-    
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="@dimen/main_tick"
-        android:paddingBottom="@dimen/main_tick"
-        android:textStyle="bold"
-        android:id="@+id/offline_player_text"
-        android:text="@string/offline_player_text"
-        android:visibility="gone"/>
-    
+        <TextView
+            android:id="@+id/heading_online_players"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingBottom="16dp"
+            android:paddingTop="16dp"
+            android:text="@string/heading_online_players"
+            android:textColor="@color/colorPrimary"
+            android:textStyle="bold" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/online_player_list_recycler_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/line_tick"
+            android:background="@color/colorAccent"
+            android:paddingBottom="@dimen/main_tick"
+            android:paddingTop="@dimen/main_tick" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/large_line_tick"
-        android:background="@color/colorPrimaryDark" />
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:paddingBottom="@dimen/main_tick"
+            android:paddingTop="@dimen/main_tick" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="@dimen/main_tick"
-        android:paddingBottom="@dimen/main_tick"
-        android:textColor="@color/colorPrimary"
-        android:textStyle="bold"
-        android:id="@+id/heading_local_players"
-        android:gravity="center"
-        android:text="@string/heading_local_players"/>
+        <TextView
+            android:id="@+id/no_online_available_players"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:paddingBottom="@dimen/main_tick"
+            android:paddingTop="@dimen/main_tick"
+            android:text="@string/no_available_online_players_for_tournament"
+            android:textStyle="bold"
+            android:visibility="gone" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/line_tick"
-        android:background="@color/colorAccent"
-        android:paddingBottom="@dimen/main_tick"
-        android:paddingTop="@dimen/main_tick" />
-    
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:paddingTop="@dimen/main_tick"
-        android:paddingBottom="@dimen/main_tick"
-        android:textStyle="bold"
-        android:id="@+id/no_local_available_players"
-        android:text="@string/no_available_players_for_tournament" />
+        <TextView
+            android:id="@+id/offline_player_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/main_tick"
+            android:paddingTop="@dimen/main_tick"
+            android:text="@string/offline_player_text"
+            android:textStyle="bold"
+            android:visibility="gone" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/local_player_list_recycler_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:scrollbars="vertical" />
-</LinearLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/online_player_list_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/large_line_tick"
+            android:background="@color/colorPrimaryDark" />
+
+        <TextView
+            android:id="@+id/heading_local_players"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingBottom="@dimen/main_tick"
+            android:paddingTop="@dimen/main_tick"
+            android:text="@string/heading_local_players"
+            android:textColor="@color/colorPrimary"
+            android:textStyle="bold" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/line_tick"
+            android:background="@color/colorAccent"
+            android:paddingBottom="@dimen/main_tick"
+            android:paddingTop="@dimen/main_tick" />
+
+        <TextView
+            android:id="@+id/no_local_available_players"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:paddingBottom="@dimen/main_tick"
+            android:paddingTop="@dimen/main_tick"
+            android:text="@string/no_available_players_for_tournament"
+            android:textStyle="bold" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/local_player_list_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="vertical" />
+    </LinearLayout>
+</ScrollView>

@@ -98,11 +98,12 @@
 
 
             <TextView
+                android:id="@+id/one_click_heading"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:layout_marginBottom="@dimen/large_tick"
-                android:layout_marginTop="@dimen/large_tick"
+                android:layout_marginBottom="@dimen/main_tick"
+                android:layout_marginTop="@dimen/main_tick"
                 android:text="@string/one_click_sign_in"
                 android:textColor="?android:attr/textColorPrimary"
                 android:textSize="@dimen/text_extra_large"

@@ -13,6 +13,7 @@ import android.widget.TextView;
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.organize.setup.TournamentPlayerListAdapter;
+import madson.org.opentournament.utility.BaseActivity;
 
 
 /**
@@ -35,6 +36,8 @@ public class TournamentPlayerViewHolder extends RecyclerView.ViewHolder implemen
     private TextView droppedInRound;
     private CardView tournamentPlayerCard;
 
+    private BaseActivity baseActivity;
+
     /**
      * used by online tournament list player.
      *
@@ -55,13 +58,13 @@ public class TournamentPlayerViewHolder extends RecyclerView.ViewHolder implemen
     }
 
 
-    public TournamentPlayerViewHolder(TournamentPlayerListAdapter tournamentPlayerListAdapter, View v) {
+    public TournamentPlayerViewHolder(View v, BaseActivity baseActivity) {
 
         super(v);
 
         tournamentPlayerCard = (CardView) v.findViewById(R.id.tournament_player_row_card_view);
+        this.baseActivity = baseActivity;
 
-        this.tournamentPlayerListAdapter = tournamentPlayerListAdapter;
         v.setOnClickListener(this);
 
         playerNumber = (TextView) v.findViewById(R.id.tournament_player_row_player_number);
@@ -114,8 +117,8 @@ public class TournamentPlayerViewHolder extends RecyclerView.ViewHolder implemen
 
         Log.i(v.getClass().getName(), "removePlayer player from tournament player list: " + player);
 
-        if (tournamentPlayerListAdapter.getmListener() != null) {
-            tournamentPlayerListAdapter.getmListener().clickTournamentPlayerListItem(player);
+        if (baseActivity != null) {
+            baseActivity.getBaseApplication().notifyRemoveTournamentPlayer(player);
         }
     }
 

@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Player;
+import madson.org.opentournament.utility.BaseActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,20 +31,15 @@ import java.util.List;
 public class LocalPlayerListAdapter extends RecyclerView.Adapter<LocalPlayerListAdapter.ViewHolder>
     implements Filterable {
 
-    private Context context;
-    private TournamentSetupEventListener mListener;
+    private BaseActivity baseActivity;
     private List<Player> originalPlayerList;
     private List<Player> filteredPlayerList;
     private ItemFilter mFilter = new ItemFilter();
 
-    /**
-     * @param  mListener  maybe null when no listener is needed
-     */
-    public LocalPlayerListAdapter(Context context, TournamentSetupEventListener mListener) {
+    public LocalPlayerListAdapter(BaseActivity baseActivity) {
 
-        this.context = context;
+        this.baseActivity = baseActivity;
 
-        this.mListener = mListener;
         this.originalPlayerList = new ArrayList<>();
         this.filteredPlayerList = new ArrayList<>();
     }
@@ -66,7 +62,7 @@ public class LocalPlayerListAdapter extends RecyclerView.Adapter<LocalPlayerList
         final Player player = filteredPlayerList.get(position);
         holder.setPlayer(player);
         holder.getPlayerNameInList()
-            .setText(context.getResources()
+            .setText(baseActivity.getResources()
                 .getString(R.string.tournament_player_name_in_row, player.getFirstname(), player.getNickname(),
                     player.getLastname()));
     }
@@ -137,10 +133,7 @@ public class LocalPlayerListAdapter extends RecyclerView.Adapter<LocalPlayerList
 
             Log.i(v.getClass().getName(), "click available offline player : " + player);
 
-            // call listener if set
-            if (mListener != null) {
-                mListener.clickAvailablePlayerListItem(player);
-            }
+            baseActivity.getBaseApplication().notifyPlayerAddToTournament(player);
         }
     }
 

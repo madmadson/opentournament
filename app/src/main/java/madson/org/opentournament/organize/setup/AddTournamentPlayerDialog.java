@@ -58,8 +58,6 @@ public class AddTournamentPlayerDialog extends DialogFragment {
     public static final String BUNDLE_PLAYER = "player";
     public static final String BUNDLE_TOURNAMENT_PLAYER = "tournament_player";
 
-    private TournamentSetupEventListener mListener;
-
     private EditText firstnameEditText;
     private EditText nicknameEditText;
     private EditText lastnameEditText;
@@ -83,28 +81,6 @@ public class AddTournamentPlayerDialog extends DialogFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-    }
-
-
-    @Override
-    public void onAttach(Context context) {
-
-        super.onAttach(context);
-
-        if (getParentFragment() instanceof TournamentSetupFragment) {
-            mListener = (TournamentSetupFragment) getParentFragment();
-        }
-    }
-
-
-    @Override
-    public void onDetach() {
-
-        super.onDetach();
-
-        if (mListener != null) {
-            mListener = null;
-        }
     }
 
 
@@ -323,11 +299,11 @@ public class AddTournamentPlayerDialog extends DialogFragment {
 
                         if (validateForm(firstname, nickname, lastname, teamname)) {
                             if (tournament_player == null) {
-                                new SaveTournamentPlayerTask((BaseActivity) getActivity(), player, tournament,
-                                    mListener, dialog, firstname, nickname, lastname, teamname, faction).execute();
+                                new SaveTournamentPlayerTask((BaseActivity) getActivity(), player, tournament, dialog,
+                                    firstname, nickname, lastname, teamname, faction).execute();
                             } else {
                                 new EditTournamentPlayerTask((BaseActivity) getActivity(), tournament_player,
-                                    tournament, mListener, dialog, teamname, faction).execute();
+                                    tournament, dialog, teamname, faction).execute();
                             }
                         }
                     }

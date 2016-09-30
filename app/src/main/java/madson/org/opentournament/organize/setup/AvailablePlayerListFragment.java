@@ -50,7 +50,6 @@ public class AvailablePlayerListFragment extends BaseFragment {
 
     private Tournament tournament;
 
-    private TournamentSetupEventListener mListener;
     private RecyclerView mOnlinePlayerRecyclerView;
     private DatabaseReference mFirebaseDatabaseReference;
 
@@ -63,11 +62,14 @@ public class AvailablePlayerListFragment extends BaseFragment {
     private TextView noOnlineTournamentPlayersTextView;
     private RecyclerView localPlayerRecyclerView;
     private EditText filterPlayerTextView;
+    private BaseActivity baseActivity;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+
+        baseActivity = (BaseActivity) getActivity();
     }
 
 
@@ -91,15 +93,15 @@ public class AvailablePlayerListFragment extends BaseFragment {
 
             filterPlayerTextView.addTextChangedListener(new PlayerFilterTextWatcher());
 
-            if (((BaseActivity) getActivity()).isConnected()) {
+            if (baseActivity.isConnected()) {
                 view.findViewById(R.id.offline_player_text).setVisibility(View.GONE);
                 mOnlinePlayerRecyclerView = (RecyclerView) view.findViewById(R.id.online_player_list_recycler_view);
                 mOnlinePlayerRecyclerView.setHasFixedSize(true);
                 mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
 
-                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(baseActivity);
                 mOnlinePlayerRecyclerView.setLayoutManager(linearLayoutManager);
-                onlinePlayerListAdapter = new OnlinePlayerListAdapter(getActivity(), mListener);
+                onlinePlayerListAdapter = new OnlinePlayerListAdapter(baseActivity);
 
                 // need player ids for filtering online players
                 final List<String> alreadyPlayingPlayersUUIDs =
@@ -169,7 +171,7 @@ public class AvailablePlayerListFragment extends BaseFragment {
             localPlayerRecyclerView.setLayoutManager(linearLayoutManager);
 
             // listener may be null
-            localPlayerListAdapter = new LocalPlayerListAdapter(getActivity(), mListener);
+            localPlayerListAdapter = new LocalPlayerListAdapter(baseActivity);
             localPlayerRecyclerView.setAdapter(localPlayerListAdapter);
 
             Runnable runnable = new Runnable() {
@@ -203,29 +205,6 @@ public class AvailablePlayerListFragment extends BaseFragment {
         }
 
         return view;
-    }
-
-
-    @Override
-    public void onAttach(Context context) {
-
-        super.onAttach(context);
-
-        // mlistener to call when player is clicked
-        if (getParentFragment() instanceof TournamentSetupFragment) {
-            mListener = (TournamentSetupEventListener) getParentFragment();
-        }
-    }
-
-
-    @Override
-    public void onDetach() {
-
-        super.onDetach();
-
-        if (mListener != null) {
-            mListener = null;
-        }
     }
 
 

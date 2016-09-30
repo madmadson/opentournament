@@ -6,16 +6,10 @@ import android.support.design.widget.Snackbar;
 
 import android.support.v7.app.AlertDialog;
 
-import android.util.Log;
-
 import madson.org.opentournament.R;
-import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
-import madson.org.opentournament.organize.setup.TournamentSetupEventListener;
-import madson.org.opentournament.service.PlayerService;
 import madson.org.opentournament.service.TournamentPlayerService;
-import madson.org.opentournament.service.TournamentService;
 import madson.org.opentournament.utility.BaseActivity;
 
 
@@ -29,7 +23,7 @@ public class EditTournamentPlayerTask extends AsyncTask<Void, Void, Void> {
     private BaseActivity baseActivity;
 
     private Tournament tournament;
-    private TournamentSetupEventListener mListener;
+
     private AlertDialog dialog;
 
     private TournamentPlayer tournamentPlayer;
@@ -38,13 +32,13 @@ public class EditTournamentPlayerTask extends AsyncTask<Void, Void, Void> {
     private String faction;
 
     public EditTournamentPlayerTask(BaseActivity baseActivity, TournamentPlayer tournamentPlayer, Tournament tournament,
-        TournamentSetupEventListener mListener, AlertDialog dialog, String teamname, String faction) {
+        AlertDialog dialog, String teamname, String faction) {
 
         this.baseActivity = baseActivity;
         this.tournamentPlayer = tournamentPlayer;
 
         this.tournament = tournament;
-        this.mListener = mListener;
+
         this.dialog = dialog;
 
         this.teamname = teamname;
@@ -84,8 +78,7 @@ public class EditTournamentPlayerTask extends AsyncTask<Void, Void, Void> {
 
         snackbar.show();
 
-        // kill old listern concept
-        mListener.updateTournmaentPlayer(tournamentPlayer);
+        baseActivity.getBaseApplication().notifyUpdateTournamentPlayer(tournamentPlayer);
 
         dialog.dismiss();
     }

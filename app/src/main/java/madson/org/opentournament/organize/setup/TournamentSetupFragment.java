@@ -36,7 +36,7 @@ import madson.org.opentournament.utility.BaseApplication;
  *
  * @author  Tobias Matt - tmatt@contargo.net
  */
-public class TournamentSetupFragment extends Fragment implements TournamentSetupEventListener, TournamentEventListener {
+public class TournamentSetupFragment extends Fragment implements TournamentEventListener {
 
     private static final String BUNDLE_TOURNAMENT = "tournament";
     private Tournament tournament;
@@ -157,7 +157,7 @@ public class TournamentSetupFragment extends Fragment implements TournamentSetup
 
 
     @Override
-    public void clickTournamentPlayerListItem(final TournamentPlayer tournamentPlayer) {
+    public void removeTournamentPlayer(final TournamentPlayer tournamentPlayer) {
 
         if (tournament.getActualRound() == 0) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -201,7 +201,7 @@ public class TournamentSetupFragment extends Fragment implements TournamentSetup
 
 
     @Override
-    public void clickAvailablePlayerListItem(Player player) {
+    public void addPlayerToTournament(Player player) {
 
         AddTournamentPlayerDialog dialog = new AddTournamentPlayerDialog();
 
@@ -223,7 +223,7 @@ public class TournamentSetupFragment extends Fragment implements TournamentSetup
 
 
     @Override
-    public void updateTournmaentPlayer(TournamentPlayer updatedPLayer) {
+    public void updateTournamentPlayer(TournamentPlayer updatedPLayer) {
 
         tournamentPlayerListFragment.updatePlayer(updatedPLayer);
     }
@@ -238,6 +238,8 @@ public class TournamentSetupFragment extends Fragment implements TournamentSetup
             fragmentTransaction.remove(availablePlayerListFragment);
             fragmentTransaction.commit();
         }
+
+        tournamentPlayerListFragment.startButtonInvisible();
     }
 
 

@@ -23,4 +23,19 @@ public interface TournamentEventListener {
 
 
     void enterGameResultConfirmed(Game game);
+
+
+    void addTournamentPlayer(TournamentPlayer tournamentPlayer);
+
+
+    void removeTournamentPlayer(TournamentPlayer tournamentPlayer);
+
+
+    void addPlayerToTournament(Player player);
+
+
+    void removeAvailablePlayer(Player player);
+
+
+    void updateTournamentPlayer(TournamentPlayer updatedPLayer);
 }

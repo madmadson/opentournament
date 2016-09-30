@@ -25,7 +25,9 @@ import android.widget.TextView;
 
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Game;
+import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.Tournament;
+import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.tasks.LoadGameListTask;
 import madson.org.opentournament.tasks.TournamentEndTask;
 import madson.org.opentournament.tasks.TournamentUploadTask;
@@ -280,5 +282,30 @@ public class GameListFragment extends Fragment implements TournamentEventListene
     public void enterGameResultConfirmed(Game game) {
 
         // nothing
+    }
+
+
+    @Override
+    public void addTournamentPlayer(TournamentPlayer tournamentPlayer) {
+    }
+
+
+    @Override
+    public void removeTournamentPlayer(TournamentPlayer tournamentPlayer) {
+    }
+
+
+    @Override
+    public void addPlayerToTournament(Player player) {
+    }
+
+
+    @Override
+    public void removeAvailablePlayer(Player player) {
+    }
+
+
+    @Override
+    public void updateTournamentPlayer(TournamentPlayer updatedPLayer) {
     }
 }

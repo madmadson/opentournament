@@ -12,12 +12,10 @@ import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
-import madson.org.opentournament.organize.setup.TournamentSetupEventListener;
 import madson.org.opentournament.service.PlayerService;
 import madson.org.opentournament.service.TournamentPlayerService;
 import madson.org.opentournament.service.TournamentService;
 import madson.org.opentournament.utility.BaseActivity;
-import madson.org.opentournament.utility.BaseApplication;
 
 
 /**
@@ -30,7 +28,7 @@ public class SaveTournamentPlayerTask extends AsyncTask<Void, Void, Void> {
     private BaseActivity baseActivity;
     private Player player;
     private Tournament tournament;
-    private TournamentSetupEventListener mListener;
+
     private AlertDialog dialog;
 
     private TournamentPlayer tournamentPlayer;
@@ -40,15 +38,14 @@ public class SaveTournamentPlayerTask extends AsyncTask<Void, Void, Void> {
     private final String teamname;
     private String faction;
 
-    public SaveTournamentPlayerTask(BaseActivity baseActivity, Player player, Tournament tournament,
-        TournamentSetupEventListener mListener, AlertDialog dialog, String firstname, String nickname, String lastname,
-        String teamname, String faction) {
+    public SaveTournamentPlayerTask(BaseActivity baseActivity, Player player, Tournament tournament, AlertDialog dialog,
+        String firstname, String nickname, String lastname, String teamname, String faction) {
 
         this.baseActivity = baseActivity;
         this.player = player;
 
         this.tournament = tournament;
-        this.mListener = mListener;
+
         this.dialog = dialog;
         this.firstname = firstname;
         this.nickname = nickname;
@@ -100,12 +97,11 @@ public class SaveTournamentPlayerTask extends AsyncTask<Void, Void, Void> {
 
         super.onPostExecute(aVoid);
 
-        if (mListener != null) {
-            mListener.addTournamentPlayer(tournamentPlayer);
+        baseActivity.getBaseApplication().notifyAddTournamentPlayer(tournamentPlayer);
 
-            if (player != null) {
-                mListener.removeAvailablePlayer(player);
-            }
+        // case player
+        if (player != null) {
+            baseActivity.getBaseApplication().notifyRemoveAvailablePlayer(player);
         }
 
         Snackbar snackbar = Snackbar.make(baseActivity.getCoordinatorLayout(), R.string.success_new_player_inserted,

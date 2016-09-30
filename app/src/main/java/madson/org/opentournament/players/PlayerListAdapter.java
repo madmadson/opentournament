@@ -10,12 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import android.widget.Filter;
-import android.widget.TextView;
-
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Player;
-import madson.org.opentournament.organize.setup.TournamentSetupEventListener;
 import madson.org.opentournament.viewHolder.PlayerViewHolder;
 
 import java.util.ArrayList;

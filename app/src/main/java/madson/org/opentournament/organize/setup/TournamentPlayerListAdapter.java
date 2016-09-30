@@ -32,16 +32,14 @@ import java.util.List;
 public class TournamentPlayerListAdapter extends RecyclerView.Adapter<TournamentPlayerViewHolder> {
 
     private BaseActivity baseActivity;
-    private TournamentSetupEventListener mListener;
+
     private Tournament tournament;
     private List<TournamentPlayer> tournamentPlayerList = new ArrayList<>();
 
-    public TournamentPlayerListAdapter(BaseActivity baseActivity, TournamentSetupEventListener mListener,
-        Tournament tournament) {
+    public TournamentPlayerListAdapter(BaseActivity baseActivity, Tournament tournament) {
 
         this.baseActivity = baseActivity;
 
-        this.mListener = mListener;
         this.tournament = tournament;
     }
 
@@ -50,9 +48,7 @@ public class TournamentPlayerListAdapter extends RecyclerView.Adapter<Tournament
 
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_tournament_player, parent, false);
 
-        TournamentPlayerViewHolder vh = new TournamentPlayerViewHolder(this, v);
-
-        return vh;
+        return new TournamentPlayerViewHolder(v, baseActivity);
     }
 
 
@@ -153,12 +149,6 @@ public class TournamentPlayerListAdapter extends RecyclerView.Adapter<Tournament
 
         tournamentPlayerList = localTournamentPlayers;
         notifyDataSetChanged();
-    }
-
-
-    public TournamentSetupEventListener getmListener() {
-
-        return mListener;
     }
 
 

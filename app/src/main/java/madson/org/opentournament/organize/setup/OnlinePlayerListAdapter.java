@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Player;
+import madson.org.opentournament.utility.BaseActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,14 +32,11 @@ public class OnlinePlayerListAdapter extends RecyclerView.Adapter<OnlinePlayerLi
     private List<Player> filteredPlayerList;
 
     private ItemFilter filter;
-    private Context context;
-    private TournamentSetupEventListener mListener;
+    private BaseActivity baseActivity;
 
-    public OnlinePlayerListAdapter(Context context, TournamentSetupEventListener mListener) {
+    public OnlinePlayerListAdapter(BaseActivity baseActivity) {
 
-        this.context = context;
-
-        this.mListener = mListener;
+        this.baseActivity = baseActivity;
 
         this.originalPlayerList = new ArrayList<>();
         this.filteredPlayerList = new ArrayList<>();
@@ -49,9 +47,8 @@ public class OnlinePlayerListAdapter extends RecyclerView.Adapter<OnlinePlayerLi
     public PlayerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_online_player, parent, false);
-        PlayerViewHolder vh = new PlayerViewHolder(v);
 
-        return vh;
+        return new PlayerViewHolder(v);
     }
 
 
@@ -61,7 +58,7 @@ public class OnlinePlayerListAdapter extends RecyclerView.Adapter<OnlinePlayerLi
         final Player player = filteredPlayerList.get(position);
         holder.setPlayer(player);
         holder.getPlayerFullNameInList()
-            .setText(context.getResources()
+            .setText(baseActivity.getResources()
                 .getString(R.string.tournament_player_name_in_row, player.getFirstname(), player.getNickname(),
                     player.getLastname()));
     }
@@ -115,9 +112,7 @@ public class OnlinePlayerListAdapter extends RecyclerView.Adapter<OnlinePlayerLi
 
             Log.i(v.getClass().getName(), "click available online player : " + player);
 
-            if (mListener != null) {
-                mListener.clickAvailablePlayerListItem(player);
-            }
+            baseActivity.getBaseApplication().notifyPlayerAddToTournament(player);
         }
 
 

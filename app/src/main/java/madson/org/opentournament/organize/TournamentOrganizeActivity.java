@@ -22,7 +22,9 @@ import android.widget.ProgressBar;
 
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Game;
+import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.Tournament;
+import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.organize.setup.TournamentSetupFragment;
 import madson.org.opentournament.tasks.LoadTournamentTask;
 import madson.org.opentournament.utility.BaseActivity;
@@ -147,6 +149,31 @@ public class TournamentOrganizeActivity extends BaseActivity implements Tourname
     public void enterGameResultConfirmed(Game game) {
 
         // nothing
+    }
+
+
+    @Override
+    public void addTournamentPlayer(TournamentPlayer tournamentPlayer) {
+    }
+
+
+    @Override
+    public void removeTournamentPlayer(TournamentPlayer tournamentPlayer) {
+    }
+
+
+    @Override
+    public void addPlayerToTournament(Player player) {
+    }
+
+
+    @Override
+    public void removeAvailablePlayer(Player player) {
+    }
+
+
+    @Override
+    public void updateTournamentPlayer(TournamentPlayer updatedPLayer) {
     }
 
     public class SectionsPagerAdapter extends FragmentPagerAdapter {

@@ -53,13 +53,12 @@ import java.util.List;
  *
  * @author  Tobias Matt - tmatt@contargo.net
  */
-public class TournamentTeamListFragment extends Fragment implements TournamentEventListener {
+public class TournamentTeamListFragment extends Fragment {
 
     public static final String BUNDLE_TOURNAMENT = "tournament";
 
     private Tournament tournament;
     private TournamentPlayerListAdapter tournamentPlayerListAdapter;
-    private TournamentSetupEventListener mListener;
 
     private DatabaseReference mFirebaseDatabaseReference;
 
@@ -76,49 +75,6 @@ public class TournamentTeamListFragment extends Fragment implements TournamentEv
         fragment.setArguments(args);
 
         return fragment;
-    }
-
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-
-        super.onCreate(savedInstanceState);
-
-        baseActivity = (BaseActivity) getActivity();
-
-        baseActivity.getBaseApplication().registerTournamentEventListener(this);
-    }
-
-
-    @Override
-    public void onDestroy() {
-
-        super.onDestroy();
-
-        baseActivity.getBaseApplication().unregisterTournamentEventListener(this);
-    }
-
-
-    @Override
-    public void onAttach(Context context) {
-
-        super.onAttach(context);
-
-        // mlistener to call when player is clicked
-        if (getParentFragment() instanceof TournamentSetupFragment) {
-            mListener = (TournamentSetupEventListener) getParentFragment();
-        }
-    }
-
-
-    @Override
-    public void onDetach() {
-
-        super.onDetach();
-
-        if (mListener != null) {
-            mListener = null;
-        }
     }
 
 
@@ -141,7 +97,7 @@ public class TournamentTeamListFragment extends Fragment implements TournamentEv
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(baseActivity);
         recyclerView.setLayoutManager(linearLayoutManager);
 
-        tournamentPlayerListAdapter = new TournamentPlayerListAdapter(baseActivity, mListener, tournament);
+        tournamentPlayerListAdapter = new TournamentPlayerListAdapter(baseActivity, tournament);
         recyclerView.setAdapter(tournamentPlayerListAdapter);
 
         new LoadLocalTournamentPlayerTask(baseActivity.getBaseApplication(), tournament, progressbar,
@@ -277,34 +233,6 @@ public class TournamentTeamListFragment extends Fragment implements TournamentEv
         if (tournamentPlayerListAdapter.getItemCount() == 0) {
             noTournamentPlayersTextView.setVisibility(View.VISIBLE);
         }
-    }
-
-
-    @Override
-    public void startRound(int roundToStart, Tournament tournament) {
-
-        startButton.setVisibility(View.GONE);
-    }
-
-
-    @Override
-    public void pairRoundAgain(int round_for_pairing) {
-
-        // nothing
-    }
-
-
-    @Override
-    public void pairingChanged(Game game1, Game game2) {
-
-        // nothing
-    }
-
-
-    @Override
-    public void enterGameResultConfirmed(Game game) {
-
-        // nothing
     }
 
 

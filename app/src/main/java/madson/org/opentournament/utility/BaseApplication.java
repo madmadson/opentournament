@@ -17,9 +17,10 @@ import madson.org.opentournament.config.MapOfPairingConfig;
 import madson.org.opentournament.domain.Game;
 import madson.org.opentournament.domain.GameOrSportTyp;
 import madson.org.opentournament.domain.PairingOption;
+import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.Tournament;
+import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.organize.TournamentEventListener;
-import madson.org.opentournament.organize.setup.TournamentSetupEventListener;
 import madson.org.opentournament.service.OngoingTournamentService;
 import madson.org.opentournament.service.OngoingTournamentServiceImpl;
 import madson.org.opentournament.service.PlayerService;
@@ -38,7 +39,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -245,10 +245,9 @@ public abstract class BaseApplication extends Application {
 
         // iterate over a copy of the listeners to enable the listeners to unregister themselves on notifications
         HashSet<OrganizeTournamentEventListener> listeners = new HashSet<>(organizeTournamentEventListeners);
-        Iterator<OrganizeTournamentEventListener> iterator = listeners.iterator();
 
-        while (iterator.hasNext()) {
-            iterator.next().onTournamentChangedEvent(updatedTournament);
+        for (OrganizeTournamentEventListener listener : listeners) {
+            listener.onTournamentChangedEvent(updatedTournament);
         }
     }
 
@@ -257,10 +256,9 @@ public abstract class BaseApplication extends Application {
 
         // iterate over a copy of the listeners to enable the listeners to unregister themselves on notifications
         HashSet<OrganizeTournamentEventListener> listeners = new HashSet<>(organizeTournamentEventListeners);
-        Iterator<OrganizeTournamentEventListener> iterator = listeners.iterator();
 
-        while (iterator.hasNext()) {
-            iterator.next().onTournamentAddedEvent(addedTournament);
+        for (OrganizeTournamentEventListener listener : listeners) {
+            listener.onTournamentAddedEvent(addedTournament);
         }
     }
 
@@ -269,10 +267,9 @@ public abstract class BaseApplication extends Application {
 
         // iterate over a copy of the listeners to enable the listeners to unregister themselves on notifications
         HashSet<OrganizeTournamentEventListener> listeners = new HashSet<>(organizeTournamentEventListeners);
-        Iterator<OrganizeTournamentEventListener> iterator = listeners.iterator();
 
-        while (iterator.hasNext()) {
-            iterator.next().onTournamentDeletedEvent(deletedTournament);
+        for (OrganizeTournamentEventListener listener : listeners) {
+            listener.onTournamentDeletedEvent(deletedTournament);
         }
     }
 
@@ -281,10 +278,9 @@ public abstract class BaseApplication extends Application {
 
         // iterate over a copy of the listeners to enable the listeners to unregister themselves on notifications
         Set<TournamentEventListener> listeners = new HashSet<>(tournamentEventListeners);
-        Iterator<TournamentEventListener> iterator = listeners.iterator();
 
-        while (iterator.hasNext()) {
-            iterator.next().startRound(roundToStart, updatedTournament);
+        for (TournamentEventListener listener : listeners) {
+            listener.startRound(roundToStart, updatedTournament);
         }
     }
 
@@ -293,10 +289,9 @@ public abstract class BaseApplication extends Application {
 
         // iterate over a copy of the listeners to enable the listeners to unregister themselves on notifications
         Set<TournamentEventListener> listeners = new HashSet<>(tournamentEventListeners);
-        Iterator<TournamentEventListener> iterator = listeners.iterator();
 
-        while (iterator.hasNext()) {
-            iterator.next().pairRoundAgain(roundToStart);
+        for (TournamentEventListener listener : listeners) {
+            listener.pairRoundAgain(roundToStart);
         }
     }
 
@@ -304,10 +299,9 @@ public abstract class BaseApplication extends Application {
     public void notifyPairingChanged(Game game1, Game game2) {
 
         Set<TournamentEventListener> listeners = new HashSet<>(tournamentEventListeners);
-        Iterator<TournamentEventListener> iterator = listeners.iterator();
 
-        while (iterator.hasNext()) {
-            iterator.next().pairingChanged(game1, game2);
+        for (TournamentEventListener listener : listeners) {
+            listener.pairingChanged(game1, game2);
         }
     }
 
@@ -315,17 +309,66 @@ public abstract class BaseApplication extends Application {
     public void notifyGameResultEntered(Game gameToSave) {
 
         Set<TournamentEventListener> listeners = new HashSet<>(tournamentEventListeners);
-        Iterator<TournamentEventListener> iterator = listeners.iterator();
 
-        while (iterator.hasNext()) {
-            iterator.next().enterGameResultConfirmed(gameToSave);
+        for (TournamentEventListener listener : listeners) {
+            listener.enterGameResultConfirmed(gameToSave);
+        }
+    }
+
+
+    public void notifyUpdateTournamentPlayer(TournamentPlayer tournamentPlayer) {
+
+        Set<TournamentEventListener> listeners = new HashSet<>(tournamentEventListeners);
+
+        for (TournamentEventListener listener : listeners) {
+            listener.updateTournamentPlayer(tournamentPlayer);
+        }
+    }
+
+
+    public void notifyPlayerAddToTournament(Player player) {
+
+        Set<TournamentEventListener> listeners = new HashSet<>(tournamentEventListeners);
+
+        for (TournamentEventListener listener : listeners) {
+            listener.addPlayerToTournament(player);
+        }
+    }
+
+
+    public void notifyRemoveAvailablePlayer(Player player) {
+
+        Set<TournamentEventListener> listeners = new HashSet<>(tournamentEventListeners);
+
+        for (TournamentEventListener listener : listeners) {
+            listener.removeAvailablePlayer(player);
+        }
+    }
+
+
+    public void notifyAddTournamentPlayer(TournamentPlayer player) {
+
+        Set<TournamentEventListener> listeners = new HashSet<>(tournamentEventListeners);
+
+        for (TournamentEventListener listener : listeners) {
+            listener.addTournamentPlayer(player);
+        }
+    }
+
+
+    public void notifyRemoveTournamentPlayer(TournamentPlayer player) {
+
+        Set<TournamentEventListener> listeners = new HashSet<>(tournamentEventListeners);
+
+        for (TournamentEventListener listener : listeners) {
+            listener.removeTournamentPlayer(player);
         }
     }
 
 
     public Map<String, PairingOption> getPairingOptionsForTournament(Tournament tournament) {
 
-        Map<String, PairingOption> returnedPairingOptions = new HashMap();
+        Map<String, PairingOption> returnedPairingOptions = new HashMap<>();
         MapOfPairingConfig pairingConfigs = new MapOfPairingConfig();
 
         Map<GameOrSportTyp, List<PairingOption>> pairingOptions = pairingConfigs.getPairingOptions();

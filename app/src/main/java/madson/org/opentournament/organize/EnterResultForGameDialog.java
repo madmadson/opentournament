@@ -143,20 +143,20 @@ public class EnterResultForGameDialog extends DialogFragment {
 
             if (player1 != null) {
                 text_name_player_one.setText(getActivity().getResources()
-                    .getString(R.string.tournament_player_name_in_row, player1.getFirstname(), player1.getNickname(),
+                    .getString(R.string.player_name_in_row, player1.getFirstname(), player1.getNickname(),
                         player1.getLastname()));
             } else {
                 text_name_player_one.setText(getActivity().getResources()
-                    .getString(R.string.tournament_player_name_in_row, "Dummy", "THE KING", "Player"));
+                    .getString(R.string.player_name_in_row, "Dummy", "THE KING", "Player"));
             }
 
             if (player2 != null) {
                 text_name_player_two.setText(getActivity().getResources()
-                    .getString(R.string.tournament_player_name_in_row, player2.getFirstname(), player2.getNickname(),
+                    .getString(R.string.player_name_in_row, player2.getFirstname(), player2.getNickname(),
                         player2.getLastname()));
             } else {
                 text_name_player_two.setText(getActivity().getResources()
-                    .getString(R.string.tournament_player_name_in_row, "Dummy", "THE HAMMER", "Player"));
+                    .getString(R.string.player_name_in_row, "Dummy", "THE HAMMER", "Player"));
             }
 
             if (game.getPlayer_one_score() == 1) {

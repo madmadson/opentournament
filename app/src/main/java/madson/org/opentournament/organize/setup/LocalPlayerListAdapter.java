@@ -1,6 +1,6 @@
 package madson.org.opentournament.organize.setup;
 
-import android.content.Context;
+import android.graphics.Color;
 
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -13,11 +13,11 @@ import android.view.ViewGroup;
 
 import android.widget.Filter;
 import android.widget.Filterable;
-import android.widget.TextView;
 
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.utility.BaseActivity;
+import madson.org.opentournament.viewHolder.PlayerViewHolder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,8 +28,7 @@ import java.util.List;
  *
  * @author  Tobias Matt - tmatt@contargo.net
  */
-public class LocalPlayerListAdapter extends RecyclerView.Adapter<LocalPlayerListAdapter.ViewHolder>
-    implements Filterable {
+public class LocalPlayerListAdapter extends RecyclerView.Adapter<PlayerViewHolder> implements Filterable {
 
     private BaseActivity baseActivity;
     private List<Player> originalPlayerList;
@@ -45,26 +44,42 @@ public class LocalPlayerListAdapter extends RecyclerView.Adapter<LocalPlayerList
     }
 
     @Override
-    public LocalPlayerListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public PlayerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         // create a new view
-        CardView v = (CardView) LayoutInflater.from(parent.getContext())
-            .inflate(R.layout.row_available_player, parent, false);
+        CardView v = (CardView) LayoutInflater.from(parent.getContext()).inflate(R.layout.row_player, parent, false);
 
         // set the view's size, margins, paddings and layout parameters
-        return new ViewHolder(v);
+        return new PlayerViewHolder(v);
     }
 
 
     @Override
-    public void onBindViewHolder(LocalPlayerListAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(PlayerViewHolder holder, int position) {
 
         final Player player = filteredPlayerList.get(position);
-        holder.setPlayer(player);
+
         holder.getPlayerNameInList()
             .setText(baseActivity.getResources()
-                .getString(R.string.tournament_player_name_in_row, player.getFirstname(), player.getNickname(),
+                .getString(R.string.player_name_in_row, player.getFirstname(), player.getNickname(),
                     player.getLastname()));
+
+        if (position % 2 == 0) {
+            holder.getPlayerCardLayout().setBackgroundColor(Color.LTGRAY);
+        } else {
+            holder.getPlayerCardLayout().setBackgroundColor(Color.WHITE);
+        }
+
+        holder.getPlayerCardLayout().setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+
+                    baseActivity.getBaseApplication().notifyPlayerAddToTournament(player);
+                }
+            });
+
+        holder.getLocalIcon().setVisibility(View.VISIBLE);
     }
 
 
@@ -100,41 +115,6 @@ public class LocalPlayerListAdapter extends RecyclerView.Adapter<LocalPlayerList
     public Filter getFilter() {
 
         return mFilter;
-    }
-
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-
-        private TextView playerNameInList;
-
-        private Player player;
-
-        public ViewHolder(CardView v) {
-
-            super(v);
-            v.setOnClickListener(this);
-
-            playerNameInList = (TextView) v.findViewById(R.id.full_player_name);
-        }
-
-        public TextView getPlayerNameInList() {
-
-            return playerNameInList;
-        }
-
-
-        public void setPlayer(Player player) {
-
-            this.player = player;
-        }
-
-
-        @Override
-        public void onClick(View v) {
-
-            Log.i(v.getClass().getName(), "click available offline player : " + player);
-
-            baseActivity.getBaseApplication().notifyPlayerAddToTournament(player);
-        }
     }
 
     private class ItemFilter extends Filter {

@@ -41,7 +41,7 @@ public class PlayerListAdapter extends RecyclerView.Adapter<PlayerViewHolder> {
     @Override
     public PlayerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_available_player, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_player, parent, false);
 
         return new PlayerViewHolder(v);
     }
@@ -54,7 +54,7 @@ public class PlayerListAdapter extends RecyclerView.Adapter<PlayerViewHolder> {
 
         holder.getPlayerNameInList()
             .setText(context.getResources()
-                .getString(R.string.tournament_player_name_in_row, player.getFirstname(), player.getNickname(),
+                .getString(R.string.player_name_in_row, player.getFirstname(), player.getNickname(),
                     player.getLastname()));
 
         if (position % 2 == 0) {

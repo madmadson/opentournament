@@ -10,7 +10,6 @@ import android.support.annotation.Nullable;
 
 import android.support.v4.app.Fragment;
 
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
@@ -18,8 +17,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import madson.org.opentournament.R;
@@ -136,7 +133,7 @@ public class RankingListFragment extends Fragment {
 
             holder.getPlayerNameInList()
                 .setText(context.getResources()
-                    .getString(R.string.tournament_player_name_in_row, tournamentPlayer.getFirstname(),
+                    .getString(R.string.player_name_in_row, tournamentPlayer.getFirstname(),
                         tournamentPlayer.getNickname(), tournamentPlayer.getLastname()));
 
             holder.getPlayerTeamNameInList().setText(tournamentPlayer.getTeamname());

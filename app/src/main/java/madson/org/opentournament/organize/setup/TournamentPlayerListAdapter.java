@@ -1,7 +1,5 @@
 package madson.org.opentournament.organize.setup;
 
-import android.content.Context;
-
 import android.graphics.Color;
 
 import android.os.Bundle;
@@ -65,8 +63,7 @@ public class TournamentPlayerListAdapter extends RecyclerView.Adapter<Tournament
         String nickname = player.getNickname();
         String lastname = player.getLastname();
         holder.getPlayerNameInList()
-            .setText(baseActivity.getResources()
-                .getString(R.string.tournament_player_name_in_row, firstname, nickname, lastname));
+            .setText(baseActivity.getResources().getString(R.string.player_name_in_row, firstname, nickname, lastname));
 
         // mark online player
         if (player.getPlayer_online_uuid() != null) {

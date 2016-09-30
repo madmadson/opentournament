@@ -101,7 +101,7 @@
     <string name="tournament_player_list_heading">Tournament Players</string>
     <string name="start_tournament">START</string>
 
-    <string name="tournament_player_name_in_row">%1$s \"%2$s\" %3$s</string>
+    <string name="player_name_in_row">%1$s \"%2$s\" %3$s</string>
     
     <string name="heading_tournament_player">Player in %2$s tournament: (%1$d)</string>
     

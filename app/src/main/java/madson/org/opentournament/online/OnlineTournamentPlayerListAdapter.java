@@ -61,8 +61,7 @@ public class OnlineTournamentPlayerListAdapter extends RecyclerView.Adapter<Tour
         String nickname = player.getNickname();
         String lastname = player.getLastname();
         viewHolder.getPlayerNameInList()
-            .setText(context.getResources()
-                .getString(R.string.tournament_player_name_in_row, firstname, nickname, lastname));
+            .setText(context.getResources().getString(R.string.player_name_in_row, firstname, nickname, lastname));
 
         // mark online player
         if (player.getPlayer_online_uuid() != null) {

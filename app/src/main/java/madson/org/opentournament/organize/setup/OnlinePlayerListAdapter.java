@@ -1,6 +1,6 @@
 package madson.org.opentournament.organize.setup;
 
-import android.content.Context;
+import android.graphics.Color;
 
 import android.support.v7.widget.RecyclerView;
 
@@ -11,11 +11,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.Filter;
-import android.widget.TextView;
 
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Player;
-import madson.org.opentournament.utility.BaseActivity;
+import madson.org.opentournament.utility.BaseApplication;
+import madson.org.opentournament.viewHolder.PlayerViewHolder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,17 +26,17 @@ import java.util.List;
  *
  * @author  Tobias Matt - tmatt@contargo.net
  */
-public class OnlinePlayerListAdapter extends RecyclerView.Adapter<OnlinePlayerListAdapter.PlayerViewHolder> {
+public class OnlinePlayerListAdapter extends RecyclerView.Adapter<PlayerViewHolder> {
 
     private List<Player> originalPlayerList;
     private List<Player> filteredPlayerList;
 
     private ItemFilter filter;
-    private BaseActivity baseActivity;
+    private BaseApplication baseApplication;
 
-    public OnlinePlayerListAdapter(BaseActivity baseActivity) {
+    public OnlinePlayerListAdapter(BaseApplication baseApplication) {
 
-        this.baseActivity = baseActivity;
+        this.baseApplication = baseApplication;
 
         this.originalPlayerList = new ArrayList<>();
         this.filteredPlayerList = new ArrayList<>();
@@ -46,7 +46,7 @@ public class OnlinePlayerListAdapter extends RecyclerView.Adapter<OnlinePlayerLi
     @Override
     public PlayerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_online_player, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_player, parent, false);
 
         return new PlayerViewHolder(v);
     }
@@ -56,11 +56,26 @@ public class OnlinePlayerListAdapter extends RecyclerView.Adapter<OnlinePlayerLi
     public void onBindViewHolder(PlayerViewHolder holder, int position) {
 
         final Player player = filteredPlayerList.get(position);
-        holder.setPlayer(player);
-        holder.getPlayerFullNameInList()
-            .setText(baseActivity.getResources()
-                .getString(R.string.tournament_player_name_in_row, player.getFirstname(), player.getNickname(),
+
+        holder.getPlayerNameInList()
+            .setText(baseApplication.getResources()
+                .getString(R.string.player_name_in_row, player.getFirstname(), player.getNickname(),
                     player.getLastname()));
+
+        if (position % 2 == 0) {
+            holder.getPlayerCardLayout().setBackgroundColor(Color.LTGRAY);
+        } else {
+            holder.getPlayerCardLayout().setBackgroundColor(Color.WHITE);
+        }
+
+        holder.getPlayerCardLayout().setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+
+                    baseApplication.notifyPlayerAddToTournament(player);
+                }
+            });
     }
 
 
@@ -92,40 +107,6 @@ public class OnlinePlayerListAdapter extends RecyclerView.Adapter<OnlinePlayerLi
     public Filter getFilter() {
 
         return filter;
-    }
-
-    public class PlayerViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-
-        private TextView playerFullNameInList;
-        private Player player;
-
-        public PlayerViewHolder(View v) {
-
-            super(v);
-            v.setOnClickListener(this);
-
-            playerFullNameInList = (TextView) v.findViewById(R.id.online_player_full_name);
-        }
-
-        @Override
-        public void onClick(View v) {
-
-            Log.i(v.getClass().getName(), "click available online player : " + player);
-
-            baseActivity.getBaseApplication().notifyPlayerAddToTournament(player);
-        }
-
-
-        public TextView getPlayerFullNameInList() {
-
-            return playerFullNameInList;
-        }
-
-
-        public void setPlayer(Player player) {
-
-            this.player = player;
-        }
     }
 
     private class ItemFilter extends Filter {

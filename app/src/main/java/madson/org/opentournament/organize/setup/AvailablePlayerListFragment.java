@@ -69,6 +69,15 @@ public class AvailablePlayerListFragment extends BaseFragment {
 
         super.onCreate(savedInstanceState);
 
+        setRetainInstance(true);
+    }
+
+
+    @Override
+    public void onAttach(Context context) {
+
+        super.onAttach(context);
+
         baseActivity = (BaseActivity) getActivity();
     }
 
@@ -99,9 +108,9 @@ public class AvailablePlayerListFragment extends BaseFragment {
                 mOnlinePlayerRecyclerView.setHasFixedSize(true);
                 mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
 
-                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(baseActivity);
+                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(baseActivity.getApplication());
                 mOnlinePlayerRecyclerView.setLayoutManager(linearLayoutManager);
-                onlinePlayerListAdapter = new OnlinePlayerListAdapter(baseActivity);
+                onlinePlayerListAdapter = new OnlinePlayerListAdapter(baseActivity.getBaseApplication());
 
                 // need player ids for filtering online players
                 final List<String> alreadyPlayingPlayersUUIDs =

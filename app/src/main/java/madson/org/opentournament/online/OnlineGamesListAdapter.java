@@ -18,7 +18,6 @@ import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Game;
 import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.viewHolder.GameViewHolder;
-import madson.org.opentournament.viewHolder.TournamentPlayerViewHolder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,7 +76,7 @@ public class OnlineGamesListAdapter extends RecyclerView.Adapter<GameViewHolder>
 
         holder.getPlayerOneNameInList()
             .setText(context.getResources()
-                .getString(R.string.tournament_player_name_in_row, player1.getFirstname(), player1.getNickname(),
+                .getString(R.string.player_name_in_row, player1.getFirstname(), player1.getNickname(),
                     player1.getLastname()));
         holder.getPlayerOneFaction().setText(player1.getFaction());
 
@@ -92,7 +91,7 @@ public class OnlineGamesListAdapter extends RecyclerView.Adapter<GameViewHolder>
 
         holder.getPlayerTwoNameInList()
             .setText(context.getResources()
-                .getString(R.string.tournament_player_name_in_row, player2.getFirstname(), player2.getNickname(),
+                .getString(R.string.player_name_in_row, player2.getFirstname(), player2.getNickname(),
                     player2.getLastname()));
         holder.getPlayerTwoFaction().setText(player2.getFaction());
 

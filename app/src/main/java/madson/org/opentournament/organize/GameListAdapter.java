@@ -7,19 +7,11 @@ import android.graphics.Color;
 
 import android.graphics.drawable.Drawable;
 
-import android.os.Bundle;
-
 import android.support.design.widget.Snackbar;
 
-import android.support.v4.app.FragmentManager;
-
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-
-import android.util.Log;
 
 import android.view.DragEvent;
 import android.view.LayoutInflater;
@@ -27,7 +19,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Game;
@@ -124,7 +115,7 @@ public class GameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
 
         holder.getPlayerOneNameInList()
             .setText(activity.getResources()
-                .getString(R.string.tournament_player_name_in_row, player1.getFirstname(), player1.getNickname(),
+                .getString(R.string.player_name_in_row, player1.getFirstname(), player1.getNickname(),
                     player1.getLastname()));
         holder.getPlayerOneFaction().setText(player1.getFaction());
 
@@ -139,7 +130,7 @@ public class GameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
 
         holder.getPlayerTwoNameInList()
             .setText(activity.getResources()
-                .getString(R.string.tournament_player_name_in_row, player2.getFirstname(), player2.getNickname(),
+                .getString(R.string.player_name_in_row, player2.getFirstname(), player2.getNickname(),
                     player2.getLastname()));
         holder.getPlayerTwoFaction().setText(player2.getFaction());
 
@@ -296,10 +287,10 @@ public class GameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
 
                     if (draggedPlayer.getListOfOpponentsIds().contains(droppedPlayerOpponent.getRealPlayerId())) {
                         String playerOne = activity.getResources()
-                                .getString(R.string.tournament_player_name_in_row, draggedPlayer.getFirstname(),
+                                .getString(R.string.player_name_in_row, draggedPlayer.getFirstname(),
                                     draggedPlayer.getNickname(), draggedPlayer.getLastname());
                         String playerTwo = activity.getResources()
-                                .getString(R.string.tournament_player_name_in_row, droppedPlayerOpponent.getFirstname(),
+                                .getString(R.string.player_name_in_row, droppedPlayerOpponent.getFirstname(),
                                     droppedPlayerOpponent.getNickname(), droppedPlayerOpponent.getLastname());
 
                         Snackbar snackbar = Snackbar.make((activity).getCoordinatorLayout(),
@@ -311,10 +302,10 @@ public class GameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
                     } else if (droppedPlayer.getListOfOpponentsIds().contains(
                                 draggedPlayerOpponent.getRealPlayerId())) {
                         String playerOne = activity.getResources()
-                                .getString(R.string.tournament_player_name_in_row, droppedPlayer.getFirstname(),
+                                .getString(R.string.player_name_in_row, droppedPlayer.getFirstname(),
                                     droppedPlayer.getNickname(), droppedPlayer.getLastname());
                         String playerTwo = activity.getResources()
-                                .getString(R.string.tournament_player_name_in_row, draggedPlayerOpponent.getFirstname(),
+                                .getString(R.string.player_name_in_row, draggedPlayerOpponent.getFirstname(),
                                     draggedPlayerOpponent.getNickname(), draggedPlayerOpponent.getLastname());
                         Snackbar snackbar = Snackbar.make((activity).getCoordinatorLayout(),
                                 activity.getResources()

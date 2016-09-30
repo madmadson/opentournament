@@ -4,23 +4,15 @@ import android.content.Context;
 
 import android.graphics.Color;
 
-import android.graphics.drawable.Drawable;
-
-import android.service.notification.NotificationListenerService;
-
 import android.support.v7.widget.RecyclerView;
-
-import android.util.Log;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import madson.org.opentournament.R;
-import madson.org.opentournament.domain.Game;
 import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.domain.TournamentRanking;
-import madson.org.opentournament.viewHolder.GameViewHolder;
 import madson.org.opentournament.viewHolder.TournamentRankingViewHolder;
 
 import java.util.ArrayList;
@@ -69,8 +61,8 @@ public class OnlineRankingListAdapter extends RecyclerView.Adapter<TournamentRan
 
         holder.getPlayerNameInList()
             .setText(context.getResources()
-                .getString(R.string.tournament_player_name_in_row, tournamentPlayer.getFirstname(),
-                    tournamentPlayer.getNickname(), tournamentPlayer.getLastname()));
+                .getString(R.string.player_name_in_row, tournamentPlayer.getFirstname(), tournamentPlayer.getNickname(),
+                    tournamentPlayer.getLastname()));
 
         holder.getPlayerTeamNameInList().setText(tournamentPlayer.getTeamname());
         holder.getPlayerFactionInList().setText(tournamentPlayer.getFaction());

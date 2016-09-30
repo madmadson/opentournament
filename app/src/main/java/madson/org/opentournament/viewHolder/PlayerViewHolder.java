@@ -12,6 +12,7 @@ import android.util.Log;
 
 import android.view.View;
 
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import madson.org.opentournament.R;
@@ -27,6 +28,7 @@ import madson.org.opentournament.organize.GameListAdapter;
  */
 public class PlayerViewHolder extends RecyclerView.ViewHolder {
 
+    private ImageView localIcon;
     private View playerCardLayout;
     private TextView playerNameInList;
 
@@ -42,6 +44,8 @@ public class PlayerViewHolder extends RecyclerView.ViewHolder {
         playerNameInList = (TextView) v.findViewById(R.id.full_player_name);
 
         playerCardLayout = v.findViewById(R.id.player_card_layout);
+
+        localIcon = (ImageView) v.findViewById(R.id.local_icon);
     }
 
     public TextView getPlayerNameInList() {
@@ -53,5 +57,11 @@ public class PlayerViewHolder extends RecyclerView.ViewHolder {
     public View getPlayerCardLayout() {
 
         return playerCardLayout;
+    }
+
+
+    public ImageView getLocalIcon() {
+
+        return localIcon;
     }
 }

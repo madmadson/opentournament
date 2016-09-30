@@ -13,13 +13,12 @@
     android:layout_marginTop="@dimen/small_tick">
 
     <RelativeLayout
-        android:id="@+id/lib_card_content"
+        android:id="@+id/player_card_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="?android:attr/selectableItemBackground">
+        android:layout_height="match_parent">
     
         <TextView
-            android:id="@+id/available_player_name"
+            android:id="@+id/full_player_name"
             android:layout_centerInParent="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />

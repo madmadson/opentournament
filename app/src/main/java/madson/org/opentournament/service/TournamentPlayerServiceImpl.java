@@ -358,13 +358,14 @@ public class TournamentPlayerServiceImpl implements TournamentPlayerService {
     public void editTournamentPlayer(TournamentPlayer tournamentPlayer, Tournament tournament) {
 
         SQLiteDatabase db = openTournamentDBHelper.getWritableDatabase();
-        ContentValues contentValues;
-        contentValues = new ContentValues();
+
+        ContentValues contentValues = new ContentValues();
 
         contentValues.put(TournamentPlayerTable.COLUMN_TEAMNAME, tournamentPlayer.getTeamname());
         contentValues.put(TournamentPlayerTable.COLUMN_FACTION, tournamentPlayer.getFaction());
 
-        db.insert(TournamentPlayerTable.TABLE_TOURNAMENT_PLAYER, null, contentValues);
+        db.update(TournamentPlayerTable.TABLE_TOURNAMENT_PLAYER, contentValues,
+            TournamentPlayerTable.COLUMN_ID + " = ?", new String[] { String.valueOf(tournamentPlayer.get_id()) });
 
         db.close();
     }

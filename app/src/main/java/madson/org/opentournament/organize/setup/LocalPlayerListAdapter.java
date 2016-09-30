@@ -113,7 +113,7 @@ public class LocalPlayerListAdapter extends RecyclerView.Adapter<LocalPlayerList
             super(v);
             v.setOnClickListener(this);
 
-            playerNameInList = (TextView) v.findViewById(R.id.available_player_name);
+            playerNameInList = (TextView) v.findViewById(R.id.full_player_name);
         }
 
         public TextView getPlayerNameInList() {

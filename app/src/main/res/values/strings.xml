@@ -233,7 +233,7 @@
     <string name="tournament_finished">Finished</string>
     <string name="final_standings">Final Standings</string>
   
-    <string name="title_player_management">Players</string>
+    <string name="title_player_management">Online Players</string>
     <string name="title_home">Home</string>
     <string name="no_online_players">No player found</string>
 

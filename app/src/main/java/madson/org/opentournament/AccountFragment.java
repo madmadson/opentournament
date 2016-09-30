@@ -1,5 +1,7 @@
 package madson.org.opentournament;
 
+import android.content.Context;
+
 import android.os.Bundle;
 
 import android.support.annotation.Nullable;
@@ -41,17 +43,14 @@ public class AccountFragment extends Fragment {
     private TextInputLayout firstname_parent;
     private TextInputLayout nickname_parent;
     private TextInputLayout lastname_parent;
+    private BaseActivity baseActivity;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
 
-        FloatingActionButton floatingActionButton = ((BaseActivity) getActivity()).getFloatingActionButton();
-
-        if (floatingActionButton != null) {
-            floatingActionButton.setVisibility(View.GONE);
-        }
+        setRetainInstance(true);
     }
 
 
@@ -196,6 +195,21 @@ public class AccountFragment extends Fragment {
 
         super.onActivityCreated(savedInstanceState);
 
-        ((BaseActivity) getActivity()).getToolbar().setTitle(R.string.title_account_management);
+        baseActivity.getToolbar().setTitle(R.string.title_account_management);
+
+        FloatingActionButton floatingActionButton = ((BaseActivity) getActivity()).getFloatingActionButton();
+
+        if (floatingActionButton != null) {
+            floatingActionButton.setVisibility(View.GONE);
+        }
+    }
+
+
+    @Override
+    public void onAttach(Context context) {
+
+        super.onAttach(context);
+
+        baseActivity = (BaseActivity) getActivity();
     }
 }

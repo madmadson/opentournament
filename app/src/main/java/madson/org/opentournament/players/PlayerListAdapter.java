@@ -2,6 +2,8 @@ package madson.org.opentournament.players;
 
 import android.content.Context;
 
+import android.graphics.Color;
+
 import android.support.v7.widget.RecyclerView;
 
 import android.util.Log;
@@ -54,6 +56,12 @@ public class PlayerListAdapter extends RecyclerView.Adapter<PlayerViewHolder> {
             .setText(context.getResources()
                 .getString(R.string.tournament_player_name_in_row, player.getFirstname(), player.getNickname(),
                     player.getLastname()));
+
+        if (position % 2 == 0) {
+            holder.getPlayerCardLayout().setBackgroundColor(Color.LTGRAY);
+        } else {
+            holder.getPlayerCardLayout().setBackgroundColor(Color.WHITE);
+        }
     }
 
 

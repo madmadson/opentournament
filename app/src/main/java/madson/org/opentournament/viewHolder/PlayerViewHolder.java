@@ -27,6 +27,7 @@ import madson.org.opentournament.organize.GameListAdapter;
  */
 public class PlayerViewHolder extends RecyclerView.ViewHolder {
 
+    private View playerCardLayout;
     private TextView playerNameInList;
 
     /**
@@ -38,11 +39,19 @@ public class PlayerViewHolder extends RecyclerView.ViewHolder {
 
         super(v);
 
-        playerNameInList = (TextView) v.findViewById(R.id.available_player_name);
+        playerNameInList = (TextView) v.findViewById(R.id.full_player_name);
+
+        playerCardLayout = v.findViewById(R.id.player_card_layout);
     }
 
     public TextView getPlayerNameInList() {
 
         return playerNameInList;
+    }
+
+
+    public View getPlayerCardLayout() {
+
+        return playerCardLayout;
     }
 }

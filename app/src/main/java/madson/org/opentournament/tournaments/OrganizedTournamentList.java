@@ -37,9 +37,6 @@ import madson.org.opentournament.utility.BaseActivity;
 
 public class OrganizedTournamentList extends Fragment implements OrganizeTournamentEventListener {
 
-    private ProgressBar progressBar;
-    private TextView noPlayersTextView;
-
     private OrganizedTournamentListAdapter tournamentListAdapter;
     private BaseActivity baseActivity;
 
@@ -48,29 +45,7 @@ public class OrganizedTournamentList extends Fragment implements OrganizeTournam
 
         super.onCreate(savedInstanceState);
 
-        baseActivity = (BaseActivity) getActivity();
-
-        FloatingActionButton floatingActionButton = ((BaseActivity) getActivity()).getFloatingActionButton();
-
-        if (floatingActionButton != null) {
-            floatingActionButton.setVisibility(View.VISIBLE);
-
-            floatingActionButton.setImageResource(R.drawable.ic_add_white_24dp);
-
-            floatingActionButton.setOnClickListener(new View.OnClickListener() {
-
-                    @Override
-                    public void onClick(View v) {
-
-                        Log.i(this.getClass().getName(), "click floatingActionButton tournament management");
-
-                        OrganizedTournamentEditDialog dialog = new OrganizedTournamentEditDialog();
-
-                        FragmentManager supportFragmentManager = getChildFragmentManager();
-                        dialog.show(supportFragmentManager, "tournament management new tournament");
-                    }
-                });
-        }
+        setRetainInstance(true);
     }
 
 
@@ -79,7 +54,30 @@ public class OrganizedTournamentList extends Fragment implements OrganizeTournam
 
         super.onActivityCreated(savedInstanceState);
 
-        ((BaseActivity) getActivity()).getToolbar().setTitle(R.string.title_organized_tournaments);
+        ProgressBar progressBar = (ProgressBar) getView().findViewById(R.id.progressBar);
+        baseActivity.setTitle(R.string.title_organized_tournaments);
+
+        FloatingActionButton floatingActionButton = ((BaseActivity) getActivity()).getFloatingActionButton();
+
+        floatingActionButton.setVisibility(View.VISIBLE);
+
+        floatingActionButton.setImageResource(R.drawable.ic_add_white_24dp);
+
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+
+                    Log.i(this.getClass().getName(), "click floatingActionButton tournament management");
+
+                    OrganizedTournamentEditDialog dialog = new OrganizedTournamentEditDialog();
+
+                    FragmentManager supportFragmentManager = getChildFragmentManager();
+                    dialog.show(supportFragmentManager, "tournament management new tournament");
+                }
+            });
+        new LoadOrganizedTournamentsTask(baseActivity.getBaseApplication(), progressBar, tournamentListAdapter)
+            .execute();
     }
 
 
@@ -88,18 +86,14 @@ public class OrganizedTournamentList extends Fragment implements OrganizeTournam
 
         final View view = inflater.inflate(R.layout.fragment_organized_tournament_list, container, false);
 
-        ProgressBar progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
-
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.organized_tournament_list_recycler_view);
         recyclerView.setHasFixedSize(true);
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(baseActivity);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(baseActivity.getApplication());
         recyclerView.setLayoutManager(linearLayoutManager);
         tournamentListAdapter = new OrganizedTournamentListAdapter(baseActivity);
 
         recyclerView.setAdapter(tournamentListAdapter);
-        new LoadOrganizedTournamentsTask(baseActivity.getBaseApplication(), progressBar, tournamentListAdapter)
-            .execute();
 
         return view;
     }
@@ -109,7 +103,9 @@ public class OrganizedTournamentList extends Fragment implements OrganizeTournam
     public void onAttach(Context context) {
 
         super.onAttach(context);
-        ((BaseActivity) getActivity()).getBaseApplication().registerOrganizeTournamentListener(this);
+
+        baseActivity = (BaseActivity) getActivity();
+        baseActivity.getBaseApplication().registerOrganizeTournamentListener(this);
     }
 
 
@@ -117,7 +113,7 @@ public class OrganizedTournamentList extends Fragment implements OrganizeTournam
     public void onDetach() {
 
         super.onDetach();
-        ((BaseActivity) getActivity()).getBaseApplication().unregisterOrganizeTournamentListener(this);
+        baseActivity.getBaseApplication().unregisterOrganizeTournamentListener(this);
     }
 
 

@@ -76,6 +76,7 @@
             android:layout_height="wrap_content"
             android:paddingLeft="@dimen/halve_tick"
             android:paddingTop="@dimen/halve_tick"
+            android:paddingBottom="@dimen/halve_tick"
             android:text="@string/team_name"
             android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium" />
 
@@ -84,7 +85,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/label_teamname"
-            android:layout_marginRight="45dp"
+            android:layout_marginRight="55dp"
             android:layout_marginLeft="@dimen/halve_tick"
             android:hint="@string/label_teamname" />
 
@@ -92,8 +93,9 @@
             android:id="@+id/team_members"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingRight="45dp"
+            android:paddingRight="55dp"
             android:paddingTop="@dimen/halve_tick"
+            android:paddingBottom="@dimen/halve_tick"
             android:layout_alignParentRight="true"
             android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium" />
 
@@ -102,7 +104,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
             android:hint="@string/label_add_teamname"
             android:src="@drawable/ic_add_black_24dp" />
     </RelativeLayout>
@@ -126,7 +127,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="70dp"
-            android:layout_marginRight="45dp"
+            android:layout_marginRight="55dp"
             android:hint="@string/label_faction"
             android:paddingTop="@dimen/halve_tick" />
 

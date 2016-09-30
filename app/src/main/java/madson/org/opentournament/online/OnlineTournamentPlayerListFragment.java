@@ -5,7 +5,10 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 
+import android.support.design.widget.Snackbar;
+
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,11 +17,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -29,6 +34,7 @@ import madson.org.opentournament.R;
 import madson.org.opentournament.db.FirebaseReferences;
 import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.TournamentPlayer;
+import madson.org.opentournament.organize.setup.AddTournamentPlayerDialog;
 import madson.org.opentournament.players.PlayerListAdapter;
 import madson.org.opentournament.viewHolder.TournamentPlayerViewHolder;
 

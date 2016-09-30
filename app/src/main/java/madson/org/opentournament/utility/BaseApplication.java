@@ -10,10 +10,19 @@ import android.util.Log;
 
 import com.facebook.FacebookSdk;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import madson.org.opentournament.R;
 import madson.org.opentournament.about.AppInfo;
 import madson.org.opentournament.about.LibraryItem;
 import madson.org.opentournament.config.MapOfPairingConfig;
+import madson.org.opentournament.db.FirebaseReferences;
 import madson.org.opentournament.domain.Game;
 import madson.org.opentournament.domain.GameOrSportTyp;
 import madson.org.opentournament.domain.PairingOption;
@@ -57,6 +66,7 @@ public abstract class BaseApplication extends Application {
 
     private Set<TournamentEventListener> tournamentEventListeners = new HashSet<>();
     private Set<OrganizeTournamentEventListener> organizeTournamentEventListeners = new HashSet<>();
+    private Player authenticatedPlayer;
 
     @Override
     public void onCreate() {
@@ -96,6 +106,9 @@ public abstract class BaseApplication extends Application {
         if (ongoingTournamentService == null) {
             ongoingTournamentService = new OngoingTournamentServiceImpl(getApplicationContext());
         }
+
+        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        loadCurrentUserInfo(user);
     }
 
 
@@ -109,6 +122,33 @@ public abstract class BaseApplication extends Application {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 
         return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnectedOrConnecting();
+    }
+
+
+    public Player getAuthenticatedPlayer() {
+
+        return authenticatedPlayer;
+    }
+
+
+    private void loadCurrentUserInfo(FirebaseUser user) {
+
+        final DatabaseReference mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference child = mFirebaseDatabaseReference.child(FirebaseReferences.PLAYERS + "/" + user.getUid());
+
+        child.addListenerForSingleValueEvent(new ValueEventListener() {
+
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                    authenticatedPlayer = dataSnapshot.getValue(Player.class);
+                }
+
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                }
+            });
     }
 
 

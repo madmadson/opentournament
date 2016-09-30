@@ -22,7 +22,7 @@
             android:layout_alignParentLeft="true"
             android:layout_centerInParent="true"
             android:layout_gravity="center_vertical"
-            android:paddingLeft="@dimen/small_tick" />
+            android:paddingLeft="@dimen/halve_tick" />
 
         <RelativeLayout
             android:layout_width="wrap_content"
@@ -65,7 +65,7 @@
                 android:id="@+id/tournament_player_row_faction"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="@dimen/halve_tick" />
+                android:layout_marginRight="@dimen/main_tick" />
 
             <ImageView
                 android:id="@+id/tournament_player_row_local_icon"
@@ -77,10 +77,18 @@
 
             <ImageView
                 android:id="@+id/tournament_player_row_edit_icon"
-                android:src="@drawable/ic_build_black_24dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="@dimen/halve_tick" />
+                android:paddingRight="@dimen/small_tick"
+                android:src="@drawable/ic_build_black_24dp" />
+
+            <ImageView
+                android:id="@+id/tournament_player_row_add_List"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingRight="@dimen/small_tick"
+                android:src="@drawable/ic_insert_drive_file_black_24dp"
+                android:visibility="gone"/>
         </LinearLayout>
     </RelativeLayout>
 </android.support.v7.widget.CardView>

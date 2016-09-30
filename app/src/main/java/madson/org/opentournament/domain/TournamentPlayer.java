@@ -55,7 +55,7 @@ public class TournamentPlayer implements Parcelable {
 
     private List<String> opponentsPlayerIds = new ArrayList<>();
 
-    private List<String> tournamentPlayerLists = new ArrayList<>();
+    private String tournamentPlayerLists;
 
     public TournamentPlayer() {
     }
@@ -366,5 +366,17 @@ public class TournamentPlayer implements Parcelable {
     public List<String> getListOfOpponentsIds() {
 
         return opponentsPlayerIds;
+    }
+
+
+    public String getTournamentPlayerLists() {
+
+        return tournamentPlayerLists;
+    }
+
+
+    public void setTournamentPlayerLists(String tournamentPlayerLists) {
+
+        this.tournamentPlayerLists = tournamentPlayerLists;
     }
 }

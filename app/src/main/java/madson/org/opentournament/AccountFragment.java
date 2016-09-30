@@ -32,7 +32,7 @@ import madson.org.opentournament.db.FirebaseReferences;
 import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.utility.BaseActivity;
 
-import static madson.org.opentournament.R.id.nickname_parent;
+import static madson.org.opentournament.R.id.welcome_text;
 
 
 public class AccountFragment extends Fragment {
@@ -44,6 +44,7 @@ public class AccountFragment extends Fragment {
     private TextInputLayout nickname_parent;
     private TextInputLayout lastname_parent;
     private BaseActivity baseActivity;
+    private TextView welcomeTextView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -67,57 +68,39 @@ public class AccountFragment extends Fragment {
         nickname_parent = (TextInputLayout) view.findViewById(R.id.nickname_parent);
         lastname_parent = (TextInputLayout) view.findViewById(R.id.lastname_parent);
 
+        welcomeTextView = (TextView) view.findViewById(R.id.welcome_text);
+
         final ProgressBar progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
         final Button addButton = (Button) view.findViewById(R.id.button_add_as_player);
 
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
         if (user == null || user.isAnonymous()) {
-            TextView welcomeText = (TextView) view.findViewById(R.id.welcomeText);
-            welcomeText.setText(getActivity().getResources().getString(R.string.please_sign_in_text));
+            welcomeTextView.setText(getActivity().getResources().getString(R.string.please_sign_in_text));
             progressBar.setVisibility(View.GONE);
         } else {
-            final TextView welcomeText = (TextView) view.findViewById(R.id.welcomeText);
-            welcomeText.setText(getActivity().getResources()
-                .getString(R.string.welcome_text, user.getDisplayName() == null ? "anonymous" : user.getDisplayName()));
+            Player authenticatedPlayer = baseActivity.getBaseApplication().getAuthenticatedPlayer();
 
-            final DatabaseReference mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
-            DatabaseReference child = mFirebaseDatabaseReference.child(FirebaseReferences.PLAYERS + "/"
-                    + user.getUid());
+            if (authenticatedPlayer != null) {
+                firstnameField.setVisibility(View.VISIBLE);
+                nicknameField.setVisibility(View.VISIBLE);
+                lastnameField.setVisibility(View.VISIBLE);
+                addButton.setVisibility(View.VISIBLE);
 
-            child.addListenerForSingleValueEvent(new ValueEventListener() {
+                firstnameField.setText(authenticatedPlayer.getFirstname());
+                nicknameField.setText(authenticatedPlayer.getNickname());
+                lastnameField.setText(authenticatedPlayer.getLastname());
 
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
+                addButton.setText(getString(R.string.change_player));
 
-                        Player player = dataSnapshot.getValue(Player.class);
+                String playerName = authenticatedPlayer.getFirstname() + " " + authenticatedPlayer.getLastname();
 
-                        progressBar.setVisibility(View.GONE);
-
-                        firstnameField.setVisibility(View.VISIBLE);
-                        nicknameField.setVisibility(View.VISIBLE);
-                        lastnameField.setVisibility(View.VISIBLE);
-                        addButton.setVisibility(View.VISIBLE);
-
-                        if (player != null) {
-                            firstnameField.setText(player.getFirstname());
-                            nicknameField.setText(player.getNickname());
-                            lastnameField.setText(player.getLastname());
-
-                            addButton.setText(getString(R.string.change_player));
-
-                            String playerName = player.getFirstname() + " " + player.getLastname();
-
-                            welcomeText.setText(
-                                getActivity().getResources().getString(R.string.welcome_text, playerName));
-                        }
-                    }
-
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                    }
-                });
+                welcomeTextView.setText(getActivity().getResources().getString(R.string.welcome_text, playerName));
+            } else {
+                welcomeTextView.setText(getActivity().getResources()
+                    .getString(R.string.welcome_text,
+                        user.getDisplayName() == null ? "anonymous" : user.getDisplayName()));
+            }
 
             addButton.setOnClickListener(new View.OnClickListener() {
 
@@ -132,6 +115,9 @@ public class AccountFragment extends Fragment {
                             player.setLastname(String.valueOf(lastnameField.getText()));
                             player.setAuth_email(user.getEmail());
 
+                            final DatabaseReference mFirebaseDatabaseReference = FirebaseDatabase.getInstance()
+                                .getReference();
+
                             DatabaseReference child = mFirebaseDatabaseReference.child(
                                     FirebaseReferences.PLAYERS + "/" + user.getUid());
 
@@ -145,7 +131,7 @@ public class AccountFragment extends Fragment {
 
                             String playerName = player.getFirstname() + " " + player.getLastname();
 
-                            welcomeText.setText(
+                            welcomeTextView.setText(
                                 getActivity().getResources().getString(R.string.welcome_text, playerName));
 
                             Snackbar snackbar = Snackbar.make(((BaseActivity) getActivity()).getCoordinatorLayout(),

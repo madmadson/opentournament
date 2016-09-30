@@ -18,6 +18,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -26,16 +28,12 @@ import com.google.firebase.database.ValueEventListener;
 
 import madson.org.opentournament.R;
 import madson.org.opentournament.db.FirebaseReferences;
+import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.Tournament;
-import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.domain.TournamentTyp;
 import madson.org.opentournament.organize.TournamentRoundManagementFragment;
-import madson.org.opentournament.organize.setup.TournamentPlayerListFragment;
 import madson.org.opentournament.organize.setup.TournamentSetupFragment;
 import madson.org.opentournament.utility.BaseActivity;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 /**
@@ -51,8 +49,6 @@ public class OnlineTournamentActivity extends BaseActivity {
 
     private DatabaseReference mFirebaseDatabaseReference;
 
-    private TournamentRoundManagementFragment tournamentRoundManagementFragment;
-    private TournamentSetupFragment tournamentSetupFragment;
     private String tournament_game_or_sport_typ;
     private String tournament_uuid;
     private ActionBar supportActionBar;
@@ -61,13 +57,6 @@ public class OnlineTournamentActivity extends BaseActivity {
     public boolean useTabLayout() {
 
         return true;
-    }
-
-
-    @Override
-    protected void onDestroy() {
-
-        super.onDestroy();
     }
 
 
@@ -114,7 +103,6 @@ public class OnlineTournamentActivity extends BaseActivity {
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         mViewPager = (ViewPager) findViewById(R.id.container);
-        mViewPager.setAdapter(mSectionsPagerAdapter);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
@@ -133,14 +121,14 @@ public class OnlineTournamentActivity extends BaseActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 Tournament tournament = dataSnapshot.getValue(Tournament.class);
+                tournament.setOnlineUUID(tournament_uuid);
 
                 if (supportActionBar != null) {
-                    if (tournament != null) {
-                        supportActionBar.setTitle(tournament.getName());
-                    }
+                    supportActionBar.setTitle(tournament.getName());
                 }
 
                 mSectionsPagerAdapter.setTournament(tournament);
+                mViewPager.setAdapter(mSectionsPagerAdapter);
             }
 
 
@@ -169,6 +157,10 @@ public class OnlineTournamentActivity extends BaseActivity {
         @Override
         public Fragment getItem(int position) {
 
+            if (tournament.getState().equals(Tournament.TournamentState.PLANED.name())) {
+                return RegisterTournamentPlayerListFragment.newInstance(tournament);
+            }
+
             int round = (position + 1) / 2;
 
             // list of all players
@@ -194,20 +186,24 @@ public class OnlineTournamentActivity extends BaseActivity {
         @Override
         public int getCount() {
 
-            if (tournament != null) {
-                if (tournament.getState().equals(Tournament.TournamentState.FINISHED.name())) {
-                    return (tournament.getActualRound() * 2);
-                } else {
-                    return (tournament.getActualRound() * 2) + 1;
-                }
-            } else {
+            if (tournament.getState().equals(Tournament.TournamentState.PLANED.name())) {
                 return 1;
+            }
+
+            if (tournament.getState().equals(Tournament.TournamentState.FINISHED.name())) {
+                return (tournament.getActualRound() * 2);
+            } else {
+                return (tournament.getActualRound() * 2) + 1;
             }
         }
 
 
         @Override
         public CharSequence getPageTitle(int position) {
+
+            if (tournament.getState().equals(Tournament.TournamentState.PLANED.name())) {
+                return getApplication().getResources().getString(R.string.nav_registration_tab);
+            }
 
             int round = (position + 1) / 2;
 

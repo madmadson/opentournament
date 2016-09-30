@@ -23,6 +23,7 @@ import madson.org.opentournament.utility.BaseActivity;
  */
 public class TournamentPlayerViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
+    private ImageView addListIcon;
     private ImageView editIcon;
     private TournamentPlayerListAdapter tournamentPlayerListAdapter;
     private TextView faction;
@@ -55,6 +56,8 @@ public class TournamentPlayerViewHolder extends RecyclerView.ViewHolder implemen
         faction = (TextView) v.findViewById(R.id.tournament_player_row_faction);
         droppedInRound = (TextView) v.findViewById(R.id.dropped_in_round);
         localIcon = (ImageView) v.findViewById(R.id.tournament_player_row_local_icon);
+        editIcon = (ImageView) v.findViewById(R.id.tournament_player_row_edit_icon);
+        addListIcon = (ImageView) v.findViewById(R.id.tournament_player_row_add_List);
     }
 
 
@@ -74,6 +77,7 @@ public class TournamentPlayerViewHolder extends RecyclerView.ViewHolder implemen
         droppedInRound = (TextView) v.findViewById(R.id.dropped_in_round);
         localIcon = (ImageView) v.findViewById(R.id.tournament_player_row_local_icon);
         editIcon = (ImageView) v.findViewById(R.id.tournament_player_row_edit_icon);
+        addListIcon = (ImageView) v.findViewById(R.id.tournament_player_row_add_List);
     }
 
     public TextView getPlayerNameInList() {
@@ -138,5 +142,11 @@ public class TournamentPlayerViewHolder extends RecyclerView.ViewHolder implemen
     public ImageView getEditIcon() {
 
         return editIcon;
+    }
+
+
+    public ImageView getAddListIcon() {
+
+        return addListIcon;
     }
 }

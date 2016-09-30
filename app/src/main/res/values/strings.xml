@@ -255,5 +255,13 @@
     <string name="validation_team_no_team">You must choose a team in a team tournament</string>
     <string name="edit_tournament_player">Edit Tournament Player</string>
     <string name="success_player_updated">Successfuly update player</string>
+    <string name="regsiter_for_tournament">Register For Tournament</string>
+    <string name="cannot_register_without_player_profile">You cannot register without player account</string>
+    <string name="nav_registration_tab">Registration</string>
+    <string name="you_are_already_registered">You are already registered for Tournament</string>
+    <string name="success_registration">Successfuly registered for Tournament</string>
+    <string name="no_registration_found">No Registrations found for Tournament</string>
+    <string name="upload_lists">Upload Army Lists</string>
+    <string name="list">Lists</string>
 
 </resources>

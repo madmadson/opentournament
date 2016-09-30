@@ -76,13 +76,6 @@ public interface TournamentPlayerService {
 
 
     /**
-     * @param  tournamentPlayer
-     * @param  tournament
-     */
-    void removeOnlinePlayerFromTournament(TournamentPlayer tournamentPlayer, Tournament tournament);
-
-
-    /**
      * @param  tournament
      */
     void uploadTournamentPlayers(Tournament tournament);

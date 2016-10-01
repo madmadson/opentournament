@@ -119,6 +119,8 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
             } else {
                 mGoogleApiClient = new GoogleApiClient.Builder(this).enableAutoManage(this /* FragmentActivity */,
                         this /* OnConnectionFailedListener */).addApi(Auth.GOOGLE_SIGN_IN_API).build();
+
+                getBaseApplication().updateAuthenticatedUser();
             }
         }
 

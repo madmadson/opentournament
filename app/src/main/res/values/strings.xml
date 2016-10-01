@@ -262,6 +262,8 @@
     <string name="success_registration">Successfuly registered for Tournament</string>
     <string name="no_registration_found">No Registrations found for Tournament</string>
     <string name="upload_lists">Upload Army Lists</string>
-    <string name="list">Lists</string>
+    <string name="list">List (copy &amp; paste from warroom or troop creator)</string>
+    <string name="name_of_list">Name of List</string>
+    <string name="upload_list">Upload List</string>
 
 </resources>

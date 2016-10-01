@@ -78,8 +78,6 @@ public class RegisterTournamentPlayerListFragment extends Fragment {
             mProgressBar = (ProgressBar) view.findViewById(R.id.progressBar);
             noRegistrationsTextView = (TextView) view.findViewById(R.id.no_tournament_players);
 
-            noRegistrationsTextView.setText(R.string.no_registration_found);
-
             recyclerView = (RecyclerView) view.findViewById(R.id.tournament_player_list_recycler_view);
             recyclerView.setHasFixedSize(true);
 
@@ -206,6 +204,7 @@ public class RegisterTournamentPlayerListFragment extends Fragment {
                     if (registrationListAdapter.getItemCount() == 0) {
                         mProgressBar.setVisibility(ProgressBar.INVISIBLE);
                         noRegistrationsTextView.setVisibility(View.VISIBLE);
+                        noRegistrationsTextView.setText(R.string.no_registration_found);
                     }
                 }
             }, 5000);

@@ -6,7 +6,9 @@ import android.os.Parcelable;
 import com.google.firebase.database.Exclude;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -55,7 +57,7 @@ public class TournamentPlayer implements Parcelable {
 
     private List<String> opponentsPlayerIds = new ArrayList<>();
 
-    private String tournamentPlayerLists;
+    private boolean tournamentPlayerListsUploaded;
 
     public TournamentPlayer() {
     }
@@ -369,14 +371,14 @@ public class TournamentPlayer implements Parcelable {
     }
 
 
-    public String getTournamentPlayerLists() {
+    public boolean isTournamentPlayerListsUploaded() {
 
-        return tournamentPlayerLists;
+        return tournamentPlayerListsUploaded;
     }
 
 
-    public void setTournamentPlayerLists(String tournamentPlayerLists) {
+    public void setTournamentPlayerListsUploaded(boolean tournamentPlayerListsUploaded) {
 
-        this.tournamentPlayerLists = tournamentPlayerLists;
+        this.tournamentPlayerListsUploaded = tournamentPlayerListsUploaded;
     }
 }

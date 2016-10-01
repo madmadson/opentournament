@@ -7,24 +7,35 @@ import android.content.DialogInterface;
 
 import android.os.Bundle;
 
+import android.support.annotation.Nullable;
+
 import android.support.v4.app.DialogFragment;
 
 import android.support.v7.app.AlertDialog;
 
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 
 import android.widget.Button;
-import android.widget.EditText;
+import android.widget.ExpandableListView;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import madson.org.opentournament.R;
 import madson.org.opentournament.db.FirebaseReferences;
+import madson.org.opentournament.domain.ArmyList;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.utility.BaseApplication;
+import madson.org.opentournament.utility.ExpandableListAdapter;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -41,7 +52,10 @@ public class AddListDialog extends DialogFragment {
 
     private BaseApplication baseApplication;
     private TournamentPlayer tournamentPlayer;
-    private EditText listsinput;
+
+    private ExpandableListView exListView;
+    private List<String> listDataHeader;
+    private Map<String, ArmyList> listDataChild;
 
     @Override
     public void onAttach(Context context) {
@@ -63,18 +77,8 @@ public class AddListDialog extends DialogFragment {
         }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-
-        // Get the layout inflater
         LayoutInflater inflater = getActivity().getLayoutInflater();
-
-        View dialogView = inflater.inflate(R.layout.dialog_upload_lists, null);
-
-        listsinput = (EditText) dialogView.findViewById(R.id.lists_input);
-
-        if (tournamentPlayer.getTournamentPlayerLists() != null) {
-            listsinput.setText(tournamentPlayer.getTournamentPlayerLists());
-        }
-
+        View dialogView = inflater.inflate(R.layout.dialog_upload_army_lists, null);
         String title = getString(R.string.upload_lists);
 
         builder.setView(dialogView)
@@ -89,7 +93,38 @@ public class AddListDialog extends DialogFragment {
                     }
                 });
 
-        return builder.create();
+        AlertDialog alertDialog = builder.create();
+
+        exListView = (ExpandableListView) dialogView.findViewById(R.id.expandable_armylist_list_view);
+
+        prepareListData();
+
+        ExpandableListAdapter listAdapter = new ExpandableListAdapter(getActivity(), listDataHeader, listDataChild,
+                tournament, tournamentPlayer);
+
+        exListView.setAdapter(listAdapter);
+
+        return alertDialog;
+    }
+
+
+    /*
+     * Preparing the list data
+     */
+    private void prepareListData() {
+
+        listDataHeader = new ArrayList<>();
+
+        listDataChild = new HashMap<>();
+
+        // Adding child data
+        listDataHeader.add("List 1");
+        listDataHeader.add("List 2");
+        listDataHeader.add("List 3");
+
+        listDataChild.put(listDataHeader.get(0), new ArmyList()); // Header, Child data
+        listDataChild.put(listDataHeader.get(1), new ArmyList());
+        listDataChild.put(listDataHeader.get(2), new ArmyList());
     }
 
 
@@ -113,15 +148,6 @@ public class AddListDialog extends DialogFragment {
 
                 @Override
                 public void onClick(View v) {
-
-                    String s = listsinput.getText().toString();
-
-                    DatabaseReference reference = FirebaseDatabase.getInstance()
-                        .getReference(
-                            FirebaseReferences.TOURNAMENT_REGISTRATIONS + "/" + tournament.getOnlineUUID() + "/"
-                            + tournamentPlayer.getOnline_uuid() + "/tournamentPlayerLists");
-
-                    reference.setValue(s);
 
                     dialog.dismiss();
                 }

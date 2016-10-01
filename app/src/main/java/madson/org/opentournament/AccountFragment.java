@@ -80,13 +80,12 @@ public class AccountFragment extends Fragment {
             progressBar.setVisibility(View.GONE);
         } else {
             Player authenticatedPlayer = baseActivity.getBaseApplication().getAuthenticatedPlayer();
+            firstnameField.setVisibility(View.VISIBLE);
+            nicknameField.setVisibility(View.VISIBLE);
+            lastnameField.setVisibility(View.VISIBLE);
+            addButton.setVisibility(View.VISIBLE);
 
             if (authenticatedPlayer != null) {
-                firstnameField.setVisibility(View.VISIBLE);
-                nicknameField.setVisibility(View.VISIBLE);
-                lastnameField.setVisibility(View.VISIBLE);
-                addButton.setVisibility(View.VISIBLE);
-
                 firstnameField.setText(authenticatedPlayer.getFirstname());
                 nicknameField.setText(authenticatedPlayer.getNickname());
                 lastnameField.setText(authenticatedPlayer.getLastname());
@@ -122,6 +121,8 @@ public class AccountFragment extends Fragment {
                                     FirebaseReferences.PLAYERS + "/" + user.getUid());
 
                             child.setValue(player);
+
+                            ((BaseActivity) getActivity()).getBaseApplication().updateAuthenticatedUser();
 
                             firstnameField.setText(player.getFirstname());
                             nicknameField.setText(player.getNickname());

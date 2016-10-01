@@ -108,7 +108,10 @@ public abstract class BaseApplication extends Application {
         }
 
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        loadCurrentUserInfo(user);
+
+        if (user != null) {
+            loadCurrentUserInfo(user);
+        }
     }
 
 
@@ -128,6 +131,16 @@ public abstract class BaseApplication extends Application {
     public Player getAuthenticatedPlayer() {
 
         return authenticatedPlayer;
+    }
+
+
+    public void updateAuthenticatedUser() {
+
+        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        if (user != null) {
+            loadCurrentUserInfo(user);
+        }
     }
 
 

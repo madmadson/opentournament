@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 
 import android.widget.FrameLayout;
 
@@ -131,6 +132,7 @@ public class RegisterTournamentPlayerListAdapter extends RecyclerView.Adapter<To
                         dialog.setArguments(bundle);
 
                         FragmentManager supportFragmentManager = baseActivity.getSupportFragmentManager();
+
                         dialog.show(supportFragmentManager, "tournament setup new player");
                     }
                 });

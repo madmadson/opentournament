@@ -1,4 +1,4 @@
-package madson.org.opentournament.utility;
+package madson.org.opentournament.online;
 
 import android.content.Context;
 
@@ -23,6 +23,7 @@ import madson.org.opentournament.db.FirebaseReferences;
 import madson.org.opentournament.domain.ArmyList;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
+import madson.org.opentournament.utility.BaseActivity;
 
 import java.util.List;
 import java.util.Map;
@@ -34,7 +35,7 @@ import java.util.Map;
  * @author  Tobias Matt - tmatt@contargo.net
  */
 
-public class ExpandableListAdapter extends BaseExpandableListAdapter {
+public class ArmyListExpandableListAdapter extends BaseExpandableListAdapter {
 
     private final BaseActivity baseActivity;
     private final List<String> listDataHeader;
@@ -43,7 +44,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
     private final TournamentPlayer tournamentPlayer;
     private ImageButton addListButton;
 
-    public ExpandableListAdapter(BaseActivity baseActivity, List<String> listDataHeader,
+    public ArmyListExpandableListAdapter(BaseActivity baseActivity, List<String> listDataHeader,
         Map<String, ArmyList> listChildData, Tournament tournament, TournamentPlayer tournamentPlayer,
         ImageButton addListButton) {
 
@@ -104,8 +105,8 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
                     addListButton.setVisibility(View.VISIBLE);
 
-                    Snackbar snackbar = Snackbar.make(baseActivity.getCoordinatorLayout(),
-                            R.string.success_upload_list, Snackbar.LENGTH_LONG);
+                    Snackbar snackbar = Snackbar.make(baseActivity.getCoordinatorLayout(), R.string.success_upload_list,
+                            Snackbar.LENGTH_LONG);
                     snackbar.getView().setBackgroundColor(baseActivity.getResources().getColor(R.color.colorPositive));
                     snackbar.show();
                 }

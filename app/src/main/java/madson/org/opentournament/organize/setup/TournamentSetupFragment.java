@@ -230,6 +230,15 @@ public class TournamentSetupFragment extends Fragment implements TournamentEvent
 
 
     @Override
+    public void addRegistration(TournamentPlayer player) {
+
+        tournamentPlayerListFragment.addPlayer(player);
+        tournamentPlayerListFragment.removeRegistration(player);
+        availablePlayerListFragment.removeOnlinePlayer(player);
+    }
+
+
+    @Override
     public void startRound(int roundToStart, Tournament tournament) {
 
         if (roundToStart == 2) {

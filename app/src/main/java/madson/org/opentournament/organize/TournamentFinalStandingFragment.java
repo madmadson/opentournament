@@ -115,6 +115,11 @@ public class TournamentFinalStandingFragment extends Fragment implements Tournam
 
 
     @Override
+    public void addRegistration(TournamentPlayer player) {
+    }
+
+
+    @Override
     public void startRound(int roundToStart, Tournament tournament) {
 
         // nothing

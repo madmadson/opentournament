@@ -145,7 +145,7 @@ public class TournamentPlayerServiceImpl implements TournamentPlayerService {
         ContentValues contentValues = new ContentValues();
         contentValues.put(TournamentPlayerTable.COLUMN_TOURNAMENT_ID, tournament.get_id());
         contentValues.put(TournamentPlayerTable.COLUMN_PLAYER_ID, player.getPlayer_id());
-        contentValues.put(TournamentPlayerTable.COLUMN_PLAYER_ONLINE_UUID, player.getPlayer_online_uuid());
+        contentValues.put(TournamentPlayerTable.COLUMN_PLAYER_ONLINE_UUID, player.getOnline_uuid());
         contentValues.put(TournamentPlayerTable.COLUMN_FIRSTNAME, player.getFirstname());
         contentValues.put(TournamentPlayerTable.COLUMN_NICKNAME, player.getNickname());
         contentValues.put(TournamentPlayerTable.COLUMN_LASTNAME, player.getLastname());

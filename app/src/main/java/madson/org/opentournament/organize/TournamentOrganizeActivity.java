@@ -176,6 +176,11 @@ public class TournamentOrganizeActivity extends BaseActivity implements Tourname
     public void updateTournamentPlayer(TournamentPlayer updatedPLayer) {
     }
 
+
+    @Override
+    public void addRegistration(TournamentPlayer player) {
+    }
+
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
         private Tournament tournamentToOrganize;

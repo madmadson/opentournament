@@ -290,15 +290,6 @@ public class TournamentPlayer implements Parcelable {
 
         TournamentPlayer that = (TournamentPlayer) o;
 
-        if (_id != that._id)
-            return false;
-
-        if (player_id != that.player_id)
-            return false;
-
-        if (online_uuid != null ? !online_uuid.equals(that.online_uuid) : that.online_uuid != null)
-            return false;
-
         return player_online_uuid != null ? player_online_uuid.equals(that.player_online_uuid)
                                           : that.player_online_uuid == null;
     }
@@ -307,12 +298,7 @@ public class TournamentPlayer implements Parcelable {
     @Override
     public int hashCode() {
 
-        int result = (int) (_id ^ (_id >>> 32));
-        result = 31 * result + (online_uuid != null ? online_uuid.hashCode() : 0);
-        result = 31 * result + (int) (player_id ^ (player_id >>> 32));
-        result = 31 * result + (player_online_uuid != null ? player_online_uuid.hashCode() : 0);
-
-        return result;
+        return player_online_uuid != null ? player_online_uuid.hashCode() : 0;
     }
 
 

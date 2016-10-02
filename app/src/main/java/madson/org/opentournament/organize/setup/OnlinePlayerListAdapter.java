@@ -14,6 +14,7 @@ import android.widget.Filter;
 
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Player;
+import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.utility.BaseApplication;
 import madson.org.opentournament.viewHolder.PlayerViewHolder;
 
@@ -107,6 +108,19 @@ public class OnlinePlayerListAdapter extends RecyclerView.Adapter<PlayerViewHold
     public Filter getFilter() {
 
         return filter;
+    }
+
+
+    public void removePlayerDueToRegistration(TournamentPlayer tournamentPlayer) {
+
+        for (Player player : originalPlayerList) {
+            if (player.getOnlineUUID().equals(tournamentPlayer.getOnline_uuid())) {
+                int position = originalPlayerList.indexOf(player);
+
+                originalPlayerList.remove(position);
+                notifyDataSetChanged();
+            }
+        }
     }
 
     private class ItemFilter extends Filter {

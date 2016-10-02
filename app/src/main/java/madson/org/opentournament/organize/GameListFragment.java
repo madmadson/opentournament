@@ -308,4 +308,9 @@ public class GameListFragment extends Fragment implements TournamentEventListene
     @Override
     public void updateTournamentPlayer(TournamentPlayer updatedPLayer) {
     }
+
+
+    @Override
+    public void addRegistration(TournamentPlayer player) {
+    }
 }

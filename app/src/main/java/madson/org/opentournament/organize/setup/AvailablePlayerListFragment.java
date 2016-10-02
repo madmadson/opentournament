@@ -298,6 +298,12 @@ public class AvailablePlayerListFragment extends BaseFragment {
         }
     }
 
+
+    public void removeOnlinePlayer(TournamentPlayer player) {
+
+        onlinePlayerListAdapter.removePlayerDueToRegistration(player);
+    }
+
     private class PlayerFilterTextWatcher implements TextWatcher {
 
         @Override

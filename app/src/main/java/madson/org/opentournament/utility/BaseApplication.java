@@ -389,6 +389,16 @@ public abstract class BaseApplication extends Application {
     }
 
 
+    public void notifyRegistrationAddToTournament(TournamentPlayer player) {
+
+        Set<TournamentEventListener> listeners = new HashSet<>(tournamentEventListeners);
+
+        for (TournamentEventListener listener : listeners) {
+            listener.addRegistration(player);
+        }
+    }
+
+
     public void notifyRemoveAvailablePlayer(Player player) {
 
         Set<TournamentEventListener> listeners = new HashSet<>(tournamentEventListeners);

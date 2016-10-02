@@ -74,19 +74,6 @@ public class RegisterTournamentPlayerListAdapter extends RecyclerView.Adapter<To
         viewHolder.getPlayerNameInList()
             .setText(baseActivity.getResources().getString(R.string.player_name_in_row, firstname, nickname, lastname));
 
-        // mark offline player
-        if (player.getPlayer_online_uuid() != null) {
-            viewHolder.getLocalIcon().setVisibility(View.VISIBLE);
-        } else {
-            viewHolder.getLocalIcon().setVisibility(View.GONE);
-        }
-
-        if (player.getDroppedInRound() != 0) {
-            viewHolder.getDroppedInRound()
-                .setText(baseActivity.getResources().getString(R.string.dropped_in_round, player.getDroppedInRound()));
-            viewHolder.getDroppedInRound().setVisibility(View.VISIBLE);
-        }
-
         if (position % 2 == 0) {
             viewHolder.getTournamentPlayerCard().setCardBackgroundColor(Color.LTGRAY);
         } else {

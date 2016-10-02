@@ -38,4 +38,7 @@ public interface TournamentEventListener {
 
 
     void updateTournamentPlayer(TournamentPlayer updatedPLayer);
+
+
+    void addRegistration(TournamentPlayer player);
 }

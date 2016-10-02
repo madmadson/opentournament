@@ -266,5 +266,7 @@
     <string name="name_of_list">Name of List</string>
     <string name="upload_list">Upload List</string>
     <string name="success_upload_list">Successfuly uploaded list</string>
+    <string name="realy_add_player">Realy add player to Tournament?</string>
+    <string name="player_already_is_in_tournament">Player is already in Tournament</string>
 
 </resources>

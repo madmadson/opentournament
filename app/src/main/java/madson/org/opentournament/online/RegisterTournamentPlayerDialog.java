@@ -335,10 +335,15 @@ public class RegisterTournamentPlayerDialog extends DialogFragment {
                         if (validateForm(firstname, nickname, lastname, teamname)) {
                             TournamentPlayer tournamentPlayer = new TournamentPlayer();
                             tournamentPlayer.setOnline_uuid(player.getOnlineUUID());
+                            tournamentPlayer.setPlayer_online_uuid(player.getOnlineUUID());
                             tournamentPlayer.setFirstname(firstname);
                             tournamentPlayer.setNickname(nickname);
                             tournamentPlayer.setLastname(lastname);
-                            tournamentPlayer.setTeamname(teamname);
+
+                            if (teamname != null && !teamname.equals(baseActivity.getString(R.string.no_team))) {
+                                tournamentPlayer.setTeamname(teamname);
+                            }
+
                             tournamentPlayer.setFaction(faction);
 
                             DatabaseReference reference = FirebaseDatabase.getInstance()

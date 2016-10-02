@@ -47,6 +47,8 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 import madson.org.opentournament.AccountFragment;
 import madson.org.opentournament.HomeFragment;
 import madson.org.opentournament.R;
@@ -137,7 +139,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
             View headerView = navView.getHeaderView(0);
 
-            userAvatar = (ImageView) headerView.findViewById(R.id.drawer_avatar);
+            userAvatar = (CircleImageView) headerView.findViewById(R.id.drawer_avatar);
 
             userMail = (TextView) headerView.findViewById(R.id.drawer_mail);
 

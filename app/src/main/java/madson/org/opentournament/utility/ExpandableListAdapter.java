@@ -2,6 +2,8 @@ package madson.org.opentournament.utility;
 
 import android.content.Context;
 
+import android.support.design.widget.Snackbar;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +11,8 @@ import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.firebase.database.DatabaseReference;
@@ -32,20 +36,23 @@ import java.util.Map;
 
 public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
-    private final Context context;
+    private final BaseActivity baseActivity;
     private final List<String> listDataHeader;
     private final Map<String, ArmyList> listDataChild;
     private final Tournament tournament;
     private final TournamentPlayer tournamentPlayer;
+    private ImageButton addListButton;
 
-    public ExpandableListAdapter(Context context, List<String> listDataHeader, Map<String, ArmyList> listChildData,
-        Tournament tournament, TournamentPlayer tournamentPlayer) {
+    public ExpandableListAdapter(BaseActivity baseActivity, List<String> listDataHeader,
+        Map<String, ArmyList> listChildData, Tournament tournament, TournamentPlayer tournamentPlayer,
+        ImageButton addListButton) {
 
-        this.context = context;
+        this.baseActivity = baseActivity;
         this.listDataHeader = listDataHeader;
         this.listDataChild = listChildData;
         this.tournament = tournament;
         this.tournamentPlayer = tournamentPlayer;
+        this.addListButton = addListButton;
     }
 
     @Override
@@ -69,7 +76,8 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         final ArmyList armyList = (ArmyList) getChild(groupPosition, childPosition);
 
         if (convertView == null) {
-            LayoutInflater inflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater inflater = (LayoutInflater) this.baseActivity.getSystemService(
+                    Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.dialog_army_lists_list_item, null);
         }
 
@@ -93,6 +101,13 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
                             + "/" + tournamentPlayer.getOnline_uuid() + "/tournamentPlayerLists/" + listPosition);
 
                     reference.setValue(armyList);
+
+                    addListButton.setVisibility(View.VISIBLE);
+
+                    Snackbar snackbar = Snackbar.make(baseActivity.getCoordinatorLayout(),
+                            R.string.success_upload_list, Snackbar.LENGTH_LONG);
+                    snackbar.getView().setBackgroundColor(baseActivity.getResources().getColor(R.color.colorPositive));
+                    snackbar.show();
                 }
             });
 
@@ -137,7 +152,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         String headerTitle = (String) getGroup(groupPosition);
 
         if (convertView == null) {
-            LayoutInflater infalInflater = (LayoutInflater) this.context.getSystemService(
+            LayoutInflater infalInflater = (LayoutInflater) this.baseActivity.getSystemService(
                     Context.LAYOUT_INFLATER_SERVICE);
             convertView = infalInflater.inflate(R.layout.dialog_army_lists_list_group, null);
         }

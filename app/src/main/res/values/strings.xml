@@ -265,5 +265,6 @@
     <string name="list">List (copy &amp; paste from warroom or troop creator)</string>
     <string name="name_of_list">Name of List</string>
     <string name="upload_list">Upload List</string>
+    <string name="success_upload_list">Successfuly uploaded list</string>
 
 </resources>

@@ -13,6 +13,23 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/line_tick"
+        android:background="@color/colorDivider"
+        android:paddingBottom="@dimen/main_tick"
+        android:paddingTop="@dimen/main_tick" />
+    
+    <ImageButton
+        android:id="@+id/add_list_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/halve_tick"
+        android:background="@color/colorPrimaryDark"
+        android:src="@drawable/ic_add_white_24dp"
+        android:padding="@dimen/halve_tick"
+        android:textColor="@color/colorTextIcon" />
 
     <!-- DONT DELETE THIS, ELSE SOFTKEYBOARD DOES NOT OPEN IN LIST ITEM -->
     <EditText

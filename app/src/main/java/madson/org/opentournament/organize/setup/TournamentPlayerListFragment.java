@@ -28,6 +28,7 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -39,6 +40,7 @@ import madson.org.opentournament.db.FirebaseReferences;
 import madson.org.opentournament.domain.Game;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
+import madson.org.opentournament.online.RegisterTournamentPlayerListAdapter;
 import madson.org.opentournament.organize.ConfirmPairingNewRoundDialog;
 import madson.org.opentournament.organize.TournamentEventListener;
 import madson.org.opentournament.service.TournamentPlayerService;
@@ -70,6 +72,9 @@ public class TournamentPlayerListFragment extends Fragment {
     private Button startButton;
     private BaseActivity baseActivity;
     private ProgressBar progressbar;
+    private RecyclerView registerationRecyclerView;
+    private ProgressBar progressbarRegistation;
+    private RegisterTournamentPlayerListAdapter registrationListAdapter;
 
     public static TournamentPlayerListFragment newInstance(Tournament tournament) {
 
@@ -103,6 +108,66 @@ public class TournamentPlayerListFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_tournament_player_list, container, false);
         noTournamentPlayersTextView = (TextView) view.findViewById(R.id.no_tournament_players);
         progressbar = (ProgressBar) view.findViewById(R.id.progressBar);
+        progressbarRegistation = (ProgressBar) view.findViewById(R.id.progressBarRegistration);
+
+        registerationRecyclerView = (RecyclerView) view.findViewById(R.id.tournament_registration_list_recycler_view);
+        registerationRecyclerView.setHasFixedSize(true);
+
+        LinearLayoutManager linearLayoutManagerRegistration = new LinearLayoutManager(getActivity());
+        registerationRecyclerView.setLayoutManager(linearLayoutManagerRegistration);
+
+        registrationListAdapter = new RegisterTournamentPlayerListAdapter(baseActivity, tournament);
+
+        mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
+
+        DatabaseReference child = mFirebaseDatabaseReference.child(FirebaseReferences.TOURNAMENT_REGISTRATIONS + "/"
+                + tournament.getOnlineUUID());
+
+        child.addChildEventListener(new ChildEventListener() {
+
+                @Override
+                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+
+                    progressbarRegistation.setVisibility(View.GONE);
+
+                    TournamentPlayer player = dataSnapshot.getValue(TournamentPlayer.class);
+                    player.setOnline_uuid(dataSnapshot.getKey());
+
+                    registrationListAdapter.addRegistration(player);
+                }
+
+
+                @Override
+                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                    TournamentPlayer player = dataSnapshot.getValue(TournamentPlayer.class);
+                    player.setOnline_uuid(dataSnapshot.getKey());
+
+                    registrationListAdapter.updateRegistration(player);
+                }
+
+
+                @Override
+                public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                    TournamentPlayer player = dataSnapshot.getValue(TournamentPlayer.class);
+                    player.setOnline_uuid(dataSnapshot.getKey());
+
+                    registrationListAdapter.removeRegistration(player);
+                }
+
+
+                @Override
+                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                }
+
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                }
+            });
+
+        registerationRecyclerView.setAdapter(registrationListAdapter);
 
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.tournament_player_list_recycler_view);
         recyclerView.setHasFixedSize(true);

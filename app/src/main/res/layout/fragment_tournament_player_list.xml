@@ -3,6 +3,21 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <ProgressBar
+        android:id="@+id/progressBarRegistration"
+        style="?android:attr/progressBarStyle"
+        android:layout_gravity="center_horizontal"
+        android:paddingTop="@dimen/main_tick"
+        android:paddingBottom="@dimen/main_tick"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/tournament_registration_list_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="vertical" />
     
     <RelativeLayout
         android:layout_width="match_parent"

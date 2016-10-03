@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import madson.org.opentournament.R;
+import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.domain.TournamentTyp;
@@ -208,5 +209,17 @@ public class TournamentPlayerListAdapter extends RecyclerView.Adapter<Tournament
             tournamentPlayerList.add(tournamentPlayer);
             notifyDataSetChanged();
         }
+    }
+
+
+    public boolean containsPlayer(Player player) {
+
+        for (TournamentPlayer tournamentPlayer : tournamentPlayerList) {
+            if (tournamentPlayer.getPlayerOnlineUUID().equals(player.getOnlineUUID())) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

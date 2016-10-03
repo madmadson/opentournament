@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -203,15 +204,24 @@ public class TournamentSetupFragment extends Fragment implements TournamentEvent
     @Override
     public void addPlayerToTournament(Player player) {
 
-        AddTournamentPlayerDialog dialog = new AddTournamentPlayerDialog();
+        if (tournamentPlayerListFragment.containsPlayer(player)) {
+            Snackbar snackbar = Snackbar.make(((BaseActivity) getActivity()).getCoordinatorLayout(),
+                    R.string.player_already_is_in_tournament, Snackbar.LENGTH_LONG);
 
-        Bundle bundle = new Bundle();
-        bundle.putParcelable(AddTournamentPlayerDialog.BUNDLE_TOURNAMENT, tournament);
-        bundle.putParcelable(AddTournamentPlayerDialog.BUNDLE_PLAYER, player);
-        dialog.setArguments(bundle);
+            snackbar.getView().setBackgroundColor(getActivity().getResources().getColor(R.color.colorNegative));
 
-        FragmentManager supportFragmentManager = getChildFragmentManager();
-        dialog.show(supportFragmentManager, this.getClass().getName());
+            snackbar.show();
+        } else {
+            AddTournamentPlayerDialog dialog = new AddTournamentPlayerDialog();
+
+            Bundle bundle = new Bundle();
+            bundle.putParcelable(AddTournamentPlayerDialog.BUNDLE_TOURNAMENT, tournament);
+            bundle.putParcelable(AddTournamentPlayerDialog.BUNDLE_PLAYER, player);
+            dialog.setArguments(bundle);
+
+            FragmentManager supportFragmentManager = getChildFragmentManager();
+            dialog.show(supportFragmentManager, this.getClass().getName());
+        }
     }
 
 

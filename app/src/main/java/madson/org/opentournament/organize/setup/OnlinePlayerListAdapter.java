@@ -2,6 +2,8 @@ package madson.org.opentournament.organize.setup;
 
 import android.graphics.Color;
 
+import android.support.design.widget.Snackbar;
+
 import android.support.v7.widget.RecyclerView;
 
 import android.util.Log;
@@ -108,23 +110,6 @@ public class OnlinePlayerListAdapter extends RecyclerView.Adapter<PlayerViewHold
     public Filter getFilter() {
 
         return filter;
-    }
-
-
-    public void removePlayerDueToRegistration(TournamentPlayer tournamentPlayer) {
-
-        int position = -1;
-
-        for (Player player : originalPlayerList) {
-            if (player.getOnlineUUID().equals(tournamentPlayer.getPlayerOnlineUUID())) {
-                position = originalPlayerList.indexOf(player);
-            }
-        }
-
-        if (position != -1) {
-            originalPlayerList.remove(position);
-            notifyDataSetChanged();
-        }
     }
 
     private class ItemFilter extends Filter {

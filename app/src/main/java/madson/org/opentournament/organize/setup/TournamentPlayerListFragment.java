@@ -39,6 +39,7 @@ import com.google.firebase.database.ValueEventListener;
 import madson.org.opentournament.R;
 import madson.org.opentournament.db.FirebaseReferences;
 import madson.org.opentournament.domain.Game;
+import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.online.RegisterTournamentPlayerListAdapter;
@@ -285,5 +286,11 @@ public class TournamentPlayerListFragment extends Fragment {
     public void removeRegistration(TournamentPlayer player) {
 
         registrationListAdapter.removeRegistration(player);
+    }
+
+
+    public boolean containsPlayer(Player player) {
+
+        return tournamentPlayerListAdapter.containsPlayer(player);
     }
 }

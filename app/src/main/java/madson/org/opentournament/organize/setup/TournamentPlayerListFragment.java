@@ -283,12 +283,6 @@ public class TournamentPlayerListFragment extends Fragment {
     }
 
 
-    public void removeRegistration(TournamentPlayer player) {
-
-        registrationListAdapter.removeRegistration(player);
-    }
-
-
     public boolean containsPlayer(Player player) {
 
         return tournamentPlayerListAdapter.containsPlayer(player);

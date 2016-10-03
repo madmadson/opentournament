@@ -212,11 +212,11 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
 
                     game.setPlayer1(player1.getTournamentPlayer());
                     game.setPlayerOneId(player1.getPlayerId());
-                    game.setPlayerOneOnlineUUID(player1.getPlayer_online_uuid());
+                    game.setPlayerOneOnlineUUID(player1.getPlayerOnlineUUID());
 
                     game.setPlayer2(player2.getTournamentPlayer());
                     game.setPlayerTwoId(player2.getPlayerId());
-                    game.setPlayerTwoOnlineUUID(player2.getPlayer_online_uuid());
+                    game.setPlayerTwoOnlineUUID(player2.getPlayerOnlineUUID());
 
                     games.add(game);
 
@@ -262,11 +262,11 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
 
                     game.setPlayer1(player1.getTournamentPlayer());
                     game.setPlayerOneId(player1.getPlayerId());
-                    game.setPlayerOneOnlineUUID(player1.getPlayer_online_uuid());
+                    game.setPlayerOneOnlineUUID(player1.getPlayerOnlineUUID());
 
                     game.setPlayer2(player2.getTournamentPlayer());
                     game.setPlayerTwoId(player2.getPlayerId());
-                    game.setPlayerTwoOnlineUUID(player2.getPlayer_online_uuid());
+                    game.setPlayerTwoOnlineUUID(player2.getPlayerOnlineUUID());
 
                     games.add(game);
 

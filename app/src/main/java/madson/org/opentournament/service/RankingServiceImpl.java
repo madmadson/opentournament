@@ -20,6 +20,7 @@ import madson.org.opentournament.domain.Game;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.domain.TournamentRanking;
+import madson.org.opentournament.domain.TournamentTyp;
 import madson.org.opentournament.service.warmachine.TournamentRankingComparator;
 import madson.org.opentournament.utility.BaseApplication;
 
@@ -103,10 +104,15 @@ public class RankingServiceImpl implements RankingService {
         for (TournamentPlayer tournamentPlayer : allPlayersForTournament) {
             TournamentRanking tournamentRanking = new TournamentRanking();
             tournamentRanking.setTournament_id(tournament.get_id());
-            tournamentRanking.setPlayerId(tournamentPlayer.getPlayerId());
-            tournamentRanking.setPlayer_online_uuid(tournamentPlayer.getPlayerOnlineUUID());
+
+            if (tournament.getTournamentTyp().equals(TournamentTyp.SOLO.name())) {
+                tournamentRanking.setPlayerId(tournamentPlayer.getPlayerId());
+                tournamentRanking.setPlayerOnlineUUID(tournamentPlayer.getPlayerOnlineUUID());
+                tournamentRanking.setTournamentPlayer(tournamentPlayer);
+            } else if (tournament.getTournamentTyp().equals(TournamentTyp.TEAM.name())) {
+            }
+
             tournamentRanking.setTournament_round(round_for_calculation);
-            tournamentRanking.setTournamentPlayer(tournamentPlayer);
 
             mapOfRankings.put(tournamentPlayer.getRealPlayerId(), tournamentRanking);
         }
@@ -222,7 +228,7 @@ public class RankingServiceImpl implements RankingService {
             ContentValues contentValues = new ContentValues();
             contentValues.put(TournamentRankingTable.COLUMN_TOURNAMENT_ID, ranking.getTournament_id());
             contentValues.put(TournamentRankingTable.COLUMN_PLAYER_ID, ranking.getPlayerId());
-            contentValues.put(TournamentRankingTable.COLUMN_PLAYER_ONLINE_UUID, ranking.getPlayer_online_uuid());
+            contentValues.put(TournamentRankingTable.COLUMN_PLAYER_ONLINE_UUID, ranking.getPlayerOnlineUUID());
             contentValues.put(TournamentRankingTable.COLUMN_TOURNAMENT_ROUND, ranking.getTournament_round());
 
             contentValues.put(TournamentRankingTable.COLUMN_SCORE, ranking.getScore());
@@ -275,7 +281,7 @@ public class RankingServiceImpl implements RankingService {
         tournamentRanking.setTournament_round(cursor.getInt(3));
 
         tournamentRanking.setPlayerId(cursor.getString(4));
-        tournamentRanking.setPlayer_online_uuid(cursor.getString(5));
+        tournamentRanking.setPlayerOnlineUUID(cursor.getString(5));
 
         tournamentRanking.setScore(cursor.getInt(6));
         tournamentRanking.setSos(cursor.getInt(7));

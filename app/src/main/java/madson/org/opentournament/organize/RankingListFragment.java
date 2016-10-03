@@ -139,7 +139,7 @@ public class RankingListFragment extends Fragment {
             holder.getPlayerTeamNameInList().setText(tournamentPlayer.getTeamname());
             holder.getPlayerFactionInList().setText(tournamentPlayer.getFaction());
 
-            if (ranking.getPlayer_online_uuid() != null) {
+            if (ranking.getPlayerOnlineUUID() != null) {
                 if (holder.getOnlineIcon() != null) {
                     holder.getOnlineIcon().setVisibility(View.VISIBLE);
                 }

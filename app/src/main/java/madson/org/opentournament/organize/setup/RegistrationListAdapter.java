@@ -74,7 +74,14 @@ public class RegistrationListAdapter extends RecyclerView.Adapter<TournamentPlay
 
         viewHolder.setPlayer(player);
         viewHolder.getPlayerNumber().setText(String.valueOf(position + 1));
-        viewHolder.getTeamName().setText(player.getTeamname());
+
+        if (player.getTeamname() != null) {
+            viewHolder.getTeamName().setText(player.getTeamname());
+            viewHolder.getTeamName().setVisibility(View.VISIBLE);
+        } else {
+            viewHolder.getTeamName().setVisibility(View.GONE);
+        }
+
         viewHolder.getFaction().setText(player.getFaction());
 
         final String firstname = player.getFirstname();

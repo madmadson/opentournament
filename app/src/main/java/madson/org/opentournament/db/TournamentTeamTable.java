@@ -15,9 +15,8 @@ public class TournamentTeamTable {
     /*
      * 0: id
      * 1: tournament_id
-     * 2: player_id
-     * 3: teamname
-     * 4: meta
+     * 2: teamname
+     * 3: meta
      */
     public static final String[] ALL_COLS_FOR_TOURNAMENT_TEAM_TABLE = {
         TournamentTeamTable.COLUMN_ID, TournamentTeamTable.COLUMN_TOURNAMENT_ID, TournamentTeamTable.COLUMN_TEAMNAME,

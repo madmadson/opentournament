@@ -25,7 +25,11 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import madson.org.opentournament.R;
+import madson.org.opentournament.db.FirebaseReferences;
 import madson.org.opentournament.domain.PairingOption;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.tasks.LoadTournamentTask;
@@ -173,6 +177,11 @@ public class ConfirmPairingNewRoundDialog extends DialogFragment {
                     TournamentOrganizeActivity activity = (TournamentOrganizeActivity) getActivity();
                     new PairNewRoundTask(activity, baseApplication, tournament, snackbar, progressBar, false,
                         pairingOptions).execute();
+
+                    DatabaseReference reference = FirebaseDatabase.getInstance()
+                        .getReference(FirebaseReferences.TOURNAMENT_REGISTRATIONS + "/" + tournament.getOnlineUUID());
+
+                    reference.setValue(null);
 
                     dialog.dismiss();
                 }

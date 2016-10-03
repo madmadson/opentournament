@@ -11,7 +11,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 
 import android.util.Log;
@@ -20,21 +19,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import android.widget.FrameLayout;
-
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import madson.org.opentournament.R;
 import madson.org.opentournament.db.FirebaseReferences;
-import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
-import madson.org.opentournament.online.AddListDialog;
 import madson.org.opentournament.online.RegisterTournamentPlayerDialog;
-import madson.org.opentournament.online.RegisterTournamentPlayerListAdapter;
 import madson.org.opentournament.tasks.SaveRegistrationTask;
-import madson.org.opentournament.tasks.SaveTournamentPlayerTask;
 import madson.org.opentournament.utility.BaseActivity;
 import madson.org.opentournament.viewHolder.TournamentPlayerViewHolder;
 
@@ -118,18 +111,33 @@ public class RegistrationListAdapter extends RecyclerView.Adapter<TournamentPlay
                                     public void onClick(DialogInterface dialog, int which) {
 
                                         new SaveRegistrationTask(baseActivity, player, tournament).execute();
-
-                                        DatabaseReference reference = FirebaseDatabase.getInstance()
-                                            .getReference(
-                                                FirebaseReferences.TOURNAMENT_REGISTRATIONS + "/"
-                                                + tournament.getOnlineUUID() + "/" + player.getOnline_uuid());
-
-                                        reference.setValue(null);
                                     }
                                 })
                         .setNegativeButton(R.string.dialog_cancel, null)
                         .show();
                     }
+                }
+            });
+
+        viewHolder.getAddListIcon().setVisibility(View.VISIBLE);
+
+        viewHolder.getAddListIcon().setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+
+                    Log.i(this.getClass().getName(), "addList");
+
+                    ShowRegistrationArmyListDialog dialog = new ShowRegistrationArmyListDialog();
+
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelable(RegisterTournamentPlayerDialog.BUNDLE_TOURNAMENT, tournament);
+                    bundle.putParcelable(RegisterTournamentPlayerDialog.BUNDLE_TOURNAMENT_PLAYER, player);
+                    dialog.setArguments(bundle);
+
+                    FragmentManager supportFragmentManager = baseActivity.getSupportFragmentManager();
+
+                    dialog.show(supportFragmentManager, "tournament setup new player");
                 }
             });
     }

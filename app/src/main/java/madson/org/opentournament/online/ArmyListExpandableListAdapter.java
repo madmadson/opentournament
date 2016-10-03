@@ -84,33 +84,39 @@ public class ArmyListExpandableListAdapter extends BaseExpandableListAdapter {
 
         final EditText listName = (EditText) convertView.findViewById(R.id.list_name);
         final EditText list = (EditText) convertView.findViewById(R.id.list);
-
         Button uploadButton = (Button) convertView.findViewById(R.id.upload_list_button);
 
-        uploadButton.setOnClickListener(new View.OnClickListener() {
+        if (addListButton != null) {
+            uploadButton.setOnClickListener(new View.OnClickListener() {
 
-                @Override
-                public void onClick(View v) {
+                    @Override
+                    public void onClick(View v) {
 
-                    armyList.setList(list.getText().toString());
-                    armyList.setName(listName.getText().toString());
+                        armyList.setList(list.getText().toString());
+                        armyList.setName(listName.getText().toString());
 
-                    int listPosition = groupPosition + 1;
-                    DatabaseReference reference = FirebaseDatabase.getInstance()
-                        .getReference(
-                            FirebaseReferences.TOURNAMENT_REGISTRATIONS + "/" + tournament.getOnlineUUID()
-                            + "/" + tournamentPlayer.getOnline_uuid() + "/tournamentPlayerLists/" + listPosition);
+                        int listPosition = groupPosition + 1;
+                        DatabaseReference addListReference = FirebaseDatabase.getInstance()
+                            .getReference(
+                                FirebaseReferences.TOURNAMENT_ARMY_LISTS + "/" + tournament.getOnlineUUID()
+                                + "/" + tournamentPlayer.getPlayerOnlineUUID() + "/" + listPosition);
 
-                    reference.setValue(armyList);
+                        addListReference.setValue(armyList);
 
-                    addListButton.setVisibility(View.VISIBLE);
+                        addListButton.setVisibility(View.VISIBLE);
 
-                    Snackbar snackbar = Snackbar.make(baseActivity.getCoordinatorLayout(), R.string.success_upload_list,
-                            Snackbar.LENGTH_LONG);
-                    snackbar.getView().setBackgroundColor(baseActivity.getResources().getColor(R.color.colorPositive));
-                    snackbar.show();
-                }
-            });
+                        Snackbar snackbar = Snackbar.make(baseActivity.getCoordinatorLayout(),
+                                R.string.success_upload_list, Snackbar.LENGTH_LONG);
+                        snackbar.getView()
+                        .setBackgroundColor(baseActivity.getResources().getColor(R.color.colorPositive));
+                        snackbar.show();
+                    }
+                });
+        } else {
+            uploadButton.setVisibility(View.GONE);
+            listName.setEnabled(false);
+            list.setEnabled(false);
+        }
 
         listName.setText(armyList.getName());
         list.setText(armyList.getList());

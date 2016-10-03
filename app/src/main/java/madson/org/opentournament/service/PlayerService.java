@@ -29,7 +29,7 @@ public interface PlayerService {
      *
      * @return  the player
      */
-    Player getPlayerForId(Long playerId);
+    Player getPlayerForId(String playerId);
 
 
     /**

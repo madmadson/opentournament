@@ -103,8 +103,8 @@ public class RankingServiceImpl implements RankingService {
         for (TournamentPlayer tournamentPlayer : allPlayersForTournament) {
             TournamentRanking tournamentRanking = new TournamentRanking();
             tournamentRanking.setTournament_id(tournament.get_id());
-            tournamentRanking.setPlayer_id(tournamentPlayer.getPlayer_id());
-            tournamentRanking.setPlayer_online_uuid(tournamentPlayer.getPlayer_online_uuid());
+            tournamentRanking.setPlayerId(tournamentPlayer.getPlayerId());
+            tournamentRanking.setPlayer_online_uuid(tournamentPlayer.getPlayerOnlineUUID());
             tournamentRanking.setTournament_round(round_for_calculation);
             tournamentRanking.setTournamentPlayer(tournamentPlayer);
 
@@ -221,7 +221,7 @@ public class RankingServiceImpl implements RankingService {
         for (TournamentRanking ranking : newRankingForRoundList.values()) {
             ContentValues contentValues = new ContentValues();
             contentValues.put(TournamentRankingTable.COLUMN_TOURNAMENT_ID, ranking.getTournament_id());
-            contentValues.put(TournamentRankingTable.COLUMN_PLAYER_ID, ranking.getPlayer_id());
+            contentValues.put(TournamentRankingTable.COLUMN_PLAYER_ID, ranking.getPlayerId());
             contentValues.put(TournamentRankingTable.COLUMN_PLAYER_ONLINE_UUID, ranking.getPlayer_online_uuid());
             contentValues.put(TournamentRankingTable.COLUMN_TOURNAMENT_ROUND, ranking.getTournament_round());
 
@@ -274,7 +274,7 @@ public class RankingServiceImpl implements RankingService {
         tournamentRanking.setTournament_id(cursor.getInt(2));
         tournamentRanking.setTournament_round(cursor.getInt(3));
 
-        tournamentRanking.setPlayer_id(cursor.getInt(4));
+        tournamentRanking.setPlayerId(cursor.getString(4));
         tournamentRanking.setPlayer_online_uuid(cursor.getString(5));
 
         tournamentRanking.setScore(cursor.getInt(6));

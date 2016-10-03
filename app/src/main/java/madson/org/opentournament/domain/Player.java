@@ -5,9 +5,7 @@ import android.os.Parcelable;
 
 import com.google.firebase.database.Exclude;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 
@@ -242,7 +240,7 @@ public class Player implements Parcelable {
 
         Player player = new Player();
 
-        player.setOnlineUUID(tournamentPlayer.getPlayer_online_uuid());
+        player.setOnlineUUID(tournamentPlayer.getPlayerOnlineUUID());
         player.setFirstname(tournamentPlayer.getFirstname());
         player.setNickname(tournamentPlayer.getNickname());
         player.setLastname(tournamentPlayer.getLastname());

@@ -13,8 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import madson.org.opentournament.R;
-import madson.org.opentournament.domain.Player;
-import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.viewHolder.TournamentPlayerViewHolder;
 
@@ -65,13 +63,6 @@ public class OnlineTournamentPlayerListAdapter extends RecyclerView.Adapter<Tour
         viewHolder.getPlayerNameInList()
             .setText(context.getResources().getString(R.string.player_name_in_row, firstname, nickname, lastname));
 
-        // mark offline player
-        if (player.getPlayer_online_uuid() != null) {
-            viewHolder.getLocalIcon().setVisibility(View.VISIBLE);
-        } else {
-            viewHolder.getLocalIcon().setVisibility(View.GONE);
-        }
-
         if (player.getDroppedInRound() != 0) {
             viewHolder.getDroppedInRound()
                 .setText(context.getResources().getString(R.string.dropped_in_round, player.getDroppedInRound()));
@@ -85,6 +76,14 @@ public class OnlineTournamentPlayerListAdapter extends RecyclerView.Adapter<Tour
         }
 
         if (viewHolder.getEditIcon() != null) {
+            viewHolder.getEditIcon().setVisibility(View.GONE);
+        }
+
+        if (viewHolder.getAddListIcon() != null) {
+            viewHolder.getAddListIcon().setVisibility(View.GONE);
+        }
+
+        if (viewHolder.getLocalIcon() != null) {
             viewHolder.getEditIcon().setVisibility(View.GONE);
         }
     }

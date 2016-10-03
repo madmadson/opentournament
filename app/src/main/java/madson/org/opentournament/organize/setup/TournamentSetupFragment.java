@@ -233,8 +233,6 @@ public class TournamentSetupFragment extends Fragment implements TournamentEvent
     public void addRegistration(TournamentPlayer player) {
 
         tournamentPlayerListFragment.addPlayer(player);
-        tournamentPlayerListFragment.removeRegistration(player);
-        availablePlayerListFragment.removeOnlinePlayer(player);
     }
 
 

@@ -148,7 +148,7 @@ public class RegisterTournamentPlayerListFragment extends Fragment {
                     mProgressBar.setVisibility(View.GONE);
 
                     TournamentPlayer player = dataSnapshot.getValue(TournamentPlayer.class);
-                    player.setOnline_uuid(dataSnapshot.getKey());
+                    player.setPlayerOnlineUUID(dataSnapshot.getKey());
 
                     registrationListAdapter.addRegistration(player);
 
@@ -162,7 +162,7 @@ public class RegisterTournamentPlayerListFragment extends Fragment {
                 public void onChildChanged(DataSnapshot dataSnapshot, String s) {
 
                     TournamentPlayer player = dataSnapshot.getValue(TournamentPlayer.class);
-                    player.setOnline_uuid(dataSnapshot.getKey());
+                    player.setPlayerOnlineUUID(dataSnapshot.getKey());
 
                     registrationListAdapter.updateRegistration(player);
                 }
@@ -172,7 +172,7 @@ public class RegisterTournamentPlayerListFragment extends Fragment {
                 public void onChildRemoved(DataSnapshot dataSnapshot) {
 
                     TournamentPlayer player = dataSnapshot.getValue(TournamentPlayer.class);
-                    player.setOnline_uuid(dataSnapshot.getKey());
+                    player.setPlayerOnlineUUID(dataSnapshot.getKey());
 
                     registrationListAdapter.removeRegistration(player);
 

@@ -69,24 +69,11 @@ public class TournamentServiceImpl implements TournamentService {
 
         Log.i(this.getClass().getName(), "pushes tournament to online: " + tournament);
 
-        if (tournament.getOnlineUUID() == null) {
-            UUID uuid = UUID.randomUUID();
+        DatabaseReference referenceForUpdateTournament = FirebaseDatabase.getInstance()
+                .getReference(FirebaseReferences.TOURNAMENTS + "/" + tournament.getGameOrSportTyp() + "/"
+                    + tournament.getOnlineUUID());
 
-            tournament.setOnlineUUID(uuid.toString());
-
-            insertOnlineUUID(tournament);
-
-            DatabaseReference referenceForNewTournament = FirebaseDatabase.getInstance()
-                    .getReference(FirebaseReferences.TOURNAMENTS + "/" + tournament.getGameOrSportTyp() + "/" + uuid);
-
-            referenceForNewTournament.setValue(tournament);
-        } else {
-            DatabaseReference referenceForUpdateTournament = FirebaseDatabase.getInstance()
-                    .getReference(FirebaseReferences.TOURNAMENTS + "/" + tournament.getGameOrSportTyp() + "/"
-                        + tournament.getOnlineUUID());
-
-            referenceForUpdateTournament.setValue(tournament);
-        }
+        referenceForUpdateTournament.setValue(tournament);
 
         return tournament;
     }
@@ -144,6 +131,7 @@ public class TournamentServiceImpl implements TournamentService {
         contentValues.put(TournamentTable.COLUMN_ACTUAL_PLAYERS, actualPlayers);
         contentValues.put(TournamentTable.COLUMN_STATE, Tournament.TournamentState.PLANED.name());
         contentValues.put(TournamentTable.COLUMN_TEAM_SIZE, teamsize);
+        contentValues.put(TournamentTable.COLUMN_ONLINE_UUID, UUID.randomUUID().toString());
 
         SQLiteDatabase writableDatabase = openTournamentDBHelper.getWritableDatabase();
 
@@ -151,9 +139,7 @@ public class TournamentServiceImpl implements TournamentService {
 
         writableDatabase.close();
 
-        Tournament newTournament = getTournamentForId(newId);
-
-        return newTournament;
+        return getTournamentForId(newId);
     }
 
 
@@ -295,6 +281,7 @@ public class TournamentServiceImpl implements TournamentService {
             new String[] { String.valueOf(tournament.get_id()) });
 
         db.close();
+        cursor.close();
     }
 
 
@@ -315,6 +302,7 @@ public class TournamentServiceImpl implements TournamentService {
             new String[] { String.valueOf(tournament.get_id()) });
 
         db.close();
+        cursor.close();
     }
 
 

@@ -4,9 +4,13 @@ import android.graphics.Color;
 
 import android.os.Bundle;
 
+import android.support.design.widget.Snackbar;
+
 import android.support.v4.app.FragmentManager;
 
 import android.support.v7.widget.RecyclerView;
+
+import android.util.Log;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +19,8 @@ import android.view.ViewGroup;
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
+import madson.org.opentournament.domain.TournamentTyp;
+import madson.org.opentournament.online.RegisterTournamentPlayerDialog;
 import madson.org.opentournament.utility.BaseActivity;
 import madson.org.opentournament.viewHolder.TournamentPlayerViewHolder;
 
@@ -56,7 +62,14 @@ public class TournamentPlayerListAdapter extends RecyclerView.Adapter<Tournament
         final TournamentPlayer player = tournamentPlayerList.get(position);
         holder.setPlayer(player);
         holder.getPlayerNumber().setText(String.valueOf(position + 1));
-        holder.getTeamName().setText(player.getTeamname());
+
+        if (player.getTeamname() != null) {
+            holder.getTeamName().setText(player.getTeamname());
+            holder.getTeamName().setVisibility(View.VISIBLE);
+        } else {
+            holder.getTeamName().setVisibility(View.GONE);
+        }
+
         holder.getFaction().setText(player.getFaction());
 
         String firstname = player.getFirstname();
@@ -66,7 +79,7 @@ public class TournamentPlayerListAdapter extends RecyclerView.Adapter<Tournament
             .setText(baseActivity.getResources().getString(R.string.player_name_in_row, firstname, nickname, lastname));
 
         // mark online player
-        if (player.getPlayer_online_uuid() != null) {
+        if (player.getPlayerOnlineUUID() != null) {
             holder.getLocalIcon().setVisibility(View.GONE);
         } else {
             holder.getLocalIcon().setVisibility(View.VISIBLE);
@@ -78,27 +91,66 @@ public class TournamentPlayerListAdapter extends RecyclerView.Adapter<Tournament
             holder.getDroppedInRound().setVisibility(View.VISIBLE);
         }
 
-        holder.getEditIcon().setOnClickListener(new View.OnClickListener() {
-
-                @Override
-                public void onClick(View v) {
-
-                    AddTournamentPlayerDialog dialog = new AddTournamentPlayerDialog();
-
-                    Bundle bundle = new Bundle();
-                    bundle.putParcelable(AddTournamentPlayerDialog.BUNDLE_TOURNAMENT, tournament);
-                    bundle.putParcelable(AddTournamentPlayerDialog.BUNDLE_TOURNAMENT_PLAYER, player);
-                    dialog.setArguments(bundle);
-
-                    FragmentManager supportFragmentManager = baseActivity.getSupportFragmentManager();
-                    dialog.show(supportFragmentManager, "tournament setup new player");
-                }
-            });
-
         if (position % 2 == 0) {
             holder.getTournamentPlayerCard().setCardBackgroundColor(Color.LTGRAY);
         } else {
             holder.getTournamentPlayerCard().setCardBackgroundColor(Color.WHITE);
+        }
+
+        if (!tournament.getState().equals(Tournament.TournamentState.PLANED)) {
+            holder.getEditIcon().setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+
+                        AddTournamentPlayerDialog dialog = new AddTournamentPlayerDialog();
+
+                        Bundle bundle = new Bundle();
+                        bundle.putParcelable(AddTournamentPlayerDialog.BUNDLE_TOURNAMENT, tournament);
+                        bundle.putParcelable(AddTournamentPlayerDialog.BUNDLE_TOURNAMENT_PLAYER, player);
+                        dialog.setArguments(bundle);
+
+                        FragmentManager supportFragmentManager = baseActivity.getSupportFragmentManager();
+                        dialog.show(supportFragmentManager, "tournament setup new player");
+                    }
+                });
+
+            if (baseActivity.getBaseApplication().isOnline() && tournament.getOnlineUUID() != null) {
+                holder.getAddListIcon().setOnClickListener(new View.OnClickListener() {
+
+                        @Override
+                        public void onClick(View v) {
+
+                            if (player.getPlayerOnlineUUID() != null) {
+                                Log.i(this.getClass().getName(), "addList");
+
+                                AddTournamentPlayerListDialog dialog = new AddTournamentPlayerListDialog();
+
+                                Bundle bundle = new Bundle();
+                                bundle.putParcelable(RegisterTournamentPlayerDialog.BUNDLE_TOURNAMENT, tournament);
+                                bundle.putParcelable(RegisterTournamentPlayerDialog.BUNDLE_TOURNAMENT_PLAYER, player);
+                                dialog.setArguments(bundle);
+
+                                FragmentManager supportFragmentManager = baseActivity.getSupportFragmentManager();
+
+                                dialog.show(supportFragmentManager, "tournament setup new player");
+                            } else {
+                                Snackbar snackbar = Snackbar.make(baseActivity.getCoordinatorLayout(),
+                                        R.string.cant_upload_list_for_local_players, Snackbar.LENGTH_LONG);
+
+                                snackbar.getView()
+                                .setBackgroundColor(baseActivity.getResources().getColor(R.color.colorNegative));
+
+                                snackbar.show();
+                            }
+                        }
+                    });
+            } else {
+                holder.getAddListIcon().setVisibility(View.GONE);
+            }
+        } else {
+            holder.getEditIcon().setVisibility(View.GONE);
+            holder.getAddListIcon().setVisibility(View.GONE);
         }
     }
 

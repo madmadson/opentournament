@@ -38,15 +38,15 @@ public class Game implements Parcelable {
 
     private int playing_field;
 
-    private long player_one_id;
-    private String player_one_online_uuid;
+    private String playerOneId;
+    private String playerOneOnlineUUID;
     private TournamentPlayer player1;
     private int player_one_score;
     private int player_one_control_points;
     private int player_one_victory_points;
 
-    private long player_two_id;
-    private String player_two_online_uuid;
+    private String playerTwoId;
+    private String playerTwoOnlineUUID;
     private TournamentPlayer player2;
     private int player_two_score;
     private int player_two_control_points;
@@ -61,14 +61,14 @@ public class Game implements Parcelable {
         online_uuid = in.readString();
         tournament_id = in.readLong();
         tournament_round = in.readInt();
-        player_one_id = in.readLong();
-        player_one_online_uuid = in.readString();
+        playerOneId = in.readString();
+        playerOneOnlineUUID = in.readString();
         player1 = in.readParcelable(TournamentPlayer.class.getClassLoader());
         player_one_score = in.readInt();
         player_one_control_points = in.readInt();
         player_one_victory_points = in.readInt();
-        player_two_id = in.readLong();
-        player_two_online_uuid = in.readString();
+        playerTwoId = in.readString();
+        playerTwoOnlineUUID = in.readString();
         player2 = in.readParcelable(TournamentPlayer.class.getClassLoader());
         player_two_score = in.readInt();
         player_two_control_points = in.readInt();
@@ -81,6 +81,12 @@ public class Game implements Parcelable {
 
     public Game() {
     }
+
+    public String getPlayerTwoId() {
+
+        return playerTwoId;
+    }
+
 
     @Exclude
     public long get_id() {
@@ -109,15 +115,15 @@ public class Game implements Parcelable {
 
 
     @Exclude
-    public long getPlayer_one_id() {
+    public String getPlayerOneId() {
 
-        return player_one_id;
+        return playerOneId;
     }
 
 
-    public String getPlayer_one_online_uuid() {
+    public String getPlayerOneOnlineUUID() {
 
-        return player_one_online_uuid;
+        return playerOneOnlineUUID;
     }
 
 
@@ -139,16 +145,9 @@ public class Game implements Parcelable {
     }
 
 
-    @Exclude
-    public long getPlayer_two_id() {
+    public String getPlayerTwoOnlineUUID() {
 
-        return player_two_id;
-    }
-
-
-    public String getPlayer_two_online_uuid() {
-
-        return player_two_online_uuid;
+        return playerTwoOnlineUUID;
     }
 
 
@@ -206,15 +205,15 @@ public class Game implements Parcelable {
     }
 
 
-    public void setPlayer_one_id(long player_one_id) {
+    public void setPlayerOneId(String playerOneId) {
 
-        this.player_one_id = player_one_id;
+        this.playerOneId = playerOneId;
     }
 
 
-    public void setPlayer_one_online_uuid(String player_one_online_uuid) {
+    public void setPlayerOneOnlineUUID(String playerOneOnlineUUID) {
 
-        this.player_one_online_uuid = player_one_online_uuid;
+        this.playerOneOnlineUUID = playerOneOnlineUUID;
     }
 
 
@@ -236,15 +235,15 @@ public class Game implements Parcelable {
     }
 
 
-    public void setPlayer_two_id(long player_two_id) {
+    public void setPlayerTwoId(String playerTwoId) {
 
-        this.player_two_id = player_two_id;
+        this.playerTwoId = playerTwoId;
     }
 
 
-    public void setPlayer_two_online_uuid(String player_two_online_uuid) {
+    public void setPlayerTwoOnlineUUID(String playerTwoOnlineUUID) {
 
-        this.player_two_online_uuid = player_two_online_uuid;
+        this.playerTwoOnlineUUID = playerTwoOnlineUUID;
     }
 
 
@@ -315,15 +314,15 @@ public class Game implements Parcelable {
         game.setTournament_id(cursor.getInt(2));
         game.setTournament_round(cursor.getInt(3));
 
-        game.setPlayer_one_id(cursor.getInt(4));
-        game.setPlayer_one_online_uuid(cursor.getString(5));
+        game.setPlayerOneId(cursor.getString(4));
+        game.setPlayerOneOnlineUUID(cursor.getString(5));
 
         game.setPlayer_one_score(cursor.getInt(6));
         game.setPlayer_one_control_points(cursor.getInt(7));
         game.setPlayer_one_victory_points(cursor.getInt(8));
 
-        game.setPlayer_two_id(cursor.getInt(9));
-        game.setPlayer_two_online_uuid(cursor.getString(10));
+        game.setPlayerTwoId(cursor.getString(9));
+        game.setPlayerTwoOnlineUUID(cursor.getString(10));
 
         game.setPlayer_two_score(cursor.getInt(11));
         game.setPlayer_two_control_points(cursor.getInt(12));
@@ -377,14 +376,14 @@ public class Game implements Parcelable {
         dest.writeString(online_uuid);
         dest.writeLong(tournament_id);
         dest.writeInt(tournament_round);
-        dest.writeLong(player_one_id);
-        dest.writeString(player_one_online_uuid);
+        dest.writeString(playerOneId);
+        dest.writeString(playerOneOnlineUUID);
         dest.writeParcelable(player1, flags);
         dest.writeInt(player_one_score);
         dest.writeInt(player_one_control_points);
         dest.writeInt(player_one_victory_points);
-        dest.writeLong(player_two_id);
-        dest.writeString(player_two_online_uuid);
+        dest.writeString(playerTwoId);
+        dest.writeString(playerTwoOnlineUUID);
         dest.writeParcelable(player2, flags);
         dest.writeInt(player_two_score);
         dest.writeInt(player_two_control_points);
@@ -404,14 +403,14 @@ public class Game implements Parcelable {
             + ", tournament_id=" + tournament_id
             + ", tournament_round=" + tournament_round
             + ", playing_field=" + playing_field
-            + ", player_one_id=" + player_one_id
-            + ", player_one_online_uuid='" + player_one_online_uuid + '\''
+            + ", playerOneId=" + playerOneId
+            + ", playerOneOnlineUUID='" + playerOneOnlineUUID + '\''
             + ", player1=" + player1
             + ", player_one_score=" + player_one_score
             + ", player_one_control_points=" + player_one_control_points
             + ", player_one_victory_points=" + player_one_victory_points
-            + ", player_two_id=" + player_two_id
-            + ", player_two_online_uuid='" + player_two_online_uuid + '\''
+            + ", playerTwoId=" + playerTwoId
+            + ", playerTwoOnlineUUID='" + playerTwoOnlineUUID + '\''
             + ", player2=" + player2
             + ", player_two_score=" + player_two_score
             + ", player_two_control_points=" + player_two_control_points
@@ -424,10 +423,10 @@ public class Game implements Parcelable {
     @Exclude
     public String getRealPlayerOneId() {
 
-        if (player_one_online_uuid != null) {
-            return player_one_online_uuid;
+        if (playerOneOnlineUUID != null) {
+            return playerOneOnlineUUID;
         } else {
-            return String.valueOf(player_one_id);
+            return String.valueOf(playerOneId);
         }
     }
 
@@ -435,10 +434,10 @@ public class Game implements Parcelable {
     @Exclude
     public String getRealPlayerTwoId() {
 
-        if (player_two_online_uuid != null) {
-            return player_two_online_uuid;
+        if (playerTwoOnlineUUID != null) {
+            return playerTwoOnlineUUID;
         } else {
-            return String.valueOf(player_two_id);
+            return String.valueOf(playerTwoId);
         }
     }
 

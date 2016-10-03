@@ -8,7 +8,6 @@ import android.content.DialogInterface;
 import android.graphics.Typeface;
 
 import android.os.Bundle;
-import android.os.Parcelable;
 
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
@@ -42,13 +41,11 @@ import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.domain.TournamentTyp;
-import madson.org.opentournament.tasks.LoadTournamentTeamTask;
 import madson.org.opentournament.utility.BaseActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
 
 
 /**
@@ -334,8 +331,8 @@ public class RegisterTournamentPlayerDialog extends DialogFragment {
 
                         if (validateForm(firstname, nickname, lastname, teamname)) {
                             TournamentPlayer tournamentPlayer = new TournamentPlayer();
-                            tournamentPlayer.setOnline_uuid(player.getOnlineUUID());
-                            tournamentPlayer.setPlayer_online_uuid(player.getOnlineUUID());
+                            tournamentPlayer.setPlayerOnlineUUID(player.getOnlineUUID());
+
                             tournamentPlayer.setFirstname(firstname);
                             tournamentPlayer.setNickname(nickname);
                             tournamentPlayer.setLastname(lastname);

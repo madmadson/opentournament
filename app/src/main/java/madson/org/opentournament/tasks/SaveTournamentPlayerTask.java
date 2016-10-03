@@ -62,6 +62,22 @@ public class SaveTournamentPlayerTask extends AsyncTask<Void, Void, Void> {
 
         TournamentService tournamentService = baseActivity.getBaseApplication().getTournamentService();
 
+        tournamentPlayer = new TournamentPlayer();
+
+        tournamentPlayer.setPlayerOnlineUUID(player.getOnlineUUID());
+
+        tournamentPlayer.setFirstname(firstname);
+        tournamentPlayer.setNickname(nickname);
+        tournamentPlayer.setLastname(lastname);
+
+        tournamentPlayer.setTournamentId(tournament.get_id());
+        tournamentPlayer.setFaction(faction);
+
+        // set only team is no team
+        if (!teamname.equals(baseActivity.getString(R.string.no_team))) {
+            tournamentPlayer.setTeamname(teamname);
+        }
+
         if (player == null) {
             Log.i(this.getClass().getName(), "add new local player.");
 
@@ -72,17 +88,7 @@ public class SaveTournamentPlayerTask extends AsyncTask<Void, Void, Void> {
 
             PlayerService playerService = baseActivity.getBaseApplication().getPlayerService();
             Player newLocalPlayerWithId = playerService.createLocalPlayer(newLocalPlayer);
-
-            tournamentPlayer = new TournamentPlayer(newLocalPlayerWithId, tournament);
-        } else {
-            tournamentPlayer = new TournamentPlayer(player, tournament);
-        }
-
-        tournamentPlayer.setFaction(faction);
-
-        // set only team is no team
-        if (!teamname.equals(baseActivity.getString(R.string.no_team))) {
-            tournamentPlayer.setTeamname(teamname);
+            tournamentPlayer.setPlayerId(String.valueOf(newLocalPlayerWithId.get_id()));
         }
 
         tournamentPlayerService.addTournamentPlayerToTournament(tournamentPlayer, tournament);

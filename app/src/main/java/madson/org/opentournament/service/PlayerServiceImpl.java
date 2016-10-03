@@ -90,13 +90,13 @@ public class PlayerServiceImpl implements PlayerService {
 
 
     @Override
-    public Player getPlayerForId(Long playerId) {
+    public Player getPlayerForId(String playerId) {
 
         Player player = null;
         SQLiteDatabase readableDatabase = openTournamentDBHelper.getReadableDatabase();
 
         Cursor cursor = readableDatabase.query(PlayerTable.TABLE_PLAYER, allColumns, "_id  = ?",
-                new String[] { Long.toString(playerId) }, null, null, null, null);
+                new String[] { playerId }, null, null, null, null);
 
         if (cursor.moveToFirst()) {
             player = cursorToPlayer(cursor);
@@ -142,7 +142,7 @@ public class PlayerServiceImpl implements PlayerService {
         String filterString = "";
 
         for (TournamentPlayer player : listOfPlayers) {
-            String playerId = String.valueOf(player.getPlayer_id()) + ",";
+            String playerId = String.valueOf(player.getPlayerId()) + ",";
 
             filterString += playerId;
         }

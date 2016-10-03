@@ -52,6 +52,8 @@ public class OnlineTournamentActivity extends BaseActivity {
     private String tournament_game_or_sport_typ;
     private String tournament_uuid;
     private ActionBar supportActionBar;
+    private DatabaseReference loadReferenceTournament;
+    private ValueEventListener onlineTournamentListener;
 
     @Override
     public boolean useTabLayout() {
@@ -111,11 +113,20 @@ public class OnlineTournamentActivity extends BaseActivity {
     }
 
 
+    @Override
+    protected void onDestroy() {
+
+        super.onDestroy();
+
+        loadReferenceTournament.removeEventListener(onlineTournamentListener);
+    }
+
+
     private void loadOnlineTournament() {
 
         mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
 
-        final ValueEventListener tournamentListener = new ValueEventListener() {
+        onlineTournamentListener = new ValueEventListener() {
 
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -128,7 +139,10 @@ public class OnlineTournamentActivity extends BaseActivity {
                 }
 
                 mSectionsPagerAdapter.setTournament(tournament);
-                mViewPager.setAdapter(mSectionsPagerAdapter);
+
+                if (mViewPager != null) {
+                    mViewPager.setAdapter(mSectionsPagerAdapter);
+                }
             }
 
 
@@ -139,10 +153,10 @@ public class OnlineTournamentActivity extends BaseActivity {
             }
         };
 
-        DatabaseReference child = mFirebaseDatabaseReference.child(FirebaseReferences.TOURNAMENTS + "/"
+        loadReferenceTournament = mFirebaseDatabaseReference.child(FirebaseReferences.TOURNAMENTS + "/"
                 + tournament_game_or_sport_typ + "/" + tournament_uuid);
 
-        child.addValueEventListener(tournamentListener);
+        loadReferenceTournament.addValueEventListener(onlineTournamentListener);
     }
 
     private class SectionsPagerAdapter extends FragmentPagerAdapter {

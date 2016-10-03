@@ -43,7 +43,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/tournament_player_fullname"
+                android:layout_marginLeft="@dimen/main_tick"
+                android:visibility="gone"/>
+
+            <TextView
+                android:id="@+id/tournament_player_row_faction"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tournament_player_teamname"
                 android:layout_marginLeft="@dimen/main_tick" />
+            
         </RelativeLayout>
 
         <LinearLayout
@@ -52,14 +61,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:paddingRight="@dimen/main_tick">
-
-            <TextView
-                android:id="@+id/tournament_player_row_faction"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="@dimen/main_tick" />
             
-
             <ImageView
                 android:id="@+id/tournament_player_row_add_List"
                 android:layout_width="wrap_content"

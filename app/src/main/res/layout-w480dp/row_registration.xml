@@ -43,24 +43,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/tournament_player_fullname"
-                android:layout_marginLeft="@dimen/main_tick" 
-                android:visibility="gone"/>
-
-            <TextView
-                android:id="@+id/tournament_player_row_faction"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/tournament_player_teamname"
                 android:layout_marginLeft="@dimen/main_tick" />
-
-            <TextView
-                android:id="@+id/dropped_in_round"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/tournament_player_teamname"
-                android:layout_marginLeft="@dimen/main_tick"
-                android:textColor="@color/colorDanger"
-                android:visibility="gone" />
         </RelativeLayout>
 
         <LinearLayout
@@ -70,27 +53,20 @@
             android:layout_centerVertical="true"
             android:paddingRight="@dimen/main_tick">
 
-            <ImageView
-                android:id="@+id/tournament_player_row_local_icon"
+            <TextView
+                android:id="@+id/tournament_player_row_faction"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingRight="@dimen/small_tick"
-                android:src="@drawable/ic_cloud_off_black_24dp"
-                android:visibility="gone" />
-
-            <ImageView
-                android:id="@+id/tournament_player_row_edit_icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingRight="@dimen/small_tick"
-                android:src="@drawable/ic_build_black_24dp" />
+                android:layout_marginRight="@dimen/main_tick" />
+            
 
             <ImageView
                 android:id="@+id/tournament_player_row_add_List"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingRight="@dimen/small_tick"
-                android:src="@drawable/ic_insert_drive_file_black_24dp" />
+                android:src="@drawable/ic_insert_drive_file_black_24dp"
+                android:visibility="gone"/>
         </LinearLayout>
     </RelativeLayout>
 </android.support.v7.widget.CardView>

@@ -113,13 +113,17 @@ public class OnlinePlayerListAdapter extends RecyclerView.Adapter<PlayerViewHold
 
     public void removePlayerDueToRegistration(TournamentPlayer tournamentPlayer) {
 
-        for (Player player : originalPlayerList) {
-            if (player.getOnlineUUID().equals(tournamentPlayer.getOnline_uuid())) {
-                int position = originalPlayerList.indexOf(player);
+        int position = -1;
 
-                originalPlayerList.remove(position);
-                notifyDataSetChanged();
+        for (Player player : originalPlayerList) {
+            if (player.getOnlineUUID().equals(tournamentPlayer.getPlayerOnlineUUID())) {
+                position = originalPlayerList.indexOf(player);
             }
+        }
+
+        if (position != -1) {
+            originalPlayerList.remove(position);
+            notifyDataSetChanged();
         }
     }
 

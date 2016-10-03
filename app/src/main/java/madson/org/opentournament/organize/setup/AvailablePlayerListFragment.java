@@ -37,7 +37,6 @@ import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.service.PlayerService;
 import madson.org.opentournament.service.TournamentPlayerService;
-import madson.org.opentournament.tasks.RemoveTournamentPlayerFromTournamentTask;
 import madson.org.opentournament.utility.BaseActivity;
 import madson.org.opentournament.utility.BaseFragment;
 
@@ -221,9 +220,9 @@ public class AvailablePlayerListFragment extends BaseFragment {
 
         Log.i(this.getClass().getName(), " player removed from tournament player list: " + tournamentPlayer);
 
-        if (tournamentPlayer.getPlayer_online_uuid() == null) {
+        if (tournamentPlayer.getPlayerOnlineUUID() == null) {
             final Player player = getBaseApplication().getPlayerService()
-                    .getPlayerForId(tournamentPlayer.getPlayer_id());
+                    .getPlayerForId(tournamentPlayer.getPlayerId());
 
             localPlayerListAdapter.add(player);
             localPlayerListAdapter.getFilter()
@@ -241,7 +240,7 @@ public class AvailablePlayerListFragment extends BaseFragment {
                     });
         } else {
             Player player = Player.fromTournamentPlayer(tournamentPlayer);
-            player.setOnlineUUID(tournamentPlayer.getPlayer_online_uuid());
+            player.setOnlineUUID(tournamentPlayer.getPlayerOnlineUUID());
             onlinePlayerListAdapter.addPlayer(player);
             onlinePlayerListAdapter.getFilter()
                 .filter(filterPlayerTextView.getText().toString(), new Filter.FilterListener() {

@@ -14,7 +14,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 
 import android.widget.FrameLayout;
 
@@ -65,7 +64,14 @@ public class RegisterTournamentPlayerListAdapter extends RecyclerView.Adapter<To
 
         viewHolder.setPlayer(player);
         viewHolder.getPlayerNumber().setText(String.valueOf(position + 1));
-        viewHolder.getTeamName().setText(player.getTeamname());
+
+        if (player.getTeamname() != null) {
+            viewHolder.getTeamName().setText(player.getTeamname());
+            viewHolder.getTeamName().setVisibility(View.VISIBLE);
+        } else {
+            viewHolder.getTeamName().setVisibility(View.GONE);
+        }
+
         viewHolder.getFaction().setText(player.getFaction());
 
         String firstname = player.getFirstname();
@@ -82,7 +88,7 @@ public class RegisterTournamentPlayerListAdapter extends RecyclerView.Adapter<To
 
         if (baseActivity.getBaseApplication().getAuthenticatedPlayer() != null
                 && baseActivity.getBaseApplication().getAuthenticatedPlayer().getOnlineUUID()
-                .equals(player.getOnline_uuid())) {
+                .equals(player.getPlayerOnlineUUID())) {
             viewHolder.getEditIcon().setOnClickListener(new View.OnClickListener() {
 
                     @Override
@@ -111,7 +117,7 @@ public class RegisterTournamentPlayerListAdapter extends RecyclerView.Adapter<To
 
                         Log.i(this.getClass().getName(), "addList");
 
-                        AddListDialog dialog = new AddListDialog();
+                        AddRegistrationListDialog dialog = new AddRegistrationListDialog();
 
                         Bundle bundle = new Bundle();
                         bundle.putParcelable(RegisterTournamentPlayerDialog.BUNDLE_TOURNAMENT, tournament);
@@ -188,7 +194,7 @@ public class RegisterTournamentPlayerListAdapter extends RecyclerView.Adapter<To
     public boolean playerNotRegistered(Player authenticatedPlayer) {
 
         for (TournamentPlayer player : playerList) {
-            if (player.getOnline_uuid().equals(authenticatedPlayer.getOnlineUUID())) {
+            if (player.getPlayerOnlineUUID().equals(authenticatedPlayer.getOnlineUUID())) {
                 return false;
             }
         }

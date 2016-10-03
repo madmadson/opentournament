@@ -33,6 +33,8 @@ import madson.org.opentournament.db.GameTable;
 import madson.org.opentournament.domain.Game;
 import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.organize.GameListAdapter;
+import madson.org.opentournament.utility.BaseActivity;
+import madson.org.opentournament.utility.BaseApplication;
 import madson.org.opentournament.viewHolder.GameViewHolder;
 import madson.org.opentournament.viewHolder.TournamentPlayerViewHolder;
 
@@ -52,6 +54,8 @@ public class OnlineGamesListFragment extends Fragment {
     private String tournament_uuid;
     private int round;
     private ProgressBar mProgressBar;
+    private RecyclerView recyclerView;
+    private BaseApplication baseApplication;
 
     public static Fragment newInstance(int round, String tournament_uuid) {
 
@@ -82,7 +86,7 @@ public class OnlineGamesListFragment extends Fragment {
 
         mProgressBar = (ProgressBar) view.findViewById(R.id.progressBar);
 
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.games_list_recycler_view);
+        recyclerView = (RecyclerView) view.findViewById(R.id.games_list_recycler_view);
         recyclerView.setHasFixedSize(true);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
@@ -95,7 +99,9 @@ public class OnlineGamesListFragment extends Fragment {
 
         Query orderedGames = child.orderByChild(GameTable.COLUMN_PLAYING_FIELD);
 
-        final OnlineGamesListAdapter gamesListAdapter = new OnlineGamesListAdapter(getActivity());
+        baseApplication = ((BaseActivity) getActivity()).getBaseApplication();
+
+        final OnlineGamesListAdapter gamesListAdapter = new OnlineGamesListAdapter(baseApplication);
 
         orderedGames.addValueEventListener(new ValueEventListener() {
 
@@ -107,6 +113,7 @@ public class OnlineGamesListFragment extends Fragment {
 
                         if (game != null) {
                             mProgressBar.setVisibility(View.GONE);
+
                             gamesListAdapter.addGame(game);
                         }
                     }
@@ -132,6 +139,24 @@ public class OnlineGamesListFragment extends Fragment {
                     }
                 }
             }, 5000);
+
+        Handler handler2 = new Handler();
+
+        handler2.postDelayed(new Runnable() {
+
+                @Override
+                public void run() {
+
+                    if (baseApplication.getAuthenticatedPlayer() != null) {
+                        int indexOfPlayer = gamesListAdapter.getIndexOfPlayer(
+                                baseApplication.getAuthenticatedPlayer().getOnlineUUID());
+
+                        if (indexOfPlayer != -1) {
+                            recyclerView.scrollToPosition(indexOfPlayer);
+                        }
+                    }
+                }
+            }, 1000);
 
         return view;
     }

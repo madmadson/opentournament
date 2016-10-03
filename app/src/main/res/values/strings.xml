@@ -268,5 +268,7 @@
     <string name="success_upload_list">Successfuly uploaded list</string>
     <string name="realy_add_player">Realy add player to Tournament?</string>
     <string name="player_already_is_in_tournament">Player is already in Tournament</string>
+    <string name="show_army_lists">Army Lists</string>
+    <string name="cant_upload_list_for_local_players">You cannot upload army lists for local players</string>
 
 </resources>

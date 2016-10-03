@@ -1,4 +1,4 @@
-package madson.org.opentournament.online;
+package madson.org.opentournament.organize.setup;
 
 import android.app.Dialog;
 
@@ -25,6 +25,7 @@ import madson.org.opentournament.db.FirebaseReferences;
 import madson.org.opentournament.domain.ArmyList;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
+import madson.org.opentournament.online.ArmyListExpandableListAdapter;
 import madson.org.opentournament.utility.BaseActivity;
 
 import java.util.ArrayList;
@@ -38,7 +39,7 @@ import java.util.Map;
  *
  * @author  Tobias Matt - tmatt@contargo.net
  */
-public class AddListDialog extends DialogFragment {
+public class ShowRegistrationArmyListDialog extends DialogFragment {
 
     public static final String BUNDLE_TOURNAMENT = "tournament";
     public static final String BUNDLE_TOURNAMENT_PLAYER = "tournament_player";
@@ -50,7 +51,7 @@ public class AddListDialog extends DialogFragment {
     private ExpandableListView exListView;
     private List<String> listDataHeader;
     private Map<String, ArmyList> listDataChild;
-    private ImageButton imageButton;
+
     private ArmyListExpandableListAdapter listAdapter;
 
     @Override
@@ -65,8 +66,8 @@ public class AddListDialog extends DialogFragment {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.dialog_upload_army_lists, null);
-        String title = getString(R.string.upload_lists);
+        View dialogView = inflater.inflate(R.layout.dialog_show_army_lists, null);
+        String title = getString(R.string.show_army_lists);
 
         builder.setView(dialogView).setTitle(title).setPositiveButton(R.string.dialog_confirm, null);
 
@@ -78,27 +79,12 @@ public class AddListDialog extends DialogFragment {
 
         listDataChild = new HashMap<>();
 
-        imageButton = (ImageButton) dialogView.findViewById(R.id.add_list_button);
-
-        imageButton.setOnClickListener(new View.OnClickListener() {
-
-                @Override
-                public void onClick(View v) {
-
-                    listDataHeader.add("List " + (listAdapter.getGroupCount() + 1));
-                    listDataChild.put(listDataHeader.get(listAdapter.getGroupCount() - 1), new ArmyList());
-                    listAdapter.notifyDataSetChanged();
-
-                    imageButton.setVisibility(View.GONE);
-                }
-            });
-
         listAdapter = new ArmyListExpandableListAdapter((BaseActivity) getActivity(), listDataHeader, listDataChild,
-                tournament, tournamentPlayer, imageButton);
+                tournament, tournamentPlayer, null);
 
         DatabaseReference reference = FirebaseDatabase.getInstance()
-                .getReference(FirebaseReferences.TOURNAMENT_REGISTRATIONS + "/" + tournament.getOnlineUUID() + "/"
-                    + tournamentPlayer.getOnline_uuid() + "/tournamentPlayerLists");
+                .getReference(FirebaseReferences.TOURNAMENT_ARMY_LISTS + "/" + tournament.getOnlineUUID() + "/"
+                    + tournamentPlayer.getPlayerOnlineUUID());
 
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
 

@@ -19,7 +19,7 @@ public class TournamentRanking {
     private long tournament_id;
     private int tournament_round;
 
-    private long player_id;
+    private String playerId;
     private String player_online_uuid;
 
     private TournamentPlayer tournamentPlayer;
@@ -49,7 +49,7 @@ public class TournamentRanking {
         if (player_online_uuid != null) {
             return player_online_uuid;
         } else {
-            return String.valueOf(player_id);
+            return String.valueOf(playerId);
         }
     }
 
@@ -99,15 +99,15 @@ public class TournamentRanking {
 
 
     @Exclude
-    public long getPlayer_id() {
+    public String getPlayerId() {
 
-        return player_id;
+        return playerId;
     }
 
 
-    public void setPlayer_id(long player_id) {
+    public void setPlayerId(String playerId) {
 
-        this.player_id = player_id;
+        this.playerId = playerId;
     }
 
 
@@ -192,7 +192,7 @@ public class TournamentRanking {
             + ", online_uuid='" + online_uuid + '\''
             + ", tournament_id=" + tournament_id
             + ", tournament_round=" + tournament_round
-            + ", player_id=" + player_id
+            + ", playerId=" + playerId
             + ", player_online_uuid='" + player_online_uuid + '\''
             + ", score=" + score
             + ", sos=" + sos

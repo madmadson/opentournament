@@ -6,9 +6,7 @@ import android.os.Parcelable;
 import com.google.firebase.database.Exclude;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 
 /**
@@ -35,12 +33,10 @@ public class TournamentPlayer implements Parcelable {
     };
 
     private long _id;
-    private String online_uuid;
+    private String playerOnlineUUID;
+    private String playerId;
 
-    private long tournament_id;
-    private String tournament_online_uid;
-    private long player_id;
-    private String player_online_uuid;
+    private long tournamentId;
 
     // used for shortcut not always go for names
     private String firstname;
@@ -57,36 +53,15 @@ public class TournamentPlayer implements Parcelable {
 
     private List<String> opponentsPlayerIds = new ArrayList<>();
 
-    private boolean tournamentPlayerListsUploaded;
-
     public TournamentPlayer() {
-    }
-
-
-    /**
-     * constructor to enable player to tournament mapping.
-     *
-     * @param  player
-     * @param  tournament
-     */
-    public TournamentPlayer(Player player, Tournament tournament) {
-
-        this.player_id = player.get_id();
-        this.player_online_uuid = player.getOnlineUUID();
-        this.firstname = player.getFirstname();
-        this.lastname = player.getLastname();
-        this.nickname = player.getNickname();
     }
 
 
     protected TournamentPlayer(Parcel in) {
 
         _id = in.readLong();
-        online_uuid = in.readString();
-        tournament_id = in.readLong();
-        tournament_online_uid = in.readString();
-        player_id = in.readLong();
-        player_online_uuid = in.readString();
+        playerId = in.readString();
+        playerOnlineUUID = in.readString();
         firstname = in.readString();
         nickname = in.readString();
         lastname = in.readString();
@@ -109,35 +84,27 @@ public class TournamentPlayer implements Parcelable {
     }
 
 
-    @Exclude
-    public long getTournament_id() {
-
-        return tournament_id;
-    }
-
-
-    public void setTournament_id(long tournament_id) {
-
-        this.tournament_id = tournament_id;
-    }
-
-
-    @Exclude
-    public long getPlayer_id() {
-
-        return player_id;
-    }
-
-
-    public void setPlayer_id(long player_id) {
-
-        this.player_id = player_id;
-    }
-
-
     public String getFirstname() {
 
         return firstname;
+    }
+
+
+    public long getTournamentId() {
+
+        return tournamentId;
+    }
+
+
+    public void setTournamentId(long tournamentId) {
+
+        this.tournamentId = tournamentId;
+    }
+
+
+    public void setPlayerId(String playerId) {
+
+        this.playerId = playerId;
     }
 
 
@@ -207,40 +174,15 @@ public class TournamentPlayer implements Parcelable {
     }
 
 
-    public String getOnline_uuid() {
+    public String getPlayerOnlineUUID() {
 
-        return online_uuid;
+        return playerOnlineUUID;
     }
 
 
-    public void setOnline_uuid(String online_uuid) {
+    public void setPlayerOnlineUUID(String playerOnlineUUID) {
 
-        this.online_uuid = online_uuid;
-    }
-
-
-    @Exclude
-    public String getTournament_online_uid() {
-
-        return tournament_online_uid;
-    }
-
-
-    public void setTournament_online_uid(String tournament_online_uid) {
-
-        this.tournament_online_uid = tournament_online_uid;
-    }
-
-
-    public String getPlayer_online_uuid() {
-
-        return player_online_uuid;
-    }
-
-
-    public void setPlayer_online_uuid(String player_online_uuid) {
-
-        this.player_online_uuid = player_online_uuid;
+        this.playerOnlineUUID = playerOnlineUUID;
     }
 
 
@@ -268,13 +210,19 @@ public class TournamentPlayer implements Parcelable {
     }
 
 
+    public String getPlayerId() {
+
+        return playerId;
+    }
+
+
     @Exclude
     public String getRealPlayerId() {
 
-        if (player_online_uuid != null) {
-            return player_online_uuid;
+        if (playerOnlineUUID != null) {
+            return playerOnlineUUID;
         } else {
-            return String.valueOf(player_id);
+            return String.valueOf(playerId);
         }
     }
 
@@ -290,15 +238,15 @@ public class TournamentPlayer implements Parcelable {
 
         TournamentPlayer that = (TournamentPlayer) o;
 
-        return player_online_uuid != null ? player_online_uuid.equals(that.player_online_uuid)
-                                          : that.player_online_uuid == null;
+        return playerOnlineUUID != null ? playerOnlineUUID.equals(that.playerOnlineUUID)
+                                        : that.playerOnlineUUID == null;
     }
 
 
     @Override
     public int hashCode() {
 
-        return player_online_uuid != null ? player_online_uuid.hashCode() : 0;
+        return playerOnlineUUID != null ? playerOnlineUUID.hashCode() : 0;
     }
 
 
@@ -307,11 +255,7 @@ public class TournamentPlayer implements Parcelable {
 
         return "TournamentPlayer{"
             + "_id=" + _id
-            + ", online_uuid='" + online_uuid + '\''
-            + ", tournament_id=" + tournament_id
-            + ", tournament_online_uid='" + tournament_online_uid + '\''
-            + ", player_id=" + player_id
-            + ", player_online_uuid='" + player_online_uuid + '\''
+            + ", playerOnlineUUID='" + playerOnlineUUID + '\''
             + ", firstname='" + firstname + '\''
             + ", nickname='" + nickname + '\''
             + ", lastname='" + lastname + '\''
@@ -335,11 +279,8 @@ public class TournamentPlayer implements Parcelable {
     public void writeToParcel(Parcel parcel, int i) {
 
         parcel.writeLong(_id);
-        parcel.writeString(online_uuid);
-        parcel.writeLong(tournament_id);
-        parcel.writeString(tournament_online_uid);
-        parcel.writeLong(player_id);
-        parcel.writeString(player_online_uuid);
+        parcel.writeString(playerOnlineUUID);
+        parcel.writeString(playerId);
         parcel.writeString(firstname);
         parcel.writeString(nickname);
         parcel.writeString(lastname);
@@ -354,17 +295,5 @@ public class TournamentPlayer implements Parcelable {
     public List<String> getListOfOpponentsIds() {
 
         return opponentsPlayerIds;
-    }
-
-
-    public boolean isTournamentPlayerListsUploaded() {
-
-        return tournamentPlayerListsUploaded;
-    }
-
-
-    public void setTournamentPlayerListsUploaded(boolean tournamentPlayerListsUploaded) {
-
-        this.tournamentPlayerListsUploaded = tournamentPlayerListsUploaded;
     }
 }

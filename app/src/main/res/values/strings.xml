@@ -64,12 +64,12 @@
         You cannot upload tournaments anonymously.\n
         Please register or sign in with google or facebook.
     </string>
-    <string name="no_online_tournaments_found">No online tournaments found</string>
+    <string name="no_online_tournaments_found">No online Tournaments found</string>
 
     <!--dialog -->
-    <string name="dialog_save">save</string>
-    <string name="dialog_cancel">cancel</string>
-    <string name="dialog_confirm">confirm</string>
+    <string name="dialog_save">Save</string>
+    <string name="dialog_cancel">Cancel</string>
+    <string name="dialog_confirm">Confirm</string>
 
     
     <!-- Tournament management dialog-->
@@ -86,9 +86,9 @@
     <string name="nav_tournament_final">Final Results</string>
     <string name="search_player">Filter available players</string>
 
-    <string name="label_firstname">firstname</string>
-    <string name="label_nickname">nickname</string>
-    <string name="label_lastname">lastname</string>
+    <string name="label_firstname">Firstname</string>
+    <string name="label_nickname">Nickname</string>
+    <string name="label_lastname">Lastname</string>
     
     
     <!-- New Player For Tournament dialog-->
@@ -105,24 +105,24 @@
     
     <string name="heading_tournament_player">Player in %2$s tournament: (%1$d)</string>
     
-    <string name="game_divider">vs</string>
+    <string name="game_divider">VS</string>
     <string name="heading_online_players">Players from online database</string>
     <string name="heading_local_players">Players from local database (only visible for you)</string>
-    <string name="label_faction">faction</string>
-    <string name="label_teamname">teamname</string>
-    <string name="label_add_teamname">add new teamname</string>
+    <string name="label_faction">Faction</string>
+    <string name="label_teamname">Teamname</string>
+    <string name="label_add_teamname">Add new Teamname</string>
     <string name="team_name">Team:</string>
-    <string name="faction">Faction:</string>
+    <string name="faction">Faction: </string>
     <string name="no_team">no team</string>
-    <string name="add_new_team">Add new team name</string>
+    <string name="add_new_team">Add new Teamname</string>
 
 
     <!-- Pairing table -->
     <string name="heading_games_for_round">Games round: %1$d</string>
-    <string name="upload_games">upload</string>
+    <string name="upload_games">Upload</string>
     
     <!-- confirm game dialog -->
-    <string name="confirm">confirm</string>
+    <string name="confirm">Confirm</string>
     <string name="confirm_pairing_title">Pairing round: %1$d</string>
     <string name="confirm_pair_round_again_title">Pair round %1$d again</string>
 
@@ -137,7 +137,7 @@
     <string name="heading_ranking_for_round">Ranking round: %1$d</string>
 
     <string name="title_tournament_management">Tournament Management</string>
-    <string name="sign_in">Sign in</string>
+    <string name="sign_in">Sign In</string>
     <string name="sign_out">Sign Out</string>
     <string name="user_name">anonymous</string>
 
@@ -153,7 +153,7 @@
     
     <string name="header_tournament_location">Location</string>
     <string name="header_tournament_date">Date</string>
-    <string name="heading_tournmant_players">Tournament players</string>
+    <string name="heading_tournmant_players">Tournament Players</string>
     <string name="tournament_online">online</string>
     <string name="header_ranking_number">#</string>
     <string name="header_ranking_player">player</string>
@@ -171,19 +171,19 @@
     
     <string name="toast_sign_in_anonymously">Sign in anonymously</string>
     <string name="toast_no_connection">No connection to internet possible. You can\'t use OpenTournament online data or upload functionality. Offline Tournament organisation is possible</string>
-    <string name="toast_sign_out_no_connection">you cant sign out when no internet</string>
+    <string name="toast_sign_out_no_connection">you can\'t sign out when no internet</string>
      <string name="delete_tournament">Delete Tournament</string>
     <string name="dialof_confirm_draw">Sure draw?</string>
-    <string name="dialog_confirm_convert_to_online_tournament">Please confirm convertions to online tournament</string>
-    <string name="success_convert_to_online_tournament">successfully convert local tournament to online</string>
+ 
+    <string name="success_convert_to_online_tournament">successfully convert local Tournament to online</string>
     <string name="nav_setup_tab">Tournament Players</string>
-    <string name="label_fullname">fullname</string>
+    <string name="label_fullname">Fullname</string>
     <string name="success_tournament_player_is_online">Tournament saved online</string>
 
     <!-- offline stuff -->
     <string name="offline_text">you are offline - cannot upload data</string>
     <string name="offline_player_text">you are offline - cannot load online players</string>
-   <string name="no_tournament_players">No tournament players found</string>
+    <string name="no_tournament_players">No Tournament Players found</string>
 
     <string name="confirm_remove_tournament_player">Sure remove player from tournament?</string>
 
@@ -191,7 +191,7 @@
     <string name="header_organised_tournament_action">action</string>
     <string name="no_available_online_players_for_tournament">No online players found (check filter)</string>
     <string name="no_available_players_for_tournament">No local players found (check filter)</string>
-    <string name="pair_again">pair again</string>
+    <string name="pair_again">Pair again</string>
     <string name="next_round">Next Round</string>
  
     <!--Caution dynamic generated keys of pairing options -->
@@ -248,28 +248,30 @@
     <string name="success_upload_player_data">Successfully upload player data</string>
     <string name="title_organized_tournaments">Organized Tournaments</string>
     <string name="title_online_tournaments">Online Tournaments</string>
-    <string name="cant_start_tournament_without_players">Cant start tournament without players</string>
+    <string name="cant_start_tournament_without_players">Can\'t start tournament without players</string>
     <string name="register_for_tournament">Register For Tournament</string>
     <string name="label_teamsize">Teamsize</string>
     <string name="validation_error_no_team">\'no team\' is no possible team name</string>
     <string name="validation_team_no_team">You must choose a team in a team tournament</string>
     <string name="edit_tournament_player">Edit Tournament Player</string>
-    <string name="success_player_updated">Successfuly update player</string>
+    <string name="success_player_updated">Successfully update player</string>
     <string name="regsiter_for_tournament">Register For Tournament</string>
     <string name="cannot_register_without_player_profile">You cannot register without player account</string>
     <string name="nav_registration_tab">Registration</string>
     <string name="you_are_already_registered">You are already registered for Tournament</string>
-    <string name="success_registration">Successfuly registered for Tournament</string>
+    <string name="success_registration">Successfully registered for Tournament</string>
     <string name="no_registration_found">No Registrations found for Tournament</string>
     <string name="upload_lists">Upload Army Lists</string>
     <string name="list">List (copy &amp; paste from warroom or troop creator)</string>
     <string name="name_of_list">Name of List</string>
     <string name="upload_list">Upload List</string>
-    <string name="success_upload_list">Successfuly uploaded list</string>
-    <string name="realy_add_player">Realy add player to Tournament?</string>
+    <string name="success_upload_list">Successfully uploaded list</string>
+    <string name="realy_add_player">Really add player to Tournament?</string>
     <string name="player_already_is_in_tournament">Player is already in Tournament</string>
     <string name="show_army_lists">Army Lists</string>
     <string name="cant_upload_list_for_local_players">You cannot upload army lists for local players</string>
     <string name="app_description">OpenTournament description</string>
+    
+    <string name="success_remove_player">Successfully remove Player</string>
 
 </resources>

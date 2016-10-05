@@ -77,6 +77,7 @@
             android:paddingLeft="@dimen/halve_tick"
             android:paddingTop="@dimen/halve_tick"
             android:paddingBottom="@dimen/halve_tick"
+            android:textStyle="bold"
             android:text="@string/team_name"
             android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium" />
 
@@ -117,6 +118,7 @@
             android:id="@+id/label_faction"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textStyle="bold"
             android:paddingLeft="@dimen/halve_tick"
             android:paddingTop="@dimen/halve_tick"
             android:text="@string/faction"
@@ -126,10 +128,10 @@
             android:id="@+id/dialog_add_tournament_player_faction_spinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="70dp"
+            android:layout_marginLeft="86dp"
             android:layout_marginRight="55dp"
             android:hint="@string/label_faction"
-            android:paddingTop="@dimen/halve_tick" />
+            android:paddingTop="10dp" />
 
     </RelativeLayout>
 

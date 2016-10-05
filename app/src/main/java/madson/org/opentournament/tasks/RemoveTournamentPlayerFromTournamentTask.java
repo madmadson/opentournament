@@ -2,13 +2,17 @@ package madson.org.opentournament.tasks;
 
 import android.os.AsyncTask;
 
+import android.support.design.widget.Snackbar;
+
 import android.util.Log;
 
+import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.organize.setup.AvailablePlayerListFragment;
 import madson.org.opentournament.organize.setup.TournamentPlayerListFragment;
+import madson.org.opentournament.utility.BaseActivity;
 import madson.org.opentournament.utility.BaseApplication;
 
 
@@ -23,13 +27,13 @@ public class RemoveTournamentPlayerFromTournamentTask extends AsyncTask<Void, Vo
     private TournamentPlayer player;
     private TournamentPlayerListFragment tournamentPlayerListFragment;
     private AvailablePlayerListFragment availablePlayerListFragment;
-    private BaseApplication baseApplication;
+    private BaseActivity baseActivity;
 
-    public RemoveTournamentPlayerFromTournamentTask(BaseApplication baseApplication, Tournament tournament,
+    public RemoveTournamentPlayerFromTournamentTask(BaseActivity baseActivity, Tournament tournament,
         TournamentPlayer player, TournamentPlayerListFragment tournamentPlayerListFragment,
         AvailablePlayerListFragment availablePlayerListFragment) {
 
-        this.baseApplication = baseApplication;
+        this.baseActivity = baseActivity;
         this.tournament = tournament;
         this.player = player;
         this.tournamentPlayerListFragment = tournamentPlayerListFragment;
@@ -41,9 +45,9 @@ public class RemoveTournamentPlayerFromTournamentTask extends AsyncTask<Void, Vo
 
         Log.i(this.getClass().getName(), "remove player from tournament ");
 
-        baseApplication.getTournamentPlayerService().removePlayerFromTournament(player, tournament);
+        baseActivity.getBaseApplication().getTournamentPlayerService().removePlayerFromTournament(player, tournament);
 
-        baseApplication.getTournamentService().decreaseActualPlayerForTournament(tournament);
+        baseActivity.getBaseApplication().getTournamentService().decreaseActualPlayerForTournament(tournament);
 
         return null;
     }
@@ -58,5 +62,10 @@ public class RemoveTournamentPlayerFromTournamentTask extends AsyncTask<Void, Vo
         if (!player.isDummy() && availablePlayerListFragment != null) {
             availablePlayerListFragment.addPlayer(player);
         }
+
+        Snackbar snackbar = Snackbar.make(baseActivity.getCoordinatorLayout(), R.string.success_remove_player,
+                Snackbar.LENGTH_LONG);
+        snackbar.getView().setBackgroundColor(baseActivity.getResources().getColor(R.color.colorPositive));
+        snackbar.show();
     }
 }

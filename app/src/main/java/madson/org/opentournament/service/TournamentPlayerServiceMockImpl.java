@@ -139,6 +139,7 @@ public class TournamentPlayerServiceMockImpl implements TournamentPlayerService 
             contentValues.put(TournamentPlayerTable.COLUMN_PLAYER_ONLINE_UUID, player.getPlayerOnlineUUID());
         }
 
+        contentValues.put(TournamentPlayerTable.COLUMN_PLAYER_ID, player.getPlayerId());
         contentValues.put(TournamentPlayerTable.COLUMN_FIRSTNAME, player.getFirstname());
         contentValues.put(TournamentPlayerTable.COLUMN_NICKNAME, player.getNickname());
         contentValues.put(TournamentPlayerTable.COLUMN_LASTNAME, player.getLastname());

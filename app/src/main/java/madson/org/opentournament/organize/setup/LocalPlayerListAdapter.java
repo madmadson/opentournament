@@ -99,6 +99,7 @@ public class LocalPlayerListAdapter extends RecyclerView.Adapter<PlayerViewHolde
     public void addPlayerList(List<Player> allPlayers) {
 
         originalPlayerList = allPlayers;
+        notifyDataSetChanged();
     }
 
 

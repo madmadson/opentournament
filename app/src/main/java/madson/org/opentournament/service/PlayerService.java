@@ -38,12 +38,4 @@ public interface PlayerService {
      * @return  list with all players
      */
     List<Player> getAllLocalPlayers();
-
-
-    /**
-     * @param  listOfPlayers
-     *
-     * @return
-     */
-    List<Player> getAllLocalPlayersNotInTournament(List<TournamentPlayer> listOfPlayers);
 }

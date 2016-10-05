@@ -80,10 +80,10 @@ public class TournamentPlayerListAdapter extends RecyclerView.Adapter<Tournament
             .setText(baseActivity.getResources().getString(R.string.player_name_in_row, firstname, nickname, lastname));
 
         // mark online player
-        if (player.getPlayerOnlineUUID() != null) {
-            holder.getLocalIcon().setVisibility(View.GONE);
-        } else {
+        if (player.getPlayerOnlineUUID() == null || !player.getPlayerId().equals("0")) {
             holder.getLocalIcon().setVisibility(View.VISIBLE);
+        } else {
+            holder.getLocalIcon().setVisibility(View.GONE);
         }
 
         if (player.getDroppedInRound() != 0) {
@@ -98,7 +98,7 @@ public class TournamentPlayerListAdapter extends RecyclerView.Adapter<Tournament
             holder.getTournamentPlayerCard().setCardBackgroundColor(Color.WHITE);
         }
 
-        if (!tournament.getState().equals(Tournament.TournamentState.PLANED)) {
+        if (tournament.getState().equals(Tournament.TournamentState.PLANED.name())) {
             holder.getEditIcon().setOnClickListener(new View.OnClickListener() {
 
                     @Override
@@ -170,7 +170,7 @@ public class TournamentPlayerListAdapter extends RecyclerView.Adapter<Tournament
      */
     public void addTournamentPlayer(TournamentPlayer tournamentPlayer) {
 
-        if (!tournamentPlayerList.contains(tournamentPlayer)) {
+        if (!tournamentPlayerList.contains(tournamentPlayer) || tournamentPlayer.getPlayerOnlineUUID() == null) {
             tournamentPlayerList.add(tournamentPlayer);
             notifyDataSetChanged();
         }
@@ -215,7 +215,8 @@ public class TournamentPlayerListAdapter extends RecyclerView.Adapter<Tournament
     public boolean containsPlayer(Player player) {
 
         for (TournamentPlayer tournamentPlayer : tournamentPlayerList) {
-            if (tournamentPlayer.getPlayerOnlineUUID().equals(player.getOnlineUUID())) {
+            if (tournamentPlayer.getRealPlayerId().equals(player.getOnlineUUID())
+                    || tournamentPlayer.getPlayerId().equals(String.valueOf(player.get_id()))) {
                 return true;
             }
         }

@@ -12,6 +12,7 @@ import android.util.Log;
 import madson.org.opentournament.db.OpenTournamentDBHelper;
 import madson.org.opentournament.db.PlayerTable;
 import madson.org.opentournament.domain.Player;
+import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
 
 import java.util.ArrayList;
@@ -24,9 +25,6 @@ import java.util.List;
 public class PlayerServiceMockImpl implements PlayerService {
 
     private OpenTournamentDBHelper openTournamentDBHelper;
-    private String[] allColumns = {
-        PlayerTable.COLUMN_ID, PlayerTable.COLUMN_FIRSTNAME, PlayerTable.COLUMN_NICKNAME, PlayerTable.COLUMN_LASTNAME
-    };
 
     public PlayerServiceMockImpl(Context context) {
 
@@ -95,11 +93,12 @@ public class PlayerServiceMockImpl implements PlayerService {
         Player player = null;
         SQLiteDatabase readableDatabase = openTournamentDBHelper.getReadableDatabase();
 
-        Cursor cursor = readableDatabase.query(PlayerTable.TABLE_PLAYER, allColumns, "_id  = ?",
-                new String[] { playerId }, null, null, null, null);
+        Cursor cursor = readableDatabase.query(PlayerTable.TABLE_PLAYER, PlayerTable.ALL_COLS_FOR_PLAYER_TABLE,
+                PlayerTable.COLUMN_ID + " = ?", new String[] { playerId }, null, null, null, null);
 
         if (cursor.moveToFirst()) {
             player = cursorToPlayer(cursor);
+            cursor.moveToNext();
         }
 
         cursor.close();
@@ -112,11 +111,12 @@ public class PlayerServiceMockImpl implements PlayerService {
     @Override
     public List<Player> getAllLocalPlayers() {
 
-        ArrayList<Player> players = new ArrayList<>();
+        List<Player> players = new ArrayList<>();
 
         SQLiteDatabase readableDatabase = openTournamentDBHelper.getReadableDatabase();
 
-        Cursor cursor = readableDatabase.query(PlayerTable.TABLE_PLAYER, allColumns, null, null, null, null, null);
+        Cursor cursor = readableDatabase.query(PlayerTable.TABLE_PLAYER, PlayerTable.ALL_COLS_FOR_PLAYER_TABLE, null,
+                null, null, null, null);
 
         cursor.moveToFirst();
 
@@ -131,46 +131,6 @@ public class PlayerServiceMockImpl implements PlayerService {
         readableDatabase.close();
 
         return players;
-    }
-
-
-    @Override
-    public List<Player> getAllLocalPlayersNotInTournament(List<TournamentPlayer> listOfPlayers) {
-
-        ArrayList<Player> players = new ArrayList<>();
-
-        String filterString = "";
-
-        for (TournamentPlayer player : listOfPlayers) {
-            String playerId = String.valueOf(player.getPlayerId()) + ",";
-
-            filterString += playerId;
-        }
-
-        if (listOfPlayers.size() > 0) {
-            filterString = filterString.substring(0, filterString.length() - 1);
-
-            SQLiteDatabase readableDatabase = openTournamentDBHelper.getReadableDatabase();
-
-            Cursor cursor = readableDatabase.query(PlayerTable.TABLE_PLAYER, allColumns,
-                    "_id  NOT IN (" + filterString + ")", null, null, null, null);
-
-            cursor.moveToFirst();
-
-            while (!cursor.isAfterLast()) {
-                Player player = cursorToPlayer(cursor);
-
-                players.add(player);
-                cursor.moveToNext();
-            }
-
-            cursor.close();
-            readableDatabase.close();
-
-            return players;
-        } else {
-            return getAllLocalPlayers();
-        }
     }
 
 

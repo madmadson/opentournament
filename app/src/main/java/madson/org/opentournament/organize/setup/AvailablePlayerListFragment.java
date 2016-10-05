@@ -37,6 +37,7 @@ import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.service.PlayerService;
 import madson.org.opentournament.service.TournamentPlayerService;
+import madson.org.opentournament.tasks.LoadAllLocalPlayerTask;
 import madson.org.opentournament.utility.BaseActivity;
 import madson.org.opentournament.utility.BaseFragment;
 
@@ -182,34 +183,8 @@ public class AvailablePlayerListFragment extends BaseFragment {
             localPlayerListAdapter = new LocalPlayerListAdapter(baseActivity);
             localPlayerRecyclerView.setAdapter(localPlayerListAdapter);
 
-            Runnable runnable = new Runnable() {
-
-                @Override
-                public void run() {
-
-                    List<TournamentPlayer> allPlayersForTournament = tournamentPlayerService.getAllPlayersForTournament(
-                            tournament);
-                    List<Player> allLocalPlayers = playerService.getAllLocalPlayersNotInTournament(
-                            allPlayersForTournament);
-
-                    localPlayerListAdapter.addPlayerList(allLocalPlayers);
-                    localPlayerListAdapter.getFilter()
-                        .filter(filterPlayerTextView.getText().toString(), new Filter.FilterListener() {
-
-                                @Override
-                                public void onFilterComplete(int count) {
-
-                                    if (count == 0) {
-                                        noLocalTournamentPlayersTextView.setVisibility(View.VISIBLE);
-                                    } else {
-                                        noLocalTournamentPlayersTextView.setVisibility(View.GONE);
-                                    }
-                                }
-                                ;
-                            });
-                }
-            };
-            runnable.run();
+            new LoadAllLocalPlayerTask(baseActivity.getBaseApplication(), localPlayerListAdapter,
+                filterPlayerTextView.getText().toString(), noLocalTournamentPlayersTextView).execute();
         }
 
         return view;
@@ -220,25 +195,8 @@ public class AvailablePlayerListFragment extends BaseFragment {
 
         Log.i(this.getClass().getName(), " player removed from tournament player list: " + tournamentPlayer);
 
-        if (tournamentPlayer.getPlayerOnlineUUID() == null) {
-            final Player player = getBaseApplication().getPlayerService()
-                    .getPlayerForId(tournamentPlayer.getPlayerId());
-
-            localPlayerListAdapter.add(player);
-            localPlayerListAdapter.getFilter()
-                .filter(filterPlayerTextView.getText().toString(), new Filter.FilterListener() {
-
-                        @Override
-                        public void onFilterComplete(int count) {
-
-                            if (count == 0) {
-                                noLocalTournamentPlayersTextView.setVisibility(View.VISIBLE);
-                            } else {
-                                noLocalTournamentPlayersTextView.setVisibility(View.GONE);
-                            }
-                        }
-                    });
-        } else {
+        if (tournamentPlayer.getPlayerOnlineUUID() != null && tournamentPlayer
+                .getPlayerId().equals("0")) {
             Player player = Player.fromTournamentPlayer(tournamentPlayer);
             player.setOnlineUUID(tournamentPlayer.getPlayerOnlineUUID());
             onlinePlayerListAdapter.addPlayer(player);

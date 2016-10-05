@@ -175,9 +175,8 @@ public class TournamentSetupFragment extends Fragment implements TournamentEvent
 
                                     Log.i(this.getClass().getName(), "removePlayer player from tournament");
 
-                                    BaseApplication baseApplication = ((BaseActivity) getActivity())
-                                        .getBaseApplication();
-                                    new RemoveTournamentPlayerFromTournamentTask(baseApplication, tournament,
+                                    BaseActivity baseActivity = ((BaseActivity) getActivity());
+                                    new RemoveTournamentPlayerFromTournamentTask(baseActivity, tournament,
                                         tournamentPlayer, tournamentPlayerListFragment, availablePlayerListFragment)
                                     .execute();
                                 }

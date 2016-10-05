@@ -148,7 +148,7 @@
     <string name="material_design_icons_description">Community managed Material Design icon set</string>
     <string name="material_design_icons_url" translatable="false">https://materialdesignicons.com/</string>
     <string name="about_used_libraries">Used Open Source libraries:</string>
-    <string name="about">about</string>
+    <string name="about">About</string>
     
     
     <string name="header_tournament_location">Location</string>
@@ -273,5 +273,11 @@
     <string name="app_description">OpenTournament description</string>
     
     <string name="success_remove_player">Successfully remove Player</string>
+    <string name="player_1_win">Player 1 win</string>
+    <string name="control_points">Control Points</string>
+    <string name="victory_points">Victory Points</string>
+    <string name="player_2_win">Player 2 win</string>
+    <string name="toggle_button_on">On</string>
+    <string name="toggle_button_off">Off</string>
 
 </resources>

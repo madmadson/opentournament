@@ -186,11 +186,15 @@ public class OngoingTournamentServiceMockImpl implements OngoingTournamentServic
                 }
 
                 if (playerWithSameTeamDontPlayAgainstEachOther) {
-                    if (player1.getTournamentPlayer().getTeamname().equals(
-                                player2.getTournamentPlayer().getTeamname())) {
-                        Log.i(this.getClass().getName(), "" + player1 + " VS " + player2 + " not possible");
+                    if (player1.getTournamentPlayer().getTeamname() != null
+                            && player2.getTournamentPlayer().getTeamname() != null) {
+                        if (player1.getTournamentPlayer()
+                                .getTeamname()
+                                .equals(player2.getTournamentPlayer().getTeamname())) {
+                            Log.i(this.getClass().getName(), "" + player1 + " VS " + player2 + " not possible");
 
-                        continue;
+                            continue;
+                        }
                     }
                 }
 

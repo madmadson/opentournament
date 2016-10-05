@@ -148,11 +148,11 @@ public class RankingServiceMockImpl implements RankingService {
             mapOfRankings.put(game.getRealPlayerTwoId(), playerTwoRanking);
         }
 
-        calculateSoSForRankingMap(mapOfRankings);
+        Map<String, TournamentRanking> actualMapWithSoS = calculateSoSForRankingMap(mapOfRankings);
 
-        insertRankingForRound(mapOfRankings);
+        insertRankingForRound(actualMapWithSoS);
 
-        return mapOfRankings;
+        return actualMapWithSoS;
     }
 
 
@@ -202,7 +202,9 @@ public class RankingServiceMockImpl implements RankingService {
     }
 
 
-    private void calculateSoSForRankingMap(Map<String, TournamentRanking> mapOfRankings) {
+    private Map<String, TournamentRanking> calculateSoSForRankingMap(Map<String, TournamentRanking> mapOfRankings) {
+
+        HashMap<String, TournamentRanking> newMap = new HashMap<>(mapOfRankings);
 
         for (TournamentRanking ranking : mapOfRankings.values()) {
             List<String> listOfOpponentsIds = ranking.getListOfOpponentsPlayerIds();
@@ -215,8 +217,10 @@ public class RankingServiceMockImpl implements RankingService {
 
             ranking.setSos(sos);
 
-            mapOfRankings.put(ranking.getRealPlayerId(), ranking);
+            newMap.put(ranking.getRealPlayerId(), ranking);
         }
+
+        return newMap;
     }
 
 

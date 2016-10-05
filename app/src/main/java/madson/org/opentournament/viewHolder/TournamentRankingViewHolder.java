@@ -1,14 +1,7 @@
 package madson.org.opentournament.viewHolder;
 
-import android.os.Bundle;
-
-import android.support.v4.app.FragmentManager;
-
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-
-import android.util.Log;
 
 import android.view.View;
 
@@ -16,9 +9,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import madson.org.opentournament.R;
-import madson.org.opentournament.domain.Game;
-import madson.org.opentournament.organize.EnterResultForGameDialog;
-import madson.org.opentournament.organize.GameListAdapter;
 
 
 /**
@@ -30,7 +20,7 @@ public class TournamentRankingViewHolder extends RecyclerView.ViewHolder {
 
     private CardView rankingCard;
     private TextView droppedInRound;
-    private ImageView onlineIcon;
+    private ImageView offlineIcon;
     private TextView playerFactionInList;
     private TextView score;
     private TextView sos;
@@ -52,7 +42,7 @@ public class TournamentRankingViewHolder extends RecyclerView.ViewHolder {
         sos = (TextView) itemView.findViewById(R.id.ranking_row_sos);
         cp = (TextView) itemView.findViewById(R.id.ranking_row_control_points);
         vp = (TextView) itemView.findViewById(R.id.ranking_row_victory_points);
-        onlineIcon = (ImageView) itemView.findViewById(R.id.ranking_row_online_icon);
+        offlineIcon = (ImageView) itemView.findViewById(R.id.ranking_row_offline_icon);
         droppedInRound = (TextView) itemView.findViewById(R.id.ranking_dropped_in_round);
         rankingCard = (CardView) itemView.findViewById(R.id.ranking_row_card_view);
     }
@@ -99,9 +89,9 @@ public class TournamentRankingViewHolder extends RecyclerView.ViewHolder {
     }
 
 
-    public ImageView getOnlineIcon() {
+    public ImageView getOfflineIcon() {
 
-        return onlineIcon;
+        return offlineIcon;
     }
 
 

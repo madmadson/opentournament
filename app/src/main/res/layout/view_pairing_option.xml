@@ -19,6 +19,8 @@
             android:id="@+id/view_pairing_toggle_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textOn="@string/toggle_button_on"
+            android:textOff="@string/toggle_button_off"
             android:layout_gravity="right" />
     </LinearLayout>
 

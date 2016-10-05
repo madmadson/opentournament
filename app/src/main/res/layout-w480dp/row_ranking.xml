@@ -177,8 +177,8 @@
   
 
             <ImageView
-                android:id="@+id/ranking_row_online_icon"
-                android:src="@drawable/ic_cloud_black_24dp"
+                android:id="@+id/ranking_row_offline_icon"
+                android:src="@drawable/ic_cloud_off_black_24dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="@dimen/small_tick"

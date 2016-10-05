@@ -103,28 +103,33 @@ public class TournamentSetupFragment extends Fragment implements TournamentEvent
         fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         fragmentTransaction.commit();
 
-        FloatingActionButton floatingActionButton = ((BaseActivity) getActivity()).getFloatingActionButton();
-        floatingActionButton.setVisibility(View.VISIBLE);
-        floatingActionButton.setImageResource(R.drawable.ic_add_white_24dp);
+        if (tournament.getState().equals(Tournament.TournamentState.PLANED.name())) {
+            FloatingActionButton floatingActionButton = ((BaseActivity) getActivity()).getFloatingActionButton();
+            floatingActionButton.setVisibility(View.VISIBLE);
+            floatingActionButton.setImageResource(R.drawable.ic_add_white_24dp);
 
-        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            floatingActionButton.setOnClickListener(new View.OnClickListener() {
 
-                @Override
-                public void onClick(View v) {
+                    @Override
+                    public void onClick(View v) {
 
-                    Log.i(this.getClass().getName(),
-                        "click floatingActionButton player addTournamentPlayer to tournament");
+                        Log.i(this.getClass().getName(),
+                            "click floatingActionButton player addTournamentPlayer to tournament");
 
-                    AddTournamentPlayerDialog dialog = new AddTournamentPlayerDialog();
+                        AddTournamentPlayerDialog dialog = new AddTournamentPlayerDialog();
 
-                    Bundle bundle = new Bundle();
-                    bundle.putParcelable(AddTournamentPlayerDialog.BUNDLE_TOURNAMENT, tournament);
-                    dialog.setArguments(bundle);
+                        Bundle bundle = new Bundle();
+                        bundle.putParcelable(AddTournamentPlayerDialog.BUNDLE_TOURNAMENT, tournament);
+                        dialog.setArguments(bundle);
 
-                    FragmentManager supportFragmentManager = getChildFragmentManager();
-                    dialog.show(supportFragmentManager, "tournament setup new player");
-                }
-            });
+                        FragmentManager supportFragmentManager = getChildFragmentManager();
+                        dialog.show(supportFragmentManager, "tournament setup new player");
+                    }
+                });
+        } else {
+            FloatingActionButton floatingActionButton = ((BaseActivity) getActivity()).getFloatingActionButton();
+            floatingActionButton.setVisibility(View.GONE);
+        }
 
         return view;
     }

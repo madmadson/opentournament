@@ -44,6 +44,7 @@ import madson.org.opentournament.utility.BaseActivity;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
 
@@ -277,7 +278,7 @@ public class AddTournamentPlayerDialog extends DialogFragment {
         final AlertDialog dialog = (AlertDialog) getDialog();
 
         if (dialog != null) {
-            Button positive = dialog.getButton(Dialog.BUTTON_POSITIVE);
+            final Button positive = dialog.getButton(Dialog.BUTTON_POSITIVE);
 
             positive.setOnClickListener(new View.OnClickListener() {
 

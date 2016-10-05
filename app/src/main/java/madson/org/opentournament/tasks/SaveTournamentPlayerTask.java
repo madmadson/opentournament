@@ -64,7 +64,9 @@ public class SaveTournamentPlayerTask extends AsyncTask<Void, Void, Void> {
 
         tournamentPlayer = new TournamentPlayer();
 
-        tournamentPlayer.setPlayerOnlineUUID(player.getOnlineUUID());
+        if (player != null) {
+            tournamentPlayer.setPlayerOnlineUUID(player.getOnlineUUID());
+        }
 
         tournamentPlayer.setFirstname(firstname);
         tournamentPlayer.setNickname(nickname);

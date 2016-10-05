@@ -12,6 +12,19 @@ import android.util.Log;
  */
 public class PlayerTable {
 
+    /*
+     * 0: id
+     * 1: player_online_uuid
+     * 2: firstname
+     * 3: nickname
+     * 4: lastname
+
+     */
+    public static final String[] ALL_COLS_FOR_PLAYER_TABLE = {
+        PlayerTable.COLUMN_ID, PlayerTable.COLUMN_ONLINE_UUID, PlayerTable.COLUMN_FIRSTNAME,
+        PlayerTable.COLUMN_NICKNAME, PlayerTable.COLUMN_LASTNAME
+    };
+
     public static final String TABLE_PLAYER = "player";
     public static final String COLUMN_ID = "_id";
     public static final String COLUMN_ONLINE_UUID = "onlineUUID";

@@ -198,7 +198,7 @@
     <string name="pairing_option_player_not_play_twice_against_each_other">Player don\'t play twice against each other</string>
     <string name="pairing_option_player_with_same_team_not_play_against_each_other">Player in same team don\'t play against each other</string>
     
-    <string name="uneven_player_message">Uneven players in tournament. You cant start a tournament with uneven amount of players. Should a dummy player be inserted for you?</string>
+    <string name="uneven_player_message">Uneven players in tournament. You can\'t start a tournament with uneven amount of players. Should a dummy player be inserted for you?</string>
     
     <string name="not_all_games_finished_next_round">Not all games are finished. Please insert results before pair next round.</string>
     <string name="not_all_games_finished_end_tournament">Not all games are finished. Please insert all results before end tournament.</string>
@@ -270,5 +270,6 @@
     <string name="player_already_is_in_tournament">Player is already in Tournament</string>
     <string name="show_army_lists">Army Lists</string>
     <string name="cant_upload_list_for_local_players">You cannot upload army lists for local players</string>
+    <string name="app_description">OpenTournament description</string>
 
 </resources>

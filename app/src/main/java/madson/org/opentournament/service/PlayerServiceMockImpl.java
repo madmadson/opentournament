@@ -21,18 +21,58 @@ import java.util.List;
 /**
  * @author  Tobias Matt - tmatt@contargo.net
  */
-public class PlayerServiceImpl implements PlayerService {
+public class PlayerServiceMockImpl implements PlayerService {
 
     private OpenTournamentDBHelper openTournamentDBHelper;
+    private String[] allColumns = {
+        PlayerTable.COLUMN_ID, PlayerTable.COLUMN_FIRSTNAME, PlayerTable.COLUMN_NICKNAME, PlayerTable.COLUMN_LASTNAME
+    };
 
-    public PlayerServiceImpl(Context context) {
+    public PlayerServiceMockImpl(Context context) {
 
-        Log.w(PlayerServiceImpl.class.getName(), "PlayerServiceImpl Constructor");
+        Log.w(PlayerServiceMockImpl.class.getName(), "PlayerServiceImpl Constructor");
 
         if (openTournamentDBHelper == null) {
             openTournamentDBHelper = new OpenTournamentDBHelper(context);
         }
+
+        deleteAllPlayers();
+        createMockPlayers();
     }
+
+    private void deleteAllPlayers() {
+
+        SQLiteDatabase writableDatabase = openTournamentDBHelper.getWritableDatabase();
+
+        writableDatabase.delete(PlayerTable.TABLE_PLAYER, null, null);
+        writableDatabase.close();
+    }
+
+
+    private void createMockPlayers() {
+
+        createPlayer(1, new Player("Tobias", "Madson", "Matt"));
+        createPlayer(2, new Player("Christoph", "Zaziboy", "Scholl"));
+        createPlayer(3, new Player("David", "Wildjack", "Voigt"));
+        createPlayer(4, new Player("Andreas", "Ragegear", "Neugebauer"));
+        createPlayer(5, new Player("Andreas", "Raskild", "Tonndorf"));
+        createPlayer(6, new Player("Martina", "Bazinga", "Haug"));
+        createPlayer(7, new Player("Tobias", "Zeus", "Rohrauer"));
+        createPlayer(8, new Player("Yann", "Arcane", "Krehl"));
+    }
+
+
+    public void createPlayer(int id, Player player) {
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(PlayerTable.COLUMN_ID, id);
+        contentValues.put(PlayerTable.COLUMN_FIRSTNAME, player.getFirstname());
+        contentValues.put(PlayerTable.COLUMN_NICKNAME, player.getNickname());
+        contentValues.put(PlayerTable.COLUMN_LASTNAME, player.getLastname());
+
+        createPlayer(contentValues);
+    }
+
 
     @Override
     public Player createLocalPlayer(Player player) {
@@ -55,8 +95,8 @@ public class PlayerServiceImpl implements PlayerService {
         Player player = null;
         SQLiteDatabase readableDatabase = openTournamentDBHelper.getReadableDatabase();
 
-        Cursor cursor = readableDatabase.query(PlayerTable.TABLE_PLAYER, PlayerTable.ALL_COLS_FOR_PLAYER_TABLE,
-                PlayerTable.COLUMN_ID + " = ?", new String[] { playerId }, null, null, null, null);
+        Cursor cursor = readableDatabase.query(PlayerTable.TABLE_PLAYER, allColumns, "_id  = ?",
+                new String[] { playerId }, null, null, null, null);
 
         if (cursor.moveToFirst()) {
             player = cursorToPlayer(cursor);
@@ -76,8 +116,7 @@ public class PlayerServiceImpl implements PlayerService {
 
         SQLiteDatabase readableDatabase = openTournamentDBHelper.getReadableDatabase();
 
-        Cursor cursor = readableDatabase.query(PlayerTable.TABLE_PLAYER, PlayerTable.ALL_COLS_FOR_PLAYER_TABLE, null,
-                null, null, null, null);
+        Cursor cursor = readableDatabase.query(PlayerTable.TABLE_PLAYER, allColumns, null, null, null, null, null);
 
         cursor.moveToFirst();
 
@@ -113,8 +152,8 @@ public class PlayerServiceImpl implements PlayerService {
 
             SQLiteDatabase readableDatabase = openTournamentDBHelper.getReadableDatabase();
 
-            Cursor cursor = readableDatabase.query(PlayerTable.TABLE_PLAYER, PlayerTable.ALL_COLS_FOR_PLAYER_TABLE,
-                    PlayerTable.COLUMN_ID + " NOT IN (" + filterString + ")", null, null, null, null);
+            Cursor cursor = readableDatabase.query(PlayerTable.TABLE_PLAYER, allColumns,
+                    "_id  NOT IN (" + filterString + ")", null, null, null, null);
 
             cursor.moveToFirst();
 

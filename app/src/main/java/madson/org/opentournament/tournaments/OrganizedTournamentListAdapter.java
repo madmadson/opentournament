@@ -69,8 +69,10 @@ public class OrganizedTournamentListAdapter extends RecyclerView.Adapter<Tournam
         viewHolder.getTournamentNameInList().setText(tournament.getName());
 
         if (viewHolder.getTournamentDateInList() != null) {
-            String formattedDate = dateFormatter.format(tournament.getDateOfTournament());
-            viewHolder.getTournamentDateInList().setText(formattedDate);
+            if (tournament.getDateOfTournament() != null) {
+                String formattedDate = dateFormatter.format(tournament.getDateOfTournament());
+                viewHolder.getTournamentDateInList().setText(formattedDate);
+            }
         }
 
         if (viewHolder.getTournamentLocationInList() != null) {

@@ -11,39 +11,72 @@ idea{
 apply plugin: 'com.android.application'
 
 android {
-
+    signingConfigs {
+        release {
+            keyAlias prod_key_alias
+            keyPassword prod_key_password
+            storeFile file(prod_store_path)
+            storePassword prod_store_password
+        }
+        stage {
+            keyAlias stage_key_alias
+            keyPassword stage_key_password
+            storeFile file(stage_store_path)
+            storePassword stage_store_password
+        }
+        debug {
+            keyAlias debug_key_alias
+            keyPassword debug_key_password
+            storeFile file(debug_store_path)
+            storePassword debug_store_password
+        }
+    }
     compileSdkVersion 24
-    buildToolsVersion "24.0.1"
-
+    buildToolsVersion "24.0.2"
     defaultConfig {
         applicationId "madson.org.opentournament"
         minSdkVersion 16
         targetSdkVersion 24
         versionCode 1
-        versionName "1.0"
+        versionName "0.1.1-BETA"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
-    
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_7
         targetCompatibility JavaVersion.VERSION_1_7
     }
-    
     buildTypes {
         debug {
+            debuggable true
+            minifyEnabled false
+            signingConfig signingConfigs.debug;
+
+            buildConfigField 'String', 'ENVIRONMENT', '"DEV"';
+            resValue "string", "facebook_app_id", facebook_app_id
+            resValue "string", "fb_login_protocol_scheme", fb_login_protocol_scheme
+        }
+
+        stage {
+            debuggable false
+            minifyEnabled false
+            signingConfig signingConfigs.stage;
+
+            buildConfigField 'String', 'ENVIRONMENT', '"STAGE"';
             resValue "string", "facebook_app_id", facebook_app_id
             resValue "string", "fb_login_protocol_scheme", fb_login_protocol_scheme
         }
         release {
-            minifyEnabled false
+            debuggable false
+            minifyEnabled false 
+            signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 
+            buildConfigField 'String', 'ENVIRONMENT', '"PROD"';
             resValue "string", "facebook_app_id", facebook_app_id
             resValue "string", "fb_login_protocol_scheme", fb_login_protocol_scheme
         }
     }
-   
 }
 
 dependencies {
@@ -57,26 +90,21 @@ dependencies {
     compile 'net.danlew:android.joda:2.9.4.1'
     compile 'de.hdodenhof:circleimageview:2.1.0'
     compile 'com.github.bumptech.glide:glide:3.6.1'
-    
     androidTestCompile 'com.android.support:support-annotations:24.2.1'
-
     androidTestCompile 'com.android.support.test:runner:0.5'
     androidTestCompile 'com.android.support.test:rules:0.5'
     androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.2'
     androidTestCompile 'com.android.support.test.espresso:espresso-intents:2.2.2'
-    androidTestCompile ('com.android.support.test.espresso:espresso-contrib:2.2.2'){
+    androidTestCompile('com.android.support.test.espresso:espresso-contrib:2.2.2') {
         exclude group: 'com.android.support'
     }
-
     // Google
     compile 'com.google.android.gms:play-services-auth:9.6.1'
-
     // Firebase
     compile 'com.google.firebase:firebase-database:9.6.1'
     compile 'com.google.firebase:firebase-auth:9.6.1'
     // Firebase UI
     compile 'com.firebaseui:firebase-ui-database:0.4.0'
-    
     // facebook
     compile 'com.facebook.android:facebook-android-sdk:4.13.1'
 }

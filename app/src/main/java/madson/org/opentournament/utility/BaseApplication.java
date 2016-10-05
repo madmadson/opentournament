@@ -18,6 +18,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import madson.org.opentournament.BuildConfig;
 import madson.org.opentournament.R;
 import madson.org.opentournament.about.AppInfo;
 import madson.org.opentournament.about.LibraryItem;
@@ -32,14 +33,19 @@ import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.organize.TournamentEventListener;
 import madson.org.opentournament.service.OngoingTournamentService;
 import madson.org.opentournament.service.OngoingTournamentServiceImpl;
+import madson.org.opentournament.service.OngoingTournamentServiceMockImpl;
 import madson.org.opentournament.service.PlayerService;
 import madson.org.opentournament.service.PlayerServiceImpl;
+import madson.org.opentournament.service.PlayerServiceMockImpl;
 import madson.org.opentournament.service.RankingService;
 import madson.org.opentournament.service.RankingServiceImpl;
+import madson.org.opentournament.service.RankingServiceMockImpl;
 import madson.org.opentournament.service.TournamentPlayerService;
 import madson.org.opentournament.service.TournamentPlayerServiceImpl;
+import madson.org.opentournament.service.TournamentPlayerServiceMockImpl;
 import madson.org.opentournament.service.TournamentService;
 import madson.org.opentournament.service.TournamentServiceImpl;
+import madson.org.opentournament.service.TournamentServiceMockImpl;
 import madson.org.opentournament.tournaments.OrganizeTournamentEventListener;
 
 import net.danlew.android.joda.JodaTimeAndroid;
@@ -86,25 +92,45 @@ public abstract class BaseApplication extends Application {
         // NOTE: order of service wiring matters!
 
         if (playerService == null) {
-            playerService = new PlayerServiceImpl(getApplicationContext());
+            if (getEnvironment() == Environment.DEV) {
+                playerService = new PlayerServiceMockImpl(getApplicationContext());
+            } else {
+                playerService = new PlayerServiceImpl(getApplicationContext());
+            }
         }
 
         if (tournamentService == null) {
-            tournamentService = new TournamentServiceImpl(getApplicationContext());
+            if (getEnvironment() == Environment.DEV) {
+                tournamentService = new TournamentServiceMockImpl(getApplicationContext());
+            } else {
+                tournamentService = new TournamentServiceImpl(getApplicationContext());
+            }
         }
 
         if (tournamentPlayerService == null) {
-            tournamentPlayerService = new TournamentPlayerServiceImpl(getApplicationContext());
+            if (getEnvironment() == Environment.DEV) {
+                tournamentPlayerService = new TournamentPlayerServiceMockImpl(getApplicationContext());
+            } else {
+                tournamentPlayerService = new TournamentPlayerServiceImpl(getApplicationContext());
+            }
         }
 
         // depend on tournamentPlayerService -> to do ranking -_-
         if (rankingService == null) {
-            rankingService = new RankingServiceImpl(getApplicationContext());
+            if (getEnvironment() == Environment.DEV) {
+                rankingService = new RankingServiceMockImpl(getApplicationContext());
+            } else {
+                rankingService = new RankingServiceImpl(getApplicationContext());
+            }
         }
 
         // depend on tournament service, player service, ranking -> must pair games
         if (ongoingTournamentService == null) {
-            ongoingTournamentService = new OngoingTournamentServiceImpl(getApplicationContext());
+            if (getEnvironment() == Environment.DEV) {
+                ongoingTournamentService = new OngoingTournamentServiceMockImpl(getApplicationContext());
+            } else {
+                ongoingTournamentService = new OngoingTournamentServiceImpl(getApplicationContext());
+            }
         }
 
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();

@@ -15,31 +15,24 @@ import java.util.List;
  */
 public class OpenTournamentApplication extends BaseApplication {
 
-    private AppInfo appInfo;
-
-    private List<LibraryItem> libraryItems;
-
     @Override
     public Environment getEnvironment() {
 
-        return Environment.DEV;
+        return Environment.valueOf(BuildConfig.ENVIRONMENT);
     }
 
 
     @Override
     public List<LibraryItem> getAdditionalLibraries() {
 
-        return libraryItems;
+        return null;
     }
 
 
     @Override
     public AppInfo getAppInfo() {
 
-        if (appInfo != null) {
-            return appInfo;
-        }
-
-        return new AppInfo("Test", "1", "App to test the about stuff.", R.drawable.avatar_anonymous);
+        return new AppInfo(getString(R.string.app_name), BuildConfig.VERSION_NAME, getString(R.string.app_description),
+                R.drawable.open_tournament);
     }
 }

@@ -33,17 +33,22 @@ import java.util.UUID;
  *
  * @author  Tobias Matt - tmatt@contargo.net
  */
-public class TournamentServiceImpl implements TournamentService {
+public class TournamentServiceMockImpl implements TournamentService {
 
     private OpenTournamentDBHelper openTournamentDBHelper;
 
-    public TournamentServiceImpl(Context context) {
+    public TournamentServiceMockImpl(Context context) {
 
-        Log.i(TournamentServiceImpl.class.getName(), "TournamentServiceImpl Constructor");
+        Log.i(TournamentServiceMockImpl.class.getName(), "TournamentServiceImpl Constructor");
 
         if (openTournamentDBHelper == null) {
             openTournamentDBHelper = new OpenTournamentDBHelper(context);
         }
+
+        deleteAllTournaments();
+        deleteAllGamesOfTournament();
+        deleteAllRankingsOfTournament();
+        createMockTournaments();
     }
 
     @Override
@@ -71,6 +76,35 @@ public class TournamentServiceImpl implements TournamentService {
         referenceForUpdateTournament.setValue(tournament);
 
         return tournament;
+    }
+
+
+    private void deleteAllGamesOfTournament() {
+
+        SQLiteDatabase writableDatabase = openTournamentDBHelper.getWritableDatabase();
+
+        writableDatabase.delete(GameTable.TABLE_TOURNAMENT_GAME, null, null);
+        writableDatabase.close();
+    }
+
+
+    private void deleteAllRankingsOfTournament() {
+
+        SQLiteDatabase writableDatabase = openTournamentDBHelper.getWritableDatabase();
+
+        writableDatabase.delete(TournamentRankingTable.TABLE_TOURNAMENT_RANKING, null, null);
+        writableDatabase.close();
+    }
+
+
+    private void createMockTournaments() {
+
+        insertTournament(1, "Coin of Evil", "Ludwigsburg", new DateTime(2016, 3, 10, 10, 8).toDate(), 32, null, null,
+            null, 8, TournamentTyp.SOLO.name(), 0);
+        insertTournament(2, "HMDZ", "Oberhausen", new DateTime(2016, 5, 20, 10, 0).toDate(), 0, null, null, null, 32,
+            TournamentTyp.TEAM.name(), 3);
+        insertTournament(3, "Dead Fish", "Heidelberg", new DateTime(2016, 7, 15, 10, 0).toDate(), 16, null, null, null,
+            0, TournamentTyp.SOLO.name(), 0);
     }
 
 

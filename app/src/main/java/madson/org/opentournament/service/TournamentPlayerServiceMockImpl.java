@@ -31,15 +31,18 @@ import java.util.UUID;
 /**
  * @author  Tobias Matt - tmatt@contargo.net
  */
-public class TournamentPlayerServiceImpl implements TournamentPlayerService {
+public class TournamentPlayerServiceMockImpl implements TournamentPlayerService {
 
     private OpenTournamentDBHelper openTournamentDBHelper;
 
-    public TournamentPlayerServiceImpl(Context context) {
+    public TournamentPlayerServiceMockImpl(Context context) {
 
         if (openTournamentDBHelper == null) {
             openTournamentDBHelper = new OpenTournamentDBHelper(context);
         }
+
+        deleteAllTournamentPlayers();
+        createMockTournamentPlayers();
     }
 
     @Override
@@ -207,6 +210,55 @@ public class TournamentPlayerServiceImpl implements TournamentPlayerService {
         readableDatabase.close();
 
         return players;
+    }
+
+
+    private void createMockTournamentPlayers() {
+
+        addPlayerToTournament(1, new Player(1, "Tobias", "Madson", "Matt"), "48\" AD", "Cygnar", "KA");
+        addPlayerToTournament(1, new Player(2, "Christoph", "Zaziboy", "Scholl"), "48\" AD", "Circle", "KA");
+        addPlayerToTournament(1, new Player(3, "David", "Wildjack", "Voigt"), "48\" AD", "Cryx", "KA");
+        addPlayerToTournament(1, new Player(4, "Andreas", "Ragegear", "Neugebauer"), "48\" AD", "Legion", "KA");
+        addPlayerToTournament(1, new Player(5, "Andreas", "Raskild", "Tonndorf"), "Team Karlsruhe", "Cryx", "KA2");
+        addPlayerToTournament(1, new Player(6, "Martina", "Bazinga", "Haug"), "Team Karlsruhe", "Menoth", "KA2");
+        addPlayerToTournament(1, new Player(7, "Tobias", "Zeus", "Rohrauer"), "Team Karlsruhe", "Cygnar", "KA2");
+        addPlayerToTournament(1, new Player(8, "Yann", "Arcane", "Krehl"), "Team Karlsruhe", "Trollbloods", "KA2");
+    }
+
+
+    private void addPlayerToTournament(int tournament_id, Player player, String teamname, String faction, String meta) {
+
+        SQLiteDatabase db = openTournamentDBHelper.getWritableDatabase();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(TournamentPlayerTable.COLUMN_TOURNAMENT_ID, tournament_id);
+        contentValues.put(TournamentPlayerTable.COLUMN_PLAYER_ID, player.get_id());
+        contentValues.put(TournamentPlayerTable.COLUMN_FIRSTNAME, player.getFirstname());
+        contentValues.put(TournamentPlayerTable.COLUMN_NICKNAME, player.getNickname());
+        contentValues.put(TournamentPlayerTable.COLUMN_LASTNAME, player.getLastname());
+        contentValues.put(TournamentPlayerTable.COLUMN_TEAMNAME, teamname);
+        contentValues.put(TournamentPlayerTable.COLUMN_FACTION, faction);
+        contentValues.put(TournamentPlayerTable.COLUMN_META, meta);
+        contentValues.put(TournamentPlayerTable.COLUMN_DUMMY, false);
+
+        if (player.getOnlineUUID() != null) {
+            contentValues.put(TournamentPlayerTable.COLUMN_PLAYER_ONLINE_UUID, player.getOnlineUUID());
+        } else {
+            contentValues.put(TournamentPlayerTable.COLUMN_PLAYER_ONLINE_UUID, UUID.randomUUID().toString());
+        }
+
+        db.insert(TournamentPlayerTable.TABLE_TOURNAMENT_PLAYER, null, contentValues);
+
+        db.close();
+    }
+
+
+    private void deleteAllTournamentPlayers() {
+
+        SQLiteDatabase db = openTournamentDBHelper.getWritableDatabase();
+        db.delete(TournamentPlayerTable.TABLE_TOURNAMENT_PLAYER, null, null);
+
+        db.close();
     }
 
 

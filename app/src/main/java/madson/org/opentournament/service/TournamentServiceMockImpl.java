@@ -363,24 +363,11 @@ public class TournamentServiceMockImpl implements TournamentService {
 
 
     @Override
-    public void deleteTournament(long id) {
-
-        Log.i(this.getClass().getName(), "delete  tournament for id: " + id);
+    public void deleteTournament(Tournament tournament) {
 
         SQLiteDatabase writableDatabase = openTournamentDBHelper.getWritableDatabase();
-        writableDatabase.delete(TournamentTable.TABLE_TOURNAMENTS, "_id  = ?", new String[] { String.valueOf(id) });
+        writableDatabase.delete(TournamentTable.TABLE_TOURNAMENTS, TournamentTable.COLUMN_ID + "  = ?",
+            new String[] { String.valueOf(tournament.get_id()) });
         writableDatabase.close();
-    }
-
-
-    @Override
-    public void removeTournamentInFirebase(Tournament tournament) {
-
-        Log.i(this.getClass().getName(), "delete online tournament in firebase: " + tournament);
-
-        DatabaseReference referenceForTournamentToDelete = FirebaseDatabase.getInstance()
-                .getReference("tournaments/" + tournament.getOnlineUUID());
-
-        referenceForTournamentToDelete.removeValue();
     }
 }

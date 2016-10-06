@@ -104,13 +104,6 @@ public class GameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
         holder.getTableNumber()
             .setText(activity.getResources().getString(R.string.table_number, game.getPlaying_field()));
 
-        if (game.isFinished()) {
-            holder.getPlayerOneCardView()
-                .setBackgroundDrawable(game.getPlayer_one_score() == 1 ? winnerShape : looserShape);
-            holder.getPlayerTwoCardView()
-                .setBackgroundDrawable(game.getPlayer_two_score() == 1 ? winnerShape : looserShape);
-        }
-
         TournamentPlayer player1 = game.getPlayer1();
 
         holder.getPlayerOneNameInList()
@@ -144,25 +137,32 @@ public class GameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
         holder.getPlayerOneCardView().setOnClickListener(holder);
         holder.getPlayerTwoCardView().setOnClickListener(holder);
 
-        // drag and drop for manually re pair
-        if (!game.isFinished()) {
-            holder.getPlayerOneCardView().setOnLongClickListener(new GameLongClickEventListener(game, 1));
-            holder.getPlayerOneCardView().setOnDragListener(new GameDragListener(game, 1));
-
-            holder.getPlayerTwoCardView().setOnLongClickListener(new GameLongClickEventListener(game, 2));
-            holder.getPlayerTwoCardView().setOnDragListener(new GameDragListener(game, 2));
+        if (position % 2 == 0) {
+            holder.getPairingRow().setBackgroundColor(Color.LTGRAY);
         } else {
+            holder.getPairingRow().setBackgroundColor(Color.WHITE);
+        }
+
+        if (game.isFinished()) {
+            holder.getPlayerOneCardView()
+                .setBackgroundDrawable(game.getPlayer_one_score() == 1 ? winnerShape : looserShape);
+            holder.getPlayerTwoCardView()
+                .setBackgroundDrawable(game.getPlayer_two_score() == 1 ? winnerShape : looserShape);
+
             holder.getPlayerOneCardView().setOnLongClickListener(null);
             holder.getPlayerOneCardView().setOnDragListener(null);
 
             holder.getPlayerTwoCardView().setOnLongClickListener(null);
             holder.getPlayerTwoCardView().setOnDragListener(null);
-        }
-
-        if (position % 2 == 0) {
-            holder.getPairingRow().setBackgroundColor(Color.LTGRAY);
         } else {
-            holder.getPairingRow().setBackgroundColor(Color.WHITE);
+            holder.getPlayerOneCardView().setBackgroundDrawable(normalShape);
+            holder.getPlayerTwoCardView().setBackgroundDrawable(normalShape);
+
+            holder.getPlayerOneCardView().setOnLongClickListener(new GameLongClickEventListener(game, 1));
+            holder.getPlayerOneCardView().setOnDragListener(new GameDragListener(game, 1));
+
+            holder.getPlayerTwoCardView().setOnLongClickListener(new GameLongClickEventListener(game, 2));
+            holder.getPlayerTwoCardView().setOnDragListener(new GameDragListener(game, 2));
         }
     }
 

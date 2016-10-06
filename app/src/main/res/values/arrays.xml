@@ -13,5 +13,22 @@
         <item>Legion</item>
         <item>Minions</item>
     </string-array>
+
+    
+    <!-- this must be a pair -->
+    <string-array name="news_header">
+        <item>Welcome!</item>
+        <item>Version 0.1.7-ALPHA Released</item>
+    </string-array>
+
+    <string-array name="news">
+        <item>Create more Tournaments! Give Feedback!</item>
+        <item>* New "News" Section\n
+            * New Starting View design\n
+            * Label for DEMO version\n
+            * Many Bug Fixes -> Thanks to all alpha Testers!\n
+            * Shortcut button to organized Tournaments from online Tournaments
+        </item>
+     </string-array>
  
 </resources>

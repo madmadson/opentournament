@@ -93,4 +93,12 @@ public interface TournamentPlayerService {
      * @param  tournament
      */
     void editTournamentPlayer(TournamentPlayer tournamentPlayer, Tournament tournament);
+
+
+    /**
+     * Delete all players for given tournament.
+     *
+     * @param  tournament
+     */
+    void deleteTournamentPlayersFromTournament(Tournament tournament);
 }

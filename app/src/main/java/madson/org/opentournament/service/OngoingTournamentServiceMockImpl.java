@@ -383,6 +383,17 @@ public class OngoingTournamentServiceMockImpl implements OngoingTournamentServic
     }
 
 
+    @Override
+    public void deleteGamesForTournament(Tournament tournament) {
+
+        SQLiteDatabase writableDatabase = openTournamentDBHelper.getWritableDatabase();
+
+        writableDatabase.delete(GameTable.TABLE_TOURNAMENT_GAME, GameTable.COLUMN_TOURNAMENT_ID + " = ? ",
+            new String[] { String.valueOf(tournament.get_id()) });
+        writableDatabase.close();
+    }
+
+
     private void insertGames(List<Game> games) {
 
         SQLiteDatabase db = openTournamentDBHelper.getWritableDatabase();

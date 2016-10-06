@@ -123,7 +123,19 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                         this /* OnConnectionFailedListener */).addApi(Auth.GOOGLE_SIGN_IN_API).build();
 
                 getBaseApplication().updateAuthenticatedUser();
+
+                Snackbar snackbar = Snackbar.make(coordinatorLayout, R.string.success_login, Snackbar.LENGTH_LONG);
+
+                snackbar.getView().setBackgroundColor(getResources().getColor(R.color.colorAccent));
+
+                snackbar.show();
             }
+        } else {
+            Snackbar snackbar = Snackbar.make(coordinatorLayout, R.string.offline_text, Snackbar.LENGTH_LONG);
+
+            snackbar.getView().setBackgroundColor(getResources().getColor(R.color.colorWarning));
+
+            snackbar.show();
         }
 
         if (useNavigationDrawer()) {

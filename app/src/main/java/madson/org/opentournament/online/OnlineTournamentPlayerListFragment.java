@@ -78,6 +78,12 @@ public class OnlineTournamentPlayerListFragment extends Fragment {
         mProgressBar = (ProgressBar) view.findViewById(R.id.progressBar);
         noTournamentPlayersTextView = (TextView) view.findViewById(R.id.no_tournament_players);
 
+        Button registerButton = (Button) view.findViewById(R.id.register_for_tournament_button);
+
+        if (registerButton != null) {
+            registerButton.setVisibility(View.GONE);
+        }
+
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.tournament_player_list_recycler_view);
         recyclerView.setHasFixedSize(true);
 

@@ -215,9 +215,16 @@ public class TournamentPlayerListAdapter extends RecyclerView.Adapter<Tournament
     public boolean containsPlayer(Player player) {
 
         for (TournamentPlayer tournamentPlayer : tournamentPlayerList) {
-            if (tournamentPlayer.getRealPlayerId().equals(player.getOnlineUUID())
-                    || tournamentPlayer.getPlayerId().equals(String.valueOf(player.get_id()))) {
+            // online player
+            if (tournamentPlayer.getRealPlayerId().equals(player.getOnlineUUID())) {
                 return true;
+            }
+
+            // local player
+            if (player.get_id() != 0) {
+                if (tournamentPlayer.getPlayerId().equals(String.valueOf(player.get_id()))) {
+                    return true;
+                }
             }
         }
 

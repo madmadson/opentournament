@@ -1,8 +1,5 @@
 <resources>
-    
-    
     <string name="app_name">Open Tournament</string>
-    <string name="Image_description">Tournaments for everyone!</string>
     <string name="title_activity_tournament_list">TournamentList</string>
     <string name="title_activity_tournament_details">TournamentDetailsActivity</string>
     <string name="title_activity_tournament_play">TournamentPlayActivity</string>
@@ -19,11 +16,23 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <!-- NAV: Tournament Management -->
-    <string name="heading_online_tournaments">Online tournaments</string>
-    <string name="heading_organized_tournaments">Your organised tournaments</string>
+    <string name="heading_online_tournaments">Online Tournaments</string>
+    <string name="heading_organized_tournaments">Your organised Tournaments</string>
 
     <string name="header_tournament_name">Tournament name</string>
     <string name="header_remaining_seats">Seats</string>
+
+    <!-- toolbar titles-->
+    <string name="toolbar_title_home">Home</string>
+    <string name="toolbar_title_home_DEMO">Home - DEMO</string>
+    <string name="toolbar_title_online_tournaments">Online Tournaments</string>
+    <string name="toolbar_title_online_tournaments_DEMO">Online Tournaments - DEMO</string>
+    <string name="toolbar_title_players">Online Players</string>
+    <string name="toolbar_title_players_DEMO">Online Players - DEMO</string>
+    <string name="toolbar_title_account">Account Management</string>
+    <string name="toolbar_title_account_DEMO">Account Management - DEMO</string>
+    <string name="toolbar_title_organized_tournaments">Organized Tournaments</string>
+    <string name="toolbar_title_organized_tournaments_DEMO">Organized Tournaments - DEMO</string>
     
     <!--tournament row -->
     <string name="players_in_tournament"> %1$d/%2$d</string>
@@ -33,7 +42,7 @@
     <string name="dialog_organize_tournament">Organize your own tournament</string>
 
     <string name="label_tournament_name">Tournament name*</string>
-    <string name="label_tournament_max_seats">Max seats</string>
+    <string name="label_tournament_max_seats">Max Seats</string>
     <string name="label_tournament_date">Date</string>
     <string name="label_tournament_location">Location</string>
     <string name="label_tournament_solo_tournament">Solo tournament</string>
@@ -181,7 +190,7 @@
     <string name="success_tournament_player_is_online">Tournament saved online</string>
 
     <!-- offline stuff -->
-    <string name="offline_text">you are offline - cannot upload data</string>
+    <string name="offline_text">you are offline - you cannot up/download any data</string>
     <string name="offline_player_text">you are offline - cannot load online players</string>
     <string name="no_tournament_players">No Tournament Players found</string>
 
@@ -189,7 +198,7 @@
 
     <string name="confirm_start_tournament_title">Tournament should start?</string>
     <string name="header_organised_tournament_action">action</string>
-    <string name="no_available_online_players_for_tournament">No online players found (check filter)</string>
+    <string name="no_available_online_players_for_tournament">No online Players found (check filter)</string>
     <string name="no_available_players_for_tournament">No local players found (check filter)</string>
     <string name="pair_again">Pair again</string>
     <string name="next_round">Next Round</string>
@@ -235,7 +244,7 @@
   
     <string name="title_player_management">Online Players</string>
     <string name="title_home">Home</string>
-    <string name="no_online_players">No player found</string>
+    <string name="no_online_players">No Player found</string>
 
     <string name="title_account_management">Account Management</string>
     <string name="welcome_text">Welcome, %1$s!</string>
@@ -247,9 +256,10 @@
     <string name="change_player">Change player info</string>
     <string name="success_upload_player_data">Successfully upload player data</string>
     <string name="title_organized_tournaments">Organized Tournaments</string>
-    <string name="title_online_tournaments">Online Tournaments</string>
+    
     <string name="cant_start_tournament_without_players">Can\'t start tournament without players</string>
     <string name="register_for_tournament">Register For Tournament</string>
+    <string name="create_own_tournament_button">Create your own Tournament</string>
     <string name="label_teamsize">Teamsize</string>
     <string name="validation_error_no_team">\'no team\' is no possible team name</string>
     <string name="validation_team_no_team">You must choose a team in a team tournament</string>
@@ -279,5 +289,6 @@
     <string name="player_2_win">Player 2 win</string>
     <string name="toggle_button_on">On</string>
     <string name="toggle_button_off">Off</string>
+    <string name="title_online_tournaments_demo">a</string>
 
 </resources>

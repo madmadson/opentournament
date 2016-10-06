@@ -367,6 +367,22 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
     }
 
 
+    private void endLoading() {
+
+        password_parent.setVisibility(View.VISIBLE);
+        email_parent.setVisibility(View.VISIBLE);
+        email_sign_in_button.setVisibility(View.VISIBLE);
+        email_create_account_button.setVisibility(View.VISIBLE);
+        button_anonymous_sign_in.setVisibility(View.VISIBLE);
+        mFacebookSignInButton.setVisibility(View.VISIBLE);
+        mGoogleSignInButton.setVisibility(View.VISIBLE);
+        divider.setVisibility(View.VISIBLE);
+        oneClickHeading.setVisibility(View.VISIBLE);
+
+        progressBar.setVisibility(View.GONE);
+    }
+
+
     private void signInAnonymously(final Context context) {
 
         Task<AuthResult> authResultTask = mFirebaseAuth.signInAnonymously();
@@ -434,8 +450,11 @@ public class SignInActivity extends AppCompatActivity implements GoogleApiClient
                 GoogleSignInAccount account = result.getSignInAccount();
                 handleAuthWithGoogle(account);
             } else {
+                Log.e(this.getClass().getName(), "failed for result: " + result.getStatus());
+
                 // Google Sign In failed
-                Log.e(TAG, "Google Sign In failed.");
+                endLoading();
+                Toast.makeText(this, "Google Sign In failed", Toast.LENGTH_SHORT).show();
             }
         } else if (FacebookSdk.isFacebookRequestCode(requestCode)) {
             Log.i(TAG, "Facebook sign in ");

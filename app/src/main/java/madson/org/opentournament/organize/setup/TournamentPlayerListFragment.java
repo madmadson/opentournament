@@ -125,70 +125,74 @@ public class TournamentPlayerListFragment extends Fragment {
         recyclerView.setAdapter(tournamentPlayerListAdapter);
         registrationListAdapter = new RegistrationListAdapter(baseActivity, tournament, tournamentPlayerListAdapter);
 
-        mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
+        if (baseActivity.isConnected()) {
+            mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
 
-        DatabaseReference child = mFirebaseDatabaseReference.child(FirebaseReferences.TOURNAMENT_REGISTRATIONS + "/"
-                + tournament.getOnlineUUID());
+            DatabaseReference child = mFirebaseDatabaseReference.child(FirebaseReferences.TOURNAMENT_REGISTRATIONS + "/"
+                    + tournament.getOnlineUUID());
 
-        child.addChildEventListener(new ChildEventListener() {
+            child.addChildEventListener(new ChildEventListener() {
+
+                    @Override
+                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+
+                        progressbarRegistation.setVisibility(View.GONE);
+
+                        TournamentPlayer player = dataSnapshot.getValue(TournamentPlayer.class);
+                        player.setPlayerOnlineUUID(dataSnapshot.getKey());
+
+                        registrationListAdapter.addRegistration(player);
+                    }
+
+
+                    @Override
+                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                        TournamentPlayer player = dataSnapshot.getValue(TournamentPlayer.class);
+                        player.setPlayerOnlineUUID(dataSnapshot.getKey());
+
+                        registrationListAdapter.updateRegistration(player);
+                    }
+
+
+                    @Override
+                    public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                        TournamentPlayer player = dataSnapshot.getValue(TournamentPlayer.class);
+                        player.setPlayerOnlineUUID(dataSnapshot.getKey());
+
+                        registrationListAdapter.removeRegistration(player);
+                    }
+
+
+                    @Override
+                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                    }
+
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                    }
+                });
+
+            registerationRecyclerView.setAdapter(registrationListAdapter);
+
+            Runnable runnable = new Runnable() {
 
                 @Override
-                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                public void run() {
 
-                    progressbarRegistation.setVisibility(View.GONE);
-
-                    TournamentPlayer player = dataSnapshot.getValue(TournamentPlayer.class);
-                    player.setPlayerOnlineUUID(dataSnapshot.getKey());
-
-                    registrationListAdapter.addRegistration(player);
+                    if (registrationListAdapter.getItemCount() == 0) {
+                        progressbarRegistation.setVisibility(View.GONE);
+                    }
                 }
+            };
 
-
-                @Override
-                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-                    TournamentPlayer player = dataSnapshot.getValue(TournamentPlayer.class);
-                    player.setPlayerOnlineUUID(dataSnapshot.getKey());
-
-                    registrationListAdapter.updateRegistration(player);
-                }
-
-
-                @Override
-                public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-                    TournamentPlayer player = dataSnapshot.getValue(TournamentPlayer.class);
-                    player.setPlayerOnlineUUID(dataSnapshot.getKey());
-
-                    registrationListAdapter.removeRegistration(player);
-                }
-
-
-                @Override
-                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-                }
-
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                }
-            });
-
-        registerationRecyclerView.setAdapter(registrationListAdapter);
-
-        Runnable runnable = new Runnable() {
-
-            @Override
-            public void run() {
-
-                if (registrationListAdapter.getItemCount() == 0) {
-                    progressbarRegistation.setVisibility(View.GONE);
-                }
-            }
-        };
-
-        Handler handler = new Handler();
-        handler.postDelayed(runnable, 5000);
+            Handler handler = new Handler();
+            handler.postDelayed(runnable, 5000);
+        } else {
+            progressbarRegistation.setVisibility(View.GONE);
+        }
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(baseActivity);
         recyclerView.setLayoutManager(linearLayoutManager);

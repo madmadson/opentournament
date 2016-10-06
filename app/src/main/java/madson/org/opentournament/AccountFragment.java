@@ -31,6 +31,7 @@ import com.google.firebase.database.ValueEventListener;
 import madson.org.opentournament.db.FirebaseReferences;
 import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.utility.BaseActivity;
+import madson.org.opentournament.utility.Environment;
 
 import static madson.org.opentournament.R.id.welcome_text;
 
@@ -182,7 +183,13 @@ public class AccountFragment extends Fragment {
 
         super.onActivityCreated(savedInstanceState);
 
-        baseActivity.getToolbar().setTitle(R.string.title_account_management);
+        BaseActivity activity = (BaseActivity) getActivity();
+
+        if (activity.getBaseApplication().getEnvironment() != Environment.PROD) {
+            activity.getToolbar().setTitle(R.string.toolbar_title_account_DEMO);
+        } else {
+            activity.getToolbar().setTitle(R.string.toolbar_title_account);
+        }
 
         FloatingActionButton floatingActionButton = ((BaseActivity) getActivity()).getFloatingActionButton();
 

@@ -275,6 +275,18 @@ public class RankingServiceMockImpl implements RankingService {
     }
 
 
+    @Override
+    public void deleteRankingsForTournament(Tournament tournament) {
+
+        SQLiteDatabase writableDatabase = openTournamentDBHelper.getWritableDatabase();
+
+        writableDatabase.delete(TournamentRankingTable.TABLE_TOURNAMENT_RANKING,
+            TournamentRankingTable.COLUMN_TOURNAMENT_ID + " = ? ",
+            new String[] { String.valueOf(tournament.get_id()) });
+        writableDatabase.close();
+    }
+
+
     private TournamentRanking cursorToTournamentRanking(Cursor cursor) {
 
         TournamentRanking tournamentRanking = new TournamentRanking();

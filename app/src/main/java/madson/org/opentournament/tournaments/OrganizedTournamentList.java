@@ -26,6 +26,7 @@ import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.tasks.LoadOrganizedTournamentsTask;
 import madson.org.opentournament.utility.BaseActivity;
+import madson.org.opentournament.utility.Environment;
 
 
 /**
@@ -54,7 +55,12 @@ public class OrganizedTournamentList extends Fragment implements OrganizeTournam
         super.onActivityCreated(savedInstanceState);
 
         ProgressBar progressBar = (ProgressBar) getView().findViewById(R.id.progressBar);
-        baseActivity.setTitle(R.string.title_organized_tournaments);
+
+        if (baseActivity.getBaseApplication().getEnvironment() != Environment.PROD) {
+            baseActivity.getToolbar().setTitle(R.string.toolbar_title_organized_tournaments_DEMO);
+        } else {
+            baseActivity.getToolbar().setTitle(R.string.toolbar_title_organized_tournaments);
+        }
 
         FloatingActionButton floatingActionButton = ((BaseActivity) getActivity()).getFloatingActionButton();
 

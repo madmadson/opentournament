@@ -202,6 +202,18 @@ public class RankingServiceImpl implements RankingService {
     }
 
 
+    @Override
+    public void deleteRankingsForTournament(Tournament tournament) {
+
+        SQLiteDatabase writableDatabase = openTournamentDBHelper.getWritableDatabase();
+
+        writableDatabase.delete(TournamentRankingTable.TABLE_TOURNAMENT_RANKING,
+            TournamentRankingTable.COLUMN_TOURNAMENT_ID + " = ? ",
+            new String[] { String.valueOf(tournament.get_id()) });
+        writableDatabase.close();
+    }
+
+
     private void calculateSoSForRankingMap(Map<String, TournamentRanking> mapOfRankings) {
 
         for (TournamentRanking ranking : mapOfRankings.values()) {

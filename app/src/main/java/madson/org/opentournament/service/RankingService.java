@@ -43,4 +43,10 @@ public interface RankingService {
      * @param  tournament
      */
     void uploadRankingsForTournament(Tournament tournament);
+
+
+    /**
+     * @param  tournament
+     */
+    void deleteRankingsForTournament(Tournament tournament);
 }

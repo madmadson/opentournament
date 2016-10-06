@@ -170,6 +170,7 @@ public class AvailablePlayerListFragment extends BaseFragment {
                 handler.postDelayed(runnable, 5000);
             } else {
                 view.findViewById(R.id.offline_player_text).setVisibility(View.VISIBLE);
+                view.findViewById(R.id.progressBar).setVisibility(View.GONE);
             }
 
             localPlayerRecyclerView = (RecyclerView) view.findViewById(R.id.local_player_list_recycler_view);

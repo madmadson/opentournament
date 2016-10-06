@@ -33,6 +33,7 @@ import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentTyp;
 import madson.org.opentournament.service.TournamentService;
+import madson.org.opentournament.tasks.DeleteTournamentTask;
 import madson.org.opentournament.tasks.SaveTournamentTask;
 import madson.org.opentournament.tasks.UpdateTournamentTask;
 import madson.org.opentournament.utility.BaseActivity;
@@ -299,37 +300,10 @@ public class OrganizedTournamentEditDialog extends DialogFragment {
                                 .setPositiveButton(R.string.dialog_confirm, new DialogInterface.OnClickListener() {
 
                                             @Override
-                                            public void onClick(final DialogInterface sure_draw_dialog, int id) {
+                                            public void onClick(final DialogInterface confirmDeleteDialog, int id) {
 
-                                                Log.i(this.getClass().getName(), "tournament deletion confirmed");
-
-                                                Runnable runnable = new Runnable() {
-
-                                                    @Override
-                                                    public void run() {
-
-                                                        TournamentService tournamentService =
-                                                            baseActivity.getBaseApplication().getTournamentService();
-
-                                                        tournamentService.deleteTournament(tournament.get_id());
-
-                                                        baseActivity.getBaseApplication()
-                                                        .notifyTournamentDelete(tournament);
-
-                                                        Snackbar snackbar = Snackbar.make(
-                                                                baseActivity.getCoordinatorLayout(),
-                                                                R.string.success_delete_tournament,
-                                                                Snackbar.LENGTH_LONG);
-                                                        snackbar.getView()
-                                                        .setBackgroundColor(
-                                                            getContext().getResources().getColor(R.color.colorAccent));
-                                                        snackbar.show();
-
-                                                        sure_draw_dialog.dismiss();
-                                                        dialog.dismiss();
-                                                    }
-                                                };
-                                                runnable.run();
+                                                new DeleteTournamentTask(baseActivity, dialog, confirmDeleteDialog,
+                                                    tournament).execute();
                                             }
                                         })
                                 .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {

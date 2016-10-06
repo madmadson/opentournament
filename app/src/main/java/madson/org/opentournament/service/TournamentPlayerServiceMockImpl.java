@@ -340,4 +340,16 @@ public class TournamentPlayerServiceMockImpl implements TournamentPlayerService 
 
         db.close();
     }
+
+
+    @Override
+    public void deleteTournamentPlayersFromTournament(Tournament tournament) {
+
+        SQLiteDatabase db = openTournamentDBHelper.getWritableDatabase();
+
+        db.delete(TournamentPlayerTable.TABLE_TOURNAMENT_PLAYER, TournamentPlayerTable.COLUMN_TOURNAMENT_ID + " = ? ",
+            new String[] { String.valueOf(tournament.get_id()) });
+
+        db.close();
+    }
 }

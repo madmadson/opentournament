@@ -70,4 +70,12 @@ public interface OngoingTournamentService {
      * @param  uploadedTournament
      */
     void uploadGames(Tournament uploadedTournament);
+
+
+    /**
+     * DElete all games for given tournament.
+     *
+     * @param  tournament
+     */
+    void deleteGamesForTournament(Tournament tournament);
 }

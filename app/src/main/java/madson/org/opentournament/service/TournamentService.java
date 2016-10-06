@@ -42,19 +42,11 @@ public interface TournamentService {
 
 
     /**
-     * Delete tournament for given id.
-     *
-     * @param  id
-     */
-    void deleteTournament(long id);
-
-
-    /**
-     * Remove value from firebase.
+     * Delete tournament.
      *
      * @param  tournament
      */
-    void removeTournamentInFirebase(Tournament tournament);
+    void deleteTournament(Tournament tournament);
 
 
     /**

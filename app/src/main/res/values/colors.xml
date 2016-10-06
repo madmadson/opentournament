@@ -23,4 +23,7 @@
     
     <color name="colorLightGrey">#E0E0E0</color>
     <color name="colorBlack">#000000</color>
+
+
+    <color name="colorAlmostBlack">#3e3e3d</color>
 </resources>

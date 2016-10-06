@@ -26,6 +26,26 @@
             android:paddingBottom="@dimen/main_tick"
             android:paddingTop="@dimen/main_tick" />
 
+        <Button
+            android:id="@+id/create_own_tournament_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingBottom="@dimen/main_tick"
+            android:paddingTop="@dimen/main_tick"
+            android:background="@color/colorPrimaryDark"
+            android:padding="@dimen/halve_tick"
+            android:text="@string/create_own_tournament_button"
+            android:textColor="@color/colorTextIcon" />
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/line_tick"
+            android:background="@color/colorAccent"
+            android:paddingBottom="@dimen/main_tick"
+            android:paddingTop="@dimen/main_tick" />
+
         <FrameLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
@@ -66,6 +86,6 @@
             android:id="@+id/online_tournament_list_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
-        
+
     </LinearLayout>
 </ScrollView>

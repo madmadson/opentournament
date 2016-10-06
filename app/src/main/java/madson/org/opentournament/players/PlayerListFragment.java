@@ -7,6 +7,8 @@ import android.os.Handler;
 
 import android.support.annotation.Nullable;
 
+import android.support.design.widget.FloatingActionButton;
+
 import android.support.v4.app.Fragment;
 
 import android.support.v7.widget.LinearLayoutManager;
@@ -31,6 +33,7 @@ import madson.org.opentournament.db.FirebaseReferences;
 import madson.org.opentournament.db.PlayerTable;
 import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.utility.BaseActivity;
+import madson.org.opentournament.utility.Environment;
 
 
 public class PlayerListFragment extends Fragment {
@@ -46,6 +49,12 @@ public class PlayerListFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         setRetainInstance(true);
+
+        FloatingActionButton floatingActionButton = baseActivity.getFloatingActionButton();
+
+        if (floatingActionButton != null) {
+            floatingActionButton.setVisibility(View.GONE);
+        }
     }
 
 
@@ -63,7 +72,13 @@ public class PlayerListFragment extends Fragment {
 
         super.onActivityCreated(savedInstanceState);
 
-        baseActivity.getToolbar().setTitle(R.string.title_player_management);
+        BaseActivity activity = (BaseActivity) getActivity();
+
+        if (activity.getBaseApplication().getEnvironment() != Environment.PROD) {
+            activity.getToolbar().setTitle(R.string.toolbar_title_players_DEMO);
+        } else {
+            activity.getToolbar().setTitle(R.string.toolbar_title_players);
+        }
     }
 
 

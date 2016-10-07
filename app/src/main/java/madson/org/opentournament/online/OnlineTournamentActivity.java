@@ -16,10 +16,7 @@ import android.support.v7.app.ActionBar;
 import android.util.Log;
 
 import android.view.Menu;
-import android.view.View;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -28,11 +25,8 @@ import com.google.firebase.database.ValueEventListener;
 
 import madson.org.opentournament.R;
 import madson.org.opentournament.db.FirebaseReferences;
-import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentTyp;
-import madson.org.opentournament.organize.TournamentRoundManagementFragment;
-import madson.org.opentournament.organize.setup.TournamentSetupFragment;
 import madson.org.opentournament.utility.BaseActivity;
 
 
@@ -217,7 +211,7 @@ public class OnlineTournamentActivity extends BaseActivity {
             int round = (position + 1) / 2;
 
             if (position == 0) {
-                return getApplication().getResources().getString(R.string.nav_setup_tab);
+                return getApplication().getResources().getString(R.string.nav_tournament_players);
             } else if (tournament.getState().equals(Tournament.TournamentState.FINISHED.name())
                     && tournament.getActualRound() == round) {
                 return getApplication().getResources().getString(R.string.nav_final_standing_tab);

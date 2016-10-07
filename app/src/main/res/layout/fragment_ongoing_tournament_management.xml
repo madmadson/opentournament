@@ -1,29 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+    <FrameLayout
+        android:id="@+id/left_fragment_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        tools:context=".tournaments.TournamentManagementFragment">
+        android:layout_height="wrap_content" />
 
-        <FrameLayout
-            android:id="@+id/left_fragment_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/huge_line_tick"
+        android:background="@color/colorPrimaryDark" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/huge_line_tick"
-            android:background="@color/colorPrimaryDark" />
+    <FrameLayout
+        android:id="@+id/right_fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
-        <FrameLayout
-            android:id="@+id/right_fragment_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-
-    </LinearLayout>
-</ScrollView>
+</LinearLayout>

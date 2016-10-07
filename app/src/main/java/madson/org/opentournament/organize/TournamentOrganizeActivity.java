@@ -16,7 +16,6 @@ import android.support.v7.app.ActionBar;
 import android.util.Log;
 
 import android.view.Menu;
-import android.view.ViewGroup;
 
 import android.widget.ProgressBar;
 
@@ -196,11 +195,16 @@ public class TournamentOrganizeActivity extends BaseActivity implements Tourname
             Log.i(this.getClass().getName(),
                 "create tournament fragment: " + tournamentToOrganize + " on position: " + position);
 
-            if (position == 0) {
-                tournamentSetupFragment = TournamentSetupFragment.newInstance(tournamentToOrganize);
+            float widthOfScreen = getWidthOfScreen();
 
-                return tournamentSetupFragment;
-            } else if (tournamentToOrganize.getState().equals(Tournament.TournamentState.FINISHED.name())
+            if (position == 0) {
+                return tournamentSetupFragment = TournamentSetupFragment.newInstance(tournamentToOrganize);
+            } else if (position == 1 && widthOfScreen < 720) {
+                // other thing
+                return tournamentSetupFragment = TournamentSetupFragment.newInstance(tournamentToOrganize);
+            }
+
+            if (tournamentToOrganize.getState().equals(Tournament.TournamentState.FINISHED.name())
                     && position == tournamentToOrganize.getActualRound() + 1) {
                 return TournamentFinalStandingFragment.newInstance(tournamentToOrganize);
             } else {
@@ -215,11 +219,21 @@ public class TournamentOrganizeActivity extends BaseActivity implements Tourname
         @Override
         public int getCount() {
 
+            float widthOfScreen = getWidthOfScreen();
+
             if (tournamentToOrganize != null) {
                 if (tournamentToOrganize.getState().equals(Tournament.TournamentState.FINISHED.name())) {
-                    return tournamentToOrganize.getActualRound() + 2;
+                    if (widthOfScreen < 720) {
+                        return tournamentToOrganize.getActualRound() + 3;
+                    } else {
+                        return tournamentToOrganize.getActualRound() + 2;
+                    }
                 } else {
-                    return tournamentToOrganize.getActualRound() + 1;
+                    if (widthOfScreen < 720) {
+                        return tournamentToOrganize.getActualRound() + 2;
+                    } else {
+                        return tournamentToOrganize.getActualRound() + 1;
+                    }
                 }
             } else {
                 return 0;
@@ -230,8 +244,12 @@ public class TournamentOrganizeActivity extends BaseActivity implements Tourname
         @Override
         public CharSequence getPageTitle(int position) {
 
+            float widthOfScreen = getWidthOfScreen();
+
             if (position == 0) {
-                return getApplication().getResources().getString(R.string.nav_setup_tab);
+                return getApplication().getResources().getString(R.string.nav_tournament_players);
+            } else if (position == 1 && widthOfScreen < 1024) {
+                return getApplication().getResources().getString(R.string.nav_available_players);
             } else if (tournamentToOrganize.getState().equals(Tournament.TournamentState.FINISHED.name())
                     && position == tournamentToOrganize.getActualRound() + 1) {
                 return getApplication().getResources().getString(R.string.nav_final_standing_tab);

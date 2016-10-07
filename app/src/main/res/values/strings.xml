@@ -185,7 +185,7 @@
     <string name="dialof_confirm_draw">Sure draw?</string>
  
     <string name="success_convert_to_online_tournament">successfully convert local Tournament to online</string>
-    <string name="nav_setup_tab">Tournament Players</string>
+    <string name="nav_tournament_players">Tournament Players</string>
     <string name="label_fullname">Fullname</string>
     <string name="success_tournament_player_is_online">Tournament saved online</string>
 
@@ -291,5 +291,6 @@
     <string name="toggle_button_off">Off</string>
     <string name="title_online_tournaments_demo">a</string>
     <string name="registered_tournament_player_heading">Players Registered</string>
+    <string name="nav_available_players">Available Players</string>
 
 </resources>

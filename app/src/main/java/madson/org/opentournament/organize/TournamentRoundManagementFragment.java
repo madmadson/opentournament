@@ -154,7 +154,7 @@ public class TournamentRoundManagementFragment extends Fragment implements Tourn
 
 
     @Override
-    public void updateTournamentPlayer(TournamentPlayer updatedPLayer) {
+    public void updateTournamentPlayer(TournamentPlayer updatedPLayer, String teamName) {
     }
 
 

@@ -80,10 +80,10 @@ public class TournamentPlayerListAdapter extends RecyclerView.Adapter<Tournament
             .setText(baseActivity.getResources().getString(R.string.player_name_in_row, firstname, nickname, lastname));
 
         // mark online player
-        if (player.getPlayerOnlineUUID() == null || !player.getPlayerId().equals("0")) {
-            holder.getLocalIcon().setVisibility(View.VISIBLE);
-        } else {
+        if (player.getPlayerId() != null && player.getPlayerId().equals("0")) {
             holder.getLocalIcon().setVisibility(View.GONE);
+        } else {
+            holder.getLocalIcon().setVisibility(View.VISIBLE);
         }
 
         if (player.getDroppedInRound() != 0) {
@@ -197,6 +197,7 @@ public class TournamentPlayerListAdapter extends RecyclerView.Adapter<Tournament
 
     public void addTournamentPlayers(List<TournamentPlayer> localTournamentPlayers) {
 
+        tournamentPlayerList.clear();
         tournamentPlayerList = localTournamentPlayers;
         notifyDataSetChanged();
     }
@@ -229,5 +230,12 @@ public class TournamentPlayerListAdapter extends RecyclerView.Adapter<Tournament
         }
 
         return false;
+    }
+
+
+    public void clear() {
+
+        tournamentPlayerList.clear();
+        notifyDataSetChanged();
     }
 }

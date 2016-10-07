@@ -65,12 +65,14 @@
                 android:id="@+id/tournament_player_row_faction"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
                 android:layout_marginRight="@dimen/main_tick" />
 
             <ImageView
                 android:id="@+id/tournament_player_row_local_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
                 android:paddingRight="@dimen/small_tick"
                 android:src="@drawable/ic_cloud_off_black_24dp"
                 android:visibility="gone" />
@@ -79,15 +81,17 @@
                 android:id="@+id/tournament_player_row_edit_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:tint="@color/colorPrimaryDark"
                 android:paddingRight="@dimen/small_tick"
-                android:src="@drawable/ic_build_black_24dp" />
+                android:src="@drawable/ic_build_black_48dp" />
 
             <ImageView
                 android:id="@+id/tournament_player_row_add_List"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:tint="@color/colorPrimaryDark"
                 android:paddingRight="@dimen/small_tick"
-                android:src="@drawable/ic_insert_drive_file_black_24dp" />
+                android:src="@drawable/ic_insert_drive_file_black_48dp" />
         </LinearLayout>
     </RelativeLayout>
 </android.support.v7.widget.CardView>

@@ -6,6 +6,7 @@ import android.content.Intent;
 import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
+import madson.org.opentournament.domain.TournamentTeam;
 
 import java.util.List;
 import java.util.Map;
@@ -62,7 +63,7 @@ public interface TournamentPlayerService {
      *
      * @return
      */
-    Map<String, Integer> getAllTeamsForTournament(Tournament tournament);
+    Map<TournamentTeam, List<TournamentPlayer>> getAllTeamsForTournament(Tournament tournament);
 
 
     /**

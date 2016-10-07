@@ -237,9 +237,9 @@ public class TournamentSetupFragment extends Fragment implements TournamentEvent
 
 
     @Override
-    public void updateTournamentPlayer(TournamentPlayer updatedPLayer) {
+    public void updateTournamentPlayer(TournamentPlayer updatedPLayer, String oldTeamName) {
 
-        tournamentPlayerListFragment.updatePlayer(updatedPLayer);
+        tournamentPlayerListFragment.updatePlayer(updatedPLayer, oldTeamName);
     }
 
 

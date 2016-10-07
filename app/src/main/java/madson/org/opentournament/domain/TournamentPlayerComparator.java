@@ -1,4 +1,4 @@
-package madson.org.opentournament.organize.setup;
+package madson.org.opentournament.domain;
 
 import madson.org.opentournament.domain.TournamentPlayer;
 

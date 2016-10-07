@@ -39,7 +39,7 @@ public class SaveTournamentPlayerTask extends AsyncTask<Void, Void, Void> {
     private String faction;
 
     public SaveTournamentPlayerTask(BaseActivity baseActivity, Player player, Tournament tournament, AlertDialog dialog,
-        String firstname, String nickname, String lastname, String teamname, String faction) {
+        String firstname, String nickname, String lastname, String teamName, String faction) {
 
         this.baseActivity = baseActivity;
         this.player = player;
@@ -50,7 +50,7 @@ public class SaveTournamentPlayerTask extends AsyncTask<Void, Void, Void> {
         this.firstname = firstname;
         this.nickname = nickname;
         this.lastname = lastname;
-        this.teamname = teamname;
+        this.teamname = teamName;
         this.faction = faction;
     }
 
@@ -79,6 +79,8 @@ public class SaveTournamentPlayerTask extends AsyncTask<Void, Void, Void> {
         // set only team is no team
         if (!teamname.equals(baseActivity.getString(R.string.no_team))) {
             tournamentPlayer.setTeamname(teamname);
+        } else {
+            tournamentPlayer.setTeamname("");
         }
 
         if (player == null) {

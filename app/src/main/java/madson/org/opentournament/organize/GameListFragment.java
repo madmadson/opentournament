@@ -306,7 +306,7 @@ public class GameListFragment extends Fragment implements TournamentEventListene
 
 
     @Override
-    public void updateTournamentPlayer(TournamentPlayer updatedPLayer) {
+    public void updateTournamentPlayer(TournamentPlayer updatedPLayer, String teamName) {
     }
 
 

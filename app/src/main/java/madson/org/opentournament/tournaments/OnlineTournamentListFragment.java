@@ -1,5 +1,7 @@
 package madson.org.opentournament.tournaments;
 
+import android.content.Context;
+
 import android.os.Bundle;
 import android.os.Handler;
 
@@ -30,7 +32,6 @@ import madson.org.opentournament.R;
 import madson.org.opentournament.db.FirebaseReferences;
 import madson.org.opentournament.domain.GameOrSportTyp;
 import madson.org.opentournament.domain.Tournament;
-import madson.org.opentournament.organize.setup.OnlinePlayerListAdapter;
 import madson.org.opentournament.utility.BaseActivity;
 import madson.org.opentournament.utility.Environment;
 
@@ -43,18 +44,26 @@ public class OnlineTournamentListFragment extends Fragment {
     private DatabaseReference mFirebaseDatabaseReference;
 
     private Button linkToOwnTournamentButton;
+    private BaseActivity baseActivity;
+
+    @Override
+    public void onAttach(Context context) {
+
+        super.onAttach(context);
+
+        baseActivity = (BaseActivity) getActivity();
+    }
+
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
 
         super.onActivityCreated(savedInstanceState);
 
-        BaseActivity activity = (BaseActivity) getActivity();
-
-        if (activity.getBaseApplication().getEnvironment() != Environment.PROD) {
-            activity.getToolbar().setTitle(R.string.toolbar_title_online_tournaments_DEMO);
+        if (baseActivity.getBaseApplication().getEnvironment() != Environment.PROD) {
+            baseActivity.getToolbar().setTitle(R.string.toolbar_title_online_tournaments_DEMO);
         } else {
-            activity.getToolbar().setTitle(R.string.toolbar_title_online_tournaments);
+            baseActivity.getToolbar().setTitle(R.string.toolbar_title_online_tournaments);
         }
     }
 
@@ -84,7 +93,7 @@ public class OnlineTournamentListFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
 
-                    ((BaseActivity) getActivity()).replaceFragment(new OrganizedTournamentList());
+                    baseActivity.replaceFragment(new OrganizedTournamentList());
                 }
             });
 
@@ -99,11 +108,11 @@ public class OnlineTournamentListFragment extends Fragment {
             mOnlineTournamentRecyclerView.setLayoutManager(linearLayoutManager);
 
             final OnlineTournamentListAdapter onlineTournamentListAdapter = new OnlineTournamentListAdapter(
-                    (BaseActivity) getActivity());
+                    baseActivity);
 
             // do this configurable for other sport games
             DatabaseReference child = mFirebaseDatabaseReference.child(FirebaseReferences.TOURNAMENTS + "/"
-                    + GameOrSportTyp.WARMACHINE.name());
+                    + baseActivity.getBaseApplication().getSelectedGameOrSportTyp());
 
             child.addChildEventListener(new ChildEventListener() {
 

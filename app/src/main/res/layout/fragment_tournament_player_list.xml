@@ -4,6 +4,21 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <TextView
+        android:id="@+id/heading_registered_players"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/main_tick"
+        android:text="@string/registered_tournament_player_heading"
+        android:textAppearance="@android:style/TextAppearance.Medium" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/line_tick"
+        android:background="@color/colorAccent"
+        android:paddingBottom="@dimen/main_tick"
+        android:paddingTop="@dimen/main_tick" />
+
     <ProgressBar
         android:id="@+id/progressBarRegistration"
         style="?android:attr/progressBarStyle"
@@ -34,6 +49,27 @@
             android:layout_marginLeft="@dimen/main_tick"
             android:text="@string/tournament_player_list_heading"
             android:textAppearance="@android:style/TextAppearance.Medium" />
+
+        <ImageView
+            android:id="@+id/solo_tournament_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/main_tick"
+            android:layout_toRightOf="@id/heading_tournament_players"
+            android:background="@android:color/transparent"
+            android:tint="@color/colorPrimaryDark"
+            android:src="@drawable/ic_person_black_48dp" />
+        <ImageView
+            android:id="@+id/team_tournament_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/main_tick"
+            android:layout_toRightOf="@id/solo_tournament_icon"
+            android:tint="@color/colorPrimaryDark"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_people_black_48dp" />
         
         <Button android:id="@+id/start_tournament_button"
             android:layout_width="wrap_content"
@@ -81,5 +117,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:scrollbars="vertical" />
+
+    <ExpandableListView
+        android:id="@+id/tournament_teams_expandableList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" 
+        android:scrollbars="vertical"/>
 
 </LinearLayout>

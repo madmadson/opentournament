@@ -30,6 +30,7 @@ public class EditTournamentPlayerTask extends AsyncTask<Void, Void, Void> {
 
     private String teamname;
     private String faction;
+    private String oldTeamName;
 
     public EditTournamentPlayerTask(BaseActivity baseActivity, TournamentPlayer tournamentPlayer, Tournament tournament,
         AlertDialog dialog, String teamname, String faction) {
@@ -53,9 +54,11 @@ public class EditTournamentPlayerTask extends AsyncTask<Void, Void, Void> {
 
         tournamentPlayer.setFaction(faction);
 
+        oldTeamName = tournamentPlayer.getTeamname();
+
         // set only team is no team
-        if (!teamname.equals(baseActivity.getString(R.string.no_team))) {
-            tournamentPlayer.setTeamname(teamname);
+        if (!this.teamname.equals(baseActivity.getString(R.string.no_team))) {
+            tournamentPlayer.setTeamname(this.teamname);
         } else {
             tournamentPlayer.setTeamname(null);
         }
@@ -78,7 +81,7 @@ public class EditTournamentPlayerTask extends AsyncTask<Void, Void, Void> {
 
         snackbar.show();
 
-        baseActivity.getBaseApplication().notifyUpdateTournamentPlayer(tournamentPlayer);
+        baseActivity.getBaseApplication().notifyUpdateTournamentPlayer(tournamentPlayer, oldTeamName);
 
         dialog.dismiss();
     }

@@ -48,6 +48,6 @@ public class DropTournamentPlayerFromTournamentTask extends AsyncTask<Void, Void
     @Override
     protected void onPostExecute(Void aVoid) {
 
-        tournamentPlayerListFragment.updatePlayer(updatedPlayer);
+        tournamentPlayerListFragment.updatePlayer(updatedPlayer, updatedPlayer.getTeamname());
     }
 }

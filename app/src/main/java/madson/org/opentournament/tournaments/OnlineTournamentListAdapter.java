@@ -103,8 +103,6 @@ public class OnlineTournamentListAdapter extends RecyclerView.Adapter<Tournament
                 public void onClick(View v) {
 
                     Intent intent = new Intent(baseActivity, OnlineTournamentActivity.class);
-                    intent.putExtra(OnlineTournamentActivity.EXTRA_TOURNAMENT_GAME_OR_SPORT_TYP,
-                        tournament.getGameOrSportTyp());
                     intent.putExtra(OnlineTournamentActivity.EXTRA_TOURNAMENT_UUID, tournament.getOnlineUUID());
                     baseActivity.startActivity(intent);
                 }

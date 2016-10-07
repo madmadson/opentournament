@@ -2,13 +2,11 @@ package madson.org.opentournament.organize.setup;
 
 import android.app.Dialog;
 
-import android.content.Context;
 import android.content.DialogInterface;
 
 import android.graphics.Typeface;
 
 import android.os.Bundle;
-import android.os.Parcelable;
 
 import android.support.annotation.Nullable;
 
@@ -35,6 +33,7 @@ import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
+import madson.org.opentournament.domain.TournamentTeam;
 import madson.org.opentournament.domain.TournamentTyp;
 import madson.org.opentournament.tasks.EditTournamentPlayerTask;
 import madson.org.opentournament.tasks.LoadTournamentTeamTask;
@@ -42,9 +41,8 @@ import madson.org.opentournament.tasks.SaveTournamentPlayerTask;
 import madson.org.opentournament.utility.BaseActivity;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
 
@@ -64,18 +62,18 @@ public class AddTournamentPlayerDialog extends DialogFragment {
     private EditText lastnameEditText;
     private Spinner factionSpinner;
     private Spinner teamnameSpinner;
-    private ImageButton addNewTeamnameButton;
+    private ImageButton addNewTeamNameButton;
 
     private Tournament tournament;
     private Player player;
 
     private ArrayAdapter<String> team_adapter;
-    private TextView labelTeamname;
+    private TextView labelTeamName;
     private TextInputLayout lastnameParent;
     private TextInputLayout firstnameParent;
     private TextInputLayout nicknameParent;
-    private TextView labelTeammembers;
-    private Map<String, Integer> teamnameMap;
+    private TextView labelTeamMembers;
+    private Map<TournamentTeam, List<TournamentPlayer>> teamNameMap;
     private TournamentPlayer tournament_player;
 
     @Override
@@ -115,11 +113,11 @@ public class AddTournamentPlayerDialog extends DialogFragment {
 
             factionSpinner = (Spinner) dialogView.findViewById(R.id.dialog_add_tournament_player_faction_spinner);
 
-            labelTeamname = (TextView) dialogView.findViewById(R.id.label_teamname);
+            labelTeamName = (TextView) dialogView.findViewById(R.id.label_teamname);
             teamnameSpinner = (Spinner) dialogView.findViewById(R.id.teamname_spinner);
-            labelTeammembers = (TextView) dialogView.findViewById(R.id.team_members);
+            labelTeamMembers = (TextView) dialogView.findViewById(R.id.team_members);
 
-            addNewTeamnameButton = (ImageButton) dialogView.findViewById(
+            addNewTeamNameButton = (ImageButton) dialogView.findViewById(
                     R.id.dialog_add_tournament_player_add_new_team);
 
             ArrayAdapter<CharSequence> faction_adapter = ArrayAdapter.createFromResource(getActivity(),
@@ -132,7 +130,7 @@ public class AddTournamentPlayerDialog extends DialogFragment {
             team_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
             try {
-                teamnameMap = new LoadTournamentTeamTask((BaseActivity) getActivity(), tournament, team_adapter,
+                teamNameMap = new LoadTournamentTeamTask((BaseActivity) getActivity(), tournament, team_adapter,
                         teamnameSpinner, tournament_player).execute().get();
             } catch (ExecutionException | InterruptedException e) {
                 e.printStackTrace();
@@ -143,19 +141,23 @@ public class AddTournamentPlayerDialog extends DialogFragment {
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-                        String teamname = (String) parent.getItemAtPosition(position);
-                        int teammembers;
+                        String teamName = (String) parent.getItemAtPosition(position);
+                        int teamMembers = 0;
 
-                        if (teamnameMap.get(teamname) == null) {
-                            teammembers = 0;
+                        if (teamNameMap.get(new TournamentTeam(teamName)) != null) {
+                            teamMembers = teamNameMap.get(new TournamentTeam(teamName)).size();
                         } else {
-                            teammembers = teamnameMap.get(teamname);
+                            if (teamNameMap.get(new TournamentTeam("")) == null) {
+                                teamMembers = 0;
+                            } else {
+                                teamMembers = teamNameMap.get(new TournamentTeam("")).size();
+                            }
                         }
 
                         if (!tournament.getTournamentTyp().equals(TournamentTyp.TEAM.name())) {
-                            labelTeammembers.setText("(" + teammembers + ")");
+                            labelTeamMembers.setText("(" + teamMembers + ")");
                         } else {
-                            labelTeammembers.setText("(" + teammembers + "/" + tournament.getTeamSize() + ")");
+                            labelTeamMembers.setText("(" + teamMembers + "/" + tournament.getTeamSize() + ")");
                         }
                     }
 
@@ -199,7 +201,7 @@ public class AddTournamentPlayerDialog extends DialogFragment {
                 }
             }
 
-            addNewTeamnameButton.setOnClickListener(new View.OnClickListener() {
+            addNewTeamNameButton.setOnClickListener(new View.OnClickListener() {
 
                     @Override
                     public void onClick(View view) {
@@ -338,12 +340,12 @@ public class AddTournamentPlayerDialog extends DialogFragment {
                         if (tournament.getTournamentTyp().equals(TournamentTyp.TEAM.name())) {
                             if (teamname == null) {
                                 valide = false;
-                                labelTeamname.setError(getContext().getString(R.string.validation_error_empty));
+                                labelTeamName.setError(getContext().getString(R.string.validation_error_empty));
                             } else if (teamname.equals(getString(R.string.no_team))) {
                                 valide = false;
-                                labelTeamname.setError(getContext().getString(R.string.validation_team_no_team));
+                                labelTeamName.setError(getContext().getString(R.string.validation_team_no_team));
                             } else {
-                                labelTeamname.setError(null);
+                                labelTeamName.setError(null);
                             }
                         }
 

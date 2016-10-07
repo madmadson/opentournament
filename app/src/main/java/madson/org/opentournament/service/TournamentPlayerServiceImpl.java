@@ -15,10 +15,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import madson.org.opentournament.db.FirebaseReferences;
 import madson.org.opentournament.db.OpenTournamentDBHelper;
 import madson.org.opentournament.db.TournamentPlayerTable;
-import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
-import madson.org.opentournament.organize.setup.TournamentPlayerComparator;
+import madson.org.opentournament.domain.TournamentPlayerComparator;
+import madson.org.opentournament.domain.TournamentTeam;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -63,27 +63,39 @@ public class TournamentPlayerServiceImpl implements TournamentPlayerService {
 
 
     @Override
-    public Map<String, Integer> getAllTeamsForTournament(Tournament tournament) {
+    public Map<TournamentTeam, List<TournamentPlayer>> getAllTeamsForTournament(Tournament tournament) {
 
-        HashMap<String, Integer> teamNameMap = new HashMap<>();
+        Map<TournamentTeam, List<TournamentPlayer>> teamMap = new HashMap<>();
 
         SQLiteDatabase readableDatabase = openTournamentDBHelper.getReadableDatabase();
 
         Cursor cursor = readableDatabase.query(TournamentPlayerTable.TABLE_TOURNAMENT_PLAYER,
-                new String[] { TournamentPlayerTable.COLUMN_TEAMNAME }, "tournament_id  = ?",
+                TournamentPlayerTable.ALL_COLS_FOR_TOURNAMENT_PLAYER_TABLE,
+                TournamentPlayerTable.COLUMN_TOURNAMENT_ID + " = ?",
                 new String[] { Long.toString(tournament.get_id()) }, null, null, null);
 
         cursor.moveToFirst();
 
         while (!cursor.isAfterLast()) {
-            String teamname = cursor.getString(0);
+            TournamentPlayer tournamentPlayer = cursorToTournamentPlayer(cursor);
 
-            if (teamname != null && !teamname.isEmpty()) {
-                if (!teamNameMap.containsKey(teamname)) {
-                    teamNameMap.put(teamname, 1);
-                } else {
-                    teamNameMap.put(teamname, teamNameMap.get(teamname) + 1);
-                }
+            String teamName = tournamentPlayer.getTeamname();
+
+            if (teamName == null) {
+                teamName = "";
+            }
+
+            TournamentTeam tournamentTeam = new TournamentTeam(teamName);
+
+            if (!teamMap.containsKey(tournamentTeam)) {
+                List<TournamentPlayer> teamMembers = new ArrayList<>();
+
+                teamMembers.add(tournamentPlayer);
+                teamMap.put(tournamentTeam, teamMembers);
+            } else {
+                List<TournamentPlayer> tournamentPlayers = teamMap.get(tournamentTeam);
+                tournamentPlayers.add(tournamentPlayer);
+                teamMap.put(tournamentTeam, tournamentPlayers);
             }
 
             cursor.moveToNext();
@@ -92,7 +104,7 @@ public class TournamentPlayerServiceImpl implements TournamentPlayerService {
         cursor.close();
         readableDatabase.close();
 
-        return teamNameMap;
+        return teamMap;
     }
 
 

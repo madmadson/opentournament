@@ -42,14 +42,10 @@ import madson.org.opentournament.utility.BaseActivity;
 public class OnlineTournamentActivity extends BaseActivity {
 
     public static final String EXTRA_TOURNAMENT_UUID = "tournament_uuid";
-    public static final String EXTRA_TOURNAMENT_GAME_OR_SPORT_TYP = "tournament_game_or_sport_typ";
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
 
-    private DatabaseReference mFirebaseDatabaseReference;
-
-    private String tournament_game_or_sport_typ;
     private String tournament_uuid;
     private ActionBar supportActionBar;
     private DatabaseReference loadReferenceTournament;
@@ -96,7 +92,6 @@ public class OnlineTournamentActivity extends BaseActivity {
         Bundle extras = intent.getExtras();
 
         tournament_uuid = (String) extras.get(EXTRA_TOURNAMENT_UUID);
-        tournament_game_or_sport_typ = (String) extras.get(EXTRA_TOURNAMENT_GAME_OR_SPORT_TYP);
 
         Log.i(this.getClass().toString(), "online tournament opened with uuid " + tournament_uuid);
 
@@ -124,7 +119,7 @@ public class OnlineTournamentActivity extends BaseActivity {
 
     private void loadOnlineTournament() {
 
-        mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
 
         onlineTournamentListener = new ValueEventListener() {
 
@@ -154,7 +149,7 @@ public class OnlineTournamentActivity extends BaseActivity {
         };
 
         loadReferenceTournament = mFirebaseDatabaseReference.child(FirebaseReferences.TOURNAMENTS + "/"
-                + tournament_game_or_sport_typ + "/" + tournament_uuid);
+                + getBaseApplication().getSelectedGameOrSportTyp() + "/" + tournament_uuid);
 
         loadReferenceTournament.addValueEventListener(onlineTournamentListener);
     }

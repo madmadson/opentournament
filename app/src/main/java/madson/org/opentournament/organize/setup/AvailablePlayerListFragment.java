@@ -7,6 +7,8 @@ import android.os.Handler;
 
 import android.support.annotation.Nullable;
 
+import android.support.design.widget.Snackbar;
+
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
@@ -195,6 +197,15 @@ public class AvailablePlayerListFragment extends BaseFragment {
     public void addPlayer(final TournamentPlayer tournamentPlayer) {
 
         Log.i(this.getClass().getName(), " player removed from tournament player list: " + tournamentPlayer);
+
+        if (tournamentPlayer.getPlayerId() == null) {
+            Snackbar snackbar = Snackbar.make(baseActivity.getCoordinatorLayout(), R.string.success_remove_player,
+                    Snackbar.LENGTH_LONG);
+            snackbar.getView().setBackgroundColor(baseActivity.getResources().getColor(R.color.colorAccent));
+            snackbar.show();
+
+            return;
+        }
 
         if (tournamentPlayer.getPlayerOnlineUUID() != null && tournamentPlayer
                 .getPlayerId().equals("0")) {

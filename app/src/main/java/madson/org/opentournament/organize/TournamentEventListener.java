@@ -37,7 +37,7 @@ public interface TournamentEventListener {
     void removeAvailablePlayer(Player player);
 
 
-    void updateTournamentPlayer(TournamentPlayer updatedPLayer);
+    void updateTournamentPlayer(TournamentPlayer updatedPLayer, String oldTeamName);
 
 
     void addRegistration(TournamentPlayer player);

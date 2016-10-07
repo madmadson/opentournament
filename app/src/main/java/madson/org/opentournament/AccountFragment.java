@@ -183,12 +183,10 @@ public class AccountFragment extends Fragment {
 
         super.onActivityCreated(savedInstanceState);
 
-        BaseActivity activity = (BaseActivity) getActivity();
-
-        if (activity.getBaseApplication().getEnvironment() != Environment.PROD) {
-            activity.getToolbar().setTitle(R.string.toolbar_title_account_DEMO);
+        if (baseActivity.getBaseApplication().getEnvironment() != Environment.PROD) {
+            baseActivity.getToolbar().setTitle(R.string.toolbar_title_account_DEMO);
         } else {
-            activity.getToolbar().setTitle(R.string.toolbar_title_account);
+            baseActivity.getToolbar().setTitle(R.string.toolbar_title_account);
         }
 
         FloatingActionButton floatingActionButton = ((BaseActivity) getActivity()).getFloatingActionButton();

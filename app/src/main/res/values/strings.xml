@@ -122,7 +122,7 @@
     <string name="label_add_teamname">Add new Teamname</string>
     <string name="team_name">Team:</string>
     <string name="faction">Faction: </string>
-    <string name="no_team">no team</string>
+    <string name="no_team">No Team</string>
     <string name="add_new_team">Add new Teamname</string>
 
 
@@ -262,7 +262,7 @@
     <string name="create_own_tournament_button">Create your own Tournament</string>
     <string name="label_teamsize">Teamsize</string>
     <string name="validation_error_no_team">\'no team\' is no possible team name</string>
-    <string name="validation_team_no_team">You must choose a team in a team tournament</string>
+    <string name="validation_team_no_team">You must choose a team in a team Tournament</string>
     <string name="edit_tournament_player">Edit Tournament Player</string>
     <string name="success_player_updated">Successfully update player</string>
     <string name="regsiter_for_tournament">Register For Tournament</string>
@@ -290,5 +290,6 @@
     <string name="toggle_button_on">On</string>
     <string name="toggle_button_off">Off</string>
     <string name="title_online_tournaments_demo">a</string>
+    <string name="registered_tournament_player_heading">Players Registered</string>
 
 </resources>

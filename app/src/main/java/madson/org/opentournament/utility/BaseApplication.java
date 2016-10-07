@@ -74,6 +74,8 @@ public abstract class BaseApplication extends Application {
     private Set<OrganizeTournamentEventListener> organizeTournamentEventListeners = new HashSet<>();
     private Player authenticatedPlayer;
 
+    private GameOrSportTyp selectedGameOrSportTyp;
+
     @Override
     public void onCreate() {
 
@@ -395,12 +397,12 @@ public abstract class BaseApplication extends Application {
     }
 
 
-    public void notifyUpdateTournamentPlayer(TournamentPlayer tournamentPlayer) {
+    public void notifyUpdateTournamentPlayer(TournamentPlayer tournamentPlayer, String oldTeamName) {
 
         Set<TournamentEventListener> listeners = new HashSet<>(tournamentEventListeners);
 
         for (TournamentEventListener listener : listeners) {
-            listener.updateTournamentPlayer(tournamentPlayer);
+            listener.updateTournamentPlayer(tournamentPlayer, oldTeamName);
         }
     }
 
@@ -472,5 +474,21 @@ public abstract class BaseApplication extends Application {
         }
 
         return returnedPairingOptions;
+    }
+
+
+    public String getSelectedGameOrSportTyp() {
+
+        if (selectedGameOrSportTyp == null) {
+            return GameOrSportTyp.WARMACHINE.name();
+        }
+
+        return selectedGameOrSportTyp.name();
+    }
+
+
+    public void setSelectedGameOrSportTyp(GameOrSportTyp selectedGameOrSportTyp) {
+
+        this.selectedGameOrSportTyp = selectedGameOrSportTyp;
     }
 }

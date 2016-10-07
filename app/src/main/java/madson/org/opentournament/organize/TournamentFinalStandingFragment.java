@@ -110,7 +110,7 @@ public class TournamentFinalStandingFragment extends Fragment implements Tournam
 
 
     @Override
-    public void updateTournamentPlayer(TournamentPlayer updatedPLayer) {
+    public void updateTournamentPlayer(TournamentPlayer updatedPLayer, String teamName) {
     }
 
 

@@ -5,22 +5,16 @@ import android.os.AsyncTask;
 import android.view.View;
 
 import android.widget.ArrayAdapter;
-import android.widget.ProgressBar;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
+import madson.org.opentournament.domain.TournamentTeam;
 import madson.org.opentournament.domain.TournamentTyp;
-import madson.org.opentournament.organize.setup.TournamentPlayerComparator;
-import madson.org.opentournament.organize.setup.TournamentPlayerListAdapter;
 import madson.org.opentournament.service.TournamentPlayerService;
 import madson.org.opentournament.utility.BaseActivity;
-import madson.org.opentournament.utility.BaseApplication;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -30,7 +24,7 @@ import java.util.Map;
  *
  * @author  Tobias Matt - tmatt@contargo.net
  */
-public class LoadTournamentTeamTask extends AsyncTask<Void, Void, Map<String, Integer>> {
+public class LoadTournamentTeamTask extends AsyncTask<Void, Void, Map<TournamentTeam, List<TournamentPlayer>>> {
 
     private BaseActivity baseActivity;
     private Tournament tournament;
@@ -38,20 +32,20 @@ public class LoadTournamentTeamTask extends AsyncTask<Void, Void, Map<String, In
     private Spinner teamnameSpinner;
     private TournamentPlayer tournament_player;
 
-    private Map<String, Integer> mapOfTeams;
+    private Map<TournamentTeam, List<TournamentPlayer>> mapOfTeams;
 
     public LoadTournamentTeamTask(BaseActivity baseActivity, Tournament tournament, ArrayAdapter<String> team_adapter,
-        Spinner teamnameSpinner, TournamentPlayer tournament_player) {
+        Spinner teamNameSpinner, TournamentPlayer tournament_player) {
 
         this.baseActivity = baseActivity;
         this.tournament = tournament;
         this.team_adapter = team_adapter;
-        this.teamnameSpinner = teamnameSpinner;
+        this.teamnameSpinner = teamNameSpinner;
         this.tournament_player = tournament_player;
     }
 
     @Override
-    protected Map<String, Integer> doInBackground(Void... params) {
+    protected Map<TournamentTeam, List<TournamentPlayer>> doInBackground(Void... params) {
 
         TournamentPlayerService tournamentPlayerService = baseActivity.getBaseApplication()
                 .getTournamentPlayerService();
@@ -63,20 +57,22 @@ public class LoadTournamentTeamTask extends AsyncTask<Void, Void, Map<String, In
 
 
     @Override
-    protected void onPostExecute(Map<String, Integer> aVoid) {
+    protected void onPostExecute(Map<TournamentTeam, List<TournamentPlayer>> aVoid) {
 
         super.onPostExecute(aVoid);
 
         if (!tournament.getTournamentTyp().equals(TournamentTyp.TEAM.name())) {
             team_adapter.add(baseActivity.getString(R.string.no_team));
 
-            for (String key : mapOfTeams.keySet()) {
-                team_adapter.add(key);
+            for (TournamentTeam key : mapOfTeams.keySet()) {
+                if (!key.getTeamName().isEmpty()) {
+                    team_adapter.add(key.getTeamName());
+                }
             }
         } else {
-            for (String key : mapOfTeams.keySet()) {
-                if (mapOfTeams.get(key) < tournament.getTeamSize()) {
-                    team_adapter.add(key);
+            for (TournamentTeam key : mapOfTeams.keySet()) {
+                if (mapOfTeams.get(key).size() < tournament.getTeamSize()) {
+                    team_adapter.add(key.getTeamName());
                 }
             }
         }

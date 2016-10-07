@@ -173,7 +173,7 @@ public class TournamentOrganizeActivity extends BaseActivity implements Tourname
 
 
     @Override
-    public void updateTournamentPlayer(TournamentPlayer updatedPLayer) {
+    public void updateTournamentPlayer(TournamentPlayer updatedPLayer, String teamName) {
     }
 
 

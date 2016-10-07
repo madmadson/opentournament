@@ -48,6 +48,18 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/main_tick" />
+
+        <ImageView
+            android:id="@+id/team_tournament_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="@dimen/halve_tick"
+            android:layout_marginRight="@dimen/halve_tick"
+            android:layout_toLeftOf="@id/amount_players"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_people_black_24dp"
+            android:visibility="gone"/>
     </RelativeLayout>
 
     <View

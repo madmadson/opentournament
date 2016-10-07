@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.Menu;
 
 import madson.org.opentournament.utility.BaseActivity;
-import madson.org.opentournament.utility.Environment;
 
 
 public class MainActivity extends BaseActivity {

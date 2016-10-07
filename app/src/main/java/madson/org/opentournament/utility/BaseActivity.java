@@ -69,9 +69,6 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
     private static BaseApplication mApplication;
 
-    public static final String ANONYMOUS_USER = "anonymous";
-    public static final String NO_CONNECTION = "no internet";
-
     private Toolbar toolbar;
     private FloatingActionButton floatingActionButton;
 
@@ -83,8 +80,6 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     private TextView userMail;
 
     // Auth
-
-    private String mUsername = "anonymous";
     private FirebaseUser mFirebaseUser;
     private GoogleApiClient mGoogleApiClient;
 
@@ -123,12 +118,6 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                         this /* OnConnectionFailedListener */).addApi(Auth.GOOGLE_SIGN_IN_API).build();
 
                 getBaseApplication().updateAuthenticatedUser();
-
-                Snackbar snackbar = Snackbar.make(coordinatorLayout, R.string.success_login, Snackbar.LENGTH_LONG);
-
-                snackbar.getView().setBackgroundColor(getResources().getColor(R.color.colorAccent));
-
-                snackbar.show();
             }
         } else {
             Snackbar snackbar = Snackbar.make(coordinatorLayout, R.string.offline_text, Snackbar.LENGTH_LONG);
@@ -245,7 +234,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                 LoginManager.getInstance().logOut();
 
                 Auth.GoogleSignInApi.signOut(mGoogleApiClient);
-                mUsername = ANONYMOUS_USER;
+
                 startActivity(new Intent(this, SignInActivity.class));
             } else if (isConnected() && mFirebaseAuth == null) {
                 startActivity(new Intent(this, SignInActivity.class));

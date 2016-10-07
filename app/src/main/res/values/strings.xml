@@ -39,7 +39,7 @@
     
     
     <!-- tournament management dialog -->
-    <string name="dialog_organize_tournament">Organize your own tournament</string>
+    <string name="dialog_organize_tournament">Organize your own Tournament</string>
 
     <string name="label_tournament_name">Tournament name*</string>
     <string name="label_tournament_max_seats">Max Seats</string>

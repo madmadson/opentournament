@@ -178,7 +178,7 @@ public class OrganizedTournamentEditDialog extends DialogFragment {
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
 
-                        DateTime dateTime = new DateTime(year, monthOfYear, dayOfMonth, 0, 0);
+                        DateTime dateTime = new DateTime(year, monthOfYear + 1, dayOfMonth, 0, 0);
                         tournamentDateEditText.setText(dateFormatter.format(dateTime.toDate()));
                     }
                 }, now.getYear(), now.getMonthOfYear(), now.getDayOfMonth());

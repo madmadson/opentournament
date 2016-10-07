@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Tournament;
+import madson.org.opentournament.domain.TournamentTyp;
 import madson.org.opentournament.online.OnlineTournamentActivity;
 import madson.org.opentournament.utility.BaseActivity;
 import madson.org.opentournament.viewHolder.TournamentViewHolder;
@@ -82,6 +83,12 @@ public class OnlineTournamentListAdapter extends RecyclerView.Adapter<Tournament
             viewHolder.getTournamentState().setVisibility(View.VISIBLE);
         } else {
             viewHolder.getTournamentState().setVisibility(View.GONE);
+        }
+
+        if (tournament.getTournamentTyp().equals(TournamentTyp.TEAM.name())) {
+            viewHolder.getTeamIcon().setVisibility(View.VISIBLE);
+        } else {
+            viewHolder.getTeamIcon().setVisibility(View.GONE);
         }
 
         if (position % 2 == 0) {

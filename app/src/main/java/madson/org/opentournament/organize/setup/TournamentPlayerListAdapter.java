@@ -1,5 +1,7 @@
 package madson.org.opentournament.organize.setup;
 
+import android.content.DialogInterface;
+
 import android.graphics.Color;
 
 import android.os.Bundle;
@@ -8,6 +10,7 @@ import android.support.design.widget.Snackbar;
 
 import android.support.v4.app.FragmentManager;
 
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 
 import android.util.Log;
@@ -22,7 +25,10 @@ import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.domain.TournamentTyp;
 import madson.org.opentournament.online.RegisterTournamentPlayerDialog;
+import madson.org.opentournament.tasks.DropTournamentPlayerFromTournamentTask;
+import madson.org.opentournament.tasks.RemoveTournamentPlayerFromTournamentTask;
 import madson.org.opentournament.utility.BaseActivity;
+import madson.org.opentournament.utility.BaseApplication;
 import madson.org.opentournament.viewHolder.TournamentPlayerViewHolder;
 
 import java.util.ArrayList;
@@ -53,42 +59,42 @@ public class TournamentPlayerListAdapter extends RecyclerView.Adapter<Tournament
 
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_tournament_player, parent, false);
 
-        return new TournamentPlayerViewHolder(v, baseActivity);
+        return new TournamentPlayerViewHolder(v);
     }
 
 
     @Override
     public void onBindViewHolder(TournamentPlayerViewHolder holder, int position) {
 
-        final TournamentPlayer player = tournamentPlayerList.get(position);
-        holder.setPlayer(player);
+        final TournamentPlayer tournamentPlayer = tournamentPlayerList.get(position);
         holder.getPlayerNumber().setText(String.valueOf(position + 1));
 
-        if (player.getTeamname() != null) {
-            holder.getTeamName().setText(player.getTeamname());
+        if (tournamentPlayer.getTeamname() != null && !tournamentPlayer.getTeamname().isEmpty()) {
+            holder.getTeamName().setText(tournamentPlayer.getTeamname());
             holder.getTeamName().setVisibility(View.VISIBLE);
         } else {
             holder.getTeamName().setVisibility(View.GONE);
         }
 
-        holder.getFaction().setText(player.getFaction());
+        holder.getFaction().setText(tournamentPlayer.getFaction());
 
-        String firstname = player.getFirstname();
-        String nickname = player.getNickname();
-        String lastname = player.getLastname();
+        String firstname = tournamentPlayer.getFirstname();
+        String nickname = tournamentPlayer.getNickname();
+        String lastname = tournamentPlayer.getLastname();
         holder.getPlayerNameInList()
             .setText(baseActivity.getResources().getString(R.string.player_name_in_row, firstname, nickname, lastname));
 
-        // mark online player
-        if (player.getPlayerId() != null && player.getPlayerId().equals("0")) {
+        // mark online tournamentPlayer
+        if (tournamentPlayer.getPlayerId() != null && tournamentPlayer.getPlayerId().equals("0")) {
             holder.getLocalIcon().setVisibility(View.GONE);
         } else {
             holder.getLocalIcon().setVisibility(View.VISIBLE);
         }
 
-        if (player.getDroppedInRound() != 0) {
+        if (tournamentPlayer.getDroppedInRound() != 0) {
             holder.getDroppedInRound()
-                .setText(baseActivity.getResources().getString(R.string.dropped_in_round, player.getDroppedInRound()));
+                .setText(baseActivity.getResources()
+                    .getString(R.string.dropped_in_round, tournamentPlayer.getDroppedInRound()));
             holder.getDroppedInRound().setVisibility(View.VISIBLE);
         }
 
@@ -108,11 +114,11 @@ public class TournamentPlayerListAdapter extends RecyclerView.Adapter<Tournament
 
                         Bundle bundle = new Bundle();
                         bundle.putParcelable(AddTournamentPlayerDialog.BUNDLE_TOURNAMENT, tournament);
-                        bundle.putParcelable(AddTournamentPlayerDialog.BUNDLE_TOURNAMENT_PLAYER, player);
+                        bundle.putParcelable(AddTournamentPlayerDialog.BUNDLE_TOURNAMENT_PLAYER, tournamentPlayer);
                         dialog.setArguments(bundle);
 
                         FragmentManager supportFragmentManager = baseActivity.getSupportFragmentManager();
-                        dialog.show(supportFragmentManager, "tournament setup new player");
+                        dialog.show(supportFragmentManager, "tournament setup new tournamentPlayer");
                     }
                 });
 
@@ -122,19 +128,20 @@ public class TournamentPlayerListAdapter extends RecyclerView.Adapter<Tournament
                         @Override
                         public void onClick(View v) {
 
-                            if (player.getPlayerOnlineUUID() != null) {
+                            if (tournamentPlayer.getPlayerOnlineUUID() != null) {
                                 Log.i(this.getClass().getName(), "addList");
 
                                 AddTournamentPlayerListDialog dialog = new AddTournamentPlayerListDialog();
 
                                 Bundle bundle = new Bundle();
                                 bundle.putParcelable(RegisterTournamentPlayerDialog.BUNDLE_TOURNAMENT, tournament);
-                                bundle.putParcelable(RegisterTournamentPlayerDialog.BUNDLE_TOURNAMENT_PLAYER, player);
+                                bundle.putParcelable(RegisterTournamentPlayerDialog.BUNDLE_TOURNAMENT_PLAYER,
+                                    tournamentPlayer);
                                 dialog.setArguments(bundle);
 
                                 FragmentManager supportFragmentManager = baseActivity.getSupportFragmentManager();
 
-                                dialog.show(supportFragmentManager, "tournament setup new player");
+                                dialog.show(supportFragmentManager, "tournament setup new tournamentPlayer");
                             } else {
                                 Snackbar snackbar = Snackbar.make(baseActivity.getCoordinatorLayout(),
                                         R.string.cant_upload_list_for_local_players, Snackbar.LENGTH_LONG);
@@ -153,6 +160,53 @@ public class TournamentPlayerListAdapter extends RecyclerView.Adapter<Tournament
             holder.getEditIcon().setVisibility(View.GONE);
             holder.getAddListIcon().setVisibility(View.GONE);
         }
+
+        holder.getTournamentPlayerCard().setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+
+                    if (tournament.getActualRound() == 0) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(baseActivity);
+                        final AlertDialog confirmDialog = builder.setTitle(R.string.confirm_remove_tournament_player)
+                            .setPositiveButton(R.string.dialog_confirm, new DialogInterface.OnClickListener() {
+
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                                            Log.i(this.getClass().getName(),
+                                                "removePlayer tournamentPlayer from tournament");
+
+                                            new RemoveTournamentPlayerFromTournamentTask(baseActivity, tournament,
+                                                tournamentPlayer).execute();
+
+                                            removeTournamentPlayer(tournamentPlayer);
+                                        }
+                                    })
+                            .setNeutralButton(R.string.dialog_cancel, null)
+                            .create();
+                        confirmDialog.show();
+                    } else {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(baseActivity);
+                        final AlertDialog confirmDialog = builder.setTitle(R.string.confirm_drop_tournament_player)
+                            .setPositiveButton(R.string.dialog_confirm, new DialogInterface.OnClickListener() {
+
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                                            tournamentPlayer.setDroppedInRound(tournament.getActualRound());
+                                            new DropTournamentPlayerFromTournamentTask(
+                                                baseActivity.getBaseApplication(), tournament, tournamentPlayer)
+                                            .execute();
+                                            updateTournamentPlayer(tournamentPlayer);
+                                        }
+                                    })
+                            .setNeutralButton(R.string.dialog_cancel, null)
+                            .create();
+                        confirmDialog.show();
+                    }
+                }
+            });
     }
 
 

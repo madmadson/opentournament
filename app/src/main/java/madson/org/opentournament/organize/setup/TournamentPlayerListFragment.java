@@ -35,11 +35,13 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import madson.org.opentournament.R;
 import madson.org.opentournament.db.FirebaseReferences;
+import madson.org.opentournament.domain.Game;
 import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.domain.TournamentTyp;
 import madson.org.opentournament.organize.ConfirmPairingNewRoundDialog;
+import madson.org.opentournament.organize.TournamentEventListener;
 import madson.org.opentournament.tasks.AddDummyPlayerTask;
 import madson.org.opentournament.tasks.LoadTournamentPlayerTask;
 import madson.org.opentournament.tasks.LoadTournamentPlayerTeamTask;
@@ -52,7 +54,7 @@ import madson.org.opentournament.utility.BaseApplication;
  *
  * @author  Tobias Matt - tmatt@contargo.net
  */
-public class TournamentPlayerListFragment extends Fragment {
+public class TournamentPlayerListFragment extends Fragment implements TournamentEventListener {
 
     public static final String BUNDLE_TOURNAMENT = "tournament";
 
@@ -89,6 +91,15 @@ public class TournamentPlayerListFragment extends Fragment {
         super.onAttach(context);
 
         baseActivity = (BaseActivity) getActivity();
+        baseActivity.getBaseApplication().registerTournamentEventListener(this);
+    }
+
+
+    @Override
+    public void onDetach() {
+
+        super.onDetach();
+        baseActivity.getBaseApplication().unregisterTournamentEventListener(this);
     }
 
 
@@ -339,8 +350,54 @@ public class TournamentPlayerListFragment extends Fragment {
     }
 
 
-    public boolean containsPlayer(Player player) {
+    @Override
+    public void startRound(int roundToStart, Tournament tournament) {
+    }
 
-        return tournamentPlayerListAdapter.containsPlayer(player);
+
+    @Override
+    public void pairRoundAgain(int round_for_pairing) {
+    }
+
+
+    @Override
+    public void pairingChanged(Game game1, Game game2) {
+    }
+
+
+    @Override
+    public void enterGameResultConfirmed(Game game) {
+    }
+
+
+    @Override
+    public void addTournamentPlayer(TournamentPlayer tournamentPlayer) {
+
+        addPlayer(tournamentPlayer);
+    }
+
+
+    @Override
+    public void removeTournamentPlayer(TournamentPlayer tournamentPlayer) {
+    }
+
+
+    @Override
+    public void addPlayerToTournament(Player player) {
+    }
+
+
+    @Override
+    public void removeAvailablePlayer(Player player) {
+    }
+
+
+    @Override
+    public void updateTournamentPlayer(TournamentPlayer updatedPLayer, String oldTeamName) {
+    }
+
+
+    @Override
+    public void addRegistration(TournamentPlayer player) {
     }
 }

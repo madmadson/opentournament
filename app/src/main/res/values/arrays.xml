@@ -18,12 +18,19 @@
     <!-- this must be a pair -->
     <string-array name="news_header">
         <item>Welcome!</item>
+        <item>So 9.10: Version 0.1.9-ALPHA Released</item>
         <item>Fr 7.10: Version 0.1.8-ALPHA Released</item>
-        <item>Do 6.10: Version 0.1.7-ALPHA Released </item>
+        <item>Do 6.10: Version 0.1.7-ALPHA Released</item>
     </string-array>
 
     <string-array name="news">
         <item>Create more Tournaments! Give Feedback!</item>
+         <item>* Improve mobile layout for tournament organization\n
+            * Many Fixed Labels\n
+            * New "teamView" for organized Tournaments -> Teamtournament preparation\n
+            * Bug with registrations. Registration now has header!\n
+        </item>
+      
         <item>* Fix bug in calendar\n
             * Many Fixed Labels\n
             * New "teamView" for organized Tournaments -> Teamtournament preparation\n

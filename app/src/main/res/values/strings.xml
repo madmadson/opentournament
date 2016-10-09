@@ -102,9 +102,8 @@
     
     <!-- New Player For Tournament dialog-->
     <string name="validation_error_empty">Field can\'t not be empty</string>
-    <string name="success_new_player_inserted">Successfully tournament player added</string>
+    <string name="success_new_player_inserted">Successfully add TournamentPlayer</string>
     <string name="new_player_tournament_title">New Tournament Player</string>
-    <string name="tournament_player_additional_data_title">Additional data for player</string>
     
     <!-- Tournament Player List -->
     <string name="tournament_player_list_heading">Tournament Players</string>
@@ -165,7 +164,7 @@
     <string name="heading_tournmant_players">Tournament Players</string>
     <string name="tournament_online">online</string>
     <string name="header_ranking_number">#</string>
-    <string name="header_ranking_player">player</string>
+    <string name="header_ranking_player">tournamentPlayer</string>
     <string name="header_ranking_score">sc</string>
     <string name="header_ranking_sos">sos</string>
     <string name="header_ranking_cp">cp</string>
@@ -194,10 +193,10 @@
     <string name="offline_player_text">you are offline - cannot load online players</string>
     <string name="no_tournament_players">No Tournament Players found</string>
 
-    <string name="confirm_remove_tournament_player">Sure remove player from tournament?</string>
+    <string name="confirm_remove_tournament_player">Sure remove tournamentPlayer from tournament?</string>
 
     <string name="confirm_start_tournament_title">Tournament should start?</string>
-    <string name="header_organised_tournament_action">action</string>
+    <string name="header_organised_tournament_action">Action</string>
     <string name="no_available_online_players_for_tournament">No online Players found (check filter)</string>
     <string name="no_available_players_for_tournament">No local players found (check filter)</string>
     <string name="pair_again">Pair again</string>
@@ -207,12 +206,12 @@
     <string name="pairing_option_player_not_play_twice_against_each_other">Player don\'t play twice against each other</string>
     <string name="pairing_option_player_with_same_team_not_play_against_each_other">Player in same team don\'t play against each other</string>
     
-    <string name="uneven_player_message">Uneven players in tournament. You can\'t start a tournament with uneven amount of players. Should a dummy player be inserted for you?</string>
+    <string name="uneven_player_message">Uneven players in tournament. You can\'t start a tournament with uneven amount of players. Should a dummy tournamentPlayer be inserted for you?</string>
     
     <string name="not_all_games_finished_next_round">Not all games are finished. Please insert results before pair next round.</string>
     <string name="not_all_games_finished_end_tournament">Not all games are finished. Please insert all results before end tournament.</string>
     <string name="at_least_one_game_started">At least one game is finished</string>
-    <string name="confirm_drop_tournament_player">Confirm drop player</string>
+    <string name="confirm_drop_tournament_player">Confirm drop tournamentPlayer</string>
     
     <string name="create_account">Create New Account</string>
     <string name="hint_email">Email</string>
@@ -232,7 +231,7 @@
     <string name="player_already_played_each_other">%1$s already played against %2$s</string>
     <string name="player_swapped_successfully">Player swapped successful</string>
     <string name="end_tournament">End Tournament</string>
-    <string name="confirm_swap_player">confirm swap player</string>
+    <string name="confirm_swap_player">confirm swap tournamentPlayer</string>
     <string name="tournament_ended_successful">tournament ended successfully</string>
     <string name="nav_final_standing_tab">Final standings</string>
     <string name="action">ACTION</string>
@@ -250,11 +249,11 @@
     <string name="welcome_text">Welcome, %1$s!</string>
     <string name="please_sign_in_text">Please sign in to manage your account</string>
     <string name="introduction_text">
-        OpenTournament uses your email address to identify you.\nYou are able to watch and create tournaments without being noticed as a player.\nNevertheless we recommend to register yourself as a player for easily being included in tournaments you are visiting.
+        OpenTournament uses your email address to identify you.\nYou are able to watch and create tournaments without being noticed as a tournamentPlayer.\nNevertheless we recommend to register yourself as a tournamentPlayer for easily being included in tournaments you are visiting.
     </string>
-    <string name="be_a_player">Add me as a player</string>
-    <string name="change_player">Change player info</string>
-    <string name="success_upload_player_data">Successfully upload player data</string>
+    <string name="be_a_player">Add me as a tournamentPlayer</string>
+    <string name="change_player">Change tournamentPlayer info</string>
+    <string name="success_upload_player_data">Successfully upload tournamentPlayer data</string>
     <string name="title_organized_tournaments">Organized Tournaments</string>
     
     <string name="cant_start_tournament_without_players">Can\'t start tournament without players</string>
@@ -264,9 +263,9 @@
     <string name="validation_error_no_team">\'no team\' is no possible team name</string>
     <string name="validation_team_no_team">You must choose a team in a team Tournament</string>
     <string name="edit_tournament_player">Edit Tournament Player</string>
-    <string name="success_player_updated">Successfully update player</string>
+    <string name="success_player_updated">Successfully update tournamentPlayer</string>
     <string name="regsiter_for_tournament">Register For Tournament</string>
-    <string name="cannot_register_without_player_profile">You cannot register without player account</string>
+    <string name="cannot_register_without_player_profile">You cannot register without tournamentPlayer account</string>
     <string name="nav_registration_tab">Registration</string>
     <string name="you_are_already_registered">You are already registered for Tournament</string>
     <string name="success_registration">Successfully registered for Tournament</string>
@@ -276,7 +275,7 @@
     <string name="name_of_list">Name of List</string>
     <string name="upload_list">Upload List</string>
     <string name="success_upload_list">Successfully uploaded list</string>
-    <string name="realy_add_player">Really add player to Tournament?</string>
+    <string name="realy_add_player">Really add tournamentPlayer to Tournament?</string>
     <string name="player_already_is_in_tournament">Player is already in Tournament</string>
     <string name="show_army_lists">Army Lists</string>
     <string name="cant_upload_list_for_local_players">You cannot upload army lists for local players</string>

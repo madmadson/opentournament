@@ -15,6 +15,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import madson.org.opentournament.db.FirebaseReferences;
 import madson.org.opentournament.db.OpenTournamentDBHelper;
 import madson.org.opentournament.db.TournamentPlayerTable;
+import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.domain.TournamentPlayerComparator;
@@ -267,7 +268,7 @@ public class TournamentPlayerServiceImpl implements TournamentPlayerService {
 
 
     @Override
-    public TournamentPlayer dropPlayerFromTournament(TournamentPlayer player, Tournament tournament) {
+    public void dropPlayerFromTournament(TournamentPlayer player, Tournament tournament) {
 
         SQLiteDatabase db = openTournamentDBHelper.getWritableDatabase();
 
@@ -278,10 +279,6 @@ public class TournamentPlayerServiceImpl implements TournamentPlayerService {
             TournamentPlayerTable.COLUMN_ID + " = ?", new String[] { String.valueOf(player.get_id()) });
 
         db.close();
-
-        player.setDroppedInRound(tournament.getActualRound());
-
-        return player;
     }
 
 
@@ -311,5 +308,43 @@ public class TournamentPlayerServiceImpl implements TournamentPlayerService {
             new String[] { String.valueOf(tournament.get_id()) });
 
         db.close();
+    }
+
+
+    @Override
+    public boolean checkPlayerAlreadyInTournament(Tournament tournament, Player player) {
+
+        boolean alreadyInTournament = false;
+
+        SQLiteDatabase readableDatabase = openTournamentDBHelper.getReadableDatabase();
+
+        Cursor cursor;
+
+        if (player.get_id() != 0) {
+            cursor = readableDatabase.query(TournamentPlayerTable.TABLE_TOURNAMENT_PLAYER,
+                    new String[] { TournamentPlayerTable.COLUMN_PLAYER_ONLINE_UUID },
+                    TournamentPlayerTable.COLUMN_TOURNAMENT_ID + " = ? AND "
+                    + TournamentPlayerTable.COLUMN_PLAYER_ONLINE_UUID + " = ?",
+                    new String[] { Long.toString(tournament.get_id()), player.getOnlineUUID() }, null, null, null);
+        } else {
+            cursor = readableDatabase.query(TournamentPlayerTable.TABLE_TOURNAMENT_PLAYER,
+                    new String[] { TournamentPlayerTable.COLUMN_PLAYER_ONLINE_UUID },
+                    TournamentPlayerTable.COLUMN_TOURNAMENT_ID + " = ? AND " + TournamentPlayerTable.COLUMN_PLAYER_ID
+                    + " = ?", new String[] { Long.toString(tournament.get_id()), String.valueOf(player.get_id()) },
+                    null, null, null);
+        }
+
+        cursor.moveToFirst();
+
+        while (!cursor.isAfterLast()) {
+            alreadyInTournament = true;
+
+            cursor.moveToNext();
+        }
+
+        cursor.close();
+        readableDatabase.close();
+
+        return alreadyInTournament;
     }
 }

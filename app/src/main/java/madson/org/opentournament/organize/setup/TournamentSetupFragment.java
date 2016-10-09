@@ -157,82 +157,21 @@ public class TournamentSetupFragment extends Fragment implements TournamentEvent
 
     @Override
     public void addTournamentPlayer(TournamentPlayer tournamentPlayer) {
-
-        tournamentPlayerListFragment.addPlayer(tournamentPlayer);
     }
 
 
     @Override
     public void removeTournamentPlayer(final TournamentPlayer tournamentPlayer) {
-
-        if (tournament.getActualRound() == 0) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            final AlertDialog confirmDialog = builder.setTitle(R.string.confirm_remove_tournament_player)
-                    .setPositiveButton(R.string.dialog_confirm, new DialogInterface.OnClickListener() {
-
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-
-                                    Log.i(this.getClass().getName(), "removePlayer player from tournament");
-
-                                    BaseActivity baseActivity = ((BaseActivity) getActivity());
-                                    new RemoveTournamentPlayerFromTournamentTask(baseActivity, tournament,
-                                        tournamentPlayer, tournamentPlayerListFragment, availablePlayerListFragment)
-                                    .execute();
-                                }
-                            })
-                    .setNeutralButton(R.string.dialog_cancel, null)
-                    .create();
-            confirmDialog.show();
-        } else {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            final AlertDialog confirmDialog = builder.setTitle(R.string.confirm_drop_tournament_player)
-                    .setPositiveButton(R.string.dialog_confirm, new DialogInterface.OnClickListener() {
-
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-
-                                    BaseApplication baseApplication = ((BaseActivity) getActivity())
-                                        .getBaseApplication();
-                                    new DropTournamentPlayerFromTournamentTask(baseApplication, tournament,
-                                        tournamentPlayer, tournamentPlayerListFragment).execute();
-                                }
-                            })
-                    .setNeutralButton(R.string.dialog_cancel, null)
-                    .create();
-            confirmDialog.show();
-        }
     }
 
 
     @Override
     public void addPlayerToTournament(Player player) {
-
-        if (tournamentPlayerListFragment.containsPlayer(player)) {
-            Snackbar snackbar = Snackbar.make(((BaseActivity) getActivity()).getCoordinatorLayout(),
-                    R.string.player_already_is_in_tournament, Snackbar.LENGTH_LONG);
-
-            snackbar.getView().setBackgroundColor(getActivity().getResources().getColor(R.color.colorNegative));
-
-            snackbar.show();
-        } else {
-            AddTournamentPlayerDialog dialog = new AddTournamentPlayerDialog();
-
-            Bundle bundle = new Bundle();
-            bundle.putParcelable(AddTournamentPlayerDialog.BUNDLE_TOURNAMENT, tournament);
-            bundle.putParcelable(AddTournamentPlayerDialog.BUNDLE_PLAYER, player);
-            dialog.setArguments(bundle);
-
-            FragmentManager supportFragmentManager = getChildFragmentManager();
-            dialog.show(supportFragmentManager, this.getClass().getName());
-        }
     }
 
 
     @Override
     public void removeAvailablePlayer(Player player) {
-
-        availablePlayerListFragment.removePlayer(player);
     }
 
 

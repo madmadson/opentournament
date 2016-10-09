@@ -21,11 +21,10 @@ import madson.org.opentournament.utility.BaseActivity;
  *
  * @author  Tobias Matt - tmatt@contargo.net
  */
-public class TournamentPlayerViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+public class TournamentPlayerViewHolder extends RecyclerView.ViewHolder {
 
     private ImageView addListIcon;
     private ImageView editIcon;
-    private TournamentPlayerListAdapter tournamentPlayerListAdapter;
     private TextView faction;
 
     private TextView playerNameInList;
@@ -33,11 +32,8 @@ public class TournamentPlayerViewHolder extends RecyclerView.ViewHolder implemen
     private TextView teamName;
 
     private ImageView localIcon;
-    private TournamentPlayer player;
     private TextView droppedInRound;
     private CardView tournamentPlayerCard;
-
-    private BaseActivity baseActivity;
 
     /**
      * used by online tournament list player.
@@ -60,35 +56,9 @@ public class TournamentPlayerViewHolder extends RecyclerView.ViewHolder implemen
         addListIcon = (ImageView) v.findViewById(R.id.tournament_player_row_add_List);
     }
 
-
-    public TournamentPlayerViewHolder(View v, BaseActivity baseActivity) {
-
-        super(v);
-
-        tournamentPlayerCard = (CardView) v.findViewById(R.id.tournament_player_row_card_view);
-        this.baseActivity = baseActivity;
-
-        v.setOnClickListener(this);
-
-        playerNumber = (TextView) v.findViewById(R.id.tournament_player_row_player_number);
-        playerNameInList = (TextView) v.findViewById(R.id.tournament_player_fullname);
-        teamName = (TextView) v.findViewById(R.id.tournament_player_teamname);
-        faction = (TextView) v.findViewById(R.id.tournament_player_row_faction);
-        droppedInRound = (TextView) v.findViewById(R.id.dropped_in_round);
-        localIcon = (ImageView) v.findViewById(R.id.tournament_player_row_local_icon);
-        editIcon = (ImageView) v.findViewById(R.id.tournament_player_row_edit_icon);
-        addListIcon = (ImageView) v.findViewById(R.id.tournament_player_row_add_List);
-    }
-
     public TextView getPlayerNameInList() {
 
         return playerNameInList;
-    }
-
-
-    public void setPlayer(TournamentPlayer player) {
-
-        this.player = player;
     }
 
 
@@ -113,17 +83,6 @@ public class TournamentPlayerViewHolder extends RecyclerView.ViewHolder implemen
     public TextView getFaction() {
 
         return faction;
-    }
-
-
-    @Override
-    public void onClick(View v) {
-
-        Log.i(v.getClass().getName(), "removePlayer player from tournament player list: " + player);
-
-        if (baseActivity != null) {
-            baseActivity.getBaseApplication().notifyRemoveTournamentPlayer(player);
-        }
     }
 
 

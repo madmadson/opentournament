@@ -25,19 +25,15 @@ public class RemoveTournamentPlayerFromTournamentTask extends AsyncTask<Void, Vo
 
     private Tournament tournament;
     private TournamentPlayer player;
-    private TournamentPlayerListFragment tournamentPlayerListFragment;
-    private AvailablePlayerListFragment availablePlayerListFragment;
+
     private BaseActivity baseActivity;
 
     public RemoveTournamentPlayerFromTournamentTask(BaseActivity baseActivity, Tournament tournament,
-        TournamentPlayer player, TournamentPlayerListFragment tournamentPlayerListFragment,
-        AvailablePlayerListFragment availablePlayerListFragment) {
+        TournamentPlayer player) {
 
         this.baseActivity = baseActivity;
         this.tournament = tournament;
         this.player = player;
-        this.tournamentPlayerListFragment = tournamentPlayerListFragment;
-        this.availablePlayerListFragment = availablePlayerListFragment;
     }
 
     @Override
@@ -56,11 +52,9 @@ public class RemoveTournamentPlayerFromTournamentTask extends AsyncTask<Void, Vo
     @Override
     protected void onPostExecute(Void aVoid) {
 
-        tournamentPlayerListFragment.removePlayer(player);
-
         // dummy player are not persistent
-        if (!player.isDummy() && availablePlayerListFragment != null) {
-            availablePlayerListFragment.addPlayer(player);
+        if (!player.isDummy()) {
+            baseActivity.getBaseApplication().notifyRemoveTournamentPlayer(player);
         }
 
         Snackbar snackbar = Snackbar.make(baseActivity.getCoordinatorLayout(), R.string.success_remove_player,

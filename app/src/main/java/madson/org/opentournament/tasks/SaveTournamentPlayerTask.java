@@ -110,7 +110,6 @@ public class SaveTournamentPlayerTask extends AsyncTask<Void, Void, Void> {
 
         baseActivity.getBaseApplication().notifyAddTournamentPlayer(tournamentPlayer);
 
-        // case player
         if (player != null) {
             baseActivity.getBaseApplication().notifyRemoveAvailablePlayer(player);
         }

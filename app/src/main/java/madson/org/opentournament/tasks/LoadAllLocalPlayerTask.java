@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Player;
+import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.organize.setup.LocalPlayerListAdapter;
 import madson.org.opentournament.utility.BaseApplication;
 

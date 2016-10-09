@@ -34,9 +34,11 @@ import com.google.firebase.database.ValueEventListener;
 
 import madson.org.opentournament.R;
 import madson.org.opentournament.db.FirebaseReferences;
+import madson.org.opentournament.domain.Game;
 import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
+import madson.org.opentournament.organize.TournamentEventListener;
 import madson.org.opentournament.service.PlayerService;
 import madson.org.opentournament.service.TournamentPlayerService;
 import madson.org.opentournament.tasks.LoadAllLocalPlayerTask;
@@ -46,7 +48,7 @@ import madson.org.opentournament.utility.BaseFragment;
 import java.util.List;
 
 
-public class AvailablePlayerListFragment extends BaseFragment {
+public class AvailablePlayerListFragment extends BaseFragment implements TournamentEventListener {
 
     public static final String BUNDLE_TOURNAMENT = "tournament";
 
@@ -81,6 +83,27 @@ public class AvailablePlayerListFragment extends BaseFragment {
         super.onAttach(context);
 
         baseActivity = (BaseActivity) getActivity();
+        baseActivity.getBaseApplication().registerTournamentEventListener(this);
+    }
+
+
+    @Override
+    public void onDetach() {
+
+        super.onDetach();
+        baseActivity.getBaseApplication().unregisterTournamentEventListener(this);
+    }
+
+
+    public static AvailablePlayerListFragment newInstance(Tournament tournamentToOrganize) {
+
+        AvailablePlayerListFragment fragment = new AvailablePlayerListFragment();
+        Bundle args = new Bundle();
+
+        args.putParcelable(BUNDLE_TOURNAMENT, tournamentToOrganize);
+        fragment.setArguments(args);
+
+        return fragment;
     }
 
 
@@ -100,7 +123,6 @@ public class AvailablePlayerListFragment extends BaseFragment {
             noOnlineTournamentPlayersTextView = (TextView) view.findViewById(R.id.no_online_available_players);
 
             final TournamentPlayerService tournamentPlayerService = getBaseApplication().getTournamentPlayerService();
-            final PlayerService playerService = getBaseApplication().getPlayerService();
 
             filterPlayerTextView.addTextChangedListener(new PlayerFilterTextWatcher());
 
@@ -112,7 +134,7 @@ public class AvailablePlayerListFragment extends BaseFragment {
 
                 LinearLayoutManager linearLayoutManager = new LinearLayoutManager(baseActivity.getApplication());
                 mOnlinePlayerRecyclerView.setLayoutManager(linearLayoutManager);
-                onlinePlayerListAdapter = new OnlinePlayerListAdapter(baseActivity.getBaseApplication());
+                onlinePlayerListAdapter = new OnlinePlayerListAdapter(baseActivity, tournament);
 
                 // need player ids for filtering online players
                 final List<String> alreadyPlayingPlayersUUIDs =
@@ -183,7 +205,7 @@ public class AvailablePlayerListFragment extends BaseFragment {
             localPlayerRecyclerView.setLayoutManager(linearLayoutManager);
 
             // listener may be null
-            localPlayerListAdapter = new LocalPlayerListAdapter(baseActivity);
+            localPlayerListAdapter = new LocalPlayerListAdapter(baseActivity, tournament);
             localPlayerRecyclerView.setAdapter(localPlayerListAdapter);
 
             new LoadAllLocalPlayerTask(baseActivity.getBaseApplication(), localPlayerListAdapter,
@@ -265,6 +287,79 @@ public class AvailablePlayerListFragment extends BaseFragment {
                         }
                     });
         }
+    }
+
+
+    @Override
+    public void startRound(int roundToStart, Tournament tournament) {
+    }
+
+
+    @Override
+    public void pairRoundAgain(int round_for_pairing) {
+    }
+
+
+    @Override
+    public void pairingChanged(Game game1, Game game2) {
+    }
+
+
+    @Override
+    public void enterGameResultConfirmed(Game game) {
+    }
+
+
+    @Override
+    public void addTournamentPlayer(TournamentPlayer tournamentPlayer) {
+
+        Player player = new Player();
+        player.setOnlineUUID(tournamentPlayer.getPlayerOnlineUUID());
+
+        if (!tournamentPlayer.getPlayerId().equals("0")) {
+            localPlayerListAdapter.removePlayer(player);
+        } else {
+            onlinePlayerListAdapter.removePlayer(player);
+        }
+    }
+
+
+    @Override
+    public void removeTournamentPlayer(TournamentPlayer tournamentPlayer) {
+
+        Player player = new Player();
+
+        player.setFirstname(tournamentPlayer.getFirstname());
+        player.setNickname(tournamentPlayer.getNickname());
+        player.setLastname(tournamentPlayer.getLastname());
+        player.setOnlineUUID(tournamentPlayer.getPlayerOnlineUUID());
+
+        if (!tournamentPlayer.getPlayerId().equals("0")) {
+            player.set_id(Long.parseLong(tournamentPlayer.getPlayerId()));
+            localPlayerListAdapter.add(player);
+        } else {
+            onlinePlayerListAdapter.addPlayer(player);
+        }
+    }
+
+
+    @Override
+    public void addPlayerToTournament(Player player) {
+    }
+
+
+    @Override
+    public void removeAvailablePlayer(Player player) {
+    }
+
+
+    @Override
+    public void updateTournamentPlayer(TournamentPlayer updatedPLayer, String oldTeamName) {
+    }
+
+
+    @Override
+    public void addRegistration(TournamentPlayer player) {
     }
 
     private class PlayerFilterTextWatcher implements TextWatcher {

@@ -6,8 +6,6 @@ import android.util.Log;
 
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
-import madson.org.opentournament.organize.setup.AvailablePlayerListFragment;
-import madson.org.opentournament.organize.setup.TournamentPlayerListFragment;
 import madson.org.opentournament.utility.BaseApplication;
 
 
@@ -19,35 +17,25 @@ import madson.org.opentournament.utility.BaseApplication;
 public class DropTournamentPlayerFromTournamentTask extends AsyncTask<Void, Void, Void> {
 
     private Tournament tournament;
-    private TournamentPlayer player;
-    private TournamentPlayerListFragment tournamentPlayerListFragment;
+    private TournamentPlayer tournamentPlayer;
+
     private BaseApplication baseApplication;
 
-    private TournamentPlayer updatedPlayer;
-
     public DropTournamentPlayerFromTournamentTask(BaseApplication baseApplication, Tournament tournament,
-        TournamentPlayer player, TournamentPlayerListFragment tournamentPlayerListFragment) {
+        TournamentPlayer tournamentPlayer) {
 
         this.baseApplication = baseApplication;
         this.tournament = tournament;
-        this.player = player;
-        this.tournamentPlayerListFragment = tournamentPlayerListFragment;
+        this.tournamentPlayer = tournamentPlayer;
     }
 
     @Override
     protected Void doInBackground(Void... params) {
 
-        Log.i(this.getClass().getName(), "drop player from tournament ");
+        Log.i(this.getClass().getName(), "drop tournamentPlayer from tournament ");
 
-        updatedPlayer = baseApplication.getTournamentPlayerService().dropPlayerFromTournament(player, tournament);
+        baseApplication.getTournamentPlayerService().dropPlayerFromTournament(tournamentPlayer, tournament);
 
         return null;
-    }
-
-
-    @Override
-    protected void onPostExecute(Void aVoid) {
-
-        tournamentPlayerListFragment.updatePlayer(updatedPlayer, updatedPlayer.getTeamname());
     }
 }

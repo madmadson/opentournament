@@ -12,6 +12,7 @@ import android.util.Log;
 import madson.org.opentournament.db.OpenTournamentDBHelper;
 import madson.org.opentournament.db.PlayerTable;
 import madson.org.opentournament.domain.Player;
+import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
 
 import java.util.ArrayList;

@@ -184,36 +184,14 @@ public class Player implements Parcelable {
 
         Player player = (Player) o;
 
-        if (_id != player._id)
-            return false;
-
-        if (onlineUUID != null ? !onlineUUID.equals(player.onlineUUID) : player.onlineUUID != null)
-            return false;
-
-        if (firstname != null ? !firstname.equals(player.firstname) : player.firstname != null)
-            return false;
-
-        if (nickname != null ? !nickname.equals(player.nickname) : player.nickname != null)
-            return false;
-
-        if (lastname != null ? !lastname.equals(player.lastname) : player.lastname != null)
-            return false;
-
-        return auth_email != null ? auth_email.equals(player.auth_email) : player.auth_email == null;
+        return onlineUUID != null ? onlineUUID.equals(player.onlineUUID) : player.onlineUUID == null;
     }
 
 
     @Override
     public int hashCode() {
 
-        int result = (int) (_id ^ (_id >>> 32));
-        result = 31 * result + (onlineUUID != null ? onlineUUID.hashCode() : 0);
-        result = 31 * result + (firstname != null ? firstname.hashCode() : 0);
-        result = 31 * result + (nickname != null ? nickname.hashCode() : 0);
-        result = 31 * result + (lastname != null ? lastname.hashCode() : 0);
-        result = 31 * result + (auth_email != null ? auth_email.hashCode() : 0);
-
-        return result;
+        return onlineUUID != null ? onlineUUID.hashCode() : 0;
     }
 
 

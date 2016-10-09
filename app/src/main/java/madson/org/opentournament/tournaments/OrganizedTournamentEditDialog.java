@@ -68,8 +68,6 @@ public class OrganizedTournamentEditDialog extends DialogFragment {
     private RadioButton tournamentTypeSoloRadio;
     private RadioButton tournamentTypeTeamRadio;
     private BaseActivity baseActivity;
-    private ImageButton teamsizeIncreaseButton;
-    private ImageButton teamsizeDecreaseButton;
     private EditText teamsize;
     private View teamsizeLayout;
 
@@ -100,8 +98,9 @@ public class OrganizedTournamentEditDialog extends DialogFragment {
         View dialogView = inflater.inflate(R.layout.dialog_add_tournament, null);
 
         teamsizeLayout = dialogView.findViewById(R.id.teamsize_layout);
-        teamsizeIncreaseButton = (ImageButton) dialogView.findViewById(R.id.teamsize_increase);
-        teamsizeIncreaseButton.setOnClickListener(new View.OnClickListener() {
+
+        ImageButton teamSizeIncreaseButton = (ImageButton) dialogView.findViewById(R.id.teamsize_increase);
+        teamSizeIncreaseButton.setOnClickListener(new View.OnClickListener() {
 
                 @Override
                 public void onClick(View v) {
@@ -112,8 +111,9 @@ public class OrganizedTournamentEditDialog extends DialogFragment {
                     }
                 }
             });
-        teamsizeDecreaseButton = (ImageButton) dialogView.findViewById(R.id.teamsize_decrease);
-        teamsizeDecreaseButton.setOnClickListener(new View.OnClickListener() {
+
+        ImageButton teamSizeDecreaseButton = (ImageButton) dialogView.findViewById(R.id.teamsize_decrease);
+        teamSizeDecreaseButton.setOnClickListener(new View.OnClickListener() {
 
                 @Override
                 public void onClick(View v) {
@@ -183,7 +183,7 @@ public class OrganizedTournamentEditDialog extends DialogFragment {
                     }
                 }, now.getYear(), now.getMonthOfYear(), now.getDayOfMonth());
 
-        datePickerDialog.updateDate(now.getYear(), now.getMonthOfYear(), now.getDayOfMonth());
+        datePickerDialog.updateDate(now.getYear(), now.getMonthOfYear() - 1, now.getDayOfMonth());
 
         builder.setView(dialogView)
             .setTitle(tournament == null ? getString(R.string.dialog_organize_tournament) : "")

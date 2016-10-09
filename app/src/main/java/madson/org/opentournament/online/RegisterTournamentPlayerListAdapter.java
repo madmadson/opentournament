@@ -62,7 +62,6 @@ public class RegisterTournamentPlayerListAdapter extends RecyclerView.Adapter<To
 
         final TournamentPlayer player = playerList.get(position);
 
-        viewHolder.setPlayer(player);
         viewHolder.getPlayerNumber().setText(String.valueOf(position + 1));
 
         if (player.getTeamname() != null) {

@@ -16,7 +16,10 @@ import android.widget.Filter;
 
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Player;
+import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
+import madson.org.opentournament.tasks.CheckPlayerAlreadyInTournamentTask;
+import madson.org.opentournament.utility.BaseActivity;
 import madson.org.opentournament.utility.BaseApplication;
 import madson.org.opentournament.viewHolder.PlayerViewHolder;
 
@@ -35,11 +38,13 @@ public class OnlinePlayerListAdapter extends RecyclerView.Adapter<PlayerViewHold
     private List<Player> filteredPlayerList;
 
     private ItemFilter filter;
-    private BaseApplication baseApplication;
+    private BaseActivity baseActivity;
+    private Tournament tournament;
 
-    public OnlinePlayerListAdapter(BaseApplication baseApplication) {
+    public OnlinePlayerListAdapter(BaseActivity baseActivity, Tournament tournament) {
 
-        this.baseApplication = baseApplication;
+        this.baseActivity = baseActivity;
+        this.tournament = tournament;
 
         this.originalPlayerList = new ArrayList<>();
         this.filteredPlayerList = new ArrayList<>();
@@ -61,7 +66,7 @@ public class OnlinePlayerListAdapter extends RecyclerView.Adapter<PlayerViewHold
         final Player player = filteredPlayerList.get(position);
 
         holder.getPlayerNameInList()
-            .setText(baseApplication.getResources()
+            .setText(baseActivity.getResources()
                 .getString(R.string.player_name_in_row, player.getFirstname(), player.getNickname(),
                     player.getLastname()));
 
@@ -76,7 +81,7 @@ public class OnlinePlayerListAdapter extends RecyclerView.Adapter<PlayerViewHold
                 @Override
                 public void onClick(View v) {
 
-                    baseApplication.notifyPlayerAddToTournament(player);
+                    new CheckPlayerAlreadyInTournamentTask(baseActivity, tournament, player).execute();
                 }
             });
     }
@@ -90,8 +95,6 @@ public class OnlinePlayerListAdapter extends RecyclerView.Adapter<PlayerViewHold
 
 
     public void addPlayer(Player player) {
-
-        Log.i(this.getClass().getName(), "player added to adapter ");
 
         this.originalPlayerList.add(player);
         notifyDataSetChanged();

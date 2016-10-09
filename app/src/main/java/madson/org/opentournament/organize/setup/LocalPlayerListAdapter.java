@@ -16,6 +16,8 @@ import android.widget.Filterable;
 
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Player;
+import madson.org.opentournament.domain.Tournament;
+import madson.org.opentournament.tasks.CheckPlayerAlreadyInTournamentTask;
 import madson.org.opentournament.utility.BaseActivity;
 import madson.org.opentournament.viewHolder.PlayerViewHolder;
 
@@ -31,13 +33,15 @@ import java.util.List;
 public class LocalPlayerListAdapter extends RecyclerView.Adapter<PlayerViewHolder> implements Filterable {
 
     private BaseActivity baseActivity;
+    private Tournament tournament;
     private List<Player> originalPlayerList;
     private List<Player> filteredPlayerList;
     private ItemFilter mFilter = new ItemFilter();
 
-    public LocalPlayerListAdapter(BaseActivity baseActivity) {
+    public LocalPlayerListAdapter(BaseActivity baseActivity, Tournament tournament) {
 
         this.baseActivity = baseActivity;
+        this.tournament = tournament;
 
         this.originalPlayerList = new ArrayList<>();
         this.filteredPlayerList = new ArrayList<>();
@@ -75,7 +79,7 @@ public class LocalPlayerListAdapter extends RecyclerView.Adapter<PlayerViewHolde
                 @Override
                 public void onClick(View v) {
 
-                    baseActivity.getBaseApplication().notifyPlayerAddToTournament(player);
+                    new CheckPlayerAlreadyInTournamentTask(baseActivity, tournament, player).execute();
                 }
             });
 

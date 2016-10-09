@@ -24,6 +24,8 @@ import madson.org.opentournament.domain.Game;
 import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
+import madson.org.opentournament.organize.setup.AvailablePlayerListFragment;
+import madson.org.opentournament.organize.setup.TournamentPlayerListFragment;
 import madson.org.opentournament.organize.setup.TournamentSetupFragment;
 import madson.org.opentournament.tasks.LoadTournamentTask;
 import madson.org.opentournament.utility.BaseActivity;
@@ -41,7 +43,6 @@ public class TournamentOrganizeActivity extends BaseActivity implements Tourname
 
     private TournamentRoundManagementFragment tournamentRoundManagementFragment;
     private Tournament tournament;
-    private TournamentSetupFragment tournamentSetupFragment;
 
     @Override
     public boolean useTabLayout() {
@@ -197,11 +198,16 @@ public class TournamentOrganizeActivity extends BaseActivity implements Tourname
 
             float widthOfScreen = getWidthOfScreen();
 
-            if (position == 0) {
-                return tournamentSetupFragment = TournamentSetupFragment.newInstance(tournamentToOrganize);
-            } else if (position == 1 && widthOfScreen < 720) {
-                // other thing
-                return tournamentSetupFragment = TournamentSetupFragment.newInstance(tournamentToOrganize);
+            if (widthOfScreen < 720) {
+                if (position == 0) {
+                    return TournamentPlayerListFragment.newInstance(tournamentToOrganize);
+                } else if (position == 1 && widthOfScreen < 720) {
+                    return AvailablePlayerListFragment.newInstance(tournamentToOrganize);
+                }
+            } else {
+                if (position == 0) {
+                    return TournamentSetupFragment.newInstance(tournamentToOrganize);
+                }
             }
 
             if (tournamentToOrganize.getState().equals(Tournament.TournamentState.FINISHED.name())

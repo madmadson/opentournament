@@ -86,7 +86,7 @@ public interface TournamentPlayerService {
      * @param  player
      * @param  tournament
      */
-    TournamentPlayer dropPlayerFromTournament(TournamentPlayer player, Tournament tournament);
+    void dropPlayerFromTournament(TournamentPlayer player, Tournament tournament);
 
 
     /**
@@ -102,4 +102,13 @@ public interface TournamentPlayerService {
      * @param  tournament
      */
     void deleteTournamentPlayersFromTournament(Tournament tournament);
+
+
+    /**
+     * @param  tournament
+     * @param  player
+     *
+     * @return
+     */
+    boolean checkPlayerAlreadyInTournament(Tournament tournament, Player player);
 }

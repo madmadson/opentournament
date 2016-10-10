@@ -24,6 +24,7 @@ import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.domain.TournamentRanking;
 import madson.org.opentournament.tasks.LoadRankingListTask;
+import madson.org.opentournament.utility.BaseActivity;
 import madson.org.opentournament.utility.BaseApplication;
 import madson.org.opentournament.viewHolder.TournamentRankingViewHolder;
 
@@ -43,11 +44,33 @@ public class RankingListFragment extends Fragment {
     private Tournament tournament;
     private int round;
     private RankingListAdapter rankingListAdapter;
+    private BaseActivity baseActivity;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+    }
+
+
+    public static RankingListFragment newInstance(int roundNumber, Tournament tournament) {
+
+        RankingListFragment fragment = new RankingListFragment();
+        Bundle args = new Bundle();
+        args.putInt(BUNDLE_ROUND, roundNumber);
+        args.putParcelable(BUNDLE_TOURNAMENT, tournament);
+        fragment.setArguments(args);
+
+        return fragment;
+    }
+
+
+    @Override
+    public void onAttach(Context context) {
+
+        super.onAttach(context);
+
+        baseActivity = (BaseActivity) getActivity();
     }
 
 
@@ -78,17 +101,16 @@ public class RankingListFragment extends Fragment {
                 && round == tournament.getActualRound()) {
             heading.setText(getString(R.string.final_standings));
         } else {
-            heading.setText(getString(R.string.heading_ranking_for_round, round));
+            heading.setText(R.string.heading_ranking_for_round);
         }
 
         RankingListHeaderFragment headerFragment = new RankingListHeaderFragment();
         getChildFragmentManager().beginTransaction().add(R.id.row_ranking_header_container, headerFragment).commit();
 
-        rankingListAdapter = new RankingListAdapter(getActivity());
+        rankingListAdapter = new RankingListAdapter(baseActivity.getBaseApplication());
         recyclerView.setAdapter(rankingListAdapter);
 
-        new LoadRankingListTask((BaseApplication) getActivity().getApplication(), tournament, round, rankingListAdapter)
-            .execute();
+        new LoadRankingListTask(baseActivity.getBaseApplication(), tournament, round, rankingListAdapter).execute();
 
         return view;
     }
@@ -133,19 +155,19 @@ public class RankingListFragment extends Fragment {
 
             holder.getPlayerNameInList()
                 .setText(context.getResources()
-                    .getString(R.string.player_name_in_row, tournamentPlayer.getFirstname(),
-                        tournamentPlayer.getNickname(), tournamentPlayer.getLastname()));
+                    .getString(R.string.player_name_in_row, tournamentPlayer.getFirstName(),
+                        tournamentPlayer.getNickName(), tournamentPlayer.getLastName()));
 
-            holder.getPlayerTeamNameInList().setText(tournamentPlayer.getTeamname());
+            holder.getPlayerTeamNameInList().setText(tournamentPlayer.getTeamName());
             holder.getPlayerFactionInList().setText(tournamentPlayer.getFaction());
 
-            if (!"0".equals(ranking.getPlayerId())) {
+            if (ranking.getTournamentPlayer().isLocal()) {
                 if (holder.getOfflineIcon() != null) {
                     holder.getOfflineIcon().setVisibility(View.VISIBLE);
                 }
             }
 
-            if (ranking.getTournamentPlayer().getDroppedInRound() != 0) {
+            if (holder.getDroppedInRound() != null && ranking.getTournamentPlayer().getDroppedInRound() != 0) {
                 holder.getDroppedInRound()
                     .setText(context.getResources()
                         .getString(R.string.dropped_in_round, ranking.getTournamentPlayer().getDroppedInRound()));

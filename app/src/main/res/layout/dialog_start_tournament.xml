@@ -15,7 +15,7 @@
             android:id="@+id/confirm_pairing_dialog"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-
+            android:layout_centerHorizontal="true"
             android:padding="@dimen/main_tick"
             android:text="@string/info_pairing_options"
             android:textStyle="bold" />
@@ -24,6 +24,7 @@
             android:id="@+id/confirm_dialog_too_much_rounds"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_centerHorizontal="true"
             android:padding="@dimen/main_tick"
             android:text="@string/info_more_rounds_than_expected"
             android:textColor="@color/colorWarning"

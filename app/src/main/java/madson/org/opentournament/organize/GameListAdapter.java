@@ -108,8 +108,8 @@ public class GameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
 
         holder.getPlayerOneNameInList()
             .setText(activity.getResources()
-                .getString(R.string.player_name_in_row, player1.getFirstname(), player1.getNickname(),
-                    player1.getLastname()));
+                .getString(R.string.player_name_in_row, player1.getFirstName(), player1.getNickName(),
+                    player1.getLastName()));
         holder.getPlayerOneFaction().setText(player1.getFaction());
 
         holder.getPlayerOneScore()
@@ -123,8 +123,8 @@ public class GameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
 
         holder.getPlayerTwoNameInList()
             .setText(activity.getResources()
-                .getString(R.string.player_name_in_row, player2.getFirstname(), player2.getNickname(),
-                    player2.getLastname()));
+                .getString(R.string.player_name_in_row, player2.getFirstName(), player2.getNickName(),
+                    player2.getLastName()));
         holder.getPlayerTwoFaction().setText(player2.getFaction());
 
         holder.getPlayerTwoScore()
@@ -285,13 +285,13 @@ public class GameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
                     final TournamentPlayer draggedPlayerFinal = draggedPlayer;
                     final TournamentPlayer droppedPlayerFinal = droppedPlayer;
 
-                    if (draggedPlayer.getListOfOpponentsIds().contains(droppedPlayerOpponent.getRealPlayerId())) {
+                    if (draggedPlayer.getListOfOpponentsIds().contains(droppedPlayerOpponent.getPlayerUUID())) {
                         String playerOne = activity.getResources()
-                                .getString(R.string.player_name_in_row, draggedPlayer.getFirstname(),
-                                    draggedPlayer.getNickname(), draggedPlayer.getLastname());
+                                .getString(R.string.player_name_in_row, draggedPlayer.getFirstName(),
+                                    draggedPlayer.getNickName(), draggedPlayer.getLastName());
                         String playerTwo = activity.getResources()
-                                .getString(R.string.player_name_in_row, droppedPlayerOpponent.getFirstname(),
-                                    droppedPlayerOpponent.getNickname(), droppedPlayerOpponent.getLastname());
+                                .getString(R.string.player_name_in_row, droppedPlayerOpponent.getFirstName(),
+                                    droppedPlayerOpponent.getNickName(), droppedPlayerOpponent.getLastName());
 
                         Snackbar snackbar = Snackbar.make((activity).getCoordinatorLayout(),
                                 activity.getResources()
@@ -299,14 +299,13 @@ public class GameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
                                 Snackbar.LENGTH_LONG);
                         snackbar.getView().setBackgroundColor(activity.getResources().getColor(R.color.colorNeutral));
                         snackbar.show();
-                    } else if (droppedPlayer.getListOfOpponentsIds().contains(
-                                draggedPlayerOpponent.getRealPlayerId())) {
+                    } else if (droppedPlayer.getListOfOpponentsIds().contains(draggedPlayerOpponent.getPlayerUUID())) {
                         String playerOne = activity.getResources()
-                                .getString(R.string.player_name_in_row, droppedPlayer.getFirstname(),
-                                    droppedPlayer.getNickname(), droppedPlayer.getLastname());
+                                .getString(R.string.player_name_in_row, droppedPlayer.getFirstName(),
+                                    droppedPlayer.getNickName(), droppedPlayer.getLastName());
                         String playerTwo = activity.getResources()
-                                .getString(R.string.player_name_in_row, draggedPlayerOpponent.getFirstname(),
-                                    draggedPlayerOpponent.getNickname(), draggedPlayerOpponent.getLastname());
+                                .getString(R.string.player_name_in_row, draggedPlayerOpponent.getFirstName(),
+                                    draggedPlayerOpponent.getNickName(), draggedPlayerOpponent.getLastName());
                         Snackbar snackbar = Snackbar.make((activity).getCoordinatorLayout(),
                                 activity.getResources()
                                     .getString(R.string.player_already_played_each_other, playerOne, playerTwo),

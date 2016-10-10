@@ -31,7 +31,6 @@ import java.util.Map;
  */
 public class PairNewRoundTask extends AsyncTask<Void, Void, Boolean> {
 
-    private TournamentOrganizeActivity activity;
     private BaseApplication application;
     private Tournament tournament;
     private Snackbar snackbar;
@@ -40,10 +39,8 @@ public class PairNewRoundTask extends AsyncTask<Void, Void, Boolean> {
     private Map<String, PairingOption> pairingOptions;
     private Tournament updatedTournament;
 
-    public PairNewRoundTask(TournamentOrganizeActivity activity, BaseApplication application, Tournament tournament,
-        Snackbar snackbar, ProgressBar progressBar, boolean pairAgain, Map<String, PairingOption> pairingOptions) {
-
-        this.activity = activity;
+    public PairNewRoundTask(BaseApplication application, Tournament tournament, Snackbar snackbar,
+        ProgressBar progressBar, boolean pairAgain, Map<String, PairingOption> pairingOptions) {
 
         this.application = application;
         this.tournament = tournament;

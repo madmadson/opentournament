@@ -12,7 +12,6 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.firebase.database.DatabaseReference;
@@ -99,7 +98,7 @@ public class ArmyListExpandableListAdapter extends BaseExpandableListAdapter {
                         DatabaseReference addListReference = FirebaseDatabase.getInstance()
                             .getReference(
                                 FirebaseReferences.TOURNAMENT_ARMY_LISTS + "/" + tournament.getOnlineUUID()
-                                + "/" + tournamentPlayer.getPlayerOnlineUUID() + "/" + listPosition);
+                                + "/" + tournamentPlayer.getPlayerUUID() + "/" + listPosition);
 
                         addListReference.setValue(armyList);
 

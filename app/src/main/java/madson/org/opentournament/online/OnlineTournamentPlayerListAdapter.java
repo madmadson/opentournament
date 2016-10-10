@@ -53,12 +53,12 @@ public class OnlineTournamentPlayerListAdapter extends RecyclerView.Adapter<Tour
         final TournamentPlayer player = playerList.get(position);
 
         viewHolder.getPlayerNumber().setText(String.valueOf(position + 1));
-        viewHolder.getTeamName().setText(player.getTeamname());
+        viewHolder.getTeamName().setText(player.getTeamName());
         viewHolder.getFaction().setText(player.getFaction());
 
-        String firstname = player.getFirstname();
-        String nickname = player.getNickname();
-        String lastname = player.getLastname();
+        String firstname = player.getFirstName();
+        String nickname = player.getNickName();
+        String lastname = player.getLastName();
         viewHolder.getPlayerNameInList()
             .setText(context.getResources().getString(R.string.player_name_in_row, firstname, nickname, lastname));
 

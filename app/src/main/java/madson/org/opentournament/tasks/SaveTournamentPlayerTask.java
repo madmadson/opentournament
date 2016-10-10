@@ -17,6 +17,8 @@ import madson.org.opentournament.service.TournamentPlayerService;
 import madson.org.opentournament.service.TournamentService;
 import madson.org.opentournament.utility.BaseActivity;
 
+import java.util.UUID;
+
 
 /**
  * Write some fancy Javadoc!
@@ -65,35 +67,39 @@ public class SaveTournamentPlayerTask extends AsyncTask<Void, Void, Void> {
         tournamentPlayer = new TournamentPlayer();
 
         if (player != null) {
-            tournamentPlayer.setPlayerOnlineUUID(player.getOnlineUUID());
-            tournamentPlayer.setPlayerId(String.valueOf(player.get_id()));
+            tournamentPlayer.setPlayerUUID(player.getUUID());
+            tournamentPlayer.setLocal(player.isLocal());
         }
 
-        tournamentPlayer.setFirstname(firstname);
-        tournamentPlayer.setNickname(nickname);
-        tournamentPlayer.setLastname(lastname);
+        tournamentPlayer.setFirstName(firstname);
+        tournamentPlayer.setNickName(nickname);
+        tournamentPlayer.setLastName(lastname);
 
-        tournamentPlayer.setTournamentId(tournament.get_id());
+        tournamentPlayer.setTournamentId(String.valueOf(tournament.get_id()));
         tournamentPlayer.setFaction(faction);
 
         // set only team is no team
         if (!teamname.equals(baseActivity.getString(R.string.no_team))) {
-            tournamentPlayer.setTeamname(teamname);
+            tournamentPlayer.setTeamName(teamname);
         } else {
-            tournamentPlayer.setTeamname("");
+            tournamentPlayer.setTeamName("");
         }
 
         if (player == null) {
             Log.i(this.getClass().getName(), "add new local player.");
 
             Player newLocalPlayer = new Player();
-            newLocalPlayer.setFirstname(firstname);
-            newLocalPlayer.setNickname(nickname);
-            newLocalPlayer.setLastname(lastname);
+            newLocalPlayer.setFirstName(firstname);
+            newLocalPlayer.setNickName(nickname);
+            newLocalPlayer.setLastName(lastname);
+
+            String uuid = UUID.randomUUID().toString();
+            newLocalPlayer.setUUID(uuid);
 
             PlayerService playerService = baseActivity.getBaseApplication().getPlayerService();
-            Player newLocalPlayerWithId = playerService.createLocalPlayer(newLocalPlayer);
-            tournamentPlayer.setPlayerId(String.valueOf(newLocalPlayerWithId.get_id()));
+            playerService.createLocalPlayer(newLocalPlayer);
+            tournamentPlayer.setLocal(true);
+            tournamentPlayer.setPlayerUUID(uuid);
         }
 
         tournamentPlayerService.addTournamentPlayerToTournament(tournamentPlayer, tournament);

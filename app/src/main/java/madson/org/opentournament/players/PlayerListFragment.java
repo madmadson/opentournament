@@ -21,6 +21,7 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -104,18 +105,39 @@ public class PlayerListFragment extends Fragment {
 
         Query orderedPlayer = child.orderByChild(PlayerTable.COLUMN_NICKNAME);
 
-        orderedPlayer.addValueEventListener(new ValueEventListener() {
+        orderedPlayer.addChildEventListener(new ChildEventListener() {
 
                 @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
+                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
                     progressBar.setVisibility(View.GONE);
 
-                    for (DataSnapshot playerSnapshot : dataSnapshot.getChildren()) {
-                        Player player = playerSnapshot.getValue(Player.class);
-                        player.setOnlineUUID(dataSnapshot.getKey());
-                        playerListAdapter.addPlayer(player);
-                    }
+                    Player player = dataSnapshot.getValue(Player.class);
+                    player.setUUID(dataSnapshot.getKey());
+                    playerListAdapter.addPlayer(player);
+                }
+
+
+                @Override
+                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                    Player player = dataSnapshot.getValue(Player.class);
+                    player.setUUID(dataSnapshot.getKey());
+                    playerListAdapter.updatePlayer(player);
+                }
+
+
+                @Override
+                public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                    Player player = dataSnapshot.getValue(Player.class);
+                    player.setUUID(dataSnapshot.getKey());
+                    playerListAdapter.removePlayer(player);
+                }
+
+
+                @Override
+                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
                 }
 
 

@@ -7,6 +7,7 @@ import android.os.Bundle;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
@@ -32,7 +33,6 @@ import madson.org.opentournament.tasks.LoadGameListTask;
 import madson.org.opentournament.tasks.TournamentEndTask;
 import madson.org.opentournament.tasks.TournamentUploadTask;
 import madson.org.opentournament.utility.BaseActivity;
-import madson.org.opentournament.utility.BaseApplication;
 
 
 /**
@@ -57,7 +57,8 @@ public class GameListFragment extends Fragment implements TournamentEventListene
     public void onAttach(Context context) {
 
         super.onAttach(context);
-        ((BaseActivity) getActivity()).getBaseApplication().registerTournamentEventListener(this);
+        baseActivity = (BaseActivity) getActivity();
+        baseActivity.getBaseApplication().registerTournamentEventListener(this);
     }
 
 
@@ -65,7 +66,19 @@ public class GameListFragment extends Fragment implements TournamentEventListene
     public void onDetach() {
 
         super.onDetach();
-        ((BaseActivity) getActivity()).getBaseApplication().unregisterTournamentEventListener(this);
+        baseActivity.getBaseApplication().unregisterTournamentEventListener(this);
+    }
+
+
+    public static GameListFragment newInstance(int roundNumber, Tournament tournament) {
+
+        GameListFragment fragment = new GameListFragment();
+        Bundle args = new Bundle();
+        args.putInt(BUNDLE_ROUND, roundNumber);
+        args.putParcelable(BUNDLE_TOURNAMENT, tournament);
+        fragment.setArguments(args);
+
+        return fragment;
     }
 
 
@@ -98,8 +111,7 @@ public class GameListFragment extends Fragment implements TournamentEventListene
         gameListAdapter = new GameListAdapter((BaseActivity) getActivity(), round);
         recyclerView.setAdapter(gameListAdapter);
 
-        new LoadGameListTask(((BaseActivity) getActivity()).getBaseApplication(), tournament, round, gameListAdapter)
-            .execute();
+        new LoadGameListTask(baseActivity.getBaseApplication(), tournament, round, gameListAdapter).execute();
 
         containerForActions = (FrameLayout) view.findViewById(R.id.container_view_toggle_action);
         pairRoundAgainButton = (Button) view.findViewById(R.id.button_pair_again);
@@ -113,7 +125,7 @@ public class GameListFragment extends Fragment implements TournamentEventListene
 
                         Bundle bundle = new Bundle();
                         bundle.putParcelable(ConfirmPairingNewRoundDialog.BUNDLE_TOURNAMENT, tournament);
-                        bundle.putInt(ConfirmPairingNewRoundDialog.BUNDLE_ROUND_TO_DISPLAY, round);
+                        bundle.putInt(ConfirmPairingNewRoundDialog.BUNDLE_ROUND, round);
                         dialog.setArguments(bundle);
 
                         FragmentManager supportFragmentManager = getActivity().getSupportFragmentManager();
@@ -169,7 +181,7 @@ public class GameListFragment extends Fragment implements TournamentEventListene
 
                         Bundle bundle = new Bundle();
                         bundle.putParcelable(ConfirmPairingNewRoundDialog.BUNDLE_TOURNAMENT, tournament);
-                        bundle.putInt(ConfirmPairingNewRoundDialog.BUNDLE_ROUND_TO_DISPLAY, round + 1);
+                        bundle.putInt(ConfirmPairingNewRoundDialog.BUNDLE_ROUND, round + 1);
                         dialog.setArguments(bundle);
 
                         FragmentManager supportFragmentManager = getActivity().getSupportFragmentManager();
@@ -247,12 +259,6 @@ public class GameListFragment extends Fragment implements TournamentEventListene
     }
 
 
-    public void updateGameInList(Game game) {
-
-        gameListAdapter.updateGameForRound(game);
-    }
-
-
     @Override
     public void startRound(int roundToStart, Tournament tournament) {
 
@@ -265,8 +271,9 @@ public class GameListFragment extends Fragment implements TournamentEventListene
     @Override
     public void pairRoundAgain(int round_for_pairing) {
 
-        // nothing
-
+        if (round_for_pairing == round) {
+            new LoadGameListTask(baseActivity.getBaseApplication(), tournament, round, gameListAdapter).execute();
+        }
     }
 
 
@@ -281,7 +288,7 @@ public class GameListFragment extends Fragment implements TournamentEventListene
     @Override
     public void enterGameResultConfirmed(Game game) {
 
-        // nothing
+        gameListAdapter.updateGameForRound(game);
     }
 
 

@@ -33,46 +33,41 @@ public class Player implements Parcelable {
     };
 
     private long _id;
-    private String onlineUUID;
+    private String UUID;
 
-    private String firstname;
-    private String nickname;
-    private String lastname;
+    private String firstName;
+    private String nickName;
+    private String lastName;
 
-    // list of tournaments player played. Note: online online persistent
+    private boolean local;
+
+    // list of tournaments player played. Note: online persistent
     private Map<String, Boolean> tournaments = new HashMap<>();
 
-    private String auth_email;
+    private String authenticatedEmail;
 
-    public Player(long id, String firstname, String nickname, String lastname) {
-
-        this._id = id;
-        this.firstname = firstname;
-        this.nickname = nickname;
-        this.lastname = lastname;
-    }
-
-
-    public Player(String firstname, String nickname, String lastname) {
-
-        this.firstname = firstname;
-        this.nickname = nickname;
-        this.lastname = lastname;
-    }
-
+    private String meta;
 
     public Player() {
+    }
+
+
+    public Player(String uuid) {
+
+        this.UUID = uuid;
     }
 
 
     protected Player(Parcel in) {
 
         _id = in.readLong();
-        onlineUUID = in.readString();
-        firstname = in.readString();
-        nickname = in.readString();
-        lastname = in.readString();
-        auth_email = in.readString();
+        UUID = in.readString();
+        firstName = in.readString();
+        nickName = in.readString();
+        lastName = in.readString();
+        authenticatedEmail = in.readString();
+        meta = in.readString();
+        local = in.readInt() != 0;
     }
 
     public Map<String, Boolean> getTournaments() {
@@ -94,51 +89,51 @@ public class Player implements Parcelable {
     }
 
 
-    public String getFirstname() {
+    public String getFirstName() {
 
-        return firstname;
+        return firstName;
     }
 
 
-    public String getLastname() {
+    public String getLastName() {
 
-        return lastname;
+        return lastName;
     }
 
 
-    public String getNickname() {
+    public String getNickName() {
 
-        return nickname;
+        return nickName;
     }
 
 
-    public String getOnlineUUID() {
+    public String getUUID() {
 
-        return onlineUUID;
+        return UUID;
     }
 
 
-    public void setOnlineUUID(String onlineUUID) {
+    public void setUUID(String UUID) {
 
-        this.onlineUUID = onlineUUID;
+        this.UUID = UUID;
     }
 
 
-    public void setFirstname(String firstname) {
+    public void setFirstName(String firstName) {
 
-        this.firstname = firstname;
+        this.firstName = firstName;
     }
 
 
-    public void setNickname(String nickname) {
+    public void setNickName(String nickName) {
 
-        this.nickname = nickname;
+        this.nickName = nickName;
     }
 
 
-    public void setLastname(String lastname) {
+    public void setLastName(String lastName) {
 
-        this.lastname = lastname;
+        this.lastName = lastName;
     }
 
 
@@ -148,15 +143,40 @@ public class Player implements Parcelable {
     }
 
 
-    public String getAuth_email() {
+    public String getAuthenticatedEmail() {
 
-        return auth_email;
+        return authenticatedEmail;
     }
 
 
-    public void setAuth_email(String auth_email) {
+    public void setAuthenticatedEmail(String authenticatedEmail) {
 
-        this.auth_email = auth_email;
+        this.authenticatedEmail = authenticatedEmail;
+    }
+
+
+    public String getMeta() {
+
+        return meta;
+    }
+
+
+    public void setMeta(String meta) {
+
+        this.meta = meta;
+    }
+
+
+    @Exclude
+    public boolean isLocal() {
+
+        return local;
+    }
+
+
+    public void setLocal(boolean local) {
+
+        this.local = local;
     }
 
 
@@ -165,11 +185,14 @@ public class Player implements Parcelable {
 
         return "Player{"
             + "_id=" + _id
-            + ", onlineUUID='" + onlineUUID + '\''
-            + ", firstname='" + firstname + '\''
-            + ", nickname='" + nickname + '\''
-            + ", lastname='" + lastname + '\''
-            + ", auth_email='" + auth_email + '\'' + '}';
+            + ", UUID='" + UUID + '\''
+            + ", firstName='" + firstName + '\''
+            + ", nickName='" + nickName + '\''
+            + ", lastName='" + lastName + '\''
+            + ", local=" + local
+            + ", tournaments=" + tournaments
+            + ", authenticatedEmail='" + authenticatedEmail + '\''
+            + ", meta='" + meta + '\'' + '}';
     }
 
 
@@ -184,14 +207,14 @@ public class Player implements Parcelable {
 
         Player player = (Player) o;
 
-        return onlineUUID != null ? onlineUUID.equals(player.onlineUUID) : player.onlineUUID == null;
+        return UUID != null ? UUID.equals(player.UUID) : player.UUID == null;
     }
 
 
     @Override
     public int hashCode() {
 
-        return onlineUUID != null ? onlineUUID.hashCode() : 0;
+        return UUID != null ? UUID.hashCode() : 0;
     }
 
 
@@ -206,23 +229,12 @@ public class Player implements Parcelable {
     public void writeToParcel(Parcel parcel, int i) {
 
         parcel.writeLong(_id);
-        parcel.writeString(onlineUUID);
-        parcel.writeString(firstname);
-        parcel.writeString(nickname);
-        parcel.writeString(lastname);
-        parcel.writeString(auth_email);
-    }
-
-
-    public static Player fromTournamentPlayer(TournamentPlayer tournamentPlayer) {
-
-        Player player = new Player();
-
-        player.setOnlineUUID(tournamentPlayer.getPlayerOnlineUUID());
-        player.setFirstname(tournamentPlayer.getFirstname());
-        player.setNickname(tournamentPlayer.getNickname());
-        player.setLastname(tournamentPlayer.getLastname());
-
-        return player;
+        parcel.writeString(UUID);
+        parcel.writeString(firstName);
+        parcel.writeString(nickName);
+        parcel.writeString(lastName);
+        parcel.writeString(authenticatedEmail);
+        parcel.writeString(meta);
+        parcel.writeInt(local ? 1 : 0);
     }
 }

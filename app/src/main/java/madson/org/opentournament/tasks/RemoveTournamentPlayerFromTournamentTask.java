@@ -41,7 +41,7 @@ public class RemoveTournamentPlayerFromTournamentTask extends AsyncTask<Void, Vo
 
         Log.i(this.getClass().getName(), "remove player from tournament ");
 
-        baseActivity.getBaseApplication().getTournamentPlayerService().removePlayerFromTournament(player, tournament);
+        baseActivity.getBaseApplication().getTournamentPlayerService().removePlayerFromTournament(player);
 
         baseActivity.getBaseApplication().getTournamentService().decreaseActualPlayerForTournament(tournament);
 

@@ -26,7 +26,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import madson.org.opentournament.R;
 import madson.org.opentournament.db.FirebaseReferences;
@@ -148,7 +147,7 @@ public class RegisterTournamentPlayerListFragment extends Fragment {
                     mProgressBar.setVisibility(View.GONE);
 
                     TournamentPlayer player = dataSnapshot.getValue(TournamentPlayer.class);
-                    player.setPlayerOnlineUUID(dataSnapshot.getKey());
+                    player.setPlayerUUID(dataSnapshot.getKey());
 
                     registrationListAdapter.addRegistration(player);
 
@@ -162,7 +161,7 @@ public class RegisterTournamentPlayerListFragment extends Fragment {
                 public void onChildChanged(DataSnapshot dataSnapshot, String s) {
 
                     TournamentPlayer player = dataSnapshot.getValue(TournamentPlayer.class);
-                    player.setPlayerOnlineUUID(dataSnapshot.getKey());
+                    player.setPlayerUUID(dataSnapshot.getKey());
 
                     registrationListAdapter.updateRegistration(player);
                 }
@@ -172,7 +171,7 @@ public class RegisterTournamentPlayerListFragment extends Fragment {
                 public void onChildRemoved(DataSnapshot dataSnapshot) {
 
                     TournamentPlayer player = dataSnapshot.getValue(TournamentPlayer.class);
-                    player.setPlayerOnlineUUID(dataSnapshot.getKey());
+                    player.setPlayerUUID(dataSnapshot.getKey());
 
                     registrationListAdapter.removeRegistration(player);
 

@@ -22,18 +22,13 @@ import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import madson.org.opentournament.db.FirebaseReferences;
 import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.utility.BaseActivity;
 import madson.org.opentournament.utility.Environment;
-
-import static madson.org.opentournament.R.id.welcome_text;
 
 
 public class AccountFragment extends Fragment {
@@ -87,13 +82,13 @@ public class AccountFragment extends Fragment {
             addButton.setVisibility(View.VISIBLE);
 
             if (authenticatedPlayer != null) {
-                firstnameField.setText(authenticatedPlayer.getFirstname());
-                nicknameField.setText(authenticatedPlayer.getNickname());
-                lastnameField.setText(authenticatedPlayer.getLastname());
+                firstnameField.setText(authenticatedPlayer.getFirstName());
+                nicknameField.setText(authenticatedPlayer.getNickName());
+                lastnameField.setText(authenticatedPlayer.getLastName());
 
                 addButton.setText(getString(R.string.change_player));
 
-                String playerName = authenticatedPlayer.getFirstname() + " " + authenticatedPlayer.getLastname();
+                String playerName = authenticatedPlayer.getFirstName() + " " + authenticatedPlayer.getLastName();
 
                 welcomeTextView.setText(getActivity().getResources().getString(R.string.welcome_text, playerName));
             } else {
@@ -109,11 +104,11 @@ public class AccountFragment extends Fragment {
 
                         if (validateForm()) {
                             Player player = new Player();
-                            player.setOnlineUUID(user.getUid());
-                            player.setFirstname(String.valueOf(firstnameField.getText()));
-                            player.setNickname(String.valueOf(nicknameField.getText()));
-                            player.setLastname(String.valueOf(lastnameField.getText()));
-                            player.setAuth_email(user.getEmail());
+                            player.setUUID(user.getUid());
+                            player.setFirstName(String.valueOf(firstnameField.getText()));
+                            player.setNickName(String.valueOf(nicknameField.getText()));
+                            player.setLastName(String.valueOf(lastnameField.getText()));
+                            player.setAuthenticatedEmail(user.getEmail());
 
                             final DatabaseReference mFirebaseDatabaseReference = FirebaseDatabase.getInstance()
                                 .getReference();
@@ -125,13 +120,13 @@ public class AccountFragment extends Fragment {
 
                             ((BaseActivity) getActivity()).getBaseApplication().updateAuthenticatedUser();
 
-                            firstnameField.setText(player.getFirstname());
-                            nicknameField.setText(player.getNickname());
-                            lastnameField.setText(player.getLastname());
+                            firstnameField.setText(player.getFirstName());
+                            nicknameField.setText(player.getNickName());
+                            lastnameField.setText(player.getLastName());
 
                             addButton.setText(getString(R.string.change_player));
 
-                            String playerName = player.getFirstname() + " " + player.getLastname();
+                            String playerName = player.getFirstName() + " " + player.getLastName();
 
                             welcomeTextView.setText(
                                 getActivity().getResources().getString(R.string.welcome_text, playerName));

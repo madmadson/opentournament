@@ -54,13 +54,13 @@ public class EditTournamentPlayerTask extends AsyncTask<Void, Void, Void> {
 
         tournamentPlayer.setFaction(faction);
 
-        oldTeamName = tournamentPlayer.getTeamname();
+        oldTeamName = tournamentPlayer.getTeamName();
 
         // set only team is no team
         if (!this.teamname.equals(baseActivity.getString(R.string.no_team))) {
-            tournamentPlayer.setTeamname(this.teamname);
+            tournamentPlayer.setTeamName(this.teamname);
         } else {
-            tournamentPlayer.setTeamname(null);
+            tournamentPlayer.setTeamName(null);
         }
 
         tournamentPlayerService.editTournamentPlayer(tournamentPlayer, tournament);

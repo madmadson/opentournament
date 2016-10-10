@@ -17,6 +17,7 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/main_tick"
             android:background="@android:color/transparent"
+            android:tint="@color/colorPrimaryDark"
             android:src="@drawable/ic_build_black_24dp" />
 
         <ImageButton
@@ -27,6 +28,7 @@
             android:layout_marginLeft="@dimen/halve_tick"
             android:layout_toRightOf="@id/button_edit_tournament"
             android:background="@android:color/transparent"
+            android:tint="@color/colorPrimaryDark"
             android:src="@drawable/ic_cloud_upload_black_24dp" />
 
         <TextView

@@ -147,7 +147,7 @@ public class RegisterTournamentPlayerDialog extends DialogFragment {
                             TournamentPlayer player = playerSnapshot.getValue(TournamentPlayer.class);
 
                             if (player != null) {
-                                String teamname = player.getTeamname();
+                                String teamname = player.getTeamName();
 
                                 if (teamname != null && !teamname.isEmpty()) {
                                     if (!teamnameMap.containsKey(teamname)) {
@@ -217,9 +217,9 @@ public class RegisterTournamentPlayerDialog extends DialogFragment {
 
             teamnameSpinner.setAdapter(team_adapter);
 
-            firstnameEditText.setText(player.getFirstname());
-            nicknameEditText.setText(player.getNickname());
-            lastnameEditText.setText(player.getLastname());
+            firstnameEditText.setText(player.getFirstName());
+            nicknameEditText.setText(player.getNickName());
+            lastnameEditText.setText(player.getLastName());
             firstnameEditText.setEnabled(false);
             nicknameEditText.setEnabled(false);
             lastnameEditText.setEnabled(false);
@@ -331,14 +331,14 @@ public class RegisterTournamentPlayerDialog extends DialogFragment {
 
                         if (validateForm(firstname, nickname, lastname, teamname)) {
                             TournamentPlayer tournamentPlayer = new TournamentPlayer();
-                            tournamentPlayer.setPlayerOnlineUUID(player.getOnlineUUID());
+                            tournamentPlayer.setPlayerUUID(player.getUUID());
 
-                            tournamentPlayer.setFirstname(firstname);
-                            tournamentPlayer.setNickname(nickname);
-                            tournamentPlayer.setLastname(lastname);
+                            tournamentPlayer.setFirstName(firstname);
+                            tournamentPlayer.setNickName(nickname);
+                            tournamentPlayer.setLastName(lastname);
 
                             if (teamname != null && !teamname.equals(baseActivity.getString(R.string.no_team))) {
-                                tournamentPlayer.setTeamname(teamname);
+                                tournamentPlayer.setTeamName(teamname);
                             }
 
                             tournamentPlayer.setFaction(faction);
@@ -346,7 +346,7 @@ public class RegisterTournamentPlayerDialog extends DialogFragment {
                             DatabaseReference reference = FirebaseDatabase.getInstance()
                                 .getReference(
                                     FirebaseReferences.TOURNAMENT_REGISTRATIONS + "/" + tournament.getOnlineUUID() + "/"
-                                    + player.getOnlineUUID());
+                                    + player.getUUID());
 
                             reference.setValue(tournamentPlayer);
 

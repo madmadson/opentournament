@@ -48,12 +48,11 @@ public interface TournamentPlayerService {
 
 
     /**
-     * Remove Player from tournament. If it is a online tournaments player will be removed immediately.
+     * Remove Player from tournament.
      *
      * @param  player
-     * @param  tournament
      */
-    void removePlayerFromTournament(TournamentPlayer player, Tournament tournament);
+    void removePlayerFromTournament(TournamentPlayer player);
 
 
     /**
@@ -73,7 +72,7 @@ public interface TournamentPlayerService {
      *
      * @return
      */
-    List<String> getAllPlayersOnlineUUIDForTournament(Tournament tournament);
+    List<String> getAllPlayersUUIDsForTournament(Tournament tournament);
 
 
     /**

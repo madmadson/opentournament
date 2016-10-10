@@ -1,14 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" 
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:descendantFocusability="beforeDescendants"
-    android:focusableInTouchMode="true">
-    
-    <TextView
-        android:id="@+id/confirm_pairing_dialog"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+    android:layout_height="match_parent">
 
-</LinearLayout>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/pairing_dialog_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:descendantFocusability="beforeDescendants"
+        android:focusableInTouchMode="true"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/confirm_pairing_dialog"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="@dimen/main_tick"
+            android:text="@string/info_pairing_options"
+            android:textStyle="bold" />
+        
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/huge_line_tick"
+            android:background="@color/colorPrimaryDark" />
+
+        <LinearLayout
+            android:id="@+id/pairing_options_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/main_tick">
+
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

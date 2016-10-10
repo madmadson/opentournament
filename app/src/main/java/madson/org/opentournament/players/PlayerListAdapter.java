@@ -14,9 +14,13 @@ import android.view.ViewGroup;
 
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Player;
+import madson.org.opentournament.domain.PlayerComparator;
+import madson.org.opentournament.domain.TournamentPlayerComparator;
+import madson.org.opentournament.tournaments.TournamentComparator;
 import madson.org.opentournament.viewHolder.PlayerViewHolder;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -54,8 +58,8 @@ public class PlayerListAdapter extends RecyclerView.Adapter<PlayerViewHolder> {
 
         holder.getPlayerNameInList()
             .setText(context.getResources()
-                .getString(R.string.player_name_in_row, player.getFirstname(), player.getNickname(),
-                    player.getLastname()));
+                .getString(R.string.player_name_in_row, player.getFirstName(), player.getNickName(),
+                    player.getLastName()));
 
         if (position % 2 == 0) {
             holder.getPlayerCardLayout().setBackgroundColor(Color.LTGRAY);
@@ -77,6 +81,26 @@ public class PlayerListAdapter extends RecyclerView.Adapter<PlayerViewHolder> {
         Log.i(this.getClass().getName(), "player added to adapter ");
 
         playerList.add(player);
+        Collections.sort(playerList, new PlayerComparator());
+        notifyDataSetChanged();
+    }
+
+
+    public void removePlayer(Player player) {
+
+        Log.i(this.getClass().getName(), "player added to adapter ");
+
+        playerList.remove(player);
+        notifyDataSetChanged();
+    }
+
+
+    public void updatePlayer(Player player) {
+
+        int index = playerList.indexOf(player);
+
+        playerList.set(index, player);
+        Collections.sort(playerList, new PlayerComparator());
         notifyDataSetChanged();
     }
 }

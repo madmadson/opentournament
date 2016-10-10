@@ -12,11 +12,10 @@ import android.util.Log;
 import madson.org.opentournament.db.OpenTournamentDBHelper;
 import madson.org.opentournament.db.PlayerTable;
 import madson.org.opentournament.domain.Player;
-import madson.org.opentournament.domain.Tournament;
-import madson.org.opentournament.domain.TournamentPlayer;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 
 /**
@@ -49,41 +48,40 @@ public class PlayerServiceMockImpl implements PlayerService {
 
     private void createMockPlayers() {
 
-        createPlayer(1, new Player("Tobias", "Madson", "Matt"));
-        createPlayer(2, new Player("Christoph", "Zaziboy", "Scholl"));
-        createPlayer(3, new Player("David", "Wildjack", "Voigt"));
-        createPlayer(4, new Player("Andreas", "Ragegear", "Neugebauer"));
-        createPlayer(5, new Player("Andreas", "Raskild", "Tonndorf"));
-        createPlayer(6, new Player("Martina", "Bazinga", "Haug"));
-        createPlayer(7, new Player("Tobias", "Zeus", "Rohrauer"));
-        createPlayer(8, new Player("Yann", "Arcane", "Krehl"));
+        createPlayer(1, "Tobias", "Madson", "Matt");
+        createPlayer(2, "Christoph", "Zaziboy", "Scholl");
+        createPlayer(3, "David", "Wildjack", "Voigt");
+        createPlayer(4, "Andreas", "Ragegear", "Neugebauer");
+        createPlayer(5, "Andreas", "Raskild", "Tonndorf");
+        createPlayer(6, "Martina", "Bazinga", "Haug");
+        createPlayer(7, "Tobias", "Zeus", "Rohrauer");
+        createPlayer(8, "Yann", "Arcane", "Krehl");
     }
 
 
-    public void createPlayer(int id, Player player) {
+    public void createPlayer(int id, String firstName, String nickName, String lastName) {
 
         ContentValues contentValues = new ContentValues();
         contentValues.put(PlayerTable.COLUMN_ID, id);
-        contentValues.put(PlayerTable.COLUMN_FIRSTNAME, player.getFirstname());
-        contentValues.put(PlayerTable.COLUMN_NICKNAME, player.getNickname());
-        contentValues.put(PlayerTable.COLUMN_LASTNAME, player.getLastname());
+        contentValues.put(PlayerTable.COLUMN_FIRSTNAME, firstName);
+        contentValues.put(PlayerTable.COLUMN_NICKNAME, nickName);
+        contentValues.put(PlayerTable.COLUMN_LASTNAME, lastName);
+        contentValues.put(PlayerTable.COLUMN_UUID, id);
 
         createPlayer(contentValues);
     }
 
 
     @Override
-    public Player createLocalPlayer(Player player) {
+    public void createLocalPlayer(Player player) {
 
         ContentValues contentValues = new ContentValues();
-        contentValues.put(PlayerTable.COLUMN_FIRSTNAME, player.getFirstname());
-        contentValues.put(PlayerTable.COLUMN_NICKNAME, player.getNickname());
-        contentValues.put(PlayerTable.COLUMN_LASTNAME, player.getLastname());
+        contentValues.put(PlayerTable.COLUMN_FIRSTNAME, player.getFirstName());
+        contentValues.put(PlayerTable.COLUMN_NICKNAME, player.getNickName());
+        contentValues.put(PlayerTable.COLUMN_LASTNAME, player.getLastName());
+        contentValues.put(PlayerTable.COLUMN_UUID, UUID.randomUUID().toString());
 
-        long player_id = createPlayer(contentValues);
-        player.set_id(player_id);
-
-        return player;
+        createPlayer(contentValues);
     }
 
 
@@ -122,7 +120,7 @@ public class PlayerServiceMockImpl implements PlayerService {
 
         while (!cursor.isAfterLast()) {
             Player player = cursorToPlayer(cursor);
-
+            player.setLocal(true);
             players.add(player);
             cursor.moveToNext();
         }
@@ -134,15 +132,13 @@ public class PlayerServiceMockImpl implements PlayerService {
     }
 
 
-    private long createPlayer(ContentValues contentValues) {
+    private void createPlayer(ContentValues contentValues) {
 
         SQLiteDatabase writableDatabase = openTournamentDBHelper.getWritableDatabase();
 
-        long insertedId = writableDatabase.insert(PlayerTable.TABLE_PLAYER, null, contentValues);
+        writableDatabase.insert(PlayerTable.TABLE_PLAYER, null, contentValues);
 
         writableDatabase.close();
-
-        return insertedId;
     }
 
 
@@ -151,10 +147,10 @@ public class PlayerServiceMockImpl implements PlayerService {
         Player player = new Player();
 
         player.set_id(cursor.getLong(0));
-        player.setOnlineUUID(cursor.getString(1));
-        player.setFirstname(cursor.getString(2));
-        player.setNickname(cursor.getString(3));
-        player.setLastname(cursor.getString(4));
+        player.setUUID(cursor.getString(1));
+        player.setFirstName(cursor.getString(2));
+        player.setNickName(cursor.getString(3));
+        player.setLastName(cursor.getString(4));
 
         return player;
     }

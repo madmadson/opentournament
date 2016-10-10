@@ -61,13 +61,13 @@ public class OnlineRankingListAdapter extends RecyclerView.Adapter<TournamentRan
 
         holder.getPlayerNameInList()
             .setText(context.getResources()
-                .getString(R.string.player_name_in_row, tournamentPlayer.getFirstname(), tournamentPlayer.getNickname(),
-                    tournamentPlayer.getLastname()));
+                .getString(R.string.player_name_in_row, tournamentPlayer.getFirstName(), tournamentPlayer.getNickName(),
+                    tournamentPlayer.getLastName()));
 
-        holder.getPlayerTeamNameInList().setText(tournamentPlayer.getTeamname());
+        holder.getPlayerTeamNameInList().setText(tournamentPlayer.getTeamName());
         holder.getPlayerFactionInList().setText(tournamentPlayer.getFaction());
 
-        if (!ranking.getPlayerId().equals("0")) {
+        if (ranking.getTournamentPlayer().isLocal()) {
             if (holder.getOfflineIcon() != null) {
                 holder.getOfflineIcon().setVisibility(View.VISIBLE);
             }

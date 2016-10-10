@@ -1,5 +1,7 @@
 package madson.org.opentournament.domain;
 
+import madson.org.opentournament.db.PlayerTable;
+
 import java.util.Comparator;
 
 
@@ -8,10 +10,10 @@ import java.util.Comparator;
  *
  * @author  Tobias Matt - tmatt@contargo.net
  */
-public class TournamentPlayerComparator implements Comparator<TournamentPlayer> {
+public class PlayerComparator implements Comparator<Player> {
 
     @Override
-    public int compare(TournamentPlayer player1, TournamentPlayer player2) {
+    public int compare(Player player1, Player player2) {
 
         return player1.getNickName().compareTo(player2.getNickName());
     }

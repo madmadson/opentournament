@@ -2,16 +2,11 @@ package madson.org.opentournament.tasks;
 
 import android.os.AsyncTask;
 
-import madson.org.opentournament.domain.Game;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
-import madson.org.opentournament.organize.GameListAdapter;
 import madson.org.opentournament.organize.setup.TournamentPlayerListAdapter;
-import madson.org.opentournament.service.OngoingTournamentService;
 import madson.org.opentournament.service.TournamentPlayerService;
 import madson.org.opentournament.utility.BaseApplication;
-
-import java.util.List;
 
 
 /**
@@ -40,10 +35,11 @@ public class AddDummyPlayerTask extends AsyncTask<Void, Void, Void> {
         TournamentPlayerService tournamentPlayerService = baseApplication.getTournamentPlayerService();
 
         dummyTournamentPlayer = new TournamentPlayer();
-        dummyTournamentPlayer.setFirstname("Dummy");
-        dummyTournamentPlayer.setNickname("THE HAMMER");
-        dummyTournamentPlayer.setLastname("Player");
+        dummyTournamentPlayer.setFirstName("Dummy");
+        dummyTournamentPlayer.setNickName("THE HAMMER");
+        dummyTournamentPlayer.setLastName("Player");
         dummyTournamentPlayer.setDummy(true);
+        dummyTournamentPlayer.setLocal(true);
 
         tournamentPlayerService.addTournamentPlayerToTournament(dummyTournamentPlayer, tournament);
 

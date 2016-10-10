@@ -142,7 +142,7 @@
     <!-- result entering dialog -->
     <string name="result">confirm</string>
     <string name="result_pairing_title">RESULT</string>
-    <string name="heading_ranking_for_round">Ranking round: %1$d</string>
+    <string name="heading_ranking_for_round">Ranking</string>
 
     <string name="title_tournament_management">Tournament Management</string>
     <string name="sign_in">Sign In</string>
@@ -275,7 +275,7 @@
     <string name="name_of_list">Name of List</string>
     <string name="upload_list">Upload List</string>
     <string name="success_upload_list">Successfully uploaded list</string>
-    <string name="realy_add_player">Really add tournamentPlayer to Tournament?</string>
+    <string name="realy_add_player">Really add registered Player to Tournament?</string>
     <string name="player_already_is_in_tournament">Player is already in Tournament</string>
     <string name="show_army_lists">Army Lists</string>
     <string name="cant_upload_list_for_local_players">You cannot upload army lists for local players</string>

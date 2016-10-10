@@ -14,13 +14,11 @@ import java.util.List;
 public class TournamentRanking {
 
     private long _id;
-    private String online_uuid;
 
-    private long tournament_id;
+    private String tournamentId;
     private int tournament_round;
 
-    private String playerId;
-    private String playerOnlineUUID;
+    private String playerUUID;
 
     private TournamentPlayer tournamentPlayer;
 
@@ -37,26 +35,15 @@ public class TournamentRanking {
     }
 
     @Exclude
-    public String getPlayerOnlineUUID() {
+    public String getPlayerUUID() {
 
-        return playerOnlineUUID;
+        return playerUUID;
     }
 
 
-    @Exclude
-    public String getRealPlayerId() {
+    public void setPlayerUUID(String playerUUID) {
 
-        if (playerOnlineUUID != null) {
-            return playerOnlineUUID;
-        } else {
-            return String.valueOf(playerId);
-        }
-    }
-
-
-    public void setPlayerOnlineUUID(String playerOnlineUUID) {
-
-        this.playerOnlineUUID = playerOnlineUUID;
+        this.playerUUID = playerUUID;
     }
 
 
@@ -73,19 +60,6 @@ public class TournamentRanking {
 
 
     @Exclude
-    public String getOnline_uuid() {
-
-        return online_uuid;
-    }
-
-
-    public void setOnline_uuid(String online_uuid) {
-
-        this.online_uuid = online_uuid;
-    }
-
-
-    @Exclude
     public long get_id() {
 
         return _id;
@@ -95,19 +69,6 @@ public class TournamentRanking {
     public void set_id(long _id) {
 
         this._id = _id;
-    }
-
-
-    @Exclude
-    public String getPlayerId() {
-
-        return playerId;
-    }
-
-
-    public void setPlayerId(String playerId) {
-
-        this.playerId = playerId;
     }
 
 
@@ -172,33 +133,15 @@ public class TournamentRanking {
     }
 
 
-    public long getTournament_id() {
+    public String getTournament_id() {
 
-        return tournament_id;
+        return tournamentId;
     }
 
 
-    public void setTournament_id(long tournament_id) {
+    public void setTournament_id(String tournamentId) {
 
-        this.tournament_id = tournament_id;
-    }
-
-
-    @Override
-    public String toString() {
-
-        return "TournamentRanking{"
-            + "_id=" + _id
-            + ", online_uuid='" + online_uuid + '\''
-            + ", tournament_id=" + tournament_id
-            + ", tournament_round=" + tournament_round
-            + ", playerId=" + playerId
-            + ", playerOnlineUUID='" + playerOnlineUUID + '\''
-            + ", score=" + score
-            + ", sos=" + sos
-            + ", control_points=" + control_points
-            + ", victory_points=" + victory_points
-            + ", listOfOpponentsPlayerIds=" + listOfOpponentsPlayerIds + '}';
+        this.tournamentId = tournamentId;
     }
 
 
@@ -217,5 +160,23 @@ public class TournamentRanking {
     public void setRank(int rank) {
 
         this.rank = rank;
+    }
+
+
+    @Override
+    public String toString() {
+
+        return "TournamentRanking{"
+            + "_id=" + _id
+            + ", tournamentId='" + tournamentId + '\''
+            + ", tournament_round=" + tournament_round
+            + ", playerUUID='" + playerUUID + '\''
+            + ", tournamentPlayer=" + tournamentPlayer
+            + ", score=" + score
+            + ", sos=" + sos
+            + ", control_points=" + control_points
+            + ", victory_points=" + victory_points
+            + ", listOfOpponentsPlayerIds=" + listOfOpponentsPlayerIds
+            + ", rank=" + rank + '}';
     }
 }

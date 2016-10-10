@@ -64,8 +64,8 @@ public class RegisterTournamentPlayerListAdapter extends RecyclerView.Adapter<To
 
         viewHolder.getPlayerNumber().setText(String.valueOf(position + 1));
 
-        if (player.getTeamname() != null) {
-            viewHolder.getTeamName().setText(player.getTeamname());
+        if (player.getTeamName() != null) {
+            viewHolder.getTeamName().setText(player.getTeamName());
             viewHolder.getTeamName().setVisibility(View.VISIBLE);
         } else {
             viewHolder.getTeamName().setVisibility(View.GONE);
@@ -73,9 +73,9 @@ public class RegisterTournamentPlayerListAdapter extends RecyclerView.Adapter<To
 
         viewHolder.getFaction().setText(player.getFaction());
 
-        String firstname = player.getFirstname();
-        String nickname = player.getNickname();
-        String lastname = player.getLastname();
+        String firstname = player.getFirstName();
+        String nickname = player.getNickName();
+        String lastname = player.getLastName();
         viewHolder.getPlayerNameInList()
             .setText(baseActivity.getResources().getString(R.string.player_name_in_row, firstname, nickname, lastname));
 
@@ -86,8 +86,8 @@ public class RegisterTournamentPlayerListAdapter extends RecyclerView.Adapter<To
         }
 
         if (baseActivity.getBaseApplication().getAuthenticatedPlayer() != null
-                && baseActivity.getBaseApplication().getAuthenticatedPlayer().getOnlineUUID()
-                .equals(player.getPlayerOnlineUUID())) {
+                && baseActivity.getBaseApplication().getAuthenticatedPlayer().getUUID().equals(
+                    player.getPlayerUUID())) {
             viewHolder.getEditIcon().setOnClickListener(new View.OnClickListener() {
 
                     @Override
@@ -193,7 +193,7 @@ public class RegisterTournamentPlayerListAdapter extends RecyclerView.Adapter<To
     public boolean playerNotRegistered(Player authenticatedPlayer) {
 
         for (TournamentPlayer player : playerList) {
-            if (player.getPlayerOnlineUUID().equals(authenticatedPlayer.getOnlineUUID())) {
+            if (player.getPlayerUUID().equals(authenticatedPlayer.getUUID())) {
                 return false;
             }
         }

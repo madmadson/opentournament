@@ -33,23 +33,23 @@ public class TournamentPlayer implements Parcelable {
     };
 
     private long _id;
-    private String playerOnlineUUID;
-    private String playerId;
+    private String playerUUID;
 
-    private long tournamentId;
+    private String tournamentId;
 
     // used for shortcut not always go for names
-    private String firstname;
-    private String nickname;
-    private String lastname;
+    private String firstName;
+    private String nickName;
+    private String lastName;
 
-    private String teamname;
+    private String teamName;
     private String faction;
     private String meta;
 
     private int droppedInRound;
 
     private boolean dummy;
+    private boolean local;
 
     private List<String> opponentsPlayerIds = new ArrayList<>();
 
@@ -60,14 +60,15 @@ public class TournamentPlayer implements Parcelable {
     protected TournamentPlayer(Parcel in) {
 
         _id = in.readLong();
-        playerId = in.readString();
-        playerOnlineUUID = in.readString();
-        firstname = in.readString();
-        nickname = in.readString();
-        lastname = in.readString();
-        teamname = in.readString();
+        playerUUID = in.readString();
+        firstName = in.readString();
+        nickName = in.readString();
+        lastName = in.readString();
+        teamName = in.readString();
         faction = in.readString();
         meta = in.readString();
+        local = in.readInt() != 0;
+        dummy = in.readInt() != 0;
         droppedInRound = in.readInt();
     }
 
@@ -84,69 +85,63 @@ public class TournamentPlayer implements Parcelable {
     }
 
 
-    public String getFirstname() {
+    public String getFirstName() {
 
-        return firstname;
+        return firstName;
     }
 
 
-    public long getTournamentId() {
+    public String getTournamentId() {
 
         return tournamentId;
     }
 
 
-    public void setTournamentId(long tournamentId) {
+    public void setTournamentId(String tournamentId) {
 
         this.tournamentId = tournamentId;
     }
 
 
-    public void setPlayerId(String playerId) {
+    public void setFirstName(String firstName) {
 
-        this.playerId = playerId;
+        this.firstName = firstName;
     }
 
 
-    public void setFirstname(String firstname) {
+    public String getNickName() {
 
-        this.firstname = firstname;
+        return nickName;
     }
 
 
-    public String getNickname() {
+    public void setNickName(String nickName) {
 
-        return nickname;
+        this.nickName = nickName;
     }
 
 
-    public void setNickname(String nickname) {
+    public String getLastName() {
 
-        this.nickname = nickname;
+        return lastName;
     }
 
 
-    public String getLastname() {
+    public void setLastName(String lastName) {
 
-        return lastname;
+        this.lastName = lastName;
     }
 
 
-    public void setLastname(String lastname) {
+    public String getTeamName() {
 
-        this.lastname = lastname;
+        return teamName;
     }
 
 
-    public String getTeamname() {
+    public void setTeamName(String teamName) {
 
-        return teamname;
-    }
-
-
-    public void setTeamname(String teamname) {
-
-        this.teamname = teamname;
+        this.teamName = teamName;
     }
 
 
@@ -174,15 +169,15 @@ public class TournamentPlayer implements Parcelable {
     }
 
 
-    public String getPlayerOnlineUUID() {
+    public String getPlayerUUID() {
 
-        return playerOnlineUUID;
+        return playerUUID;
     }
 
 
-    public void setPlayerOnlineUUID(String playerOnlineUUID) {
+    public void setPlayerUUID(String playerUUID) {
 
-        this.playerOnlineUUID = playerOnlineUUID;
+        this.playerUUID = playerUUID;
     }
 
 
@@ -210,20 +205,21 @@ public class TournamentPlayer implements Parcelable {
     }
 
 
-    public String getPlayerId() {
+    public boolean isLocal() {
 
-        return playerId;
+        return local;
     }
 
 
-    @Exclude
-    public String getRealPlayerId() {
+    public void setLocal(boolean local) {
 
-        if (playerOnlineUUID != null) {
-            return playerOnlineUUID;
-        } else {
-            return String.valueOf(playerId);
-        }
+        this.local = local;
+    }
+
+
+    public List<String> getListOfOpponentsIds() {
+
+        return opponentsPlayerIds;
     }
 
 
@@ -238,15 +234,14 @@ public class TournamentPlayer implements Parcelable {
 
         TournamentPlayer that = (TournamentPlayer) o;
 
-        return playerOnlineUUID != null ? playerOnlineUUID.equals(that.playerOnlineUUID)
-                                        : that.playerOnlineUUID == null;
+        return playerUUID != null ? playerUUID.equals(that.playerUUID) : that.playerUUID == null;
     }
 
 
     @Override
     public int hashCode() {
 
-        return playerOnlineUUID != null ? playerOnlineUUID.hashCode() : 0;
+        return playerUUID != null ? playerUUID.hashCode() : 0;
     }
 
 
@@ -255,15 +250,17 @@ public class TournamentPlayer implements Parcelable {
 
         return "TournamentPlayer{"
             + "_id=" + _id
-            + ", playerOnlineUUID='" + playerOnlineUUID + '\''
-            + ", firstname='" + firstname + '\''
-            + ", nickname='" + nickname + '\''
-            + ", lastname='" + lastname + '\''
-            + ", teamname='" + teamname + '\''
+            + ", playerUUID='" + playerUUID + '\''
+            + ", tournamentId=" + tournamentId
+            + ", firstName='" + firstName + '\''
+            + ", nickName='" + nickName + '\''
+            + ", lastName='" + lastName + '\''
+            + ", teamName='" + teamName + '\''
             + ", faction='" + faction + '\''
             + ", meta='" + meta + '\''
             + ", droppedInRound=" + droppedInRound
             + ", dummy=" + dummy
+            + ", local=" + local
             + ", opponentsPlayerIds=" + opponentsPlayerIds + '}';
     }
 
@@ -279,21 +276,16 @@ public class TournamentPlayer implements Parcelable {
     public void writeToParcel(Parcel parcel, int i) {
 
         parcel.writeLong(_id);
-        parcel.writeString(playerOnlineUUID);
-        parcel.writeString(playerId);
-        parcel.writeString(firstname);
-        parcel.writeString(nickname);
-        parcel.writeString(lastname);
-        parcel.writeString(teamname);
+        parcel.writeString(playerUUID);
+
+        parcel.writeString(firstName);
+        parcel.writeString(nickName);
+        parcel.writeString(lastName);
+        parcel.writeString(teamName);
         parcel.writeString(faction);
         parcel.writeString(meta);
+        parcel.writeInt(local ? 0 : 1);
         parcel.writeInt(dummy ? 0 : 1);
         parcel.writeInt(droppedInRound);
-    }
-
-
-    public List<String> getListOfOpponentsIds() {
-
-        return opponentsPlayerIds;
     }
 }

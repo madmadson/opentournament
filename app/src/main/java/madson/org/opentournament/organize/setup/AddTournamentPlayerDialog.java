@@ -173,9 +173,9 @@ public class AddTournamentPlayerDialog extends DialogFragment {
                 player = bundle.getParcelable(BUNDLE_PLAYER);
 
                 if (player != null) {
-                    firstnameEditText.setText(player.getFirstname());
-                    nicknameEditText.setText(player.getNickname());
-                    lastnameEditText.setText(player.getLastname());
+                    firstnameEditText.setText(player.getFirstName());
+                    nicknameEditText.setText(player.getNickName());
+                    lastnameEditText.setText(player.getLastName());
                     firstnameEditText.setEnabled(false);
                     nicknameEditText.setEnabled(false);
                     lastnameEditText.setEnabled(false);
@@ -186,9 +186,9 @@ public class AddTournamentPlayerDialog extends DialogFragment {
             }
 
             if (tournament_player != null) {
-                firstnameEditText.setText(tournament_player.getFirstname());
-                nicknameEditText.setText(tournament_player.getNickname());
-                lastnameEditText.setText(tournament_player.getLastname());
+                firstnameEditText.setText(tournament_player.getFirstName());
+                nicknameEditText.setText(tournament_player.getNickName());
+                lastnameEditText.setText(tournament_player.getLastName());
                 firstnameEditText.setEnabled(false);
                 nicknameEditText.setEnabled(false);
                 lastnameEditText.setEnabled(false);
@@ -238,6 +238,13 @@ public class AddTournamentPlayerDialog extends DialogFragment {
                                             team_adapter.add(newTeamNameEditText.getText().toString());
                                             team_adapter.notifyDataSetChanged();
                                             teamnameSpinner.setSelection(team_adapter.getCount());
+
+                                            if (!tournament.getTournamentTyp().equals(TournamentTyp.TEAM.name())) {
+                                                labelTeamMembers.setText("(0)");
+                                            } else {
+                                                labelTeamMembers.setText("(0/" + tournament.getTeamSize() + ")");
+                                            }
+
                                             newTeamNameDialog.dismiss();
                                         } else {
                                             newTeamNameEditText.setError(getString(R.string.validation_error_empty));

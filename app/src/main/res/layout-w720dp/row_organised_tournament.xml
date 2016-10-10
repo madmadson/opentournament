@@ -16,6 +16,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/main_tick"
+            android:tint="@color/colorPrimaryDark"
             android:background="@android:color/transparent"
             android:src="@drawable/ic_build_black_24dp" />
 
@@ -26,6 +27,7 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/halve_tick"
             android:layout_toRightOf="@id/button_edit_tournament"
+            android:tint="@color/colorPrimaryDark"
             android:background="@android:color/transparent"
             android:src="@drawable/ic_cloud_upload_black_24dp" />
 

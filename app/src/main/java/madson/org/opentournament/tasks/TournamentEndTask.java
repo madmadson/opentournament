@@ -57,13 +57,13 @@ public class TournamentEndTask extends AsyncTask<Void, Void, Void> {
     @Override
     protected Void doInBackground(Void... params) {
 
-        next_round = tournament.getActualRound() + 1;
+        tournament.setActualRound(tournament.getActualRound() + 1);
         tournament.setState(Tournament.TournamentState.FINISHED.name());
 
         TournamentService tournamentService = application.getTournamentService();
         RankingService rankingService = application.getRankingService();
 
-        rankingService.createRankingForRound(tournament, next_round);
+        rankingService.createRankingForRound(tournament, tournament.getActualRound());
         tournamentService.endTournament(tournament);
 
         return null;
@@ -75,6 +75,6 @@ public class TournamentEndTask extends AsyncTask<Void, Void, Void> {
 
         progressBar.setVisibility(View.GONE);
 
-        application.notifyNextRoundPaired(next_round, tournament);
+        application.notifyNextRoundPaired(tournament.getActualRound() + 1, tournament);
     }
 }

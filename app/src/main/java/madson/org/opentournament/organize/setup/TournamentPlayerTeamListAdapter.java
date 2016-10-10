@@ -11,7 +11,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 
 import android.support.v7.widget.CardView;
-import android.support.v7.widget.RecyclerView;
 
 import android.util.Log;
 
@@ -20,33 +19,20 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.BaseExpandableListAdapter;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-
 import madson.org.opentournament.R;
-import madson.org.opentournament.db.FirebaseReferences;
-import madson.org.opentournament.domain.ArmyList;
-import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.domain.TournamentTeam;
 import madson.org.opentournament.online.RegisterTournamentPlayerDialog;
 import madson.org.opentournament.utility.BaseActivity;
-import madson.org.opentournament.viewHolder.TournamentPlayerViewHolder;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.SortedSet;
 
 
 /**
@@ -190,9 +176,9 @@ public class TournamentPlayerTeamListAdapter extends BaseExpandableListAdapter {
 
             TextView fullname = (TextView) convertView.findViewById(R.id.tournament_player_fullname);
 
-            String firstname = tournamentPlayer.getFirstname();
-            String nickname = tournamentPlayer.getNickname();
-            String lastname = tournamentPlayer.getLastname();
+            String firstname = tournamentPlayer.getFirstName();
+            String nickname = tournamentPlayer.getNickName();
+            String lastname = tournamentPlayer.getLastName();
             fullname.setText(baseActivity.getResources()
                 .getString(R.string.player_name_in_row, firstname, nickname, lastname));
 
@@ -211,10 +197,10 @@ public class TournamentPlayerTeamListAdapter extends BaseExpandableListAdapter {
 
             ImageView localIcon = (ImageView) convertView.findViewById(R.id.tournament_player_row_local_icon);
 
-            if (tournamentPlayer.getPlayerId() != null && tournamentPlayer.getPlayerId().equals("0")) {
-                localIcon.setVisibility(View.GONE);
-            } else {
+            if (tournamentPlayer.isLocal()) {
                 localIcon.setVisibility(View.VISIBLE);
+            } else {
+                localIcon.setVisibility(View.GONE);
             }
 
             CardView card = (CardView) convertView.findViewById(R.id.tournament_player_row_card_view);
@@ -252,7 +238,7 @@ public class TournamentPlayerTeamListAdapter extends BaseExpandableListAdapter {
                             @Override
                             public void onClick(View v) {
 
-                                if (tournamentPlayer.getPlayerOnlineUUID() != null) {
+                                if (tournamentPlayer.getPlayerUUID() != null) {
                                     Log.i(this.getClass().getName(), "addList");
 
                                     AddTournamentPlayerListDialog dialog = new AddTournamentPlayerListDialog();
@@ -306,7 +292,7 @@ public class TournamentPlayerTeamListAdapter extends BaseExpandableListAdapter {
 
     public void addTournamentPlayer(TournamentPlayer player) {
 
-        TournamentTeam tournamentTeam = new TournamentTeam(player.getTeamname());
+        TournamentTeam tournamentTeam = new TournamentTeam(player.getTeamName());
 
         if (tournamentTeams.contains(tournamentTeam)) {
             final List<TournamentPlayer> tournamentPlayers = allTeamsWithPlayersForTournament.get(tournamentTeam);
@@ -325,7 +311,7 @@ public class TournamentPlayerTeamListAdapter extends BaseExpandableListAdapter {
 
     public void removeTournamentPlayer(TournamentPlayer player) {
 
-        TournamentTeam tournamentTeam = new TournamentTeam(player.getTeamname());
+        TournamentTeam tournamentTeam = new TournamentTeam(player.getTeamName());
 
         final List<TournamentPlayer> tournamentPlayers = allTeamsWithPlayersForTournament.get(tournamentTeam);
         tournamentPlayers.remove(player);

@@ -92,19 +92,19 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
             Game game = Game.cursorToGame(cursor);
 
             if (game.getTournament_round() < round) {
-                TournamentPlayer playerOne = allPlayerMapForTournament.get(game.getRealPlayerOneId());
-                TournamentPlayer playerTwo = allPlayerMapForTournament.get(game.getRealPlayerTwoId());
+                TournamentPlayer playerOne = allPlayerMapForTournament.get(game.getPlayerOneUUID());
+                TournamentPlayer playerTwo = allPlayerMapForTournament.get(game.getPlayerTwoUUID());
 
-                playerOne.getListOfOpponentsIds().add(playerTwo.getRealPlayerId());
-                playerTwo.getListOfOpponentsIds().add(playerOne.getRealPlayerId());
+                playerOne.getListOfOpponentsIds().add(playerTwo.getPlayerUUID());
+                playerTwo.getListOfOpponentsIds().add(playerOne.getPlayerUUID());
 
-                allPlayerMapForTournament.put(game.getRealPlayerOneId(), playerOne);
-                allPlayerMapForTournament.put(game.getRealPlayerTwoId(), playerTwo);
+                allPlayerMapForTournament.put(game.getPlayerOneUUID(), playerOne);
+                allPlayerMapForTournament.put(game.getPlayerTwoUUID(), playerTwo);
             }
 
             if (game.getTournament_round() == round) {
-                game.setPlayer1(allPlayerMapForTournament.get(game.getRealPlayerOneId()));
-                game.setPlayer2(allPlayerMapForTournament.get(game.getRealPlayerTwoId()));
+                game.setPlayer1(allPlayerMapForTournament.get(game.getPlayerOneUUID()));
+                game.setPlayer2(allPlayerMapForTournament.get(game.getPlayerTwoUUID()));
 
                 gamesToReturn.add(game);
             }
@@ -165,7 +165,7 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
     }
 
 
-    public boolean match(List<TournamentRanking> players, List<Game> games, Tournament tournament, int round) {
+    private boolean match(List<TournamentRanking> players, List<Game> games, Tournament tournament, int round) {
 
         if (players.isEmpty()) {
             return true;
@@ -178,7 +178,7 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
                 TournamentRanking player2 = players.get(j);
 
                 if (playerDontPlayTwiceAgainstEachOther) {
-                    if (player1.getListOfOpponentsPlayerIds().contains(player2.getRealPlayerId())) {
+                    if (player1.getListOfOpponentsPlayerIds().contains(player2.getPlayerUUID())) {
                         Log.i(this.getClass().getName(), "" + player1 + " VS " + player2 + " not possible");
 
                         continue;
@@ -186,8 +186,8 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
                 }
 
                 if (playerWithSameTeamDontPlayAgainstEachOther) {
-                    if (player1.getTournamentPlayer().getTeamname().equals(
-                                player2.getTournamentPlayer().getTeamname())) {
+                    if (player1.getTournamentPlayer().getTeamName().equals(
+                                player2.getTournamentPlayer().getTeamName())) {
                         Log.i(this.getClass().getName(), "" + player1 + " VS " + player2 + " not possible");
 
                         continue;
@@ -207,16 +207,14 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
                 if (match) {
                     Game game = new Game();
 
-                    game.setTournament_id(tournament.get_id());
+                    game.setTournamentId(String.valueOf(tournament.get_id()));
                     game.setTournament_round(round);
 
                     game.setPlayer1(player1.getTournamentPlayer());
-                    game.setPlayerOneId(player1.getPlayerId());
-                    game.setPlayerOneOnlineUUID(player1.getPlayerOnlineUUID());
+                    game.setPlayerOneUUID(player1.getPlayerUUID());
 
                     game.setPlayer2(player2.getTournamentPlayer());
-                    game.setPlayerTwoId(player2.getPlayerId());
-                    game.setPlayerTwoOnlineUUID(player2.getPlayerOnlineUUID());
+                    game.setPlayerTwoUUID(player2.getPlayerUUID());
 
                     games.add(game);
 
@@ -232,7 +230,7 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
                 TournamentRanking player2 = players.get(j);
 
                 if (playerDontPlayTwiceAgainstEachOther) {
-                    if (player1.getListOfOpponentsPlayerIds().contains(player2.getRealPlayerId())) {
+                    if (player1.getListOfOpponentsPlayerIds().contains(player2.getPlayerUUID())) {
                         Log.i(this.getClass().getName(), "" + player1 + " VS " + player2 + " not possible");
 
                         continue;
@@ -240,8 +238,8 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
                 }
 
                 if (playerWithSameTeamDontPlayAgainstEachOther) {
-                    if (player1.getTournamentPlayer().getTeamname().equals(
-                                player2.getTournamentPlayer().getTeamname())) {
+                    if (player1.getTournamentPlayer().getTeamName().equals(
+                                player2.getTournamentPlayer().getTeamName())) {
                         Log.i(this.getClass().getName(), "" + player1 + " VS " + player2 + " not possible");
 
                         continue;
@@ -257,16 +255,14 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
                 if (match) {
                     Game game = new Game();
 
-                    game.setTournament_id(tournament.get_id());
+                    game.setTournamentId(String.valueOf(tournament.get_id()));
                     game.setTournament_round(round);
 
                     game.setPlayer1(player1.getTournamentPlayer());
-                    game.setPlayerOneId(player1.getPlayerId());
-                    game.setPlayerOneOnlineUUID(player1.getPlayerOnlineUUID());
+                    game.setPlayerOneUUID(player1.getPlayerUUID());
 
                     game.setPlayer2(player2.getTournamentPlayer());
-                    game.setPlayerTwoId(player2.getPlayerId());
-                    game.setPlayerTwoOnlineUUID(player2.getPlayerOnlineUUID());
+                    game.setPlayerTwoUUID(player2.getPlayerUUID());
 
                     games.add(game);
 
@@ -288,21 +284,11 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
 
         ContentValues contentValues = new ContentValues();
 
-        if (game.getPlayer1().getPlayerOnlineUUID() != null) {
-            contentValues.put(GameTable.COLUMN_PLAYER_ONE_ONLINE_UUID, game.getPlayer1().getPlayerOnlineUUID());
-            game.setPlayerOneOnlineUUID(game.getPlayer1().getPlayerOnlineUUID());
-        } else {
-            contentValues.put(GameTable.COLUMN_PLAYER_ONE_ID, game.getPlayer1().getPlayerId());
-            game.setPlayerOneId(game.getPlayer1().getPlayerId());
-        }
+        contentValues.put(GameTable.COLUMN_PLAYER_ONE_UUID, game.getPlayer1().getPlayerUUID());
+        game.setPlayerOneUUID(game.getPlayer1().getPlayerUUID());
 
-        if (game.getPlayer1().getPlayerOnlineUUID() != null) {
-            contentValues.put(GameTable.COLUMN_PLAYER_TWO_ONLINE_UUID, game.getPlayer2().getPlayerOnlineUUID());
-            game.setPlayerTwoOnlineUUID(game.getPlayer2().getPlayerOnlineUUID());
-        } else {
-            contentValues.put(GameTable.COLUMN_PLAYER_TWO_ID, game.getPlayer2().getPlayerId());
-            game.setPlayerTwoId(game.getPlayer2().getPlayerId());
-        }
+        contentValues.put(GameTable.COLUMN_PLAYER_TWO_UUID, game.getPlayer2().getPlayerUUID());
+        game.setPlayerTwoUUID(game.getPlayer2().getPlayerUUID());
 
         contentValues.put(GameTable.COLUMN_PLAYER_ONE_SCORE, game.getPlayer_one_score());
         contentValues.put(GameTable.COLUMN_PLAYER_ONE_CONTROL_POINTS, game.getPlayer_one_control_points());
@@ -396,15 +382,13 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
 
         for (int i = 0; i < games.size(); i++) {
             ContentValues contentValues = new ContentValues();
-            contentValues.put(GameTable.COLUMN_TOURNAMENT_ID, games.get(i).getTournament_id());
+            contentValues.put(GameTable.COLUMN_TOURNAMENT_ID, games.get(i).getTournamentId());
             contentValues.put(GameTable.COLUMN_TOURNAMENT_ROUND, games.get(i).getTournament_round());
             contentValues.put(GameTable.COLUMN_PLAYING_FIELD, i + 1);
 
-            contentValues.put(GameTable.COLUMN_PLAYER_ONE_ID, games.get(i).getPlayerOneId());
-            contentValues.put(GameTable.COLUMN_PLAYER_ONE_ONLINE_UUID, games.get(i).getPlayerOneOnlineUUID());
+            contentValues.put(GameTable.COLUMN_PLAYER_ONE_UUID, games.get(i).getPlayerOneUUID());
 
-            contentValues.put(GameTable.COLUMN_PLAYER_TWO_ID, games.get(i).getPlayerTwoId());
-            contentValues.put(GameTable.COLUMN_PLAYER_TWO_ONLINE_UUID, games.get(i).getPlayerTwoOnlineUUID());
+            contentValues.put(GameTable.COLUMN_PLAYER_TWO_UUID, games.get(i).getPlayerTwoUUID());
 
             db.insert(GameTable.TABLE_TOURNAMENT_GAME, null, contentValues);
         }

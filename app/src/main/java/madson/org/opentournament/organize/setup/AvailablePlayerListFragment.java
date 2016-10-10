@@ -7,8 +7,6 @@ import android.os.Handler;
 
 import android.support.annotation.Nullable;
 
-import android.support.design.widget.Snackbar;
-
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
@@ -39,7 +37,6 @@ import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.organize.TournamentEventListener;
-import madson.org.opentournament.service.PlayerService;
 import madson.org.opentournament.service.TournamentPlayerService;
 import madson.org.opentournament.tasks.LoadAllLocalPlayerTask;
 import madson.org.opentournament.utility.BaseActivity;
@@ -137,8 +134,8 @@ public class AvailablePlayerListFragment extends BaseFragment implements Tournam
                 onlinePlayerListAdapter = new OnlinePlayerListAdapter(baseActivity, tournament);
 
                 // need player ids for filtering online players
-                final List<String> alreadyPlayingPlayersUUIDs =
-                    tournamentPlayerService.getAllPlayersOnlineUUIDForTournament(tournament);
+                final List<String> alreadyPlayingPlayersUUIDs = tournamentPlayerService.getAllPlayersUUIDsForTournament(
+                        tournament);
 
                 ValueEventListener playerListener = new ValueEventListener() {
 
@@ -155,7 +152,7 @@ public class AvailablePlayerListFragment extends BaseFragment implements Tournam
                             Player player = playerSnapShot.getValue(Player.class);
 
                             if (player != null && !player.getTournaments().containsKey(tournament.getOnlineUUID())) {
-                                player.setOnlineUUID(player_online_uuid);
+                                player.setUUID(player_online_uuid);
 
                                 if (!alreadyPlayingPlayersUUIDs.contains(player_online_uuid)) {
                                     onlinePlayerListAdapter.addPlayer(player);
@@ -209,84 +206,10 @@ public class AvailablePlayerListFragment extends BaseFragment implements Tournam
             localPlayerRecyclerView.setAdapter(localPlayerListAdapter);
 
             new LoadAllLocalPlayerTask(baseActivity.getBaseApplication(), localPlayerListAdapter,
-                filterPlayerTextView.getText().toString(), noLocalTournamentPlayersTextView).execute();
+                filterPlayerTextView.getText().toString(), noLocalTournamentPlayersTextView, tournament).execute();
         }
 
         return view;
-    }
-
-
-    public void addPlayer(final TournamentPlayer tournamentPlayer) {
-
-        Log.i(this.getClass().getName(), " player removed from tournament player list: " + tournamentPlayer);
-
-        if (tournamentPlayer.getPlayerId() == null) {
-            Snackbar snackbar = Snackbar.make(baseActivity.getCoordinatorLayout(), R.string.success_remove_player,
-                    Snackbar.LENGTH_LONG);
-            snackbar.getView().setBackgroundColor(baseActivity.getResources().getColor(R.color.colorAccent));
-            snackbar.show();
-
-            return;
-        }
-
-        if (tournamentPlayer.getPlayerOnlineUUID() != null && tournamentPlayer
-                .getPlayerId().equals("0")) {
-            Player player = Player.fromTournamentPlayer(tournamentPlayer);
-            player.setOnlineUUID(tournamentPlayer.getPlayerOnlineUUID());
-            onlinePlayerListAdapter.addPlayer(player);
-            onlinePlayerListAdapter.getFilter()
-                .filter(filterPlayerTextView.getText().toString(), new Filter.FilterListener() {
-
-                        @Override
-                        public void onFilterComplete(int count) {
-
-                            if (count == 0) {
-                                noOnlineTournamentPlayersTextView.setVisibility(View.VISIBLE);
-                            } else {
-                                noOnlineTournamentPlayersTextView.setVisibility(View.GONE);
-                            }
-                        }
-                    });
-        }
-    }
-
-
-    public void removePlayer(Player player) {
-
-        Log.i(this.getClass().getName(), "removePlayer player from tournament: " + player);
-
-        if (player.getOnlineUUID() == null) {
-            int indexOfPlayerAdapter = localPlayerListAdapter.removePlayer(player);
-            localPlayerRecyclerView.removeViewAt(indexOfPlayerAdapter);
-            localPlayerListAdapter.getFilter()
-                .filter(filterPlayerTextView.getText().toString(), new Filter.FilterListener() {
-
-                        @Override
-                        public void onFilterComplete(int count) {
-
-                            if (count == 0) {
-                                noLocalTournamentPlayersTextView.setVisibility(View.VISIBLE);
-                            } else {
-                                noLocalTournamentPlayersTextView.setVisibility(View.GONE);
-                            }
-                        }
-                    });
-        } else {
-            onlinePlayerListAdapter.removePlayer(player);
-            onlinePlayerListAdapter.getFilter()
-                .filter(filterPlayerTextView.getText().toString(), new Filter.FilterListener() {
-
-                        @Override
-                        public void onFilterComplete(int count) {
-
-                            if (count == 0) {
-                                noOnlineTournamentPlayersTextView.setVisibility(View.VISIBLE);
-                            } else {
-                                noOnlineTournamentPlayersTextView.setVisibility(View.GONE);
-                            }
-                        }
-                    });
-        }
     }
 
 
@@ -312,15 +235,6 @@ public class AvailablePlayerListFragment extends BaseFragment implements Tournam
 
     @Override
     public void addTournamentPlayer(TournamentPlayer tournamentPlayer) {
-
-        Player player = new Player();
-        player.setOnlineUUID(tournamentPlayer.getPlayerOnlineUUID());
-
-        if (!tournamentPlayer.getPlayerId().equals("0")) {
-            localPlayerListAdapter.removePlayer(player);
-        } else {
-            onlinePlayerListAdapter.removePlayer(player);
-        }
     }
 
 
@@ -329,16 +243,18 @@ public class AvailablePlayerListFragment extends BaseFragment implements Tournam
 
         Player player = new Player();
 
-        player.setFirstname(tournamentPlayer.getFirstname());
-        player.setNickname(tournamentPlayer.getNickname());
-        player.setLastname(tournamentPlayer.getLastname());
-        player.setOnlineUUID(tournamentPlayer.getPlayerOnlineUUID());
+        player.setFirstName(tournamentPlayer.getFirstName());
+        player.setNickName(tournamentPlayer.getNickName());
+        player.setLastName(tournamentPlayer.getLastName());
+        player.setUUID(tournamentPlayer.getPlayerUUID());
+        player.setLocal(tournamentPlayer.isLocal());
 
-        if (!tournamentPlayer.getPlayerId().equals("0")) {
-            player.set_id(Long.parseLong(tournamentPlayer.getPlayerId()));
+        if (tournamentPlayer.isLocal()) {
             localPlayerListAdapter.add(player);
+            doFilter(filterPlayerTextView.getText());
         } else {
             onlinePlayerListAdapter.addPlayer(player);
+            doFilter(filterPlayerTextView.getText());
         }
     }
 
@@ -350,6 +266,14 @@ public class AvailablePlayerListFragment extends BaseFragment implements Tournam
 
     @Override
     public void removeAvailablePlayer(Player player) {
+
+        if (player.isLocal()) {
+            localPlayerListAdapter.removePlayer(player);
+            doFilter(filterPlayerTextView.getText());
+        } else {
+            onlinePlayerListAdapter.removePlayer(player);
+            doFilter(filterPlayerTextView.getText());
+        }
     }
 
 
@@ -360,6 +284,36 @@ public class AvailablePlayerListFragment extends BaseFragment implements Tournam
 
     @Override
     public void addRegistration(TournamentPlayer player) {
+    }
+
+
+    private void doFilter(CharSequence s) {
+
+        localPlayerListAdapter.getFilter().filter(s.toString(), new Filter.FilterListener() {
+
+                @Override
+                public void onFilterComplete(int count) {
+
+                    if (count == 0) {
+                        noLocalTournamentPlayersTextView.setVisibility(View.VISIBLE);
+                    } else {
+                        noLocalTournamentPlayersTextView.setVisibility(View.GONE);
+                    }
+                }
+            });
+
+        onlinePlayerListAdapter.getFilter().filter(s.toString(), new Filter.FilterListener() {
+
+                @Override
+                public void onFilterComplete(int count) {
+
+                    if (count == 0) {
+                        noOnlineTournamentPlayersTextView.setVisibility(View.VISIBLE);
+                    } else {
+                        noOnlineTournamentPlayersTextView.setVisibility(View.GONE);
+                    }
+                }
+            });
     }
 
     private class PlayerFilterTextWatcher implements TextWatcher {
@@ -373,30 +327,7 @@ public class AvailablePlayerListFragment extends BaseFragment implements Tournam
         public void onTextChanged(CharSequence s, int start, int before, int count) {
 
             Log.i(this.getClass().getName(), "filtered by: " + s.toString());
-            localPlayerListAdapter.getFilter().filter(s.toString(), new Filter.FilterListener() {
-
-                    @Override
-                    public void onFilterComplete(int count) {
-
-                        if (count == 0) {
-                            noLocalTournamentPlayersTextView.setVisibility(View.VISIBLE);
-                        } else {
-                            noLocalTournamentPlayersTextView.setVisibility(View.GONE);
-                        }
-                    }
-                });
-            onlinePlayerListAdapter.getFilter().filter(s.toString(), new Filter.FilterListener() {
-
-                    @Override
-                    public void onFilterComplete(int count) {
-
-                        if (count == 0) {
-                            noOnlineTournamentPlayersTextView.setVisibility(View.VISIBLE);
-                        } else {
-                            noOnlineTournamentPlayersTextView.setVisibility(View.GONE);
-                        }
-                    }
-                });
+            doFilter(s);
         }
 
 

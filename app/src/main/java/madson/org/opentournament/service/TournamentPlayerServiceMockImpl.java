@@ -46,21 +46,60 @@ public class TournamentPlayerServiceMockImpl implements TournamentPlayerService 
         createMockTournamentPlayers();
     }
 
-    @Override
-    public void removePlayerFromTournament(TournamentPlayer player, Tournament tournament) {
+    private void createMockTournamentPlayers() {
+
+        addPlayerToTournament(1, "Tobias", "Madson", "Matt", "48\" AD", "Cygnar", "KA", "1");
+        addPlayerToTournament(1, "Christoph", "Zaziboy", "Scholl", "48\" AD", "Circle", "KA", "2");
+        addPlayerToTournament(1, "David", "Wildjack", "Voigt", "48\" AD", "Cryx", "KA", "3");
+        addPlayerToTournament(1, "Andreas", "Ragegear", "Neugebauer", "48\" AD", "Legion", "KA", "4");
+        addPlayerToTournament(1, "Andreas", "Raskild", "Tonndorf", "Team Karlsruhe", "Cryx", "KA2", "5");
+        addPlayerToTournament(1, "Martina", "Bazinga", "Haug", "Team Karlsruhe", "Menoth", "KA2", "6");
+        addPlayerToTournament(1, "Tobias", "Zeus", "Rohrauer", "Team Karlsruhe", "Cygnar", "KA2", "7");
+        addPlayerToTournament(1, "Yann", "Arcane", "Krehl", "Team Karlsruhe", "Trollbloods", "KA2", "8");
+    }
+
+
+    private void addPlayerToTournament(int tournament_id, String firstName, String nickName, String lastName,
+        String teamName, String faction, String meta, String uuid) {
 
         SQLiteDatabase db = openTournamentDBHelper.getWritableDatabase();
 
-        if (player.getPlayerOnlineUUID() == null) {
-            db.delete(TournamentPlayerTable.TABLE_TOURNAMENT_PLAYER,
-                TournamentPlayerTable.COLUMN_TOURNAMENT_ID + " = ?  AND  " + TournamentPlayerTable.COLUMN_PLAYER_ID
-                + " = ? ", new String[] { String.valueOf(tournament.get_id()), player.getPlayerId() });
-        } else {
-            db.delete(TournamentPlayerTable.TABLE_TOURNAMENT_PLAYER,
-                TournamentPlayerTable.COLUMN_TOURNAMENT_ID + " = ?  AND  "
-                + TournamentPlayerTable.COLUMN_PLAYER_ONLINE_UUID
-                + " = ? ", new String[] { String.valueOf(tournament.get_id()), player.getPlayerOnlineUUID() });
-        }
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(TournamentPlayerTable.COLUMN_TOURNAMENT_ID, tournament_id);
+        contentValues.put(TournamentPlayerTable.COLUMN_FIRSTNAME, firstName);
+        contentValues.put(TournamentPlayerTable.COLUMN_NICKNAME, nickName);
+        contentValues.put(TournamentPlayerTable.COLUMN_LASTNAME, lastName);
+        contentValues.put(TournamentPlayerTable.COLUMN_TEAMNAME, teamName);
+        contentValues.put(TournamentPlayerTable.COLUMN_FACTION, faction);
+        contentValues.put(TournamentPlayerTable.COLUMN_META, meta);
+        contentValues.put(TournamentPlayerTable.COLUMN_DUMMY, false);
+
+        contentValues.put(TournamentPlayerTable.COLUMN_LOCAL, true);
+        contentValues.put(TournamentPlayerTable.COLUMN_PLAYER_UUID, uuid);
+
+        db.insert(TournamentPlayerTable.TABLE_TOURNAMENT_PLAYER, null, contentValues);
+
+        db.close();
+    }
+
+
+    private void deleteAllTournamentPlayers() {
+
+        SQLiteDatabase db = openTournamentDBHelper.getWritableDatabase();
+        db.delete(TournamentPlayerTable.TABLE_TOURNAMENT_PLAYER, null, null);
+
+        db.close();
+    }
+
+
+    @Override
+    public void removePlayerFromTournament(TournamentPlayer player) {
+
+        SQLiteDatabase db = openTournamentDBHelper.getWritableDatabase();
+
+        db.delete(TournamentPlayerTable.TABLE_TOURNAMENT_PLAYER,
+            TournamentPlayerTable.COLUMN_TOURNAMENT_ID + " = ?  AND  " + TournamentPlayerTable.COLUMN_PLAYER_UUID
+            + " = ? ", new String[] { player.getTournamentId(), player.getPlayerUUID() });
 
         db.close();
     }
@@ -83,7 +122,7 @@ public class TournamentPlayerServiceMockImpl implements TournamentPlayerService 
         while (!cursor.isAfterLast()) {
             TournamentPlayer tournamentPlayer = cursorToTournamentPlayer(cursor);
 
-            String teamName = tournamentPlayer.getTeamname();
+            String teamName = tournamentPlayer.getTeamName();
 
             if (teamName == null) {
                 teamName = "";
@@ -113,13 +152,14 @@ public class TournamentPlayerServiceMockImpl implements TournamentPlayerService 
 
 
     @Override
-    public List<String> getAllPlayersOnlineUUIDForTournament(Tournament tournament) {
+    public List<String> getAllPlayersUUIDsForTournament(Tournament tournament) {
 
         List<String> playersOnlineUUIDs = new ArrayList<>();
         SQLiteDatabase readableDatabase = openTournamentDBHelper.getReadableDatabase();
 
         Cursor cursor = readableDatabase.query(TournamentPlayerTable.TABLE_TOURNAMENT_PLAYER,
-                new String[] { TournamentPlayerTable.COLUMN_PLAYER_ONLINE_UUID }, "tournament_id  = ?",
+                new String[] { TournamentPlayerTable.COLUMN_PLAYER_UUID },
+                TournamentPlayerTable.COLUMN_TOURNAMENT_ID + " = ?",
                 new String[] { Long.toString(tournament.get_id()) }, null, null, null);
 
         cursor.moveToFirst();
@@ -146,19 +186,14 @@ public class TournamentPlayerServiceMockImpl implements TournamentPlayerService 
 
         contentValues.put(TournamentPlayerTable.COLUMN_TOURNAMENT_ID, tournament.get_id());
 
-        if (player.getPlayerOnlineUUID() == null) {
-            contentValues.put(TournamentPlayerTable.COLUMN_PLAYER_ONLINE_UUID, UUID.randomUUID().toString());
-        } else {
-            contentValues.put(TournamentPlayerTable.COLUMN_PLAYER_ONLINE_UUID, player.getPlayerOnlineUUID());
-        }
-
-        contentValues.put(TournamentPlayerTable.COLUMN_PLAYER_ID, player.getPlayerId());
-        contentValues.put(TournamentPlayerTable.COLUMN_FIRSTNAME, player.getFirstname());
-        contentValues.put(TournamentPlayerTable.COLUMN_NICKNAME, player.getNickname());
-        contentValues.put(TournamentPlayerTable.COLUMN_LASTNAME, player.getLastname());
-        contentValues.put(TournamentPlayerTable.COLUMN_TEAMNAME, player.getTeamname());
+        contentValues.put(TournamentPlayerTable.COLUMN_PLAYER_UUID, player.getPlayerUUID());
+        contentValues.put(TournamentPlayerTable.COLUMN_FIRSTNAME, player.getFirstName());
+        contentValues.put(TournamentPlayerTable.COLUMN_NICKNAME, player.getNickName());
+        contentValues.put(TournamentPlayerTable.COLUMN_LASTNAME, player.getLastName());
+        contentValues.put(TournamentPlayerTable.COLUMN_TEAMNAME, player.getTeamName());
         contentValues.put(TournamentPlayerTable.COLUMN_FACTION, player.getFaction());
         contentValues.put(TournamentPlayerTable.COLUMN_DUMMY, player.isDummy());
+        contentValues.put(TournamentPlayerTable.COLUMN_LOCAL, player.isLocal());
 
         db.insert(TournamentPlayerTable.TABLE_TOURNAMENT_PLAYER, null, contentValues);
 
@@ -211,11 +246,7 @@ public class TournamentPlayerServiceMockImpl implements TournamentPlayerService 
         while (!cursor.isAfterLast()) {
             TournamentPlayer tournamentPlayer = cursorToTournamentPlayer(cursor);
 
-            if (tournamentPlayer.getPlayerOnlineUUID() != null) {
-                players.put(tournamentPlayer.getPlayerOnlineUUID(), tournamentPlayer);
-            } else {
-                players.put(tournamentPlayer.getPlayerId(), tournamentPlayer);
-            }
+            players.put(tournamentPlayer.getPlayerUUID(), tournamentPlayer);
 
             cursor.moveToNext();
         }
@@ -227,71 +258,22 @@ public class TournamentPlayerServiceMockImpl implements TournamentPlayerService 
     }
 
 
-    private void createMockTournamentPlayers() {
-
-        addPlayerToTournament(1, new Player(1, "Tobias", "Madson", "Matt"), "48\" AD", "Cygnar", "KA");
-        addPlayerToTournament(1, new Player(2, "Christoph", "Zaziboy", "Scholl"), "48\" AD", "Circle", "KA");
-        addPlayerToTournament(1, new Player(3, "David", "Wildjack", "Voigt"), "48\" AD", "Cryx", "KA");
-        addPlayerToTournament(1, new Player(4, "Andreas", "Ragegear", "Neugebauer"), "48\" AD", "Legion", "KA");
-        addPlayerToTournament(1, new Player(5, "Andreas", "Raskild", "Tonndorf"), "Team Karlsruhe", "Cryx", "KA2");
-        addPlayerToTournament(1, new Player(6, "Martina", "Bazinga", "Haug"), "Team Karlsruhe", "Menoth", "KA2");
-        addPlayerToTournament(1, new Player(7, "Tobias", "Zeus", "Rohrauer"), "Team Karlsruhe", "Cygnar", "KA2");
-        addPlayerToTournament(1, new Player(8, "Yann", "Arcane", "Krehl"), "Team Karlsruhe", "Trollbloods", "KA2");
-    }
-
-
-    private void addPlayerToTournament(int tournament_id, Player player, String teamname, String faction, String meta) {
-
-        SQLiteDatabase db = openTournamentDBHelper.getWritableDatabase();
-
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(TournamentPlayerTable.COLUMN_TOURNAMENT_ID, tournament_id);
-        contentValues.put(TournamentPlayerTable.COLUMN_PLAYER_ID, player.get_id());
-        contentValues.put(TournamentPlayerTable.COLUMN_FIRSTNAME, player.getFirstname());
-        contentValues.put(TournamentPlayerTable.COLUMN_NICKNAME, player.getNickname());
-        contentValues.put(TournamentPlayerTable.COLUMN_LASTNAME, player.getLastname());
-        contentValues.put(TournamentPlayerTable.COLUMN_TEAMNAME, teamname);
-        contentValues.put(TournamentPlayerTable.COLUMN_FACTION, faction);
-        contentValues.put(TournamentPlayerTable.COLUMN_META, meta);
-        contentValues.put(TournamentPlayerTable.COLUMN_DUMMY, false);
-
-        if (player.getOnlineUUID() != null) {
-            contentValues.put(TournamentPlayerTable.COLUMN_PLAYER_ONLINE_UUID, player.getOnlineUUID());
-        } else {
-            contentValues.put(TournamentPlayerTable.COLUMN_PLAYER_ONLINE_UUID, UUID.randomUUID().toString());
-        }
-
-        db.insert(TournamentPlayerTable.TABLE_TOURNAMENT_PLAYER, null, contentValues);
-
-        db.close();
-    }
-
-
-    private void deleteAllTournamentPlayers() {
-
-        SQLiteDatabase db = openTournamentDBHelper.getWritableDatabase();
-        db.delete(TournamentPlayerTable.TABLE_TOURNAMENT_PLAYER, null, null);
-
-        db.close();
-    }
-
-
     private TournamentPlayer cursorToTournamentPlayer(Cursor cursor) {
 
         TournamentPlayer tournamentPlayer = new TournamentPlayer();
         tournamentPlayer.set_id(cursor.getInt(0));
-        tournamentPlayer.setTournamentId(cursor.getInt(1));
-        tournamentPlayer.setPlayerId(cursor.getString(2));
-        tournamentPlayer.setPlayerOnlineUUID(cursor.getString(3));
+        tournamentPlayer.setTournamentId(cursor.getString(1));
+        tournamentPlayer.setPlayerUUID(cursor.getString(2));
 
-        tournamentPlayer.setFirstname(cursor.getString(4));
-        tournamentPlayer.setNickname(cursor.getString(5));
-        tournamentPlayer.setLastname(cursor.getString(6));
-        tournamentPlayer.setTeamname(cursor.getString(7));
-        tournamentPlayer.setFaction(cursor.getString(8));
-        tournamentPlayer.setMeta(cursor.getString(9));
-        tournamentPlayer.setDummy(cursor.getInt(10) != 0);
-        tournamentPlayer.setDroppedInRound(cursor.getInt(11));
+        tournamentPlayer.setFirstName(cursor.getString(3));
+        tournamentPlayer.setNickName(cursor.getString(4));
+        tournamentPlayer.setLastName(cursor.getString(5));
+        tournamentPlayer.setTeamName(cursor.getString(6));
+        tournamentPlayer.setFaction(cursor.getString(7));
+        tournamentPlayer.setMeta(cursor.getString(8));
+        tournamentPlayer.setDummy(cursor.getInt(9) != 0);
+        tournamentPlayer.setDroppedInRound(cursor.getInt(10));
+        tournamentPlayer.setLocal(cursor.getInt(11) != 0);
 
         return tournamentPlayer;
     }
@@ -308,7 +290,7 @@ public class TournamentPlayerServiceMockImpl implements TournamentPlayerService 
         referenceFoPlayersToDelete.removeValue();
 
         for (TournamentPlayer player : allPlayersForTournament) {
-            String online_uuid = player.getPlayerOnlineUUID();
+            String online_uuid = player.getPlayerUUID();
 
             DatabaseReference referenceForUpdateTournamentPlayer = FirebaseDatabase.getInstance()
                     .getReference(FirebaseReferences.TOURNAMENT_PLAYERS + "/" + tournament.getOnlineUUID() + "/"
@@ -341,7 +323,7 @@ public class TournamentPlayerServiceMockImpl implements TournamentPlayerService 
 
         ContentValues contentValues = new ContentValues();
 
-        contentValues.put(TournamentPlayerTable.COLUMN_TEAMNAME, tournamentPlayer.getTeamname());
+        contentValues.put(TournamentPlayerTable.COLUMN_TEAMNAME, tournamentPlayer.getTeamName());
         contentValues.put(TournamentPlayerTable.COLUMN_FACTION, tournamentPlayer.getFaction());
 
         db.update(TournamentPlayerTable.TABLE_TOURNAMENT_PLAYER, contentValues,
@@ -372,19 +354,10 @@ public class TournamentPlayerServiceMockImpl implements TournamentPlayerService 
 
         Cursor cursor;
 
-        if (player.get_id() == 0) {
-            cursor = readableDatabase.query(TournamentPlayerTable.TABLE_TOURNAMENT_PLAYER,
-                    new String[] { TournamentPlayerTable.COLUMN_PLAYER_ONLINE_UUID },
-                    TournamentPlayerTable.COLUMN_TOURNAMENT_ID + " = ? AND "
-                    + TournamentPlayerTable.COLUMN_PLAYER_ONLINE_UUID + " = ?",
-                    new String[] { Long.toString(tournament.get_id()), player.getOnlineUUID() }, null, null, null);
-        } else {
-            cursor = readableDatabase.query(TournamentPlayerTable.TABLE_TOURNAMENT_PLAYER,
-                    new String[] { TournamentPlayerTable.COLUMN_PLAYER_ONLINE_UUID },
-                    TournamentPlayerTable.COLUMN_TOURNAMENT_ID + " = ? AND " + TournamentPlayerTable.COLUMN_PLAYER_ID
-                    + " = ?", new String[] { Long.toString(tournament.get_id()), String.valueOf(player.get_id()) },
-                    null, null, null);
-        }
+        cursor = readableDatabase.query(TournamentPlayerTable.TABLE_TOURNAMENT_PLAYER,
+                new String[] { TournamentPlayerTable.COLUMN_PLAYER_UUID },
+                TournamentPlayerTable.COLUMN_TOURNAMENT_ID + " = ? AND " + TournamentPlayerTable.COLUMN_PLAYER_UUID
+                + " = ?", new String[] { Long.toString(tournament.get_id()), player.getUUID() }, null, null, null);
 
         cursor.moveToFirst();
 

@@ -1,7 +1,5 @@
 package madson.org.opentournament.online;
 
-import android.content.Context;
-
 import android.graphics.Color;
 
 import android.graphics.drawable.Drawable;
@@ -17,7 +15,6 @@ import android.view.ViewGroup;
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Game;
 import madson.org.opentournament.domain.TournamentPlayer;
-import madson.org.opentournament.utility.BaseActivity;
 import madson.org.opentournament.utility.BaseApplication;
 import madson.org.opentournament.viewHolder.GameViewHolder;
 
@@ -78,8 +75,8 @@ public class OnlineGamesListAdapter extends RecyclerView.Adapter<GameViewHolder>
 
         holder.getPlayerOneNameInList()
             .setText(baseApplication.getResources()
-                .getString(R.string.player_name_in_row, player1.getFirstname(), player1.getNickname(),
-                    player1.getLastname()));
+                .getString(R.string.player_name_in_row, player1.getFirstName(), player1.getNickName(),
+                    player1.getLastName()));
         holder.getPlayerOneFaction().setText(player1.getFaction());
 
         holder.getPlayerOneScore()
@@ -93,8 +90,8 @@ public class OnlineGamesListAdapter extends RecyclerView.Adapter<GameViewHolder>
 
         holder.getPlayerTwoNameInList()
             .setText(baseApplication.getResources()
-                .getString(R.string.player_name_in_row, player2.getFirstname(), player2.getNickname(),
-                    player2.getLastname()));
+                .getString(R.string.player_name_in_row, player2.getFirstName(), player2.getNickName(),
+                    player2.getLastName()));
         holder.getPlayerTwoFaction().setText(player2.getFaction());
 
         holder.getPlayerTwoScore()
@@ -111,12 +108,12 @@ public class OnlineGamesListAdapter extends RecyclerView.Adapter<GameViewHolder>
         }
 
         if (baseApplication.getAuthenticatedPlayer() != null
-                && (baseApplication.getAuthenticatedPlayer().getOnlineUUID().equals(player1.getPlayerOnlineUUID()))) {
+                && (baseApplication.getAuthenticatedPlayer().getUUID().equals(player1.getPlayerUUID()))) {
             holder.getPlayerOneCardView().setCardBackgroundColor(Color.MAGENTA);
         }
 
         if (baseApplication.getAuthenticatedPlayer() != null
-                && (baseApplication.getAuthenticatedPlayer().getOnlineUUID().equals(player2.getPlayerOnlineUUID()))) {
+                && (baseApplication.getAuthenticatedPlayer().getUUID().equals(player2.getPlayerUUID()))) {
             holder.getPlayerTwoCardView().setCardBackgroundColor(Color.MAGENTA);
         }
     }
@@ -141,8 +138,9 @@ public class OnlineGamesListAdapter extends RecyclerView.Adapter<GameViewHolder>
     public int getIndexOfPlayer(String uuid) {
 
         for (int i = 0; i < gameList.size(); i++) {
-            if (gameList.get(i).getPlayerOneOnlineUUID().equals(uuid)
-                    || gameList.get(i).getPlayerTwoOnlineUUID().equals(uuid)) {
+            if (gameList.get(i).getPlayerOneUUID().equals(uuid) || gameList.get(i)
+                    .getPlayerTwoUUID()
+                    .equals(uuid)) {
                 return i;
             }
         }

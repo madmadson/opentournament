@@ -48,7 +48,7 @@ import java.util.Map;
 public class ConfirmPairingNewRoundDialog extends DialogFragment {
 
     public static final String BUNDLE_TOURNAMENT = "tournament";
-    public static final String BUNDLE_ROUND_TO_DISPLAY = "round_for_pairing";
+    public static final String BUNDLE_ROUND = "round_for_pairing";
 
     private Tournament tournament;
     private int round_for_pairing;
@@ -79,7 +79,7 @@ public class ConfirmPairingNewRoundDialog extends DialogFragment {
 
         if (bundle != null) {
             tournament = bundle.getParcelable(BUNDLE_TOURNAMENT);
-            round_for_pairing = bundle.getInt(BUNDLE_ROUND_TO_DISPLAY);
+            round_for_pairing = bundle.getInt(BUNDLE_ROUND);
         }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -123,13 +123,7 @@ public class ConfirmPairingNewRoundDialog extends DialogFragment {
             container.addView(pairingOption);
         }
 
-        String title;
-
-        if (round_for_pairing == 1) {
-            title = getString(R.string.confirm_start_tournament_title);
-        } else {
-            title = getString(R.string.confirm_pairing_title, round_for_pairing);
-        }
+        String title = getString(R.string.confirm_pairing_title, round_for_pairing);
 
         builder.setView(dialogView)
             .setTitle(title)
@@ -174,14 +168,9 @@ public class ConfirmPairingNewRoundDialog extends DialogFragment {
                             R.string.empty, Snackbar.LENGTH_LONG);
 
                     ProgressBar progressBar = (ProgressBar) toolbar.findViewById(R.id.toolbar_progress_bar);
-                    TournamentOrganizeActivity activity = (TournamentOrganizeActivity) getActivity();
-                    new PairNewRoundTask(activity, baseApplication, tournament, snackbar, progressBar, false,
-                        pairingOptions).execute();
 
-                    DatabaseReference reference = FirebaseDatabase.getInstance()
-                        .getReference(FirebaseReferences.TOURNAMENT_REGISTRATIONS + "/" + tournament.getOnlineUUID());
-
-                    reference.setValue(null);
+                    new PairNewRoundTask(baseApplication, tournament, snackbar, progressBar, false, pairingOptions)
+                    .execute();
 
                     dialog.dismiss();
                 }

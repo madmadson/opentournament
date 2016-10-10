@@ -12,6 +12,7 @@ import android.widget.TextView;
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.Tournament;
+import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.organize.setup.LocalPlayerListAdapter;
 import madson.org.opentournament.utility.BaseApplication;
 
@@ -29,21 +30,34 @@ public class LoadAllLocalPlayerTask extends AsyncTask<Void, Void, Void> {
     private LocalPlayerListAdapter localPlayerListAdapter;
     private String filterString;
     private TextView noLocalTournamentPlayersTextView;
+    private Tournament tournament;
     private List<Player> allLocalPlayers;
 
     public LoadAllLocalPlayerTask(BaseApplication baseApplication, LocalPlayerListAdapter localPlayerListAdapter,
-        String filterString, TextView noLocalTournamentPlayersTextView) {
+        String filterString, TextView noLocalTournamentPlayersTextView, Tournament tournament) {
 
         this.baseApplication = baseApplication;
         this.localPlayerListAdapter = localPlayerListAdapter;
         this.filterString = filterString;
         this.noLocalTournamentPlayersTextView = noLocalTournamentPlayersTextView;
+        this.tournament = tournament;
     }
 
     @Override
     protected Void doInBackground(Void... params) {
 
         allLocalPlayers = baseApplication.getPlayerService().getAllLocalPlayers();
+
+        List<TournamentPlayer> allPlayersForTournament = baseApplication.getTournamentPlayerService()
+                .getAllPlayersForTournament(tournament);
+
+        for (TournamentPlayer player : allPlayersForTournament) {
+            Player player1 = new Player(player.getPlayerUUID());
+
+            if (allLocalPlayers.contains(player1)) {
+                allLocalPlayers.remove(player1);
+            }
+        }
 
         return null;
     }

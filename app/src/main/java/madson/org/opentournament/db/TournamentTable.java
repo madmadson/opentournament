@@ -72,10 +72,9 @@ public class TournamentTable {
 
     public static void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
-        Log.i(TournamentTable.class.getName(),
-            "Upgrading database from version " + oldVersion + " to " + newVersion
-            + ", which will destroy all old data");
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_TOURNAMENTS);
-        createTable(db);
+        if (oldVersion == 3 && newVersion == 4) {
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_TOURNAMENTS);
+            createTable(db);
+        }
     }
 }

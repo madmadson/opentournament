@@ -124,12 +124,6 @@ public class TournamentRoundManagementFragment extends Fragment implements Tourn
 
     @Override
     public void enterGameResultConfirmed(Game game) {
-
-        Log.i(this.getClass().getName(), "game result entered: " + game);
-
-        if (gameListFragment != null) {
-            gameListFragment.updateGameInList(game);
-        }
     }
 
 

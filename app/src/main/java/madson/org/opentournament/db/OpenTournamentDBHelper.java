@@ -14,7 +14,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class OpenTournamentDBHelper extends SQLiteOpenHelper {
 
     private static final String DB_NAME = "opentournament.db";
-    private static final int DB_VERSION = 3;
+    private static final int DB_VERSION = 4;
 
     public OpenTournamentDBHelper(Context context) {
 
@@ -34,5 +34,11 @@ public class OpenTournamentDBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+
+        TournamentTable.onUpgrade(db, oldVersion, newVersion);
+        PlayerTable.onUpgrade(db, oldVersion, newVersion);
+        TournamentPlayerTable.onUpgrade(db, oldVersion, newVersion);
+        TournamentRankingTable.onUpgrade(db, oldVersion, newVersion);
+        GameTable.onUpgrade(db, oldVersion, newVersion);
     }
 }

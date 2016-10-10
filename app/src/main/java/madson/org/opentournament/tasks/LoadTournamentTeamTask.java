@@ -83,8 +83,8 @@ public class LoadTournamentTeamTask extends AsyncTask<Void, Void, Map<Tournament
             teamnameSpinner.setVisibility(View.VISIBLE);
         }
 
-        if (tournament_player != null && tournament_player.getTeamname() != null) {
-            teamnameSpinner.setSelection(team_adapter.getPosition(tournament_player.getTeamname()));
+        if (tournament_player != null && tournament_player.getTeamName() != null) {
+            teamnameSpinner.setSelection(team_adapter.getPosition(tournament_player.getTeamName()));
         }
 
         team_adapter.notifyDataSetChanged();

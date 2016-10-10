@@ -65,8 +65,8 @@ public class LocalPlayerListAdapter extends RecyclerView.Adapter<PlayerViewHolde
 
         holder.getPlayerNameInList()
             .setText(baseActivity.getResources()
-                .getString(R.string.player_name_in_row, player.getFirstname(), player.getNickname(),
-                    player.getLastname()));
+                .getString(R.string.player_name_in_row, player.getFirstName(), player.getNickName(),
+                    player.getLastName()));
 
         if (position % 2 == 0) {
             holder.getPlayerCardLayout().setBackgroundColor(Color.LTGRAY);
@@ -147,9 +147,9 @@ public class LocalPlayerListAdapter extends RecyclerView.Adapter<PlayerViewHolde
             for (int i = 0; i < count; i++) {
                 filterablePlayer = list.get(i);
 
-                if (filterablePlayer.getFirstname().toLowerCase().contains(filterString)
-                        || filterablePlayer.getNickname().toLowerCase().contains(filterString)
-                        || filterablePlayer.getLastname().toLowerCase().contains(filterString)) {
+                if (filterablePlayer.getFirstName().toLowerCase().contains(filterString)
+                        || filterablePlayer.getNickName().toLowerCase().contains(filterString)
+                        || filterablePlayer.getLastName().toLowerCase().contains(filterString)) {
                     Log.i(this.getClass().getName(), "addTournamentPlayer to players: " + filterablePlayer.toString());
                     newListOfPlayers.add(filterablePlayer);
                 }

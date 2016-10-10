@@ -1,9 +1,5 @@
 package madson.org.opentournament.online;
 
-import android.graphics.Color;
-
-import android.graphics.drawable.Drawable;
-
 import android.os.Bundle;
 import android.os.Handler;
 
@@ -18,8 +14,6 @@ import android.view.ViewGroup;
 
 import android.widget.ProgressBar;
 
-import com.firebase.ui.database.FirebaseRecyclerAdapter;
-
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -31,12 +25,8 @@ import madson.org.opentournament.R;
 import madson.org.opentournament.db.FirebaseReferences;
 import madson.org.opentournament.db.GameTable;
 import madson.org.opentournament.domain.Game;
-import madson.org.opentournament.domain.TournamentPlayer;
-import madson.org.opentournament.organize.GameListAdapter;
 import madson.org.opentournament.utility.BaseActivity;
 import madson.org.opentournament.utility.BaseApplication;
-import madson.org.opentournament.viewHolder.GameViewHolder;
-import madson.org.opentournament.viewHolder.TournamentPlayerViewHolder;
 
 
 /**
@@ -149,7 +139,7 @@ public class OnlineGamesListFragment extends Fragment {
 
                     if (baseApplication.getAuthenticatedPlayer() != null) {
                         int indexOfPlayer = gamesListAdapter.getIndexOfPlayer(
-                                baseApplication.getAuthenticatedPlayer().getOnlineUUID());
+                                baseApplication.getAuthenticatedPlayer().getUUID());
 
                         if (indexOfPlayer != -1) {
                             recyclerView.scrollToPosition(indexOfPlayer);

@@ -23,12 +23,10 @@ import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
-import madson.org.opentournament.domain.TournamentTyp;
 import madson.org.opentournament.online.RegisterTournamentPlayerDialog;
 import madson.org.opentournament.tasks.DropTournamentPlayerFromTournamentTask;
 import madson.org.opentournament.tasks.RemoveTournamentPlayerFromTournamentTask;
 import madson.org.opentournament.utility.BaseActivity;
-import madson.org.opentournament.utility.BaseApplication;
 import madson.org.opentournament.viewHolder.TournamentPlayerViewHolder;
 
 import java.util.ArrayList;
@@ -69,8 +67,8 @@ public class TournamentPlayerListAdapter extends RecyclerView.Adapter<Tournament
         final TournamentPlayer tournamentPlayer = tournamentPlayerList.get(position);
         holder.getPlayerNumber().setText(String.valueOf(position + 1));
 
-        if (tournamentPlayer.getTeamname() != null && !tournamentPlayer.getTeamname().isEmpty()) {
-            holder.getTeamName().setText(tournamentPlayer.getTeamname());
+        if (tournamentPlayer.getTeamName() != null && !tournamentPlayer.getTeamName().isEmpty()) {
+            holder.getTeamName().setText(tournamentPlayer.getTeamName());
             holder.getTeamName().setVisibility(View.VISIBLE);
         } else {
             holder.getTeamName().setVisibility(View.GONE);
@@ -78,17 +76,17 @@ public class TournamentPlayerListAdapter extends RecyclerView.Adapter<Tournament
 
         holder.getFaction().setText(tournamentPlayer.getFaction());
 
-        String firstname = tournamentPlayer.getFirstname();
-        String nickname = tournamentPlayer.getNickname();
-        String lastname = tournamentPlayer.getLastname();
+        String firstname = tournamentPlayer.getFirstName();
+        String nickname = tournamentPlayer.getNickName();
+        String lastname = tournamentPlayer.getLastName();
         holder.getPlayerNameInList()
             .setText(baseActivity.getResources().getString(R.string.player_name_in_row, firstname, nickname, lastname));
 
         // mark online tournamentPlayer
-        if (tournamentPlayer.getPlayerId() != null && tournamentPlayer.getPlayerId().equals("0")) {
-            holder.getLocalIcon().setVisibility(View.GONE);
-        } else {
+        if (tournamentPlayer.isLocal()) {
             holder.getLocalIcon().setVisibility(View.VISIBLE);
+        } else {
+            holder.getLocalIcon().setVisibility(View.GONE);
         }
 
         if (tournamentPlayer.getDroppedInRound() != 0) {
@@ -128,7 +126,7 @@ public class TournamentPlayerListAdapter extends RecyclerView.Adapter<Tournament
                         @Override
                         public void onClick(View v) {
 
-                            if (tournamentPlayer.getPlayerOnlineUUID() != null) {
+                            if (tournamentPlayer.getPlayerUUID() != null) {
                                 Log.i(this.getClass().getName(), "addList");
 
                                 AddTournamentPlayerListDialog dialog = new AddTournamentPlayerListDialog();
@@ -179,8 +177,6 @@ public class TournamentPlayerListAdapter extends RecyclerView.Adapter<Tournament
 
                                             new RemoveTournamentPlayerFromTournamentTask(baseActivity, tournament,
                                                 tournamentPlayer).execute();
-
-                                            removeTournamentPlayer(tournamentPlayer);
                                         }
                                     })
                             .setNeutralButton(R.string.dialog_cancel, null)
@@ -224,7 +220,7 @@ public class TournamentPlayerListAdapter extends RecyclerView.Adapter<Tournament
      */
     public void addTournamentPlayer(TournamentPlayer tournamentPlayer) {
 
-        if (!tournamentPlayerList.contains(tournamentPlayer) || tournamentPlayer.getPlayerOnlineUUID() == null) {
+        if (!tournamentPlayerList.contains(tournamentPlayer) || tournamentPlayer.getPlayerUUID() == null) {
             tournamentPlayerList.add(tournamentPlayer);
             notifyDataSetChanged();
         }
@@ -264,26 +260,6 @@ public class TournamentPlayerListAdapter extends RecyclerView.Adapter<Tournament
             tournamentPlayerList.add(tournamentPlayer);
             notifyDataSetChanged();
         }
-    }
-
-
-    public boolean containsPlayer(Player player) {
-
-        for (TournamentPlayer tournamentPlayer : tournamentPlayerList) {
-            // online player
-            if (tournamentPlayer.getRealPlayerId().equals(player.getOnlineUUID())) {
-                return true;
-            }
-
-            // local player
-            if (player.get_id() != 0) {
-                if (tournamentPlayer.getPlayerId().equals(String.valueOf(player.get_id()))) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
     }
 
 

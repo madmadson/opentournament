@@ -15,8 +15,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
-import android.util.Log;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -73,6 +71,7 @@ public class TournamentPlayerListFragment extends Fragment implements Tournament
 
     private TournamentPlayerListAdapter tournamentPlayerListAdapter;
     private TournamentPlayerTeamListAdapter tournamentPlayerTeamListAdapter;
+    private TextView headingRegisteredPlayers;
 
     public static TournamentPlayerListFragment newInstance(Tournament tournament) {
 
@@ -116,6 +115,7 @@ public class TournamentPlayerListFragment extends Fragment implements Tournament
         noTournamentPlayersTextView = (TextView) view.findViewById(R.id.no_tournament_players);
         progressbar = (ProgressBar) view.findViewById(R.id.progressBar);
         progressbarRegistration = (ProgressBar) view.findViewById(R.id.progressBarRegistration);
+        headingRegisteredPlayers = (TextView) view.findViewById(R.id.heading_registered_players);
 
         registrationRecyclerView = (RecyclerView) view.findViewById(R.id.tournament_registration_list_recycler_view);
         registrationRecyclerView.setHasFixedSize(true);
@@ -146,9 +146,15 @@ public class TournamentPlayerListFragment extends Fragment implements Tournament
         registrationRecyclerView.setAdapter(registrationListAdapter);
 
         if (baseActivity.isConnected()) {
-            loadRegistrations();
+            if (tournament.getState().equals(Tournament.TournamentState.PLANED.name())) {
+                loadRegistrations();
+            } else {
+                progressbarRegistration.setVisibility(View.GONE);
+                headingRegisteredPlayers.setVisibility(View.GONE);
+            }
         } else {
             progressbarRegistration.setVisibility(View.GONE);
+            headingRegisteredPlayers.setVisibility(View.GONE);
         }
 
         tournamentPlayerTeamListAdapter.clear();
@@ -231,11 +237,10 @@ public class TournamentPlayerListFragment extends Fragment implements Tournament
                 .setNegativeButton(R.string.dialog_cancel, null)
                 .show();
         } else {
-            ConfirmPairingNewRoundDialog dialog = new ConfirmPairingNewRoundDialog();
+            ConfirmStartTournamentDialog dialog = new ConfirmStartTournamentDialog();
 
             Bundle bundle = new Bundle();
-            bundle.putParcelable(ConfirmPairingNewRoundDialog.BUNDLE_TOURNAMENT, tournament);
-            bundle.putInt(ConfirmPairingNewRoundDialog.BUNDLE_ROUND_TO_DISPLAY, 1);
+            bundle.putParcelable(ConfirmStartTournamentDialog.BUNDLE_TOURNAMENT, tournament);
             dialog.setArguments(bundle);
 
             FragmentManager supportFragmentManager = getActivity().getSupportFragmentManager();
@@ -259,9 +264,11 @@ public class TournamentPlayerListFragment extends Fragment implements Tournament
                     progressbarRegistration.setVisibility(View.GONE);
 
                     TournamentPlayer player = dataSnapshot.getValue(TournamentPlayer.class);
-                    player.setPlayerOnlineUUID(dataSnapshot.getKey());
+                    player.setPlayerUUID(dataSnapshot.getKey());
 
-                    registrationListAdapter.addRegistration(player);
+                    if (!tournamentPlayerListAdapter.contains(player)) {
+                        registrationListAdapter.addRegistration(player);
+                    }
                 }
 
 
@@ -269,7 +276,7 @@ public class TournamentPlayerListFragment extends Fragment implements Tournament
                 public void onChildChanged(DataSnapshot dataSnapshot, String s) {
 
                     TournamentPlayer player = dataSnapshot.getValue(TournamentPlayer.class);
-                    player.setPlayerOnlineUUID(dataSnapshot.getKey());
+                    player.setPlayerUUID(dataSnapshot.getKey());
 
                     registrationListAdapter.updateRegistration(player);
                 }
@@ -279,7 +286,7 @@ public class TournamentPlayerListFragment extends Fragment implements Tournament
                 public void onChildRemoved(DataSnapshot dataSnapshot) {
 
                     TournamentPlayer player = dataSnapshot.getValue(TournamentPlayer.class);
-                    player.setPlayerOnlineUUID(dataSnapshot.getKey());
+                    player.setPlayerUUID(dataSnapshot.getKey());
 
                     registrationListAdapter.removeRegistration(player);
                 }
@@ -311,42 +318,9 @@ public class TournamentPlayerListFragment extends Fragment implements Tournament
     }
 
 
-    public void addPlayer(TournamentPlayer player) {
-
-        Log.i(this.getClass().getName(), "addTournamentPlayer player to tournament player list: " + player);
-
-        tournamentPlayerListAdapter.addTournamentPlayer(player);
-        tournamentPlayerTeamListAdapter.addTournamentPlayer(player);
-
-        if (tournamentPlayerListAdapter.getItemCount() > 0) {
-            noTournamentPlayersTextView.setVisibility(View.GONE);
-        }
-    }
-
-
-    public void removePlayer(TournamentPlayer player) {
-
-        Log.i(this.getClass().getName(), "remove TournamentPlayer: " + player);
-
-        tournamentPlayerListAdapter.removeTournamentPlayer(player);
-        tournamentPlayerTeamListAdapter.removeTournamentPlayer(player);
-
-        if (tournamentPlayerListAdapter.getItemCount() == 0) {
-            noTournamentPlayersTextView.setVisibility(View.VISIBLE);
-        }
-    }
-
-
     public void startButtonInvisible() {
 
         startButton.setVisibility(View.GONE);
-    }
-
-
-    public void updatePlayer(TournamentPlayer player, String oldTeamName) {
-
-        tournamentPlayerListAdapter.updateTournamentPlayer(player);
-        tournamentPlayerTeamListAdapter.updateTournamentPlayer(player, oldTeamName);
     }
 
 
@@ -373,12 +347,24 @@ public class TournamentPlayerListFragment extends Fragment implements Tournament
     @Override
     public void addTournamentPlayer(TournamentPlayer tournamentPlayer) {
 
-        addPlayer(tournamentPlayer);
+        tournamentPlayerListAdapter.addTournamentPlayer(tournamentPlayer);
+        tournamentPlayerTeamListAdapter.addTournamentPlayer(tournamentPlayer);
+
+        if (tournamentPlayerListAdapter.getItemCount() > 0) {
+            noTournamentPlayersTextView.setVisibility(View.GONE);
+        }
     }
 
 
     @Override
     public void removeTournamentPlayer(TournamentPlayer tournamentPlayer) {
+
+        tournamentPlayerListAdapter.removeTournamentPlayer(tournamentPlayer);
+        tournamentPlayerTeamListAdapter.removeTournamentPlayer(tournamentPlayer);
+
+        if (tournamentPlayerListAdapter.getItemCount() == 0) {
+            noTournamentPlayersTextView.setVisibility(View.VISIBLE);
+        }
     }
 
 
@@ -394,10 +380,18 @@ public class TournamentPlayerListFragment extends Fragment implements Tournament
 
     @Override
     public void updateTournamentPlayer(TournamentPlayer updatedPLayer, String oldTeamName) {
+
+        tournamentPlayerListAdapter.updateTournamentPlayer(updatedPLayer);
+        tournamentPlayerTeamListAdapter.updateTournamentPlayer(updatedPLayer, oldTeamName);
     }
 
 
     @Override
     public void addRegistration(TournamentPlayer player) {
+
+        tournamentPlayerListAdapter.addTournamentPlayer(player);
+        tournamentPlayerTeamListAdapter.addTournamentPlayer(player);
+
+        registrationListAdapter.removeRegistration(player);
     }
 }

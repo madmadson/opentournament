@@ -143,8 +143,8 @@ public class EnterResultForGameDialog extends DialogFragment {
 
             if (player1 != null) {
                 text_name_player_one.setText(getActivity().getResources()
-                    .getString(R.string.player_name_in_row, player1.getFirstname(), player1.getNickname(),
-                        player1.getLastname()));
+                    .getString(R.string.player_name_in_row, player1.getFirstName(), player1.getNickName(),
+                        player1.getLastName()));
             } else {
                 text_name_player_one.setText(getActivity().getResources()
                     .getString(R.string.player_name_in_row, "Dummy", "THE KING", "Player"));
@@ -152,8 +152,8 @@ public class EnterResultForGameDialog extends DialogFragment {
 
             if (player2 != null) {
                 text_name_player_two.setText(getActivity().getResources()
-                    .getString(R.string.player_name_in_row, player2.getFirstname(), player2.getNickname(),
-                        player2.getLastname()));
+                    .getString(R.string.player_name_in_row, player2.getFirstName(), player2.getNickName(),
+                        player2.getLastName()));
             } else {
                 text_name_player_two.setText(getActivity().getResources()
                     .getString(R.string.player_name_in_row, "Dummy", "THE HAMMER", "Player"));

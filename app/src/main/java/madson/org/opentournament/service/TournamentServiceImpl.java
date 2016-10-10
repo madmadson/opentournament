@@ -270,11 +270,11 @@ public class TournamentServiceImpl implements TournamentService {
 
         ContentValues contentValues = new ContentValues();
         contentValues.put(TournamentTable.COLUMN_STATE, Tournament.TournamentState.FINISHED.name());
-        contentValues.put(TournamentTable.COLUMN_ACTUAL_ROUND, tournament.getActualRound());
+        contentValues.put(TournamentTable.COLUMN_ACTUAL_ROUND, tournament.getActualRound() + 1);
 
         SQLiteDatabase writableDatabase = openTournamentDBHelper.getWritableDatabase();
 
-        writableDatabase.update(TournamentTable.TABLE_TOURNAMENTS, contentValues, "_id = ?",
+        writableDatabase.update(TournamentTable.TABLE_TOURNAMENTS, contentValues, TournamentTable.COLUMN_ID + " = ?",
             new String[] { String.valueOf(tournament.get_id()) });
 
         writableDatabase.close();

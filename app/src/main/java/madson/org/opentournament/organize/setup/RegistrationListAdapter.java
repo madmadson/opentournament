@@ -19,11 +19,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-
 import madson.org.opentournament.R;
-import madson.org.opentournament.db.FirebaseReferences;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.online.RegisterTournamentPlayerDialog;
@@ -74,8 +70,8 @@ public class RegistrationListAdapter extends RecyclerView.Adapter<TournamentPlay
 
         viewHolder.getPlayerNumber().setText(String.valueOf(position + 1));
 
-        if (player.getTeamname() != null) {
-            viewHolder.getTeamName().setText(player.getTeamname());
+        if (player.getTeamName() != null) {
+            viewHolder.getTeamName().setText(player.getTeamName());
             viewHolder.getTeamName().setVisibility(View.VISIBLE);
         } else {
             viewHolder.getTeamName().setVisibility(View.GONE);
@@ -83,9 +79,9 @@ public class RegistrationListAdapter extends RecyclerView.Adapter<TournamentPlay
 
         viewHolder.getFaction().setText(player.getFaction());
 
-        final String firstname = player.getFirstname();
-        final String nickname = player.getNickname();
-        final String lastname = player.getLastname();
+        final String firstname = player.getFirstName();
+        final String nickname = player.getNickName();
+        final String lastname = player.getLastName();
         viewHolder.getPlayerNameInList()
             .setText(baseActivity.getResources().getString(R.string.player_name_in_row, firstname, nickname, lastname));
 

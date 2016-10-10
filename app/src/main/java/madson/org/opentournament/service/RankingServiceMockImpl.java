@@ -25,6 +25,7 @@ import madson.org.opentournament.service.warmachine.TournamentRankingComparator;
 import madson.org.opentournament.utility.BaseApplication;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -78,7 +79,7 @@ public class RankingServiceMockImpl implements RankingService {
         while (!cursor.isAfterLast()) {
             TournamentRanking tournamentRanking = cursorToTournamentRanking(cursor);
 
-            tournamentRanking.setTournamentPlayer(allPlayerMapForTournament.get(tournamentRanking.getRealPlayerId()));
+            tournamentRanking.setTournamentPlayer(allPlayerMapForTournament.get(tournamentRanking.getPlayerUUID()));
 
             rankingsForRound.add(tournamentRanking);
             cursor.moveToNext();
@@ -103,25 +104,24 @@ public class RankingServiceMockImpl implements RankingService {
 
         for (TournamentPlayer tournamentPlayer : allPlayersForTournament) {
             TournamentRanking tournamentRanking = new TournamentRanking();
-            tournamentRanking.setTournament_id(tournament.get_id());
+            tournamentRanking.setTournament_id(String.valueOf(tournament.get_id()));
 
             if (tournament.getTournamentTyp().equals(TournamentTyp.SOLO.name())) {
-                tournamentRanking.setPlayerId(tournamentPlayer.getPlayerId());
-                tournamentRanking.setPlayerOnlineUUID(tournamentPlayer.getPlayerOnlineUUID());
+                tournamentRanking.setPlayerUUID(tournamentPlayer.getPlayerUUID());
                 tournamentRanking.setTournamentPlayer(tournamentPlayer);
             } else if (tournament.getTournamentTyp().equals(TournamentTyp.TEAM.name())) {
             }
 
             tournamentRanking.setTournament_round(round_for_calculation);
 
-            mapOfRankings.put(tournamentPlayer.getRealPlayerId(), tournamentRanking);
+            mapOfRankings.put(tournamentPlayer.getPlayerUUID(), tournamentRanking);
         }
 
         List<Game> gamesOfPlayerForTournament = getAllGamesForTournamentTillRound(tournament.get_id(),
                 round_for_calculation);
 
         for (Game game : gamesOfPlayerForTournament) {
-            TournamentRanking playerOneRanking = mapOfRankings.get(game.getRealPlayerOneId());
+            TournamentRanking playerOneRanking = mapOfRankings.get(game.getPlayerOneUUID());
 
             int newPlayerOneScore = playerOneRanking.getScore() + game.getPlayer_one_score();
             playerOneRanking.setScore(newPlayerOneScore);
@@ -131,7 +131,7 @@ public class RankingServiceMockImpl implements RankingService {
             playerOneRanking.setVictory_points(playerOneRanking.getVictory_points()
                 + game.getPlayer_one_victory_points());
 
-            TournamentRanking playerTwoRanking = mapOfRankings.get(game.getRealPlayerTwoId());
+            TournamentRanking playerTwoRanking = mapOfRankings.get(game.getPlayerTwoUUID());
 
             playerTwoRanking.setScore(playerTwoRanking.getScore() + game.getPlayer_two_score());
             playerTwoRanking.setControl_points(playerTwoRanking.getControl_points()
@@ -141,18 +141,18 @@ public class RankingServiceMockImpl implements RankingService {
 
             // overwrite map && SOS
 
-            playerTwoRanking.getListOfOpponentsPlayerIds().add(playerOneRanking.getRealPlayerId());
-            playerOneRanking.getListOfOpponentsPlayerIds().add(playerTwoRanking.getRealPlayerId());
+            playerTwoRanking.getListOfOpponentsPlayerIds().add(playerOneRanking.getPlayerUUID());
+            playerOneRanking.getListOfOpponentsPlayerIds().add(playerTwoRanking.getPlayerUUID());
 
-            mapOfRankings.put(game.getRealPlayerOneId(), playerOneRanking);
-            mapOfRankings.put(game.getRealPlayerTwoId(), playerTwoRanking);
+            mapOfRankings.put(game.getPlayerOneUUID(), playerOneRanking);
+            mapOfRankings.put(game.getPlayerTwoUUID(), playerTwoRanking);
         }
 
-        Map<String, TournamentRanking> actualMapWithSoS = calculateSoSForRankingMap(mapOfRankings);
+        calculateSoSForRankingMap(mapOfRankings);
 
-        insertRankingForRound(actualMapWithSoS);
+        insertRankingForRound(mapOfRankings);
 
-        return actualMapWithSoS;
+        return mapOfRankings;
     }
 
 
@@ -202,25 +202,35 @@ public class RankingServiceMockImpl implements RankingService {
     }
 
 
-    private Map<String, TournamentRanking> calculateSoSForRankingMap(Map<String, TournamentRanking> mapOfRankings) {
+    @Override
+    public void deleteRankingsForTournament(Tournament tournament) {
 
-        HashMap<String, TournamentRanking> newMap = new HashMap<>(mapOfRankings);
+        SQLiteDatabase writableDatabase = openTournamentDBHelper.getWritableDatabase();
 
-        for (TournamentRanking ranking : mapOfRankings.values()) {
+        writableDatabase.delete(TournamentRankingTable.TABLE_TOURNAMENT_RANKING,
+            TournamentRankingTable.COLUMN_TOURNAMENT_ID + " = ? ",
+            new String[] { String.valueOf(tournament.get_id()) });
+        writableDatabase.close();
+    }
+
+
+    private void calculateSoSForRankingMap(Map<String, TournamentRanking> mapOfRankings) {
+
+        Map<String, TournamentRanking> copyMap = new HashMap<>(mapOfRankings);
+
+        for (TournamentRanking ranking : copyMap.values()) {
             List<String> listOfOpponentsIds = ranking.getListOfOpponentsPlayerIds();
 
             int sos = 0;
 
             for (String opponent_id : listOfOpponentsIds) {
-                sos = sos + mapOfRankings.get(opponent_id).getScore();
+                sos = sos + copyMap.get(opponent_id).getScore();
             }
 
             ranking.setSos(sos);
 
-            newMap.put(ranking.getRealPlayerId(), ranking);
+            mapOfRankings.put(ranking.getPlayerUUID(), ranking);
         }
-
-        return newMap;
     }
 
 
@@ -231,15 +241,13 @@ public class RankingServiceMockImpl implements RankingService {
         for (TournamentRanking ranking : newRankingForRoundList.values()) {
             ContentValues contentValues = new ContentValues();
             contentValues.put(TournamentRankingTable.COLUMN_TOURNAMENT_ID, ranking.getTournament_id());
-            contentValues.put(TournamentRankingTable.COLUMN_PLAYER_ID, ranking.getPlayerId());
-            contentValues.put(TournamentRankingTable.COLUMN_PLAYER_ONLINE_UUID, ranking.getPlayerOnlineUUID());
             contentValues.put(TournamentRankingTable.COLUMN_TOURNAMENT_ROUND, ranking.getTournament_round());
+            contentValues.put(TournamentRankingTable.COLUMN_PLAYER_UUID, ranking.getPlayerUUID());
 
             contentValues.put(TournamentRankingTable.COLUMN_SCORE, ranking.getScore());
+            contentValues.put(TournamentRankingTable.COLUMN_SOS, ranking.getSos());
             contentValues.put(TournamentRankingTable.COLUMN_CONTROL_POINTS, ranking.getControl_points());
             contentValues.put(TournamentRankingTable.COLUMN_VICTORY_POINTS, ranking.getVictory_points());
-
-            contentValues.put(TournamentRankingTable.COLUMN_SOS, ranking.getSos());
 
             db.insert(TournamentRankingTable.TABLE_TOURNAMENT_RANKING, null, contentValues);
         }
@@ -275,34 +283,20 @@ public class RankingServiceMockImpl implements RankingService {
     }
 
 
-    @Override
-    public void deleteRankingsForTournament(Tournament tournament) {
-
-        SQLiteDatabase writableDatabase = openTournamentDBHelper.getWritableDatabase();
-
-        writableDatabase.delete(TournamentRankingTable.TABLE_TOURNAMENT_RANKING,
-            TournamentRankingTable.COLUMN_TOURNAMENT_ID + " = ? ",
-            new String[] { String.valueOf(tournament.get_id()) });
-        writableDatabase.close();
-    }
-
-
     private TournamentRanking cursorToTournamentRanking(Cursor cursor) {
 
         TournamentRanking tournamentRanking = new TournamentRanking();
         tournamentRanking.set_id(cursor.getInt(0));
-        tournamentRanking.setOnline_uuid(cursor.getString(1));
 
-        tournamentRanking.setTournament_id(cursor.getInt(2));
-        tournamentRanking.setTournament_round(cursor.getInt(3));
+        tournamentRanking.setTournament_id(cursor.getString(1));
+        tournamentRanking.setTournament_round(cursor.getInt(2));
 
-        tournamentRanking.setPlayerId(cursor.getString(4));
-        tournamentRanking.setPlayerOnlineUUID(cursor.getString(5));
+        tournamentRanking.setPlayerUUID(cursor.getString(3));
 
-        tournamentRanking.setScore(cursor.getInt(6));
-        tournamentRanking.setSos(cursor.getInt(7));
-        tournamentRanking.setControl_points(cursor.getInt(8));
-        tournamentRanking.setVictory_points(cursor.getInt(9));
+        tournamentRanking.setScore(cursor.getInt(4));
+        tournamentRanking.setSos(cursor.getInt(5));
+        tournamentRanking.setControl_points(cursor.getInt(6));
+        tournamentRanking.setVictory_points(cursor.getInt(7));
 
         return tournamentRanking;
     }

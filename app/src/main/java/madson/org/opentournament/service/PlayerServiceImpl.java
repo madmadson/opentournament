@@ -12,11 +12,10 @@ import android.util.Log;
 import madson.org.opentournament.db.OpenTournamentDBHelper;
 import madson.org.opentournament.db.PlayerTable;
 import madson.org.opentournament.domain.Player;
-import madson.org.opentournament.domain.Tournament;
-import madson.org.opentournament.domain.TournamentPlayer;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 
 /**
@@ -36,17 +35,13 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
-    public Player createLocalPlayer(Player player) {
+    public void createLocalPlayer(Player player) {
 
         ContentValues contentValues = new ContentValues();
-        contentValues.put(PlayerTable.COLUMN_FIRSTNAME, player.getFirstname());
-        contentValues.put(PlayerTable.COLUMN_NICKNAME, player.getNickname());
-        contentValues.put(PlayerTable.COLUMN_LASTNAME, player.getLastname());
-
-        long player_id = createPlayer(contentValues);
-        player.set_id(player_id);
-
-        return player;
+        contentValues.put(PlayerTable.COLUMN_FIRSTNAME, player.getFirstName());
+        contentValues.put(PlayerTable.COLUMN_NICKNAME, player.getNickName());
+        contentValues.put(PlayerTable.COLUMN_LASTNAME, player.getLastName());
+        contentValues.put(PlayerTable.COLUMN_UUID, player.getUUID());
     }
 
 
@@ -113,10 +108,10 @@ public class PlayerServiceImpl implements PlayerService {
         Player player = new Player();
 
         player.set_id(cursor.getLong(0));
-        player.setOnlineUUID(cursor.getString(1));
-        player.setFirstname(cursor.getString(2));
-        player.setNickname(cursor.getString(3));
-        player.setLastname(cursor.getString(4));
+        player.setUUID(cursor.getString(1));
+        player.setFirstName(cursor.getString(2));
+        player.setNickName(cursor.getString(3));
+        player.setLastName(cursor.getString(4));
 
         return player;
     }

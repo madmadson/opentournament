@@ -115,7 +115,7 @@ public class RankingServiceImpl implements RankingService {
         int round_for_calculation) {
 
         Map<TournamentTeam, List<TournamentPlayer>> allTeamsForTournament =
-            tournamentPlayerService.getAllTeamsForTournament(tournament);
+            tournamentPlayerService.getTeamMapForTournament(tournament);
 
         Map<String, TournamentRanking> mapOfRankings = new HashMap<>();
 

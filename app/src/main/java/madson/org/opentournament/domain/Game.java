@@ -318,7 +318,7 @@ public class Game implements Parcelable {
 
         game.setScenario(cursor.getString(14));
 
-        game.setPlaying_field(cursor.getInt(13));
+        game.setPlaying_field(cursor.getInt(15));
 
         return game;
     }

@@ -418,7 +418,7 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
             SQLiteDatabase db = openTournamentDBHelper.getWritableDatabase();
 
             Map<TournamentTeam, List<TournamentPlayer>> allTeamsForTournament =
-                tournamentPlayerService.getAllTeamsForTournament(tournament);
+                tournamentPlayerService.getTeamMapForTournament(tournament);
 
             List<TournamentPlayer> teamOneMembers = allTeamsForTournament.get(new TournamentTeam(
                         parent_game.getParticipantOneUUID()));

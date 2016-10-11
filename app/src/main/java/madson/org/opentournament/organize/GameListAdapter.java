@@ -13,22 +13,33 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 
 import android.support.v4.app.FragmentManager;
+import android.support.v4.view.MotionEventCompat;
+import android.support.v4.widget.NestedScrollView;
 
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.RecyclerView.OnScrollListener;
 import android.support.v7.widget.Toolbar;
 
+import android.util.DisplayMetrics;
+import android.util.Log;
+
+import android.view.Display;
 import android.view.DragEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 
 import android.widget.ProgressBar;
+import android.widget.ScrollView;
 
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Game;
 import madson.org.opentournament.domain.Tournament;
+import madson.org.opentournament.domain.TournamentParticipant;
 import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.domain.TournamentTyp;
 import madson.org.opentournament.organize.team.TeamTournamentGameManagementActivity;
@@ -107,9 +118,27 @@ public class GameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
 
 
     @Override
-    public void onBindViewHolder(GameViewHolder holder, int position) {
+    public void onBindViewHolder(final GameViewHolder holder, int position) {
 
         final Game game = gamesForRound.get(position);
+
+        holder.getSwapPlayerOne().setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+
+                    holder.getPlayerOneCardView().setBackgroundDrawable(startShape);
+                }
+            });
+
+        holder.getSwapPlayerTwo().setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+
+                    holder.getPlayerTwoCardView().setBackgroundDrawable(startShape);
+                }
+            });
 
         holder.getTableNumber()
             .setText(baseActivity.getResources().getString(R.string.table_number, game.getPlaying_field()));
@@ -200,6 +229,37 @@ public class GameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
         holder.getPlayerTwoCardView().setOnClickListener(new OpenEnterGameResultClickListener(game));
     }
 
+
+    @Override
+    public int getItemCount() {
+
+        return gamesForRound.size();
+    }
+
+
+    public boolean allGamesAreFinished() {
+
+        for (Game game : gamesForRound) {
+            if (!game.isFinished()) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+
+    public boolean atLeastOneGameStarted() {
+
+        for (Game game : gamesForRound) {
+            if (game.isFinished()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     private class OpenEnterGameResultClickListener implements View.OnClickListener {
 
         private Game game;
@@ -247,53 +307,23 @@ public class GameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
         }
     }
 
-    @Override
-    public int getItemCount() {
-
-        return gamesForRound.size();
-    }
-
-
-    public boolean allGamesAreFinished() {
-
-        for (Game game : gamesForRound) {
-            if (!game.isFinished()) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-
-    public boolean atLeastOneGameStarted() {
-
-        for (Game game : gamesForRound) {
-            if (game.isFinished()) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
     private class GameLongClickEventListener implements View.OnLongClickListener {
 
         private Game draggedGame;
-        private int player;
+        private int participant;
 
-        public GameLongClickEventListener(Game game, int player) {
+        public GameLongClickEventListener(Game game, int participant) {
 
             this.draggedGame = game;
 
-            this.player = player;
+            this.participant = participant;
         }
 
         @Override
         public boolean onLongClick(View v) {
 
-            ClipData playerId = ClipData.newPlainText("player", String.valueOf(player));
-            v.startDrag(playerId, // the data to be dragged
+            ClipData participantId = ClipData.newPlainText("participant", String.valueOf(participant));
+            v.startDrag(participantId, // the data to be dragged
                 new View.DragShadowBuilder(v), // the drag shadow builder
                 draggedGame, 0 // flags (not currently used, set to 0)
                 );
@@ -305,16 +335,16 @@ public class GameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
     private class GameDragListener implements View.OnDragListener {
 
         private Game droppedGame;
-        private int droppedPlayerIndex;
+        private int droppedParticipantIndex;
 
         /**
          * @param  droppedGame  game of drag element
-         * @param  droppedPlayerIndex  new opponent for dragged player
+         * @param  droppedParticipantIndex  new opponent for dragged participant
          */
-        public GameDragListener(Game droppedGame, int droppedPlayerIndex) {
+        public GameDragListener(Game droppedGame, int droppedParticipantIndex) {
 
             this.droppedGame = droppedGame;
-            this.droppedPlayerIndex = droppedPlayerIndex;
+            this.droppedParticipantIndex = droppedParticipantIndex;
         }
 
         @Override
@@ -340,63 +370,51 @@ public class GameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
                 case DragEvent.ACTION_DROP:
 
                     final Game draggedGame = (Game) event.getLocalState();
-                    final CharSequence playerOneOrTwo = event.getClipData().getItemAt(0).getText();
+                    final CharSequence participantOneOrTwo = event.getClipData().getItemAt(0).getText();
 
-                    TournamentPlayer draggedPlayer = null;
-                    TournamentPlayer draggedPlayerOpponent = null;
-                    if (playerOneOrTwo.equals("1")) {
-                        draggedPlayer = (TournamentPlayer) draggedGame.getParticipantOne();
-                        draggedPlayerOpponent = (TournamentPlayer) draggedGame.getParticipantTwo();
+                    TournamentParticipant draggedParticipant = null;
+                    TournamentParticipant draggedParticipantOpponent = null;
+                    if (participantOneOrTwo.equals("1")) {
+                        draggedParticipant = draggedGame.getParticipantOne();
+                        draggedParticipantOpponent = draggedGame.getParticipantTwo();
                     } else {
-                        draggedPlayer = (TournamentPlayer) draggedGame.getParticipantTwo();
-                        draggedPlayerOpponent = (TournamentPlayer) draggedGame.getParticipantOne();
+                        draggedParticipant = draggedGame.getParticipantTwo();
+                        draggedParticipantOpponent = draggedGame.getParticipantOne();
                     }
 
-                    TournamentPlayer droppedPlayer = null;
-                    TournamentPlayer droppedPlayerOpponent = null;
-                    if (droppedPlayerIndex == 1) {
-                        droppedPlayer = (TournamentPlayer) droppedGame.getParticipantOne();
-                        droppedPlayerOpponent = (TournamentPlayer) droppedGame.getParticipantTwo();
+                    TournamentParticipant droppedParticipant = null;
+                    TournamentParticipant droppedParticipantOpponent = null;
+                    if (droppedParticipantIndex == 1) {
+                        droppedParticipant = droppedGame.getParticipantOne();
+                        droppedParticipantOpponent = droppedGame.getParticipantTwo();
                     } else {
-                        droppedPlayer = (TournamentPlayer) droppedGame.getParticipantTwo();
-                        droppedPlayerOpponent = (TournamentPlayer) droppedGame.getParticipantOne();
+                        droppedParticipant = droppedGame.getParticipantTwo();
+                        droppedParticipantOpponent = droppedGame.getParticipantOne();
                     }
 
-                    final TournamentPlayer draggedPlayerFinal = draggedPlayer;
-                    final TournamentPlayer droppedPlayerFinal = droppedPlayer;
+                    final TournamentParticipant draggedParticipantFinal = draggedParticipant;
+                    final TournamentParticipant droppedParticipantFinal = droppedParticipant;
 
-                    if (draggedPlayer.getListOfOpponentsIds().contains(droppedPlayerOpponent.getPlayerUUID())) {
-                        String playerOne = baseActivity.getResources()
-                                .getString(R.string.player_name_in_row, draggedPlayer.getFirstName(),
-                                    draggedPlayer.getNickName(), draggedPlayer.getLastName());
-                        String playerTwo = baseActivity.getResources()
-                                .getString(R.string.player_name_in_row, droppedPlayerOpponent.getFirstName(),
-                                    droppedPlayerOpponent.getNickName(), droppedPlayerOpponent.getLastName());
-
+                    if (draggedParticipant.getListOfOpponentsUUIDs().contains(droppedParticipantOpponent.getUuid())) {
                         Snackbar snackbar = Snackbar.make((baseActivity).getCoordinatorLayout(),
                                 baseActivity.getResources()
-                                    .getString(R.string.player_already_played_each_other, playerOne, playerTwo),
-                                Snackbar.LENGTH_LONG);
+                                    .getString(R.string.player_already_played_each_other, draggedParticipant.getName(),
+                                        droppedParticipant.getName()), Snackbar.LENGTH_LONG);
                         snackbar.getView()
                             .setBackgroundColor(baseActivity.getResources().getColor(R.color.colorNeutral));
                         snackbar.show();
-                    } else if (droppedPlayer.getListOfOpponentsIds().contains(draggedPlayerOpponent.getPlayerUUID())) {
-                        String playerOne = baseActivity.getResources()
-                                .getString(R.string.player_name_in_row, droppedPlayer.getFirstName(),
-                                    droppedPlayer.getNickName(), droppedPlayer.getLastName());
-                        String playerTwo = baseActivity.getResources()
-                                .getString(R.string.player_name_in_row, draggedPlayerOpponent.getFirstName(),
-                                    draggedPlayerOpponent.getNickName(), draggedPlayerOpponent.getLastName());
+                    } else if (droppedParticipant.getListOfOpponentsUUIDs()
+                            .contains(draggedParticipantOpponent.getUuid())) {
                         Snackbar snackbar = Snackbar.make((baseActivity).getCoordinatorLayout(),
                                 baseActivity.getResources()
-                                    .getString(R.string.player_already_played_each_other, playerOne, playerTwo),
-                                Snackbar.LENGTH_LONG);
+                                    .getString(R.string.player_already_played_each_other, droppedParticipant.getName(),
+                                        draggedParticipant.getName()), Snackbar.LENGTH_LONG);
                         snackbar.getView()
                             .setBackgroundColor(baseActivity.getResources().getColor(R.color.colorNeutral));
 
                         snackbar.show();
                     } else {
-                        if (!droppedPlayerFinal.equals(draggedPlayer)) {
+                        if (!droppedParticipantFinal.equals(draggedParticipant)) {
                             AlertDialog.Builder builder = new AlertDialog.Builder(baseActivity);
                             builder.setTitle(R.string.confirm_swap_player)
                                 .setPositiveButton(R.string.dialog_confirm, new DialogInterface.OnClickListener() {
@@ -404,16 +422,16 @@ public class GameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {
 
-                                                if (playerOneOrTwo.equals("1")) {
-                                                    draggedGame.setParticipantOne(droppedPlayerFinal);
+                                                if (participantOneOrTwo.equals("1")) {
+                                                    draggedGame.setParticipantOne(droppedParticipantFinal);
                                                 } else {
-                                                    draggedGame.setParticipantTwo(droppedPlayerFinal);
+                                                    draggedGame.setParticipantTwo(droppedParticipantFinal);
                                                 }
 
-                                                if (droppedPlayerIndex == 1) {
-                                                    droppedGame.setParticipantOne(draggedPlayerFinal);
+                                                if (droppedParticipantIndex == 1) {
+                                                    droppedGame.setParticipantOne(draggedParticipantFinal);
                                                 } else {
-                                                    droppedGame.setParticipantTwo(draggedPlayerFinal);
+                                                    droppedGame.setParticipantTwo(draggedParticipantFinal);
                                                 }
 
                                                 Toolbar toolbar = baseActivity.getToolbar();

@@ -8,16 +8,41 @@
     android:paddingLeft="@dimen/main_tick"
     android:paddingRight="@dimen/main_tick"
     android:paddingTop="@dimen/small_tick">
+    
+    <RelativeLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        
 
-    <TextView
-        android:id="@+id/table_number"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="@dimen/small_tick"
-        android:layout_marginTop="@dimen/small_tick"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:gravity="center_vertical" />
+        <ImageView
+            android:id="@+id/swap_player_one"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_swap_horiz_black_48dp"
+            android:background="@android:color/transparent"
+            android:tint="@color/colorPrimaryDark"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="100dp"/>
+    
+        <TextView
+            android:id="@+id/table_number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:layout_centerHorizontal="true"/>
+
+        <ImageView
+            android:id="@+id/swap_player_two"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_swap_horiz_black_48dp"
+            android:background="@android:color/transparent"
+            android:tint="@color/colorPrimaryDark"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="100dp"/>
+
+    </RelativeLayout>
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"

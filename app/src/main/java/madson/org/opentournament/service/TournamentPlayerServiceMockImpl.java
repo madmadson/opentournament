@@ -114,7 +114,7 @@ public class TournamentPlayerServiceMockImpl implements TournamentPlayerService 
 
 
     @Override
-    public Map<TournamentTeam, List<TournamentPlayer>> getAllTeamsForTournament(Tournament tournament) {
+    public Map<TournamentTeam, List<TournamentPlayer>> getTeamMapForTournament(Tournament tournament) {
 
         Map<TournamentTeam, List<TournamentPlayer>> teamMap = new HashMap<>();
 
@@ -156,6 +156,45 @@ public class TournamentPlayerServiceMockImpl implements TournamentPlayerService 
         readableDatabase.close();
 
         return teamMap;
+    }
+
+
+    @Override
+    public List<TournamentTeam> getTeamListForTournament(Tournament tournament) {
+
+        List<TournamentTeam> teamList = new ArrayList<>();
+
+        SQLiteDatabase readableDatabase = openTournamentDBHelper.getReadableDatabase();
+
+        Cursor cursor = readableDatabase.query(TournamentPlayerTable.TABLE_TOURNAMENT_PLAYER,
+                TournamentPlayerTable.ALL_COLS_FOR_TOURNAMENT_PLAYER_TABLE,
+                TournamentPlayerTable.COLUMN_TOURNAMENT_ID + " = ?",
+                new String[] { Long.toString(tournament.get_id()) }, null, null, null);
+
+        cursor.moveToFirst();
+
+        while (!cursor.isAfterLast()) {
+            TournamentPlayer tournamentPlayer = cursorToTournamentPlayer(cursor);
+
+            String teamName = tournamentPlayer.getTeamName();
+
+            if (teamName == null) {
+                teamName = "";
+            }
+
+            TournamentTeam tournamentTeam = new TournamentTeam(teamName);
+
+            if (!teamList.contains(tournamentTeam)) {
+                teamList.add(tournamentTeam);
+            }
+
+            cursor.moveToNext();
+        }
+
+        cursor.close();
+        readableDatabase.close();
+
+        return teamList;
     }
 
 
@@ -263,6 +302,45 @@ public class TournamentPlayerServiceMockImpl implements TournamentPlayerService 
         readableDatabase.close();
 
         return players;
+    }
+
+
+    @Override
+    public Map<String, TournamentTeam> getAllTeamMapForTournament(Tournament tournament) {
+
+        Map<String, TournamentTeam> teamMap = new HashMap<>();
+
+        SQLiteDatabase readableDatabase = openTournamentDBHelper.getReadableDatabase();
+
+        Cursor cursor = readableDatabase.query(TournamentPlayerTable.TABLE_TOURNAMENT_PLAYER,
+                TournamentPlayerTable.ALL_COLS_FOR_TOURNAMENT_PLAYER_TABLE,
+                TournamentPlayerTable.COLUMN_TOURNAMENT_ID + " = ?",
+                new String[] { Long.toString(tournament.get_id()) }, null, null, null);
+
+        cursor.moveToFirst();
+
+        while (!cursor.isAfterLast()) {
+            TournamentPlayer tournamentPlayer = cursorToTournamentPlayer(cursor);
+
+            String teamName = tournamentPlayer.getTeamName();
+
+            if (teamName == null) {
+                teamName = "";
+            }
+
+            TournamentTeam tournamentTeam = new TournamentTeam(teamName);
+
+            if (!teamMap.containsKey(teamName)) {
+                teamMap.put(teamName, tournamentTeam);
+            }
+
+            cursor.moveToNext();
+        }
+
+        cursor.close();
+        readableDatabase.close();
+
+        return teamMap;
     }
 
 

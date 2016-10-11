@@ -39,6 +39,14 @@ public interface TournamentPlayerService {
 
 
     /**
+     * @param  tournament  tournament
+     *
+     * @return  map of all players; tournament player id is key
+     */
+    Map<String, TournamentTeam> getAllTeamMapForTournament(Tournament tournament);
+
+
+    /**
      * Add Player to tournament and return new tournament player instance.
      *
      * @param  player  player instance
@@ -56,13 +64,19 @@ public interface TournamentPlayerService {
 
 
     /**
-     * Get all team names on tournament players in specific tournament.
-     *
      * @param  tournament
      *
      * @return
      */
-    Map<TournamentTeam, List<TournamentPlayer>> getAllTeamsForTournament(Tournament tournament);
+    Map<TournamentTeam, List<TournamentPlayer>> getTeamMapForTournament(Tournament tournament);
+
+
+    /**
+     * @param  tournament
+     *
+     * @return
+     */
+    List<TournamentTeam> getTeamListForTournament(Tournament tournament);
 
 
     /**

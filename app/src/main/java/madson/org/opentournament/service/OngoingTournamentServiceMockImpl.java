@@ -22,6 +22,7 @@ import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.domain.TournamentRanking;
 import madson.org.opentournament.domain.TournamentTeam;
+import madson.org.opentournament.domain.TournamentTyp;
 import madson.org.opentournament.utility.BaseApplication;
 
 import java.util.ArrayList;
@@ -49,8 +50,6 @@ public class OngoingTournamentServiceMockImpl implements OngoingTournamentServic
 
     public OngoingTournamentServiceMockImpl(Context context) {
 
-        Log.d(OngoingTournamentServiceMockImpl.class.getName(), "WarmachineTournamentServiceImpl Constructor");
-
         BaseApplication application = (BaseApplication) context;
 
         if (openTournamentDBHelper == null) {
@@ -77,9 +76,63 @@ public class OngoingTournamentServiceMockImpl implements OngoingTournamentServic
     @Override
     public List<Game> getGamesForRound(Tournament tournament, int round) {
 
-        Map<String, TournamentPlayer> allPlayerMapForTournament = tournamentPlayerService.getAllPlayerMapForTournament(
+        if (tournament.getTournamentTyp().equals(TournamentTyp.TEAM.name())) {
+            return getGamesForTeamTournamentForRound(tournament, round);
+        } else {
+            return getGamesForSoloTournamentForRound(tournament, round);
+        }
+    }
+
+
+    private List<Game> getGamesForTeamTournamentForRound(Tournament tournament, int round) {
+
+        Map<String, TournamentTeam> allTeamMapForTournament = tournamentPlayerService.getAllTeamMapForTournament(
                 tournament);
 
+        List<Game> gamesToReturn = new ArrayList<>();
+        SQLiteDatabase readableDatabase = openTournamentDBHelper.getReadableDatabase();
+
+        Cursor cursor = readableDatabase.query(GameTable.TABLE_TOURNAMENT_GAME, GameTable.ALL_COLS_FOR_TOURNAMENT_GAME,
+                GameTable.COLUMN_TOURNAMENT_ID + "  = ? AND " + GameTable.COLUMN_PARENT_UUID + " IS null",
+                new String[] { String.valueOf(tournament.get_id()) }, null, null, null);
+
+        cursor.moveToFirst();
+
+        while (!cursor.isAfterLast()) {
+            Game game = Game.cursorToGame(cursor);
+
+            if (game.getTournament_round() < round) {
+                TournamentTeam teamOne = allTeamMapForTournament.get(game.getParticipantOneUUID());
+                TournamentTeam teamTwo = allTeamMapForTournament.get(game.getParticipantTwoUUID());
+
+                teamOne.getListOfOpponentsIds().add(teamTwo.getUuid());
+                teamTwo.getListOfOpponentsIds().add(teamOne.getUuid());
+
+                allTeamMapForTournament.put(game.getParticipantOneUUID(), teamOne);
+                allTeamMapForTournament.put(game.getParticipantTwoUUID(), teamTwo);
+            }
+
+            if (game.getTournament_round() == round) {
+                game.setParticipantOne(allTeamMapForTournament.get(game.getParticipantOneUUID()));
+                game.setParticipantTwo(allTeamMapForTournament.get(game.getParticipantTwoUUID()));
+
+                gamesToReturn.add(game);
+            }
+
+            cursor.moveToNext();
+        }
+
+        cursor.close();
+        readableDatabase.close();
+
+        return gamesToReturn;
+    }
+
+
+    private List<Game> getGamesForSoloTournamentForRound(Tournament tournament, int round) {
+
+        Map<String, TournamentPlayer> allPlayerMapForTournament = tournamentPlayerService.getAllPlayerMapForTournament(
+                tournament);
         List<Game> gamesToReturn = new ArrayList<>();
         SQLiteDatabase readableDatabase = openTournamentDBHelper.getReadableDatabase();
 
@@ -418,7 +471,7 @@ public class OngoingTournamentServiceMockImpl implements OngoingTournamentServic
             SQLiteDatabase db = openTournamentDBHelper.getWritableDatabase();
 
             Map<TournamentTeam, List<TournamentPlayer>> allTeamsForTournament =
-                tournamentPlayerService.getAllTeamsForTournament(tournament);
+                tournamentPlayerService.getTeamMapForTournament(tournament);
 
             List<TournamentPlayer> teamOneMembers = allTeamsForTournament.get(new TournamentTeam(
                         parent_game.getParticipantOneUUID()));

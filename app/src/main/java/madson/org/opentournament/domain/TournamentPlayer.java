@@ -53,7 +53,7 @@ public class TournamentPlayer extends TournamentParticipant implements Parcelabl
     private boolean dummy;
     private boolean local;
 
-    private List<String> opponentsPlayerIds = new ArrayList<>();
+    private List<String> opponentsIds = new ArrayList<>();
 
     public TournamentPlayer() {
     }
@@ -234,7 +234,7 @@ public class TournamentPlayer extends TournamentParticipant implements Parcelabl
 
     public List<String> getListOfOpponentsIds() {
 
-        return opponentsPlayerIds;
+        return opponentsIds;
     }
 
 
@@ -276,7 +276,7 @@ public class TournamentPlayer extends TournamentParticipant implements Parcelabl
             + ", droppedInRound=" + droppedInRound
             + ", dummy=" + dummy
             + ", local=" + local
-            + ", opponentsPlayerIds=" + opponentsPlayerIds + '}';
+            + ", opponentsIds=" + opponentsIds + '}';
     }
 
 
@@ -310,5 +310,21 @@ public class TournamentPlayer extends TournamentParticipant implements Parcelabl
     public String getUuid() {
 
         return playerUUID;
+    }
+
+
+    @Exclude
+    @Override
+    public String getName() {
+
+        return nickName;
+    }
+
+
+    @Exclude
+    @Override
+    public List<String> getListOfOpponentsUUIDs() {
+
+        return opponentsIds;
     }
 }

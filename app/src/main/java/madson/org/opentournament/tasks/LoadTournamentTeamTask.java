@@ -50,7 +50,7 @@ public class LoadTournamentTeamTask extends AsyncTask<Void, Void, Map<Tournament
         TournamentPlayerService tournamentPlayerService = baseActivity.getBaseApplication()
                 .getTournamentPlayerService();
 
-        mapOfTeams = tournamentPlayerService.getAllTeamsForTournament(tournament);
+        mapOfTeams = tournamentPlayerService.getTeamMapForTournament(tournament);
 
         return mapOfTeams;
     }

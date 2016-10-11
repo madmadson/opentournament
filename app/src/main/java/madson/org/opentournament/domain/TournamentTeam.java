@@ -44,7 +44,7 @@ public class TournamentTeam extends TournamentParticipant implements Parcelable 
 
     private boolean dummy;
 
-    private List<String> opponentsPlayerIds = new ArrayList<>();
+    private List<String> opponentsIds = new ArrayList<>();
 
     public TournamentTeam(String teamName) {
 
@@ -136,7 +136,7 @@ public class TournamentTeam extends TournamentParticipant implements Parcelable 
 
     public List<String> getListOfOpponentsIds() {
 
-        return opponentsPlayerIds;
+        return opponentsIds;
     }
 
 
@@ -185,5 +185,19 @@ public class TournamentTeam extends TournamentParticipant implements Parcelable 
     public String getUuid() {
 
         return teamName;
+    }
+
+
+    @Override
+    public String getName() {
+
+        return teamName;
+    }
+
+
+    @Override
+    public List<String> getListOfOpponentsUUIDs() {
+
+        return opponentsIds;
     }
 }

@@ -1,14 +1,7 @@
 package madson.org.opentournament.viewHolder;
 
-import android.os.Bundle;
-
-import android.support.v4.app.FragmentManager;
-
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-
-import android.util.Log;
 
 import android.view.View;
 
@@ -16,11 +9,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import madson.org.opentournament.R;
-import madson.org.opentournament.domain.Game;
-import madson.org.opentournament.domain.TournamentPlayer;
-import madson.org.opentournament.organize.EnterResultForGameDialog;
-import madson.org.opentournament.organize.GameListAdapter;
-import madson.org.opentournament.organize.setup.TournamentPlayerListAdapter;
 
 
 /**
@@ -30,6 +18,8 @@ import madson.org.opentournament.organize.setup.TournamentPlayerListAdapter;
  */
 public class GameViewHolder extends RecyclerView.ViewHolder {
 
+    private ImageView swapPlayerTwo;
+    private ImageView swapPlayerOne;
     private TextView tableNumber;
     private View pairingRow;
 
@@ -53,9 +43,11 @@ public class GameViewHolder extends RecyclerView.ViewHolder {
 
         super(v);
 
+        pairingRow = v.findViewById(R.id.pairing_row);
         tableNumber = (TextView) v.findViewById(R.id.table_number);
 
-        pairingRow = v.findViewById(R.id.pairing_row);
+        swapPlayerOne = (ImageView) v.findViewById(R.id.swap_player_one);
+        swapPlayerTwo = (ImageView) v.findViewById(R.id.swap_player_two);
 
         playerOneCardView = (CardView) v.findViewById(R.id.game_list_player_one_card_view);
         playerTwoCardView = (CardView) v.findViewById(R.id.game_list_player_two_card_view);
@@ -154,5 +146,17 @@ public class GameViewHolder extends RecyclerView.ViewHolder {
     public TextView getTableNumber() {
 
         return tableNumber;
+    }
+
+
+    public ImageView getSwapPlayerTwo() {
+
+        return swapPlayerTwo;
+    }
+
+
+    public ImageView getSwapPlayerOne() {
+
+        return swapPlayerOne;
     }
 }

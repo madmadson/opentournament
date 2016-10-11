@@ -14,7 +14,6 @@ import madson.org.opentournament.organize.setup.TournamentPlayerTeamListAdapter;
 import madson.org.opentournament.service.TournamentPlayerService;
 import madson.org.opentournament.utility.BaseApplication;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -59,7 +58,7 @@ public class LoadTournamentPlayerTeamTask extends AsyncTask<Void, Void, Void> {
     protected Void doInBackground(Void... params) {
 
         TournamentPlayerService tournamentPlayerService = baseApplication.getTournamentPlayerService();
-        allTeamsForTournament = tournamentPlayerService.getAllTeamsForTournament(tournament);
+        allTeamsForTournament = tournamentPlayerService.getTeamMapForTournament(tournament);
 
         return null;
     }

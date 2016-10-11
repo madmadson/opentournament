@@ -7,7 +7,6 @@ import android.os.Bundle;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
@@ -108,7 +107,7 @@ public class GameListFragment extends Fragment implements TournamentEventListene
         TextView heading = (TextView) view.findViewById(R.id.heading_game_for_round);
         heading.setText(getString(R.string.heading_games_for_round, round));
 
-        gameListAdapter = new GameListAdapter((BaseActivity) getActivity(), round);
+        gameListAdapter = new GameListAdapter((BaseActivity) getActivity(), round, tournament);
         recyclerView.setAdapter(gameListAdapter);
 
         new LoadGameListTask(baseActivity.getBaseApplication(), tournament, round, gameListAdapter).execute();

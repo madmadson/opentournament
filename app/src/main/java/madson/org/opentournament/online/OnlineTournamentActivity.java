@@ -175,13 +175,13 @@ public class OnlineTournamentActivity extends BaseActivity {
                 }
             } else if (tournament.getState().equals(Tournament.TournamentState.FINISHED.name())
                     && tournament.getActualRound() == round) {
-                return OnlineRankingListFragment.newInstance(round, tournament_uuid);
+                return OnlineRankingListFragment.newInstance(round, tournament);
             }
 
             if (position % 2 == 1) {
                 return OnlineGamesListFragment.newInstance(round, tournament_uuid);
             } else {
-                return OnlineRankingListFragment.newInstance(round, tournament_uuid);
+                return OnlineRankingListFragment.newInstance(round, tournament);
             }
         }
 

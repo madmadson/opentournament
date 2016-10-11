@@ -78,4 +78,13 @@ public interface OngoingTournamentService {
      * @param  tournament
      */
     void deleteGamesForTournament(Tournament tournament);
+
+
+    /**
+     * @param  tournament
+     * @param  game
+     *
+     * @return
+     */
+    List<Game> getGamesForTeamMatch(Tournament tournament, Game game);
 }

@@ -28,11 +28,10 @@ import madson.org.opentournament.organize.setup.TournamentPlayerListAdapter;
  *
  * @author  Tobias Matt - tmatt@contargo.net
  */
-public class GameViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+public class GameViewHolder extends RecyclerView.ViewHolder {
 
     private TextView tableNumber;
     private View pairingRow;
-    private Game game;
 
     private CardView playerOneCardView;
 
@@ -50,29 +49,9 @@ public class GameViewHolder extends RecyclerView.ViewHolder implements View.OnCl
     private TextView playerTwoControlPoints;
     private TextView playerTwoVictoryPoints;
 
-    /**
-     * used by online game list.
-     *
-     * @param  v
-     */
     public GameViewHolder(View v) {
 
         super(v);
-
-        setFields(v);
-    }
-
-
-    public GameViewHolder(GameListAdapter adapter, View v) {
-
-        super(v);
-
-        v.setOnClickListener(this);
-
-        setFields(v);
-    }
-
-    private void setFields(View v) {
 
         tableNumber = (TextView) v.findViewById(R.id.table_number);
 
@@ -93,29 +72,6 @@ public class GameViewHolder extends RecyclerView.ViewHolder implements View.OnCl
         playerTwoControlPoints = (TextView) v.findViewById(R.id.pairing_player_two_control_points);
         playerTwoVictoryPoints = (TextView) v.findViewById(R.id.pairing_player_two_victory_points);
     }
-
-
-    @Override
-    public void onClick(View v) {
-
-        Log.i(v.getClass().getName(), "game clicked: " + game);
-
-        EnterResultForGameDialog dialog = new EnterResultForGameDialog();
-
-        Bundle resultForPairingResult = new Bundle();
-        resultForPairingResult.putParcelable(EnterResultForGameDialog.BUNDLE_GAME, game);
-        dialog.setArguments(resultForPairingResult);
-
-        FragmentManager supportFragmentManager = ((AppCompatActivity) v.getContext()).getSupportFragmentManager();
-        dialog.show(supportFragmentManager, "enterGameResultDialog");
-    }
-
-
-    public void setGame(Game game) {
-
-        this.game = game;
-    }
-
 
     public CardView getPlayerOneCardView() {
 

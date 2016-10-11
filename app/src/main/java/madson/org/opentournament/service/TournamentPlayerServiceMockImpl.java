@@ -26,7 +26,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 
 /**
@@ -56,6 +55,15 @@ public class TournamentPlayerServiceMockImpl implements TournamentPlayerService 
         addPlayerToTournament(1, "Martina", "Bazinga", "Haug", "Team Karlsruhe", "Menoth", "KA2", "6");
         addPlayerToTournament(1, "Tobias", "Zeus", "Rohrauer", "Team Karlsruhe", "Cygnar", "KA2", "7");
         addPlayerToTournament(1, "Yann", "Arcane", "Krehl", "Team Karlsruhe", "Trollbloods", "KA2", "8");
+
+        addPlayerToTournament(2, "Tobias", "Madson", "Matt", "48\" AD", "Cygnar", "KA", "1");
+        addPlayerToTournament(2, "Christoph", "Zaziboy", "Scholl", "48\" AD", "Circle", "KA", "2");
+        addPlayerToTournament(2, "David", "Wildjack", "Voigt", "49\" AD", "Cryx", "KA", "3");
+        addPlayerToTournament(2, "Andreas", "Ragegear", "Neugebauer", "49\" AD", "Legion", "KA", "4");
+        addPlayerToTournament(2, "Andreas", "Raskild", "Tonndorf", "Team Karlsruhe", "Cryx", "KA2", "5");
+        addPlayerToTournament(2, "Martina", "Bazinga", "Haug", "Team Karlsruhe", "Menoth", "KA2", "6");
+        addPlayerToTournament(2, "Tobias", "Zeus", "Rohrauer", "Team Karlsruhe2", "Cygnar", "KA2", "7");
+        addPlayerToTournament(2, "Yann", "Arcane", "Krehl", "Team Karlsruhe2", "Trollbloods", "KA2", "8");
     }
 
 

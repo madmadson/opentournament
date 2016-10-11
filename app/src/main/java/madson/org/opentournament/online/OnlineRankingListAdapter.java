@@ -11,8 +11,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import madson.org.opentournament.R;
+import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.domain.TournamentRanking;
+import madson.org.opentournament.domain.TournamentTeam;
+import madson.org.opentournament.domain.TournamentTyp;
 import madson.org.opentournament.viewHolder.TournamentRankingViewHolder;
 
 import java.util.ArrayList;
@@ -29,10 +32,12 @@ public class OnlineRankingListAdapter extends RecyclerView.Adapter<TournamentRan
     private List<TournamentRanking> rankingList;
 
     private Context context;
+    private Tournament tournament;
 
-    public OnlineRankingListAdapter(Context context) {
+    public OnlineRankingListAdapter(Context context, Tournament tournament) {
 
         this.context = context;
+        this.tournament = tournament;
 
         this.rankingList = new ArrayList<>();
     }
@@ -57,7 +62,31 @@ public class OnlineRankingListAdapter extends RecyclerView.Adapter<TournamentRan
         holder.getCp().setText(String.valueOf(ranking.getControl_points()));
         holder.getVp().setText(String.valueOf(ranking.getVictory_points()));
 
-        TournamentPlayer tournamentPlayer = ranking.getTournamentPlayer();
+        if (tournament.getTournamentTyp().equals(TournamentTyp.SOLO.name())) {
+            rankingForSoloTournament(holder, ranking);
+        } else {
+            rankingForTeamTournament(holder, ranking);
+        }
+
+        if (position % 2 == 0) {
+            holder.getRankingCard().setCardBackgroundColor(Color.LTGRAY);
+        } else {
+            holder.getRankingCard().setCardBackgroundColor(Color.WHITE);
+        }
+    }
+
+
+    private void rankingForTeamTournament(TournamentRankingViewHolder holder, TournamentRanking ranking) {
+
+        TournamentTeam tournamentTeam = (TournamentTeam) ranking.getTournamentParticipant();
+
+        holder.getPlayerNameInList().setText(tournamentTeam.getTeamName());
+    }
+
+
+    private void rankingForSoloTournament(TournamentRankingViewHolder holder, TournamentRanking ranking) {
+
+        TournamentPlayer tournamentPlayer = (TournamentPlayer) ranking.getTournamentParticipant();
 
         holder.getPlayerNameInList()
             .setText(context.getResources()
@@ -67,23 +96,17 @@ public class OnlineRankingListAdapter extends RecyclerView.Adapter<TournamentRan
         holder.getPlayerTeamNameInList().setText(tournamentPlayer.getTeamName());
         holder.getPlayerFactionInList().setText(tournamentPlayer.getFaction());
 
-        if (ranking.getTournamentPlayer().isLocal()) {
+        if (tournamentPlayer.isLocal()) {
             if (holder.getOfflineIcon() != null) {
                 holder.getOfflineIcon().setVisibility(View.VISIBLE);
             }
         }
 
-        if (ranking.getTournamentPlayer().getDroppedInRound() != 0) {
+        if (holder.getDroppedInRound() != null && tournamentPlayer.getDroppedInRound() != 0) {
             holder.getDroppedInRound()
                 .setText(context.getResources()
-                    .getString(R.string.dropped_in_round, ranking.getTournamentPlayer().getDroppedInRound()));
+                    .getString(R.string.dropped_in_round, tournamentPlayer.getDroppedInRound()));
             holder.getDroppedInRound().setVisibility(View.VISIBLE);
-        }
-
-        if (position % 2 == 0) {
-            holder.getRankingCard().setCardBackgroundColor(Color.LTGRAY);
-        } else {
-            holder.getRankingCard().setCardBackgroundColor(Color.WHITE);
         }
     }
 

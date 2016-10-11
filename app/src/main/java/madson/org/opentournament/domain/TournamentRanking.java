@@ -18,9 +18,9 @@ public class TournamentRanking {
     private String tournamentId;
     private int tournament_round;
 
-    private String playerUUID;
+    private String participantUUID;
 
-    private TournamentPlayer tournamentPlayer;
+    private TournamentParticipant tournamentParticipant;
 
     private int score;
     private int sos;
@@ -34,28 +34,27 @@ public class TournamentRanking {
     public TournamentRanking() {
     }
 
-    @Exclude
-    public String getPlayerUUID() {
+    public String getParticipantUUID() {
 
-        return playerUUID;
+        return participantUUID;
     }
 
 
-    public void setPlayerUUID(String playerUUID) {
+    public void setParticipantUUID(String participantUUID) {
 
-        this.playerUUID = playerUUID;
+        this.participantUUID = participantUUID;
     }
 
 
-    public TournamentPlayer getTournamentPlayer() {
+    public TournamentParticipant getTournamentParticipant() {
 
-        return tournamentPlayer;
+        return tournamentParticipant;
     }
 
 
-    public void setTournamentPlayer(TournamentPlayer tournamentPlayer) {
+    public void setTournamentParticipant(TournamentParticipant tournamentParticipant) {
 
-        this.tournamentPlayer = tournamentPlayer;
+        this.tournamentParticipant = tournamentParticipant;
     }
 
 
@@ -170,8 +169,8 @@ public class TournamentRanking {
             + "_id=" + _id
             + ", tournamentId='" + tournamentId + '\''
             + ", tournament_round=" + tournament_round
-            + ", playerUUID='" + playerUUID + '\''
-            + ", tournamentPlayer=" + tournamentPlayer
+            + ", participantUUID='" + participantUUID + '\''
+            + ", tournamentParticipant=" + tournamentParticipant
             + ", score=" + score
             + ", sos=" + sos
             + ", control_points=" + control_points

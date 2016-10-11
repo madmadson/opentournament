@@ -59,19 +59,17 @@ public class OnlineGamesListAdapter extends RecyclerView.Adapter<GameViewHolder>
 
         final Game game = gameList.get(position);
 
-        holder.setGame(game);
-
         holder.getTableNumber()
             .setText(baseApplication.getResources().getString(R.string.table_number, game.getPlaying_field()));
 
         if (game.isFinished()) {
             holder.getPlayerOneCardView()
-                .setBackgroundDrawable(game.getPlayer_one_score() == 1 ? winnerShape : looserShape);
+                .setBackgroundDrawable(game.getParticipant_one_score() == 1 ? winnerShape : looserShape);
             holder.getPlayerTwoCardView()
-                .setBackgroundDrawable(game.getPlayer_two_score() == 1 ? winnerShape : looserShape);
+                .setBackgroundDrawable(game.getParticipant_two_score() == 1 ? winnerShape : looserShape);
         }
 
-        TournamentPlayer player1 = game.getPlayer1();
+        TournamentPlayer player1 = (TournamentPlayer) game.getParticipantOne();
 
         holder.getPlayerOneNameInList()
             .setText(baseApplication.getResources()
@@ -80,13 +78,15 @@ public class OnlineGamesListAdapter extends RecyclerView.Adapter<GameViewHolder>
         holder.getPlayerOneFaction().setText(player1.getFaction());
 
         holder.getPlayerOneScore()
-            .setText(baseApplication.getResources().getString(R.string.game_win, game.getPlayer_one_score()));
+            .setText(baseApplication.getResources().getString(R.string.game_win, game.getParticipant_one_score()));
         holder.getPlayerOneControlPoints()
-            .setText(baseApplication.getResources().getString(R.string.game_cp, game.getPlayer_one_control_points()));
+            .setText(baseApplication.getResources()
+                .getString(R.string.game_cp, game.getParticipant_one_control_points()));
         holder.getPlayerOneVictoryPoints()
-            .setText(baseApplication.getResources().getString(R.string.game_vp, game.getPlayer_one_victory_points()));
+            .setText(baseApplication.getResources()
+                .getString(R.string.game_vp, game.getParticipant_one_victory_points()));
 
-        TournamentPlayer player2 = game.getPlayer2();
+        TournamentPlayer player2 = (TournamentPlayer) game.getParticipantTwo();
 
         holder.getPlayerTwoNameInList()
             .setText(baseApplication.getResources()
@@ -95,11 +95,13 @@ public class OnlineGamesListAdapter extends RecyclerView.Adapter<GameViewHolder>
         holder.getPlayerTwoFaction().setText(player2.getFaction());
 
         holder.getPlayerTwoScore()
-            .setText(baseApplication.getResources().getString(R.string.game_win, game.getPlayer_two_score()));
+            .setText(baseApplication.getResources().getString(R.string.game_win, game.getParticipant_two_score()));
         holder.getPlayerTwoControlPoints()
-            .setText(baseApplication.getResources().getString(R.string.game_cp, game.getPlayer_two_control_points()));
+            .setText(baseApplication.getResources()
+                .getString(R.string.game_cp, game.getParticipant_two_control_points()));
         holder.getPlayerTwoVictoryPoints()
-            .setText(baseApplication.getResources().getString(R.string.game_vp, game.getPlayer_two_victory_points()));
+            .setText(baseApplication.getResources()
+                .getString(R.string.game_vp, game.getParticipant_two_victory_points()));
 
         if (position % 2 == 0) {
             holder.getPairingRow().setBackgroundColor(Color.LTGRAY);
@@ -138,9 +140,8 @@ public class OnlineGamesListAdapter extends RecyclerView.Adapter<GameViewHolder>
     public int getIndexOfPlayer(String uuid) {
 
         for (int i = 0; i < gameList.size(); i++) {
-            if (gameList.get(i).getPlayerOneUUID().equals(uuid) || gameList.get(i)
-                    .getPlayerTwoUUID()
-                    .equals(uuid)) {
+            if (gameList.get(i).getParticipantOneUUID().equals(uuid)
+                    || gameList.get(i).getParticipantTwoUUID().equals(uuid)) {
                 return i;
             }
         }

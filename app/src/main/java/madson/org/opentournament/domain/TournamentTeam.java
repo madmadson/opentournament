@@ -14,7 +14,7 @@ import java.util.List;
  *
  * @author  Tobias Matt - tmatt@contargo.net
  */
-public class TournamentTeam implements Parcelable {
+public class TournamentTeam extends TournamentParticipant implements Parcelable {
 
     public static final Creator<TournamentTeam> CREATOR = new Creator<TournamentTeam>() {
 
@@ -35,9 +35,8 @@ public class TournamentTeam implements Parcelable {
     private long _id;
 
     private long tournamentId;
-
-    // used for shortcut not always go for names
     private String teamName;
+    private String teamUUID;
 
     private String meta;
 
@@ -179,5 +178,12 @@ public class TournamentTeam implements Parcelable {
     public int describeContents() {
 
         return 0;
+    }
+
+
+    @Override
+    public String getUuid() {
+
+        return teamName;
     }
 }

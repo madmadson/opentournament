@@ -55,9 +55,9 @@ public class HomeFragment extends Fragment {
         String[] newsHeader = getResources().getStringArray(R.array.news_header);
         String[] news = getResources().getStringArray(R.array.news);
 
-        NewsAdapter newsAdpater = new NewsAdapter(newsHeader, news);
+        NewsAdapter newsAdapter = new NewsAdapter(newsHeader, news);
 
-        recyclerView.setAdapter(newsAdpater);
+        recyclerView.setAdapter(newsAdapter);
 
         return frag_view;
     }

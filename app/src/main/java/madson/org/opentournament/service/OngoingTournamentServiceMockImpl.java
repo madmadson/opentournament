@@ -21,6 +21,7 @@ import madson.org.opentournament.domain.PairingOption;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.domain.TournamentRanking;
+import madson.org.opentournament.domain.TournamentTeam;
 import madson.org.opentournament.utility.BaseApplication;
 
 import java.util.ArrayList;
@@ -92,19 +93,19 @@ public class OngoingTournamentServiceMockImpl implements OngoingTournamentServic
             Game game = Game.cursorToGame(cursor);
 
             if (game.getTournament_round() < round) {
-                TournamentPlayer playerOne = allPlayerMapForTournament.get(game.getPlayerOneUUID());
-                TournamentPlayer playerTwo = allPlayerMapForTournament.get(game.getPlayerTwoUUID());
+                TournamentPlayer playerOne = allPlayerMapForTournament.get(game.getParticipantOneUUID());
+                TournamentPlayer playerTwo = allPlayerMapForTournament.get(game.getParticipantTwoUUID());
 
                 playerOne.getListOfOpponentsIds().add(playerTwo.getPlayerUUID());
                 playerTwo.getListOfOpponentsIds().add(playerOne.getPlayerUUID());
 
-                allPlayerMapForTournament.put(game.getPlayerOneUUID(), playerOne);
-                allPlayerMapForTournament.put(game.getPlayerTwoUUID(), playerTwo);
+                allPlayerMapForTournament.put(game.getParticipantOneUUID(), playerOne);
+                allPlayerMapForTournament.put(game.getParticipantTwoUUID(), playerTwo);
             }
 
             if (game.getTournament_round() == round) {
-                game.setPlayer1(allPlayerMapForTournament.get(game.getPlayerOneUUID()));
-                game.setPlayer2(allPlayerMapForTournament.get(game.getPlayerTwoUUID()));
+                game.setParticipantOne(allPlayerMapForTournament.get(game.getParticipantOneUUID()));
+                game.setParticipantTwo(allPlayerMapForTournament.get(game.getParticipantTwoUUID()));
 
                 gamesToReturn.add(game);
             }
@@ -178,7 +179,7 @@ public class OngoingTournamentServiceMockImpl implements OngoingTournamentServic
                 TournamentRanking player2 = players.get(j);
 
                 if (playerDontPlayTwiceAgainstEachOther) {
-                    if (player1.getListOfOpponentsPlayerIds().contains(player2.getPlayerUUID())) {
+                    if (player1.getListOfOpponentsPlayerIds().contains(player2.getParticipantUUID())) {
                         Log.i(this.getClass().getName(), "" + player1 + " VS " + player2 + " not possible");
 
                         continue;
@@ -186,11 +187,11 @@ public class OngoingTournamentServiceMockImpl implements OngoingTournamentServic
                 }
 
                 if (playerWithSameTeamDontPlayAgainstEachOther) {
-                    if (player1.getTournamentPlayer().getTeamName() != null
-                            && player2.getTournamentPlayer().getTeamName() != null) {
-                        if (player1.getTournamentPlayer()
-                                .getTeamName()
-                                .equals(player2.getTournamentPlayer().getTeamName())) {
+                    String teamOneName = ((TournamentPlayer) player1.getTournamentParticipant()).getTeamName();
+                    String teamTwoName = ((TournamentPlayer) player2.getTournamentParticipant()).getTeamName();
+
+                    if (teamOneName != null && teamTwoName != null) {
+                        if (teamOneName.equals(teamTwoName)) {
                             Log.i(this.getClass().getName(), "" + player1 + " VS " + player2 + " not possible");
 
                             continue;
@@ -214,11 +215,11 @@ public class OngoingTournamentServiceMockImpl implements OngoingTournamentServic
                     game.setTournamentId(String.valueOf(tournament.get_id()));
                     game.setTournament_round(round);
 
-                    game.setPlayer1(player1.getTournamentPlayer());
-                    game.setPlayerOneUUID(player1.getPlayerUUID());
+                    game.setParticipantOne(player1.getTournamentParticipant());
+                    game.setParticipantOneUUID(player1.getParticipantUUID());
 
-                    game.setPlayer2(player2.getTournamentPlayer());
-                    game.setPlayerTwoUUID(player2.getPlayerUUID());
+                    game.setParticipantTwo(player2.getTournamentParticipant());
+                    game.setParticipantTwoUUID(player2.getParticipantUUID());
 
                     games.add(game);
 
@@ -234,7 +235,7 @@ public class OngoingTournamentServiceMockImpl implements OngoingTournamentServic
                 TournamentRanking player2 = players.get(j);
 
                 if (playerDontPlayTwiceAgainstEachOther) {
-                    if (player1.getListOfOpponentsPlayerIds().contains(player2.getPlayerUUID())) {
+                    if (player1.getListOfOpponentsPlayerIds().contains(player2.getParticipantUUID())) {
                         Log.i(this.getClass().getName(), "" + player1 + " VS " + player2 + " not possible");
 
                         continue;
@@ -242,11 +243,15 @@ public class OngoingTournamentServiceMockImpl implements OngoingTournamentServic
                 }
 
                 if (playerWithSameTeamDontPlayAgainstEachOther) {
-                    if (player1.getTournamentPlayer().getTeamName().equals(
-                                player2.getTournamentPlayer().getTeamName())) {
-                        Log.i(this.getClass().getName(), "" + player1 + " VS " + player2 + " not possible");
+                    String teamOneName = ((TournamentPlayer) player1.getTournamentParticipant()).getTeamName();
+                    String teamTwoName = ((TournamentPlayer) player2.getTournamentParticipant()).getTeamName();
 
-                        continue;
+                    if (teamOneName != null && teamTwoName != null) {
+                        if (teamOneName.equals(teamTwoName)) {
+                            Log.i(this.getClass().getName(), "" + player1 + " VS " + player2 + " not possible");
+
+                            continue;
+                        }
                     }
                 }
 
@@ -262,11 +267,11 @@ public class OngoingTournamentServiceMockImpl implements OngoingTournamentServic
                     game.setTournamentId(String.valueOf(tournament.get_id()));
                     game.setTournament_round(round);
 
-                    game.setPlayer1(player1.getTournamentPlayer());
-                    game.setPlayerOneUUID(player1.getPlayerUUID());
+                    game.setParticipantOne(player1.getTournamentParticipant());
+                    game.setParticipantOneUUID(player1.getParticipantUUID());
 
-                    game.setPlayer2(player2.getTournamentPlayer());
-                    game.setPlayerTwoUUID(player2.getPlayerUUID());
+                    game.setParticipantTwo(player2.getTournamentParticipant());
+                    game.setParticipantTwoUUID(player2.getParticipantUUID());
 
                     games.add(game);
 
@@ -288,19 +293,19 @@ public class OngoingTournamentServiceMockImpl implements OngoingTournamentServic
 
         ContentValues contentValues = new ContentValues();
 
-        contentValues.put(GameTable.COLUMN_PLAYER_ONE_UUID, game.getPlayer1().getPlayerUUID());
-        game.setPlayerOneUUID(game.getPlayer1().getPlayerUUID());
+        contentValues.put(GameTable.COLUMN_PARTICIPANT_ONE_UUID, game.getParticipantOne().getUuid());
+        game.setParticipantOneUUID(game.getParticipantOne().getUuid());
 
-        contentValues.put(GameTable.COLUMN_PLAYER_TWO_UUID, game.getPlayer2().getPlayerUUID());
-        game.setPlayerTwoUUID(game.getPlayer2().getPlayerUUID());
+        contentValues.put(GameTable.COLUMN_PARTICIPANT_TWO_UUID, game.getParticipantTwo().getUuid());
+        game.setParticipantTwoUUID(game.getParticipantTwo().getUuid());
 
-        contentValues.put(GameTable.COLUMN_PLAYER_ONE_SCORE, game.getPlayer_one_score());
-        contentValues.put(GameTable.COLUMN_PLAYER_ONE_CONTROL_POINTS, game.getPlayer_one_control_points());
-        contentValues.put(GameTable.COLUMN_PLAYER_ONE_VICTORY_POINTS, game.getPlayer_one_victory_points());
+        contentValues.put(GameTable.COLUMN_PARTICIPANT_ONE_SCORE, game.getParticipant_one_score());
+        contentValues.put(GameTable.COLUMN_PARTICIPANT_ONE_CONTROL_POINTS, game.getParticipant_one_control_points());
+        contentValues.put(GameTable.COLUMN_PARTICIPANT_ONE_VICTORY_POINTS, game.getParticipant_one_victory_points());
 
-        contentValues.put(GameTable.COLUMN_PLAYER_TWO_SCORE, game.getPlayer_two_score());
-        contentValues.put(GameTable.COLUMN_PLAYER_TWO_CONTROL_POINTS, game.getPlayer_two_control_points());
-        contentValues.put(GameTable.COLUMN_PLAYER_TWO_VICTORY_POINTS, game.getPlayer_two_victory_points());
+        contentValues.put(GameTable.COLUMN_PARTICIPANT_TWO_SCORE, game.getParticipant_two_score());
+        contentValues.put(GameTable.COLUMN_PARTICIPANT_TWO_CONTROL_POINTS, game.getParticipant_two_control_points());
+        contentValues.put(GameTable.COLUMN_PARTICIPANT_TWO_VICTORY_POINTS, game.getParticipant_two_victory_points());
         contentValues.put(GameTable.COLUMN_FINISHED, game.isFinished());
 
         db.update(GameTable.TABLE_TOURNAMENT_GAME, contentValues, GameTable.COLUMN_ID + " = ? ",
@@ -380,19 +385,95 @@ public class OngoingTournamentServiceMockImpl implements OngoingTournamentServic
     }
 
 
+    @Override
+    public List<Game> getGamesForTeamMatch(Tournament tournament, Game parent_game) {
+
+        Map<String, TournamentPlayer> allPlayerMapForTournament = tournamentPlayerService.getAllPlayerMapForTournament(
+                tournament);
+
+        List<Game> gamesToReturn = new ArrayList<>();
+        SQLiteDatabase readableDatabase = openTournamentDBHelper.getReadableDatabase();
+
+        Cursor cursor = readableDatabase.query(GameTable.TABLE_TOURNAMENT_GAME, GameTable.ALL_COLS_FOR_TOURNAMENT_GAME,
+                GameTable.COLUMN_TOURNAMENT_ID + "  = ? AND " + GameTable.COLUMN_PARENT_UUID + " = ? ",
+                new String[] { String.valueOf(tournament.get_id()), parent_game.getUUID() }, null, null, null);
+
+        cursor.moveToFirst();
+
+        while (!cursor.isAfterLast()) {
+            Game game = Game.cursorToGame(cursor);
+
+            game.setParticipantOne(allPlayerMapForTournament.get(game.getParticipantOneUUID()));
+            game.setParticipantTwo(allPlayerMapForTournament.get(game.getParticipantTwoUUID()));
+
+            gamesToReturn.add(game);
+
+            cursor.moveToNext();
+        }
+
+        cursor.close();
+        readableDatabase.close();
+
+        if (gamesToReturn.isEmpty()) {
+            SQLiteDatabase db = openTournamentDBHelper.getWritableDatabase();
+
+            Map<TournamentTeam, List<TournamentPlayer>> allTeamsForTournament =
+                tournamentPlayerService.getAllTeamsForTournament(tournament);
+
+            List<TournamentPlayer> teamOneMembers = allTeamsForTournament.get(new TournamentTeam(
+                        parent_game.getParticipantOneUUID()));
+
+            List<TournamentPlayer> teamTwoMembers = allTeamsForTournament.get(new TournamentTeam(
+                        parent_game.getParticipantTwoUUID()));
+
+            for (int i = 0; i < teamOneMembers.size(); i++) {
+                Game game = new Game();
+
+                String uuid = UUID.randomUUID().toString();
+
+                game.setUUID(uuid);
+                game.setParticipantOneUUID(teamOneMembers.get(i).getUuid());
+                game.setParticipantOne(teamOneMembers.get(i));
+                game.setParticipantTwoUUID(teamTwoMembers.get(i).getUuid());
+                game.setParticipantTwo(teamTwoMembers.get(i));
+                game.setPlaying_field(i + 1);
+
+                ContentValues contentValues = new ContentValues();
+                contentValues.put(GameTable.COLUMN_UUID, uuid);
+
+                contentValues.put(GameTable.COLUMN_TOURNAMENT_ID, String.valueOf(tournament.get_id()));
+                contentValues.put(GameTable.COLUMN_TOURNAMENT_ROUND, parent_game.getTournament_round());
+                contentValues.put(GameTable.COLUMN_PLAYING_FIELD, i + 1);
+
+                contentValues.put(GameTable.COLUMN_PARTICIPANT_ONE_UUID, teamOneMembers.get(i).getUuid());
+                contentValues.put(GameTable.COLUMN_PARTICIPANT_TWO_UUID, teamTwoMembers.get(i).getUuid());
+
+                db.insert(GameTable.TABLE_TOURNAMENT_GAME, null, contentValues);
+
+                gamesToReturn.add(game);
+            }
+
+            db.close();
+        }
+
+        return gamesToReturn;
+    }
+
+
     private void insertGames(List<Game> games) {
 
         SQLiteDatabase db = openTournamentDBHelper.getWritableDatabase();
 
         for (int i = 0; i < games.size(); i++) {
             ContentValues contentValues = new ContentValues();
+            contentValues.put(GameTable.COLUMN_UUID, UUID.randomUUID().toString());
+
             contentValues.put(GameTable.COLUMN_TOURNAMENT_ID, games.get(i).getTournamentId());
             contentValues.put(GameTable.COLUMN_TOURNAMENT_ROUND, games.get(i).getTournament_round());
             contentValues.put(GameTable.COLUMN_PLAYING_FIELD, i + 1);
 
-            contentValues.put(GameTable.COLUMN_PLAYER_ONE_UUID, games.get(i).getPlayerOneUUID());
-
-            contentValues.put(GameTable.COLUMN_PLAYER_TWO_UUID, games.get(i).getPlayerTwoUUID());
+            contentValues.put(GameTable.COLUMN_PARTICIPANT_ONE_UUID, games.get(i).getParticipantOneUUID());
+            contentValues.put(GameTable.COLUMN_PARTICIPANT_TWO_UUID, games.get(i).getParticipantTwoUUID());
 
             db.insert(GameTable.TABLE_TOURNAMENT_GAME, null, contentValues);
         }

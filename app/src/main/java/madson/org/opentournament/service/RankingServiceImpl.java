@@ -20,6 +20,7 @@ import madson.org.opentournament.domain.Game;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.domain.TournamentRanking;
+import madson.org.opentournament.domain.TournamentTeam;
 import madson.org.opentournament.domain.TournamentTyp;
 import madson.org.opentournament.service.warmachine.TournamentRankingComparator;
 import madson.org.opentournament.utility.BaseApplication;
@@ -78,7 +79,10 @@ public class RankingServiceImpl implements RankingService {
         while (!cursor.isAfterLast()) {
             TournamentRanking tournamentRanking = cursorToTournamentRanking(cursor);
 
-            tournamentRanking.setTournamentPlayer(allPlayerMapForTournament.get(tournamentRanking.getPlayerUUID()));
+            if (tournament.getTournamentTyp().equals(TournamentTyp.SOLO.name())) {
+                tournamentRanking.setTournamentParticipant(allPlayerMapForTournament.get(
+                        tournamentRanking.getParticipantUUID()));
+            }
 
             rankingsForRound.add(tournamentRanking);
             cursor.moveToNext();
@@ -97,6 +101,88 @@ public class RankingServiceImpl implements RankingService {
     @Override
     public Map<String, TournamentRanking> createRankingForRound(Tournament tournament, int round_for_calculation) {
 
+        if (tournament.getTournamentTyp().equals(TournamentTyp.SOLO.name())) {
+            return createRankingForRoundSoloTournament(tournament, round_for_calculation);
+        } else if (tournament.getTournamentTyp().equals(TournamentTyp.TEAM.name())) {
+            return createRankingForRoundTeamTournament(tournament, round_for_calculation);
+        }
+
+        return null;
+    }
+
+
+    private Map<String, TournamentRanking> createRankingForRoundTeamTournament(Tournament tournament,
+        int round_for_calculation) {
+
+        Map<TournamentTeam, List<TournamentPlayer>> allTeamsForTournament =
+            tournamentPlayerService.getAllTeamsForTournament(tournament);
+
+        Map<String, TournamentRanking> mapOfRankings = new HashMap<>();
+
+        for (TournamentTeam team : allTeamsForTournament.keySet()) {
+            TournamentRanking tournamentRanking = new TournamentRanking();
+            tournamentRanking.setTournament_id(String.valueOf(tournament.get_id()));
+
+            tournamentRanking.setParticipantUUID(team.getTeamName());
+            tournamentRanking.setTournamentParticipant(team);
+
+            tournamentRanking.setTournament_round(round_for_calculation);
+
+            mapOfRankings.put(team.getTeamName(), tournamentRanking);
+        }
+
+        List<Game> allGamesTillRound = getAllGamesForTournamentTillRound(tournament.get_id(), round_for_calculation);
+
+        for (Game game : allGamesTillRound) {
+            // teamName is key
+            if (mapOfRankings.containsKey(game.getParticipantOneUUID())) {
+                TournamentRanking teamOneRanking = mapOfRankings.get(game.getParticipantOneUUID());
+
+                int newTeamOneScore = teamOneRanking.getScore() + game.getParticipant_one_score();
+                teamOneRanking.setScore(newTeamOneScore);
+
+                TournamentRanking teamTwoRanking = mapOfRankings.get(game.getParticipantTwoUUID());
+
+                teamTwoRanking.getListOfOpponentsPlayerIds().add(teamOneRanking.getParticipantUUID());
+                teamOneRanking.getListOfOpponentsPlayerIds().add(teamTwoRanking.getParticipantUUID());
+
+                mapOfRankings.put(game.getParticipantOneUUID(), teamOneRanking);
+                mapOfRankings.put(game.getParticipantTwoUUID(), teamTwoRanking);
+            } else {
+                // game between players
+
+                TournamentRanking teamOneRanking = mapOfRankings.get(((TournamentPlayer) game.getParticipantOne())
+                        .getTeamName());
+
+                teamOneRanking.setControl_points(teamOneRanking.getControl_points()
+                    + game.getParticipant_one_control_points());
+                teamOneRanking.setVictory_points(teamOneRanking.getVictory_points()
+                    + game.getParticipant_one_victory_points());
+
+                TournamentRanking teamTwoRanking = mapOfRankings.get(((TournamentPlayer) game.getParticipantTwo())
+                        .getTeamName());
+
+                teamTwoRanking.setControl_points(teamTwoRanking.getControl_points()
+                    + game.getParticipant_two_control_points());
+                teamTwoRanking.setVictory_points(teamTwoRanking.getVictory_points()
+                    + game.getParticipant_two_victory_points());
+
+                mapOfRankings.put(game.getParticipantOneUUID(), teamOneRanking);
+                mapOfRankings.put(game.getParticipantTwoUUID(), teamTwoRanking);
+            }
+        }
+
+        calculateSoSForRankingMap(mapOfRankings);
+
+        insertRankingForRound(mapOfRankings);
+
+        return mapOfRankings;
+    }
+
+
+    private Map<String, TournamentRanking> createRankingForRoundSoloTournament(Tournament tournament,
+        int round_for_calculation) {
+
         List<TournamentPlayer> allPlayersForTournament = tournamentPlayerService.getAllPlayersForTournament(tournament);
 
         Map<String, TournamentRanking> mapOfRankings = new HashMap<>(allPlayersForTournament.size());
@@ -105,11 +191,8 @@ public class RankingServiceImpl implements RankingService {
             TournamentRanking tournamentRanking = new TournamentRanking();
             tournamentRanking.setTournament_id(String.valueOf(tournament.get_id()));
 
-            if (tournament.getTournamentTyp().equals(TournamentTyp.SOLO.name())) {
-                tournamentRanking.setPlayerUUID(tournamentPlayer.getPlayerUUID());
-                tournamentRanking.setTournamentPlayer(tournamentPlayer);
-            } else if (tournament.getTournamentTyp().equals(TournamentTyp.TEAM.name())) {
-            }
+            tournamentRanking.setParticipantUUID(tournamentPlayer.getPlayerUUID());
+            tournamentRanking.setTournamentParticipant(tournamentPlayer);
 
             tournamentRanking.setTournament_round(round_for_calculation);
 
@@ -120,31 +203,31 @@ public class RankingServiceImpl implements RankingService {
                 round_for_calculation);
 
         for (Game game : gamesOfPlayerForTournament) {
-            TournamentRanking playerOneRanking = mapOfRankings.get(game.getPlayerOneUUID());
+            TournamentRanking playerOneRanking = mapOfRankings.get(game.getParticipantOneUUID());
 
-            int newPlayerOneScore = playerOneRanking.getScore() + game.getPlayer_one_score();
+            int newPlayerOneScore = playerOneRanking.getScore() + game.getParticipant_one_score();
             playerOneRanking.setScore(newPlayerOneScore);
 
             playerOneRanking.setControl_points(playerOneRanking.getControl_points()
-                + game.getPlayer_one_control_points());
+                + game.getParticipant_one_control_points());
             playerOneRanking.setVictory_points(playerOneRanking.getVictory_points()
-                + game.getPlayer_one_victory_points());
+                + game.getParticipant_one_victory_points());
 
-            TournamentRanking playerTwoRanking = mapOfRankings.get(game.getPlayerTwoUUID());
+            TournamentRanking playerTwoRanking = mapOfRankings.get(game.getParticipantTwoUUID());
 
-            playerTwoRanking.setScore(playerTwoRanking.getScore() + game.getPlayer_two_score());
+            playerTwoRanking.setScore(playerTwoRanking.getScore() + game.getParticipant_two_score());
             playerTwoRanking.setControl_points(playerTwoRanking.getControl_points()
-                + game.getPlayer_two_control_points());
+                + game.getParticipant_two_control_points());
             playerTwoRanking.setVictory_points(playerTwoRanking.getVictory_points()
-                + game.getPlayer_two_victory_points());
+                + game.getParticipant_two_victory_points());
 
             // overwrite map && SOS
 
-            playerTwoRanking.getListOfOpponentsPlayerIds().add(playerOneRanking.getPlayerUUID());
-            playerOneRanking.getListOfOpponentsPlayerIds().add(playerTwoRanking.getPlayerUUID());
+            playerTwoRanking.getListOfOpponentsPlayerIds().add(playerOneRanking.getParticipantUUID());
+            playerOneRanking.getListOfOpponentsPlayerIds().add(playerTwoRanking.getParticipantUUID());
 
-            mapOfRankings.put(game.getPlayerOneUUID(), playerOneRanking);
-            mapOfRankings.put(game.getPlayerTwoUUID(), playerTwoRanking);
+            mapOfRankings.put(game.getParticipantOneUUID(), playerOneRanking);
+            mapOfRankings.put(game.getParticipantTwoUUID(), playerTwoRanking);
         }
 
         calculateSoSForRankingMap(mapOfRankings);
@@ -228,7 +311,7 @@ public class RankingServiceImpl implements RankingService {
 
             ranking.setSos(sos);
 
-            mapOfRankings.put(ranking.getPlayerUUID(), ranking);
+            mapOfRankings.put(ranking.getParticipantUUID(), ranking);
         }
     }
 
@@ -241,7 +324,7 @@ public class RankingServiceImpl implements RankingService {
             ContentValues contentValues = new ContentValues();
             contentValues.put(TournamentRankingTable.COLUMN_TOURNAMENT_ID, ranking.getTournament_id());
             contentValues.put(TournamentRankingTable.COLUMN_TOURNAMENT_ROUND, ranking.getTournament_round());
-            contentValues.put(TournamentRankingTable.COLUMN_PLAYER_UUID, ranking.getPlayerUUID());
+            contentValues.put(TournamentRankingTable.COLUMN_PARTICIPANT_UUID, ranking.getParticipantUUID());
 
             contentValues.put(TournamentRankingTable.COLUMN_SCORE, ranking.getScore());
             contentValues.put(TournamentRankingTable.COLUMN_SOS, ranking.getSos());
@@ -263,9 +346,8 @@ public class RankingServiceImpl implements RankingService {
 
         Cursor cursor = readableDatabase.query(GameTable.TABLE_TOURNAMENT_GAME, GameTable.ALL_COLS_FOR_TOURNAMENT_GAME,
                 GameTable.COLUMN_TOURNAMENT_ID + "  = ? AND " + GameTable.COLUMN_TOURNAMENT_ROUND
-                + " <= ? AND (" + GameTable.COLUMN_PLAYER_ONE_SCORE + " != 0 OR  " + GameTable.COLUMN_PLAYER_TWO_SCORE
-                + " != 0) ", new String[] { String.valueOf(tournament_id), String.valueOf(tournament_round) }, null,
-                null, null);
+                + " <= ? AND " + GameTable.COLUMN_FINISHED + " != 0  ",
+                new String[] { String.valueOf(tournament_id), String.valueOf(tournament_round) }, null, null, null);
 
         cursor.moveToFirst();
 
@@ -290,7 +372,7 @@ public class RankingServiceImpl implements RankingService {
         tournamentRanking.setTournament_id(cursor.getString(1));
         tournamentRanking.setTournament_round(cursor.getInt(2));
 
-        tournamentRanking.setPlayerUUID(cursor.getString(3));
+        tournamentRanking.setParticipantUUID(cursor.getString(3));
 
         tournamentRanking.setScore(cursor.getInt(4));
         tournamentRanking.setSos(cursor.getInt(5));

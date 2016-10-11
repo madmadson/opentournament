@@ -14,7 +14,7 @@ import java.util.List;
  *
  * @author  Tobias Matt - tmatt@contargo.net
  */
-public class TournamentPlayer implements Parcelable {
+public class TournamentPlayer extends TournamentParticipant implements Parcelable {
 
     public static final Creator<TournamentPlayer> CREATOR = new Creator<TournamentPlayer>() {
 
@@ -43,6 +43,8 @@ public class TournamentPlayer implements Parcelable {
     private String lastName;
 
     private String teamName;
+    private TournamentTeam team;
+
     private String faction;
     private String meta;
 
@@ -88,6 +90,19 @@ public class TournamentPlayer implements Parcelable {
     public String getFirstName() {
 
         return firstName;
+    }
+
+
+    @Exclude
+    public TournamentTeam getTeam() {
+
+        return team;
+    }
+
+
+    public void setTeam(TournamentTeam team) {
+
+        this.team = team;
     }
 
 
@@ -287,5 +302,13 @@ public class TournamentPlayer implements Parcelable {
         parcel.writeInt(local ? 0 : 1);
         parcel.writeInt(dummy ? 0 : 1);
         parcel.writeInt(droppedInRound);
+    }
+
+
+    @Exclude
+    @Override
+    public String getUuid() {
+
+        return playerUUID;
     }
 }

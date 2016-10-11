@@ -101,7 +101,7 @@
     
     
     <!-- New Player For Tournament dialog-->
-    <string name="validation_error_empty">Field can\'t not be empty</string>
+    <string name="validation_error_empty">Field cannot be empty</string>
     <string name="success_new_player_inserted">Successfully add TournamentPlayer</string>
     <string name="new_player_tournament_title">New Tournament Player</string>
     
@@ -260,7 +260,7 @@
     <string name="register_for_tournament">Register For Tournament</string>
     <string name="create_own_tournament_button">Create your own Tournament</string>
     <string name="label_teamsize">Teamsize</string>
-    <string name="validation_error_no_team">\'no team\' is no possible team name</string>
+    <string name="validation_error_no_team">\'no team\' is not a possible team name</string>
     <string name="validation_team_no_team">You must choose a team in a team Tournament</string>
     <string name="edit_tournament_player">Edit Tournament Player</string>
     <string name="success_player_updated">Successfully update tournamentPlayer</string>

@@ -29,7 +29,6 @@ import madson.org.opentournament.domain.Game;
 import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.tasks.SaveGameResultTask;
 import madson.org.opentournament.utility.BaseActivity;
-import madson.org.opentournament.utility.BaseApplication;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -156,8 +155,8 @@ public class EnterResultForGameDialog extends DialogFragment {
             final ImageButton button_decrease_player_two_victory_points = (ImageButton) dialog.findViewById(
                     R.id.result_player_two_dec_victory_points);
 
-            TournamentPlayer player1 = game.getPlayer1();
-            TournamentPlayer player2 = game.getPlayer2();
+            TournamentPlayer player1 = (TournamentPlayer) game.getParticipantOne();
+            TournamentPlayer player2 = (TournamentPlayer) game.getParticipantTwo();
 
             if (player1 != null) {
                 text_name_player_one.setText(activity.getResources()
@@ -177,19 +176,19 @@ public class EnterResultForGameDialog extends DialogFragment {
                     .getString(R.string.player_name_in_row, "Dummy", "THE HAMMER", "Player"));
             }
 
-            if (game.getPlayer_one_score() == 1) {
+            if (game.getParticipant_one_score() == 1) {
                 setPlayerToWinner(1, text_name_player_one, text_name_player_two);
             }
 
-            if (game.getPlayer_two_score() == 1) {
+            if (game.getParticipant_two_score() == 1) {
                 setPlayerToWinner(2, text_name_player_one, text_name_player_two);
             }
 
-            text_player_one_control_points.setText(String.valueOf(game.getPlayer_one_control_points()));
-            text_player_one_victory_points.setText(String.valueOf(game.getPlayer_one_victory_points()));
+            text_player_one_control_points.setText(String.valueOf(game.getParticipant_one_control_points()));
+            text_player_one_victory_points.setText(String.valueOf(game.getParticipant_one_victory_points()));
 
-            text_player_two_control_points.setText(String.valueOf(game.getPlayer_two_control_points()));
-            text_player_two_victory_points.setText(String.valueOf(game.getPlayer_two_victory_points()));
+            text_player_two_control_points.setText(String.valueOf(game.getParticipant_two_control_points()));
+            text_player_two_victory_points.setText(String.valueOf(game.getParticipant_two_victory_points()));
 
             addClickForPlayerOneWinListener(text_name_player_one, text_name_player_two, button_win_player_one);
             addPlayerTwoClickWonListener(text_name_player_one, text_name_player_two, button_win_player_two);
@@ -303,9 +302,9 @@ public class EnterResultForGameDialog extends DialogFragment {
                 editText_points.setText(String.valueOf(increasedControlPoints));
 
                 if (player_number == 1) {
-                    game.setPlayer_one_control_points(increasedControlPoints);
+                    game.setParticipant_one_control_points(increasedControlPoints);
                 } else if (player_number == 2) {
-                    game.setPlayer_two_control_points(increasedControlPoints);
+                    game.setParticipant_two_control_points(increasedControlPoints);
                 }
             }
         } else if (WaysOfScoring.VICTORY_POINTS.equals(scoring)) {
@@ -316,9 +315,9 @@ public class EnterResultForGameDialog extends DialogFragment {
                 editText_points.setText(String.valueOf(increasedVictoryPoints));
 
                 if (player_number == 1) {
-                    game.setPlayer_one_victory_points(increasedVictoryPoints);
+                    game.setParticipant_one_victory_points(increasedVictoryPoints);
                 } else if (player_number == 2) {
-                    game.setPlayer_two_victory_points(increasedVictoryPoints);
+                    game.setParticipant_two_victory_points(increasedVictoryPoints);
                 }
             }
         }
@@ -336,9 +335,9 @@ public class EnterResultForGameDialog extends DialogFragment {
                 editText_points.setText(String.valueOf(decreasedControlPoints));
 
                 if (player_number == 1) {
-                    game.setPlayer_one_control_points(decreasedControlPoints);
+                    game.setParticipant_one_control_points(decreasedControlPoints);
                 } else if (player_number == 2) {
-                    game.setPlayer_two_control_points(decreasedControlPoints);
+                    game.setParticipant_two_control_points(decreasedControlPoints);
                 }
             }
         } else if (WaysOfScoring.VICTORY_POINTS.equals(scoring)) {
@@ -349,9 +348,9 @@ public class EnterResultForGameDialog extends DialogFragment {
                 editText_points.setText(String.valueOf(decreasedVictoryPoints));
 
                 if (player_number == 1) {
-                    game.setPlayer_one_victory_points(decreasedVictoryPoints);
+                    game.setParticipant_one_victory_points(decreasedVictoryPoints);
                 } else if (player_number == 2) {
-                    game.setPlayer_two_victory_points(decreasedVictoryPoints);
+                    game.setParticipant_two_victory_points(decreasedVictoryPoints);
                 }
             }
         }
@@ -390,8 +389,8 @@ public class EnterResultForGameDialog extends DialogFragment {
         final TextView text_name_player_two) {
 
         if (player_number == 1) {
-            game.setPlayer_one_score(1);
-            game.setPlayer_two_score(0);
+            game.setParticipant_one_score(1);
+            game.setParticipant_two_score(0);
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 text_name_player_one.setTextColor(getResources().getColor(R.color.colorWin, null));
@@ -401,8 +400,8 @@ public class EnterResultForGameDialog extends DialogFragment {
                 text_name_player_two.setTextColor(getResources().getColor(R.color.colorLoose));
             }
         } else if (player_number == 2) {
-            game.setPlayer_two_score(1);
-            game.setPlayer_one_score(0);
+            game.setParticipant_two_score(1);
+            game.setParticipant_one_score(0);
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 text_name_player_one.setTextColor(getResources().getColor(R.color.colorLoose, null));
@@ -426,7 +425,7 @@ public class EnterResultForGameDialog extends DialogFragment {
 
                     Log.i(this.getClass().getName(), "click confirm result of game");
 
-                    if (game.getPlayer_one_score() == 0 && game.getPlayer_two_score() == 0) {
+                    if (game.getParticipant_one_score() == 0 && game.getParticipant_two_score() == 0) {
                         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
 
                         builder.setTitle(R.string.dialof_confirm_draw)
@@ -457,11 +456,11 @@ public class EnterResultForGameDialog extends DialogFragment {
 
     private void saveGameResult(AlertDialog confirm_dialog) {
 
-        game.setPlayer_one_control_points(Integer.parseInt(text_player_one_control_points.getText().toString()));
-        game.setPlayer_one_victory_points(Integer.parseInt(text_player_one_victory_points.getText().toString()));
+        game.setParticipant_one_control_points(Integer.parseInt(text_player_one_control_points.getText().toString()));
+        game.setParticipant_one_victory_points(Integer.parseInt(text_player_one_victory_points.getText().toString()));
 
-        game.setPlayer_two_control_points(Integer.parseInt(text_player_two_control_points.getText().toString()));
-        game.setPlayer_two_victory_points(Integer.parseInt(text_player_two_victory_points.getText().toString()));
+        game.setParticipant_two_control_points(Integer.parseInt(text_player_two_control_points.getText().toString()));
+        game.setParticipant_two_victory_points(Integer.parseInt(text_player_two_victory_points.getText().toString()));
 
         new SaveGameResultTask(activity.getBaseApplication(), game, confirm_dialog, null).execute();
     }

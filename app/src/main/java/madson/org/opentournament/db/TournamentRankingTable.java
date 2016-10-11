@@ -24,7 +24,7 @@ public class TournamentRankingTable {
      */
     public static final String[] ALL_COLS_FOR_TOURNAMENT_RANKING = {
         TournamentRankingTable.COLUMN_ID, TournamentRankingTable.COLUMN_TOURNAMENT_ID,
-        TournamentRankingTable.COLUMN_TOURNAMENT_ROUND, TournamentRankingTable.COLUMN_PLAYER_UUID,
+        TournamentRankingTable.COLUMN_TOURNAMENT_ROUND, TournamentRankingTable.COLUMN_PARTICIPANT_UUID,
         TournamentRankingTable.COLUMN_SCORE, TournamentRankingTable.COLUMN_SOS,
         TournamentRankingTable.COLUMN_CONTROL_POINTS, TournamentRankingTable.COLUMN_VICTORY_POINTS,
     };
@@ -35,7 +35,7 @@ public class TournamentRankingTable {
     public static final String COLUMN_TOURNAMENT_ID = "tournament_id";
     public static final String COLUMN_TOURNAMENT_ROUND = "tournament_round";
 
-    public static final String COLUMN_PLAYER_UUID = "player_uuid";
+    public static final String COLUMN_PARTICIPANT_UUID = "participant_uuid";
 
     public static final String COLUMN_SCORE = "score";
     public static final String COLUMN_SOS = "sos";
@@ -48,7 +48,7 @@ public class TournamentRankingTable {
 
         db.execSQL(" CREATE TABLE " + TABLE_TOURNAMENT_RANKING
             + " (" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_TOURNAMENT_ID + " TEXT, "
-            + COLUMN_PLAYER_UUID + " TEXT, " + COLUMN_TOURNAMENT_ROUND + " INTEGER, " + COLUMN_SCORE + " INTEGER, "
+            + COLUMN_PARTICIPANT_UUID + " TEXT, " + COLUMN_TOURNAMENT_ROUND + " INTEGER, " + COLUMN_SCORE + " INTEGER, "
             + COLUMN_SOS + " INTEGER, " + COLUMN_CONTROL_POINTS + " INTEGER, " + COLUMN_VICTORY_POINTS + " INTEGER)");
     }
 

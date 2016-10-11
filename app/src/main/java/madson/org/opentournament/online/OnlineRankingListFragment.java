@@ -33,6 +33,7 @@ import madson.org.opentournament.R;
 import madson.org.opentournament.db.FirebaseReferences;
 import madson.org.opentournament.db.GameTable;
 import madson.org.opentournament.domain.Game;
+import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.domain.TournamentRanking;
 import madson.org.opentournament.viewHolder.GameViewHolder;
@@ -46,20 +47,20 @@ import madson.org.opentournament.viewHolder.TournamentRankingViewHolder;
  */
 public class OnlineRankingListFragment extends Fragment {
 
-    public static final String BUNDLE_TOURNAMENT_UUID = "tournament_uuid";
+    public static final String BUNDLE_TOURNAMENT = "tournament";
     public static final String BUNDLE_ROUND = "round";
 
     private DatabaseReference mFirebaseDatabaseReference;
 
-    private String tournament_uuid;
+    private Tournament tournament;
     private int round;
     private ProgressBar mProgressBar;
 
-    public static Fragment newInstance(int round, String tournament_uuid) {
+    public static Fragment newInstance(int round, Tournament tournament) {
 
         OnlineRankingListFragment fragment = new OnlineRankingListFragment();
         Bundle args = new Bundle();
-        args.putString(BUNDLE_TOURNAMENT_UUID, tournament_uuid);
+        args.putParcelable(BUNDLE_TOURNAMENT, tournament);
         args.putInt(BUNDLE_ROUND, round);
         fragment.setArguments(args);
 
@@ -72,8 +73,8 @@ public class OnlineRankingListFragment extends Fragment {
 
         Bundle bundle = getArguments();
 
-        if (bundle != null && bundle.getString(BUNDLE_TOURNAMENT_UUID) != null) {
-            tournament_uuid = bundle.getString(BUNDLE_TOURNAMENT_UUID);
+        if (bundle != null && bundle.getParcelable(BUNDLE_TOURNAMENT) != null) {
+            tournament = bundle.getParcelable(BUNDLE_TOURNAMENT);
         }
 
         if (bundle != null && bundle.getInt(BUNDLE_ROUND) != 0) {
@@ -93,10 +94,11 @@ public class OnlineRankingListFragment extends Fragment {
         mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
 
         DatabaseReference child = mFirebaseDatabaseReference.child(FirebaseReferences.TOURNAMENT_RANKINGS + "/"
-                + tournament_uuid + "/" + round);
+                + tournament.getOnlineUUID() + "/" + round);
 
         Query orderedGames = child.orderByChild("rank");
-        final OnlineRankingListAdapter onlineRankingListAdapter = new OnlineRankingListAdapter(getActivity());
+        final OnlineRankingListAdapter onlineRankingListAdapter = new OnlineRankingListAdapter(getActivity(),
+                tournament);
 
         orderedGames.addValueEventListener(new ValueEventListener() {
 

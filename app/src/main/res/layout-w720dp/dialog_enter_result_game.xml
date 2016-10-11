@@ -125,6 +125,7 @@
                 android:focusableInTouchMode="true"
                 android:paddingLeft="@dimen/main_tick"
                 android:paddingRight="@dimen/main_tick"
+                android:inputType="number"
                 android:text="0" />
 
             <ImageButton
@@ -155,6 +156,7 @@
                 android:focusableInTouchMode="true"
                 android:paddingLeft="@dimen/main_tick"
                 android:paddingRight="@dimen/main_tick"
+                android:inputType="number"
                 android:text="0" />
 
             <ImageButton
@@ -230,6 +232,7 @@
                 android:focusableInTouchMode="true"
                 android:paddingLeft="@dimen/main_tick"
                 android:paddingRight="@dimen/main_tick"
+                android:inputType="number"
                 android:text="0" />
 
             <ImageButton
@@ -258,6 +261,7 @@
                 android:focusableInTouchMode="true"
                 android:paddingLeft="@dimen/main_tick"
                 android:paddingRight="@dimen/main_tick"
+                android:inputType="number"
                 android:text="0" />
 
             <ImageButton

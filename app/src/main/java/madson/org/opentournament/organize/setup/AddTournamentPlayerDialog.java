@@ -2,6 +2,7 @@ package madson.org.opentournament.organize.setup;
 
 import android.app.Dialog;
 
+import android.content.Context;
 import android.content.DialogInterface;
 
 import android.graphics.Typeface;
@@ -13,6 +14,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentActivity;
 
 import android.support.v7.app.AlertDialog;
 
@@ -28,6 +30,8 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import com.bumptech.glide.load.resource.NullEncoder;
 
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Player;
@@ -75,11 +79,14 @@ public class AddTournamentPlayerDialog extends DialogFragment {
     private TextView labelTeamMembers;
     private Map<TournamentTeam, List<TournamentPlayer>> teamNameMap;
     private TournamentPlayer tournament_player;
+    private BaseActivity baseActivity;
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onAttach(Context context) {
 
-        super.onCreate(savedInstanceState);
+        super.onAttach(context);
+
+        baseActivity = (BaseActivity) getActivity();
     }
 
 
@@ -120,8 +127,8 @@ public class AddTournamentPlayerDialog extends DialogFragment {
             addNewTeamNameButton = (ImageButton) dialogView.findViewById(
                     R.id.dialog_add_tournament_player_add_new_team);
 
-            ArrayAdapter<CharSequence> faction_adapter = ArrayAdapter.createFromResource(getActivity(),
-                    R.array.factions, android.R.layout.simple_spinner_item);
+            ArrayAdapter<CharSequence> faction_adapter = ArrayAdapter.createFromResource(baseActivity, R.array.factions,
+                    android.R.layout.simple_spinner_item);
             faction_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             factionSpinner.setAdapter(faction_adapter);
 
@@ -257,7 +264,7 @@ public class AddTournamentPlayerDialog extends DialogFragment {
                     }
                 });
 
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            AlertDialog.Builder builder = new AlertDialog.Builder(baseActivity);
 
             builder.setView(dialogView)
                 .setTitle(tournament_player == null ? getString(R.string.new_player_tournament_title)
@@ -309,11 +316,11 @@ public class AddTournamentPlayerDialog extends DialogFragment {
 
                         if (validateForm(firstname, nickname, lastname, teamname)) {
                             if (tournament_player == null) {
-                                new SaveTournamentPlayerTask((BaseActivity) getActivity(), player, tournament, dialog,
-                                    firstname, nickname, lastname, teamname, faction).execute();
+                                new SaveTournamentPlayerTask(baseActivity, player, tournament, dialog, firstname,
+                                    nickname, lastname, teamname, faction).execute();
                             } else {
-                                new EditTournamentPlayerTask((BaseActivity) getActivity(), tournament_player,
-                                    tournament, dialog, teamname, faction).execute();
+                                new EditTournamentPlayerTask(baseActivity, tournament_player, tournament, dialog,
+                                    teamname, faction).execute();
                             }
                         }
                     }

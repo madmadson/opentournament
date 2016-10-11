@@ -2,6 +2,7 @@ package madson.org.opentournament.organize;
 
 import android.app.Dialog;
 
+import android.content.Context;
 import android.content.DialogInterface;
 
 import android.os.Build;
@@ -27,6 +28,7 @@ import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Game;
 import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.tasks.SaveGameResultTask;
+import madson.org.opentournament.utility.BaseActivity;
 import madson.org.opentournament.utility.BaseApplication;
 
 import java.util.Timer;
@@ -59,7 +61,23 @@ public class EnterResultForGameDialog extends DialogFragment {
         DECREASE
     }
 
+    private BaseActivity activity;
+
+    private EditText text_player_two_victory_points;
+    private EditText text_player_two_control_points;
+    private EditText text_player_one_victory_points;
+    private EditText text_player_one_control_points;
+
     private Game game;
+
+    @Override
+    public void onAttach(Context context) {
+
+        super.onAttach(context);
+
+        activity = (BaseActivity) getActivity();
+    }
+
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -109,32 +127,32 @@ public class EnterResultForGameDialog extends DialogFragment {
             // ControlPoints Player one
             final ImageButton button_increase_player_one_control_points = (ImageButton) dialog.findViewById(
                     R.id.result_player_one_inc_control_points);
-            final EditText text_player_one_control_points = (EditText) dialog.findViewById(
-                    R.id.result_player_one_control_points);
+            text_player_one_control_points = (EditText) dialog.findViewById(R.id.result_player_one_control_points);
+
             final ImageButton button_decrease_player_one_control_points = (ImageButton) dialog.findViewById(
                     R.id.result_player_one_dec_control_points);
 
             // VictoryPoints Player one
             final ImageButton button_increase_player_one_victory_points = (ImageButton) dialog.findViewById(
                     R.id.result_player_one_inc_victory_points);
-            final EditText text_player_one_victory_points = (EditText) dialog.findViewById(
-                    R.id.result_player_one_victory_points);
+            text_player_one_victory_points = (EditText) dialog.findViewById(R.id.result_player_one_victory_points);
+
             final ImageButton button_decrease_player_one_victory_points = (ImageButton) dialog.findViewById(
                     R.id.result_player_one_dec_victory_points);
 
             // ControlPoints Player two
             final ImageButton button_increase_player_two_control_points = (ImageButton) dialog.findViewById(
                     R.id.result_player_two_inc_control_points);
-            final EditText text_player_two_control_points = (EditText) dialog.findViewById(
-                    R.id.result_player_two_control_points);
+            text_player_two_control_points = (EditText) dialog.findViewById(R.id.result_player_two_control_points);
+
             final ImageButton button_decrease_player_two_control_points = (ImageButton) dialog.findViewById(
                     R.id.result_player_two_dec_control_points);
 
             // VictoryPoints Player two
             final ImageButton button_increase_player_two_victory_points = (ImageButton) dialog.findViewById(
                     R.id.result_player_two_inc_victory_points);
-            final EditText text_player_two_victory_points = (EditText) dialog.findViewById(
-                    R.id.result_player_two_victory_points);
+            text_player_two_victory_points = (EditText) dialog.findViewById(R.id.result_player_two_victory_points);
+
             final ImageButton button_decrease_player_two_victory_points = (ImageButton) dialog.findViewById(
                     R.id.result_player_two_dec_victory_points);
 
@@ -142,20 +160,20 @@ public class EnterResultForGameDialog extends DialogFragment {
             TournamentPlayer player2 = game.getPlayer2();
 
             if (player1 != null) {
-                text_name_player_one.setText(getActivity().getResources()
+                text_name_player_one.setText(activity.getResources()
                     .getString(R.string.player_name_in_row, player1.getFirstName(), player1.getNickName(),
                         player1.getLastName()));
             } else {
-                text_name_player_one.setText(getActivity().getResources()
+                text_name_player_one.setText(activity.getResources()
                     .getString(R.string.player_name_in_row, "Dummy", "THE KING", "Player"));
             }
 
             if (player2 != null) {
-                text_name_player_two.setText(getActivity().getResources()
+                text_name_player_two.setText(activity.getResources()
                     .getString(R.string.player_name_in_row, player2.getFirstName(), player2.getNickName(),
                         player2.getLastName()));
             } else {
-                text_name_player_two.setText(getActivity().getResources()
+                text_name_player_two.setText(activity.getResources()
                     .getString(R.string.player_name_in_row, "Dummy", "THE HAMMER", "Player"));
             }
 
@@ -277,7 +295,7 @@ public class EnterResultForGameDialog extends DialogFragment {
     private void increasePointsForPlayer(int player_number, EditText editText_points, WaysOfScoring scoring,
         int amount) {
 
-        if (scoring.equals(WaysOfScoring.CONTROL_POINTS)) {
+        if (WaysOfScoring.CONTROL_POINTS.equals(scoring)) {
             Integer controlPoints = Integer.valueOf(editText_points.getText().toString());
             int increasedControlPoints = controlPoints + amount;
 
@@ -290,7 +308,7 @@ public class EnterResultForGameDialog extends DialogFragment {
                     game.setPlayer_two_control_points(increasedControlPoints);
                 }
             }
-        } else if (scoring.equals(WaysOfScoring.VICTORY_POINTS)) {
+        } else if (WaysOfScoring.VICTORY_POINTS.equals(scoring)) {
             Integer victoryPoints = Integer.valueOf(editText_points.getText().toString());
             int increasedVictoryPoints = victoryPoints + amount;
 
@@ -310,7 +328,7 @@ public class EnterResultForGameDialog extends DialogFragment {
     private void decreasePointsForPlayer(int player_number, EditText editText_points, WaysOfScoring scoring,
         int amount) {
 
-        if (scoring.equals(WaysOfScoring.CONTROL_POINTS)) {
+        if (WaysOfScoring.CONTROL_POINTS.equals(scoring)) {
             Integer controlPoints = Integer.valueOf(editText_points.getText().toString());
             int decreasedControlPoints = controlPoints - amount;
 
@@ -323,7 +341,7 @@ public class EnterResultForGameDialog extends DialogFragment {
                     game.setPlayer_two_control_points(decreasedControlPoints);
                 }
             }
-        } else if (scoring.equals(WaysOfScoring.VICTORY_POINTS)) {
+        } else if (WaysOfScoring.VICTORY_POINTS.equals(scoring)) {
             Integer victoryPoints = Integer.valueOf(editText_points.getText().toString());
             int decreasedVictoryPoints = victoryPoints - amount;
 
@@ -409,7 +427,7 @@ public class EnterResultForGameDialog extends DialogFragment {
                     Log.i(this.getClass().getName(), "click confirm result of game");
 
                     if (game.getPlayer_one_score() == 0 && game.getPlayer_two_score() == 0) {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
 
                         builder.setTitle(R.string.dialof_confirm_draw)
                         .setPositiveButton(R.string.dialog_save, new DialogInterface.OnClickListener() {
@@ -417,8 +435,7 @@ public class EnterResultForGameDialog extends DialogFragment {
                                     @Override
                                     public void onClick(DialogInterface sure_draw_dialog, int id) {
 
-                                        new SaveGameResultTask((BaseApplication) getActivity().getApplication(), game,
-                                            confirm_dialog, sure_draw_dialog).execute();
+                                        saveGameResult(confirm_dialog);
                                     }
                                 })
                         .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
@@ -431,10 +448,21 @@ public class EnterResultForGameDialog extends DialogFragment {
                             });
                         builder.show();
                     } else {
-                        new SaveGameResultTask((BaseApplication) getActivity().getApplication(), game, confirm_dialog,
-                            null).execute();
+                        saveGameResult(confirm_dialog);
                     }
                 }
             });
+    }
+
+
+    private void saveGameResult(AlertDialog confirm_dialog) {
+
+        game.setPlayer_one_control_points(Integer.parseInt(text_player_one_control_points.getText().toString()));
+        game.setPlayer_one_victory_points(Integer.parseInt(text_player_one_victory_points.getText().toString()));
+
+        game.setPlayer_two_control_points(Integer.parseInt(text_player_two_control_points.getText().toString()));
+        game.setPlayer_two_victory_points(Integer.parseInt(text_player_two_victory_points.getText().toString()));
+
+        new SaveGameResultTask(activity.getBaseApplication(), game, confirm_dialog, null).execute();
     }
 }

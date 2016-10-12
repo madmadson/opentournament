@@ -12,7 +12,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
@@ -40,10 +39,10 @@ import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.domain.TournamentTyp;
 import madson.org.opentournament.organize.TournamentEventListener;
-import madson.org.opentournament.tasks.AddDummyPlayerTask;
 import madson.org.opentournament.tasks.CheckTeamTournamentStartedTask;
 import madson.org.opentournament.tasks.LoadTournamentPlayerTask;
 import madson.org.opentournament.tasks.LoadTournamentPlayerTeamTask;
+import madson.org.opentournament.tasks.SaveDummyTournamentPlayerTask;
 import madson.org.opentournament.utility.BaseActivity;
 import madson.org.opentournament.utility.BaseApplication;
 
@@ -237,7 +236,8 @@ public class TournamentPlayerListFragment extends Fragment implements Tournament
                             public void onClick(DialogInterface dialog, int which) {
 
                                 BaseApplication application = (BaseApplication) getActivity().getApplication();
-                                new AddDummyPlayerTask(application, tournament, tournamentPlayerListAdapter).execute();
+                                new SaveDummyTournamentPlayerTask(application, tournament, tournamentPlayerListAdapter)
+                                .execute();
                             }
                         })
                 .setNegativeButton(R.string.dialog_cancel, null)

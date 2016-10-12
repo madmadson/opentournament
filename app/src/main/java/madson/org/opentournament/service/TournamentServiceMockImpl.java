@@ -84,7 +84,6 @@ public class TournamentServiceMockImpl implements TournamentService {
         SQLiteDatabase writableDatabase = openTournamentDBHelper.getWritableDatabase();
 
         writableDatabase.delete(GameTable.TABLE_TOURNAMENT_GAME, null, null);
-        writableDatabase.close();
     }
 
 
@@ -93,7 +92,6 @@ public class TournamentServiceMockImpl implements TournamentService {
         SQLiteDatabase writableDatabase = openTournamentDBHelper.getWritableDatabase();
 
         writableDatabase.delete(TournamentRankingTable.TABLE_TOURNAMENT_RANKING, null, null);
-        writableDatabase.close();
     }
 
 
@@ -101,8 +99,8 @@ public class TournamentServiceMockImpl implements TournamentService {
 
         insertTournament(1, "Coin of Evil", "Ludwigsburg", new DateTime().toDate(), 32, null, null, null, 8,
             TournamentTyp.SOLO.name(), 0);
-        insertTournament(2, "HMDZ", "Oberhausen", new DateTime().toDate(), 32, null, null, null, 32,
-            TournamentTyp.TEAM.name(), 3);
+        insertTournament(2, "HMDZ", "Oberhausen", new DateTime().toDate(), 32, null, null, null, 8,
+            TournamentTyp.TEAM.name(), 2);
         insertTournament(3, "Dead Fish", "Heidelberg", new DateTime().toDate(), 16, null, null, null, 0,
             TournamentTyp.SOLO.name(), 0);
     }
@@ -137,8 +135,6 @@ public class TournamentServiceMockImpl implements TournamentService {
 
         long newId = writableDatabase.insert(TournamentTable.TABLE_TOURNAMENTS, null, contentValues);
 
-        writableDatabase.close();
-
         return getTournamentForId(newId);
     }
 
@@ -158,7 +154,6 @@ public class TournamentServiceMockImpl implements TournamentService {
         }
 
         cursor.close();
-        readableDatabase.close();
 
         return tournament;
     }
@@ -169,7 +164,6 @@ public class TournamentServiceMockImpl implements TournamentService {
         SQLiteDatabase writableDatabase = openTournamentDBHelper.getWritableDatabase();
 
         writableDatabase.delete(TournamentTable.TABLE_TOURNAMENTS, null, null);
-        writableDatabase.close();
     }
 
 
@@ -221,8 +215,6 @@ public class TournamentServiceMockImpl implements TournamentService {
 
         writableDatabase.update(TournamentTable.TABLE_TOURNAMENTS, contentValues, "_id = ?",
             new String[] { String.valueOf(tournament.get_id()) });
-
-        writableDatabase.close();
     }
 
 
@@ -236,8 +228,6 @@ public class TournamentServiceMockImpl implements TournamentService {
 
         writableDatabase.update(TournamentTable.TABLE_TOURNAMENTS, contentValues, TournamentTable.COLUMN_ID + " = ?",
             new String[] { String.valueOf(tournament.get_id()) });
-
-        writableDatabase.close();
     }
 
 
@@ -254,8 +244,6 @@ public class TournamentServiceMockImpl implements TournamentService {
 
         writableDatabase.update(TournamentTable.TABLE_TOURNAMENTS, contentValues, TournamentTable.COLUMN_ID + " = ?",
             new String[] { String.valueOf(tournament.get_id()) });
-
-        writableDatabase.close();
 
         tournament.setActualRound(round);
         tournament.setState(Tournament.TournamentState.STARTED.name());
@@ -280,7 +268,6 @@ public class TournamentServiceMockImpl implements TournamentService {
         db.update(TournamentTable.TABLE_TOURNAMENTS, contentValues, "_id = ?",
             new String[] { String.valueOf(tournament.get_id()) });
 
-        db.close();
         cursor.close();
     }
 
@@ -301,7 +288,6 @@ public class TournamentServiceMockImpl implements TournamentService {
         db.update(TournamentTable.TABLE_TOURNAMENTS, contentValues, "_id = ?",
             new String[] { String.valueOf(tournament.get_id()) });
 
-        db.close();
         cursor.close();
     }
 
@@ -319,8 +305,6 @@ public class TournamentServiceMockImpl implements TournamentService {
 
         writableDatabase.update(TournamentTable.TABLE_TOURNAMENTS, contentValues, "_id = ?",
             new String[] { String.valueOf(tournament.get_id()) });
-
-        writableDatabase.close();
     }
 
 
@@ -344,7 +328,6 @@ public class TournamentServiceMockImpl implements TournamentService {
         }
 
         cursor.close();
-        readableDatabase.close();
 
         return tournaments;
     }
@@ -368,6 +351,5 @@ public class TournamentServiceMockImpl implements TournamentService {
         SQLiteDatabase writableDatabase = openTournamentDBHelper.getWritableDatabase();
         writableDatabase.delete(TournamentTable.TABLE_TOURNAMENTS, TournamentTable.COLUMN_ID + "  = ?",
             new String[] { String.valueOf(tournament.get_id()) });
-        writableDatabase.close();
     }
 }

@@ -82,9 +82,9 @@ public class StartTournamentTask extends AsyncTask<Void, Void, Void> {
 
         Intent intent = new Intent(baseActivity, TournamentOrganizeActivity.class);
 
-        // avoid go back to planned
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.putExtra(TournamentOrganizeActivity.EXTRA_TOURNAMENT, tournament);
         baseActivity.startActivity(intent);
+
+        baseActivity.finish();
     }
 }

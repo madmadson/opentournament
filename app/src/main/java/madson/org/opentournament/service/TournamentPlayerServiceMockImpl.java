@@ -86,8 +86,6 @@ public class TournamentPlayerServiceMockImpl implements TournamentPlayerService 
         contentValues.put(TournamentPlayerTable.COLUMN_PLAYER_UUID, uuid);
 
         db.insert(TournamentPlayerTable.TABLE_TOURNAMENT_PLAYER, null, contentValues);
-
-        db.close();
     }
 
 
@@ -95,8 +93,6 @@ public class TournamentPlayerServiceMockImpl implements TournamentPlayerService 
 
         SQLiteDatabase db = openTournamentDBHelper.getWritableDatabase();
         db.delete(TournamentPlayerTable.TABLE_TOURNAMENT_PLAYER, null, null);
-
-        db.close();
     }
 
 
@@ -108,8 +104,6 @@ public class TournamentPlayerServiceMockImpl implements TournamentPlayerService 
         db.delete(TournamentPlayerTable.TABLE_TOURNAMENT_PLAYER,
             TournamentPlayerTable.COLUMN_TOURNAMENT_ID + " = ?  AND  " + TournamentPlayerTable.COLUMN_PLAYER_UUID
             + " = ? ", new String[] { player.getTournamentId(), player.getPlayerUUID() });
-
-        db.close();
     }
 
 
@@ -153,7 +147,6 @@ public class TournamentPlayerServiceMockImpl implements TournamentPlayerService 
         }
 
         cursor.close();
-        readableDatabase.close();
 
         return teamMap;
     }
@@ -192,7 +185,6 @@ public class TournamentPlayerServiceMockImpl implements TournamentPlayerService 
         }
 
         cursor.close();
-        readableDatabase.close();
 
         return teamList;
     }
@@ -218,7 +210,6 @@ public class TournamentPlayerServiceMockImpl implements TournamentPlayerService 
         }
 
         cursor.close();
-        readableDatabase.close();
 
         return playersOnlineUUIDs;
     }
@@ -243,8 +234,6 @@ public class TournamentPlayerServiceMockImpl implements TournamentPlayerService 
         contentValues.put(TournamentPlayerTable.COLUMN_LOCAL, player.isLocal());
 
         db.insert(TournamentPlayerTable.TABLE_TOURNAMENT_PLAYER, null, contentValues);
-
-        db.close();
     }
 
 
@@ -271,7 +260,6 @@ public class TournamentPlayerServiceMockImpl implements TournamentPlayerService 
         Collections.sort(players, new TournamentPlayerComparator());
 
         cursor.close();
-        readableDatabase.close();
 
         return players;
     }
@@ -299,7 +287,6 @@ public class TournamentPlayerServiceMockImpl implements TournamentPlayerService 
         }
 
         cursor.close();
-        readableDatabase.close();
 
         return players;
     }
@@ -338,7 +325,6 @@ public class TournamentPlayerServiceMockImpl implements TournamentPlayerService 
         }
 
         cursor.close();
-        readableDatabase.close();
 
         return teamMap;
     }
@@ -397,8 +383,6 @@ public class TournamentPlayerServiceMockImpl implements TournamentPlayerService 
 
         db.update(TournamentPlayerTable.TABLE_TOURNAMENT_PLAYER, contentValues,
             TournamentPlayerTable.COLUMN_ID + " = ?", new String[] { String.valueOf(player.get_id()) });
-
-        db.close();
     }
 
 
@@ -414,8 +398,6 @@ public class TournamentPlayerServiceMockImpl implements TournamentPlayerService 
 
         db.update(TournamentPlayerTable.TABLE_TOURNAMENT_PLAYER, contentValues,
             TournamentPlayerTable.COLUMN_ID + " = ?", new String[] { String.valueOf(tournamentPlayer.get_id()) });
-
-        db.close();
     }
 
 
@@ -426,8 +408,6 @@ public class TournamentPlayerServiceMockImpl implements TournamentPlayerService 
 
         db.delete(TournamentPlayerTable.TABLE_TOURNAMENT_PLAYER, TournamentPlayerTable.COLUMN_TOURNAMENT_ID + " = ? ",
             new String[] { String.valueOf(tournament.get_id()) });
-
-        db.close();
     }
 
 
@@ -454,7 +434,6 @@ public class TournamentPlayerServiceMockImpl implements TournamentPlayerService 
         }
 
         cursor.close();
-        readableDatabase.close();
 
         return alreadyInTournament;
     }

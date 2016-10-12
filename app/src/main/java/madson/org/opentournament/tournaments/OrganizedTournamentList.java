@@ -50,11 +50,21 @@ public class OrganizedTournamentList extends Fragment implements OrganizeTournam
 
 
     @Override
+    public void onResume() {
+
+        super.onResume();
+
+        ProgressBar progressBar = (ProgressBar) getView().findViewById(R.id.progressBar);
+
+        new LoadOrganizedTournamentsTask(baseActivity.getBaseApplication(), progressBar, tournamentListAdapter)
+            .execute();
+    }
+
+
+    @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
 
         super.onActivityCreated(savedInstanceState);
-
-        ProgressBar progressBar = (ProgressBar) getView().findViewById(R.id.progressBar);
 
         if (baseActivity.getBaseApplication().getEnvironment() != Environment.PROD) {
             baseActivity.getToolbar().setTitle(R.string.toolbar_title_organized_tournaments_DEMO);
@@ -81,8 +91,6 @@ public class OrganizedTournamentList extends Fragment implements OrganizeTournam
                     dialog.show(supportFragmentManager, "tournament management new tournament");
                 }
             });
-        new LoadOrganizedTournamentsTask(baseActivity.getBaseApplication(), progressBar, tournamentListAdapter)
-            .execute();
     }
 
 

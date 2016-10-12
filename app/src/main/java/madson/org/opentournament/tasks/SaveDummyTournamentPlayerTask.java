@@ -14,14 +14,14 @@ import madson.org.opentournament.utility.BaseApplication;
  *
  * @author  Tobias Matt - tmatt@contargo.net
  */
-public class AddDummyPlayerTask extends AsyncTask<Void, Void, Void> {
+public class SaveDummyTournamentPlayerTask extends AsyncTask<Void, Void, Void> {
 
     private BaseApplication baseApplication;
     private Tournament tournament;
     private TournamentPlayerListAdapter tournamentPlayerListAdapter;
     private TournamentPlayer dummyTournamentPlayer;
 
-    public AddDummyPlayerTask(BaseApplication baseApplication, Tournament tournament,
+    public SaveDummyTournamentPlayerTask(BaseApplication baseApplication, Tournament tournament,
         TournamentPlayerListAdapter tournamentPlayerListAdapter) {
 
         this.baseApplication = baseApplication;

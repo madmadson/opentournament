@@ -58,6 +58,16 @@ public class TournamentOrganizeActivity extends BaseActivity implements Tourname
 
 
     @Override
+    protected void onNewIntent(Intent intent) {
+
+        super.onNewIntent(intent);
+
+        mSectionsPagerAdapter = null;
+        mViewPager = null;
+    }
+
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
         // additionally to the navigation drawer, inflate the base menu into the options menu

@@ -42,7 +42,6 @@ public class PlayerServiceMockImpl implements PlayerService {
         SQLiteDatabase writableDatabase = openTournamentDBHelper.getWritableDatabase();
 
         writableDatabase.delete(PlayerTable.TABLE_PLAYER, null, null);
-        writableDatabase.close();
     }
 
 
@@ -100,7 +99,6 @@ public class PlayerServiceMockImpl implements PlayerService {
         }
 
         cursor.close();
-        readableDatabase.close();
 
         return player;
     }
@@ -126,7 +124,6 @@ public class PlayerServiceMockImpl implements PlayerService {
         }
 
         cursor.close();
-        readableDatabase.close();
 
         return players;
     }
@@ -137,8 +134,6 @@ public class PlayerServiceMockImpl implements PlayerService {
         SQLiteDatabase writableDatabase = openTournamentDBHelper.getWritableDatabase();
 
         writableDatabase.insert(PlayerTable.TABLE_PLAYER, null, contentValues);
-
-        writableDatabase.close();
     }
 
 

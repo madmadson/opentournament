@@ -90,7 +90,6 @@ public class RankingServiceMockImpl implements RankingService {
         Collections.sort(rankingsForRound, new TournamentRankingComparator());
 
         cursor.close();
-        readableDatabase.close();
 
         return rankingsForRound;
     }
@@ -247,7 +246,6 @@ public class RankingServiceMockImpl implements RankingService {
         writableDatabase.delete(TournamentRankingTable.TABLE_TOURNAMENT_RANKING,
             TournamentRankingTable.COLUMN_TOURNAMENT_ID + " = ? AND " + TournamentRankingTable.COLUMN_TOURNAMENT_ROUND
             + " = ?", new String[] { String.valueOf(tournament.get_id()), String.valueOf(roundToDelete) });
-        writableDatabase.close();
     }
 
 
@@ -290,7 +288,6 @@ public class RankingServiceMockImpl implements RankingService {
         writableDatabase.delete(TournamentRankingTable.TABLE_TOURNAMENT_RANKING,
             TournamentRankingTable.COLUMN_TOURNAMENT_ID + " = ? ",
             new String[] { String.valueOf(tournament.get_id()) });
-        writableDatabase.close();
     }
 
 
@@ -331,8 +328,6 @@ public class RankingServiceMockImpl implements RankingService {
 
             db.insert(TournamentRankingTable.TABLE_TOURNAMENT_RANKING, null, contentValues);
         }
-
-        db.close();
     }
 
 
@@ -356,7 +351,6 @@ public class RankingServiceMockImpl implements RankingService {
         }
 
         cursor.close();
-        readableDatabase.close();
 
         return games;
     }

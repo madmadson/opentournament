@@ -59,7 +59,6 @@ public class PlayerServiceImpl implements PlayerService {
         }
 
         cursor.close();
-        readableDatabase.close();
 
         return player;
     }
@@ -85,7 +84,6 @@ public class PlayerServiceImpl implements PlayerService {
         }
 
         cursor.close();
-        readableDatabase.close();
 
         return players;
     }
@@ -96,8 +94,6 @@ public class PlayerServiceImpl implements PlayerService {
         SQLiteDatabase writableDatabase = openTournamentDBHelper.getWritableDatabase();
 
         long insertedId = writableDatabase.insert(PlayerTable.TABLE_PLAYER, null, contentValues);
-
-        writableDatabase.close();
 
         return insertedId;
     }

@@ -123,7 +123,6 @@ public class OngoingTournamentServiceMockImpl implements OngoingTournamentServic
         }
 
         cursor.close();
-        readableDatabase.close();
 
         return gamesToReturn;
     }
@@ -167,7 +166,6 @@ public class OngoingTournamentServiceMockImpl implements OngoingTournamentServic
         }
 
         cursor.close();
-        readableDatabase.close();
 
         return gamesToReturn;
     }
@@ -364,8 +362,6 @@ public class OngoingTournamentServiceMockImpl implements OngoingTournamentServic
         db.update(GameTable.TABLE_TOURNAMENT_GAME, contentValues, GameTable.COLUMN_ID + " = ? ",
             new String[] { String.valueOf(game.get_id()) });
 
-        db.close();
-
         return game;
     }
 
@@ -398,7 +394,6 @@ public class OngoingTournamentServiceMockImpl implements OngoingTournamentServic
         writableDatabase.delete(GameTable.TABLE_TOURNAMENT_GAME,
             GameTable.COLUMN_TOURNAMENT_ID + " = ? AND " + GameTable.COLUMN_TOURNAMENT_ROUND
             + " = ?", new String[] { String.valueOf(tournament.get_id()), String.valueOf(roundToDelete) });
-        writableDatabase.close();
     }
 
 
@@ -434,7 +429,6 @@ public class OngoingTournamentServiceMockImpl implements OngoingTournamentServic
 
         writableDatabase.delete(GameTable.TABLE_TOURNAMENT_GAME, GameTable.COLUMN_TOURNAMENT_ID + " = ? ",
             new String[] { String.valueOf(tournament.get_id()) });
-        writableDatabase.close();
     }
 
 
@@ -465,7 +459,6 @@ public class OngoingTournamentServiceMockImpl implements OngoingTournamentServic
         }
 
         cursor.close();
-        readableDatabase.close();
 
         if (gamesToReturn.isEmpty()) {
             SQLiteDatabase db = openTournamentDBHelper.getWritableDatabase();
@@ -505,8 +498,6 @@ public class OngoingTournamentServiceMockImpl implements OngoingTournamentServic
 
                 gamesToReturn.add(game);
             }
-
-            db.close();
         }
 
         return gamesToReturn;
@@ -530,7 +521,5 @@ public class OngoingTournamentServiceMockImpl implements OngoingTournamentServic
 
             db.insert(GameTable.TABLE_TOURNAMENT_GAME, null, contentValues);
         }
-
-        db.close();
     }
 }

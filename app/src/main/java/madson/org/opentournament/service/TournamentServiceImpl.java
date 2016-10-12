@@ -103,8 +103,6 @@ public class TournamentServiceImpl implements TournamentService {
 
         long newId = writableDatabase.insert(TournamentTable.TABLE_TOURNAMENTS, null, contentValues);
 
-        writableDatabase.close();
-
         return getTournamentForId(newId);
     }
 
@@ -124,7 +122,6 @@ public class TournamentServiceImpl implements TournamentService {
         }
 
         cursor.close();
-        readableDatabase.close();
 
         return tournament;
     }
@@ -178,8 +175,6 @@ public class TournamentServiceImpl implements TournamentService {
 
         writableDatabase.update(TournamentTable.TABLE_TOURNAMENTS, contentValues, "_id = ?",
             new String[] { String.valueOf(tournament.get_id()) });
-
-        writableDatabase.close();
     }
 
 
@@ -193,8 +188,6 @@ public class TournamentServiceImpl implements TournamentService {
 
         writableDatabase.update(TournamentTable.TABLE_TOURNAMENTS, contentValues, TournamentTable.COLUMN_ID + " = ?",
             new String[] { String.valueOf(tournament.get_id()) });
-
-        writableDatabase.close();
     }
 
 
@@ -211,8 +204,6 @@ public class TournamentServiceImpl implements TournamentService {
 
         writableDatabase.update(TournamentTable.TABLE_TOURNAMENTS, contentValues, TournamentTable.COLUMN_ID + " = ?",
             new String[] { String.valueOf(tournament.get_id()) });
-
-        writableDatabase.close();
 
         tournament.setActualRound(round);
         tournament.setState(Tournament.TournamentState.STARTED.name());
@@ -237,7 +228,6 @@ public class TournamentServiceImpl implements TournamentService {
         db.update(TournamentTable.TABLE_TOURNAMENTS, contentValues, "_id = ?",
             new String[] { String.valueOf(tournament.get_id()) });
 
-        db.close();
         cursor.close();
     }
 
@@ -258,7 +248,6 @@ public class TournamentServiceImpl implements TournamentService {
         db.update(TournamentTable.TABLE_TOURNAMENTS, contentValues, "_id = ?",
             new String[] { String.valueOf(tournament.get_id()) });
 
-        db.close();
         cursor.close();
     }
 
@@ -276,8 +265,6 @@ public class TournamentServiceImpl implements TournamentService {
 
         writableDatabase.update(TournamentTable.TABLE_TOURNAMENTS, contentValues, TournamentTable.COLUMN_ID + " = ?",
             new String[] { String.valueOf(tournament.get_id()) });
-
-        writableDatabase.close();
     }
 
 
@@ -301,7 +288,6 @@ public class TournamentServiceImpl implements TournamentService {
         }
 
         cursor.close();
-        readableDatabase.close();
 
         return tournaments;
     }
@@ -325,6 +311,5 @@ public class TournamentServiceImpl implements TournamentService {
         SQLiteDatabase writableDatabase = openTournamentDBHelper.getWritableDatabase();
         writableDatabase.delete(TournamentTable.TABLE_TOURNAMENTS, TournamentTable.COLUMN_ID + "  = ?",
             new String[] { String.valueOf(tournament.get_id()) });
-        writableDatabase.close();
     }
 }

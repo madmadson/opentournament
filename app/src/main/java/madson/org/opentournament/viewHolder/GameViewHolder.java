@@ -18,6 +18,10 @@ import madson.org.opentournament.R;
  */
 public class GameViewHolder extends RecyclerView.ViewHolder {
 
+    private TextView playerOneIntermediatePoints;
+    private TextView playerTwoIntermediatePoints;
+    private TextView playerOneTeam;
+    private TextView playerTwoTeam;
     private ImageView swapPlayerTwo;
     private ImageView swapPlayerOne;
     private TextView tableNumber;
@@ -53,16 +57,20 @@ public class GameViewHolder extends RecyclerView.ViewHolder {
         playerTwoCardView = (CardView) v.findViewById(R.id.game_list_player_two_card_view);
 
         playerOneNameInList = (TextView) v.findViewById(R.id.player_one_name);
+        playerOneTeam = (TextView) v.findViewById(R.id.player_one_team);
         playerOneFaction = (TextView) v.findViewById(R.id.player_one_faction);
         playerOneScore = (TextView) v.findViewById(R.id.pairing_player_one_score);
         playerOneControlPoints = (TextView) v.findViewById(R.id.pairing_player_one_control_points);
         playerOneVictoryPoints = (TextView) v.findViewById(R.id.pairing_player_one_victory_points);
+        playerOneIntermediatePoints = (TextView) v.findViewById(R.id.player_one_intermediate_points);
 
         playerTwoNameInList = (TextView) v.findViewById(R.id.player_two_name);
+        playerTwoTeam = (TextView) v.findViewById(R.id.player_two_team);
         playerTwoFaction = (TextView) v.findViewById(R.id.player_two_faction);
         playerTwoScore = (TextView) v.findViewById(R.id.pairing_player_two_score);
         playerTwoControlPoints = (TextView) v.findViewById(R.id.pairing_player_two_control_points);
         playerTwoVictoryPoints = (TextView) v.findViewById(R.id.pairing_player_two_victory_points);
+        playerTwoIntermediatePoints = (TextView) v.findViewById(R.id.player_two_intermediate_points);
     }
 
     public CardView getPlayerOneCardView() {
@@ -158,5 +166,29 @@ public class GameViewHolder extends RecyclerView.ViewHolder {
     public ImageView getSwapPlayerOne() {
 
         return swapPlayerOne;
+    }
+
+
+    public TextView getPlayerOneTeam() {
+
+        return playerOneTeam;
+    }
+
+
+    public TextView getPlayerTwoTeam() {
+
+        return playerTwoTeam;
+    }
+
+
+    public TextView getPlayerOneIntermediatePoints() {
+
+        return playerOneIntermediatePoints;
+    }
+
+
+    public TextView getPlayerTwoIntermediatePoints() {
+
+        return playerTwoIntermediatePoints;
     }
 }

@@ -2,7 +2,6 @@ package madson.org.opentournament.organize.team;
 
 import android.content.ClipData;
 import android.content.DialogInterface;
-import android.content.Intent;
 
 import android.graphics.Color;
 
@@ -15,7 +14,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 
@@ -30,7 +28,6 @@ import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Game;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
-import madson.org.opentournament.domain.TournamentTyp;
 import madson.org.opentournament.organize.EnterResultForGameDialog;
 import madson.org.opentournament.tasks.SwapPlayersTask;
 import madson.org.opentournament.utility.BaseActivity;
@@ -54,12 +51,15 @@ public class TeamGameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
     private final Drawable winnerShape;
     private final Drawable looserShape;
 
-    private List<Game> gamesForRound;
+    private List<Game> gamesInTeamMatch;
     private BaseActivity baseActivity;
+    private Tournament tournament;
 
-    public TeamGameListAdapter(BaseActivity baseActivity) {
+    public TeamGameListAdapter(BaseActivity baseActivity, Tournament tournament) {
 
-        this.gamesForRound = new ArrayList<>();
+        this.tournament = tournament;
+
+        this.gamesInTeamMatch = new ArrayList<>();
         this.baseActivity = baseActivity;
 
         enterShape = baseActivity.getResources().getDrawable(R.drawable.shape_droptarget_entered);
@@ -72,7 +72,7 @@ public class TeamGameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
 
     public void setGames(List<Game> games) {
 
-        this.gamesForRound = games;
+        this.gamesInTeamMatch = games;
 
         notifyDataSetChanged();
     }
@@ -90,12 +90,32 @@ public class TeamGameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
     @Override
     public void onBindViewHolder(GameViewHolder holder, int position) {
 
-        final Game game = gamesForRound.get(position);
+        final Game game = gamesInTeamMatch.get(position);
 
         holder.getTableNumber()
             .setText(baseActivity.getResources().getString(R.string.table_number, game.getPlaying_field()));
 
-        gameForSoloTournament(holder, game);
+        TournamentPlayer player1 = (TournamentPlayer) game.getParticipantOne();
+
+        holder.getPlayerOneNameInList()
+            .setText(baseActivity.getResources()
+                .getString(R.string.player_name_in_row, player1.getFirstName(), player1.getNickName(),
+                    player1.getLastName()));
+        holder.getPlayerOneTeam().setText(player1.getTeamName());
+        holder.getPlayerOneFaction().setText(player1.getFaction());
+
+        TournamentPlayer player2 = (TournamentPlayer) game.getParticipantTwo();
+
+        holder.getPlayerTwoNameInList()
+            .setText(baseActivity.getResources()
+                .getString(R.string.player_name_in_row, player2.getFirstName(), player2.getNickName(),
+                    player2.getLastName()));
+        holder.getPlayerTwoTeam().setText(player2.getTeamName());
+        holder.getPlayerTwoFaction().setText(player2.getFaction());
+
+        holder.getPairingRow().setOnClickListener(new OpenEnterGameResultClickListener(game));
+        holder.getPlayerOneCardView().setOnClickListener(new OpenEnterGameResultClickListener(game));
+        holder.getPlayerTwoCardView().setOnClickListener(new OpenEnterGameResultClickListener(game));
 
         holder.getPlayerOneScore()
             .setText(baseActivity.getResources().getString(R.string.game_win, game.getParticipant_one_score()));
@@ -141,27 +161,22 @@ public class TeamGameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
     }
 
 
-    private void gameForSoloTournament(GameViewHolder holder, final Game game) {
+    @Override
+    public int getItemCount() {
 
-        TournamentPlayer player1 = (TournamentPlayer) game.getParticipantOne();
+        return gamesInTeamMatch.size();
+    }
 
-        holder.getPlayerOneNameInList()
-            .setText(baseActivity.getResources()
-                .getString(R.string.player_name_in_row, player1.getFirstName(), player1.getNickName(),
-                    player1.getLastName()));
-        holder.getPlayerOneFaction().setText(player1.getFaction());
 
-        TournamentPlayer player2 = (TournamentPlayer) game.getParticipantTwo();
+    public void updateGame(Game game) {
 
-        holder.getPlayerTwoNameInList()
-            .setText(baseActivity.getResources()
-                .getString(R.string.player_name_in_row, player2.getFirstName(), player2.getNickName(),
-                    player2.getLastName()));
-        holder.getPlayerTwoFaction().setText(player2.getFaction());
+        if (gamesInTeamMatch.contains(game)) {
+            int indexOfGame = gamesInTeamMatch.indexOf(game);
 
-        holder.getPairingRow().setOnClickListener(new OpenEnterGameResultClickListener(game));
-        holder.getPlayerOneCardView().setOnClickListener(new OpenEnterGameResultClickListener(game));
-        holder.getPlayerTwoCardView().setOnClickListener(new OpenEnterGameResultClickListener(game));
+            gamesInTeamMatch.remove(game);
+            gamesInTeamMatch.add(indexOfGame, game);
+            notifyDataSetChanged();
+        }
     }
 
     private class OpenEnterGameResultClickListener implements View.OnClickListener {
@@ -180,17 +195,12 @@ public class TeamGameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
 
             Bundle resultForPairingResult = new Bundle();
             resultForPairingResult.putParcelable(EnterResultForGameDialog.BUNDLE_GAME, game);
+            resultForPairingResult.putParcelable(EnterResultForGameDialog.BUNDLE_TOURNAMENT, tournament);
             dialog.setArguments(resultForPairingResult);
 
-            FragmentManager supportFragmentManager = ((AppCompatActivity) v.getContext()).getSupportFragmentManager();
+            FragmentManager supportFragmentManager = baseActivity.getSupportFragmentManager();
             dialog.show(supportFragmentManager, "enterGameResultDialog");
         }
-    }
-
-    @Override
-    public int getItemCount() {
-
-        return gamesForRound.size();
     }
 
     private class GameLongClickEventListener implements View.OnLongClickListener {

@@ -54,6 +54,9 @@ public class Game implements Parcelable {
     private boolean finished;
     private String scenario;
 
+    private int participant_one_intermediate_points;
+    private int participant_two_intermediate_points;
+
     protected Game(Parcel in) {
 
         _id = in.readLong();
@@ -75,6 +78,8 @@ public class Game implements Parcelable {
         finished = in.readByte() != 0;
         scenario = in.readString();
         playing_field = in.readInt();
+        participant_one_intermediate_points = in.readInt();
+        participant_two_intermediate_points = in.readInt();
     }
 
 
@@ -320,6 +325,9 @@ public class Game implements Parcelable {
 
         game.setPlaying_field(cursor.getInt(15));
 
+        game.setParticipant_one_intermediate_points(cursor.getInt(16));
+        game.setParticipant_two_intermediate_points(cursor.getInt(17));
+
         return game;
     }
 
@@ -377,6 +385,8 @@ public class Game implements Parcelable {
         dest.writeByte((byte) (finished ? 1 : 0));
         dest.writeString(scenario);
         dest.writeInt(playing_field);
+        dest.writeInt(participant_one_intermediate_points);
+        dest.writeInt(participant_two_intermediate_points);
     }
 
 
@@ -389,5 +399,29 @@ public class Game implements Parcelable {
     public void setParent_UUID(String parent_UUID) {
 
         this.parent_UUID = parent_UUID;
+    }
+
+
+    public int getParticipant_one_intermediate_points() {
+
+        return participant_one_intermediate_points;
+    }
+
+
+    public void setParticipant_one_intermediate_points(int participant_one_intermediate_points) {
+
+        this.participant_one_intermediate_points = participant_one_intermediate_points;
+    }
+
+
+    public int getParticipant_two_intermediate_points() {
+
+        return participant_two_intermediate_points;
+    }
+
+
+    public void setParticipant_two_intermediate_points(int participant_two_intermediate_points) {
+
+        this.participant_two_intermediate_points = participant_two_intermediate_points;
     }
 }

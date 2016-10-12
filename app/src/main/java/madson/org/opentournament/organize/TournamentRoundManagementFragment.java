@@ -4,8 +4,6 @@ import android.content.Context;
 
 import android.os.Bundle;
 
-import android.support.annotation.Nullable;
-
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 
@@ -21,6 +19,7 @@ import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.utility.BaseActivity;
+import madson.org.opentournament.utility.TournamentEventTag;
 
 
 public class TournamentRoundManagementFragment extends Fragment implements TournamentEventListener {
@@ -123,7 +122,7 @@ public class TournamentRoundManagementFragment extends Fragment implements Tourn
 
 
     @Override
-    public void enterGameResultConfirmed(Game game) {
+    public void enterGameResultConfirmed(TournamentEventTag tag, Game game) {
     }
 
 

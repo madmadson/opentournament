@@ -6,7 +6,6 @@ import android.content.Context;
 
 import android.net.ConnectivityManager;
 
-import android.util.DisplayMetrics;
 import android.util.Log;
 
 import com.facebook.FacebookSdk;
@@ -19,7 +18,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import madson.org.opentournament.BuildConfig;
 import madson.org.opentournament.R;
 import madson.org.opentournament.about.AppInfo;
 import madson.org.opentournament.about.LibraryItem;
@@ -388,12 +386,12 @@ public abstract class BaseApplication extends Application {
     }
 
 
-    public void notifyGameResultEntered(Game gameToSave) {
+    public void notifyGameResultEntered(TournamentEventTag tag, Game gameToSave) {
 
         Set<TournamentEventListener> listeners = new HashSet<>(tournamentEventListeners);
 
         for (TournamentEventListener listener : listeners) {
-            listener.enterGameResultConfirmed(gameToSave);
+            listener.enterGameResultConfirmed(tag, gameToSave);
         }
     }
 

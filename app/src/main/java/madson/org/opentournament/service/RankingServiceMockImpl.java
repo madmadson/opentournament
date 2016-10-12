@@ -137,8 +137,19 @@ public class RankingServiceMockImpl implements RankingService {
 
                 int newTeamOneScore = teamOneRanking.getScore() + game.getParticipant_one_score();
                 teamOneRanking.setScore(newTeamOneScore);
+                teamOneRanking.setControl_points(teamOneRanking.getControl_points()
+                    + game.getParticipant_one_control_points());
+                teamOneRanking.setVictory_points(teamOneRanking.getVictory_points()
+                    + game.getParticipant_one_victory_points());
 
                 TournamentRanking teamTwoRanking = mapOfRankings.get(game.getParticipantTwoUUID());
+
+                int newTeamTwoScore = teamTwoRanking.getScore() + game.getParticipant_two_score();
+                teamTwoRanking.setScore(newTeamTwoScore);
+                teamTwoRanking.setControl_points(teamTwoRanking.getControl_points()
+                    + game.getParticipant_two_control_points());
+                teamTwoRanking.setVictory_points(teamTwoRanking.getVictory_points()
+                    + game.getParticipant_two_victory_points());
 
                 teamTwoRanking.getListOfOpponentsPlayerIds().add(teamOneRanking.getParticipantUUID());
                 teamOneRanking.getListOfOpponentsPlayerIds().add(teamTwoRanking.getParticipantUUID());
@@ -339,7 +350,7 @@ public class RankingServiceMockImpl implements RankingService {
 
         Cursor cursor = readableDatabase.query(GameTable.TABLE_TOURNAMENT_GAME, GameTable.ALL_COLS_FOR_TOURNAMENT_GAME,
                 GameTable.COLUMN_TOURNAMENT_ID + "  = ? AND " + GameTable.COLUMN_TOURNAMENT_ROUND
-                + " <= ? AND " + GameTable.COLUMN_FINISHED + " != 0  ",
+                + " <= ? AND " + GameTable.COLUMN_FINISHED + " != 0   AND " + GameTable.COLUMN_PARENT_UUID + " IS NULL",
                 new String[] { String.valueOf(tournament_id), String.valueOf(tournament_round) }, null, null, null);
 
         cursor.moveToFirst();

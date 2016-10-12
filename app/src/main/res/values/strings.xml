@@ -296,5 +296,6 @@
     <string name="teams_not_full">Some Teams are not full</string>
     <string name="player_with_same_name_already_in_tournament">Player with name already in Tournament</string>
     <string name="dialog_I_know_this">I know this</string>
+    <string name="success_save_game_result">Successfuly save Game result</string>
 
 </resources>

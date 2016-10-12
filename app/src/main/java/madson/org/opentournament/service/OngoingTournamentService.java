@@ -82,9 +82,18 @@ public interface OngoingTournamentService {
 
     /**
      * @param  tournament
-     * @param  game
+     * @param  parent_game
      *
      * @return
      */
-    List<Game> getGamesForTeamMatch(Tournament tournament, Game game);
+    List<Game> getGamesForTeamMatch(Tournament tournament, Game parent_game);
+
+
+    /**
+     * @param  gameToSave
+     * @param  tournament
+     *
+     * @return
+     */
+    Game updateTeamMatch(Game gameToSave, Tournament tournament);
 }

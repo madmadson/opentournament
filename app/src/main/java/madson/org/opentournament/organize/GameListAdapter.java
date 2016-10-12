@@ -46,6 +46,7 @@ import madson.org.opentournament.organize.team.TeamTournamentGameManagementActiv
 import madson.org.opentournament.tasks.SwapPlayersTask;
 import madson.org.opentournament.utility.BaseActivity;
 import madson.org.opentournament.utility.BaseApplication;
+import madson.org.opentournament.utility.TournamentEventTag;
 import madson.org.opentournament.viewHolder.GameViewHolder;
 
 import java.util.ArrayList;
@@ -64,6 +65,7 @@ public class GameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
     private final Drawable startShape;
     private final Drawable winnerShape;
     private final Drawable looserShape;
+    private final Drawable startedShape;
 
     private List<Game> gamesForRound;
     private BaseActivity baseActivity;
@@ -84,16 +86,28 @@ public class GameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
 
         winnerShape = baseActivity.getResources().getDrawable(R.drawable.shape_winner);
         looserShape = baseActivity.getResources().getDrawable(R.drawable.shape_looser);
+
+        startedShape = baseActivity.getResources().getDrawable(R.drawable.shape_started);
     }
 
-    public void updateGameForRound(Game game) {
+    public void updateGameForRound(TournamentEventTag tag, Game game) {
 
-        if (game.getTournament_round() == round) {
-            int indexOfGame = gamesForRound.indexOf(game);
+        if (TournamentEventTag.TEAM_TOURNAMENT_GAME_RESULT_ENTERED.equals(tag)) {
+            if (gamesForRound.contains(game)) {
+                int indexOfGame = gamesForRound.indexOf(game);
 
-            gamesForRound.remove(game);
-            gamesForRound.add(indexOfGame, game);
-            notifyDataSetChanged();
+                gamesForRound.remove(game);
+                gamesForRound.add(indexOfGame, game);
+                notifyDataSetChanged();
+            }
+        } else {
+            if (game.getTournament_round() == round) {
+                int indexOfGame = gamesForRound.indexOf(game);
+
+                gamesForRound.remove(game);
+                gamesForRound.add(indexOfGame, game);
+                notifyDataSetChanged();
+            }
         }
     }
 
@@ -198,6 +212,18 @@ public class GameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
         holder.getPlayerOneNameInList().setText(game.getParticipantOneUUID());
         holder.getPlayerTwoNameInList().setText(game.getParticipantTwoUUID());
 
+        holder.getPlayerOneFaction().setVisibility(View.GONE);
+        holder.getPlayerOneTeam().setVisibility(View.GONE);
+
+        holder.getPlayerTwoFaction().setVisibility(View.GONE);
+        holder.getPlayerTwoTeam().setVisibility(View.GONE);
+
+        holder.getPlayerOneIntermediatePoints().setVisibility(View.VISIBLE);
+        holder.getPlayerOneIntermediatePoints().setText(String.valueOf(game.getParticipant_one_intermediate_points()));
+
+        holder.getPlayerTwoIntermediatePoints().setVisibility(View.VISIBLE);
+        holder.getPlayerTwoIntermediatePoints().setText(String.valueOf(game.getParticipant_two_intermediate_points()));
+
         holder.getPairingRow().setOnClickListener(new OpenTournamentTeamManagementClickListener(tournament, game));
         holder.getPlayerOneCardView()
             .setOnClickListener(new OpenTournamentTeamManagementClickListener(tournament, game));
@@ -276,6 +302,7 @@ public class GameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
 
             Bundle resultForPairingResult = new Bundle();
             resultForPairingResult.putParcelable(EnterResultForGameDialog.BUNDLE_GAME, game);
+            resultForPairingResult.putParcelable(EnterResultForGameDialog.BUNDLE_TOURNAMENT, tournament);
             dialog.setArguments(resultForPairingResult);
 
             FragmentManager supportFragmentManager = ((AppCompatActivity) v.getContext()).getSupportFragmentManager();
@@ -300,7 +327,6 @@ public class GameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
 
             Intent intent = new Intent(baseActivity, TeamTournamentGameManagementActivity.class);
 
-            // avoid go back to planned
             intent.putExtra(TeamTournamentGameManagementActivity.EXTRA_TOURNAMENT, tournament);
             intent.putExtra(TeamTournamentGameManagementActivity.EXTRA_GAME, game);
             baseActivity.startActivity(intent);

@@ -29,6 +29,7 @@ import madson.org.opentournament.organize.setup.TournamentPlayerListFragment;
 import madson.org.opentournament.organize.setup.TournamentSetupFragment;
 import madson.org.opentournament.tasks.LoadTournamentTask;
 import madson.org.opentournament.utility.BaseActivity;
+import madson.org.opentournament.utility.TournamentEventTag;
 
 
 /**
@@ -161,7 +162,7 @@ public class TournamentOrganizeActivity extends BaseActivity implements Tourname
 
 
     @Override
-    public void enterGameResultConfirmed(Game game) {
+    public void enterGameResultConfirmed(TournamentEventTag tag, Game game) {
 
         // nothing
     }

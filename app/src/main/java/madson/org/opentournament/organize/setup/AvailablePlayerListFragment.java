@@ -41,6 +41,7 @@ import madson.org.opentournament.service.TournamentPlayerService;
 import madson.org.opentournament.tasks.LoadAllLocalPlayerTask;
 import madson.org.opentournament.utility.BaseActivity;
 import madson.org.opentournament.utility.BaseFragment;
+import madson.org.opentournament.utility.TournamentEventTag;
 
 import java.util.List;
 
@@ -229,7 +230,7 @@ public class AvailablePlayerListFragment extends BaseFragment implements Tournam
 
 
     @Override
-    public void enterGameResultConfirmed(Game game) {
+    public void enterGameResultConfirmed(TournamentEventTag tag, Game game) {
     }
 
 

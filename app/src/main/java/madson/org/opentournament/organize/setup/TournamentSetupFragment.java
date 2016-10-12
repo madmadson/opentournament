@@ -1,18 +1,14 @@
 package madson.org.opentournament.organize.setup;
 
 import android.content.Context;
-import android.content.DialogInterface;
 
 import android.os.Bundle;
 
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-
-import android.support.v7.app.AlertDialog;
 
 import android.util.Log;
 
@@ -26,10 +22,8 @@ import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.organize.TournamentEventListener;
-import madson.org.opentournament.tasks.DropTournamentPlayerFromTournamentTask;
-import madson.org.opentournament.tasks.RemoveTournamentPlayerFromTournamentTask;
 import madson.org.opentournament.utility.BaseActivity;
-import madson.org.opentournament.utility.BaseApplication;
+import madson.org.opentournament.utility.TournamentEventTag;
 
 
 /**
@@ -210,6 +204,6 @@ public class TournamentSetupFragment extends Fragment implements TournamentEvent
 
 
     @Override
-    public void enterGameResultConfirmed(Game game) {
+    public void enterGameResultConfirmed(TournamentEventTag tag, Game game) {
     }
 }

@@ -45,6 +45,7 @@ import madson.org.opentournament.tasks.LoadTournamentPlayerTeamTask;
 import madson.org.opentournament.tasks.SaveDummyTournamentPlayerTask;
 import madson.org.opentournament.utility.BaseActivity;
 import madson.org.opentournament.utility.BaseApplication;
+import madson.org.opentournament.utility.TournamentEventTag;
 
 
 /**
@@ -352,7 +353,7 @@ public class TournamentPlayerListFragment extends Fragment implements Tournament
 
 
     @Override
-    public void enterGameResultConfirmed(Game game) {
+    public void enterGameResultConfirmed(TournamentEventTag tag, Game game) {
     }
 
 

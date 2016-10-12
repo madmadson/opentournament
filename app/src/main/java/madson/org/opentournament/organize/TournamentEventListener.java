@@ -4,6 +4,7 @@ import madson.org.opentournament.domain.Game;
 import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
+import madson.org.opentournament.utility.TournamentEventTag;
 
 
 /**
@@ -22,7 +23,7 @@ public interface TournamentEventListener {
     void pairingChanged(Game game1, Game game2);
 
 
-    void enterGameResultConfirmed(Game game);
+    void enterGameResultConfirmed(TournamentEventTag tag, Game game);
 
 
     void addTournamentPlayer(TournamentPlayer tournamentPlayer);

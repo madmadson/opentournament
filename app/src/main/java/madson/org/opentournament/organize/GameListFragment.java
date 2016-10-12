@@ -7,17 +7,13 @@ import android.os.Bundle;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.view.MotionEventCompat;
 
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 
-import android.util.Log;
-
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -36,6 +32,7 @@ import madson.org.opentournament.tasks.LoadGameListTask;
 import madson.org.opentournament.tasks.TournamentEndTask;
 import madson.org.opentournament.tasks.TournamentUploadTask;
 import madson.org.opentournament.utility.BaseActivity;
+import madson.org.opentournament.utility.TournamentEventTag;
 
 
 /**
@@ -283,15 +280,15 @@ public class GameListFragment extends Fragment implements TournamentEventListene
     @Override
     public void pairingChanged(Game game1, Game game2) {
 
-        gameListAdapter.updateGameForRound(game1);
-        gameListAdapter.updateGameForRound(game2);
+        gameListAdapter.updateGameForRound(null, game1);
+        gameListAdapter.updateGameForRound(null, game2);
     }
 
 
     @Override
-    public void enterGameResultConfirmed(Game game) {
+    public void enterGameResultConfirmed(TournamentEventTag tag, Game game) {
 
-        gameListAdapter.updateGameForRound(game);
+        gameListAdapter.updateGameForRound(tag, game);
     }
 
 

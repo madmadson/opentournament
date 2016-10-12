@@ -9,6 +9,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.Parcelable;
 
 import android.support.v4.app.DialogFragment;
 
@@ -26,9 +27,11 @@ import android.widget.TextView;
 
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Game;
+import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.tasks.SaveGameResultTask;
 import madson.org.opentournament.utility.BaseActivity;
+import madson.org.opentournament.utility.TournamentEventTag;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -42,6 +45,8 @@ import java.util.TimerTask;
 public class EnterResultForGameDialog extends DialogFragment {
 
     public static final String BUNDLE_GAME = "game";
+    public static final String BUNDLE_TOURNAMENT = "tournament";
+
     private static final Integer MIN_CONTROL_POINTS = 0;
     private static final Integer MAX_CONTROL_POINTS = 5;
 
@@ -60,7 +65,9 @@ public class EnterResultForGameDialog extends DialogFragment {
         DECREASE
     }
 
-    private BaseActivity activity;
+    private Tournament tournament;
+
+    private BaseActivity baseActivity;
 
     private EditText text_player_two_victory_points;
     private EditText text_player_two_control_points;
@@ -74,7 +81,7 @@ public class EnterResultForGameDialog extends DialogFragment {
 
         super.onAttach(context);
 
-        activity = (BaseActivity) getActivity();
+        baseActivity = (BaseActivity) getActivity();
     }
 
 
@@ -85,6 +92,7 @@ public class EnterResultForGameDialog extends DialogFragment {
 
         if (bundle != null) {
             game = bundle.getParcelable(BUNDLE_GAME);
+            tournament = bundle.getParcelable(BUNDLE_TOURNAMENT);
         }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -158,23 +166,13 @@ public class EnterResultForGameDialog extends DialogFragment {
             TournamentPlayer player1 = (TournamentPlayer) game.getParticipantOne();
             TournamentPlayer player2 = (TournamentPlayer) game.getParticipantTwo();
 
-            if (player1 != null) {
-                text_name_player_one.setText(activity.getResources()
-                    .getString(R.string.player_name_in_row, player1.getFirstName(), player1.getNickName(),
-                        player1.getLastName()));
-            } else {
-                text_name_player_one.setText(activity.getResources()
-                    .getString(R.string.player_name_in_row, "Dummy", "THE KING", "Player"));
-            }
+            text_name_player_one.setText(baseActivity.getResources()
+                .getString(R.string.player_name_in_row, player1.getFirstName(), player1.getNickName(),
+                    player1.getLastName()));
 
-            if (player2 != null) {
-                text_name_player_two.setText(activity.getResources()
-                    .getString(R.string.player_name_in_row, player2.getFirstName(), player2.getNickName(),
-                        player2.getLastName()));
-            } else {
-                text_name_player_two.setText(activity.getResources()
-                    .getString(R.string.player_name_in_row, "Dummy", "THE HAMMER", "Player"));
-            }
+            text_name_player_two.setText(baseActivity.getResources()
+                .getString(R.string.player_name_in_row, player2.getFirstName(), player2.getNickName(),
+                    player2.getLastName()));
 
             if (game.getParticipant_one_score() == 1) {
                 setPlayerToWinner(1, text_name_player_one, text_name_player_two);
@@ -426,7 +424,7 @@ public class EnterResultForGameDialog extends DialogFragment {
                     Log.i(this.getClass().getName(), "click confirm result of game");
 
                     if (game.getParticipant_one_score() == 0 && game.getParticipant_two_score() == 0) {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+                        AlertDialog.Builder builder = new AlertDialog.Builder(baseActivity);
 
                         builder.setTitle(R.string.dialof_confirm_draw)
                         .setPositiveButton(R.string.dialog_save, new DialogInterface.OnClickListener() {
@@ -462,6 +460,12 @@ public class EnterResultForGameDialog extends DialogFragment {
         game.setParticipant_two_control_points(Integer.parseInt(text_player_two_control_points.getText().toString()));
         game.setParticipant_two_victory_points(Integer.parseInt(text_player_two_victory_points.getText().toString()));
 
-        new SaveGameResultTask(activity.getBaseApplication(), game, confirm_dialog, null).execute();
+        if (game.getParent_UUID() == null) {
+            new SaveGameResultTask(TournamentEventTag.GAME_RESULT_ENTERED, baseActivity, game, confirm_dialog, null,
+                tournament).execute();
+        } else {
+            new SaveGameResultTask(TournamentEventTag.TEAM_TOURNAMENT_GAME_RESULT_ENTERED, baseActivity, game,
+                confirm_dialog, null, tournament).execute();
+        }
     }
 }

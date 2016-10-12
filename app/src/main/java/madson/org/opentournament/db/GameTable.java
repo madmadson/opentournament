@@ -29,6 +29,8 @@ public class GameTable {
      * 11: game finished
      * 12: scenario
      * 13: playing_field
+     * 14: participant_one_intermediate_score
+     * 15: participant_two_intermediate_score
      */
     public static final String[] ALL_COLS_FOR_TOURNAMENT_GAME = {
         GameTable.COLUMN_ID, GameTable.COLUMN_UUID, GameTable.COLUMN_PARENT_UUID, GameTable.COLUMN_TOURNAMENT_ID,
@@ -37,7 +39,8 @@ public class GameTable {
         GameTable.COLUMN_PARTICIPANT_ONE_VICTORY_POINTS, GameTable.COLUMN_PARTICIPANT_TWO_UUID,
         GameTable.COLUMN_PARTICIPANT_TWO_SCORE, GameTable.COLUMN_PARTICIPANT_TWO_CONTROL_POINTS,
         GameTable.COLUMN_PARTICIPANT_TWO_VICTORY_POINTS, GameTable.COLUMN_FINISHED, GameTable.COLUMN_SCENARIO,
-        GameTable.COLUMN_PLAYING_FIELD
+        GameTable.COLUMN_PLAYING_FIELD, GameTable.COLUMN_PARTICIPANT_ONE_INTERMEDIATE_POINTS,
+        GameTable.COLUMN_PARTICIPANT_TWO_INTERMEDIATE_POINTS
     };
 
     public static final String TABLE_TOURNAMENT_GAME = "game";
@@ -64,6 +67,9 @@ public class GameTable {
     public static final String COLUMN_SCENARIO = "scenario";
     public static final String COLUMN_PLAYING_FIELD = "playing_field";
 
+    public static final String COLUMN_PARTICIPANT_ONE_INTERMEDIATE_POINTS = "participant_one_intermediate_points";
+    public static final String COLUMN_PARTICIPANT_TWO_INTERMEDIATE_POINTS = "participant_two_intermediate_points";
+
     public static void createTable(SQLiteDatabase db) {
 
         Log.i(GameTable.class.getName(), "create warmachine_tournament_pairing table");
@@ -77,7 +83,8 @@ public class GameTable {
             + " TEXT, " + COLUMN_PARTICIPANT_TWO_SCORE + " INTEGER, " + COLUMN_PARTICIPANT_TWO_CONTROL_POINTS
             + " INTEGER, " + COLUMN_PARTICIPANT_TWO_VICTORY_POINTS + " INTEGER, " + COLUMN_FINISHED + " INTEGER, "
             + COLUMN_SCENARIO
-            + " TEXT, " + COLUMN_PLAYING_FIELD + " INTEGER)");
+            + " TEXT, " + COLUMN_PLAYING_FIELD + " INTEGER, " + COLUMN_PARTICIPANT_ONE_INTERMEDIATE_POINTS
+            + " INTEGER, " + COLUMN_PARTICIPANT_TWO_INTERMEDIATE_POINTS + " INTEGER)");
     }
 
 

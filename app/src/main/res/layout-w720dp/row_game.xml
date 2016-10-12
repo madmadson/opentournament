@@ -75,6 +75,16 @@
                     android:gravity="center_vertical" />
 
                 <TextView
+                    android:id="@+id/player_one_team"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="@dimen/small_tick"
+                    android:layout_marginTop="@dimen/small_tick"
+                    android:gravity="center_vertical" />
+
+
+                <TextView
                     android:id="@+id/player_one_faction"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -83,6 +93,17 @@
                     android:layout_marginTop="@dimen/small_tick"
                     android:gravity="center_vertical"
                     android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <TextView
+                    android:id="@+id/player_one_intermediate_points"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="@dimen/small_tick"
+                    android:layout_marginTop="@dimen/small_tick"
+                    android:gravity="center_vertical"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:visibility="gone"/>
 
                 <View
                     android:layout_width="match_parent"
@@ -158,6 +179,15 @@
                     android:gravity="center_vertical" />
 
                 <TextView
+                    android:id="@+id/player_two_team"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="@dimen/small_tick"
+                    android:layout_marginTop="@dimen/small_tick"
+                    android:gravity="center_vertical" />
+
+                <TextView
                     android:id="@+id/player_two_faction"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -166,6 +196,17 @@
                     android:layout_marginTop="@dimen/small_tick"
                     android:gravity="center_vertical"
                     android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <TextView
+                    android:id="@+id/player_two_intermediate_points"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="@dimen/small_tick"
+                    android:layout_marginTop="@dimen/small_tick"
+                    android:gravity="center_vertical"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:visibility="gone"/>
 
                 <View
                     android:layout_width="match_parent"

@@ -13,22 +13,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import android.widget.ImageButton;
-import android.widget.TextView;
-
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Game;
+import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.Tournament;
-import madson.org.opentournament.organize.GameListAdapter;
+import madson.org.opentournament.domain.TournamentPlayer;
+import madson.org.opentournament.organize.TournamentEventListener;
 import madson.org.opentournament.tasks.LoadGameListForTeamMatchTask;
-import madson.org.opentournament.tasks.LoadGameListTask;
 import madson.org.opentournament.utility.BaseActivity;
+import madson.org.opentournament.utility.TournamentEventTag;
 
 
 /**
  * @author  Tobias Matt - tmatt@contargo.net
  */
-public class TeamGameListFragment extends Fragment {
+public class TeamGameListFragment extends Fragment implements TournamentEventListener {
 
     public static final String BUNDLE_TOURNAMENT = "tournament";
     public static final String BUNDLE_GAME = "game";
@@ -43,6 +42,15 @@ public class TeamGameListFragment extends Fragment {
 
         super.onAttach(context);
         baseActivity = (BaseActivity) getActivity();
+        baseActivity.getBaseApplication().registerTournamentEventListener(this);
+    }
+
+
+    @Override
+    public void onDetach() {
+
+        super.onDetach();
+        baseActivity.getBaseApplication().unregisterTournamentEventListener(this);
     }
 
 
@@ -81,12 +89,66 @@ public class TeamGameListFragment extends Fragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(linearLayoutManager);
 
-        gameListAdapter = new TeamGameListAdapter(baseActivity);
+        gameListAdapter = new TeamGameListAdapter(baseActivity, tournament);
         recyclerView.setAdapter(gameListAdapter);
 
         new LoadGameListForTeamMatchTask(baseActivity.getBaseApplication(), tournament, game, gameListAdapter)
             .execute();
 
         return view;
+    }
+
+
+    @Override
+    public void startRound(int roundToStart, Tournament tournament) {
+    }
+
+
+    @Override
+    public void pairRoundAgain(int round_for_pairing) {
+    }
+
+
+    @Override
+    public void pairingChanged(Game game1, Game game2) {
+    }
+
+
+    @Override
+    public void enterGameResultConfirmed(TournamentEventTag tag, Game game) {
+
+        if (TournamentEventTag.TEAM_TOURNAMENT_GAME_RESULT_ENTERED.equals(tag)) {
+            gameListAdapter.updateGame(game);
+        }
+    }
+
+
+    @Override
+    public void addTournamentPlayer(TournamentPlayer tournamentPlayer) {
+    }
+
+
+    @Override
+    public void removeTournamentPlayer(TournamentPlayer tournamentPlayer) {
+    }
+
+
+    @Override
+    public void addPlayerToTournament(Player player) {
+    }
+
+
+    @Override
+    public void removeAvailablePlayer(Player player) {
+    }
+
+
+    @Override
+    public void updateTournamentPlayer(TournamentPlayer updatedPLayer, String oldTeamName) {
+    }
+
+
+    @Override
+    public void addRegistration(TournamentPlayer player) {
     }
 }

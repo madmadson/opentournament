@@ -1,5 +1,7 @@
 package madson.org.opentournament.tasks;
 
+import android.content.DialogInterface;
+
 import android.os.AsyncTask;
 
 import android.support.design.widget.Snackbar;
@@ -17,6 +19,7 @@ import madson.org.opentournament.service.TournamentPlayerService;
 import madson.org.opentournament.service.TournamentService;
 import madson.org.opentournament.utility.BaseActivity;
 
+import java.util.List;
 import java.util.UUID;
 
 
@@ -39,6 +42,9 @@ public class SaveTournamentPlayerTask extends AsyncTask<Void, Void, Void> {
     private String lastname;
     private final String teamname;
     private String faction;
+    private boolean playerWithSameNAmeAlreadyIsInTournament;
+    private TournamentPlayerService tournamentPlayerService;
+    private TournamentService tournamentService;
 
     public SaveTournamentPlayerTask(BaseActivity baseActivity, Player player, Tournament tournament, AlertDialog dialog,
         String firstname, String nickname, String lastname, String teamName, String faction) {
@@ -59,10 +65,9 @@ public class SaveTournamentPlayerTask extends AsyncTask<Void, Void, Void> {
     @Override
     protected Void doInBackground(Void... params) {
 
-        TournamentPlayerService tournamentPlayerService = baseActivity.getBaseApplication()
-                .getTournamentPlayerService();
+        tournamentPlayerService = baseActivity.getBaseApplication().getTournamentPlayerService();
 
-        TournamentService tournamentService = baseActivity.getBaseApplication().getTournamentService();
+        tournamentService = baseActivity.getBaseApplication().getTournamentService();
 
         tournamentPlayer = new TournamentPlayer();
 
@@ -102,8 +107,24 @@ public class SaveTournamentPlayerTask extends AsyncTask<Void, Void, Void> {
             tournamentPlayer.setPlayerUUID(uuid);
         }
 
-        tournamentPlayerService.addTournamentPlayerToTournament(tournamentPlayer, tournament);
-        tournamentService.increaseActualPlayerForTournament(tournament);
+        List<TournamentPlayer> allPlayersForTournament = tournamentPlayerService.getAllPlayersForTournament(tournament);
+
+        playerWithSameNAmeAlreadyIsInTournament = false;
+
+        for (TournamentPlayer tournamentPlayer1 : allPlayersForTournament) {
+            if (tournamentPlayer1.getFirstName().equals(tournamentPlayer.getFirstName())
+                    && tournamentPlayer1.getNickName().equals(tournamentPlayer.getNickName())
+                    && tournamentPlayer1.getLastName().equals(tournamentPlayer.getLastName())) {
+                playerWithSameNAmeAlreadyIsInTournament = true;
+
+                break;
+            }
+        }
+
+        if (!playerWithSameNAmeAlreadyIsInTournament) {
+            tournamentPlayerService.addTournamentPlayerToTournament(tournamentPlayer, tournament);
+            tournamentService.increaseActualPlayerForTournament(tournament);
+        }
 
         return null;
     }
@@ -113,6 +134,29 @@ public class SaveTournamentPlayerTask extends AsyncTask<Void, Void, Void> {
     protected void onPostExecute(Void aVoid) {
 
         super.onPostExecute(aVoid);
+
+        if (!playerWithSameNAmeAlreadyIsInTournament) {
+            onPostExecuteDoing();
+        } else {
+            AlertDialog.Builder builder = new AlertDialog.Builder(baseActivity);
+            builder.setTitle(R.string.player_with_same_name_already_in_tournament)
+                .setPositiveButton(R.string.dialog_I_know_this, new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                                tournamentPlayerService.addTournamentPlayerToTournament(tournamentPlayer, tournament);
+                                tournamentService.increaseActualPlayerForTournament(tournament);
+                                onPostExecuteDoing();
+                            }
+                        })
+                .setNegativeButton(R.string.dialog_cancel, null)
+                .show();
+        }
+    }
+
+
+    private void onPostExecuteDoing() {
 
         baseActivity.getBaseApplication().notifyAddTournamentPlayer(tournamentPlayer);
 

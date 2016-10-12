@@ -209,7 +209,6 @@ public class OrganizedTournamentEditDialog extends DialogFragment {
                 tournamentTypeTeamRadio.setChecked(true);
                 teamsizeLayout.setVisibility(View.VISIBLE);
                 teamsize.setText(String.valueOf(tournament.getTeamSize()));
-                teamsize.setEnabled(false);
             }
 
             tournamentTypeSoloRadio.setEnabled(false);

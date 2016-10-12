@@ -12,6 +12,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
@@ -38,9 +39,9 @@ import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.domain.TournamentTyp;
-import madson.org.opentournament.organize.ConfirmPairingNewRoundDialog;
 import madson.org.opentournament.organize.TournamentEventListener;
 import madson.org.opentournament.tasks.AddDummyPlayerTask;
+import madson.org.opentournament.tasks.CheckTeamTournamentStartedTask;
 import madson.org.opentournament.tasks.LoadTournamentPlayerTask;
 import madson.org.opentournament.tasks.LoadTournamentPlayerTeamTask;
 import madson.org.opentournament.utility.BaseActivity;
@@ -179,7 +180,11 @@ public class TournamentPlayerListFragment extends Fragment implements Tournament
                 @Override
                 public void onClick(View v) {
 
-                    startTournamentClicked();
+                    if (tournament.getTournamentTyp().equals(TournamentTyp.SOLO.name())) {
+                        startSoloTournamentClicked();
+                    } else {
+                        startTeamTournamentClicked();
+                    }
                 }
             });
 
@@ -213,7 +218,7 @@ public class TournamentPlayerListFragment extends Fragment implements Tournament
     }
 
 
-    private void startTournamentClicked() {
+    private void startSoloTournamentClicked() {
 
         if (tournamentPlayerListAdapter.getItemCount() == 0) {
             Snackbar snackbar = Snackbar.make(((BaseActivity) getActivity()).getCoordinatorLayout(),
@@ -224,7 +229,8 @@ public class TournamentPlayerListFragment extends Fragment implements Tournament
             snackbar.show();
         } else if (tournamentPlayerListAdapter.getItemCount() % 2 == 1) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-            builder.setTitle(R.string.uneven_player_message)
+            builder.setTitle(R.string.uneven_player_message_title)
+                .setView(R.layout.dialog_uneven_player_view)
                 .setPositiveButton(R.string.dialog_confirm, new DialogInterface.OnClickListener() {
 
                             @Override
@@ -246,6 +252,12 @@ public class TournamentPlayerListFragment extends Fragment implements Tournament
             FragmentManager supportFragmentManager = getActivity().getSupportFragmentManager();
             dialog.show(supportFragmentManager, "confirm start tournament");
         }
+    }
+
+
+    private void startTeamTournamentClicked() {
+
+        new CheckTeamTournamentStartedTask(baseActivity, tournament).execute();
     }
 
 

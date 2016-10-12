@@ -206,7 +206,8 @@
     <string name="pairing_option_player_not_play_twice_against_each_other">Player don\'t play twice against each other</string>
     <string name="pairing_option_player_with_same_team_not_play_against_each_other">Player in same team don\'t play against each other</string>
     
-    <string name="uneven_player_message">Uneven players in tournament. You can\'t start a tournament with uneven amount of players. Should a dummy tournamentPlayer be inserted for you?</string>
+    <string name="uneven_player_message_title">Uneven Players in Tournament.</string>
+    <string name="uneven_player_message"> You can\'t start a Tournament with uneven amount of players.\n Should a dummy TournamentPlayer be inserted for you?</string>
     
     <string name="not_all_games_finished_next_round">Not all games are finished. Please insert results before pair next round.</string>
     <string name="not_all_games_finished_end_tournament">Not all games are finished. Please insert all results before end tournament.</string>
@@ -291,5 +292,9 @@
     <string name="title_online_tournaments_demo">a</string>
     <string name="registered_tournament_player_heading">Players Registered</string>
     <string name="nav_available_players">Available Players</string>
+    <string name="uneven_teams">Uneven Teams. Please add another Team</string>
+    <string name="teams_not_full">Some Teams are not full</string>
+    <string name="player_with_same_name_already_in_tournament">Player with name already in Tournament</string>
+    <string name="dialog_I_know_this">I know this</string>
 
 </resources>

@@ -1,6 +1,7 @@
 package madson.org.opentournament.organize.setup;
 
 import android.content.Context;
+import android.content.DialogInterface;
 
 import android.graphics.Color;
 
@@ -10,6 +11,7 @@ import android.support.design.widget.Snackbar;
 
 import android.support.v4.app.FragmentManager;
 
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 
 import android.util.Log;
@@ -27,6 +29,8 @@ import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.domain.TournamentTeam;
 import madson.org.opentournament.online.RegisterTournamentPlayerDialog;
+import madson.org.opentournament.tasks.DropTournamentPlayerFromTournamentTask;
+import madson.org.opentournament.tasks.RemoveTournamentPlayerFromTournamentTask;
 import madson.org.opentournament.utility.BaseActivity;
 
 import java.util.ArrayList;
@@ -146,6 +150,9 @@ public class TournamentPlayerTeamListAdapter extends BaseExpandableListAdapter {
             }
 
             View layout = convertView.findViewById(R.id.expandableList_layout);
+            TextView teamNumber = (TextView) convertView.findViewById(R.id.expandableList_team_number);
+
+            teamNumber.setText(String.valueOf(groupPosition + 1));
 
             if (groupPosition % 2 == 0) {
                 layout.setBackgroundColor(Color.LTGRAY);
@@ -270,6 +277,53 @@ public class TournamentPlayerTeamListAdapter extends BaseExpandableListAdapter {
                 editIcon.setVisibility(View.GONE);
                 addListIcon.setVisibility(View.GONE);
             }
+
+            card.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+
+                        if (tournament.getActualRound() == 0) {
+                            AlertDialog.Builder builder = new AlertDialog.Builder(baseActivity);
+                            final AlertDialog confirmDialog = builder.setTitle(
+                                        R.string.confirm_remove_tournament_player)
+                                .setPositiveButton(R.string.dialog_confirm, new DialogInterface.OnClickListener() {
+
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                                                Log.i(this.getClass().getName(),
+                                                    "removePlayer tournamentPlayer from tournament");
+
+                                                new RemoveTournamentPlayerFromTournamentTask(baseActivity, tournament,
+                                                    tournamentPlayer).execute();
+                                            }
+                                        })
+                                .setNeutralButton(R.string.dialog_cancel, null)
+                                .create();
+                            confirmDialog.show();
+                        } else {
+                            AlertDialog.Builder builder = new AlertDialog.Builder(baseActivity);
+                            final AlertDialog confirmDialog = builder.setTitle(R.string.confirm_drop_tournament_player)
+                                .setPositiveButton(R.string.dialog_confirm, new DialogInterface.OnClickListener() {
+
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                                                tournamentPlayer.setDroppedInRound(tournament.getActualRound());
+                                                new DropTournamentPlayerFromTournamentTask(
+                                                    baseActivity.getBaseApplication(), tournament, tournamentPlayer)
+                                                .execute();
+                                                updateTournamentPlayer(tournamentPlayer,
+                                                    tournamentPlayer.getTeamName());
+                                            }
+                                        })
+                                .setNeutralButton(R.string.dialog_cancel, null)
+                                .create();
+                            confirmDialog.show();
+                        }
+                    }
+                });
         }
 
         return convertView;

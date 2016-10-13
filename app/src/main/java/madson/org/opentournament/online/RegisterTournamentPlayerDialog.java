@@ -134,7 +134,7 @@ public class RegisterTournamentPlayerDialog extends DialogFragment {
             team_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
             DatabaseReference reference = FirebaseDatabase.getInstance()
-                    .getReference(FirebaseReferences.TOURNAMENT_REGISTRATIONS + "/" + tournament.getOnlineUUID());
+                    .getReference(FirebaseReferences.TOURNAMENT_REGISTRATIONS + "/" + tournament.getUUID());
 
             teamnameMap = new HashMap<>();
 
@@ -345,7 +345,7 @@ public class RegisterTournamentPlayerDialog extends DialogFragment {
 
                             DatabaseReference reference = FirebaseDatabase.getInstance()
                                 .getReference(
-                                    FirebaseReferences.TOURNAMENT_REGISTRATIONS + "/" + tournament.getOnlineUUID() + "/"
+                                    FirebaseReferences.TOURNAMENT_REGISTRATIONS + "/" + tournament.getUUID() + "/"
                                     + player.getUUID());
 
                             reference.setValue(tournamentPlayer);

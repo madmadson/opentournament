@@ -55,14 +55,6 @@ public class TournamentOrganizeActivity extends BaseActivity implements Tourname
         super.onDestroy();
 
         getBaseApplication().unregisterTournamentEventListener(this);
-    }
-
-
-    @Override
-    protected void onNewIntent(Intent intent) {
-
-        super.onNewIntent(intent);
-
         mSectionsPagerAdapter = null;
         mViewPager = null;
     }

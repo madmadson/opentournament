@@ -1,49 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" 
-    android:padding="@dimen/main_tick"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="@dimen/main_tick">
 
-    <Button
-        android:id="@+id/register_for_tournament_button"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:id="@+id/actions"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="@dimen/main_tick"
-        android:layout_marginBottom="@dimen/main_tick"
-        android:background="@color/colorPrimaryDark"
-        android:padding="@dimen/halve_tick"
-        android:text="@string/register_for_tournament"
-        android:textColor="@color/colorTextIcon" />
+        android:orientation="horizontal"
+        android:paddingBottom="@dimen/halve_tick"
+        android:paddingTop="@dimen/halve_tick">
+
+        <Button
+            android:id="@+id/register_for_tournament_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/main_tick"
+            android:layout_marginTop="@dimen/main_tick"
+            android:background="@color/colorPrimaryDark"
+            android:padding="@dimen/halve_tick"
+            android:text="@string/register_for_tournament"
+            android:textColor="@color/colorTextIcon" />
+        
+        <ImageView
+            android:id="@+id/solo_tournament_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/main_tick"
+            android:layout_toRightOf="@id/register_for_tournament_button"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_person_black_48dp"
+            android:tint="@color/colorPrimaryDark" />
+
+        <ImageView
+            android:id="@+id/team_tournament_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/main_tick"
+            android:layout_toRightOf="@id/solo_tournament_icon"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_people_black_48dp"
+            android:tint="@color/colorPrimaryDark" />
+
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/no_tournament_players"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/actions"
+        android:layout_centerHorizontal="true"
         android:layout_centerInParent="true"
         android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@+id/register_for_tournament_button"
+        android:text="@string/no_tournament_players"
         android:textStyle="bold"
-        android:text="@string/no_tournament_players" 
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
     <ProgressBar
         android:id="@+id/progressBar"
         style="?android:attr/progressBarStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/register_for_tournament_button"
+        android:layout_below="@+id/actions"
+        android:layout_centerHorizontal="true"
         android:layout_centerInParent="true"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerVertical="true" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/tournament_player_list_recycler_view"
-        android:layout_below="@+id/register_for_tournament_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/actions"
         android:scrollbars="vertical" />
-    
+
+    <ExpandableListView
+        android:id="@+id/tournament_teams_expandableList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/actions"
+        android:scrollbars="vertical" />
+
 </RelativeLayout>

@@ -60,8 +60,6 @@ public class RankingServiceMockImpl implements RankingService {
     @Override
     public List<TournamentRanking> getTournamentRankingForRound(Tournament tournament, int round) {
 
-        Log.i(this.getClass().getName(), "get ranking for round -> for ranking list/ final standings");
-
         Map<String, TournamentPlayer> allPlayerMapForTournament = tournamentPlayerService.getAllPlayerMapForTournament(
                 tournament);
 
@@ -81,6 +79,11 @@ public class RankingServiceMockImpl implements RankingService {
 
             tournamentRanking.setTournamentParticipant(allPlayerMapForTournament.get(
                     tournamentRanking.getParticipantUUID()));
+
+            if (tournament.getTournamentTyp().equals(TournamentTyp.SOLO.name())) {
+                tournamentRanking.setTournamentPlayer(allPlayerMapForTournament.get(
+                        tournamentRanking.getParticipantUUID()));
+            }
 
             rankingsForRound.add(tournamentRanking);
             cursor.moveToNext();
@@ -266,7 +269,7 @@ public class RankingServiceMockImpl implements RankingService {
         int actualRound = tournament.getActualRound();
 
         DatabaseReference referenceForRankingToDelete = FirebaseDatabase.getInstance()
-                .getReference(FirebaseReferences.TOURNAMENT_RANKINGS + "/" + tournament.getOnlineUUID());
+                .getReference(FirebaseReferences.TOURNAMENT_RANKINGS + "/" + tournament.getUUID());
         referenceForRankingToDelete.removeValue();
 
         for (int i = 1; i <= actualRound; i++) {
@@ -278,7 +281,7 @@ public class RankingServiceMockImpl implements RankingService {
                 UUID uuid = UUID.randomUUID();
 
                 DatabaseReference referenceForRankings = FirebaseDatabase.getInstance()
-                        .getReference(FirebaseReferences.TOURNAMENT_RANKINGS + "/" + tournament.getOnlineUUID()
+                        .getReference(FirebaseReferences.TOURNAMENT_RANKINGS + "/" + tournament.getUUID()
                             + "/" + i + "/" + uuid);
 
                 // for sorting after insert

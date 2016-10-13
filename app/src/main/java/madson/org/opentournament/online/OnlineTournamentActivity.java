@@ -121,7 +121,7 @@ public class OnlineTournamentActivity extends BaseActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 Tournament tournament = dataSnapshot.getValue(Tournament.class);
-                tournament.setOnlineUUID(tournament_uuid);
+                tournament.setUuid(tournament_uuid);
 
                 if (supportActionBar != null) {
                     supportActionBar.setTitle(tournament.getName());
@@ -168,18 +168,14 @@ public class OnlineTournamentActivity extends BaseActivity {
 
             // list of all players
             if (position == 0) {
-                if (tournament.getTournamentTyp().equals(TournamentTyp.SOLO.name())) {
-                    return OnlineTournamentPlayerListFragment.newInstance(tournament_uuid);
-                } else {
-                    return OnlineTournamentTeamListFragment.newInstance(tournament_uuid);
-                }
+                return OnlineTournamentPlayerListFragment.newInstance(tournament);
             } else if (tournament.getState().equals(Tournament.TournamentState.FINISHED.name())
                     && tournament.getActualRound() == round) {
                 return OnlineRankingListFragment.newInstance(round, tournament);
             }
 
             if (position % 2 == 1) {
-                return OnlineGamesListFragment.newInstance(round, tournament_uuid);
+                return OnlineGamesListFragment.newInstance(round, tournament);
             } else {
                 return OnlineRankingListFragment.newInstance(round, tournament);
             }

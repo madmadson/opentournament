@@ -97,7 +97,7 @@ public class ArmyListExpandableListAdapter extends BaseExpandableListAdapter {
                         int listPosition = groupPosition + 1;
                         DatabaseReference addListReference = FirebaseDatabase.getInstance()
                             .getReference(
-                                FirebaseReferences.TOURNAMENT_ARMY_LISTS + "/" + tournament.getOnlineUUID()
+                                FirebaseReferences.TOURNAMENT_ARMY_LISTS + "/" + tournament.getUUID()
                                 + "/" + tournamentPlayer.getPlayerUUID() + "/" + listPosition);
 
                         addListReference.setValue(armyList);

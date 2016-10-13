@@ -22,6 +22,7 @@ import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.domain.TournamentRanking;
 import madson.org.opentournament.domain.TournamentTeam;
+import madson.org.opentournament.domain.TournamentTyp;
 import madson.org.opentournament.utility.BaseApplication;
 
 import java.util.ArrayList;
@@ -106,6 +107,11 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
             if (game.getTournament_round() == round) {
                 game.setParticipantOne(allPlayerMapForTournament.get(game.getParticipantOneUUID()));
                 game.setParticipantTwo(allPlayerMapForTournament.get(game.getParticipantTwoUUID()));
+
+                if (tournament.getTournamentTyp().equals(TournamentTyp.SOLO.name())) {
+                    game.setTournamentPlayerOne(allPlayerMapForTournament.get(game.getParticipantOneUUID()));
+                    game.setTournamentPlayerTwo(allPlayerMapForTournament.get(game.getParticipantTwoUUID()));
+                }
 
                 gamesToReturn.add(game);
             }
@@ -351,7 +357,7 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
         int actualRound = uploadedTournament.getActualRound();
 
         DatabaseReference referenceForGamesToDelete = FirebaseDatabase.getInstance()
-                .getReference(FirebaseReferences.TOURNAMENT_GAMES + "/" + uploadedTournament.getOnlineUUID());
+                .getReference(FirebaseReferences.TOURNAMENT_GAMES + "/" + uploadedTournament.getUUID());
         referenceForGamesToDelete.removeValue();
 
         for (int i = 1; i <= actualRound; i++) {
@@ -361,7 +367,7 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
                 UUID uuid = UUID.randomUUID();
 
                 DatabaseReference referenceForGames = FirebaseDatabase.getInstance()
-                        .getReference(FirebaseReferences.TOURNAMENT_GAMES + "/" + uploadedTournament.getOnlineUUID()
+                        .getReference(FirebaseReferences.TOURNAMENT_GAMES + "/" + uploadedTournament.getUUID()
                             + "/" + i + "/" + uuid);
 
                 referenceForGames.setValue(game);

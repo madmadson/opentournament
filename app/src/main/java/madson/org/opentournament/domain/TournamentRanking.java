@@ -22,6 +22,9 @@ public class TournamentRanking {
 
     private TournamentParticipant tournamentParticipant;
 
+    // only used by firebase object mapper
+    private TournamentPlayer tournamentPlayer;
+
     private int score;
     private int sos;
     private int control_points;
@@ -46,9 +49,27 @@ public class TournamentRanking {
     }
 
 
+    @Exclude
     public TournamentParticipant getTournamentParticipant() {
 
         return tournamentParticipant;
+    }
+
+
+    /**
+     * used by firebase object mapper.
+     *
+     * @return
+     */
+    public TournamentPlayer getTournamentPlayer() {
+
+        return tournamentPlayer;
+    }
+
+
+    public void setTournamentPlayer(TournamentPlayer tournamentPlayer) {
+
+        this.tournamentPlayer = tournamentPlayer;
     }
 
 

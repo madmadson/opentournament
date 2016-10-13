@@ -57,6 +57,10 @@ public class Game implements Parcelable {
     private int participant_one_intermediate_points;
     private int participant_two_intermediate_points;
 
+    // for online (abstract doesnt work
+    private TournamentPlayer tournamentPlayerOne;
+    private TournamentPlayer tournamentPlayerTwo;
+
     protected Game(Parcel in) {
 
         _id = in.readLong();
@@ -332,6 +336,36 @@ public class Game implements Parcelable {
     }
 
 
+    /**
+     * Used by firebase mapper to get player information.
+     *
+     * @return
+     */
+    public TournamentPlayer getTournamentPlayerOne() {
+
+        return tournamentPlayerOne;
+    }
+
+
+    public void setTournamentPlayerOne(TournamentPlayer tournamentPlayerOne) {
+
+        this.tournamentPlayerOne = tournamentPlayerOne;
+    }
+
+
+    public TournamentPlayer getTournamentPlayerTwo() {
+
+        return tournamentPlayerTwo;
+    }
+
+
+    public void setTournamentPlayerTwo(TournamentPlayer tournamentPlayerTwo) {
+
+        this.tournamentPlayerTwo = tournamentPlayerTwo;
+    }
+
+
+    @Exclude
     public TournamentParticipant getParticipantOne() {
 
         return participantOne;
@@ -344,6 +378,7 @@ public class Game implements Parcelable {
     }
 
 
+    @Exclude
     public TournamentParticipant getParticipantTwo() {
 
         return participantTwo;

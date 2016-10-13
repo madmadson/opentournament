@@ -20,7 +20,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import madson.org.opentournament.R;
-import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.online.RegisterTournamentPlayerDialog;
@@ -120,7 +119,7 @@ public class TournamentPlayerListAdapter extends RecyclerView.Adapter<Tournament
                     }
                 });
 
-            if (baseActivity.getBaseApplication().isOnline() && tournament.getOnlineUUID() != null) {
+            if (baseActivity.getBaseApplication().isOnline() && tournament.getUUID() != null) {
                 holder.getAddListIcon().setOnClickListener(new View.OnClickListener() {
 
                         @Override

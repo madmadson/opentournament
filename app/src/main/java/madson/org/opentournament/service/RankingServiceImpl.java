@@ -79,8 +79,11 @@ public class RankingServiceImpl implements RankingService {
         while (!cursor.isAfterLast()) {
             TournamentRanking tournamentRanking = cursorToTournamentRanking(cursor);
 
+            tournamentRanking.setTournamentParticipant(allPlayerMapForTournament.get(
+                    tournamentRanking.getParticipantUUID()));
+
             if (tournament.getTournamentTyp().equals(TournamentTyp.SOLO.name())) {
-                tournamentRanking.setTournamentParticipant(allPlayerMapForTournament.get(
+                tournamentRanking.setTournamentPlayer(allPlayerMapForTournament.get(
                         tournamentRanking.getParticipantUUID()));
             }
 
@@ -260,7 +263,7 @@ public class RankingServiceImpl implements RankingService {
         int actualRound = tournament.getActualRound();
 
         DatabaseReference referenceForRankingToDelete = FirebaseDatabase.getInstance()
-                .getReference(FirebaseReferences.TOURNAMENT_RANKINGS + "/" + tournament.getOnlineUUID());
+                .getReference(FirebaseReferences.TOURNAMENT_RANKINGS + "/" + tournament.getUUID());
         referenceForRankingToDelete.removeValue();
 
         for (int i = 1; i <= actualRound; i++) {
@@ -272,7 +275,7 @@ public class RankingServiceImpl implements RankingService {
                 UUID uuid = UUID.randomUUID();
 
                 DatabaseReference referenceForRankings = FirebaseDatabase.getInstance()
-                        .getReference(FirebaseReferences.TOURNAMENT_RANKINGS + "/" + tournament.getOnlineUUID()
+                        .getReference(FirebaseReferences.TOURNAMENT_RANKINGS + "/" + tournament.getUUID()
                             + "/" + i + "/" + uuid);
 
                 // for sorting after insert

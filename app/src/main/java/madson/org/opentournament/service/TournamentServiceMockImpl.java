@@ -58,7 +58,7 @@ public class TournamentServiceMockImpl implements TournamentService {
 
         DatabaseReference referenceForTournament = FirebaseDatabase.getInstance()
                 .getReference(FirebaseReferences.TOURNAMENTS + "/" + tournament.getGameOrSportTyp() + "/"
-                    + tournament.getOnlineUUID());
+                    + tournament.getUUID());
 
         referenceForTournament.setValue(tournament);
     }
@@ -71,7 +71,7 @@ public class TournamentServiceMockImpl implements TournamentService {
 
         DatabaseReference referenceForUpdateTournament = FirebaseDatabase.getInstance()
                 .getReference(FirebaseReferences.TOURNAMENTS + "/" + tournament.getGameOrSportTyp() + "/"
-                    + tournament.getOnlineUUID());
+                    + tournament.getUUID());
 
         referenceForUpdateTournament.setValue(tournament);
 
@@ -184,7 +184,7 @@ public class TournamentServiceMockImpl implements TournamentService {
 
         tournament.setActualRound(cursor.getInt(4));
         tournament.setMaxNumberOfParticipants(cursor.getInt(5));
-        tournament.setOnlineUUID(cursor.getString(6));
+        tournament.setUuid(cursor.getString(6));
         tournament.setCreatorName(cursor.getString(7));
         tournament.setCreatorEmail(cursor.getString(8));
         tournament.setTournamentTyp(cursor.getString(9));
@@ -224,7 +224,7 @@ public class TournamentServiceMockImpl implements TournamentService {
 
         SQLiteDatabase writableDatabase = openTournamentDBHelper.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(TournamentTable.COLUMN_ONLINE_UUID, tournament.getOnlineUUID());
+        contentValues.put(TournamentTable.COLUMN_ONLINE_UUID, tournament.getUUID());
 
         writableDatabase.update(TournamentTable.TABLE_TOURNAMENTS, contentValues, TournamentTable.COLUMN_ID + " = ?",
             new String[] { String.valueOf(tournament.get_id()) });
@@ -339,7 +339,7 @@ public class TournamentServiceMockImpl implements TournamentService {
         Log.i(this.getClass().getName(), "create tournament: " + tournament);
 
         return insertTournament(0, tournament.getName(), tournament.getLocation(), tournament.getDateOfTournament(),
-                tournament.getMaxNumberOfParticipants(), tournament.getOnlineUUID(), tournament.getCreatorName(),
+                tournament.getMaxNumberOfParticipants(), tournament.getUUID(), tournament.getCreatorName(),
                 tournament.getCreatorEmail(), tournament.getActualPlayers(), tournament.getTournamentTyp(),
                 tournament.getTeamSize());
     }

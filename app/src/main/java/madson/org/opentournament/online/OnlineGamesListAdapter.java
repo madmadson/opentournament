@@ -14,7 +14,9 @@ import android.view.ViewGroup;
 
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Game;
+import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
+import madson.org.opentournament.domain.TournamentTyp;
 import madson.org.opentournament.utility.BaseApplication;
 import madson.org.opentournament.viewHolder.GameViewHolder;
 
@@ -32,12 +34,14 @@ public class OnlineGamesListAdapter extends RecyclerView.Adapter<GameViewHolder>
     private List<Game> gameList;
 
     private BaseApplication baseApplication;
+    private Tournament tournament;
     private Drawable winnerShape;
     private Drawable looserShape;
 
-    public OnlineGamesListAdapter(BaseApplication baseApplication) {
+    public OnlineGamesListAdapter(BaseApplication baseApplication, Tournament tournament) {
 
         this.baseApplication = baseApplication;
+        this.tournament = tournament;
 
         this.gameList = new ArrayList<>();
 
@@ -69,13 +73,17 @@ public class OnlineGamesListAdapter extends RecyclerView.Adapter<GameViewHolder>
                 .setBackgroundDrawable(game.getParticipant_two_score() == 1 ? winnerShape : looserShape);
         }
 
-        TournamentPlayer player1 = (TournamentPlayer) game.getParticipantOne();
+        if (position % 2 == 0) {
+            holder.getPairingRow().setBackgroundColor(Color.LTGRAY);
+        } else {
+            holder.getPairingRow().setBackgroundColor(Color.WHITE);
+        }
 
-        holder.getPlayerOneNameInList()
-            .setText(baseApplication.getResources()
-                .getString(R.string.player_name_in_row, player1.getFirstName(), player1.getNickName(),
-                    player1.getLastName()));
-        holder.getPlayerOneFaction().setText(player1.getFaction());
+        if (tournament.getTournamentTyp().equals(TournamentTyp.SOLO.name())) {
+            gameForSoloTournament(holder, game);
+        } else {
+            gameForTeamTournament(holder, game);
+        }
 
         holder.getPlayerOneScore()
             .setText(baseApplication.getResources().getString(R.string.game_win, game.getParticipant_one_score()));
@@ -86,14 +94,6 @@ public class OnlineGamesListAdapter extends RecyclerView.Adapter<GameViewHolder>
             .setText(baseApplication.getResources()
                 .getString(R.string.game_vp, game.getParticipant_one_victory_points()));
 
-        TournamentPlayer player2 = (TournamentPlayer) game.getParticipantTwo();
-
-        holder.getPlayerTwoNameInList()
-            .setText(baseApplication.getResources()
-                .getString(R.string.player_name_in_row, player2.getFirstName(), player2.getNickName(),
-                    player2.getLastName()));
-        holder.getPlayerTwoFaction().setText(player2.getFaction());
-
         holder.getPlayerTwoScore()
             .setText(baseApplication.getResources().getString(R.string.game_win, game.getParticipant_two_score()));
         holder.getPlayerTwoControlPoints()
@@ -102,12 +102,33 @@ public class OnlineGamesListAdapter extends RecyclerView.Adapter<GameViewHolder>
         holder.getPlayerTwoVictoryPoints()
             .setText(baseApplication.getResources()
                 .getString(R.string.game_vp, game.getParticipant_two_victory_points()));
+    }
 
-        if (position % 2 == 0) {
-            holder.getPairingRow().setBackgroundColor(Color.LTGRAY);
-        } else {
-            holder.getPairingRow().setBackgroundColor(Color.WHITE);
-        }
+
+    private void gameForTeamTournament(GameViewHolder holder, Game game) {
+
+        holder.getPlayerOneNameInList().setText(game.getParticipantOneUUID());
+        holder.getPlayerTwoNameInList().setText(game.getParticipantTwoUUID());
+    }
+
+
+    private void gameForSoloTournament(GameViewHolder holder, Game game) {
+
+        TournamentPlayer player1 = game.getTournamentPlayerOne();
+
+        holder.getPlayerOneNameInList()
+            .setText(baseApplication.getResources()
+                .getString(R.string.player_name_in_row, player1.getFirstName(), player1.getNickName(),
+                    player1.getLastName()));
+        holder.getPlayerOneFaction().setText(player1.getFaction());
+
+        TournamentPlayer player2 = game.getTournamentPlayerTwo();
+
+        holder.getPlayerTwoNameInList()
+            .setText(baseApplication.getResources()
+                .getString(R.string.player_name_in_row, player2.getFirstName(), player2.getNickName(),
+                    player2.getLastName()));
+        holder.getPlayerTwoFaction().setText(player2.getFaction());
 
         if (baseApplication.getAuthenticatedPlayer() != null
                 && (baseApplication.getAuthenticatedPlayer().getUUID().equals(player1.getPlayerUUID()))) {

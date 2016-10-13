@@ -145,6 +145,7 @@ public class OngoingTournamentServiceMockImpl implements OngoingTournamentServic
             Game game = Game.cursorToGame(cursor);
 
             if (game.getTournament_round() < round) {
+                // collect information about opponents in current round
                 TournamentPlayer playerOne = allPlayerMapForTournament.get(game.getParticipantOneUUID());
                 TournamentPlayer playerTwo = allPlayerMapForTournament.get(game.getParticipantTwoUUID());
 
@@ -158,6 +159,11 @@ public class OngoingTournamentServiceMockImpl implements OngoingTournamentServic
             if (game.getTournament_round() == round) {
                 game.setParticipantOne(allPlayerMapForTournament.get(game.getParticipantOneUUID()));
                 game.setParticipantTwo(allPlayerMapForTournament.get(game.getParticipantTwoUUID()));
+
+                if (tournament.getTournamentTyp().equals(TournamentTyp.SOLO.name())) {
+                    game.setTournamentPlayerOne(allPlayerMapForTournament.get(game.getParticipantOneUUID()));
+                    game.setTournamentPlayerTwo(allPlayerMapForTournament.get(game.getParticipantTwoUUID()));
+                }
 
                 gamesToReturn.add(game);
             }
@@ -403,7 +409,7 @@ public class OngoingTournamentServiceMockImpl implements OngoingTournamentServic
         int actualRound = uploadedTournament.getActualRound();
 
         DatabaseReference referenceForGamesToDelete = FirebaseDatabase.getInstance()
-                .getReference(FirebaseReferences.TOURNAMENT_GAMES + "/" + uploadedTournament.getOnlineUUID());
+                .getReference(FirebaseReferences.TOURNAMENT_GAMES + "/" + uploadedTournament.getUUID());
         referenceForGamesToDelete.removeValue();
 
         for (int i = 1; i <= actualRound; i++) {
@@ -413,7 +419,7 @@ public class OngoingTournamentServiceMockImpl implements OngoingTournamentServic
                 UUID uuid = UUID.randomUUID();
 
                 DatabaseReference referenceForGames = FirebaseDatabase.getInstance()
-                        .getReference(FirebaseReferences.TOURNAMENT_GAMES + "/" + uploadedTournament.getOnlineUUID()
+                        .getReference(FirebaseReferences.TOURNAMENT_GAMES + "/" + uploadedTournament.getUUID()
                             + "/" + i + "/" + uuid);
 
                 referenceForGames.setValue(game);

@@ -44,7 +44,7 @@ import java.util.Map;
  *
  * @author  Tobias Matt - tmatt@contargo.net
  */
-public class TournamentPlayerTeamListAdapter extends BaseExpandableListAdapter {
+public class TournamentPlayerTeamExpandableListAdapter extends BaseExpandableListAdapter {
 
     private BaseActivity baseActivity;
 
@@ -52,7 +52,7 @@ public class TournamentPlayerTeamListAdapter extends BaseExpandableListAdapter {
     private Map<TournamentTeam, List<TournamentPlayer>> allTeamsWithPlayersForTournament;
     private List<TournamentTeam> tournamentTeams;
 
-    public TournamentPlayerTeamListAdapter(BaseActivity baseActivity, Tournament tournament) {
+    public TournamentPlayerTeamExpandableListAdapter(BaseActivity baseActivity, Tournament tournament) {
 
         this.baseActivity = baseActivity;
 
@@ -239,7 +239,7 @@ public class TournamentPlayerTeamListAdapter extends BaseExpandableListAdapter {
                         }
                     });
 
-                if (baseActivity.getBaseApplication().isOnline() && tournament.getOnlineUUID() != null) {
+                if (baseActivity.getBaseApplication().isOnline() && tournament.getUUID() != null) {
                     addListIcon.setOnClickListener(new View.OnClickListener() {
 
                             @Override

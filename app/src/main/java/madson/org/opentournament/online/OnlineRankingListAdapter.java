@@ -78,15 +78,13 @@ public class OnlineRankingListAdapter extends RecyclerView.Adapter<TournamentRan
 
     private void rankingForTeamTournament(TournamentRankingViewHolder holder, TournamentRanking ranking) {
 
-        TournamentTeam tournamentTeam = (TournamentTeam) ranking.getTournamentParticipant();
-
-        holder.getPlayerNameInList().setText(tournamentTeam.getTeamName());
+        holder.getPlayerNameInList().setText(ranking.getParticipantUUID());
     }
 
 
     private void rankingForSoloTournament(TournamentRankingViewHolder holder, TournamentRanking ranking) {
 
-        TournamentPlayer tournamentPlayer = (TournamentPlayer) ranking.getTournamentParticipant();
+        TournamentPlayer tournamentPlayer = ranking.getTournamentPlayer();
 
         holder.getPlayerNameInList()
             .setText(context.getResources()

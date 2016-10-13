@@ -2,33 +2,20 @@ package madson.org.opentournament.tasks;
 
 import android.content.Intent;
 
-import android.graphics.Color;
-
 import android.os.AsyncTask;
-
-import android.support.design.widget.Snackbar;
-
-import android.view.View;
-
-import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import madson.org.opentournament.R;
 import madson.org.opentournament.db.FirebaseReferences;
 import madson.org.opentournament.domain.PairingOption;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentRanking;
-import madson.org.opentournament.domain.TournamentTyp;
 import madson.org.opentournament.organize.TournamentOrganizeActivity;
 import madson.org.opentournament.service.OngoingTournamentService;
 import madson.org.opentournament.service.RankingService;
-import madson.org.opentournament.service.TournamentPlayerService;
 import madson.org.opentournament.service.TournamentService;
 import madson.org.opentournament.utility.BaseActivity;
-import madson.org.opentournament.utility.BaseApplication;
 
 import java.util.Map;
 
@@ -69,7 +56,7 @@ public class StartTournamentTask extends AsyncTask<Void, Void, Void> {
         tournamentService.updateActualRound(tournament, 1);
 
         DatabaseReference reference = FirebaseDatabase.getInstance()
-                .getReference(FirebaseReferences.TOURNAMENT_REGISTRATIONS + "/" + tournament.getOnlineUUID());
+                .getReference(FirebaseReferences.TOURNAMENT_REGISTRATIONS + "/" + tournament.getUUID());
 
         reference.setValue(null);
 

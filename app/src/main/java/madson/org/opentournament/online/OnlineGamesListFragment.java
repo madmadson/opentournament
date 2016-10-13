@@ -1,5 +1,7 @@
 package madson.org.opentournament.online;
 
+import android.content.Context;
+
 import android.os.Bundle;
 import android.os.Handler;
 
@@ -25,6 +27,7 @@ import madson.org.opentournament.R;
 import madson.org.opentournament.db.FirebaseReferences;
 import madson.org.opentournament.db.GameTable;
 import madson.org.opentournament.domain.Game;
+import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.utility.BaseActivity;
 import madson.org.opentournament.utility.BaseApplication;
 
@@ -36,22 +39,22 @@ import madson.org.opentournament.utility.BaseApplication;
  */
 public class OnlineGamesListFragment extends Fragment {
 
-    public static final String BUNDLE_TOURNAMENT_UUID = "tournament_uuid";
+    public static final String BUNDLE_TOURNAMENT = "tournament";
     public static final String BUNDLE_ROUND = "round";
 
     private DatabaseReference mFirebaseDatabaseReference;
 
-    private String tournament_uuid;
+    private Tournament tournament;
     private int round;
     private ProgressBar mProgressBar;
     private RecyclerView recyclerView;
     private BaseApplication baseApplication;
 
-    public static Fragment newInstance(int round, String tournament_uuid) {
+    public static Fragment newInstance(int round, Tournament tournament) {
 
         OnlineGamesListFragment fragment = new OnlineGamesListFragment();
         Bundle args = new Bundle();
-        args.putString(BUNDLE_TOURNAMENT_UUID, tournament_uuid);
+        args.putParcelable(BUNDLE_TOURNAMENT, tournament);
         args.putInt(BUNDLE_ROUND, round);
         fragment.setArguments(args);
 
@@ -60,12 +63,21 @@ public class OnlineGamesListFragment extends Fragment {
 
 
     @Override
+    public void onAttach(Context context) {
+
+        super.onAttach(context);
+
+        baseApplication = ((BaseActivity) getActivity()).getBaseApplication();
+    }
+
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         Bundle bundle = getArguments();
 
-        if (bundle != null && bundle.getString(BUNDLE_TOURNAMENT_UUID) != null) {
-            tournament_uuid = bundle.getString(BUNDLE_TOURNAMENT_UUID);
+        if (bundle != null && bundle.getParcelable(BUNDLE_TOURNAMENT) != null) {
+            tournament = bundle.getParcelable(BUNDLE_TOURNAMENT);
         }
 
         if (bundle != null && bundle.getInt(BUNDLE_ROUND) != 0) {
@@ -85,13 +97,11 @@ public class OnlineGamesListFragment extends Fragment {
         mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
 
         DatabaseReference child = mFirebaseDatabaseReference.child(FirebaseReferences.TOURNAMENT_GAMES + "/"
-                + tournament_uuid + "/" + round);
+                + tournament.getUUID() + "/" + round);
 
         Query orderedGames = child.orderByChild(GameTable.COLUMN_PLAYING_FIELD);
 
-        baseApplication = ((BaseActivity) getActivity()).getBaseApplication();
-
-        final OnlineGamesListAdapter gamesListAdapter = new OnlineGamesListAdapter(baseApplication);
+        final OnlineGamesListAdapter gamesListAdapter = new OnlineGamesListAdapter(baseApplication, tournament);
 
         orderedGames.addValueEventListener(new ValueEventListener() {
 

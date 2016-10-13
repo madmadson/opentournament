@@ -48,7 +48,7 @@ public class Tournament implements Parcelable {
     private int maxNumberOfParticipants;
     private Date dateOfTournament;
     private int actualRound;
-    private String onlineUUID;
+    private String uuid;
     private String creatorName;
     private String creatorEmail;
     private TournamentTyp tournamentTyp;
@@ -77,7 +77,7 @@ public class Tournament implements Parcelable {
         this.actualPlayers = tournament.getActualPlayers();
         this.dateOfTournament = tournament.getDateOfTournament();
         this.actualRound = tournament.getActualRound();
-        this.onlineUUID = tournament.getOnlineUUID();
+        this.uuid = tournament.getUUID();
         this.creatorName = tournament.getCreatorName();
         this.creatorEmail = tournament.getCreatorEmail();
         this.tournamentTyp = TournamentTyp.valueOf(tournament.getTournamentTyp());
@@ -102,7 +102,7 @@ public class Tournament implements Parcelable {
         }
 
         actualRound = in.readInt();
-        onlineUUID = in.readString();
+        uuid = in.readString();
         creatorName = in.readString();
         creatorEmail = in.readString();
         setTournamentTyp(in.readString());
@@ -146,7 +146,7 @@ public class Tournament implements Parcelable {
         }
 
         parcel.writeInt(actualRound);
-        parcel.writeString(onlineUUID);
+        parcel.writeString(uuid);
         parcel.writeString(creatorName);
         parcel.writeString(creatorEmail);
         parcel.writeString(getTournamentTyp());
@@ -253,15 +253,15 @@ public class Tournament implements Parcelable {
 
 
     @Exclude
-    public String getOnlineUUID() {
+    public String getUUID() {
 
-        return onlineUUID;
+        return uuid;
     }
 
 
-    public void setOnlineUUID(String onlineUUID) {
+    public void setUuid(String uuid) {
 
-        this.onlineUUID = onlineUUID;
+        this.uuid = uuid;
     }
 
 
@@ -313,7 +313,7 @@ public class Tournament implements Parcelable {
             + ", maxNumberOfParticipants=" + maxNumberOfParticipants
             + ", dateOfTournament=" + dateOfTournament
             + ", actualRound=" + actualRound
-            + ", onlineUUID='" + onlineUUID + '\''
+            + ", uuid='" + uuid + '\''
             + ", creatorName='" + creatorName + '\''
             + ", creatorEmail='" + creatorEmail + '\''
             + ", tournamentTyp=" + tournamentTyp
@@ -348,7 +348,7 @@ public class Tournament implements Parcelable {
         if (_id != that._id)
             return false;
 
-        return onlineUUID != null ? onlineUUID.equals(that.onlineUUID) : that.onlineUUID == null;
+        return uuid != null ? uuid.equals(that.uuid) : that.uuid == null;
     }
 
 
@@ -356,7 +356,7 @@ public class Tournament implements Parcelable {
     public int hashCode() {
 
         int result = (int) (_id ^ (_id >>> 32));
-        result = 31 * result + (onlineUUID != null ? onlineUUID.hashCode() : 0);
+        result = 31 * result + (uuid != null ? uuid.hashCode() : 0);
 
         return result;
     }

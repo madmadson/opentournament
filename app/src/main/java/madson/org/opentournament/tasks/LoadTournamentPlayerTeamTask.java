@@ -10,7 +10,7 @@ import android.widget.TextView;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.domain.TournamentTeam;
-import madson.org.opentournament.organize.setup.TournamentPlayerTeamListAdapter;
+import madson.org.opentournament.organize.setup.TournamentPlayerTeamExpandableListAdapter;
 import madson.org.opentournament.service.TournamentPlayerService;
 import madson.org.opentournament.utility.BaseApplication;
 
@@ -29,17 +29,18 @@ public class LoadTournamentPlayerTeamTask extends AsyncTask<Void, Void, Void> {
     private Tournament tournament;
 
     private ProgressBar progressBar;
-    private TournamentPlayerTeamListAdapter tournamentPlayerTeamListAdapter;
+    private TournamentPlayerTeamExpandableListAdapter tournamentPlayerTeamExpandableListAdapter;
     private TextView noTournamentPlayersTextView;
     private Map<TournamentTeam, List<TournamentPlayer>> allTeamsForTournament;
 
     public LoadTournamentPlayerTeamTask(BaseApplication baseApplication, Tournament tournament, ProgressBar progressBar,
-        TournamentPlayerTeamListAdapter tournamentPlayerTeamListAdapter, TextView noTournamentPlayersTextView) {
+        TournamentPlayerTeamExpandableListAdapter tournamentPlayerTeamExpandableListAdapter,
+        TextView noTournamentPlayersTextView) {
 
         this.baseApplication = baseApplication;
         this.tournament = tournament;
         this.progressBar = progressBar;
-        this.tournamentPlayerTeamListAdapter = tournamentPlayerTeamListAdapter;
+        this.tournamentPlayerTeamExpandableListAdapter = tournamentPlayerTeamExpandableListAdapter;
         this.noTournamentPlayersTextView = noTournamentPlayersTextView;
     }
 
@@ -76,7 +77,7 @@ public class LoadTournamentPlayerTeamTask extends AsyncTask<Void, Void, Void> {
         if (allTeamsForTournament.size() > 0) {
             noTournamentPlayersTextView.setVisibility(View.GONE);
 
-            tournamentPlayerTeamListAdapter.addAllTeams(allTeamsForTournament);
+            tournamentPlayerTeamExpandableListAdapter.addAllTeams(allTeamsForTournament);
         }
     }
 }

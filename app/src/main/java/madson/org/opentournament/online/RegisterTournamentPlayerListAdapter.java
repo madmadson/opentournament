@@ -131,7 +131,8 @@ public class RegisterTournamentPlayerListAdapter extends RecyclerView.Adapter<To
 
             viewHolder.getTournamentPlayerCard().setCardBackgroundColor(Color.MAGENTA);
             viewHolder.getTournamentPlayerCard()
-                .setLayoutParams(new CardView.LayoutParams(CardView.LayoutParams.MATCH_PARENT, 200));
+                .setLayoutParams(new CardView.LayoutParams(CardView.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT));
 
             viewHolder.getPlayerNumber().setTextSize(20);
             viewHolder.getPlayerNumber().setTextColor(Color.BLACK);
@@ -157,7 +158,8 @@ public class RegisterTournamentPlayerListAdapter extends RecyclerView.Adapter<To
             viewHolder.getEditIcon().setVisibility(View.GONE);
             viewHolder.getAddListIcon().setVisibility(View.GONE);
 
-            FrameLayout.LayoutParams layoutParams = new CardView.LayoutParams(CardView.LayoutParams.MATCH_PARENT, 90);
+            FrameLayout.LayoutParams layoutParams = new CardView.LayoutParams(CardView.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT);
             layoutParams.setMargins(16, 4, 16, 4);
             viewHolder.getTournamentPlayerCard().setLayoutParams(layoutParams);
 

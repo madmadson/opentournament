@@ -1,13 +1,7 @@
 package madson.org.opentournament.online;
 
-import android.graphics.Color;
-
-import android.graphics.drawable.Drawable;
-
 import android.os.Bundle;
 import android.os.Handler;
-
-import android.service.notification.NotificationListenerService;
 
 import android.support.v4.app.Fragment;
 
@@ -20,8 +14,6 @@ import android.view.ViewGroup;
 
 import android.widget.ProgressBar;
 
-import com.firebase.ui.database.FirebaseRecyclerAdapter;
-
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -31,13 +23,8 @@ import com.google.firebase.database.ValueEventListener;
 
 import madson.org.opentournament.R;
 import madson.org.opentournament.db.FirebaseReferences;
-import madson.org.opentournament.db.GameTable;
-import madson.org.opentournament.domain.Game;
 import madson.org.opentournament.domain.Tournament;
-import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.domain.TournamentRanking;
-import madson.org.opentournament.viewHolder.GameViewHolder;
-import madson.org.opentournament.viewHolder.TournamentRankingViewHolder;
 
 
 /**
@@ -94,7 +81,7 @@ public class OnlineRankingListFragment extends Fragment {
         mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
 
         DatabaseReference child = mFirebaseDatabaseReference.child(FirebaseReferences.TOURNAMENT_RANKINGS + "/"
-                + tournament.getOnlineUUID() + "/" + round);
+                + tournament.getUUID() + "/" + round);
 
         Query orderedGames = child.orderByChild("rank");
         final OnlineRankingListAdapter onlineRankingListAdapter = new OnlineRankingListAdapter(getActivity(),

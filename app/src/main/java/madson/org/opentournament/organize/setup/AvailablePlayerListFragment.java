@@ -152,7 +152,7 @@ public class AvailablePlayerListFragment extends BaseFragment implements Tournam
 
                             Player player = playerSnapShot.getValue(Player.class);
 
-                            if (player != null && !player.getTournaments().containsKey(tournament.getOnlineUUID())) {
+                            if (player != null && !player.getTournaments().containsKey(tournament.getUUID())) {
                                 player.setUUID(player_online_uuid);
 
                                 if (!alreadyPlayingPlayersUUIDs.contains(player_online_uuid)) {

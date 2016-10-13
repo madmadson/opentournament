@@ -30,7 +30,6 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import madson.org.opentournament.R;
 import madson.org.opentournament.db.FirebaseReferences;
-import madson.org.opentournament.domain.GameOrSportTyp;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.utility.BaseActivity;
 import madson.org.opentournament.utility.Environment;
@@ -120,9 +119,10 @@ public class OnlineTournamentListFragment extends Fragment {
                     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
                         progressBar.setVisibility(View.GONE);
+                        noTournamentsTextView.setVisibility(View.GONE);
 
                         Tournament tournament = dataSnapshot.getValue(Tournament.class);
-                        tournament.setOnlineUUID(dataSnapshot.getKey());
+                        tournament.setUuid(dataSnapshot.getKey());
                         onlineTournamentListAdapter.addTournament(tournament);
                     }
 
@@ -131,7 +131,7 @@ public class OnlineTournamentListFragment extends Fragment {
                     public void onChildChanged(DataSnapshot dataSnapshot, String s) {
 
                         Tournament tournament = dataSnapshot.getValue(Tournament.class);
-                        tournament.setOnlineUUID(dataSnapshot.getKey());
+                        tournament.setUuid(dataSnapshot.getKey());
                         onlineTournamentListAdapter.replaceTournament(tournament);
                     }
 
@@ -140,7 +140,7 @@ public class OnlineTournamentListFragment extends Fragment {
                     public void onChildRemoved(DataSnapshot dataSnapshot) {
 
                         Tournament tournament = dataSnapshot.getValue(Tournament.class);
-                        tournament.setOnlineUUID(dataSnapshot.getKey());
+                        tournament.setUuid(dataSnapshot.getKey());
                         onlineTournamentListAdapter.removeTournament(tournament);
                     }
 
@@ -170,7 +170,7 @@ public class OnlineTournamentListFragment extends Fragment {
             };
 
             Handler handler = new Handler();
-            handler.postDelayed(runnable, 5000);
+            handler.postDelayed(runnable, 10000);
         } else {
             TextView offlineText = (TextView) view.findViewById(R.id.offline_text);
             offlineText.setVisibility(View.VISIBLE);

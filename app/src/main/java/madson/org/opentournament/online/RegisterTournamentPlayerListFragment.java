@@ -18,6 +18,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.Button;
+import android.widget.ExpandableListView;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -32,6 +34,7 @@ import madson.org.opentournament.db.FirebaseReferences;
 import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
+import madson.org.opentournament.domain.TournamentTyp;
 import madson.org.opentournament.utility.BaseActivity;
 
 
@@ -52,6 +55,9 @@ public class RegisterTournamentPlayerListFragment extends Fragment {
     private RegisterTournamentPlayerListAdapter registrationListAdapter;
 
     private BaseActivity baseActivity;
+    private OnlineTournamentPlayerTeamExpandableListAdapter tournamentPlayerTeamExpandableListAdapter;
+    private ImageView soloViewForTournamentPlayers;
+    private ImageView teamViewForTournamentPlayers;
 
     public static Fragment newInstance(Tournament tournament) {
 
@@ -79,6 +85,13 @@ public class RegisterTournamentPlayerListFragment extends Fragment {
 
             recyclerView = (RecyclerView) view.findViewById(R.id.tournament_player_list_recycler_view);
             recyclerView.setHasFixedSize(true);
+
+            final ExpandableListView teamExpandableList = (ExpandableListView) view.findViewById(
+                    R.id.tournament_teams_expandableList);
+
+            tournamentPlayerTeamExpandableListAdapter = new OnlineTournamentPlayerTeamExpandableListAdapter(
+                    baseActivity, tournament);
+            teamExpandableList.setAdapter(tournamentPlayerTeamExpandableListAdapter);
 
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
             recyclerView.setLayoutManager(linearLayoutManager);
@@ -121,6 +134,36 @@ public class RegisterTournamentPlayerListFragment extends Fragment {
                         }
                     }
                 });
+
+            if (tournament.getTournamentTyp().equals(TournamentTyp.SOLO.name())) {
+                recyclerView.setVisibility(View.VISIBLE);
+                teamExpandableList.setVisibility(View.GONE);
+            } else {
+                teamExpandableList.setVisibility(View.VISIBLE);
+                recyclerView.setVisibility(View.GONE);
+            }
+
+            soloViewForTournamentPlayers = (ImageView) view.findViewById(R.id.solo_tournament_icon);
+            soloViewForTournamentPlayers.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+
+                        recyclerView.setVisibility(View.VISIBLE);
+                        teamExpandableList.setVisibility(View.GONE);
+                    }
+                });
+
+            teamViewForTournamentPlayers = (ImageView) view.findViewById(R.id.team_tournament_icon);
+            teamViewForTournamentPlayers.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+
+                        teamExpandableList.setVisibility(View.VISIBLE);
+                        recyclerView.setVisibility(View.GONE);
+                    }
+                });
         }
 
         return view;
@@ -137,7 +180,7 @@ public class RegisterTournamentPlayerListFragment extends Fragment {
         mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
 
         DatabaseReference child = mFirebaseDatabaseReference.child(FirebaseReferences.TOURNAMENT_REGISTRATIONS + "/"
-                + tournament.getOnlineUUID());
+                + tournament.getUUID());
 
         child.addChildEventListener(new ChildEventListener() {
 
@@ -150,6 +193,8 @@ public class RegisterTournamentPlayerListFragment extends Fragment {
                     player.setPlayerUUID(dataSnapshot.getKey());
 
                     registrationListAdapter.addRegistration(player);
+
+                    tournamentPlayerTeamExpandableListAdapter.addTournamentPlayer(player);
 
                     if (registrationListAdapter.getItemCount() > 0) {
                         noRegistrationsTextView.setVisibility(View.GONE);
@@ -164,6 +209,7 @@ public class RegisterTournamentPlayerListFragment extends Fragment {
                     player.setPlayerUUID(dataSnapshot.getKey());
 
                     registrationListAdapter.updateRegistration(player);
+                    tournamentPlayerTeamExpandableListAdapter.updateTournamentPlayer(player);
                 }
 
 
@@ -174,6 +220,7 @@ public class RegisterTournamentPlayerListFragment extends Fragment {
                     player.setPlayerUUID(dataSnapshot.getKey());
 
                     registrationListAdapter.removeRegistration(player);
+                    tournamentPlayerTeamExpandableListAdapter.removeTournamentPlayer(player);
 
                     if (registrationListAdapter.getItemCount() == 0) {
                         noRegistrationsTextView.setVisibility(View.VISIBLE);

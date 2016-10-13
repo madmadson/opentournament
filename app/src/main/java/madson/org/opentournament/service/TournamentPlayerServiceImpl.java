@@ -304,14 +304,14 @@ public class TournamentPlayerServiceImpl implements TournamentPlayerService {
         Log.i(this.getClass().getName(), "pushes tournament players to firebase: " + allPlayersForTournament);
 
         DatabaseReference referenceFoPlayersToDelete = FirebaseDatabase.getInstance()
-                .getReference(FirebaseReferences.TOURNAMENT_PLAYERS + "/" + tournament.getOnlineUUID());
+                .getReference(FirebaseReferences.TOURNAMENT_PLAYERS + "/" + tournament.getUUID());
         referenceFoPlayersToDelete.removeValue();
 
         for (TournamentPlayer player : allPlayersForTournament) {
             String online_uuid = player.getPlayerUUID();
 
             DatabaseReference referenceForUpdateTournamentPlayer = FirebaseDatabase.getInstance()
-                    .getReference(FirebaseReferences.TOURNAMENT_PLAYERS + "/" + tournament.getOnlineUUID() + "/"
+                    .getReference(FirebaseReferences.TOURNAMENT_PLAYERS + "/" + tournament.getUUID() + "/"
                         + online_uuid);
 
             referenceForUpdateTournamentPlayer.setValue(player);

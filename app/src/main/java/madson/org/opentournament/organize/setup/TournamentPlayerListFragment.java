@@ -71,7 +71,7 @@ public class TournamentPlayerListFragment extends Fragment implements Tournament
     private ImageView teamViewForTournamentPlayers;
 
     private TournamentPlayerListAdapter tournamentPlayerListAdapter;
-    private TournamentPlayerTeamListAdapter tournamentPlayerTeamListAdapter;
+    private TournamentPlayerTeamExpandableListAdapter tournamentPlayerTeamExpandableListAdapter;
     private TextView headingRegisteredPlayers;
 
     public static TournamentPlayerListFragment newInstance(Tournament tournament) {
@@ -140,8 +140,9 @@ public class TournamentPlayerListFragment extends Fragment implements Tournament
         tournamentPlayerListAdapter = new TournamentPlayerListAdapter(baseActivity, tournament);
         tournamentPlayersRecyclerView.setAdapter(tournamentPlayerListAdapter);
 
-        tournamentPlayerTeamListAdapter = new TournamentPlayerTeamListAdapter(baseActivity, tournament);
-        teamExpandableList.setAdapter(tournamentPlayerTeamListAdapter);
+        tournamentPlayerTeamExpandableListAdapter = new TournamentPlayerTeamExpandableListAdapter(baseActivity,
+                tournament);
+        teamExpandableList.setAdapter(tournamentPlayerTeamExpandableListAdapter);
 
         registrationListAdapter = new RegistrationListAdapter(baseActivity, tournament, tournamentPlayerListAdapter);
         registrationRecyclerView.setAdapter(registrationListAdapter);
@@ -158,13 +159,13 @@ public class TournamentPlayerListFragment extends Fragment implements Tournament
             headingRegisteredPlayers.setVisibility(View.GONE);
         }
 
-        tournamentPlayerTeamListAdapter.clear();
+        tournamentPlayerTeamExpandableListAdapter.clear();
         new LoadTournamentPlayerTask(baseActivity.getBaseApplication(), tournament, progressbar,
             tournamentPlayerListAdapter, noTournamentPlayersTextView).execute();
 
         tournamentPlayerListAdapter.clear();
         new LoadTournamentPlayerTeamTask(baseActivity.getBaseApplication(), tournament, progressbar,
-            tournamentPlayerTeamListAdapter, noTournamentPlayersTextView).execute();
+            tournamentPlayerTeamExpandableListAdapter, noTournamentPlayersTextView).execute();
 
         if (tournament.getTournamentTyp().equals(TournamentTyp.SOLO.name())) {
             tournamentPlayersRecyclerView.setVisibility(View.VISIBLE);
@@ -267,7 +268,7 @@ public class TournamentPlayerListFragment extends Fragment implements Tournament
         DatabaseReference mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
 
         DatabaseReference child = mFirebaseDatabaseReference.child(FirebaseReferences.TOURNAMENT_REGISTRATIONS + "/"
-                + tournament.getOnlineUUID());
+                + tournament.getUUID());
 
         child.addChildEventListener(new ChildEventListener() {
 
@@ -361,7 +362,7 @@ public class TournamentPlayerListFragment extends Fragment implements Tournament
     public void addTournamentPlayer(TournamentPlayer tournamentPlayer) {
 
         tournamentPlayerListAdapter.addTournamentPlayer(tournamentPlayer);
-        tournamentPlayerTeamListAdapter.addTournamentPlayer(tournamentPlayer);
+        tournamentPlayerTeamExpandableListAdapter.addTournamentPlayer(tournamentPlayer);
 
         if (tournamentPlayerListAdapter.getItemCount() > 0) {
             noTournamentPlayersTextView.setVisibility(View.GONE);
@@ -373,7 +374,7 @@ public class TournamentPlayerListFragment extends Fragment implements Tournament
     public void removeTournamentPlayer(TournamentPlayer tournamentPlayer) {
 
         tournamentPlayerListAdapter.removeTournamentPlayer(tournamentPlayer);
-        tournamentPlayerTeamListAdapter.removeTournamentPlayer(tournamentPlayer);
+        tournamentPlayerTeamExpandableListAdapter.removeTournamentPlayer(tournamentPlayer);
 
         if (tournamentPlayerListAdapter.getItemCount() == 0) {
             noTournamentPlayersTextView.setVisibility(View.VISIBLE);
@@ -395,7 +396,7 @@ public class TournamentPlayerListFragment extends Fragment implements Tournament
     public void updateTournamentPlayer(TournamentPlayer updatedPLayer, String oldTeamName) {
 
         tournamentPlayerListAdapter.updateTournamentPlayer(updatedPLayer);
-        tournamentPlayerTeamListAdapter.updateTournamentPlayer(updatedPLayer, oldTeamName);
+        tournamentPlayerTeamExpandableListAdapter.updateTournamentPlayer(updatedPLayer, oldTeamName);
     }
 
 
@@ -403,7 +404,7 @@ public class TournamentPlayerListFragment extends Fragment implements Tournament
     public void addRegistration(TournamentPlayer player) {
 
         tournamentPlayerListAdapter.addTournamentPlayer(player);
-        tournamentPlayerTeamListAdapter.addTournamentPlayer(player);
+        tournamentPlayerTeamExpandableListAdapter.addTournamentPlayer(player);
 
         registrationListAdapter.removeRegistration(player);
     }

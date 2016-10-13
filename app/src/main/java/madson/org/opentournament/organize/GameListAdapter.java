@@ -253,6 +253,12 @@ public class GameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
         holder.getPairingRow().setOnClickListener(new OpenEnterGameResultClickListener(game));
         holder.getPlayerOneCardView().setOnClickListener(new OpenEnterGameResultClickListener(game));
         holder.getPlayerTwoCardView().setOnClickListener(new OpenEnterGameResultClickListener(game));
+
+        holder.getPlayerOneTeam().setVisibility(View.GONE);
+        holder.getPlayerTwoTeam().setVisibility(View.GONE);
+
+        holder.getPlayerOneFaction().setVisibility(View.GONE);
+        holder.getPlayerTwoFaction().setVisibility(View.GONE);
     }
 
 

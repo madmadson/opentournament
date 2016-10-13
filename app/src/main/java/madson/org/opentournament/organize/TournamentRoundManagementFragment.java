@@ -157,6 +157,11 @@ public class TournamentRoundManagementFragment extends Fragment implements Tourn
 
 
     @Override
+    public void handleTournamentEvent(TournamentEventTag eventTag) {
+    }
+
+
+    @Override
     public void startRound(int roundToStart, Tournament tournament) {
 
         // nothing

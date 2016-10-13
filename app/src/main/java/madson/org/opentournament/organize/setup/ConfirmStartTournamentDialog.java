@@ -7,37 +7,24 @@ import android.content.DialogInterface;
 
 import android.os.Bundle;
 
-import android.support.annotation.Nullable;
-
-import android.support.design.widget.Snackbar;
-
 import android.support.v4.app.DialogFragment;
 
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.Toolbar;
 
 import android.view.LayoutInflater;
 import android.view.View;
 
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-
 import madson.org.opentournament.R;
-import madson.org.opentournament.db.FirebaseReferences;
 import madson.org.opentournament.domain.PairingOption;
 import madson.org.opentournament.domain.Tournament;
-import madson.org.opentournament.organize.TournamentOrganizeActivity;
 import madson.org.opentournament.tasks.LoadTournamentTask;
-import madson.org.opentournament.tasks.PairNewRoundTask;
 import madson.org.opentournament.tasks.StartTournamentTask;
 import madson.org.opentournament.utility.BaseActivity;
-import madson.org.opentournament.utility.BaseApplication;
 
 import java.util.Map;
 
@@ -53,13 +40,14 @@ public class ConfirmStartTournamentDialog extends DialogFragment {
 
     private Tournament tournament;
     private Map<String, PairingOption> pairingOptions;
-    private BaseApplication baseApplication;
+    private BaseActivity baseActivity;
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onAttach(Context context) {
 
-        super.onCreate(savedInstanceState);
-        baseApplication = (BaseApplication) getActivity().getApplication();
+        super.onAttach(context);
+
+        baseActivity = (BaseActivity) getActivity();
     }
 
 
@@ -88,11 +76,11 @@ public class ConfirmStartTournamentDialog extends DialogFragment {
 
         View dialogView = inflater.inflate(R.layout.dialog_confirm_start_tournament, null);
 
-        new LoadTournamentTask(baseApplication, dialogView, tournament).execute();
+        new LoadTournamentTask(baseActivity, dialogView, tournament).execute();
 
         LinearLayout container = (LinearLayout) dialogView.findViewById(R.id.pairing_options_container);
 
-        pairingOptions = baseApplication.getPairingOptionsForTournament(tournament);
+        pairingOptions = baseActivity.getBaseApplication().getPairingOptionsForTournament(tournament);
 
         for (final PairingOption option : pairingOptions.values()) {
             View pairingOption = inflater.inflate(R.layout.view_pairing_option, null);
@@ -161,8 +149,7 @@ public class ConfirmStartTournamentDialog extends DialogFragment {
                 @Override
                 public void onClick(View v) {
 
-                    new StartTournamentTask((BaseActivity) getActivity(), tournament, pairingOptions).execute();
-
+                    new StartTournamentTask(baseActivity, tournament, pairingOptions).execute();
                     dialog.dismiss();
                 }
             });

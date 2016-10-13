@@ -107,6 +107,18 @@ public class OnlineGamesListAdapter extends RecyclerView.Adapter<GameViewHolder>
 
     private void gameForTeamTournament(GameViewHolder holder, Game game) {
 
+        holder.getPlayerOneFaction().setVisibility(View.GONE);
+        holder.getPlayerOneTeam().setVisibility(View.GONE);
+
+        holder.getPlayerTwoFaction().setVisibility(View.GONE);
+        holder.getPlayerTwoTeam().setVisibility(View.GONE);
+
+        holder.getPlayerOneIntermediatePoints().setVisibility(View.VISIBLE);
+        holder.getPlayerOneIntermediatePoints().setText(String.valueOf(game.getParticipant_one_intermediate_points()));
+
+        holder.getPlayerTwoIntermediatePoints().setVisibility(View.VISIBLE);
+        holder.getPlayerTwoIntermediatePoints().setText(String.valueOf(game.getParticipant_two_intermediate_points()));
+
         holder.getPlayerOneNameInList().setText(game.getParticipantOneUUID());
         holder.getPlayerTwoNameInList().setText(game.getParticipantTwoUUID());
     }

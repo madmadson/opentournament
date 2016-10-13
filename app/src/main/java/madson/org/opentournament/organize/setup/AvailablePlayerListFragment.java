@@ -288,6 +288,11 @@ public class AvailablePlayerListFragment extends BaseFragment implements Tournam
     }
 
 
+    @Override
+    public void handleTournamentEvent(TournamentEventTag eventTag) {
+    }
+
+
     private void doFilter(CharSequence s) {
 
         localPlayerListAdapter.getFilter().filter(s.toString(), new Filter.FilterListener() {

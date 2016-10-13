@@ -151,4 +151,9 @@ public class TeamGameListFragment extends Fragment implements TournamentEventLis
     @Override
     public void addRegistration(TournamentPlayer player) {
     }
+
+
+    @Override
+    public void handleTournamentEvent(TournamentEventTag eventTag) {
+    }
 }

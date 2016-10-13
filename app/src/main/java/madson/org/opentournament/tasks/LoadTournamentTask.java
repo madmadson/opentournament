@@ -15,6 +15,7 @@ import madson.org.opentournament.organize.GameListAdapter;
 import madson.org.opentournament.organize.TournamentOrganizeActivity;
 import madson.org.opentournament.service.OngoingTournamentService;
 import madson.org.opentournament.service.TournamentService;
+import madson.org.opentournament.utility.BaseActivity;
 import madson.org.opentournament.utility.BaseApplication;
 
 import java.util.List;
@@ -27,7 +28,7 @@ import java.util.List;
  */
 public class LoadTournamentTask extends AsyncTask<Void, Void, Void> {
 
-    private BaseApplication baseApplication;
+    private BaseActivity baseActivity;
     private Tournament tournament;
     private TournamentOrganizeActivity.SectionsPagerAdapter adapter;
     private ViewPager pager;
@@ -35,10 +36,10 @@ public class LoadTournamentTask extends AsyncTask<Void, Void, Void> {
     private Tournament actualTournament;
     private View dialogView;
 
-    public LoadTournamentTask(BaseApplication baseApplication, Tournament tournament,
+    public LoadTournamentTask(BaseActivity baseActivity, Tournament tournament,
         TournamentOrganizeActivity.SectionsPagerAdapter adapter, ViewPager pager, ProgressBar progressBar) {
 
-        this.baseApplication = baseApplication;
+        this.baseActivity = baseActivity;
         this.tournament = tournament;
         this.adapter = adapter;
         this.pager = pager;
@@ -46,9 +47,9 @@ public class LoadTournamentTask extends AsyncTask<Void, Void, Void> {
     }
 
 
-    public LoadTournamentTask(BaseApplication baseApplication, View dialogView, Tournament tournament) {
+    public LoadTournamentTask(BaseActivity baseActivity, View dialogView, Tournament tournament) {
 
-        this.baseApplication = baseApplication;
+        this.baseActivity = baseActivity;
         this.dialogView = dialogView;
         this.tournament = tournament;
     }
@@ -67,7 +68,7 @@ public class LoadTournamentTask extends AsyncTask<Void, Void, Void> {
     @Override
     protected Void doInBackground(Void... params) {
 
-        TournamentService tournamentService = baseApplication.getTournamentService();
+        TournamentService tournamentService = baseActivity.getBaseApplication().getTournamentService();
         actualTournament = tournamentService.getTournamentForId(tournament.get_id());
 
         return null;

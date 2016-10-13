@@ -114,7 +114,9 @@ public class OnlineGamesListFragment extends Fragment {
                         if (game != null) {
                             mProgressBar.setVisibility(View.GONE);
 
-                            gamesListAdapter.addGame(game);
+                            if (game.getParent_UUID() == null) {
+                                gamesListAdapter.addGame(game);
+                            }
                         }
                     }
                 }

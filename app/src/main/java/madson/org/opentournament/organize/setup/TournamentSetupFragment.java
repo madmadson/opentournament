@@ -180,6 +180,11 @@ public class TournamentSetupFragment extends Fragment implements TournamentEvent
 
 
     @Override
+    public void handleTournamentEvent(TournamentEventTag eventTag) {
+    }
+
+
+    @Override
     public void startRound(int roundToStart, Tournament tournament) {
 
         if (roundToStart == 2) {

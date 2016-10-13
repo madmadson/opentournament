@@ -456,6 +456,16 @@ public abstract class BaseApplication extends Application {
     }
 
 
+    public void notifyTournamentEvent(TournamentEventTag eventTag) {
+
+        Set<TournamentEventListener> listeners = new HashSet<>(tournamentEventListeners);
+
+        for (TournamentEventListener listener : listeners) {
+            listener.handleTournamentEvent(eventTag);
+        }
+    }
+
+
     public Map<String, PairingOption> getPairingOptionsForTournament(Tournament tournament) {
 
         Map<String, PairingOption> returnedPairingOptions = new HashMap<>();

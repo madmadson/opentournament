@@ -1,5 +1,6 @@
 package madson.org.opentournament.organize;
 
+import android.content.Context;
 import android.content.Intent;
 
 import android.os.Bundle;
@@ -9,13 +10,17 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 
 import android.support.v7.app.ActionBar;
 
 import android.util.Log;
 
+import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.View;
+import android.view.ViewGroup;
 
 import android.widget.ProgressBar;
 
@@ -33,14 +38,16 @@ import madson.org.opentournament.utility.TournamentEventTag;
 
 
 /**
- * Activity for tournament organiser.
+ * Activity for initialTournament organiser.
  */
 public class TournamentOrganizeActivity extends BaseActivity implements TournamentEventListener {
 
-    public static final String EXTRA_TOURNAMENT = "tournament";
+    public static final String EXTRA_TOURNAMENT = "initialTournament";
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
+    private ProgressBar progressBar;
+    private Tournament initialTournament;
 
     @Override
     public boolean useTabLayout() {
@@ -55,8 +62,6 @@ public class TournamentOrganizeActivity extends BaseActivity implements Tourname
         super.onDestroy();
 
         getBaseApplication().unregisterTournamentEventListener(this);
-        mSectionsPagerAdapter = null;
-        mViewPager = null;
     }
 
 
@@ -95,15 +100,15 @@ public class TournamentOrganizeActivity extends BaseActivity implements Tourname
 
         Bundle extras = intent.getExtras();
 
-        Tournament tournament = (Tournament) extras.get(EXTRA_TOURNAMENT);
+        initialTournament = (Tournament) extras.get(EXTRA_TOURNAMENT);
 
-        if (tournament != null) {
-            Log.i(this.getClass().toString(), "tournament opened with id " + tournament);
+        if (initialTournament != null) {
+            Log.i(this.getClass().toString(), "initialTournament opened with id " + initialTournament);
 
             ActionBar supportActionBar = getSupportActionBar();
 
             if (supportActionBar != null) {
-                supportActionBar.setTitle(tournament.getName());
+                supportActionBar.setTitle(initialTournament.getName());
             }
 
             mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
@@ -114,28 +119,14 @@ public class TournamentOrganizeActivity extends BaseActivity implements Tourname
             TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
             tabLayout.setupWithViewPager(mViewPager);
 
-            ProgressBar progressBar = (ProgressBar) getToolbar().findViewById(R.id.toolbar_progress_bar);
-            new LoadTournamentTask(getBaseApplication(), tournament, mSectionsPagerAdapter, mViewPager, progressBar)
-                .execute();
+            progressBar = (ProgressBar) getToolbar().findViewById(R.id.toolbar_progress_bar);
+            new LoadTournamentTask(this, initialTournament, mSectionsPagerAdapter, mViewPager, progressBar).execute();
         }
     }
 
 
     @Override
     public void startRound(int roundToStart, Tournament tournament) {
-
-        Log.i(this.getClass().getName(), "set actual tournament");
-
-        mSectionsPagerAdapter.setTournamentToOrganize(tournament);
-
-        float widthOfScreen = getWidthOfScreen();
-
-        if (widthOfScreen < 720) {
-            int round = (roundToStart * 2) - 1;
-            mViewPager.setCurrentItem(round);
-        } else {
-            mViewPager.setCurrentItem(roundToStart);
-        }
     }
 
 
@@ -189,6 +180,23 @@ public class TournamentOrganizeActivity extends BaseActivity implements Tourname
     public void addRegistration(TournamentPlayer player) {
     }
 
+
+    @Override
+    public void handleTournamentEvent(TournamentEventTag eventTag) {
+
+        if (eventTag.equals(TournamentEventTag.TOURNAMENT_STARTED)) {
+            // TODO ask if no better solution
+            mSectionsPagerAdapter = null;
+            mViewPager = null;
+            finish();
+
+            Intent intent = new Intent(this, TournamentOrganizeActivity.class);
+
+            intent.putExtra(TournamentOrganizeActivity.EXTRA_TOURNAMENT, initialTournament);
+            startActivity(intent);
+        }
+    }
+
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
         private Tournament tournamentToOrganize;
@@ -202,7 +210,7 @@ public class TournamentOrganizeActivity extends BaseActivity implements Tourname
         public Fragment getItem(int position) {
 
             Log.i(this.getClass().getName(),
-                "create tournament fragment: " + tournamentToOrganize + " on position: " + position);
+                "create initialTournament fragment: " + tournamentToOrganize + " on position: " + position);
 
             float widthOfScreen = getWidthOfScreen();
 

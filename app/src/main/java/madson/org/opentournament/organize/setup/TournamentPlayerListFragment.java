@@ -408,4 +408,9 @@ public class TournamentPlayerListFragment extends Fragment implements Tournament
 
         registrationListAdapter.removeRegistration(player);
     }
+
+
+    @Override
+    public void handleTournamentEvent(TournamentEventTag eventTag) {
+    }
 }

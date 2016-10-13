@@ -53,13 +53,14 @@ public class ConfirmPairingNewRoundDialog extends DialogFragment {
     private Tournament tournament;
     private int round_for_pairing;
     private Map<String, PairingOption> pairingOptions;
-    private BaseApplication baseApplication;
+    private BaseActivity baseActivity;
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onAttach(Context context) {
 
-        super.onCreate(savedInstanceState);
-        baseApplication = (BaseApplication) getActivity().getApplication();
+        super.onAttach(context);
+
+        baseActivity = (BaseActivity) getActivity();
     }
 
 
@@ -89,11 +90,11 @@ public class ConfirmPairingNewRoundDialog extends DialogFragment {
 
         View dialogView = inflater.inflate(R.layout.dialog_confirm_pairing, null);
 
-        new LoadTournamentTask(baseApplication, dialogView, tournament).execute();
+        new LoadTournamentTask(baseActivity, dialogView, tournament).execute();
 
         LinearLayout container = (LinearLayout) dialogView.findViewById(R.id.pairing_options_container);
 
-        pairingOptions = baseApplication.getPairingOptionsForTournament(tournament);
+        pairingOptions = baseActivity.getBaseApplication().getPairingOptionsForTournament(tournament);
 
         for (final PairingOption option : pairingOptions.values()) {
             View pairingOption = inflater.inflate(R.layout.view_pairing_option, null);
@@ -169,8 +170,8 @@ public class ConfirmPairingNewRoundDialog extends DialogFragment {
 
                     ProgressBar progressBar = (ProgressBar) toolbar.findViewById(R.id.toolbar_progress_bar);
 
-                    new PairNewRoundTask(baseApplication, tournament, snackbar, progressBar, false, pairingOptions)
-                    .execute();
+                    new PairNewRoundTask(baseActivity.getBaseApplication(), tournament, snackbar, progressBar, false,
+                        pairingOptions).execute();
 
                     dialog.dismiss();
                 }

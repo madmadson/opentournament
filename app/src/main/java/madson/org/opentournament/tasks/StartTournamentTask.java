@@ -16,6 +16,7 @@ import madson.org.opentournament.service.OngoingTournamentService;
 import madson.org.opentournament.service.RankingService;
 import madson.org.opentournament.service.TournamentService;
 import madson.org.opentournament.utility.BaseActivity;
+import madson.org.opentournament.utility.TournamentEventTag;
 
 import java.util.Map;
 
@@ -67,11 +68,6 @@ public class StartTournamentTask extends AsyncTask<Void, Void, Void> {
     @Override
     protected void onPostExecute(Void aVoid) {
 
-        Intent intent = new Intent(baseActivity, TournamentOrganizeActivity.class);
-
-        intent.putExtra(TournamentOrganizeActivity.EXTRA_TOURNAMENT, tournament);
-        baseActivity.startActivity(intent);
-
-        baseActivity.finish();
+        baseActivity.getBaseApplication().notifyTournamentEvent(TournamentEventTag.TOURNAMENT_STARTED);
     }
 }

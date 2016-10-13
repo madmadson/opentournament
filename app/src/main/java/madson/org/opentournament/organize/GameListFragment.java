@@ -320,4 +320,9 @@ public class GameListFragment extends Fragment implements TournamentEventListene
     @Override
     public void addRegistration(TournamentPlayer player) {
     }
+
+
+    @Override
+    public void handleTournamentEvent(TournamentEventTag eventTag) {
+    }
 }

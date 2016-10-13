@@ -9,5 +9,6 @@ package madson.org.opentournament.utility;
 public enum TournamentEventTag {
 
     TEAM_TOURNAMENT_GAME_RESULT_ENTERED,
-    GAME_RESULT_ENTERED;
+    GAME_RESULT_ENTERED,
+    TOURNAMENT_STARTED;
 }

@@ -42,4 +42,7 @@ public interface TournamentEventListener {
 
 
     void addRegistration(TournamentPlayer player);
+
+
+    void handleTournamentEvent(TournamentEventTag eventTag);
 }

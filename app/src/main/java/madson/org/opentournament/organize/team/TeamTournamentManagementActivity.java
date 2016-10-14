@@ -29,7 +29,7 @@ import madson.org.opentournament.utility.BaseActivity;
  * @author  Tobias Matt - tmatt@contargo.net
  */
 
-public class TeamTournamentGameManagementActivity extends BaseActivity {
+public class TeamTournamentManagementActivity extends BaseActivity {
 
     public static final String EXTRA_TOURNAMENT = "tournament";
     public static final String EXTRA_GAME = "game";

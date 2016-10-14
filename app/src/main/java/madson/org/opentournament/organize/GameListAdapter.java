@@ -13,28 +13,18 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 
 import android.support.v4.app.FragmentManager;
-import android.support.v4.view.MotionEventCompat;
-import android.support.v4.widget.NestedScrollView;
 
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.RecyclerView.OnScrollListener;
 import android.support.v7.widget.Toolbar;
 
-import android.util.DisplayMetrics;
-import android.util.Log;
-
-import android.view.Display;
 import android.view.DragEvent;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 
 import android.widget.ProgressBar;
-import android.widget.ScrollView;
 
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Game;
@@ -42,7 +32,7 @@ import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentParticipant;
 import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.domain.TournamentTyp;
-import madson.org.opentournament.organize.team.TeamTournamentGameManagementActivity;
+import madson.org.opentournament.organize.team.TeamTournamentManagementActivity;
 import madson.org.opentournament.tasks.SwapPlayersTask;
 import madson.org.opentournament.utility.BaseActivity;
 import madson.org.opentournament.utility.BaseApplication;
@@ -90,24 +80,14 @@ public class GameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
         startedShape = baseActivity.getResources().getDrawable(R.drawable.shape_started);
     }
 
-    public void updateGameForRound(TournamentEventTag tag, Game game) {
+    public void updateGame(Game game) {
 
-        if (TournamentEventTag.TEAM_TOURNAMENT_GAME_RESULT_ENTERED.equals(tag)) {
-            if (gamesForRound.contains(game)) {
-                int indexOfGame = gamesForRound.indexOf(game);
+        if (gamesForRound.contains(game)) {
+            int indexOfGame = gamesForRound.indexOf(game);
 
-                gamesForRound.remove(game);
-                gamesForRound.add(indexOfGame, game);
-                notifyDataSetChanged();
-            }
-        } else {
-            if (game.getTournament_round() == round) {
-                int indexOfGame = gamesForRound.indexOf(game);
-
-                gamesForRound.remove(game);
-                gamesForRound.add(indexOfGame, game);
-                notifyDataSetChanged();
-            }
+            gamesForRound.remove(game);
+            gamesForRound.add(indexOfGame, game);
+            notifyDataSetChanged();
         }
     }
 
@@ -224,11 +204,9 @@ public class GameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
         holder.getPlayerTwoIntermediatePoints().setVisibility(View.VISIBLE);
         holder.getPlayerTwoIntermediatePoints().setText(String.valueOf(game.getParticipant_two_intermediate_points()));
 
-        holder.getPairingRow().setOnClickListener(new OpenTournamentTeamManagementClickListener(tournament, game));
-        holder.getPlayerOneCardView()
-            .setOnClickListener(new OpenTournamentTeamManagementClickListener(tournament, game));
-        holder.getPlayerTwoCardView()
-            .setOnClickListener(new OpenTournamentTeamManagementClickListener(tournament, game));
+        holder.getPairingRow().setOnClickListener(new TeamManagementClickListener(tournament, game));
+        holder.getPlayerOneCardView().setOnClickListener(new TeamManagementClickListener(tournament, game));
+        holder.getPlayerTwoCardView().setOnClickListener(new TeamManagementClickListener(tournament, game));
     }
 
 
@@ -316,12 +294,12 @@ public class GameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
         }
     }
 
-    private class OpenTournamentTeamManagementClickListener implements View.OnClickListener {
+    private class TeamManagementClickListener implements View.OnClickListener {
 
         private Tournament tournament;
         private Game game;
 
-        public OpenTournamentTeamManagementClickListener(Tournament tournament, Game game) {
+        public TeamManagementClickListener(Tournament tournament, Game game) {
 
             this.tournament = tournament;
 
@@ -331,10 +309,10 @@ public class GameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
         @Override
         public void onClick(View v) {
 
-            Intent intent = new Intent(baseActivity, TeamTournamentGameManagementActivity.class);
+            Intent intent = new Intent(baseActivity, TeamTournamentManagementActivity.class);
 
-            intent.putExtra(TeamTournamentGameManagementActivity.EXTRA_TOURNAMENT, tournament);
-            intent.putExtra(TeamTournamentGameManagementActivity.EXTRA_GAME, game);
+            intent.putExtra(TeamTournamentManagementActivity.EXTRA_TOURNAMENT, tournament);
+            intent.putExtra(TeamTournamentManagementActivity.EXTRA_GAME, game);
             baseActivity.startActivity(intent);
         }
     }

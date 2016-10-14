@@ -1,5 +1,7 @@
 package madson.org.opentournament.online;
 
+import android.content.Intent;
+
 import android.graphics.Color;
 
 import android.graphics.drawable.Drawable;
@@ -14,9 +16,12 @@ import android.view.ViewGroup;
 
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Game;
+import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.domain.TournamentTyp;
+import madson.org.opentournament.online.team.OnlineTeamTournamentManagementActivity;
+import madson.org.opentournament.utility.BaseActivity;
 import madson.org.opentournament.utility.BaseApplication;
 import madson.org.opentournament.viewHolder.GameViewHolder;
 
@@ -33,20 +38,21 @@ public class OnlineGamesListAdapter extends RecyclerView.Adapter<GameViewHolder>
 
     private List<Game> gameList;
 
-    private BaseApplication baseApplication;
     private Tournament tournament;
     private Drawable winnerShape;
     private Drawable looserShape;
 
-    public OnlineGamesListAdapter(BaseApplication baseApplication, Tournament tournament) {
+    private BaseActivity baseActivity;
 
-        this.baseApplication = baseApplication;
+    public OnlineGamesListAdapter(BaseActivity baseActivity, Tournament tournament) {
+
+        this.baseActivity = baseActivity;
         this.tournament = tournament;
 
         this.gameList = new ArrayList<>();
 
-        winnerShape = baseApplication.getResources().getDrawable(R.drawable.shape_winner);
-        looserShape = baseApplication.getResources().getDrawable(R.drawable.shape_looser);
+        winnerShape = baseActivity.getResources().getDrawable(R.drawable.shape_winner);
+        looserShape = baseActivity.getResources().getDrawable(R.drawable.shape_looser);
     }
 
     @Override
@@ -64,7 +70,7 @@ public class OnlineGamesListAdapter extends RecyclerView.Adapter<GameViewHolder>
         final Game game = gameList.get(position);
 
         holder.getTableNumber()
-            .setText(baseApplication.getResources().getString(R.string.table_number, game.getPlaying_field()));
+            .setText(baseActivity.getResources().getString(R.string.table_number, game.getPlaying_field()));
 
         if (game.isFinished()) {
             holder.getPlayerOneCardView()
@@ -86,22 +92,18 @@ public class OnlineGamesListAdapter extends RecyclerView.Adapter<GameViewHolder>
         }
 
         holder.getPlayerOneScore()
-            .setText(baseApplication.getResources().getString(R.string.game_win, game.getParticipant_one_score()));
+            .setText(baseActivity.getResources().getString(R.string.game_win, game.getParticipant_one_score()));
         holder.getPlayerOneControlPoints()
-            .setText(baseApplication.getResources()
-                .getString(R.string.game_cp, game.getParticipant_one_control_points()));
+            .setText(baseActivity.getResources().getString(R.string.game_cp, game.getParticipant_one_control_points()));
         holder.getPlayerOneVictoryPoints()
-            .setText(baseApplication.getResources()
-                .getString(R.string.game_vp, game.getParticipant_one_victory_points()));
+            .setText(baseActivity.getResources().getString(R.string.game_vp, game.getParticipant_one_victory_points()));
 
         holder.getPlayerTwoScore()
-            .setText(baseApplication.getResources().getString(R.string.game_win, game.getParticipant_two_score()));
+            .setText(baseActivity.getResources().getString(R.string.game_win, game.getParticipant_two_score()));
         holder.getPlayerTwoControlPoints()
-            .setText(baseApplication.getResources()
-                .getString(R.string.game_cp, game.getParticipant_two_control_points()));
+            .setText(baseActivity.getResources().getString(R.string.game_cp, game.getParticipant_two_control_points()));
         holder.getPlayerTwoVictoryPoints()
-            .setText(baseApplication.getResources()
-                .getString(R.string.game_vp, game.getParticipant_two_victory_points()));
+            .setText(baseActivity.getResources().getString(R.string.game_vp, game.getParticipant_two_victory_points()));
     }
 
 
@@ -121,6 +123,10 @@ public class OnlineGamesListAdapter extends RecyclerView.Adapter<GameViewHolder>
 
         holder.getPlayerOneNameInList().setText(game.getParticipantOneUUID());
         holder.getPlayerTwoNameInList().setText(game.getParticipantTwoUUID());
+
+        holder.getPairingRow().setOnClickListener(new TeamManagementClickListener(tournament, game));
+        holder.getPlayerOneCardView().setOnClickListener(new TeamManagementClickListener(tournament, game));
+        holder.getPlayerTwoCardView().setOnClickListener(new TeamManagementClickListener(tournament, game));
     }
 
 
@@ -129,7 +135,7 @@ public class OnlineGamesListAdapter extends RecyclerView.Adapter<GameViewHolder>
         TournamentPlayer player1 = game.getTournamentPlayerOne();
 
         holder.getPlayerOneNameInList()
-            .setText(baseApplication.getResources()
+            .setText(baseActivity.getResources()
                 .getString(R.string.player_name_in_row, player1.getFirstName(), player1.getNickName(),
                     player1.getLastName()));
         holder.getPlayerOneFaction().setText(player1.getFaction());
@@ -137,19 +143,19 @@ public class OnlineGamesListAdapter extends RecyclerView.Adapter<GameViewHolder>
         TournamentPlayer player2 = game.getTournamentPlayerTwo();
 
         holder.getPlayerTwoNameInList()
-            .setText(baseApplication.getResources()
+            .setText(baseActivity.getResources()
                 .getString(R.string.player_name_in_row, player2.getFirstName(), player2.getNickName(),
                     player2.getLastName()));
         holder.getPlayerTwoFaction().setText(player2.getFaction());
 
-        if (baseApplication.getAuthenticatedPlayer() != null
-                && (baseApplication.getAuthenticatedPlayer().getUUID().equals(player1.getPlayerUUID()))) {
-            holder.getPlayerOneCardView().setCardBackgroundColor(Color.MAGENTA);
-        }
+        Player authenticatedPlayer = baseActivity.getBaseApplication().getAuthenticatedPlayer();
 
-        if (baseApplication.getAuthenticatedPlayer() != null
-                && (baseApplication.getAuthenticatedPlayer().getUUID().equals(player2.getPlayerUUID()))) {
-            holder.getPlayerTwoCardView().setCardBackgroundColor(Color.MAGENTA);
+        if (authenticatedPlayer != null) {
+            if (authenticatedPlayer.getUUID().equals(player1.getPlayerUUID())) {
+                holder.getPlayerOneCardView().setCardBackgroundColor(Color.MAGENTA);
+            } else if (authenticatedPlayer.getUUID().equals(player2.getPlayerUUID())) {
+                holder.getPlayerTwoCardView().setCardBackgroundColor(Color.MAGENTA);
+            }
         }
     }
 
@@ -180,5 +186,28 @@ public class OnlineGamesListAdapter extends RecyclerView.Adapter<GameViewHolder>
         }
 
         return -1;
+    }
+
+    private class TeamManagementClickListener implements View.OnClickListener {
+
+        private Tournament tournament;
+        private Game game;
+
+        public TeamManagementClickListener(Tournament tournament, Game game) {
+
+            this.tournament = tournament;
+
+            this.game = game;
+        }
+
+        @Override
+        public void onClick(View v) {
+
+            Intent intent = new Intent(baseActivity, OnlineTeamTournamentManagementActivity.class);
+
+            intent.putExtra(OnlineTeamTournamentManagementActivity.EXTRA_TOURNAMENT, tournament);
+            intent.putExtra(OnlineTeamTournamentManagementActivity.EXTRA_GAME, game);
+            baseActivity.startActivity(intent);
+        }
     }
 }

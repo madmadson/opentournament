@@ -20,6 +20,7 @@ import madson.org.opentournament.service.OngoingTournamentService;
 import madson.org.opentournament.service.RankingService;
 import madson.org.opentournament.service.TournamentService;
 import madson.org.opentournament.utility.BaseApplication;
+import madson.org.opentournament.utility.TournamentEventTag;
 
 import java.util.Map;
 
@@ -99,7 +100,7 @@ public class PairNewRoundTask extends AsyncTask<Void, Void, Boolean> {
         if (pairAgain) {
             application.notifyPairAgain(tournament.getActualRound());
         } else {
-            application.notifyNextRoundPaired(tournament.getActualRound() + 1, updatedTournament);
+            application.notifyTournamentEvent(TournamentEventTag.NEXT_ROUND_PAIRED);
         }
 
         if (successful) {

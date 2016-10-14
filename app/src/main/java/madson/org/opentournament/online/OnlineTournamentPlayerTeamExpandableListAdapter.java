@@ -1,20 +1,10 @@
 package madson.org.opentournament.online;
 
 import android.content.Context;
-import android.content.DialogInterface;
 
 import android.graphics.Color;
 
-import android.os.Bundle;
-
-import android.support.design.widget.Snackbar;
-
-import android.support.v4.app.FragmentManager;
-
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
-
-import android.util.Log;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,10 +18,6 @@ import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.domain.TournamentTeam;
-import madson.org.opentournament.organize.setup.AddTournamentPlayerDialog;
-import madson.org.opentournament.organize.setup.AddTournamentPlayerListDialog;
-import madson.org.opentournament.tasks.DropTournamentPlayerFromTournamentTask;
-import madson.org.opentournament.tasks.RemoveTournamentPlayerFromTournamentTask;
 import madson.org.opentournament.utility.BaseActivity;
 
 import java.util.ArrayList;

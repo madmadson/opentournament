@@ -354,17 +354,6 @@ public abstract class BaseApplication extends Application {
     }
 
 
-    public void notifyNextRoundPaired(int roundToStart, Tournament updatedTournament) {
-
-        // iterate over a copy of the listeners to enable the listeners to unregister themselves on notifications
-        Set<TournamentEventListener> listeners = new HashSet<>(tournamentEventListeners);
-
-        for (TournamentEventListener listener : listeners) {
-            listener.startRound(roundToStart, updatedTournament);
-        }
-    }
-
-
     public void notifyPairAgain(int roundToStart) {
 
         // iterate over a copy of the listeners to enable the listeners to unregister themselves on notifications
@@ -402,16 +391,6 @@ public abstract class BaseApplication extends Application {
 
         for (TournamentEventListener listener : listeners) {
             listener.updateTournamentPlayer(tournamentPlayer, oldTeamName);
-        }
-    }
-
-
-    public void notifyPlayerAddToTournament(Player player) {
-
-        Set<TournamentEventListener> listeners = new HashSet<>(tournamentEventListeners);
-
-        for (TournamentEventListener listener : listeners) {
-            listener.addPlayerToTournament(player);
         }
     }
 

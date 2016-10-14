@@ -339,11 +339,6 @@ public class TournamentPlayerListFragment extends Fragment implements Tournament
 
 
     @Override
-    public void startRound(int roundToStart, Tournament tournament) {
-    }
-
-
-    @Override
     public void pairRoundAgain(int round_for_pairing) {
     }
 
@@ -379,11 +374,6 @@ public class TournamentPlayerListFragment extends Fragment implements Tournament
         if (tournamentPlayerListAdapter.getItemCount() == 0) {
             noTournamentPlayersTextView.setVisibility(View.VISIBLE);
         }
-    }
-
-
-    @Override
-    public void addPlayerToTournament(Player player) {
     }
 
 

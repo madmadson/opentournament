@@ -215,11 +215,6 @@ public class AvailablePlayerListFragment extends BaseFragment implements Tournam
 
 
     @Override
-    public void startRound(int roundToStart, Tournament tournament) {
-    }
-
-
-    @Override
     public void pairRoundAgain(int round_for_pairing) {
     }
 
@@ -257,11 +252,6 @@ public class AvailablePlayerListFragment extends BaseFragment implements Tournam
             onlinePlayerListAdapter.addPlayer(player);
             doFilter(filterPlayerTextView.getText());
         }
-    }
-
-
-    @Override
-    public void addPlayerToTournament(Player player) {
     }
 
 

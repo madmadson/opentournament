@@ -100,17 +100,15 @@ public class TeamGameListFragment extends Fragment implements TournamentEventLis
 
 
     @Override
-    public void startRound(int roundToStart, Tournament tournament) {
-    }
-
-
-    @Override
     public void pairRoundAgain(int round_for_pairing) {
     }
 
 
     @Override
     public void pairingChanged(Game game1, Game game2) {
+
+        gameListAdapter.updateGame(game1);
+        gameListAdapter.updateGame(game2);
     }
 
 
@@ -130,11 +128,6 @@ public class TeamGameListFragment extends Fragment implements TournamentEventLis
 
     @Override
     public void removeTournamentPlayer(TournamentPlayer tournamentPlayer) {
-    }
-
-
-    @Override
-    public void addPlayerToTournament(Player player) {
     }
 
 

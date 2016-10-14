@@ -137,11 +137,6 @@ public class TournamentRoundManagementFragment extends Fragment implements Tourn
 
 
     @Override
-    public void addPlayerToTournament(Player player) {
-    }
-
-
-    @Override
     public void removeAvailablePlayer(Player player) {
     }
 
@@ -158,13 +153,6 @@ public class TournamentRoundManagementFragment extends Fragment implements Tourn
 
     @Override
     public void handleTournamentEvent(TournamentEventTag eventTag) {
-    }
-
-
-    @Override
-    public void startRound(int roundToStart, Tournament tournament) {
-
-        // nothing
     }
 
 

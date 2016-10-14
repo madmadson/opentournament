@@ -260,15 +260,6 @@ public class GameListFragment extends Fragment implements TournamentEventListene
 
 
     @Override
-    public void startRound(int roundToStart, Tournament tournament) {
-
-        nextRoundButton.setVisibility(View.GONE);
-        pairRoundAgainButton.setVisibility(View.GONE);
-        endTournamentButton.setVisibility(View.GONE);
-    }
-
-
-    @Override
     public void pairRoundAgain(int round_for_pairing) {
 
         if (round_for_pairing == round) {
@@ -280,15 +271,15 @@ public class GameListFragment extends Fragment implements TournamentEventListene
     @Override
     public void pairingChanged(Game game1, Game game2) {
 
-        gameListAdapter.updateGameForRound(null, game1);
-        gameListAdapter.updateGameForRound(null, game2);
+        gameListAdapter.updateGame(game1);
+        gameListAdapter.updateGame(game2);
     }
 
 
     @Override
     public void enterGameResultConfirmed(TournamentEventTag tag, Game game) {
 
-        gameListAdapter.updateGameForRound(tag, game);
+        gameListAdapter.updateGame(game);
     }
 
 
@@ -299,11 +290,6 @@ public class GameListFragment extends Fragment implements TournamentEventListene
 
     @Override
     public void removeTournamentPlayer(TournamentPlayer tournamentPlayer) {
-    }
-
-
-    @Override
-    public void addPlayerToTournament(Player player) {
     }
 
 
@@ -324,5 +310,11 @@ public class GameListFragment extends Fragment implements TournamentEventListene
 
     @Override
     public void handleTournamentEvent(TournamentEventTag eventTag) {
+
+        if (eventTag.equals(TournamentEventTag.NEXT_ROUND_PAIRED)) {
+            nextRoundButton.setVisibility(View.GONE);
+            pairRoundAgainButton.setVisibility(View.GONE);
+            endTournamentButton.setVisibility(View.GONE);
+        }
     }
 }

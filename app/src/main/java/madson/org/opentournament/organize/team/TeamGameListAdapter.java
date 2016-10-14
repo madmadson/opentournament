@@ -27,11 +27,13 @@ import android.widget.ProgressBar;
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Game;
 import madson.org.opentournament.domain.Tournament;
+import madson.org.opentournament.domain.TournamentParticipant;
 import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.organize.EnterResultForGameDialog;
 import madson.org.opentournament.tasks.SwapPlayersTask;
 import madson.org.opentournament.utility.BaseActivity;
 import madson.org.opentournament.utility.BaseApplication;
+import madson.org.opentournament.utility.TournamentEventTag;
 import madson.org.opentournament.viewHolder.GameViewHolder;
 
 import java.util.ArrayList;
@@ -268,55 +270,42 @@ public class TeamGameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
                     final Game draggedGame = (Game) event.getLocalState();
                     final CharSequence playerOneOrTwo = event.getClipData().getItemAt(0).getText();
 
-                    TournamentPlayer draggedPlayer = null;
-                    TournamentPlayer draggedPlayerOpponent = null;
+                    TournamentParticipant draggedPlayer = null;
+                    TournamentParticipant draggedPlayerOpponent = null;
                     if (playerOneOrTwo.equals("1")) {
-                        draggedPlayer = (TournamentPlayer) draggedGame.getParticipantOne();
-                        draggedPlayerOpponent = (TournamentPlayer) draggedGame.getParticipantTwo();
+                        draggedPlayer = draggedGame.getParticipantOne();
+                        draggedPlayerOpponent = draggedGame.getParticipantTwo();
                     } else {
-                        draggedPlayer = (TournamentPlayer) draggedGame.getParticipantTwo();
-                        draggedPlayerOpponent = (TournamentPlayer) draggedGame.getParticipantOne();
+                        draggedPlayer = draggedGame.getParticipantTwo();
+                        draggedPlayerOpponent = draggedGame.getParticipantOne();
                     }
 
-                    TournamentPlayer droppedPlayer = null;
-                    TournamentPlayer droppedPlayerOpponent = null;
+                    TournamentParticipant droppedPlayer = null;
+                    TournamentParticipant droppedPlayerOpponent = null;
                     if (droppedPlayerIndex == 1) {
-                        droppedPlayer = (TournamentPlayer) droppedGame.getParticipantOne();
-                        droppedPlayerOpponent = (TournamentPlayer) droppedGame.getParticipantTwo();
+                        droppedPlayer = droppedGame.getParticipantOne();
+                        droppedPlayerOpponent = droppedGame.getParticipantTwo();
                     } else {
-                        droppedPlayer = (TournamentPlayer) droppedGame.getParticipantTwo();
-                        droppedPlayerOpponent = (TournamentPlayer) droppedGame.getParticipantOne();
+                        droppedPlayer = droppedGame.getParticipantTwo();
+                        droppedPlayerOpponent = droppedGame.getParticipantOne();
                     }
 
-                    final TournamentPlayer draggedPlayerFinal = draggedPlayer;
-                    final TournamentPlayer droppedPlayerFinal = droppedPlayer;
+                    final TournamentParticipant draggedPlayerFinal = draggedPlayer;
+                    final TournamentParticipant droppedPlayerFinal = droppedPlayer;
 
-                    if (draggedPlayer.getListOfOpponentsIds().contains(droppedPlayerOpponent.getPlayerUUID())) {
-                        String playerOne = baseActivity.getResources()
-                                .getString(R.string.player_name_in_row, draggedPlayer.getFirstName(),
-                                    draggedPlayer.getNickName(), draggedPlayer.getLastName());
-                        String playerTwo = baseActivity.getResources()
-                                .getString(R.string.player_name_in_row, droppedPlayerOpponent.getFirstName(),
-                                    droppedPlayerOpponent.getNickName(), droppedPlayerOpponent.getLastName());
-
+                    if (draggedPlayer.getListOfOpponentsUUIDs().contains(droppedPlayerOpponent.getUuid())) {
                         Snackbar snackbar = Snackbar.make((baseActivity).getCoordinatorLayout(),
                                 baseActivity.getResources()
-                                    .getString(R.string.player_already_played_each_other, playerOne, playerTwo),
-                                Snackbar.LENGTH_LONG);
+                                    .getString(R.string.player_already_played_each_other, draggedPlayer.getName(),
+                                        droppedPlayer.getName()), Snackbar.LENGTH_LONG);
                         snackbar.getView()
                             .setBackgroundColor(baseActivity.getResources().getColor(R.color.colorNeutral));
                         snackbar.show();
-                    } else if (droppedPlayer.getListOfOpponentsIds().contains(draggedPlayerOpponent.getPlayerUUID())) {
-                        String playerOne = baseActivity.getResources()
-                                .getString(R.string.player_name_in_row, droppedPlayer.getFirstName(),
-                                    droppedPlayer.getNickName(), droppedPlayer.getLastName());
-                        String playerTwo = baseActivity.getResources()
-                                .getString(R.string.player_name_in_row, draggedPlayerOpponent.getFirstName(),
-                                    draggedPlayerOpponent.getNickName(), draggedPlayerOpponent.getLastName());
+                    } else if (droppedPlayer.getListOfOpponentsUUIDs().contains(draggedPlayerOpponent.getUuid())) {
                         Snackbar snackbar = Snackbar.make((baseActivity).getCoordinatorLayout(),
                                 baseActivity.getResources()
-                                    .getString(R.string.player_already_played_each_other, playerOne, playerTwo),
-                                Snackbar.LENGTH_LONG);
+                                    .getString(R.string.player_already_played_each_other, droppedPlayer.getName(),
+                                        draggedPlayerOpponent.getName()), Snackbar.LENGTH_LONG);
                         snackbar.getView()
                             .setBackgroundColor(baseActivity.getResources().getColor(R.color.colorNeutral));
 

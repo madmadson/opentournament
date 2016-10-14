@@ -23,6 +23,7 @@ import madson.org.opentournament.service.TournamentPlayerService;
 import madson.org.opentournament.service.TournamentService;
 import madson.org.opentournament.utility.BaseActivity;
 import madson.org.opentournament.utility.BaseApplication;
+import madson.org.opentournament.utility.TournamentEventTag;
 
 import java.util.Map;
 
@@ -75,6 +76,6 @@ public class TournamentEndTask extends AsyncTask<Void, Void, Void> {
 
         progressBar.setVisibility(View.GONE);
 
-        application.notifyNextRoundPaired(tournament.getActualRound() + 1, tournament);
+        application.notifyTournamentEvent(TournamentEventTag.NEXT_ROUND_PAIRED);
     }
 }

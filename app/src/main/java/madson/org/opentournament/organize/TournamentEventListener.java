@@ -14,9 +14,6 @@ import madson.org.opentournament.utility.TournamentEventTag;
  */
 public interface TournamentEventListener {
 
-    void startRound(int roundToStart, Tournament tournament);
-
-
     void pairRoundAgain(int round_for_pairing);
 
 
@@ -30,9 +27,6 @@ public interface TournamentEventListener {
 
 
     void removeTournamentPlayer(TournamentPlayer tournamentPlayer);
-
-
-    void addPlayerToTournament(Player player);
 
 
     void removeAvailablePlayer(Player player);

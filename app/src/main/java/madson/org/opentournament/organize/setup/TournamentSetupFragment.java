@@ -160,11 +160,6 @@ public class TournamentSetupFragment extends Fragment implements TournamentEvent
 
 
     @Override
-    public void addPlayerToTournament(Player player) {
-    }
-
-
-    @Override
     public void removeAvailablePlayer(Player player) {
     }
 
@@ -181,20 +176,10 @@ public class TournamentSetupFragment extends Fragment implements TournamentEvent
 
     @Override
     public void handleTournamentEvent(TournamentEventTag eventTag) {
-    }
 
-
-    @Override
-    public void startRound(int roundToStart, Tournament tournament) {
-
-        if (roundToStart == 2) {
-            FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
-
-            fragmentTransaction.remove(availablePlayerListFragment);
-            fragmentTransaction.commit();
+        if (eventTag.equals(TournamentEventTag.TOURNAMENT_STARTED)) {
+            tournamentPlayerListFragment.startButtonInvisible();
         }
-
-        tournamentPlayerListFragment.startButtonInvisible();
     }
 
 

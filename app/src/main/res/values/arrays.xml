@@ -18,7 +18,7 @@
     <!-- this must be a pair -->
     <string-array name="news_header">
         <item>Welcome!</item>
-        <item>XXX: Version 0.2.0-ALPHA Released</item>
+        <item>Fr 14.10: Version 0.2.0-ALPHA Released</item>
         <item>Fr 7.10: Version 0.1.8-ALPHA Released</item>
         <item>Do 6.10: Version 0.1.7-ALPHA Released</item>
     </string-array>
@@ -28,11 +28,16 @@
          <item>* Improve mobile layout for tournament organization\n
             * Many Fixed Labels\n
             * New "teamView" for organized Tournaments -> Teamtournament preparation\n
-            * Bug with registrations. Registration now has header!\n
+             * new Feature TeamTournaments!
+             * Check if player already in tournament (name check)
+             * space saving in tournament player visualization
+             * better mobile view for tournament organization
+             * Bug with registrations. Registration now has header!\n
+             * input bug when use keyboard in game result entering
+             * final standings  should be correct now
         </item>
       
         <item>* Fix bug in calendar\n
-            * Many Fixed Labels\n
             * New "teamView" for organized Tournaments -> Teamtournament preparation\n
             * Bug with registrations. Registration now has header!\n
         </item>

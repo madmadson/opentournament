@@ -151,6 +151,8 @@ public class OnlineTournamentActivity extends BaseActivity {
     private class SectionsPagerAdapter extends FragmentPagerAdapter {
 
         private Tournament tournament;
+        private String state;
+        private int actualRound;
 
         public SectionsPagerAdapter(FragmentManager fm) {
 
@@ -160,7 +162,7 @@ public class OnlineTournamentActivity extends BaseActivity {
         @Override
         public Fragment getItem(int position) {
 
-            if (tournament.getState().equals(Tournament.TournamentState.PLANED.name())) {
+            if (state.equals(Tournament.TournamentState.PLANED.name())) {
                 return RegisterTournamentPlayerListFragment.newInstance(tournament);
             }
 
@@ -169,9 +171,13 @@ public class OnlineTournamentActivity extends BaseActivity {
             // list of all players
             if (position == 0) {
                 return OnlineTournamentPlayerListFragment.newInstance(tournament);
-            } else if (tournament.getState().equals(Tournament.TournamentState.FINISHED.name())
-                    && tournament.getActualRound() == round) {
-                return OnlineRankingListFragment.newInstance(round, tournament);
+            }
+
+            if (state.equals(Tournament.TournamentState.FINISHED.name())) {
+                if ((actualRound * 2) - 1 == position) {
+                    // final standings
+                    return OnlineRankingListFragment.newInstance(round, tournament);
+                }
             }
 
             if (position % 2 == 1) {
@@ -185,22 +191,18 @@ public class OnlineTournamentActivity extends BaseActivity {
         @Override
         public int getCount() {
 
-            if (tournament.getState().equals(Tournament.TournamentState.PLANED.name())) {
+            if (state.equals(Tournament.TournamentState.PLANED.name())) {
                 return 1;
             }
 
-            if (tournament.getState().equals(Tournament.TournamentState.FINISHED.name())) {
-                return (tournament.getActualRound() * 2);
-            } else {
-                return (tournament.getActualRound() * 2) + 1;
-            }
+            return actualRound * 2;
         }
 
 
         @Override
         public CharSequence getPageTitle(int position) {
 
-            if (tournament.getState().equals(Tournament.TournamentState.PLANED.name())) {
+            if (state.equals(Tournament.TournamentState.PLANED.name())) {
                 return getApplication().getResources().getString(R.string.nav_registration_tab);
             }
 
@@ -208,8 +210,8 @@ public class OnlineTournamentActivity extends BaseActivity {
 
             if (position == 0) {
                 return getApplication().getResources().getString(R.string.nav_tournament_players);
-            } else if (tournament.getState().equals(Tournament.TournamentState.FINISHED.name())
-                    && tournament.getActualRound() == round) {
+            } else if (state.equals(Tournament.TournamentState.FINISHED.name())
+                    && (((actualRound * 2) - 1) == position)) {
                 return getApplication().getResources().getString(R.string.nav_final_standing_tab);
             } else {
                 if (position % 2 == 1) {
@@ -228,6 +230,9 @@ public class OnlineTournamentActivity extends BaseActivity {
 
 
         public void setTournament(Tournament tournament) {
+
+            state = tournament.getState();
+            actualRound = tournament.getActualRound();
 
             this.tournament = tournament;
             notifyDataSetChanged();

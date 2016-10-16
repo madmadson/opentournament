@@ -260,8 +260,8 @@ public class TournamentServiceImpl implements TournamentService {
 
         SQLiteDatabase writableDatabase = openTournamentDBHelper.getWritableDatabase();
 
-        writableDatabase.update(TournamentTable.TABLE_TOURNAMENTS, contentValues, TournamentTable.COLUMN_ID + " = ?",
-            new String[] { String.valueOf(tournament.get_id()) });
+        writableDatabase.update(TournamentTable.TABLE_TOURNAMENTS, contentValues,
+            TournamentTable.COLUMN_ONLINE_UUID + " = ?", new String[] { tournament.getUUID() });
     }
 
 

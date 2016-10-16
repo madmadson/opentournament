@@ -91,6 +91,8 @@ public class OrganizedTournamentListAdapter extends RecyclerView.Adapter<Tournam
         } else if (tournament.getActualRound() > 0) {
             viewHolder.getTournamentState().setText(R.string.tournament_started);
             viewHolder.getTournamentState().setTextColor(Color.GREEN);
+        } else {
+            viewHolder.getTournamentState().setVisibility(View.GONE);
         }
 
         if (viewHolder.getEditTournamentButton() != null) {

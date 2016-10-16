@@ -75,7 +75,7 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/label_tournament_date"
                 android:imeOptions="actionNext"
-                android:inputType="none"
+                android:inputType="date"
                 android:maxLines="1" />
 
         </android.support.design.widget.TextInputLayout>
@@ -146,9 +146,10 @@
                 android:layout_height="wrap_content"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
-                android:inputType="none"
+                android:inputType="number"
                 android:paddingLeft="@dimen/main_tick"
                 android:paddingRight="@dimen/main_tick"
+                android:maxLines="1"
                 android:text="5" />
 
             <ImageButton

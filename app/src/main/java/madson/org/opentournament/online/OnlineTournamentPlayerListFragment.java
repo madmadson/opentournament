@@ -149,7 +149,7 @@ public class OnlineTournamentPlayerListFragment extends Fragment {
                         noTournamentPlayersTextView.setVisibility(View.VISIBLE);
                     }
                 }
-            }, 5000);
+            }, 10000);
 
         if (tournament.getTournamentTyp().equals(TournamentTyp.SOLO.name())) {
             recyclerView.setVisibility(View.VISIBLE);

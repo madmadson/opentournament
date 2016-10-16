@@ -346,7 +346,7 @@ public class RankingServiceImpl implements RankingService {
         SQLiteDatabase readableDatabase = openTournamentDBHelper.getReadableDatabase();
 
         Cursor cursor = readableDatabase.query(GameTable.TABLE_TOURNAMENT_GAME, GameTable.ALL_COLS_FOR_TOURNAMENT_GAME,
-                GameTable.COLUMN_TOURNAMENT_ID + "  = ? A   ND " + GameTable.COLUMN_TOURNAMENT_ROUND
+                GameTable.COLUMN_TOURNAMENT_ID + "  = ? AND " + GameTable.COLUMN_TOURNAMENT_ROUND
                 + " <= ? AND " + GameTable.COLUMN_FINISHED + " != 0  AND " + GameTable.COLUMN_PARENT_UUID + " IS NULL",
                 new String[] { String.valueOf(tournament_id), String.valueOf(tournament_round) }, null, null, null);
 

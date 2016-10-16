@@ -107,10 +107,7 @@ public class CheckTeamTournamentStartedTask extends AsyncTask<Void, Void, Void> 
             list.setAdapter(stringArrayAdapter);
 
             AlertDialog.Builder builder = new AlertDialog.Builder(baseActivity);
-            builder.setTitle(R.string.teams_not_full)
-                .setView(v)
-                .setPositiveButton(R.string.dialog_confirm, null)
-                .show();
+            builder.setTitle(R.string.teams_not_full).setView(v).setPositiveButton(R.string.dialog_ok, null).show();
         } else {
             ConfirmStartTournamentDialog dialog = new ConfirmStartTournamentDialog();
 

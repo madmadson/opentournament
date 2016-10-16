@@ -182,7 +182,11 @@ public class TournamentOrganizeActivity extends BaseActivity implements Tourname
     public void handleTournamentEvent(TournamentEventTag eventTag) {
 
         if (eventTag.equals(TournamentEventTag.TOURNAMENT_STARTED)) {
-            new LoadTournamentTask(this, initialTournament, mSectionsPagerAdapter, mViewPager, progressBar).execute();
+            finish();
+
+            Intent intent = new Intent(this, TournamentOrganizeActivity.class);
+            intent.putExtra(TournamentOrganizeActivity.EXTRA_TOURNAMENT, initialTournament);
+            startActivity(intent);
         } else if (eventTag.equals(TournamentEventTag.NEXT_ROUND_PAIRED)) {
             new LoadTournamentTask(this, initialTournament, mSectionsPagerAdapter, mViewPager, progressBar).execute();
         }
@@ -191,6 +195,8 @@ public class TournamentOrganizeActivity extends BaseActivity implements Tourname
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
         private Tournament tournamentToOrganize;
+        private String state;
+        private int actualRound;
 
         public SectionsPagerAdapter(FragmentManager fm) {
 
@@ -205,44 +211,39 @@ public class TournamentOrganizeActivity extends BaseActivity implements Tourname
 
             float widthOfScreen = getWidthOfScreen();
 
-            if (tournamentToOrganize.getState().equals(Tournament.TournamentState.PLANED.name())) {
+            if (state.equals(Tournament.TournamentState.PLANED.name())) {
                 if (widthOfScreen < 720) {
                     if (position == 0) {
-                        return TournamentPlayerListFragment.newInstance(new Tournament(tournamentToOrganize));
+                        return TournamentPlayerListFragment.newInstance(tournamentToOrganize);
                     } else {
-                        return AvailablePlayerListFragment.newInstance(new Tournament(tournamentToOrganize));
+                        return AvailablePlayerListFragment.newInstance(tournamentToOrganize);
                     }
                 } else {
-                    return TournamentSetupFragment.newInstance(new Tournament(tournamentToOrganize));
+                    return TournamentSetupFragment.newInstance(tournamentToOrganize);
                 }
             } else {
                 if (position == 0) {
-                    return TournamentPlayerListFragment.newInstance(new Tournament(tournamentToOrganize));
+                    return TournamentPlayerListFragment.newInstance(tournamentToOrganize);
                 }
             }
 
             if (widthOfScreen < 720) {
                 int round = (position + 1) / 2;
 
-                if (tournamentToOrganize.getState().equals(Tournament.TournamentState.FINISHED.name())
-                        && tournamentToOrganize.getActualRound() == round) {
-                    return RankingListFragment.newInstance(tournamentToOrganize.getActualRound(),
-                            new Tournament(tournamentToOrganize));
+                if (state.equals(Tournament.TournamentState.FINISHED.name()) && actualRound == round) {
+                    return RankingListFragment.newInstance(actualRound, tournamentToOrganize);
                 }
 
                 if (position % 2 == 1) {
-                    return GameListFragment.newInstance(round, new Tournament(tournamentToOrganize));
+                    return GameListFragment.newInstance(round, tournamentToOrganize);
                 } else {
-                    return RankingListFragment.newInstance(round, new Tournament(tournamentToOrganize));
+                    return RankingListFragment.newInstance(round, tournamentToOrganize);
                 }
             } else {
-                if (tournamentToOrganize.getState().equals(Tournament.TournamentState.FINISHED.name())
-                        && position == tournamentToOrganize.getActualRound()) {
-                    return RankingListFragment.newInstance(tournamentToOrganize.getActualRound(),
-                            new Tournament(tournamentToOrganize));
+                if (state.equals(Tournament.TournamentState.FINISHED.name()) && position == actualRound) {
+                    return RankingListFragment.newInstance(actualRound, tournamentToOrganize);
                 } else {
-                    return TournamentRoundManagementFragment.newInstance(position,
-                            new Tournament(tournamentToOrganize));
+                    return TournamentRoundManagementFragment.newInstance(position, tournamentToOrganize);
                 }
             }
         }
@@ -253,25 +254,25 @@ public class TournamentOrganizeActivity extends BaseActivity implements Tourname
 
             float widthOfScreen = getWidthOfScreen();
 
-            if (tournamentToOrganize != null) {
-                if (tournamentToOrganize.getState().equals(Tournament.TournamentState.PLANED.name())) {
+            if (state != null) {
+                if (state.equals(Tournament.TournamentState.PLANED.name())) {
                     if (widthOfScreen < 720) {
                         return 2;
                     } else {
                         return 1;
                     }
                 } else {
-                    if (tournamentToOrganize.getState().equals(Tournament.TournamentState.FINISHED.name())) {
+                    if (state.equals(Tournament.TournamentState.FINISHED.name())) {
                         if (widthOfScreen < 720) {
-                            return (tournamentToOrganize.getActualRound() * 2);
+                            return actualRound * 2;
                         } else {
-                            return tournamentToOrganize.getActualRound() + 1;
+                            return actualRound + 1;
                         }
                     } else {
                         if (widthOfScreen < 720) {
-                            return (tournamentToOrganize.getActualRound() * 2) + 1;
+                            return (actualRound * 2) + 1;
                         } else {
-                            return tournamentToOrganize.getActualRound() + 1;
+                            return actualRound + 1;
                         }
                     }
                 }
@@ -290,7 +291,7 @@ public class TournamentOrganizeActivity extends BaseActivity implements Tourname
                 return getApplication().getResources().getString(R.string.nav_tournament_players);
             }
 
-            if (tournamentToOrganize.getState().equals(Tournament.TournamentState.PLANED.name())) {
+            if (state.equals(Tournament.TournamentState.PLANED.name())) {
                 if (position == 1 && widthOfScreen < 720) {
                     return getApplication().getResources().getString(R.string.nav_available_players);
                 }
@@ -299,8 +300,7 @@ public class TournamentOrganizeActivity extends BaseActivity implements Tourname
             if (widthOfScreen < 720) {
                 int round = (position + 1) / 2;
 
-                if (tournamentToOrganize.getState().equals(Tournament.TournamentState.FINISHED.name())
-                        && position == ((tournamentToOrganize.getActualRound() * 2) - 1)) {
+                if (state.equals(Tournament.TournamentState.FINISHED.name()) && position == (actualRound * 2)) {
                     return getApplication().getResources().getString(R.string.nav_final_standing_tab);
                 } else {
                     if (position % 2 == 1) {
@@ -310,8 +310,7 @@ public class TournamentOrganizeActivity extends BaseActivity implements Tourname
                     }
                 }
             } else {
-                if (tournamentToOrganize.getState().equals(Tournament.TournamentState.FINISHED.name())
-                        && position == tournamentToOrganize.getActualRound()) {
+                if (state.equals(Tournament.TournamentState.FINISHED.name()) && position == actualRound) {
                     return getApplication().getResources().getString(R.string.nav_final_standing_tab);
                 } else {
                     return getApplication().getResources().getString(R.string.nav_round_tab, position);
@@ -323,6 +322,9 @@ public class TournamentOrganizeActivity extends BaseActivity implements Tourname
         public void setTournamentToOrganize(Tournament tournamentToOrganize) {
 
             this.tournamentToOrganize = new Tournament(tournamentToOrganize);
+
+            state = tournamentToOrganize.getState();
+            actualRound = tournamentToOrganize.getActualRound();
 
             mSectionsPagerAdapter.notifyDataSetChanged();
         }

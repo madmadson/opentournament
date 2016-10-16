@@ -17,9 +17,9 @@
 
     <!-- NAV: Tournament Management -->
     <string name="heading_online_tournaments">Online Tournaments</string>
-    <string name="heading_organized_tournaments">Your organised Tournaments</string>
+    <string name="heading_organized_tournaments">Your Tournaments</string>
 
-    <string name="header_tournament_name">Tournament name</string>
+    <string name="header_tournament_name">Tournament</string>
     <string name="header_remaining_seats">Seats</string>
 
     <!-- toolbar titles-->
@@ -297,5 +297,6 @@
     <string name="player_with_same_name_already_in_tournament">Player with name already in Tournament</string>
     <string name="dialog_I_know_this">I know this</string>
     <string name="success_save_game_result">Successfuly save Game result</string>
+    <string name="dialog_ok">ok</string>
 
 </resources>

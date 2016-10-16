@@ -409,7 +409,8 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
                 game.setParticipantOne(allPlayerMapForTournament.get(game.getParticipantOneUUID()));
                 game.setParticipantTwo(allPlayerMapForTournament.get(game.getParticipantTwoUUID()));
 
-                if (game.getParent_UUID() != null) {
+                if (game.getParent_UUID() != null
+                        || uploadedTournament.getTournamentTyp().equals(TournamentTyp.SOLO.name())) {
                     game.setTournamentPlayerOne(allPlayerMapForTournament.get(game.getParticipantOneUUID()));
                     game.setTournamentPlayerTwo(allPlayerMapForTournament.get(game.getParticipantTwoUUID()));
                 }

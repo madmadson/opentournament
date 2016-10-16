@@ -18,6 +18,7 @@
     <!-- this must be a pair -->
     <string-array name="news_header">
         <item>Welcome!</item>
+        <item>So 16.10: Version 0.2.2-ALPHA Released</item>
         <item>Fr 14.10: Version 0.2.0-ALPHA Released</item>
         <item>Fr 7.10: Version 0.1.8-ALPHA Released</item>
         <item>Do 6.10: Version 0.1.7-ALPHA Released</item>
@@ -25,6 +26,9 @@
 
     <string-array name="news">
         <item>Create more Tournaments! Give Feedback!</item>
+         <item>* Fix wrong determination of tournament state and round\n
+             * fix issue creating team tournament
+        </item>
          <item>* Improve mobile layout for tournament organization\n
             * Many Fixed Labels\n
             * New "teamView" for organized Tournaments -> Teamtournament preparation\n

@@ -6,6 +6,9 @@ import android.support.design.widget.Snackbar;
 
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Tournament;
+import madson.org.opentournament.events.OpenTournamentEventTag;
+import madson.org.opentournament.events.UpdateTournamentEvent;
+import madson.org.opentournament.events.UpdateTournamentPlayerEvent;
 import madson.org.opentournament.service.TournamentService;
 import madson.org.opentournament.utility.BaseActivity;
 
@@ -41,7 +44,9 @@ public class UpdateTournamentTask extends AsyncTask<Void, Void, Void> {
 
         super.onPostExecute(aVoid);
 
-        baseActivity.getBaseApplication().notifyTournamentEdited(tournamentToSave);
+        baseActivity.getBaseApplication()
+            .notifyTournamentEvent(OpenTournamentEventTag.UPDATE_TOURNAMENT,
+                new UpdateTournamentEvent(tournamentToSave));
 
         Snackbar snackbar = Snackbar.make(baseActivity.getCoordinatorLayout(), R.string.success_update_tournament,
                 Snackbar.LENGTH_LONG);

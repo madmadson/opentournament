@@ -37,8 +37,8 @@ android {
         applicationId "madson.org.opentournament"
         minSdkVersion 16
         targetSdkVersion 24
-        versionCode 11
-        versionName "0.2.2-ALPHA"
+        versionCode 12
+        versionName "0.2.3-ALPHA"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
@@ -58,7 +58,7 @@ android {
         }
 
         stage {
-            debuggable false
+            debuggable true
             minifyEnabled false
             signingConfig signingConfigs.stage;
 

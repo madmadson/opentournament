@@ -23,13 +23,13 @@ import madson.org.opentournament.about.AppInfo;
 import madson.org.opentournament.about.LibraryItem;
 import madson.org.opentournament.config.MapOfPairingConfig;
 import madson.org.opentournament.db.FirebaseReferences;
-import madson.org.opentournament.domain.Game;
 import madson.org.opentournament.domain.GameOrSportTyp;
 import madson.org.opentournament.domain.PairingOption;
 import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.Tournament;
-import madson.org.opentournament.domain.TournamentPlayer;
-import madson.org.opentournament.organize.TournamentEventListener;
+import madson.org.opentournament.events.OpenTournamentEvent;
+import madson.org.opentournament.events.OpenTournamentEventListener;
+import madson.org.opentournament.events.OpenTournamentEventTag;
 import madson.org.opentournament.service.OngoingTournamentService;
 import madson.org.opentournament.service.OngoingTournamentServiceImpl;
 import madson.org.opentournament.service.OngoingTournamentServiceMockImpl;
@@ -45,7 +45,6 @@ import madson.org.opentournament.service.TournamentPlayerServiceMockImpl;
 import madson.org.opentournament.service.TournamentService;
 import madson.org.opentournament.service.TournamentServiceImpl;
 import madson.org.opentournament.service.TournamentServiceMockImpl;
-import madson.org.opentournament.tournaments.OrganizeTournamentEventListener;
 
 import net.danlew.android.joda.JodaTimeAndroid;
 
@@ -69,8 +68,7 @@ public abstract class BaseApplication extends Application {
     private static PlayerService playerService;
     private static TournamentPlayerService tournamentPlayerService;
 
-    private Set<TournamentEventListener> tournamentEventListeners = new HashSet<>();
-    private Set<OrganizeTournamentEventListener> organizeTournamentEventListeners = new HashSet<>();
+    private Set<OpenTournamentEventListener> tournamentEventListeners = new HashSet<>();
     private Player authenticatedPlayer;
 
     private GameOrSportTyp selectedGameOrSportTyp;
@@ -274,7 +272,7 @@ public abstract class BaseApplication extends Application {
      *
      * @param  listener
      */
-    public void registerTournamentEventListener(TournamentEventListener listener) {
+    public void registerTournamentEventListener(OpenTournamentEventListener listener) {
 
         if (!tournamentEventListeners.contains(listener)) {
             tournamentEventListeners.add(listener);
@@ -287,7 +285,7 @@ public abstract class BaseApplication extends Application {
      *
      * @param  listener
      */
-    public void unregisterTournamentEventListener(TournamentEventListener listener) {
+    public void unregisterTournamentEventListener(OpenTournamentEventListener listener) {
 
         if (tournamentEventListeners.contains(listener)) {
             tournamentEventListeners.remove(listener);
@@ -295,152 +293,12 @@ public abstract class BaseApplication extends Application {
     }
 
 
-    /**
-     * Registers a listener .
-     *
-     * @param  listener
-     */
-    public void registerOrganizeTournamentListener(OrganizeTournamentEventListener listener) {
+    public void notifyTournamentEvent(OpenTournamentEventTag eventTag, OpenTournamentEvent parameter) {
 
-        if (!organizeTournamentEventListeners.contains(listener)) {
-            organizeTournamentEventListeners.add(listener);
-        }
-    }
+        Set<OpenTournamentEventListener> listeners = new HashSet<>(tournamentEventListeners);
 
-
-    /**
-     * Registers a listener .
-     *
-     * @param  listener
-     */
-    public void unregisterOrganizeTournamentListener(OrganizeTournamentEventListener listener) {
-
-        if (organizeTournamentEventListeners.contains(listener)) {
-            organizeTournamentEventListeners.remove(listener);
-        }
-    }
-
-
-    public void notifyTournamentEdited(Tournament updatedTournament) {
-
-        // iterate over a copy of the listeners to enable the listeners to unregister themselves on notifications
-        HashSet<OrganizeTournamentEventListener> listeners = new HashSet<>(organizeTournamentEventListeners);
-
-        for (OrganizeTournamentEventListener listener : listeners) {
-            listener.onTournamentChangedEvent(updatedTournament);
-        }
-    }
-
-
-    public void notifyTournamentAdded(Tournament addedTournament) {
-
-        // iterate over a copy of the listeners to enable the listeners to unregister themselves on notifications
-        HashSet<OrganizeTournamentEventListener> listeners = new HashSet<>(organizeTournamentEventListeners);
-
-        for (OrganizeTournamentEventListener listener : listeners) {
-            listener.onTournamentAddedEvent(addedTournament);
-        }
-    }
-
-
-    public void notifyTournamentDelete(Tournament deletedTournament) {
-
-        // iterate over a copy of the listeners to enable the listeners to unregister themselves on notifications
-        HashSet<OrganizeTournamentEventListener> listeners = new HashSet<>(organizeTournamentEventListeners);
-
-        for (OrganizeTournamentEventListener listener : listeners) {
-            listener.onTournamentDeletedEvent(deletedTournament);
-        }
-    }
-
-
-    public void notifyPairAgain(int roundToStart) {
-
-        // iterate over a copy of the listeners to enable the listeners to unregister themselves on notifications
-        Set<TournamentEventListener> listeners = new HashSet<>(tournamentEventListeners);
-
-        for (TournamentEventListener listener : listeners) {
-            listener.pairRoundAgain(roundToStart);
-        }
-    }
-
-
-    public void notifyPairingChanged(Game game1, Game game2) {
-
-        Set<TournamentEventListener> listeners = new HashSet<>(tournamentEventListeners);
-
-        for (TournamentEventListener listener : listeners) {
-            listener.pairingChanged(game1, game2);
-        }
-    }
-
-
-    public void notifyGameResultEntered(TournamentEventTag tag, Game gameToSave) {
-
-        Set<TournamentEventListener> listeners = new HashSet<>(tournamentEventListeners);
-
-        for (TournamentEventListener listener : listeners) {
-            listener.enterGameResultConfirmed(tag, gameToSave);
-        }
-    }
-
-
-    public void notifyUpdateTournamentPlayer(TournamentPlayer tournamentPlayer, String oldTeamName) {
-
-        Set<TournamentEventListener> listeners = new HashSet<>(tournamentEventListeners);
-
-        for (TournamentEventListener listener : listeners) {
-            listener.updateTournamentPlayer(tournamentPlayer, oldTeamName);
-        }
-    }
-
-
-    public void notifyRegistrationAddToTournament(TournamentPlayer player) {
-
-        Set<TournamentEventListener> listeners = new HashSet<>(tournamentEventListeners);
-
-        for (TournamentEventListener listener : listeners) {
-            listener.addRegistration(player);
-        }
-    }
-
-
-    public void notifyRemoveAvailablePlayer(Player player) {
-
-        Set<TournamentEventListener> listeners = new HashSet<>(tournamentEventListeners);
-
-        for (TournamentEventListener listener : listeners) {
-            listener.removeAvailablePlayer(player);
-        }
-    }
-
-
-    public void notifyAddTournamentPlayer(TournamentPlayer player) {
-
-        Set<TournamentEventListener> listeners = new HashSet<>(tournamentEventListeners);
-
-        for (TournamentEventListener listener : listeners) {
-            listener.addTournamentPlayer(player);
-        }
-    }
-
-
-    public void notifyRemoveTournamentPlayer(TournamentPlayer player) {
-
-        Set<TournamentEventListener> listeners = new HashSet<>(tournamentEventListeners);
-
-        for (TournamentEventListener listener : listeners) {
-            listener.removeTournamentPlayer(player);
-        }
-    }
-
-
-    public void notifyTournamentEvent(TournamentEventTag eventTag) {
-
-        Set<TournamentEventListener> listeners = new HashSet<>(tournamentEventListeners);
-
-        for (TournamentEventListener listener : listeners) {
-            listener.handleTournamentEvent(eventTag);
+        for (OpenTournamentEventListener listener : listeners) {
+            listener.handleEvent(eventTag, parameter);
         }
     }
 

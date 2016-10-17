@@ -15,19 +15,20 @@ import android.view.ViewGroup;
 
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Game;
-import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.Tournament;
-import madson.org.opentournament.domain.TournamentPlayer;
-import madson.org.opentournament.organize.TournamentEventListener;
+import madson.org.opentournament.events.EnterGameResultConfirmed;
+import madson.org.opentournament.events.OpenTournamentEvent;
+import madson.org.opentournament.events.OpenTournamentEventListener;
+import madson.org.opentournament.events.OpenTournamentEventTag;
+import madson.org.opentournament.events.PairingChangedEvent;
 import madson.org.opentournament.tasks.LoadGameListForTeamMatchTask;
 import madson.org.opentournament.utility.BaseActivity;
-import madson.org.opentournament.utility.TournamentEventTag;
 
 
 /**
  * @author  Tobias Matt - tmatt@contargo.net
  */
-public class TeamGameListFragment extends Fragment implements TournamentEventListener {
+public class TeamGameListFragment extends Fragment implements OpenTournamentEventListener {
 
     public static final String BUNDLE_TOURNAMENT = "tournament";
     public static final String BUNDLE_GAME = "game";
@@ -100,53 +101,17 @@ public class TeamGameListFragment extends Fragment implements TournamentEventLis
 
 
     @Override
-    public void pairRoundAgain(int round_for_pairing) {
-    }
+    public void handleEvent(OpenTournamentEventTag eventTag, OpenTournamentEvent parameter) {
 
+        if (OpenTournamentEventTag.SAVE_GAME_RESULT_CONFIRMED.equals(eventTag)) {
+            EnterGameResultConfirmed enterGameResultConfirmed = (EnterGameResultConfirmed) parameter;
 
-    @Override
-    public void pairingChanged(Game game1, Game game2) {
+            gameListAdapter.updateGame(enterGameResultConfirmed.getEnteredGame());
+        } else if (OpenTournamentEventTag.PAIRING_CHANGED.equals(eventTag)) {
+            PairingChangedEvent enterGameResultConfirmed = (PairingChangedEvent) parameter;
 
-        gameListAdapter.updateGame(game1);
-        gameListAdapter.updateGame(game2);
-    }
-
-
-    @Override
-    public void enterGameResultConfirmed(TournamentEventTag tag, Game game) {
-
-        if (TournamentEventTag.TEAM_TOURNAMENT_GAME_RESULT_ENTERED.equals(tag)) {
-            gameListAdapter.updateGame(game);
+            gameListAdapter.updateGame(enterGameResultConfirmed.getGameOne());
+            gameListAdapter.updateGame(enterGameResultConfirmed.getGameTwo());
         }
-    }
-
-
-    @Override
-    public void addTournamentPlayer(TournamentPlayer tournamentPlayer) {
-    }
-
-
-    @Override
-    public void removeTournamentPlayer(TournamentPlayer tournamentPlayer) {
-    }
-
-
-    @Override
-    public void removeAvailablePlayer(Player player) {
-    }
-
-
-    @Override
-    public void updateTournamentPlayer(TournamentPlayer updatedPLayer, String oldTeamName) {
-    }
-
-
-    @Override
-    public void addRegistration(TournamentPlayer player) {
-    }
-
-
-    @Override
-    public void handleTournamentEvent(TournamentEventTag eventTag) {
     }
 }

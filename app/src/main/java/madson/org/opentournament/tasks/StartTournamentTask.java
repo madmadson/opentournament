@@ -1,7 +1,5 @@
 package madson.org.opentournament.tasks;
 
-import android.content.Intent;
-
 import android.os.AsyncTask;
 
 import com.google.firebase.database.DatabaseReference;
@@ -11,12 +9,11 @@ import madson.org.opentournament.db.FirebaseReferences;
 import madson.org.opentournament.domain.PairingOption;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentRanking;
-import madson.org.opentournament.organize.TournamentOrganizeActivity;
+import madson.org.opentournament.events.OpenTournamentEventTag;
 import madson.org.opentournament.service.OngoingTournamentService;
 import madson.org.opentournament.service.RankingService;
 import madson.org.opentournament.service.TournamentService;
 import madson.org.opentournament.utility.BaseActivity;
-import madson.org.opentournament.utility.TournamentEventTag;
 
 import java.util.Map;
 
@@ -68,6 +65,6 @@ public class StartTournamentTask extends AsyncTask<Void, Void, Void> {
     @Override
     protected void onPostExecute(Void aVoid) {
 
-        baseActivity.getBaseApplication().notifyTournamentEvent(TournamentEventTag.TOURNAMENT_STARTED);
+        baseActivity.getBaseApplication().notifyTournamentEvent(OpenTournamentEventTag.TOURNAMENT_STARTED, null);
     }
 }

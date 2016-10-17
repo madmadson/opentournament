@@ -18,11 +18,17 @@ import madson.org.opentournament.domain.Game;
 import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
+import madson.org.opentournament.events.OpenTournamentEvent;
+import madson.org.opentournament.events.OpenTournamentEventListener;
+import madson.org.opentournament.events.OpenTournamentEventTag;
+import madson.org.opentournament.events.PairRoundAgainEvent;
+import madson.org.opentournament.tasks.LoadGameListTask;
 import madson.org.opentournament.utility.BaseActivity;
-import madson.org.opentournament.utility.TournamentEventTag;
+
+import java.util.HashMap;
 
 
-public class TournamentRoundManagementFragment extends Fragment implements TournamentEventListener {
+public class TournamentRoundManagementFragment extends Fragment implements OpenTournamentEventListener {
 
     public static final String BUNDLE_TOURNAMENT = "tournament";
     public static final String BUNDLE_ROUND = "round";
@@ -32,6 +38,7 @@ public class TournamentRoundManagementFragment extends Fragment implements Tourn
 
     private GameListFragment gameListFragment;
     private RankingListFragment rankingForRoundListFragment;
+    private BaseActivity baseActivity;
 
     public static TournamentRoundManagementFragment newInstance(int roundNumber, Tournament tournament) {
 
@@ -49,7 +56,8 @@ public class TournamentRoundManagementFragment extends Fragment implements Tourn
     public void onAttach(Context context) {
 
         super.onAttach(context);
-        ((BaseActivity) getActivity()).getBaseApplication().registerTournamentEventListener(this);
+        baseActivity = ((BaseActivity) getActivity());
+        baseActivity.getBaseApplication().registerTournamentEventListener(this);
     }
 
 
@@ -58,7 +66,7 @@ public class TournamentRoundManagementFragment extends Fragment implements Tourn
 
         super.onDetach();
 
-        ((BaseActivity) getActivity()).getBaseApplication().unregisterTournamentEventListener(this);
+        baseActivity.getBaseApplication().unregisterTournamentEventListener(this);
     }
 
 
@@ -122,57 +130,19 @@ public class TournamentRoundManagementFragment extends Fragment implements Tourn
 
 
     @Override
-    public void enterGameResultConfirmed(TournamentEventTag tag, Game game) {
-    }
+    public void handleEvent(OpenTournamentEventTag eventTag, OpenTournamentEvent parameter) {
 
+        if (OpenTournamentEventTag.PAIR_ROUND_AGAIN.equals(eventTag)) {
+            PairRoundAgainEvent pairRoundAgainEvent = (PairRoundAgainEvent) parameter;
 
-    @Override
-    public void addTournamentPlayer(TournamentPlayer tournamentPlayer) {
-    }
+            if (pairRoundAgainEvent.getRound() == round) {
+                FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
 
+                showRound(pairRoundAgainEvent.getRound(), fragmentTransaction);
 
-    @Override
-    public void removeTournamentPlayer(TournamentPlayer tournamentPlayer) {
-    }
-
-
-    @Override
-    public void removeAvailablePlayer(Player player) {
-    }
-
-
-    @Override
-    public void updateTournamentPlayer(TournamentPlayer updatedPLayer, String teamName) {
-    }
-
-
-    @Override
-    public void addRegistration(TournamentPlayer player) {
-    }
-
-
-    @Override
-    public void handleTournamentEvent(TournamentEventTag eventTag) {
-    }
-
-
-    @Override
-    public void pairRoundAgain(int roundPairedAgainFor) {
-
-        if (roundPairedAgainFor == round) {
-            FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
-
-            showRound(roundPairedAgainFor, fragmentTransaction);
-
-            fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-            fragmentTransaction.commit();
+                fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+                fragmentTransaction.commit();
+            }
         }
-    }
-
-
-    @Override
-    public void pairingChanged(Game game1, Game game2) {
-
-        // nothing
     }
 }

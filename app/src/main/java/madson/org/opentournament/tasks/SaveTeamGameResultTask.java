@@ -10,6 +10,7 @@ import android.support.v7.app.AlertDialog;
 
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Game;
+import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.events.EnterGameResultConfirmed;
 import madson.org.opentournament.events.OpenTournamentEventTag;
 import madson.org.opentournament.service.OngoingTournamentService;
@@ -21,20 +22,23 @@ import madson.org.opentournament.utility.BaseActivity;
  *
  * @author  Tobias Matt - tmatt@contargo.net
  */
-public class SaveGameResultTask extends AsyncTask<Void, Void, Void> {
+public class SaveTeamGameResultTask extends AsyncTask<Void, Void, Void> {
 
     private BaseActivity baseActivity;
     private Game gameToSave;
     private AlertDialog confirm_dialog;
     private DialogInterface sure_draw_dialog;
+    private Tournament tournament;
+    private Game teamMatch;
 
-    public SaveGameResultTask(BaseActivity baseActivity, Game gameToSave, AlertDialog confirm_dialog,
-        DialogInterface sure_draw_dialog) {
+    public SaveTeamGameResultTask(BaseActivity baseActivity, Game gameToSave, AlertDialog confirm_dialog,
+        DialogInterface sure_draw_dialog, Tournament tournament) {
 
         this.baseActivity = baseActivity;
         this.gameToSave = gameToSave;
         this.confirm_dialog = confirm_dialog;
         this.sure_draw_dialog = sure_draw_dialog;
+        this.tournament = tournament;
     }
 
     @Override
@@ -46,6 +50,7 @@ public class SaveGameResultTask extends AsyncTask<Void, Void, Void> {
                 .getOngoingTournamentService();
 
         ongoingTournamentService.saveGameResult(gameToSave);
+        teamMatch = ongoingTournamentService.updateTeamMatch(gameToSave, tournament);
 
         return null;
     }
@@ -59,6 +64,10 @@ public class SaveGameResultTask extends AsyncTask<Void, Void, Void> {
         baseActivity.getBaseApplication()
             .notifyTournamentEvent(OpenTournamentEventTag.SAVE_GAME_RESULT_CONFIRMED,
                 new EnterGameResultConfirmed(gameToSave));
+
+        baseActivity.getBaseApplication()
+            .notifyTournamentEvent(OpenTournamentEventTag.SAVE_GAME_RESULT_CONFIRMED,
+                new EnterGameResultConfirmed(teamMatch));
 
         if (sure_draw_dialog != null) {
             sure_draw_dialog.dismiss();

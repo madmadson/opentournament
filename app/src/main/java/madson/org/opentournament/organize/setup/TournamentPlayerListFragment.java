@@ -33,19 +33,22 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import madson.org.opentournament.R;
 import madson.org.opentournament.db.FirebaseReferences;
-import madson.org.opentournament.domain.Game;
-import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.domain.TournamentTyp;
-import madson.org.opentournament.organize.TournamentEventListener;
+import madson.org.opentournament.events.AddRegistrationEvent;
+import madson.org.opentournament.events.AddTournamentPlayerEvent;
+import madson.org.opentournament.events.OpenTournamentEvent;
+import madson.org.opentournament.events.OpenTournamentEventListener;
+import madson.org.opentournament.events.OpenTournamentEventTag;
+import madson.org.opentournament.events.RemoveTournamentPlayerEvent;
+import madson.org.opentournament.events.UpdateTournamentPlayerEvent;
 import madson.org.opentournament.tasks.CheckTeamTournamentStartedTask;
 import madson.org.opentournament.tasks.LoadTournamentPlayerTask;
 import madson.org.opentournament.tasks.LoadTournamentPlayerTeamTask;
 import madson.org.opentournament.tasks.SaveDummyTournamentPlayerTask;
 import madson.org.opentournament.utility.BaseActivity;
 import madson.org.opentournament.utility.BaseApplication;
-import madson.org.opentournament.utility.TournamentEventTag;
 
 
 /**
@@ -53,7 +56,7 @@ import madson.org.opentournament.utility.TournamentEventTag;
  *
  * @author  Tobias Matt - tmatt@contargo.net
  */
-public class TournamentPlayerListFragment extends Fragment implements TournamentEventListener {
+public class TournamentPlayerListFragment extends Fragment implements OpenTournamentEventListener {
 
     public static final String BUNDLE_TOURNAMENT = "tournament";
 
@@ -259,7 +262,16 @@ public class TournamentPlayerListFragment extends Fragment implements Tournament
 
     private void startTeamTournamentClicked() {
 
-        new CheckTeamTournamentStartedTask(baseActivity, tournament).execute();
+        if (tournamentPlayerListAdapter.getItemCount() == 0) {
+            Snackbar snackbar = Snackbar.make(((BaseActivity) getActivity()).getCoordinatorLayout(),
+                    R.string.cant_start_tournament_without_players, Snackbar.LENGTH_LONG);
+
+            snackbar.getView().setBackgroundColor(getContext().getResources().getColor(R.color.colorNegative));
+
+            snackbar.show();
+        } else {
+            new CheckTeamTournamentStartedTask(baseActivity, tournament).execute();
+        }
     }
 
 
@@ -339,68 +351,43 @@ public class TournamentPlayerListFragment extends Fragment implements Tournament
 
 
     @Override
-    public void pairRoundAgain(int round_for_pairing) {
-    }
+    public void handleEvent(OpenTournamentEventTag eventTag, OpenTournamentEvent parameter) {
 
+        if (OpenTournamentEventTag.ADD_REGISTRATION.equals(eventTag)) {
+            AddRegistrationEvent registrationEvent = (AddRegistrationEvent) parameter;
+            TournamentPlayer tournamentPlayer = registrationEvent.getTournamentPlayer();
 
-    @Override
-    public void pairingChanged(Game game1, Game game2) {
-    }
+            tournamentPlayerListAdapter.addTournamentPlayer(tournamentPlayer);
+            tournamentPlayerTeamExpandableListAdapter.addTournamentPlayer(tournamentPlayer);
 
+            registrationListAdapter.removeRegistration(tournamentPlayer);
+        } else if (OpenTournamentEventTag.UPDATE_TOURNAMENT_PLAYER.equals(eventTag)) {
+            UpdateTournamentPlayerEvent updateTournamentEvent = (UpdateTournamentPlayerEvent) parameter;
+            TournamentPlayer updatedPlayer = updateTournamentEvent.getTournamentPlayer();
+            String oldTeamName = updateTournamentEvent.getOldTeamName();
 
-    @Override
-    public void enterGameResultConfirmed(TournamentEventTag tag, Game game) {
-    }
+            tournamentPlayerListAdapter.updateTournamentPlayer(updatedPlayer);
+            tournamentPlayerTeamExpandableListAdapter.updateTournamentPlayer(updatedPlayer, oldTeamName);
+        } else if (OpenTournamentEventTag.REMOVE_TOURNAMENT_PLAYER.equals(eventTag)) {
+            RemoveTournamentPlayerEvent removeTournamentPlayerEvent = (RemoveTournamentPlayerEvent) parameter;
+            TournamentPlayer tournamentPlayer = removeTournamentPlayerEvent.getTournamentPlayer();
 
+            tournamentPlayerListAdapter.removeTournamentPlayer(tournamentPlayer);
+            tournamentPlayerTeamExpandableListAdapter.removeTournamentPlayer(tournamentPlayer);
 
-    @Override
-    public void addTournamentPlayer(TournamentPlayer tournamentPlayer) {
+            if (tournamentPlayerListAdapter.getItemCount() == 0) {
+                noTournamentPlayersTextView.setVisibility(View.VISIBLE);
+            }
+        } else if (OpenTournamentEventTag.ADD_TOURNAMENT_PLAYER.equals(eventTag)) {
+            AddTournamentPlayerEvent addTournamentPlayerEvent = (AddTournamentPlayerEvent) parameter;
+            TournamentPlayer tournamentPlayer = addTournamentPlayerEvent.getTournamentPlayer();
 
-        tournamentPlayerListAdapter.addTournamentPlayer(tournamentPlayer);
-        tournamentPlayerTeamExpandableListAdapter.addTournamentPlayer(tournamentPlayer);
+            tournamentPlayerListAdapter.addTournamentPlayer(tournamentPlayer);
+            tournamentPlayerTeamExpandableListAdapter.addTournamentPlayer(tournamentPlayer);
 
-        if (tournamentPlayerListAdapter.getItemCount() > 0) {
-            noTournamentPlayersTextView.setVisibility(View.GONE);
+            if (tournamentPlayerListAdapter.getItemCount() > 0) {
+                noTournamentPlayersTextView.setVisibility(View.GONE);
+            }
         }
-    }
-
-
-    @Override
-    public void removeTournamentPlayer(TournamentPlayer tournamentPlayer) {
-
-        tournamentPlayerListAdapter.removeTournamentPlayer(tournamentPlayer);
-        tournamentPlayerTeamExpandableListAdapter.removeTournamentPlayer(tournamentPlayer);
-
-        if (tournamentPlayerListAdapter.getItemCount() == 0) {
-            noTournamentPlayersTextView.setVisibility(View.VISIBLE);
-        }
-    }
-
-
-    @Override
-    public void removeAvailablePlayer(Player player) {
-    }
-
-
-    @Override
-    public void updateTournamentPlayer(TournamentPlayer updatedPLayer, String oldTeamName) {
-
-        tournamentPlayerListAdapter.updateTournamentPlayer(updatedPLayer);
-        tournamentPlayerTeamExpandableListAdapter.updateTournamentPlayer(updatedPLayer, oldTeamName);
-    }
-
-
-    @Override
-    public void addRegistration(TournamentPlayer player) {
-
-        tournamentPlayerListAdapter.addTournamentPlayer(player);
-        tournamentPlayerTeamExpandableListAdapter.addTournamentPlayer(player);
-
-        registrationListAdapter.removeRegistration(player);
-    }
-
-
-    @Override
-    public void handleTournamentEvent(TournamentEventTag eventTag) {
     }
 }

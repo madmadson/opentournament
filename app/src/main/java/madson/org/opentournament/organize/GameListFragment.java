@@ -24,21 +24,24 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import madson.org.opentournament.R;
-import madson.org.opentournament.domain.Game;
-import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.Tournament;
-import madson.org.opentournament.domain.TournamentPlayer;
+import madson.org.opentournament.domain.TournamentTyp;
+import madson.org.opentournament.events.EnterGameResultConfirmed;
+import madson.org.opentournament.events.OpenTournamentEvent;
+import madson.org.opentournament.events.OpenTournamentEventListener;
+import madson.org.opentournament.events.OpenTournamentEventTag;
+import madson.org.opentournament.events.PairRoundAgainEvent;
+import madson.org.opentournament.events.PairingChangedEvent;
 import madson.org.opentournament.tasks.LoadGameListTask;
 import madson.org.opentournament.tasks.TournamentEndTask;
 import madson.org.opentournament.tasks.TournamentUploadTask;
 import madson.org.opentournament.utility.BaseActivity;
-import madson.org.opentournament.utility.TournamentEventTag;
 
 
 /**
  * @author  Tobias Matt - tmatt@contargo.net
  */
-public class GameListFragment extends Fragment implements TournamentEventListener {
+public class GameListFragment extends Fragment implements OpenTournamentEventListener {
 
     public static final String BUNDLE_TOURNAMENT = "tournament";
     public static final String BUNDLE_ROUND = "round";
@@ -204,8 +207,20 @@ public class GameListFragment extends Fragment implements TournamentEventListene
                     if (gameListAdapter.allGamesAreFinished()) {
                         String message = "";
 
-                        if ((Math.pow(2, tournament.getActualRound())) < tournament.getActualPlayers()) {
-                            message = "We recommend more rounds in this tournament";
+                        if (tournament.getTournamentTyp().equals(TournamentTyp.SOLO.name())) {
+                            if ((Math.pow(2, tournament.getActualRound())) < tournament.getActualPlayers()) {
+                                message = baseActivity.getResources().getString(R.string.more_round_recomendation);
+                            } else {
+                                message = baseActivity.getResources().getString(R.string.end_tournament_text);
+                            }
+                        } else {
+                            int amountTeams = tournament.getActualPlayers() / tournament.getTeamSize();
+
+                            if ((Math.pow(2, tournament.getActualRound())) < amountTeams) {
+                                message = baseActivity.getResources().getString(R.string.more_round_recomendation);
+                            } else {
+                                message = baseActivity.getResources().getString(R.string.end_tournament_text);
+                            }
                         }
 
                         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
@@ -260,61 +275,27 @@ public class GameListFragment extends Fragment implements TournamentEventListene
 
 
     @Override
-    public void pairRoundAgain(int round_for_pairing) {
+    public void handleEvent(OpenTournamentEventTag eventTag, OpenTournamentEvent parameter) {
 
-        if (round_for_pairing == round) {
-            new LoadGameListTask(baseActivity.getBaseApplication(), tournament, round, gameListAdapter).execute();
-        }
-    }
-
-
-    @Override
-    public void pairingChanged(Game game1, Game game2) {
-
-        gameListAdapter.updateGame(game1);
-        gameListAdapter.updateGame(game2);
-    }
-
-
-    @Override
-    public void enterGameResultConfirmed(TournamentEventTag tag, Game game) {
-
-        gameListAdapter.updateGame(game);
-    }
-
-
-    @Override
-    public void addTournamentPlayer(TournamentPlayer tournamentPlayer) {
-    }
-
-
-    @Override
-    public void removeTournamentPlayer(TournamentPlayer tournamentPlayer) {
-    }
-
-
-    @Override
-    public void removeAvailablePlayer(Player player) {
-    }
-
-
-    @Override
-    public void updateTournamentPlayer(TournamentPlayer updatedPLayer, String teamName) {
-    }
-
-
-    @Override
-    public void addRegistration(TournamentPlayer player) {
-    }
-
-
-    @Override
-    public void handleTournamentEvent(TournamentEventTag eventTag) {
-
-        if (eventTag.equals(TournamentEventTag.NEXT_ROUND_PAIRED)) {
+        if (eventTag.equals(OpenTournamentEventTag.NEXT_ROUND_PAIRED)) {
             nextRoundButton.setVisibility(View.GONE);
             pairRoundAgainButton.setVisibility(View.GONE);
             endTournamentButton.setVisibility(View.GONE);
+        } else if (OpenTournamentEventTag.SAVE_GAME_RESULT_CONFIRMED.equals(eventTag)) {
+            EnterGameResultConfirmed enterGameResultConfirmed = (EnterGameResultConfirmed) parameter;
+
+            gameListAdapter.updateGame(enterGameResultConfirmed.getEnteredGame());
+        } else if (OpenTournamentEventTag.PAIRING_CHANGED.equals(eventTag)) {
+            PairingChangedEvent enterGameResultConfirmed = (PairingChangedEvent) parameter;
+
+            gameListAdapter.updateGame(enterGameResultConfirmed.getGameOne());
+            gameListAdapter.updateGame(enterGameResultConfirmed.getGameTwo());
+        } else if (OpenTournamentEventTag.PAIR_ROUND_AGAIN.equals(eventTag)) {
+            PairRoundAgainEvent pairRoundAgainEvent = (PairRoundAgainEvent) parameter;
+
+            if (pairRoundAgainEvent.getRound() == round) {
+                new LoadGameListTask(baseActivity.getBaseApplication(), tournament, round, gameListAdapter).execute();
+            }
         }
     }
 }

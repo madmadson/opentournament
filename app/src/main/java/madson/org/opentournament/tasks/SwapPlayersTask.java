@@ -11,6 +11,9 @@ import android.widget.ProgressBar;
 import madson.org.opentournament.domain.Game;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
+import madson.org.opentournament.events.OpenTournamentEvent;
+import madson.org.opentournament.events.OpenTournamentEventTag;
+import madson.org.opentournament.events.PairingChangedEvent;
 import madson.org.opentournament.service.OngoingTournamentService;
 import madson.org.opentournament.utility.BaseApplication;
 
@@ -67,7 +70,8 @@ public class SwapPlayersTask extends AsyncTask<Void, Void, Void> {
 
         progressBar.setVisibility(View.GONE);
 
-        application.notifyPairingChanged(game1, game2);
+        PairingChangedEvent pairingChangedEvent = new PairingChangedEvent(game1, game2);
+        application.notifyTournamentEvent(OpenTournamentEventTag.PAIRING_CHANGED, pairingChangedEvent);
 
         snackbar.show();
     }

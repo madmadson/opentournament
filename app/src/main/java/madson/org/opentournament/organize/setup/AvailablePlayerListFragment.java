@@ -36,17 +36,22 @@ import madson.org.opentournament.domain.Game;
 import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
-import madson.org.opentournament.organize.TournamentEventListener;
+import madson.org.opentournament.events.AddTournamentPlayerEvent;
+import madson.org.opentournament.events.OpenTournamentEvent;
+import madson.org.opentournament.events.OpenTournamentEventListener;
+import madson.org.opentournament.events.OpenTournamentEventTag;
+import madson.org.opentournament.events.RemoveAvailablePlayerEvent;
+import madson.org.opentournament.events.RemoveTournamentPlayerEvent;
 import madson.org.opentournament.service.TournamentPlayerService;
 import madson.org.opentournament.tasks.LoadAllLocalPlayerTask;
 import madson.org.opentournament.utility.BaseActivity;
 import madson.org.opentournament.utility.BaseFragment;
-import madson.org.opentournament.utility.TournamentEventTag;
 
+import java.util.HashMap;
 import java.util.List;
 
 
-public class AvailablePlayerListFragment extends BaseFragment implements TournamentEventListener {
+public class AvailablePlayerListFragment extends BaseFragment implements OpenTournamentEventListener {
 
     public static final String BUNDLE_TOURNAMENT = "tournament";
 
@@ -215,71 +220,39 @@ public class AvailablePlayerListFragment extends BaseFragment implements Tournam
 
 
     @Override
-    public void pairRoundAgain(int round_for_pairing) {
-    }
+    public void handleEvent(OpenTournamentEventTag eventTag, OpenTournamentEvent parameter) {
 
+        if (OpenTournamentEventTag.REMOVE_AVAILABLE_PLAYER.equals(eventTag)) {
+            RemoveAvailablePlayerEvent removeAvailablePlayerEvent = (RemoveAvailablePlayerEvent) parameter;
+            Player player = removeAvailablePlayerEvent.getPlayer();
 
-    @Override
-    public void pairingChanged(Game game1, Game game2) {
-    }
+            if (player.isLocal()) {
+                localPlayerListAdapter.removePlayer(player);
+                doFilter(filterPlayerTextView.getText());
+            } else {
+                onlinePlayerListAdapter.removePlayer(player);
+                doFilter(filterPlayerTextView.getText());
+            }
+        } else if (OpenTournamentEventTag.REMOVE_TOURNAMENT_PLAYER.equals(eventTag)) {
+            RemoveTournamentPlayerEvent removeTournamentPlayerEvent = (RemoveTournamentPlayerEvent) parameter;
+            TournamentPlayer tournamentPlayer = removeTournamentPlayerEvent.getTournamentPlayer();
 
+            Player player = new Player();
 
-    @Override
-    public void enterGameResultConfirmed(TournamentEventTag tag, Game game) {
-    }
+            player.setFirstName(tournamentPlayer.getFirstName());
+            player.setNickName(tournamentPlayer.getNickName());
+            player.setLastName(tournamentPlayer.getLastName());
+            player.setUUID(tournamentPlayer.getPlayerUUID());
+            player.setLocal(tournamentPlayer.isLocal());
 
-
-    @Override
-    public void addTournamentPlayer(TournamentPlayer tournamentPlayer) {
-    }
-
-
-    @Override
-    public void removeTournamentPlayer(TournamentPlayer tournamentPlayer) {
-
-        Player player = new Player();
-
-        player.setFirstName(tournamentPlayer.getFirstName());
-        player.setNickName(tournamentPlayer.getNickName());
-        player.setLastName(tournamentPlayer.getLastName());
-        player.setUUID(tournamentPlayer.getPlayerUUID());
-        player.setLocal(tournamentPlayer.isLocal());
-
-        if (tournamentPlayer.isLocal()) {
-            localPlayerListAdapter.add(player);
-            doFilter(filterPlayerTextView.getText());
-        } else {
-            onlinePlayerListAdapter.addPlayer(player);
-            doFilter(filterPlayerTextView.getText());
+            if (tournamentPlayer.isLocal()) {
+                localPlayerListAdapter.add(player);
+                doFilter(filterPlayerTextView.getText());
+            } else {
+                onlinePlayerListAdapter.addPlayer(player);
+                doFilter(filterPlayerTextView.getText());
+            }
         }
-    }
-
-
-    @Override
-    public void removeAvailablePlayer(Player player) {
-
-        if (player.isLocal()) {
-            localPlayerListAdapter.removePlayer(player);
-            doFilter(filterPlayerTextView.getText());
-        } else {
-            onlinePlayerListAdapter.removePlayer(player);
-            doFilter(filterPlayerTextView.getText());
-        }
-    }
-
-
-    @Override
-    public void updateTournamentPlayer(TournamentPlayer updatedPLayer, String oldTeamName) {
-    }
-
-
-    @Override
-    public void addRegistration(TournamentPlayer player) {
-    }
-
-
-    @Override
-    public void handleTournamentEvent(TournamentEventTag eventTag) {
     }
 
 

@@ -23,7 +23,7 @@ import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.online.RegisterTournamentPlayerDialog;
-import madson.org.opentournament.tasks.SaveRegistrationTask;
+import madson.org.opentournament.tasks.AddRegistrationTask;
 import madson.org.opentournament.utility.BaseActivity;
 import madson.org.opentournament.viewHolder.TournamentPlayerViewHolder;
 
@@ -112,7 +112,7 @@ public class RegistrationListAdapter extends RecyclerView.Adapter<TournamentPlay
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
 
-                                        new SaveRegistrationTask(baseActivity, player, tournament).execute();
+                                        new AddRegistrationTask(baseActivity, player, tournament).execute();
                                     }
                                 })
                         .setNegativeButton(R.string.dialog_cancel, null)

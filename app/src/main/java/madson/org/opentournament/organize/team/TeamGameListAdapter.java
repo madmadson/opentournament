@@ -33,7 +33,6 @@ import madson.org.opentournament.organize.EnterResultForGameDialog;
 import madson.org.opentournament.tasks.SwapPlayersTask;
 import madson.org.opentournament.utility.BaseActivity;
 import madson.org.opentournament.utility.BaseApplication;
-import madson.org.opentournament.utility.TournamentEventTag;
 import madson.org.opentournament.viewHolder.GameViewHolder;
 
 import java.util.ArrayList;

@@ -32,14 +32,16 @@ import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentParticipant;
 import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.domain.TournamentTyp;
+import madson.org.opentournament.events.OpenTournamentEventTag;
+import madson.org.opentournament.events.SwapPlayerEvent;
 import madson.org.opentournament.organize.team.TeamTournamentManagementActivity;
 import madson.org.opentournament.tasks.SwapPlayersTask;
 import madson.org.opentournament.utility.BaseActivity;
 import madson.org.opentournament.utility.BaseApplication;
-import madson.org.opentournament.utility.TournamentEventTag;
 import madson.org.opentournament.viewHolder.GameViewHolder;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -122,6 +124,9 @@ public class GameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
                 public void onClick(View v) {
 
                     holder.getPlayerOneCardView().setBackgroundDrawable(startShape);
+
+                    baseActivity.getBaseApplication()
+                    .notifyTournamentEvent(OpenTournamentEventTag.SWAP_PLAYER, new SwapPlayerEvent(game));
                 }
             });
 

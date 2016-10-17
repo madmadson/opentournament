@@ -244,8 +244,16 @@ public class OngoingTournamentServiceMockImpl implements OngoingTournamentServic
                 }
 
                 if (playerWithSameTeamDontPlayAgainstEachOther) {
-                    String teamOneName = ((TournamentPlayer) player1.getTournamentParticipant()).getTeamName();
-                    String teamTwoName = ((TournamentPlayer) player2.getTournamentParticipant()).getTeamName();
+                    String teamOneName = "";
+                    String teamTwoName = "";
+
+                    if (tournament.getTournamentTyp().equals(TournamentTyp.SOLO.name())) {
+                        teamOneName = ((TournamentPlayer) player1.getTournamentParticipant()).getTeamName();
+                        teamTwoName = ((TournamentPlayer) player2.getTournamentParticipant()).getTeamName();
+                    } else if (tournament.getTournamentTyp().equals(TournamentTyp.TEAM.name())) {
+                        teamOneName = player1.getParticipantUUID();
+                        teamTwoName = player2.getParticipantUUID();
+                    }
 
                     if (teamOneName != null && teamTwoName != null) {
                         if (teamOneName.equals(teamTwoName)) {
@@ -300,8 +308,16 @@ public class OngoingTournamentServiceMockImpl implements OngoingTournamentServic
                 }
 
                 if (playerWithSameTeamDontPlayAgainstEachOther) {
-                    String teamOneName = ((TournamentPlayer) player1.getTournamentParticipant()).getTeamName();
-                    String teamTwoName = ((TournamentPlayer) player2.getTournamentParticipant()).getTeamName();
+                    String teamOneName = "";
+                    String teamTwoName = "";
+
+                    if (tournament.getTournamentTyp().equals(TournamentTyp.SOLO.name())) {
+                        teamOneName = ((TournamentPlayer) player1.getTournamentParticipant()).getTeamName();
+                        teamTwoName = ((TournamentPlayer) player2.getTournamentParticipant()).getTeamName();
+                    } else if (tournament.getTournamentTyp().equals(TournamentTyp.TEAM.name())) {
+                        teamOneName = player1.getParticipantUUID();
+                        teamTwoName = player2.getParticipantUUID();
+                    }
 
                     if (teamOneName != null && teamTwoName != null) {
                         if (teamOneName.equals(teamTwoName)) {

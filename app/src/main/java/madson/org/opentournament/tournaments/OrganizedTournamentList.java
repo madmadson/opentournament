@@ -24,6 +24,12 @@ import android.widget.ProgressBar;
 
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Tournament;
+import madson.org.opentournament.events.AddTournamentEvent;
+import madson.org.opentournament.events.DeleteTournamentEvent;
+import madson.org.opentournament.events.OpenTournamentEvent;
+import madson.org.opentournament.events.OpenTournamentEventListener;
+import madson.org.opentournament.events.OpenTournamentEventTag;
+import madson.org.opentournament.events.UpdateTournamentEvent;
 import madson.org.opentournament.tasks.LoadOrganizedTournamentsTask;
 import madson.org.opentournament.utility.BaseActivity;
 import madson.org.opentournament.utility.Environment;
@@ -35,10 +41,28 @@ import madson.org.opentournament.utility.Environment;
  * @author  Tobias Matt - tmatt@contargo.net
  */
 
-public class OrganizedTournamentList extends Fragment implements OrganizeTournamentEventListener {
+public class OrganizedTournamentList extends Fragment implements OpenTournamentEventListener {
 
     private OrganizedTournamentListAdapter tournamentListAdapter;
     private BaseActivity baseActivity;
+
+    @Override
+    public void onAttach(Context context) {
+
+        super.onAttach(context);
+
+        baseActivity = (BaseActivity) getActivity();
+        baseActivity.getBaseApplication().registerTournamentEventListener(this);
+    }
+
+
+    @Override
+    public void onDetach() {
+
+        super.onDetach();
+        baseActivity.getBaseApplication().unregisterTournamentEventListener(this);
+    }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -113,40 +137,20 @@ public class OrganizedTournamentList extends Fragment implements OrganizeTournam
 
 
     @Override
-    public void onAttach(Context context) {
+    public void handleEvent(OpenTournamentEventTag eventTag, OpenTournamentEvent parameter) {
 
-        super.onAttach(context);
+        if (OpenTournamentEventTag.UPDATE_TOURNAMENT.equals(eventTag)) {
+            UpdateTournamentEvent updateTournamentEvent = (UpdateTournamentEvent) parameter;
 
-        baseActivity = (BaseActivity) getActivity();
-        baseActivity.getBaseApplication().registerOrganizeTournamentListener(this);
-    }
+            tournamentListAdapter.replaceTournament(updateTournamentEvent.getTournament());
+        } else if (OpenTournamentEventTag.ADD_TOURNAMENT.equals(eventTag)) {
+            AddTournamentEvent addTournamentEvent = (AddTournamentEvent) parameter;
 
+            tournamentListAdapter.addTournament(addTournamentEvent.getTournament());
+        } else if (OpenTournamentEventTag.DELETE_TOURNAMENT.equals(eventTag)) {
+            DeleteTournamentEvent deleteTournamentEvent = (DeleteTournamentEvent) parameter;
 
-    @Override
-    public void onDetach() {
-
-        super.onDetach();
-        baseActivity.getBaseApplication().unregisterOrganizeTournamentListener(this);
-    }
-
-
-    @Override
-    public void onTournamentChangedEvent(Tournament tournament) {
-
-        tournamentListAdapter.replaceTournament(tournament);
-    }
-
-
-    @Override
-    public void onTournamentAddedEvent(Tournament tournament) {
-
-        tournamentListAdapter.addTournament(tournament);
-    }
-
-
-    @Override
-    public void onTournamentDeletedEvent(Tournament tournament) {
-
-        tournamentListAdapter.removeTournament(tournament);
+            tournamentListAdapter.removeTournament(deleteTournamentEvent.getTournament());
+        }
     }
 }

@@ -9,7 +9,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.os.Parcelable;
 
 import android.support.v4.app.DialogFragment;
 
@@ -30,8 +29,8 @@ import madson.org.opentournament.domain.Game;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.tasks.SaveGameResultTask;
+import madson.org.opentournament.tasks.SaveTeamGameResultTask;
 import madson.org.opentournament.utility.BaseActivity;
-import madson.org.opentournament.utility.TournamentEventTag;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -432,7 +431,7 @@ public class EnterResultForGameDialog extends DialogFragment {
                                     @Override
                                     public void onClick(DialogInterface sure_draw_dialog, int id) {
 
-                                        saveGameResult(confirm_dialog);
+                                        saveGameResult(confirm_dialog, sure_draw_dialog);
                                     }
                                 })
                         .setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
@@ -445,14 +444,14 @@ public class EnterResultForGameDialog extends DialogFragment {
                             });
                         builder.show();
                     } else {
-                        saveGameResult(confirm_dialog);
+                        saveGameResult(confirm_dialog, null);
                     }
                 }
             });
     }
 
 
-    private void saveGameResult(AlertDialog confirm_dialog) {
+    private void saveGameResult(AlertDialog confirm_dialog, DialogInterface sure_draw_dialog) {
 
         game.setParticipant_one_control_points(Integer.parseInt(text_player_one_control_points.getText().toString()));
         game.setParticipant_one_victory_points(Integer.parseInt(text_player_one_victory_points.getText().toString()));
@@ -461,11 +460,9 @@ public class EnterResultForGameDialog extends DialogFragment {
         game.setParticipant_two_victory_points(Integer.parseInt(text_player_two_victory_points.getText().toString()));
 
         if (game.getParent_UUID() == null) {
-            new SaveGameResultTask(TournamentEventTag.GAME_RESULT_ENTERED, baseActivity, game, confirm_dialog, null,
-                tournament).execute();
+            new SaveGameResultTask(baseActivity, game, confirm_dialog, sure_draw_dialog).execute();
         } else {
-            new SaveGameResultTask(TournamentEventTag.TEAM_TOURNAMENT_GAME_RESULT_ENTERED, baseActivity, game,
-                confirm_dialog, null, tournament).execute();
+            new SaveTeamGameResultTask(baseActivity, game, confirm_dialog, sure_draw_dialog, tournament).execute();
         }
     }
 }

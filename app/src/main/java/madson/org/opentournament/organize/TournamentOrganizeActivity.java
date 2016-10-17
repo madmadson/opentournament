@@ -1,6 +1,5 @@
 package madson.org.opentournament.organize;
 
-import android.content.Context;
 import android.content.Intent;
 
 import android.os.Bundle;
@@ -10,37 +9,34 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 
 import android.support.v7.app.ActionBar;
 
 import android.util.Log;
 
-import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.View;
-import android.view.ViewGroup;
 
 import android.widget.ProgressBar;
 
 import madson.org.opentournament.R;
-import madson.org.opentournament.domain.Game;
-import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.Tournament;
-import madson.org.opentournament.domain.TournamentPlayer;
+import madson.org.opentournament.events.OpenTournamentEvent;
+import madson.org.opentournament.events.OpenTournamentEventListener;
+import madson.org.opentournament.events.OpenTournamentEventTag;
 import madson.org.opentournament.organize.setup.AvailablePlayerListFragment;
 import madson.org.opentournament.organize.setup.TournamentPlayerListFragment;
 import madson.org.opentournament.organize.setup.TournamentSetupFragment;
 import madson.org.opentournament.tasks.LoadTournamentTask;
 import madson.org.opentournament.utility.BaseActivity;
-import madson.org.opentournament.utility.TournamentEventTag;
+
+import java.util.HashMap;
 
 
 /**
  * Activity for initialTournament organiser.
  */
-public class TournamentOrganizeActivity extends BaseActivity implements TournamentEventListener {
+public class TournamentOrganizeActivity extends BaseActivity implements OpenTournamentEventListener {
 
     public static final String EXTRA_TOURNAMENT = "initialTournament";
 
@@ -133,61 +129,15 @@ public class TournamentOrganizeActivity extends BaseActivity implements Tourname
 
 
     @Override
-    public void pairRoundAgain(int round_for_pairing) {
+    public void handleEvent(OpenTournamentEventTag eventTag, OpenTournamentEvent parameterObject) {
 
-        // nothing
-    }
-
-
-    @Override
-    public void pairingChanged(Game game1, Game game2) {
-
-        // nothing
-    }
-
-
-    @Override
-    public void enterGameResultConfirmed(TournamentEventTag tag, Game game) {
-
-        // nothing
-    }
-
-
-    @Override
-    public void addTournamentPlayer(TournamentPlayer tournamentPlayer) {
-    }
-
-
-    @Override
-    public void removeTournamentPlayer(TournamentPlayer tournamentPlayer) {
-    }
-
-
-    @Override
-    public void removeAvailablePlayer(Player player) {
-    }
-
-
-    @Override
-    public void updateTournamentPlayer(TournamentPlayer updatedPLayer, String teamName) {
-    }
-
-
-    @Override
-    public void addRegistration(TournamentPlayer player) {
-    }
-
-
-    @Override
-    public void handleTournamentEvent(TournamentEventTag eventTag) {
-
-        if (eventTag.equals(TournamentEventTag.TOURNAMENT_STARTED)) {
+        if (eventTag.equals(OpenTournamentEventTag.TOURNAMENT_STARTED)) {
             finish();
 
             Intent intent = new Intent(this, TournamentOrganizeActivity.class);
             intent.putExtra(TournamentOrganizeActivity.EXTRA_TOURNAMENT, initialTournament);
             startActivity(intent);
-        } else if (eventTag.equals(TournamentEventTag.NEXT_ROUND_PAIRED)) {
+        } else if (eventTag.equals(OpenTournamentEventTag.NEXT_ROUND_PAIRED)) {
             new LoadTournamentTask(this, initialTournament, mSectionsPagerAdapter, mViewPager, progressBar).execute();
         }
     }

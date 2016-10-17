@@ -39,7 +39,7 @@ import java.util.Map;
  *
  * @author  Tobias Matt - tmatt@contargo.net
  */
-public class AddTournamentPlayerListDialog extends DialogFragment {
+public class AddArmyListDialog extends DialogFragment {
 
     public static final String BUNDLE_TOURNAMENT = "tournament";
     public static final String BUNDLE_TOURNAMENT_PLAYER = "tournament_player";

@@ -1,31 +1,16 @@
 package madson.org.opentournament.tasks;
 
-import android.app.Activity;
-
-import android.content.Intent;
-
 import android.os.AsyncTask;
-
-import android.support.design.widget.Snackbar;
 
 import android.view.View;
 
 import android.widget.ProgressBar;
 
-import madson.org.opentournament.MainActivity;
-import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Tournament;
-import madson.org.opentournament.domain.TournamentRanking;
-import madson.org.opentournament.organize.TournamentOrganizeActivity;
-import madson.org.opentournament.service.OngoingTournamentService;
+import madson.org.opentournament.events.OpenTournamentEventTag;
 import madson.org.opentournament.service.RankingService;
-import madson.org.opentournament.service.TournamentPlayerService;
 import madson.org.opentournament.service.TournamentService;
-import madson.org.opentournament.utility.BaseActivity;
 import madson.org.opentournament.utility.BaseApplication;
-import madson.org.opentournament.utility.TournamentEventTag;
-
-import java.util.Map;
 
 
 /**
@@ -73,6 +58,6 @@ public class TournamentEndTask extends AsyncTask<Void, Void, Void> {
 
         progressBar.setVisibility(View.GONE);
 
-        application.notifyTournamentEvent(TournamentEventTag.NEXT_ROUND_PAIRED);
+        application.notifyTournamentEvent(OpenTournamentEventTag.NEXT_ROUND_PAIRED, null);
     }
 }

@@ -297,6 +297,8 @@
     <string name="player_with_same_name_already_in_tournament">Player with name already in Tournament</string>
     <string name="dialog_I_know_this">I know this</string>
     <string name="success_save_game_result">Successfuly save Game result</string>
-    <string name="dialog_ok">ok</string>
+    <string name="dialog_ok">OK</string>
+    <string name="more_round_recomendation">We recommend more rounds for this tournament</string>
+    <string name="end_tournament_text">Really end tournament?</string>
 
 </resources>

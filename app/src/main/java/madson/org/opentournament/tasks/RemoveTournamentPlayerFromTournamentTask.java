@@ -10,6 +10,8 @@ import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
+import madson.org.opentournament.events.OpenTournamentEventTag;
+import madson.org.opentournament.events.RemoveTournamentPlayerEvent;
 import madson.org.opentournament.organize.setup.AvailablePlayerListFragment;
 import madson.org.opentournament.organize.setup.TournamentPlayerListFragment;
 import madson.org.opentournament.utility.BaseActivity;
@@ -54,7 +56,9 @@ public class RemoveTournamentPlayerFromTournamentTask extends AsyncTask<Void, Vo
 
         // dummy player are not persistent
         if (!player.isDummy()) {
-            baseActivity.getBaseApplication().notifyRemoveTournamentPlayer(player);
+            baseActivity.getBaseApplication()
+                .notifyTournamentEvent(OpenTournamentEventTag.REMOVE_TOURNAMENT_PLAYER,
+                    new RemoveTournamentPlayerEvent(player));
         }
 
         Snackbar snackbar = Snackbar.make(baseActivity.getCoordinatorLayout(), R.string.success_remove_player,

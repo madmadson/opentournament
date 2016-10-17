@@ -9,6 +9,8 @@ import android.support.v7.app.AlertDialog;
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
+import madson.org.opentournament.events.OpenTournamentEventTag;
+import madson.org.opentournament.events.UpdateTournamentPlayerEvent;
 import madson.org.opentournament.service.TournamentPlayerService;
 import madson.org.opentournament.utility.BaseActivity;
 
@@ -18,7 +20,7 @@ import madson.org.opentournament.utility.BaseActivity;
  *
  * @author  Tobias Matt - tmatt@contargo.net
  */
-public class EditTournamentPlayerTask extends AsyncTask<Void, Void, Void> {
+public class UpdateTournamentPlayerTask extends AsyncTask<Void, Void, Void> {
 
     private BaseActivity baseActivity;
 
@@ -32,8 +34,8 @@ public class EditTournamentPlayerTask extends AsyncTask<Void, Void, Void> {
     private String faction;
     private String oldTeamName;
 
-    public EditTournamentPlayerTask(BaseActivity baseActivity, TournamentPlayer tournamentPlayer, Tournament tournament,
-        AlertDialog dialog, String teamname, String faction) {
+    public UpdateTournamentPlayerTask(BaseActivity baseActivity, TournamentPlayer tournamentPlayer,
+        Tournament tournament, AlertDialog dialog, String teamname, String faction) {
 
         this.baseActivity = baseActivity;
         this.tournamentPlayer = tournamentPlayer;
@@ -81,7 +83,11 @@ public class EditTournamentPlayerTask extends AsyncTask<Void, Void, Void> {
 
         snackbar.show();
 
-        baseActivity.getBaseApplication().notifyUpdateTournamentPlayer(tournamentPlayer, oldTeamName);
+        UpdateTournamentPlayerEvent updateTournamentEvent = new UpdateTournamentPlayerEvent(oldTeamName,
+                tournamentPlayer);
+
+        baseActivity.getBaseApplication()
+            .notifyTournamentEvent(OpenTournamentEventTag.UPDATE_TOURNAMENT_PLAYER, updateTournamentEvent);
 
         dialog.dismiss();
     }

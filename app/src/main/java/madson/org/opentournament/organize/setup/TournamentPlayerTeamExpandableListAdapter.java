@@ -248,7 +248,7 @@ public class TournamentPlayerTeamExpandableListAdapter extends BaseExpandableLis
                                 if (tournamentPlayer.getPlayerUUID() != null) {
                                     Log.i(this.getClass().getName(), "addList");
 
-                                    AddTournamentPlayerListDialog dialog = new AddTournamentPlayerListDialog();
+                                    AddArmyListDialog dialog = new AddArmyListDialog();
 
                                     Bundle bundle = new Bundle();
                                     bundle.putParcelable(RegisterTournamentPlayerDialog.BUNDLE_TOURNAMENT, tournament);

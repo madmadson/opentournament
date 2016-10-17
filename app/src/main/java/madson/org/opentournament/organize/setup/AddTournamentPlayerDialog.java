@@ -9,12 +9,9 @@ import android.graphics.Typeface;
 
 import android.os.Bundle;
 
-import android.support.annotation.Nullable;
-
 import android.support.design.widget.TextInputLayout;
 
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.FragmentActivity;
 
 import android.support.v7.app.AlertDialog;
 
@@ -31,17 +28,15 @@ import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.bumptech.glide.load.resource.NullEncoder;
-
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.domain.TournamentTeam;
 import madson.org.opentournament.domain.TournamentTyp;
-import madson.org.opentournament.tasks.EditTournamentPlayerTask;
 import madson.org.opentournament.tasks.LoadTournamentTeamTask;
 import madson.org.opentournament.tasks.SaveTournamentPlayerTask;
+import madson.org.opentournament.tasks.UpdateTournamentPlayerTask;
 import madson.org.opentournament.utility.BaseActivity;
 
 import java.util.ArrayList;
@@ -319,7 +314,7 @@ public class AddTournamentPlayerDialog extends DialogFragment {
                                 new SaveTournamentPlayerTask(baseActivity, player, tournament, dialog, firstname,
                                     nickname, lastname, teamname, faction).execute();
                             } else {
-                                new EditTournamentPlayerTask(baseActivity, tournament_player, tournament, dialog,
+                                new UpdateTournamentPlayerTask(baseActivity, tournament_player, tournament, dialog,
                                     teamname, faction).execute();
                             }
                         }

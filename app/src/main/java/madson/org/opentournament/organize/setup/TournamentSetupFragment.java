@@ -21,9 +21,12 @@ import madson.org.opentournament.domain.Game;
 import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
-import madson.org.opentournament.organize.TournamentEventListener;
+import madson.org.opentournament.events.OpenTournamentEvent;
+import madson.org.opentournament.events.OpenTournamentEventListener;
+import madson.org.opentournament.events.OpenTournamentEventTag;
 import madson.org.opentournament.utility.BaseActivity;
-import madson.org.opentournament.utility.TournamentEventTag;
+
+import java.util.HashMap;
 
 
 /**
@@ -31,7 +34,7 @@ import madson.org.opentournament.utility.TournamentEventTag;
  *
  * @author  Tobias Matt - tmatt@contargo.net
  */
-public class TournamentSetupFragment extends Fragment implements TournamentEventListener {
+public class TournamentSetupFragment extends Fragment implements OpenTournamentEventListener {
 
     private static final String BUNDLE_TOURNAMENT = "tournament";
     private Tournament tournament;
@@ -150,50 +153,10 @@ public class TournamentSetupFragment extends Fragment implements TournamentEvent
 
 
     @Override
-    public void addTournamentPlayer(TournamentPlayer tournamentPlayer) {
-    }
+    public void handleEvent(OpenTournamentEventTag eventTag, OpenTournamentEvent parameterObject) {
 
-
-    @Override
-    public void removeTournamentPlayer(final TournamentPlayer tournamentPlayer) {
-    }
-
-
-    @Override
-    public void removeAvailablePlayer(Player player) {
-    }
-
-
-    @Override
-    public void updateTournamentPlayer(TournamentPlayer updatedPLayer, String oldTeamName) {
-    }
-
-
-    @Override
-    public void addRegistration(TournamentPlayer player) {
-    }
-
-
-    @Override
-    public void handleTournamentEvent(TournamentEventTag eventTag) {
-
-        if (eventTag.equals(TournamentEventTag.TOURNAMENT_STARTED)) {
+        if (eventTag.equals(OpenTournamentEventTag.TOURNAMENT_STARTED)) {
             tournamentPlayerListFragment.startButtonInvisible();
         }
-    }
-
-
-    @Override
-    public void pairRoundAgain(int round_for_pairing) {
-    }
-
-
-    @Override
-    public void pairingChanged(Game game1, Game game2) {
-    }
-
-
-    @Override
-    public void enterGameResultConfirmed(TournamentEventTag tag, Game game) {
     }
 }

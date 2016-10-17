@@ -29,7 +29,11 @@ import madson.org.opentournament.domain.Game;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentParticipant;
 import madson.org.opentournament.domain.TournamentPlayer;
+import madson.org.opentournament.events.EndSwapPlayerEvent;
+import madson.org.opentournament.events.OpenTournamentEventTag;
+import madson.org.opentournament.events.SwapPlayerEvent;
 import madson.org.opentournament.organize.EnterResultForGameDialog;
+import madson.org.opentournament.organize.GameListAdapter;
 import madson.org.opentournament.tasks.SwapPlayersTask;
 import madson.org.opentournament.utility.BaseActivity;
 import madson.org.opentournament.utility.BaseApplication;
@@ -51,10 +55,14 @@ public class TeamGameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
     private final Drawable startShape;
     private final Drawable winnerShape;
     private final Drawable looserShape;
+    private final Drawable startedShape;
 
     private List<Game> gamesInTeamMatch;
     private BaseActivity baseActivity;
     private Tournament tournament;
+
+    private Game gameOneToSwap;
+    private int playerNumberGameOneToSwap;
 
     public TeamGameListAdapter(BaseActivity baseActivity, Tournament tournament) {
 
@@ -69,6 +77,8 @@ public class TeamGameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
 
         winnerShape = baseActivity.getResources().getDrawable(R.drawable.shape_winner);
         looserShape = baseActivity.getResources().getDrawable(R.drawable.shape_looser);
+
+        startedShape = baseActivity.getResources().getDrawable(R.drawable.shape_started);
     }
 
     public void setGames(List<Game> games) {
@@ -92,6 +102,35 @@ public class TeamGameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
     public void onBindViewHolder(GameViewHolder holder, int position) {
 
         final Game game = gamesInTeamMatch.get(position);
+        holder.getSwapPlayerOne().setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+
+                    if (game.isStartSwappingPlayerOne()) {
+                        baseActivity.getBaseApplication()
+                        .notifyTournamentEvent(OpenTournamentEventTag.END_SWAP_PLAYER, new EndSwapPlayerEvent(game));
+                    } else {
+                        baseActivity.getBaseApplication()
+                        .notifyTournamentEvent(OpenTournamentEventTag.SWAP_PLAYER, new SwapPlayerEvent(game, 1));
+                    }
+                }
+            });
+
+        holder.getSwapPlayerTwo().setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+
+                    if (game.isStartSwappingPlayerTwo()) {
+                        baseActivity.getBaseApplication()
+                        .notifyTournamentEvent(OpenTournamentEventTag.END_SWAP_PLAYER, new EndSwapPlayerEvent(game));
+                    } else {
+                        baseActivity.getBaseApplication()
+                        .notifyTournamentEvent(OpenTournamentEventTag.SWAP_PLAYER, new SwapPlayerEvent(game, 2));
+                    }
+                }
+            });
 
         holder.getTableNumber()
             .setText(baseActivity.getResources().getString(R.string.table_number, game.getPlaying_field()));
@@ -149,6 +188,9 @@ public class TeamGameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
 
             holder.getPlayerTwoCardView().setOnLongClickListener(null);
             holder.getPlayerTwoCardView().setOnDragListener(null);
+
+            holder.getSwapPlayerOne().setVisibility(View.GONE);
+            holder.getSwapPlayerTwo().setVisibility(View.GONE);
         } else {
             holder.getPlayerOneCardView().setBackgroundDrawable(normalShape);
             holder.getPlayerTwoCardView().setBackgroundDrawable(normalShape);
@@ -158,6 +200,27 @@ public class TeamGameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
 
             holder.getPlayerTwoCardView().setOnLongClickListener(new GameLongClickEventListener(game, 2));
             holder.getPlayerTwoCardView().setOnDragListener(new GameDragListener(game, 2));
+        }
+
+        if (game.isSwappable()) {
+            holder.getPlayerOneCardView().setBackgroundDrawable(enterShape);
+            holder.getPlayerTwoCardView().setBackgroundDrawable(enterShape);
+            holder.getPlayerOneCardView().setOnLongClickListener(null);
+            holder.getPlayerOneCardView().setOnDragListener(null);
+
+            holder.getPlayerTwoCardView().setOnLongClickListener(null);
+            holder.getPlayerTwoCardView().setOnDragListener(null);
+
+            holder.getPlayerOneCardView().setOnClickListener(new SwapPlayerConfirmedClicked(game, 1));
+            holder.getPlayerTwoCardView().setOnClickListener(new SwapPlayerConfirmedClicked(game, 2));
+        }
+
+        if (game.isStartSwappingPlayerOne()) {
+            holder.getPlayerOneCardView().setBackgroundDrawable(startedShape);
+        }
+
+        if (game.isStartSwappingPlayerTwo()) {
+            holder.getPlayerTwoCardView().setBackgroundDrawable(startedShape);
         }
     }
 
@@ -176,6 +239,81 @@ public class TeamGameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
 
             gamesInTeamMatch.remove(game);
             gamesInTeamMatch.add(indexOfGame, game);
+            notifyDataSetChanged();
+        }
+    }
+
+
+    public void startSwapping(Game swappedGame, int playerNumber) {
+
+        if (gamesInTeamMatch.contains(swappedGame)) {
+            List<Game> swappingGames = new ArrayList<>();
+
+            for (Game game : gamesInTeamMatch) {
+                if (!game.isFinished()) {
+                    if (game.equals(swappedGame)) {
+                        if (playerNumber == 1) {
+                            game.setStartSwappingPlayerOne(true);
+                            game.setStartSwappingPlayerTwo(false);
+                            playerNumberGameOneToSwap = 1;
+                        } else if (playerNumber == 2) {
+                            game.setStartSwappingPlayerTwo(true);
+                            game.setStartSwappingPlayerOne(false);
+                            playerNumberGameOneToSwap = 2;
+                        }
+
+                        gameOneToSwap = game;
+                    } else {
+                        game.setStartSwappingPlayerOne(false);
+                        game.setStartSwappingPlayerTwo(false);
+                    }
+
+                    game.setSwappable(true);
+                    swappingGames.add(game);
+                } else {
+                    swappingGames.add(game);
+                }
+            }
+
+            this.gamesInTeamMatch = swappingGames;
+
+            Snackbar snackbar = Snackbar.make(baseActivity.getCoordinatorLayout(), R.string.click_for_swapping,
+                    Snackbar.LENGTH_LONG);
+
+            snackbar.getView().setBackgroundColor(baseActivity.getResources().getColor(R.color.colorAccent));
+
+            snackbar.show();
+
+            notifyDataSetChanged();
+        }
+    }
+
+
+    public void endSwapping(Game swappedGame) {
+
+        if (gamesInTeamMatch.contains(swappedGame)) {
+            List<Game> swappingGames = new ArrayList<>();
+
+            for (Game game : gamesInTeamMatch) {
+                game.setSwappable(false);
+                game.setStartSwappingPlayerOne(false);
+                game.setStartSwappingPlayerTwo(false);
+
+                swappingGames.add(game);
+            }
+
+            gameOneToSwap = null;
+            playerNumberGameOneToSwap = 0;
+
+            this.gamesInTeamMatch = swappingGames;
+
+            Snackbar snackbar = Snackbar.make(baseActivity.getCoordinatorLayout(), R.string.swapping_canceled,
+                    Snackbar.LENGTH_LONG);
+
+            snackbar.getView().setBackgroundColor(baseActivity.getResources().getColor(R.color.colorNegative));
+
+            snackbar.show();
+
             notifyDataSetChanged();
         }
     }
@@ -358,6 +496,195 @@ public class TeamGameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
 
                 default:
                     break;
+            }
+
+            return true;
+        }
+    }
+
+    private class SwapPlayerConfirmedClicked implements View.OnClickListener {
+
+        private Game gameTwoToSwap;
+        private int playerNumberGameTwoToSwap;
+
+        public SwapPlayerConfirmedClicked(Game gameTwoToSwap, int gameTwoPlayerNumber) {
+
+            this.gameTwoToSwap = gameTwoToSwap;
+            this.playerNumberGameTwoToSwap = gameTwoPlayerNumber;
+        }
+
+        @Override
+        public void onClick(View v) {
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(baseActivity);
+            builder.setTitle(R.string.confirm_swap_player)
+                .setPositiveButton(R.string.dialog_confirm, new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                                TournamentParticipant gameOneParticipantOne = gameOneToSwap.getParticipantOne();
+                                TournamentParticipant gameOneParticipantTwo = gameOneToSwap.getParticipantTwo();
+
+                                boolean swappingValid = newPairingsDoesNotPlayedAgainstEachOther();
+
+                                if (swappingValid) {
+                                    if (playerNumberGameOneToSwap == 1) {
+                                        if (playerNumberGameTwoToSwap == 1) {
+                                            gameOneToSwap.setParticipantOne(gameTwoToSwap.getParticipantOne());
+                                        } else {
+                                            gameOneToSwap.setParticipantOne(gameTwoToSwap.getParticipantTwo());
+                                        }
+                                    } else {
+                                        if (playerNumberGameTwoToSwap == 1) {
+                                            gameOneToSwap.setParticipantTwo(gameTwoToSwap.getParticipantOne());
+                                        } else {
+                                            gameOneToSwap.setParticipantTwo(gameTwoToSwap.getParticipantTwo());
+                                        }
+                                    }
+
+                                    if (playerNumberGameTwoToSwap == 1) {
+                                        if (playerNumberGameOneToSwap == 1) {
+                                            gameTwoToSwap.setParticipantOne(gameOneParticipantOne);
+                                        } else {
+                                            gameTwoToSwap.setParticipantOne(gameOneParticipantTwo);
+                                        }
+                                    } else {
+                                        if (playerNumberGameOneToSwap == 1) {
+                                            gameTwoToSwap.setParticipantTwo(gameOneParticipantOne);
+                                        } else {
+                                            gameTwoToSwap.setParticipantTwo(gameOneParticipantTwo);
+                                        }
+                                    }
+
+                                    Toolbar toolbar = baseActivity.getToolbar();
+                                    ProgressBar progressBar = (ProgressBar) toolbar.findViewById(
+                                            R.id.toolbar_progress_bar);
+                                    Snackbar snackbar = Snackbar.make((baseActivity).getCoordinatorLayout(),
+                                            baseActivity.getResources()
+                                                .getString(R.string.player_swapped_successfully), Snackbar.LENGTH_LONG);
+                                    snackbar.getView()
+                                    .setBackgroundColor(baseActivity.getResources().getColor(R.color.colorPositive));
+                                    new SwapPlayersTask(baseActivity.getBaseApplication(), gameOneToSwap, gameTwoToSwap,
+                                        progressBar, snackbar).execute();
+                                }
+                            }
+                        })
+                .setNegativeButton(R.string.dialog_cancel, null)
+                .show();
+        }
+
+
+        private boolean newPairingsDoesNotPlayedAgainstEachOther() {
+
+            if (playerNumberGameOneToSwap == 1 && playerNumberGameTwoToSwap == 1) {
+                if (gameOneToSwap.getParticipantOne()
+                        .getListOfOpponentsUUIDs()
+                        .contains(gameTwoToSwap.getParticipantTwo().getUuid())) {
+                    Snackbar snackbar = Snackbar.make((baseActivity).getCoordinatorLayout(),
+                            baseActivity.getResources()
+                                .getString(R.string.player_already_played_each_other,
+                                    gameOneToSwap.getParticipantOne().getName(),
+                                    gameTwoToSwap.getParticipantTwo().getName()), Snackbar.LENGTH_LONG);
+                    snackbar.getView().setBackgroundColor(baseActivity.getResources().getColor(R.color.colorNeutral));
+                    snackbar.show();
+
+                    return false;
+                } else if (gameTwoToSwap.getParticipantOne()
+                        .getListOfOpponentsUUIDs()
+                        .contains(gameOneToSwap.getParticipantTwo().getUuid())) {
+                    Snackbar snackbar = Snackbar.make((baseActivity).getCoordinatorLayout(),
+                            baseActivity.getResources()
+                                .getString(R.string.player_already_played_each_other,
+                                    gameTwoToSwap.getParticipantOne().getName(),
+                                    gameOneToSwap.getParticipantTwo().getName()), Snackbar.LENGTH_LONG);
+                    snackbar.getView().setBackgroundColor(baseActivity.getResources().getColor(R.color.colorNeutral));
+
+                    snackbar.show();
+
+                    return false;
+                }
+            } else if (playerNumberGameOneToSwap == 2 && playerNumberGameTwoToSwap == 1) {
+                if (gameOneToSwap.getParticipantTwo()
+                        .getListOfOpponentsUUIDs()
+                        .contains(gameTwoToSwap.getParticipantTwo().getUuid())) {
+                    Snackbar snackbar = Snackbar.make((baseActivity).getCoordinatorLayout(),
+                            baseActivity.getResources()
+                                .getString(R.string.player_already_played_each_other,
+                                    gameOneToSwap.getParticipantTwo().getName(),
+                                    gameTwoToSwap.getParticipantTwo().getName()), Snackbar.LENGTH_LONG);
+                    snackbar.getView().setBackgroundColor(baseActivity.getResources().getColor(R.color.colorNeutral));
+                    snackbar.show();
+
+                    return false;
+                } else if (gameTwoToSwap.getParticipantOne()
+                        .getListOfOpponentsUUIDs()
+                        .contains(gameOneToSwap.getParticipantOne().getUuid())) {
+                    Snackbar snackbar = Snackbar.make((baseActivity).getCoordinatorLayout(),
+                            baseActivity.getResources()
+                                .getString(R.string.player_already_played_each_other,
+                                    gameTwoToSwap.getParticipantOne().getName(),
+                                    gameOneToSwap.getParticipantOne().getName()), Snackbar.LENGTH_LONG);
+                    snackbar.getView().setBackgroundColor(baseActivity.getResources().getColor(R.color.colorNeutral));
+
+                    snackbar.show();
+
+                    return false;
+                }
+            } else if (playerNumberGameOneToSwap == 1 && playerNumberGameTwoToSwap == 2) {
+                if (gameOneToSwap.getParticipantOne()
+                        .getListOfOpponentsUUIDs()
+                        .contains(gameTwoToSwap.getParticipantOne().getUuid())) {
+                    Snackbar snackbar = Snackbar.make((baseActivity).getCoordinatorLayout(),
+                            baseActivity.getResources()
+                                .getString(R.string.player_already_played_each_other,
+                                    gameOneToSwap.getParticipantOne().getName(),
+                                    gameTwoToSwap.getParticipantOne().getName()), Snackbar.LENGTH_LONG);
+                    snackbar.getView().setBackgroundColor(baseActivity.getResources().getColor(R.color.colorNeutral));
+                    snackbar.show();
+
+                    return false;
+                } else if (gameTwoToSwap.getParticipantTwo()
+                        .getListOfOpponentsUUIDs()
+                        .contains(gameOneToSwap.getParticipantTwo().getUuid())) {
+                    Snackbar snackbar = Snackbar.make((baseActivity).getCoordinatorLayout(),
+                            baseActivity.getResources()
+                                .getString(R.string.player_already_played_each_other,
+                                    gameTwoToSwap.getParticipantTwo().getName(),
+                                    gameOneToSwap.getParticipantTwo().getName()), Snackbar.LENGTH_LONG);
+                    snackbar.getView().setBackgroundColor(baseActivity.getResources().getColor(R.color.colorNeutral));
+
+                    snackbar.show();
+
+                    return false;
+                }
+            } else if (playerNumberGameOneToSwap == 2 && playerNumberGameTwoToSwap == 2) {
+                if (gameOneToSwap.getParticipantTwo()
+                        .getListOfOpponentsUUIDs()
+                        .contains(gameTwoToSwap.getParticipantOne().getUuid())) {
+                    Snackbar snackbar = Snackbar.make((baseActivity).getCoordinatorLayout(),
+                            baseActivity.getResources()
+                                .getString(R.string.player_already_played_each_other,
+                                    gameOneToSwap.getParticipantTwo().getName(),
+                                    gameTwoToSwap.getParticipantOne().getName()), Snackbar.LENGTH_LONG);
+                    snackbar.getView().setBackgroundColor(baseActivity.getResources().getColor(R.color.colorNeutral));
+                    snackbar.show();
+
+                    return false;
+                } else if (gameTwoToSwap.getParticipantOne()
+                        .getListOfOpponentsUUIDs()
+                        .contains(gameOneToSwap.getParticipantOne().getUuid())) {
+                    Snackbar snackbar = Snackbar.make((baseActivity).getCoordinatorLayout(),
+                            baseActivity.getResources()
+                                .getString(R.string.player_already_played_each_other,
+                                    gameTwoToSwap.getParticipantOne().getName(),
+                                    gameOneToSwap.getParticipantOne().getName()), Snackbar.LENGTH_LONG);
+                    snackbar.getView().setBackgroundColor(baseActivity.getResources().getColor(R.color.colorNeutral));
+
+                    snackbar.show();
+
+                    return false;
+                }
             }
 
             return true;

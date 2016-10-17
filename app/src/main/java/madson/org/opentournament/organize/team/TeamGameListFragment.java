@@ -16,11 +16,13 @@ import android.view.ViewGroup;
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Game;
 import madson.org.opentournament.domain.Tournament;
+import madson.org.opentournament.events.EndSwapPlayerEvent;
 import madson.org.opentournament.events.EnterGameResultConfirmed;
 import madson.org.opentournament.events.OpenTournamentEvent;
 import madson.org.opentournament.events.OpenTournamentEventListener;
 import madson.org.opentournament.events.OpenTournamentEventTag;
 import madson.org.opentournament.events.PairingChangedEvent;
+import madson.org.opentournament.events.SwapPlayerEvent;
 import madson.org.opentournament.tasks.LoadGameListForTeamMatchTask;
 import madson.org.opentournament.utility.BaseActivity;
 
@@ -112,6 +114,19 @@ public class TeamGameListFragment extends Fragment implements OpenTournamentEven
 
             gameListAdapter.updateGame(enterGameResultConfirmed.getGameOne());
             gameListAdapter.updateGame(enterGameResultConfirmed.getGameTwo());
+
+            gameListAdapter.endSwapping(enterGameResultConfirmed.getGameOne());
+        } else if (OpenTournamentEventTag.SWAP_PLAYER.equals(eventTag)) {
+            SwapPlayerEvent swapPlayerEvent = (SwapPlayerEvent) parameter;
+            Game swappedGame = swapPlayerEvent.getSwappedGame();
+            int playerNumber = swapPlayerEvent.getPlayer();
+
+            gameListAdapter.startSwapping(swappedGame, playerNumber);
+        } else if (OpenTournamentEventTag.END_SWAP_PLAYER.equals(eventTag)) {
+            EndSwapPlayerEvent swapPlayerEvent = (EndSwapPlayerEvent) parameter;
+            Game swappedGame = swapPlayerEvent.getGame();
+
+            gameListAdapter.endSwapping(swappedGame);
         }
     }
 }

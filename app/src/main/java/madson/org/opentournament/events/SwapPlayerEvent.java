@@ -11,10 +11,12 @@ import madson.org.opentournament.domain.Game;
 public class SwapPlayerEvent extends OpenTournamentEvent {
 
     private Game swappedGame;
+    private int player;
 
-    public SwapPlayerEvent(Game swappedGame) {
+    public SwapPlayerEvent(Game swappedGame, int player) {
 
         this.swappedGame = swappedGame;
+        this.player = player;
     }
 
     public Game getSwappedGame() {
@@ -26,5 +28,17 @@ public class SwapPlayerEvent extends OpenTournamentEvent {
     public void setSwappedGame(Game swappedGame) {
 
         this.swappedGame = swappedGame;
+    }
+
+
+    public int getPlayer() {
+
+        return player;
+    }
+
+
+    public void setPlayer(int player) {
+
+        this.player = player;
     }
 }

@@ -8,7 +8,7 @@
 
     <gradient
         android:angle="225"
-        android:endColor="@color/cardview_light_background"
+        android:endColor="@color/colorAction"
         android:startColor="@color/cardview_light_background" />
 
     <corners
@@ -16,7 +16,6 @@
         android:bottomRightRadius="7dp"
         android:topLeftRadius="7dp"
         android:topRightRadius="7dp" />
-
-
+    
 </shape>
 

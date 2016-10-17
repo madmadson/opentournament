@@ -61,7 +61,12 @@ public class Game implements Parcelable {
     private TournamentPlayer tournamentPlayerOne;
     private TournamentPlayer tournamentPlayerTwo;
 
-    protected Game(Parcel in) {
+    // only for swap player
+    private boolean swappable;
+    private boolean startSwappingPlayerOne;
+    private boolean startSwappingPlayerTwo;
+
+    public Game(Parcel in) {
 
         _id = in.readLong();
         UUID = in.readString();
@@ -89,6 +94,45 @@ public class Game implements Parcelable {
 
     public Game() {
     }
+
+    @Exclude
+    public boolean isSwappable() {
+
+        return swappable;
+    }
+
+
+    public void setSwappable(boolean swappable) {
+
+        this.swappable = swappable;
+    }
+
+
+    @Exclude
+    public boolean isStartSwappingPlayerOne() {
+
+        return startSwappingPlayerOne;
+    }
+
+
+    public void setStartSwappingPlayerOne(boolean startSwappingPlayerOne) {
+
+        this.startSwappingPlayerOne = startSwappingPlayerOne;
+    }
+
+
+    @Exclude
+    public boolean isStartSwappingPlayerTwo() {
+
+        return startSwappingPlayerTwo;
+    }
+
+
+    public void setStartSwappingPlayerTwo(boolean startSwappingPlayerTwo) {
+
+        this.startSwappingPlayerTwo = startSwappingPlayerTwo;
+    }
+
 
     @Exclude
     public long get_id() {

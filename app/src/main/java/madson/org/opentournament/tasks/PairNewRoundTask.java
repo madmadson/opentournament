@@ -16,6 +16,7 @@ import madson.org.opentournament.domain.PairingOption;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentRanking;
 import madson.org.opentournament.events.OpenTournamentEventTag;
+import madson.org.opentournament.events.PairRoundAgainEvent;
 import madson.org.opentournament.service.OngoingTournamentService;
 import madson.org.opentournament.service.RankingService;
 import madson.org.opentournament.service.TournamentService;
@@ -97,7 +98,8 @@ public class PairNewRoundTask extends AsyncTask<Void, Void, Boolean> {
         progressBar.setVisibility(View.GONE);
 
         if (pairAgain) {
-            application.notifyTournamentEvent(OpenTournamentEventTag.PAIR_ROUND_AGAIN, null);
+            application.notifyTournamentEvent(OpenTournamentEventTag.PAIR_ROUND_AGAIN,
+                new PairRoundAgainEvent(tournament.getActualRound()));
         } else {
             application.notifyTournamentEvent(OpenTournamentEventTag.NEXT_ROUND_PAIRED, null);
         }

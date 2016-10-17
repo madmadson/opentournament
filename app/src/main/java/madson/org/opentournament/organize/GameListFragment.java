@@ -13,6 +13,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 
+import android.util.Log;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,14 +26,17 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import madson.org.opentournament.R;
+import madson.org.opentournament.domain.Game;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentTyp;
+import madson.org.opentournament.events.EndSwapPlayerEvent;
 import madson.org.opentournament.events.EnterGameResultConfirmed;
 import madson.org.opentournament.events.OpenTournamentEvent;
 import madson.org.opentournament.events.OpenTournamentEventListener;
 import madson.org.opentournament.events.OpenTournamentEventTag;
 import madson.org.opentournament.events.PairRoundAgainEvent;
 import madson.org.opentournament.events.PairingChangedEvent;
+import madson.org.opentournament.events.SwapPlayerEvent;
 import madson.org.opentournament.tasks.LoadGameListTask;
 import madson.org.opentournament.tasks.TournamentEndTask;
 import madson.org.opentournament.tasks.TournamentUploadTask;
@@ -290,12 +295,27 @@ public class GameListFragment extends Fragment implements OpenTournamentEventLis
 
             gameListAdapter.updateGame(enterGameResultConfirmed.getGameOne());
             gameListAdapter.updateGame(enterGameResultConfirmed.getGameTwo());
+
+            gameListAdapter.endSwapping(enterGameResultConfirmed.getGameOne());
         } else if (OpenTournamentEventTag.PAIR_ROUND_AGAIN.equals(eventTag)) {
             PairRoundAgainEvent pairRoundAgainEvent = (PairRoundAgainEvent) parameter;
 
             if (pairRoundAgainEvent.getRound() == round) {
+                Log.i(this.getClass().getName(),
+                    "pair again for: " + pairRoundAgainEvent.getRound() + " round: " + round);
                 new LoadGameListTask(baseActivity.getBaseApplication(), tournament, round, gameListAdapter).execute();
             }
+        } else if (OpenTournamentEventTag.SWAP_PLAYER.equals(eventTag)) {
+            SwapPlayerEvent swapPlayerEvent = (SwapPlayerEvent) parameter;
+            Game swappedGame = swapPlayerEvent.getSwappedGame();
+            int playerNumber = swapPlayerEvent.getPlayer();
+
+            gameListAdapter.startSwapping(swappedGame, playerNumber);
+        } else if (OpenTournamentEventTag.END_SWAP_PLAYER.equals(eventTag)) {
+            EndSwapPlayerEvent swapPlayerEvent = (EndSwapPlayerEvent) parameter;
+            Game swappedGame = swapPlayerEvent.getGame();
+
+            gameListAdapter.endSwapping(swappedGame);
         }
     }
 }

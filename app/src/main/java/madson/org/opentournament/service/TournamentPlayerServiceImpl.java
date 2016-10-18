@@ -333,7 +333,7 @@ public class TournamentPlayerServiceImpl implements TournamentPlayerService {
 
 
     @Override
-    public void editTournamentPlayer(TournamentPlayer tournamentPlayer, Tournament tournament) {
+    public void updateTournamentPlayer(TournamentPlayer tournamentPlayer, Tournament tournament) {
 
         SQLiteDatabase db = openTournamentDBHelper.getWritableDatabase();
 

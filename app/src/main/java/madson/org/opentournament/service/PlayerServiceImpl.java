@@ -42,6 +42,10 @@ public class PlayerServiceImpl implements PlayerService {
         contentValues.put(PlayerTable.COLUMN_NICKNAME, player.getNickName());
         contentValues.put(PlayerTable.COLUMN_LASTNAME, player.getLastName());
         contentValues.put(PlayerTable.COLUMN_UUID, player.getUUID());
+
+        SQLiteDatabase writableDatabase = openTournamentDBHelper.getWritableDatabase();
+
+        writableDatabase.insert(PlayerTable.TABLE_PLAYER, null, contentValues);
     }
 
 
@@ -78,7 +82,7 @@ public class PlayerServiceImpl implements PlayerService {
 
         while (!cursor.isAfterLast()) {
             Player player = cursorToPlayer(cursor);
-
+            player.setLocal(true);
             players.add(player);
             cursor.moveToNext();
         }
@@ -89,13 +93,13 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
 
-    private long createPlayer(ContentValues contentValues) {
+    @Override
+    public void deleteLocalPlayer(Player player) {
 
         SQLiteDatabase writableDatabase = openTournamentDBHelper.getWritableDatabase();
 
-        long insertedId = writableDatabase.insert(PlayerTable.TABLE_PLAYER, null, contentValues);
-
-        return insertedId;
+        writableDatabase.delete(PlayerTable.TABLE_PLAYER, PlayerTable.COLUMN_UUID + " = ? ",
+            new String[] { player.getUUID() });
     }
 
 

@@ -451,6 +451,9 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
         Map<String, TournamentPlayer> allPlayerMapForTournament = tournamentPlayerService.getAllPlayerMapForTournament(
                 uploadedTournament);
 
+        Map<String, TournamentTeam> allTeamMapForTournament = tournamentPlayerService.getAllTeamMapForTournament(
+                uploadedTournament);
+
         List<Game> gamesToReturn = new ArrayList<>();
         SQLiteDatabase readableDatabase = openTournamentDBHelper.getReadableDatabase();
 
@@ -465,27 +468,46 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
 
             if (game.getTournament_round() < round) {
                 // collect information about opponents in current round
-                TournamentPlayer playerOne = allPlayerMapForTournament.get(game.getParticipantOneUUID());
-                TournamentPlayer playerTwo = allPlayerMapForTournament.get(game.getParticipantTwoUUID());
+                if (uploadedTournament.getTournamentTyp().equals(TournamentTyp.SOLO.name())) {
+                    TournamentPlayer participantOne = allPlayerMapForTournament.get(game.getParticipantOneUUID());
+                    TournamentPlayer participantTwo = allPlayerMapForTournament.get(game.getParticipantTwoUUID());
+                    participantOne.getListOfOpponentsUUIDs().add(participantTwo.getUuid());
+                    participantTwo.getListOfOpponentsUUIDs().add(participantOne.getUuid());
 
-                playerOne.getListOfOpponentsIds().add(playerTwo.getPlayerUUID());
-                playerTwo.getListOfOpponentsIds().add(playerOne.getPlayerUUID());
+                    allPlayerMapForTournament.put(game.getParticipantOneUUID(), participantOne);
+                    allPlayerMapForTournament.put(game.getParticipantTwoUUID(), participantTwo);
+                } else if (uploadedTournament.getTournamentTyp().equals(TournamentTyp.TEAM.name())
+                        && game.getParent_UUID() == null) {
+                    TournamentTeam teamOne = allTeamMapForTournament.get(game.getParticipantOneUUID());
+                    TournamentTeam teamTwo = allTeamMapForTournament.get(game.getParticipantTwoUUID());
 
-                allPlayerMapForTournament.put(game.getParticipantOneUUID(), playerOne);
-                allPlayerMapForTournament.put(game.getParticipantTwoUUID(), playerTwo);
+                    teamOne.getListOfOpponentsIds().add(teamTwo.getUuid());
+                    teamTwo.getListOfOpponentsIds().add(teamOne.getUuid());
+
+                    allTeamMapForTournament.put(game.getParticipantOneUUID(), teamOne);
+                    allTeamMapForTournament.put(game.getParticipantTwoUUID(), teamTwo);
+                }
             }
 
             if (game.getTournament_round() == round) {
-                game.setParticipantOne(allPlayerMapForTournament.get(game.getParticipantOneUUID()));
-                game.setParticipantTwo(allPlayerMapForTournament.get(game.getParticipantTwoUUID()));
+                if (uploadedTournament.getTournamentTyp().equals(TournamentTyp.TEAM.name())
+                        && game.getParent_UUID() == null) {
+                    game.setParticipantOne(allTeamMapForTournament.get(game.getParticipantOneUUID()));
+                    game.setParticipantTwo(allTeamMapForTournament.get(game.getParticipantTwoUUID()));
 
-                if (game.getParent_UUID() != null
-                        || uploadedTournament.getTournamentTyp().equals(TournamentTyp.SOLO.name())) {
-                    game.setTournamentPlayerOne(allPlayerMapForTournament.get(game.getParticipantOneUUID()));
-                    game.setTournamentPlayerTwo(allPlayerMapForTournament.get(game.getParticipantTwoUUID()));
+                    gamesToReturn.add(game);
+                } else {
+                    game.setParticipantOne(allPlayerMapForTournament.get(game.getParticipantOneUUID()));
+                    game.setParticipantTwo(allPlayerMapForTournament.get(game.getParticipantTwoUUID()));
+
+                    if (game.getParent_UUID() != null
+                            || uploadedTournament.getTournamentTyp().equals(TournamentTyp.SOLO.name())) {
+                        game.setTournamentPlayerOne(allPlayerMapForTournament.get(game.getParticipantOneUUID()));
+                        game.setTournamentPlayerTwo(allPlayerMapForTournament.get(game.getParticipantTwoUUID()));
+                    }
+
+                    gamesToReturn.add(game);
                 }
-
-                gamesToReturn.add(game);
             }
 
             cursor.moveToNext();

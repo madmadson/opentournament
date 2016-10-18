@@ -35,6 +35,7 @@ import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.domain.TournamentTeam;
 import madson.org.opentournament.domain.TournamentTyp;
 import madson.org.opentournament.tasks.LoadTournamentTeamTask;
+import madson.org.opentournament.tasks.SaveLocalPlayerTask;
 import madson.org.opentournament.tasks.SaveTournamentPlayerTask;
 import madson.org.opentournament.tasks.UpdateTournamentPlayerTask;
 import madson.org.opentournament.utility.BaseActivity;
@@ -42,6 +43,7 @@ import madson.org.opentournament.utility.BaseActivity;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
 
@@ -231,28 +233,38 @@ public class AddTournamentPlayerDialog extends DialogFragment {
                                 @Override
                                 public void onClick(View view) {
 
-                                    if (!newTeamNameEditText.getText()
-                                            .toString()
-                                            .toLowerCase()
-                                            .equals(getString(R.string.no_team))) {
-                                        if (newTeamNameEditText.getText().toString().length() != 0) {
-                                            teamnameSpinner.setVisibility(View.VISIBLE);
-                                            team_adapter.add(newTeamNameEditText.getText().toString());
-                                            team_adapter.notifyDataSetChanged();
-                                            teamnameSpinner.setSelection(team_adapter.getCount());
+                                    String newTeamName = newTeamNameEditText.getText().toString();
 
-                                            if (!tournament.getTournamentTyp().equals(TournamentTyp.TEAM.name())) {
-                                                labelTeamMembers.setText("(0)");
-                                            } else {
-                                                labelTeamMembers.setText("(0/" + tournament.getTeamSize() + ")");
-                                            }
+                                    boolean valid = true;
 
-                                            newTeamNameDialog.dismiss();
-                                        } else {
-                                            newTeamNameEditText.setError(getString(R.string.validation_error_empty));
-                                        }
-                                    } else {
+                                    if (teamNameMap.get(new TournamentTeam(newTeamName)) != null) {
+                                        newTeamNameEditText.setError(getString(R.string.team_name_already_taken));
+                                        valid = false;
+                                    }
+
+                                    if (newTeamName.toLowerCase().equals(getString(R.string.no_team))) {
                                         newTeamNameEditText.setError(getString(R.string.validation_error_no_team));
+                                        valid = false;
+                                    }
+
+                                    if (newTeamName.length() == 0) {
+                                        newTeamNameEditText.setError(getString(R.string.validation_error_empty));
+                                        valid = false;
+                                    }
+
+                                    if (valid) {
+                                        teamnameSpinner.setVisibility(View.VISIBLE);
+                                        team_adapter.add(newTeamName);
+                                        team_adapter.notifyDataSetChanged();
+                                        teamnameSpinner.setSelection(team_adapter.getCount());
+
+                                        if (!tournament.getTournamentTyp().equals(TournamentTyp.TEAM.name())) {
+                                            labelTeamMembers.setText("(0)");
+                                        } else {
+                                            labelTeamMembers.setText("(0/" + tournament.getTeamSize() + ")");
+                                        }
+
+                                        newTeamNameDialog.dismiss();
                                     }
                                 }
                             });
@@ -310,12 +322,66 @@ public class AddTournamentPlayerDialog extends DialogFragment {
                         final String faction = factionSpinner.getSelectedItem().toString();
 
                         if (validateForm(firstname, nickname, lastname, teamname)) {
+                            String uuid = UUID.randomUUID().toString();
+
+                            // added local or online Player
                             if (tournament_player == null) {
-                                new SaveTournamentPlayerTask(baseActivity, player, tournament, dialog, firstname,
-                                    nickname, lastname, teamname, faction).execute();
+                                TournamentPlayer tournamentPlayer = new TournamentPlayer();
+
+                                tournamentPlayer.setFirstName(firstname);
+                                tournamentPlayer.setNickName(nickname);
+                                tournamentPlayer.setLastName(lastname);
+
+                                tournamentPlayer.setTournamentId(String.valueOf(tournament.get_id()));
+                                tournamentPlayer.setFaction(faction);
+
+                                if (!baseActivity.getString(R.string.no_team).equals(teamname)) {
+                                    tournamentPlayer.setTeamName(teamname);
+                                } else {
+                                    tournamentPlayer.setTeamName("");
+                                }
+
+                                if (player != null) {
+                                    tournamentPlayer.setPlayerUUID(player.getUUID());
+
+                                    if (player.isLocal()) {
+                                        tournamentPlayer.setLocal(true);
+                                    }
+                                } else {
+                                    tournamentPlayer.setPlayerUUID(uuid);
+                                }
+
+                                new SaveTournamentPlayerTask(baseActivity, tournament, tournamentPlayer, dialog)
+                                .execute();
                             } else {
+                                tournament_player.setFirstName(firstname);
+                                tournament_player.setNickName(nickname);
+                                tournament_player.setLastName(lastname);
+
+                                tournament_player.setTournamentId(String.valueOf(tournament.get_id()));
+                                tournament_player.setFaction(faction);
+
+                                String oldTeamName = tournament_player.getTeamName();
+
+                                if (!baseActivity.getString(R.string.no_team).equals(teamname)) {
+                                    tournament_player.setTeamName(teamname);
+                                } else {
+                                    tournament_player.setTeamName("");
+                                }
+
                                 new UpdateTournamentPlayerTask(baseActivity, tournament_player, tournament, dialog,
-                                    teamname, faction).execute();
+                                    oldTeamName).execute();
+                            }
+
+                            if (player == null && tournament_player == null) {
+                                Player newLocalPlayer = new Player();
+                                newLocalPlayer.setFirstName(firstname);
+                                newLocalPlayer.setNickName(nickname);
+                                newLocalPlayer.setLastName(lastname);
+
+                                newLocalPlayer.setUUID(uuid);
+
+                                new SaveLocalPlayerTask(baseActivity, newLocalPlayer).execute();
                             }
                         }
                     }

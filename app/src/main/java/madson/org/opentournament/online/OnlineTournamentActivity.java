@@ -217,7 +217,7 @@ public class OnlineTournamentActivity extends BaseActivity {
                 if (position % 2 == 1) {
                     return getApplication().getResources().getString(R.string.nav_games_tab, round);
                 } else {
-                    return getApplication().getResources().getString(R.string.nav_ranking_tab, round);
+                    return getApplication().getResources().getString(R.string.nav_ranking_tab, (round - 1));
                 }
             }
         }

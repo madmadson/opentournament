@@ -30,12 +30,10 @@ public class UpdateTournamentPlayerTask extends AsyncTask<Void, Void, Void> {
 
     private TournamentPlayer tournamentPlayer;
 
-    private String teamname;
-    private String faction;
     private String oldTeamName;
 
     public UpdateTournamentPlayerTask(BaseActivity baseActivity, TournamentPlayer tournamentPlayer,
-        Tournament tournament, AlertDialog dialog, String teamname, String faction) {
+        Tournament tournament, AlertDialog dialog, String oldTeamName) {
 
         this.baseActivity = baseActivity;
         this.tournamentPlayer = tournamentPlayer;
@@ -44,8 +42,7 @@ public class UpdateTournamentPlayerTask extends AsyncTask<Void, Void, Void> {
 
         this.dialog = dialog;
 
-        this.teamname = teamname;
-        this.faction = faction;
+        this.oldTeamName = oldTeamName;
     }
 
     @Override
@@ -54,18 +51,7 @@ public class UpdateTournamentPlayerTask extends AsyncTask<Void, Void, Void> {
         TournamentPlayerService tournamentPlayerService = baseActivity.getBaseApplication()
                 .getTournamentPlayerService();
 
-        tournamentPlayer.setFaction(faction);
-
-        oldTeamName = tournamentPlayer.getTeamName();
-
-        // set only team is no team
-        if (!this.teamname.equals(baseActivity.getString(R.string.no_team))) {
-            tournamentPlayer.setTeamName(this.teamname);
-        } else {
-            tournamentPlayer.setTeamName(null);
-        }
-
-        tournamentPlayerService.editTournamentPlayer(tournamentPlayer, tournament);
+        tournamentPlayerService.updateTournamentPlayer(tournamentPlayer, tournament);
 
         return null;
     }

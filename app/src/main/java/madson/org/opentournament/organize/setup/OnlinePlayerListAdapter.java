@@ -15,6 +15,7 @@ import android.widget.Filter;
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.Tournament;
+import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.tasks.CheckPlayerAlreadyInTournamentTask;
 import madson.org.opentournament.utility.BaseActivity;
 import madson.org.opentournament.viewHolder.PlayerViewHolder;
@@ -97,12 +98,17 @@ public class OnlinePlayerListAdapter extends RecyclerView.Adapter<PlayerViewHold
     }
 
 
-    public void removePlayer(Player player) {
+    public void removeTournamentPlayer(TournamentPlayer tournamentPlayer) {
 
-        int position = originalPlayerList.indexOf(player);
+        Player player = new Player();
+        player.setUUID(tournamentPlayer.getPlayerUUID());
 
-        originalPlayerList.remove(position);
-        notifyDataSetChanged();
+        if (originalPlayerList.contains(player)) {
+            int position = originalPlayerList.indexOf(player);
+
+            originalPlayerList.remove(position);
+            notifyDataSetChanged();
+        }
     }
 
 

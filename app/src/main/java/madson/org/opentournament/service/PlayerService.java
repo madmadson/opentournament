@@ -38,4 +38,12 @@ public interface PlayerService {
      * @return  list with all players
      */
     List<Player> getAllLocalPlayers();
+
+
+    /**
+     * Delete given player.
+     *
+     * @param  player
+     */
+    void deleteLocalPlayer(Player player);
 }

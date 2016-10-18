@@ -22,5 +22,6 @@ public enum OpenTournamentEventTag {
     UPDATE_TOURNAMENT,
     ADD_TOURNAMENT,
     DELETE_TOURNAMENT,
-    END_SWAP_PLAYER;
+    END_SWAP_PLAYER,
+    DELETE_LOCAL_PLAYER;
 }

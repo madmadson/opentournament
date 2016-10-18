@@ -18,6 +18,8 @@
     <!-- this must be a pair -->
     <string-array name="news_header">
         <item>Welcome!</item>
+        <item>Di 18.10: Version 0.3.1-ALPHA Released</item>
+        <item>Mo 17.10: Version 0.3.0-ALPHA Released</item>
         <item>So 16.10: Version 0.2.2-ALPHA Released</item>
         <item>Fr 14.10: Version 0.2.0-ALPHA Released</item>
         <item>Fr 7.10: Version 0.1.8-ALPHA Released</item>
@@ -26,18 +28,26 @@
 
     <string-array name="news">
         <item>Create more Tournaments! Give Feedback!</item>
+        <item>* New Feature: delete local player + tournament player counter\n
+             * fix adding local players\n
+             * fix team tournament cp + vp calculation.
+        </item>
+         <item>* New Feature: swap player with button \n
+             * fix crash team tournament with no player/teams.\n
+             * fix bug creating local players -> now stored again in local db.
+        </item>
          <item>* Fix wrong determination of tournament state and round\n
              * fix issue creating team tournament
         </item>
          <item>* Improve mobile layout for tournament organization\n
             * Many Fixed Labels\n
             * New "teamView" for organized Tournaments -> Teamtournament preparation\n
-             * new Feature TeamTournaments!
-             * Check if player already in tournament (name check)
-             * space saving in tournament player visualization
-             * better mobile view for tournament organization
+             * new Feature TeamTournaments!\n
+             * Check if player already in tournament (name check)\n
+             * space saving in tournament player visualization\n
+             * better mobile view for tournament organization\n
              * Bug with registrations. Registration now has header!\n
-             * input bug when use keyboard in game result entering
+             * input bug when use keyboard in game result entering\n
              * final standings  should be correct now
         </item>
       

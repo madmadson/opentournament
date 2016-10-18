@@ -32,22 +32,20 @@ import com.google.firebase.database.ValueEventListener;
 
 import madson.org.opentournament.R;
 import madson.org.opentournament.db.FirebaseReferences;
-import madson.org.opentournament.domain.Game;
 import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.events.AddTournamentPlayerEvent;
+import madson.org.opentournament.events.DeleteLocalPlayerEvent;
 import madson.org.opentournament.events.OpenTournamentEvent;
 import madson.org.opentournament.events.OpenTournamentEventListener;
 import madson.org.opentournament.events.OpenTournamentEventTag;
-import madson.org.opentournament.events.RemoveAvailablePlayerEvent;
 import madson.org.opentournament.events.RemoveTournamentPlayerEvent;
 import madson.org.opentournament.service.TournamentPlayerService;
 import madson.org.opentournament.tasks.LoadAllLocalPlayerTask;
 import madson.org.opentournament.utility.BaseActivity;
 import madson.org.opentournament.utility.BaseFragment;
 
-import java.util.HashMap;
 import java.util.List;
 
 
@@ -222,15 +220,15 @@ public class AvailablePlayerListFragment extends BaseFragment implements OpenTou
     @Override
     public void handleEvent(OpenTournamentEventTag eventTag, OpenTournamentEvent parameter) {
 
-        if (OpenTournamentEventTag.REMOVE_AVAILABLE_PLAYER.equals(eventTag)) {
-            RemoveAvailablePlayerEvent removeAvailablePlayerEvent = (RemoveAvailablePlayerEvent) parameter;
-            Player player = removeAvailablePlayerEvent.getPlayer();
+        if (OpenTournamentEventTag.ADD_TOURNAMENT_PLAYER.equals(eventTag)) {
+            AddTournamentPlayerEvent addTournamentPlayerEvent = (AddTournamentPlayerEvent) parameter;
+            TournamentPlayer player = addTournamentPlayerEvent.getTournamentPlayer();
 
             if (player.isLocal()) {
-                localPlayerListAdapter.removePlayer(player);
+                localPlayerListAdapter.removeTournamentPlayer(player);
                 doFilter(filterPlayerTextView.getText());
             } else {
-                onlinePlayerListAdapter.removePlayer(player);
+                onlinePlayerListAdapter.removeTournamentPlayer(player);
                 doFilter(filterPlayerTextView.getText());
             }
         } else if (OpenTournamentEventTag.REMOVE_TOURNAMENT_PLAYER.equals(eventTag)) {
@@ -252,6 +250,12 @@ public class AvailablePlayerListFragment extends BaseFragment implements OpenTou
                 onlinePlayerListAdapter.addPlayer(player);
                 doFilter(filterPlayerTextView.getText());
             }
+        } else if (OpenTournamentEventTag.DELETE_LOCAL_PLAYER.equals(eventTag)) {
+            DeleteLocalPlayerEvent deleteLocalPlayerEvent = (DeleteLocalPlayerEvent) parameter;
+            Player player = deleteLocalPlayerEvent.getPlayer();
+
+            localPlayerListAdapter.removePlayer(player);
+            doFilter(filterPlayerTextView.getText());
         }
     }
 

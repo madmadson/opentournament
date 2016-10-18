@@ -17,6 +17,7 @@ import madson.org.opentournament.R;
  */
 public class PlayerViewHolder extends RecyclerView.ViewHolder {
 
+    private ImageView deleteIcon;
     private ImageView localIcon;
     private View playerCardLayout;
     private TextView playerNameInList;
@@ -35,6 +36,7 @@ public class PlayerViewHolder extends RecyclerView.ViewHolder {
         playerCardLayout = v.findViewById(R.id.player_card_layout);
 
         localIcon = (ImageView) v.findViewById(R.id.local_icon);
+        deleteIcon = (ImageView) v.findViewById(R.id.delete_icon);
     }
 
     public TextView getPlayerNameInList() {
@@ -52,5 +54,11 @@ public class PlayerViewHolder extends RecyclerView.ViewHolder {
     public ImageView getLocalIcon() {
 
         return localIcon;
+    }
+
+
+    public ImageView getDeleteIcon() {
+
+        return deleteIcon;
     }
 }

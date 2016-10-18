@@ -134,6 +134,10 @@ public class OnlineGamesListAdapter extends RecyclerView.Adapter<GameViewHolder>
 
         TournamentPlayer player1 = game.getTournamentPlayerOne();
 
+        if (player1.getTeamName().isEmpty()) {
+            holder.getPlayerOneTeam().setVisibility(View.GONE);
+        }
+
         holder.getPlayerOneNameInList()
             .setText(baseActivity.getResources()
                 .getString(R.string.player_name_in_row, player1.getFirstName(), player1.getNickName(),
@@ -141,6 +145,10 @@ public class OnlineGamesListAdapter extends RecyclerView.Adapter<GameViewHolder>
         holder.getPlayerOneFaction().setText(player1.getFaction());
 
         TournamentPlayer player2 = game.getTournamentPlayerTwo();
+
+        if (player2.getTeamName().isEmpty()) {
+            holder.getPlayerTwoTeam().setVisibility(View.GONE);
+        }
 
         holder.getPlayerTwoNameInList()
             .setText(baseActivity.getResources()

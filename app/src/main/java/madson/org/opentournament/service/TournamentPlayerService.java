@@ -106,7 +106,7 @@ public interface TournamentPlayerService {
      * @param  tournamentPlayer
      * @param  tournament
      */
-    void editTournamentPlayer(TournamentPlayer tournamentPlayer, Tournament tournament);
+    void updateTournamentPlayer(TournamentPlayer tournamentPlayer, Tournament tournament);
 
 
     /**

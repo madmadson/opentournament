@@ -172,7 +172,7 @@ public class TournamentPlayerListAdapter extends RecyclerView.Adapter<Tournament
                                         public void onClick(DialogInterface dialogInterface, int i) {
 
                                             Log.i(this.getClass().getName(),
-                                                "removePlayer tournamentPlayer from tournament");
+                                                "removeTournamentPlayer tournamentPlayer from tournament");
 
                                             new RemoveTournamentPlayerFromTournamentTask(baseActivity, tournament,
                                                 tournamentPlayer).execute();
@@ -266,5 +266,19 @@ public class TournamentPlayerListAdapter extends RecyclerView.Adapter<Tournament
 
         tournamentPlayerList.clear();
         notifyDataSetChanged();
+    }
+
+
+    public boolean checkTeamIsFull(String teamNameOfRegistration) {
+
+        int playersInTeam = 0;
+
+        for (TournamentPlayer tournamentPlayer : tournamentPlayerList) {
+            if (tournamentPlayer.getTeamName().equals(teamNameOfRegistration)) {
+                playersInTeam++;
+            }
+        }
+
+        return playersInTeam >= tournament.getTeamSize();
     }
 }

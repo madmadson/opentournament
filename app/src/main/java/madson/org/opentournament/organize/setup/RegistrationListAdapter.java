@@ -22,6 +22,7 @@ import android.view.ViewGroup;
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
+import madson.org.opentournament.domain.TournamentTyp;
 import madson.org.opentournament.online.RegisterTournamentPlayerDialog;
 import madson.org.opentournament.tasks.AddRegistrationTask;
 import madson.org.opentournament.utility.BaseActivity;
@@ -96,6 +97,24 @@ public class RegistrationListAdapter extends RecyclerView.Adapter<TournamentPlay
                 @Override
                 public void onClick(View v) {
 
+                    boolean valid = true;
+
+                    if (TournamentTyp.TEAM.name().equals(tournament.getTournamentTyp())) {
+                        String teamNameOfRegistration = player.getTeamName();
+
+                        valid = !tournamentPlayerListAdapter.checkTeamIsFull(teamNameOfRegistration);
+
+                        if (!valid) {
+                            Snackbar snackbar = Snackbar.make(baseActivity.getCoordinatorLayout(),
+                                    R.string.team_already_full, Snackbar.LENGTH_LONG);
+
+                            snackbar.getView()
+                            .setBackgroundColor(baseActivity.getResources().getColor(R.color.colorNegative));
+
+                            snackbar.show();
+                        }
+                    }
+
                     if (tournamentPlayerListAdapter.contains(player)) {
                         Snackbar snackbar = Snackbar.make(baseActivity.getCoordinatorLayout(),
                                 R.string.player_already_is_in_tournament, Snackbar.LENGTH_LONG);
@@ -104,7 +123,11 @@ public class RegistrationListAdapter extends RecyclerView.Adapter<TournamentPlay
                         .setBackgroundColor(baseActivity.getResources().getColor(R.color.colorNegative));
 
                         snackbar.show();
-                    } else {
+
+                        valid = false;
+                    }
+
+                    if (valid) {
                         AlertDialog.Builder builder = new AlertDialog.Builder(baseActivity);
                         builder.setTitle(R.string.realy_add_player)
                         .setPositiveButton(R.string.dialog_save, new DialogInterface.OnClickListener() {

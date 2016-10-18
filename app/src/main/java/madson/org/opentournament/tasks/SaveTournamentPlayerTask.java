@@ -34,81 +34,33 @@ import java.util.UUID;
 public class SaveTournamentPlayerTask extends AsyncTask<Void, Void, Void> {
 
     private BaseActivity baseActivity;
-    private Player player;
+
     private Tournament tournament;
 
     private AlertDialog dialog;
 
     private TournamentPlayer tournamentPlayer;
-    private String firstname;
-    private String nickname;
-    private String lastname;
-    private final String teamname;
-    private String faction;
+
     private boolean playerWithSameNAmeAlreadyIsInTournament;
     private TournamentPlayerService tournamentPlayerService;
     private TournamentService tournamentService;
 
-    public SaveTournamentPlayerTask(BaseActivity baseActivity, Player player, Tournament tournament, AlertDialog dialog,
-        String firstname, String nickname, String lastname, String teamName, String faction) {
+    public SaveTournamentPlayerTask(BaseActivity baseActivity, Tournament tournament, TournamentPlayer tournamentPlayer,
+        AlertDialog dialog) {
 
         this.baseActivity = baseActivity;
-        this.player = player;
 
         this.tournament = tournament;
+        this.tournamentPlayer = tournamentPlayer;
 
         this.dialog = dialog;
-        this.firstname = firstname;
-        this.nickname = nickname;
-        this.lastname = lastname;
-        this.teamname = teamName;
-        this.faction = faction;
     }
 
     @Override
     protected Void doInBackground(Void... params) {
 
         tournamentPlayerService = baseActivity.getBaseApplication().getTournamentPlayerService();
-
         tournamentService = baseActivity.getBaseApplication().getTournamentService();
-
-        tournamentPlayer = new TournamentPlayer();
-
-        if (player != null) {
-            tournamentPlayer.setPlayerUUID(player.getUUID());
-            tournamentPlayer.setLocal(player.isLocal());
-        }
-
-        tournamentPlayer.setFirstName(firstname);
-        tournamentPlayer.setNickName(nickname);
-        tournamentPlayer.setLastName(lastname);
-
-        tournamentPlayer.setTournamentId(String.valueOf(tournament.get_id()));
-        tournamentPlayer.setFaction(faction);
-
-        // set only team is no team
-        if (!teamname.equals(baseActivity.getString(R.string.no_team))) {
-            tournamentPlayer.setTeamName(teamname);
-        } else {
-            tournamentPlayer.setTeamName("");
-        }
-
-        if (player == null) {
-            Log.i(this.getClass().getName(), "add new local player.");
-
-            Player newLocalPlayer = new Player();
-            newLocalPlayer.setFirstName(firstname);
-            newLocalPlayer.setNickName(nickname);
-            newLocalPlayer.setLastName(lastname);
-
-            String uuid = UUID.randomUUID().toString();
-            newLocalPlayer.setUUID(uuid);
-
-            PlayerService playerService = baseActivity.getBaseApplication().getPlayerService();
-            playerService.createLocalPlayer(newLocalPlayer);
-            tournamentPlayer.setLocal(true);
-            tournamentPlayer.setPlayerUUID(uuid);
-        }
 
         List<TournamentPlayer> allPlayersForTournament = tournamentPlayerService.getAllPlayersForTournament(tournament);
 
@@ -164,12 +116,6 @@ public class SaveTournamentPlayerTask extends AsyncTask<Void, Void, Void> {
         baseActivity.getBaseApplication()
             .notifyTournamentEvent(OpenTournamentEventTag.ADD_TOURNAMENT_PLAYER,
                 new AddTournamentPlayerEvent(tournamentPlayer));
-
-        if (player != null) {
-            baseActivity.getBaseApplication()
-                .notifyTournamentEvent(OpenTournamentEventTag.REMOVE_AVAILABLE_PLAYER,
-                    new RemoveAvailablePlayerEvent(player));
-        }
 
         Snackbar snackbar = Snackbar.make(baseActivity.getCoordinatorLayout(), R.string.success_new_player_inserted,
                 Snackbar.LENGTH_LONG);

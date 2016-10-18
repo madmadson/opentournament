@@ -205,6 +205,9 @@ public class GameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
 
                 holder.getPlayerTwoCardView().setOnLongClickListener(new GameLongClickEventListener(game, 2));
                 holder.getPlayerTwoCardView().setOnDragListener(new GameDragListener(game, 2));
+
+                holder.getSwapPlayerOne().setVisibility(View.VISIBLE);
+                holder.getSwapPlayerTwo().setVisibility(View.VISIBLE);
             }
         }
 

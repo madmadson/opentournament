@@ -3,6 +3,8 @@ package madson.org.opentournament.organize.setup;
 import android.content.Context;
 import android.content.DialogInterface;
 
+import android.graphics.Color;
+
 import android.os.Bundle;
 import android.os.Handler;
 
@@ -76,6 +78,9 @@ public class TournamentPlayerListFragment extends Fragment implements OpenTourna
     private TournamentPlayerListAdapter tournamentPlayerListAdapter;
     private TournamentPlayerTeamExpandableListAdapter tournamentPlayerTeamExpandableListAdapter;
     private TextView headingRegisteredPlayers;
+    private TextView counterTournamentPlayers;
+
+    private int interCounterTournamentPlayers;
 
     public static TournamentPlayerListFragment newInstance(Tournament tournament) {
 
@@ -120,6 +125,10 @@ public class TournamentPlayerListFragment extends Fragment implements OpenTourna
         progressbar = (ProgressBar) view.findViewById(R.id.progressBar);
         progressbarRegistration = (ProgressBar) view.findViewById(R.id.progressBarRegistration);
         headingRegisteredPlayers = (TextView) view.findViewById(R.id.heading_registered_players);
+        counterTournamentPlayers = (TextView) view.findViewById(R.id.count_tournament_player);
+
+        interCounterTournamentPlayers = tournament.getActualPlayers();
+        manageTournamentPlayerCounter();
 
         registrationRecyclerView = (RecyclerView) view.findViewById(R.id.tournament_registration_list_recycler_view);
         registrationRecyclerView.setHasFixedSize(true);
@@ -361,6 +370,9 @@ public class TournamentPlayerListFragment extends Fragment implements OpenTourna
             tournamentPlayerTeamExpandableListAdapter.addTournamentPlayer(tournamentPlayer);
 
             registrationListAdapter.removeRegistration(tournamentPlayer);
+
+            interCounterTournamentPlayers++;
+            manageTournamentPlayerCounter();
         } else if (OpenTournamentEventTag.UPDATE_TOURNAMENT_PLAYER.equals(eventTag)) {
             UpdateTournamentPlayerEvent updateTournamentEvent = (UpdateTournamentPlayerEvent) parameter;
             TournamentPlayer updatedPlayer = updateTournamentEvent.getTournamentPlayer();
@@ -378,6 +390,9 @@ public class TournamentPlayerListFragment extends Fragment implements OpenTourna
             if (tournamentPlayerListAdapter.getItemCount() == 0) {
                 noTournamentPlayersTextView.setVisibility(View.VISIBLE);
             }
+
+            interCounterTournamentPlayers--;
+            manageTournamentPlayerCounter();
         } else if (OpenTournamentEventTag.ADD_TOURNAMENT_PLAYER.equals(eventTag)) {
             AddTournamentPlayerEvent addTournamentPlayerEvent = (AddTournamentPlayerEvent) parameter;
             TournamentPlayer tournamentPlayer = addTournamentPlayerEvent.getTournamentPlayer();
@@ -388,6 +403,22 @@ public class TournamentPlayerListFragment extends Fragment implements OpenTourna
             if (tournamentPlayerListAdapter.getItemCount() > 0) {
                 noTournamentPlayersTextView.setVisibility(View.GONE);
             }
+
+            interCounterTournamentPlayers++;
+            manageTournamentPlayerCounter();
+        }
+    }
+
+
+    private void manageTournamentPlayerCounter() {
+
+        counterTournamentPlayers.setText(getString(R.string.counter_tournament_players, interCounterTournamentPlayers,
+                tournament.getMaxNumberOfParticipants()));
+
+        if (interCounterTournamentPlayers > tournament.getMaxNumberOfParticipants()) {
+            counterTournamentPlayers.setTextColor(Color.RED);
+        } else {
+            counterTournamentPlayers.setTextColor(Color.GREEN);
         }
     }
 }

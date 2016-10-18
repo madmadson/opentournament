@@ -40,6 +40,7 @@ import madson.org.opentournament.db.FirebaseReferences;
 import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
+import madson.org.opentournament.domain.TournamentTeam;
 import madson.org.opentournament.domain.TournamentTyp;
 import madson.org.opentournament.utility.BaseActivity;
 
@@ -259,21 +260,38 @@ public class RegisterTournamentPlayerDialog extends DialogFragment {
                                 @Override
                                 public void onClick(View view) {
 
-                                    if (!newTeamNameEditText.getText()
-                                            .toString()
-                                            .toLowerCase()
-                                            .equals(getString(R.string.no_team))) {
-                                        if (newTeamNameEditText.getText().toString().length() != 0) {
-                                            teamnameSpinner.setVisibility(View.VISIBLE);
-                                            team_adapter.add(newTeamNameEditText.getText().toString());
-                                            team_adapter.notifyDataSetChanged();
-                                            teamnameSpinner.setSelection(team_adapter.getCount());
-                                            newTeamNameDialog.dismiss();
-                                        } else {
-                                            newTeamNameEditText.setError(getString(R.string.validation_error_empty));
-                                        }
-                                    } else {
+                                    String newTeamName = newTeamNameEditText.getText().toString();
+
+                                    boolean valid = true;
+
+                                    if (teamnameMap.get(new TournamentTeam(newTeamName)) != null) {
+                                        newTeamNameEditText.setError(getString(R.string.team_name_already_taken));
+                                        valid = false;
+                                    }
+
+                                    if (newTeamName.toLowerCase().equals(getString(R.string.no_team))) {
                                         newTeamNameEditText.setError(getString(R.string.validation_error_no_team));
+                                        valid = false;
+                                    }
+
+                                    if (newTeamName.length() == 0) {
+                                        newTeamNameEditText.setError(getString(R.string.validation_error_empty));
+                                        valid = false;
+                                    }
+
+                                    if (valid) {
+                                        teamnameSpinner.setVisibility(View.VISIBLE);
+                                        team_adapter.add(newTeamName);
+                                        team_adapter.notifyDataSetChanged();
+                                        teamnameSpinner.setSelection(team_adapter.getCount());
+
+                                        if (!tournament.getTournamentTyp().equals(TournamentTyp.TEAM.name())) {
+                                            labelTeammembers.setText("(0)");
+                                        } else {
+                                            labelTeammembers.setText("(0/" + tournament.getTeamSize() + ")");
+                                        }
+
+                                        newTeamNameDialog.dismiss();
                                     }
                                 }
                             });

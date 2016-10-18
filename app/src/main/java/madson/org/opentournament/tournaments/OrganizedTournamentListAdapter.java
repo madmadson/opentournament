@@ -88,9 +88,11 @@ public class OrganizedTournamentListAdapter extends RecyclerView.Adapter<Tournam
         if (tournament.getState().equals(Tournament.TournamentState.FINISHED.name())) {
             viewHolder.getTournamentState().setText(R.string.tournament_finished);
             viewHolder.getTournamentState().setTextColor(Color.BLUE);
+            viewHolder.getTournamentState().setVisibility(View.VISIBLE);
         } else if (tournament.getActualRound() > 0) {
             viewHolder.getTournamentState().setText(R.string.tournament_started);
             viewHolder.getTournamentState().setTextColor(Color.GREEN);
+            viewHolder.getTournamentState().setVisibility(View.VISIBLE);
         } else {
             viewHolder.getTournamentState().setVisibility(View.GONE);
         }

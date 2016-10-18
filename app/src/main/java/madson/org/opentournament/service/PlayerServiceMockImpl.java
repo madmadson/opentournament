@@ -129,6 +129,16 @@ public class PlayerServiceMockImpl implements PlayerService {
     }
 
 
+    @Override
+    public void deleteLocalPlayer(Player player) {
+
+        SQLiteDatabase writableDatabase = openTournamentDBHelper.getWritableDatabase();
+
+        writableDatabase.delete(PlayerTable.TABLE_PLAYER, PlayerTable.COLUMN_UUID + " = ? ",
+            new String[] { player.getUUID() });
+    }
+
+
     private void createPlayer(ContentValues contentValues) {
 
         SQLiteDatabase writableDatabase = openTournamentDBHelper.getWritableDatabase();

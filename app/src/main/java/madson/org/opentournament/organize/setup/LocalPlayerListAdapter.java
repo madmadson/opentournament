@@ -1,7 +1,10 @@
 package madson.org.opentournament.organize.setup;
 
+import android.content.DialogInterface;
+
 import android.graphics.Color;
 
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 
@@ -17,7 +20,9 @@ import android.widget.Filterable;
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.Tournament;
+import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.tasks.CheckPlayerAlreadyInTournamentTask;
+import madson.org.opentournament.tasks.DeleteLocalPlayerTask;
 import madson.org.opentournament.utility.BaseActivity;
 import madson.org.opentournament.viewHolder.PlayerViewHolder;
 
@@ -50,10 +55,8 @@ public class LocalPlayerListAdapter extends RecyclerView.Adapter<PlayerViewHolde
     @Override
     public PlayerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        // create a new view
         CardView v = (CardView) LayoutInflater.from(parent.getContext()).inflate(R.layout.row_player, parent, false);
 
-        // set the view's size, margins, paddings and layout parameters
         return new PlayerViewHolder(v);
     }
 
@@ -84,6 +87,26 @@ public class LocalPlayerListAdapter extends RecyclerView.Adapter<PlayerViewHolde
             });
 
         holder.getLocalIcon().setVisibility(View.VISIBLE);
+        holder.getDeleteIcon().setVisibility(View.VISIBLE);
+        holder.getDeleteIcon().setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(baseActivity);
+                    builder.setTitle(R.string.really_delete_local_player)
+                    .setPositiveButton(R.string.dialog_confirm, new DialogInterface.OnClickListener() {
+
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                    new DeleteLocalPlayerTask(baseActivity, player).execute();
+                                }
+                            })
+                    .setNegativeButton(R.string.dialog_cancel, null)
+                    .show();
+                }
+            });
     }
 
 
@@ -107,12 +130,17 @@ public class LocalPlayerListAdapter extends RecyclerView.Adapter<PlayerViewHolde
     }
 
 
-    public int removePlayer(Player player) {
+    public void removeTournamentPlayer(TournamentPlayer tournamentPlayer) {
 
-        int position = originalPlayerList.indexOf(player);
-        originalPlayerList.remove(position);
+        Player player = new Player();
+        player.setUUID(tournamentPlayer.getPlayerUUID());
 
-        return position;
+        if (originalPlayerList.contains(player)) {
+            int position = originalPlayerList.indexOf(player);
+
+            originalPlayerList.remove(position);
+            notifyDataSetChanged();
+        }
     }
 
 
@@ -120,6 +148,17 @@ public class LocalPlayerListAdapter extends RecyclerView.Adapter<PlayerViewHolde
     public Filter getFilter() {
 
         return mFilter;
+    }
+
+
+    public void removePlayer(Player player) {
+
+        if (originalPlayerList.contains(player)) {
+            int position = originalPlayerList.indexOf(player);
+
+            originalPlayerList.remove(position);
+            notifyDataSetChanged();
+        }
     }
 
     private class ItemFilter extends Filter {

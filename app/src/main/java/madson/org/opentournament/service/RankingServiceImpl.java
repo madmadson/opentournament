@@ -142,11 +142,19 @@ public class RankingServiceImpl implements RankingService {
 
                 int newTeamOneScore = teamOneRanking.getScore() + game.getParticipant_one_score();
                 teamOneRanking.setScore(newTeamOneScore);
+                teamOneRanking.setControl_points(teamOneRanking.getControl_points()
+                    + game.getParticipant_one_control_points());
+                teamOneRanking.setVictory_points(teamOneRanking.getVictory_points()
+                    + game.getParticipant_one_victory_points());
 
                 TournamentRanking teamTwoRanking = mapOfRankings.get(game.getParticipantTwoUUID());
 
                 int newTeamTwoScore = teamTwoRanking.getScore() + game.getParticipant_two_score();
                 teamTwoRanking.setScore(newTeamTwoScore);
+                teamTwoRanking.setControl_points(teamTwoRanking.getControl_points()
+                    + game.getParticipant_two_control_points());
+                teamTwoRanking.setVictory_points(teamTwoRanking.getVictory_points()
+                    + game.getParticipant_two_victory_points());
 
                 teamTwoRanking.getListOfOpponentsPlayerIds().add(teamOneRanking.getParticipantUUID());
                 teamOneRanking.getListOfOpponentsPlayerIds().add(teamTwoRanking.getParticipantUUID());

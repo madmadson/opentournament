@@ -45,13 +45,13 @@
     <string name="label_tournament_max_seats">Max Seats</string>
     <string name="label_tournament_date">Date</string>
     <string name="label_tournament_location">Location</string>
-    <string name="label_tournament_solo_tournament">Solo tournament</string>
-    <string name="label_tournament_team_tournament">Team tournament</string>
+    <string name="label_tournament_solo_tournament">Solo Tournament</string>
+    <string name="label_tournament_team_tournament">Team Tournament</string>
 
-    <string name="success_create_tournament">Successfully save tournament</string>
-    <string name="success_update_tournament">Successfully update tournament</string>
-    <string name="success_delete_tournament">Successfully delete tournament</string>
-    <string name="success_upload_tournament">Successfully upload tournament</string>
+    <string name="success_create_tournament">Successfully save Tournament</string>
+    <string name="success_update_tournament">Successfully update Tournament</string>
+    <string name="success_delete_tournament">Successfully delete Tournament</string>
+    <string name="success_upload_tournament">Successfully upload Tournament</string>
     
     
     <string name="dialog_confirm_delete_tournament">
@@ -59,8 +59,8 @@
     </string>
     <string name="confirm_upload_tournament">Please confirm upload data</string>
     <string name="confirm_upload_tournament_text">
-        Uploading tournament will enable other people to see your tournament. Only tournament data will be
-        visible in that moment. Updates in your tournament must be published again. Rankings and Games
+        Uploading tournament will enable other people to see your tournament. Only Tournament data will be
+        visible in that moment. Updates in your Tournament must be published again. Rankings and Games
         can be published while the tournament takes place.
     </string>
     
@@ -82,7 +82,7 @@
 
     
     <!-- Tournament management dialog-->
-    <string name="dialog_edit_tournament">Edit tournament</string>
+    <string name="dialog_edit_tournament">Edit Tournament</string>
     
     
     
@@ -90,7 +90,7 @@
     <string name="nav_tournament_setup">Tournament Setup</string>
     <string name="nav_round_tab">Round %1$d</string>
     <string name="nav_games_tab">Games %1$d</string>
-    <string name="nav_ranking_tab">Ranking %1$d</string>
+    <string name="nav_ranking_tab">Ranking Round %1$d</string>
     <string name="nav_home_activity">Home</string>
     <string name="nav_tournament_final">Final Results</string>
     <string name="search_player">Filter available players</string>
@@ -296,11 +296,16 @@
     <string name="teams_not_full">Some Teams are not full</string>
     <string name="player_with_same_name_already_in_tournament">Player with name already in Tournament</string>
     <string name="dialog_I_know_this">I know this</string>
-    <string name="success_save_game_result">Successfuly save Game result</string>
+    <string name="success_save_game_result">Successfully save Game result</string>
     <string name="dialog_ok">OK</string>
-    <string name="more_round_recomendation">We recommend more rounds for this tournament</string>
-    <string name="end_tournament_text">Really end tournament?</string>
+    <string name="more_round_recomendation">We recommend more rounds for this Tournament</string>
+    <string name="end_tournament_text">Really end Tournament?</string>
     <string name="click_for_swapping">Click other Player for swap</string>
-    <string name="swapping_canceled">Swapping canceled successfuly</string>
+    <string name="swapping_canceled">Swapping canceled successfully</string>
+    <string name="really_delete_local_player">Really delete local Player?</string>
+    <string name="success_delete_local_player">Successfully delete local Player</string>
+    <string name="team_name_already_taken">Teamname already taken</string>
+    <string name="team_already_full">Team already full</string>
+    <string name="counter_tournament_players">(%1$d/%2$d)</string>
 
 </resources>

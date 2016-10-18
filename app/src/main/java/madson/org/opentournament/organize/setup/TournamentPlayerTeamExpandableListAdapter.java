@@ -293,7 +293,7 @@ public class TournamentPlayerTeamExpandableListAdapter extends BaseExpandableLis
                                             public void onClick(DialogInterface dialogInterface, int i) {
 
                                                 Log.i(this.getClass().getName(),
-                                                    "removePlayer tournamentPlayer from tournament");
+                                                    "removeTournamentPlayer tournamentPlayer from tournament");
 
                                                 new RemoveTournamentPlayerFromTournamentTask(baseActivity, tournament,
                                                     tournamentPlayer).execute();

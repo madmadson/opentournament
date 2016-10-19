@@ -14,7 +14,6 @@ import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.domain.TournamentRanking;
-import madson.org.opentournament.domain.TournamentTeam;
 import madson.org.opentournament.domain.TournamentTyp;
 import madson.org.opentournament.viewHolder.TournamentRankingViewHolder;
 

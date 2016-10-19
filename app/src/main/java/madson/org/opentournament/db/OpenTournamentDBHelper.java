@@ -14,7 +14,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class OpenTournamentDBHelper extends SQLiteOpenHelper {
 
     private static final String DB_NAME = "opentournament.db";
-    private static final int DB_VERSION = 4;
+    public static final int DB_VERSION = 5;
 
     public OpenTournamentDBHelper(Context context) {
 

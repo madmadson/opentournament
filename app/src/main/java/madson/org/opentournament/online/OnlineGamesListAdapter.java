@@ -22,7 +22,6 @@ import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.domain.TournamentTyp;
 import madson.org.opentournament.online.team.OnlineTeamTournamentManagementActivity;
 import madson.org.opentournament.utility.BaseActivity;
-import madson.org.opentournament.utility.BaseApplication;
 import madson.org.opentournament.viewHolder.GameViewHolder;
 
 import java.util.ArrayList;
@@ -104,6 +103,9 @@ public class OnlineGamesListAdapter extends RecyclerView.Adapter<GameViewHolder>
             .setText(baseActivity.getResources().getString(R.string.game_cp, game.getParticipant_two_control_points()));
         holder.getPlayerTwoVictoryPoints()
             .setText(baseActivity.getResources().getString(R.string.game_vp, game.getParticipant_two_victory_points()));
+
+        holder.getSwapPlayerOne().setVisibility(View.GONE);
+        holder.getSwapPlayerTwo().setVisibility(View.GONE);
     }
 
 
@@ -160,9 +162,9 @@ public class OnlineGamesListAdapter extends RecyclerView.Adapter<GameViewHolder>
 
         if (authenticatedPlayer != null) {
             if (authenticatedPlayer.getUUID().equals(player1.getPlayerUUID())) {
-                holder.getPlayerOneCardView().setCardBackgroundColor(Color.MAGENTA);
+                holder.getPlayerOneCardView().setCardBackgroundColor(Color.CYAN);
             } else if (authenticatedPlayer.getUUID().equals(player2.getPlayerUUID())) {
-                holder.getPlayerTwoCardView().setCardBackgroundColor(Color.MAGENTA);
+                holder.getPlayerTwoCardView().setCardBackgroundColor(Color.CYAN);
             }
         }
     }

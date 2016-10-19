@@ -7,8 +7,6 @@ import android.content.DialogInterface;
 
 import android.os.Bundle;
 
-import android.support.annotation.Nullable;
-
 import android.support.design.widget.Snackbar;
 
 import android.support.v4.app.DialogFragment;
@@ -25,17 +23,11 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-
 import madson.org.opentournament.R;
-import madson.org.opentournament.db.FirebaseReferences;
 import madson.org.opentournament.domain.PairingOption;
 import madson.org.opentournament.domain.Tournament;
-import madson.org.opentournament.tasks.LoadTournamentTask;
 import madson.org.opentournament.tasks.PairNewRoundTask;
 import madson.org.opentournament.utility.BaseActivity;
-import madson.org.opentournament.utility.BaseApplication;
 
 import java.util.Map;
 
@@ -90,8 +82,6 @@ public class ConfirmPairingNewRoundDialog extends DialogFragment {
 
         View dialogView = inflater.inflate(R.layout.dialog_confirm_pairing, null);
 
-        new LoadTournamentTask(baseActivity, dialogView, tournament).execute();
-
         LinearLayout container = (LinearLayout) dialogView.findViewById(R.id.pairing_options_container);
 
         pairingOptions = baseActivity.getBaseApplication().getPairingOptionsForTournament(tournament);
@@ -119,7 +109,7 @@ public class ConfirmPairingNewRoundDialog extends DialogFragment {
                     }
                 });
 
-            toggleButton.setChecked(option.isDefaultPairing());
+            toggleButton.setChecked(option.isDefaultOption());
 
             container.addView(pairingOption);
         }

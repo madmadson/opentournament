@@ -101,7 +101,7 @@ public class RegisterTournamentPlayerDialog extends DialogFragment {
             tournamentPlayer = bundle.getParcelable(BUNDLE_TOURNAMENT_PLAYER);
 
             // Get the layout inflater
-            LayoutInflater inflater = getActivity().getLayoutInflater();
+            final LayoutInflater inflater = getActivity().getLayoutInflater();
 
             View dialogView = inflater.inflate(R.layout.dialog_add_tournament_player, null);
 
@@ -237,10 +237,10 @@ public class RegisterTournamentPlayerDialog extends DialogFragment {
                     @Override
                     public void onClick(View view) {
 
-                        final EditText newTeamNameEditText = new EditText(getContext());
+                        final View dialogAddTeam = inflater.inflate(R.layout.dialog_add_team, null);
 
                         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                        final AlertDialog newTeamNameDialog = builder.setView(newTeamNameEditText)
+                        final AlertDialog newTeamNameDialog = builder.setView(dialogAddTeam)
                             .setTitle(R.string.add_new_team)
                             .setPositiveButton(R.string.dialog_save, new DialogInterface.OnClickListener() {
 
@@ -259,6 +259,9 @@ public class RegisterTournamentPlayerDialog extends DialogFragment {
 
                                 @Override
                                 public void onClick(View view) {
+
+                                    EditText newTeamNameEditText = (EditText) dialogAddTeam.findViewById(
+                                            R.id.new_team_name);
 
                                     String newTeamName = newTeamNameEditText.getText().toString();
 
@@ -363,8 +366,8 @@ public class RegisterTournamentPlayerDialog extends DialogFragment {
 
                             DatabaseReference reference = FirebaseDatabase.getInstance()
                                 .getReference(
-                                    FirebaseReferences.TOURNAMENT_REGISTRATIONS + "/" + tournament.getUUID() + "/"
-                                    + player.getUUID());
+                                    FirebaseReferences.TOURNAMENT_REGISTRATIONS + "/" + tournament.getGameOrSportTyp()
+                                    + "/" + tournament.getUUID() + "/" + player.getUUID());
 
                             reference.setValue(tournamentPlayer);
 

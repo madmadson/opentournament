@@ -1,10 +1,5 @@
 package madson.org.opentournament.service;
 
-import android.content.ContentValues;
-
-import android.database.Cursor;
-
-import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.Tournament;
 
 import java.util.List;
@@ -18,11 +13,11 @@ import java.util.List;
 public interface TournamentService {
 
     /**
-     * @param  id  id of the tournament
+     * @param  uuid  id of the tournament
      *
      * @return
      */
-    Tournament getTournamentForId(Long id);
+    Tournament getTournamentForId(String uuid);
 
 
     /**

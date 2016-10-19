@@ -4,8 +4,6 @@ import android.database.sqlite.SQLiteDatabase;
 
 import android.util.Log;
 
-import madson.org.opentournament.domain.TournamentPlayer;
-
 
 /**
  * Local database for players.

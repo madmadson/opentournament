@@ -48,8 +48,8 @@ public class TournamentPlayerServiceImpl implements TournamentPlayerService {
         SQLiteDatabase db = openTournamentDBHelper.getWritableDatabase();
 
         db.delete(TournamentPlayerTable.TABLE_TOURNAMENT_PLAYER,
-            TournamentPlayerTable.COLUMN_TOURNAMENT_ID + " = ?  AND  " + TournamentPlayerTable.COLUMN_PLAYER_UUID
-            + " = ? ", new String[] { player.getTournamentId(), player.getPlayerUUID() });
+            TournamentPlayerTable.COLUMN_TOURNAMENT_UUID + " = ?  AND  " + TournamentPlayerTable.COLUMN_PLAYER_UUID
+            + " = ? ", new String[] { player.getTournamentUUID(), player.getPlayerUUID() });
     }
 
 
@@ -62,8 +62,8 @@ public class TournamentPlayerServiceImpl implements TournamentPlayerService {
 
         Cursor cursor = readableDatabase.query(TournamentPlayerTable.TABLE_TOURNAMENT_PLAYER,
                 TournamentPlayerTable.ALL_COLS_FOR_TOURNAMENT_PLAYER_TABLE,
-                TournamentPlayerTable.COLUMN_TOURNAMENT_ID + " = ?",
-                new String[] { Long.toString(tournament.get_id()) }, null, null, null);
+                TournamentPlayerTable.COLUMN_TOURNAMENT_UUID + " = ?", new String[] { tournament.getUUID() }, null,
+                null, null);
 
         cursor.moveToFirst();
 
@@ -107,8 +107,8 @@ public class TournamentPlayerServiceImpl implements TournamentPlayerService {
 
         Cursor cursor = readableDatabase.query(TournamentPlayerTable.TABLE_TOURNAMENT_PLAYER,
                 TournamentPlayerTable.ALL_COLS_FOR_TOURNAMENT_PLAYER_TABLE,
-                TournamentPlayerTable.COLUMN_TOURNAMENT_ID + " = ?",
-                new String[] { Long.toString(tournament.get_id()) }, null, null, null);
+                TournamentPlayerTable.COLUMN_TOURNAMENT_UUID + " = ?", new String[] { tournament.getUUID() }, null,
+                null, null);
 
         cursor.moveToFirst();
 
@@ -144,8 +144,8 @@ public class TournamentPlayerServiceImpl implements TournamentPlayerService {
 
         Cursor cursor = readableDatabase.query(TournamentPlayerTable.TABLE_TOURNAMENT_PLAYER,
                 new String[] { TournamentPlayerTable.COLUMN_PLAYER_UUID },
-                TournamentPlayerTable.COLUMN_TOURNAMENT_ID + " = ?",
-                new String[] { Long.toString(tournament.get_id()) }, null, null, null);
+                TournamentPlayerTable.COLUMN_TOURNAMENT_UUID + " = ?", new String[] { tournament.getUUID() }, null,
+                null, null);
 
         cursor.moveToFirst();
 
@@ -168,7 +168,7 @@ public class TournamentPlayerServiceImpl implements TournamentPlayerService {
 
         ContentValues contentValues = new ContentValues();
 
-        contentValues.put(TournamentPlayerTable.COLUMN_TOURNAMENT_ID, tournament.get_id());
+        contentValues.put(TournamentPlayerTable.COLUMN_TOURNAMENT_UUID, tournament.getUUID());
 
         contentValues.put(TournamentPlayerTable.COLUMN_PLAYER_UUID, player.getPlayerUUID());
         contentValues.put(TournamentPlayerTable.COLUMN_FIRSTNAME, player.getFirstName());
@@ -191,8 +191,8 @@ public class TournamentPlayerServiceImpl implements TournamentPlayerService {
 
         Cursor cursor = readableDatabase.query(TournamentPlayerTable.TABLE_TOURNAMENT_PLAYER,
                 TournamentPlayerTable.ALL_COLS_FOR_TOURNAMENT_PLAYER_TABLE,
-                TournamentPlayerTable.COLUMN_TOURNAMENT_ID + "  = ?",
-                new String[] { Long.toString(tournament.get_id()) }, null, null, null);
+                TournamentPlayerTable.COLUMN_TOURNAMENT_UUID + "  = ?", new String[] { tournament.getUUID() }, null,
+                null, null);
 
         cursor.moveToFirst();
 
@@ -219,8 +219,8 @@ public class TournamentPlayerServiceImpl implements TournamentPlayerService {
 
         Cursor cursor = readableDatabase.query(TournamentPlayerTable.TABLE_TOURNAMENT_PLAYER,
                 TournamentPlayerTable.ALL_COLS_FOR_TOURNAMENT_PLAYER_TABLE,
-                TournamentPlayerTable.COLUMN_TOURNAMENT_ID + " = ?",
-                new String[] { Long.toString(tournament.get_id()) }, null, null, null);
+                TournamentPlayerTable.COLUMN_TOURNAMENT_UUID + " = ?", new String[] { tournament.getUUID() }, null,
+                null, null);
 
         cursor.moveToFirst();
 
@@ -247,8 +247,8 @@ public class TournamentPlayerServiceImpl implements TournamentPlayerService {
 
         Cursor cursor = readableDatabase.query(TournamentPlayerTable.TABLE_TOURNAMENT_PLAYER,
                 TournamentPlayerTable.ALL_COLS_FOR_TOURNAMENT_PLAYER_TABLE,
-                TournamentPlayerTable.COLUMN_TOURNAMENT_ID + " = ?",
-                new String[] { Long.toString(tournament.get_id()) }, null, null, null);
+                TournamentPlayerTable.COLUMN_TOURNAMENT_UUID + " = ?", new String[] { tournament.getUUID() }, null,
+                null, null);
 
         cursor.moveToFirst();
 
@@ -280,7 +280,7 @@ public class TournamentPlayerServiceImpl implements TournamentPlayerService {
 
         TournamentPlayer tournamentPlayer = new TournamentPlayer();
         tournamentPlayer.set_id(cursor.getInt(0));
-        tournamentPlayer.setTournamentId(cursor.getString(1));
+        tournamentPlayer.setTournamentUUID(cursor.getString(1));
         tournamentPlayer.setPlayerUUID(cursor.getString(2));
 
         tournamentPlayer.setFirstName(cursor.getString(3));
@@ -304,15 +304,16 @@ public class TournamentPlayerServiceImpl implements TournamentPlayerService {
         Log.i(this.getClass().getName(), "pushes tournament players to firebase: " + allPlayersForTournament);
 
         DatabaseReference referenceFoPlayersToDelete = FirebaseDatabase.getInstance()
-                .getReference(FirebaseReferences.TOURNAMENT_PLAYERS + "/" + tournament.getUUID());
+                .getReference(FirebaseReferences.TOURNAMENT_PLAYERS + "/" + tournament.getGameOrSportTyp() + "/"
+                    + tournament.getUUID());
         referenceFoPlayersToDelete.removeValue();
 
         for (TournamentPlayer player : allPlayersForTournament) {
             String online_uuid = player.getPlayerUUID();
 
             DatabaseReference referenceForUpdateTournamentPlayer = FirebaseDatabase.getInstance()
-                    .getReference(FirebaseReferences.TOURNAMENT_PLAYERS + "/" + tournament.getUUID() + "/"
-                        + online_uuid);
+                    .getReference(FirebaseReferences.TOURNAMENT_PLAYERS + "/" + tournament.getGameOrSportTyp() + "/"
+                        + tournament.getUUID() + "/" + online_uuid);
 
             referenceForUpdateTournamentPlayer.setValue(player);
         }
@@ -328,7 +329,7 @@ public class TournamentPlayerServiceImpl implements TournamentPlayerService {
         contentValues.put(TournamentPlayerTable.COLUMN_DROPPED_IN_ROUND, tournament.getActualRound());
 
         db.update(TournamentPlayerTable.TABLE_TOURNAMENT_PLAYER, contentValues,
-            TournamentPlayerTable.COLUMN_ID + " = ?", new String[] { String.valueOf(player.get_id()) });
+            TournamentPlayerTable.COLUMN_PLAYER_UUID + " = ?", new String[] { player.getUuid() });
     }
 
 
@@ -343,7 +344,7 @@ public class TournamentPlayerServiceImpl implements TournamentPlayerService {
         contentValues.put(TournamentPlayerTable.COLUMN_FACTION, tournamentPlayer.getFaction());
 
         db.update(TournamentPlayerTable.TABLE_TOURNAMENT_PLAYER, contentValues,
-            TournamentPlayerTable.COLUMN_ID + " = ?", new String[] { String.valueOf(tournamentPlayer.get_id()) });
+            TournamentPlayerTable.COLUMN_PLAYER_UUID + " = ?", new String[] { tournamentPlayer.getPlayerUUID() });
     }
 
 
@@ -352,8 +353,8 @@ public class TournamentPlayerServiceImpl implements TournamentPlayerService {
 
         SQLiteDatabase db = openTournamentDBHelper.getWritableDatabase();
 
-        db.delete(TournamentPlayerTable.TABLE_TOURNAMENT_PLAYER, TournamentPlayerTable.COLUMN_TOURNAMENT_ID + " = ? ",
-            new String[] { String.valueOf(tournament.get_id()) });
+        db.delete(TournamentPlayerTable.TABLE_TOURNAMENT_PLAYER, TournamentPlayerTable.COLUMN_TOURNAMENT_UUID + " = ? ",
+            new String[] { tournament.getUUID() });
     }
 
 
@@ -368,8 +369,8 @@ public class TournamentPlayerServiceImpl implements TournamentPlayerService {
 
         cursor = readableDatabase.query(TournamentPlayerTable.TABLE_TOURNAMENT_PLAYER,
                 new String[] { TournamentPlayerTable.COLUMN_PLAYER_UUID },
-                TournamentPlayerTable.COLUMN_TOURNAMENT_ID + " = ? AND " + TournamentPlayerTable.COLUMN_PLAYER_UUID
-                + " = ?", new String[] { Long.toString(tournament.get_id()), player.getUUID() }, null, null, null);
+                TournamentPlayerTable.COLUMN_TOURNAMENT_UUID + " = ? AND " + TournamentPlayerTable.COLUMN_PLAYER_UUID
+                + " = ?", new String[] { tournament.getUUID(), player.getUUID() }, null, null, null);
 
         cursor.moveToFirst();
 

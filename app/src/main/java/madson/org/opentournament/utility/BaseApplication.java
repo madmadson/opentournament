@@ -32,19 +32,14 @@ import madson.org.opentournament.events.OpenTournamentEventListener;
 import madson.org.opentournament.events.OpenTournamentEventTag;
 import madson.org.opentournament.service.OngoingTournamentService;
 import madson.org.opentournament.service.OngoingTournamentServiceImpl;
-import madson.org.opentournament.service.OngoingTournamentServiceMockImpl;
 import madson.org.opentournament.service.PlayerService;
 import madson.org.opentournament.service.PlayerServiceImpl;
-import madson.org.opentournament.service.PlayerServiceMockImpl;
 import madson.org.opentournament.service.RankingService;
 import madson.org.opentournament.service.RankingServiceImpl;
-import madson.org.opentournament.service.RankingServiceMockImpl;
 import madson.org.opentournament.service.TournamentPlayerService;
 import madson.org.opentournament.service.TournamentPlayerServiceImpl;
-import madson.org.opentournament.service.TournamentPlayerServiceMockImpl;
 import madson.org.opentournament.service.TournamentService;
 import madson.org.opentournament.service.TournamentServiceImpl;
-import madson.org.opentournament.service.TournamentServiceMockImpl;
 
 import net.danlew.android.joda.JodaTimeAndroid;
 
@@ -92,7 +87,7 @@ public abstract class BaseApplication extends Application {
 
         if (playerService == null) {
             if (getEnvironment() == Environment.DEV) {
-                playerService = new PlayerServiceMockImpl(getApplicationContext());
+                playerService = new PlayerServiceImpl(getApplicationContext());
             } else {
                 playerService = new PlayerServiceImpl(getApplicationContext());
             }
@@ -100,7 +95,7 @@ public abstract class BaseApplication extends Application {
 
         if (tournamentService == null) {
             if (getEnvironment() == Environment.DEV) {
-                tournamentService = new TournamentServiceMockImpl(getApplicationContext());
+                tournamentService = new TournamentServiceImpl(getApplicationContext());
             } else {
                 tournamentService = new TournamentServiceImpl(getApplicationContext());
             }
@@ -108,7 +103,7 @@ public abstract class BaseApplication extends Application {
 
         if (tournamentPlayerService == null) {
             if (getEnvironment() == Environment.DEV) {
-                tournamentPlayerService = new TournamentPlayerServiceMockImpl(getApplicationContext());
+                tournamentPlayerService = new TournamentPlayerServiceImpl(getApplicationContext());
             } else {
                 tournamentPlayerService = new TournamentPlayerServiceImpl(getApplicationContext());
             }
@@ -117,7 +112,7 @@ public abstract class BaseApplication extends Application {
         // depend on tournamentPlayerService -> to do ranking -_-
         if (rankingService == null) {
             if (getEnvironment() == Environment.DEV) {
-                rankingService = new RankingServiceMockImpl(getApplicationContext());
+                rankingService = new RankingServiceImpl(getApplicationContext());
             } else {
                 rankingService = new RankingServiceImpl(getApplicationContext());
             }
@@ -126,7 +121,7 @@ public abstract class BaseApplication extends Application {
         // depend on tournament service, player service, ranking -> must pair games
         if (ongoingTournamentService == null) {
             if (getEnvironment() == Environment.DEV) {
-                ongoingTournamentService = new OngoingTournamentServiceMockImpl(getApplicationContext());
+                ongoingTournamentService = new OngoingTournamentServiceImpl(getApplicationContext());
             } else {
                 ongoingTournamentService = new OngoingTournamentServiceImpl(getApplicationContext());
             }
@@ -326,7 +321,7 @@ public abstract class BaseApplication extends Application {
     public String getSelectedGameOrSportTyp() {
 
         if (selectedGameOrSportTyp == null) {
-            return GameOrSportTyp.WARMACHINE.name();
+            return GameOrSportTyp.WARMACHINE_SOLO.name();
         }
 
         return selectedGameOrSportTyp.name();

@@ -5,6 +5,15 @@
     android:layout_centerHorizontal="true"
     android:orientation="vertical">
 
+
+    <TextView
+        android:id="@+id/team_match_not_online_yet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/main_tick"
+        android:text="@string/team_match_not_online_yet"
+        android:textStyle="bold"
+        android:visibility="gone" />
     <ProgressBar
         android:id="@+id/progressBar"
         style="?android:attr/progressBarStyle"

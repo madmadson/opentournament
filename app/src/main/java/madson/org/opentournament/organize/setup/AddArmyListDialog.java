@@ -98,8 +98,8 @@ public class AddArmyListDialog extends DialogFragment {
                 tournament, tournamentPlayer, imageButton);
 
         DatabaseReference reference = FirebaseDatabase.getInstance()
-                .getReference(FirebaseReferences.TOURNAMENT_ARMY_LISTS + "/" + tournament.getUUID() + "/"
-                    + tournamentPlayer.getPlayerUUID());
+                .getReference(FirebaseReferences.TOURNAMENT_ARMY_LISTS + "/" + tournament.getGameOrSportTyp() + "/"
+                    + tournament.getUUID() + "/" + tournamentPlayer.getPlayerUUID());
 
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
 

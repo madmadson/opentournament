@@ -2,6 +2,7 @@ package madson.org.opentournament.organize;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 
 import android.os.Bundle;
 
@@ -37,9 +38,11 @@ import madson.org.opentournament.events.OpenTournamentEventTag;
 import madson.org.opentournament.events.PairRoundAgainEvent;
 import madson.org.opentournament.events.PairingChangedEvent;
 import madson.org.opentournament.events.SwapPlayerEvent;
+import madson.org.opentournament.events.UndoRoundEvent;
 import madson.org.opentournament.tasks.LoadGameListTask;
 import madson.org.opentournament.tasks.TournamentEndTask;
 import madson.org.opentournament.tasks.TournamentUploadTask;
+import madson.org.opentournament.tasks.UndoRoundTask;
 import madson.org.opentournament.utility.BaseActivity;
 
 
@@ -60,6 +63,7 @@ public class GameListFragment extends Fragment implements OpenTournamentEventLis
     private ImageButton toggleActionButton;
     private FrameLayout containerForActions;
     private BaseActivity baseActivity;
+    private Button undoRoundButton;
 
     @Override
     public void onAttach(Context context) {
@@ -122,6 +126,29 @@ public class GameListFragment extends Fragment implements OpenTournamentEventLis
         new LoadGameListTask(baseActivity.getBaseApplication(), tournament, round, gameListAdapter).execute();
 
         containerForActions = (FrameLayout) view.findViewById(R.id.container_view_toggle_action);
+
+        undoRoundButton = (Button) view.findViewById(R.id.button_undo_round);
+        undoRoundButton.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setTitle(R.string.confirm_undo_round)
+                    .setView(R.layout.dialog_undo_round)
+                    .setPositiveButton(R.string.dialog_save, new DialogInterface.OnClickListener() {
+
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                    new UndoRoundTask(baseActivity, tournament, round).execute();
+                                }
+                            })
+                    .setNegativeButton(R.string.dialog_cancel, null)
+                    .show();
+                }
+            });
+
         pairRoundAgainButton = (Button) view.findViewById(R.id.button_pair_again);
         pairRoundAgainButton.setOnClickListener(new View.OnClickListener() {
 
@@ -269,10 +296,8 @@ public class GameListFragment extends Fragment implements OpenTournamentEventLis
                 }
             });
 
-        if (tournament.getState().equals(Tournament.TournamentState.FINISHED.name())) {
-            nextRoundButton.setVisibility(View.GONE);
-            pairRoundAgainButton.setVisibility(View.GONE);
-            endTournamentButton.setVisibility(View.GONE);
+        if (round < tournament.getActualRound()) {
+            setActionButtonsInvisible();
         }
 
         return view;
@@ -283,9 +308,7 @@ public class GameListFragment extends Fragment implements OpenTournamentEventLis
     public void handleEvent(OpenTournamentEventTag eventTag, OpenTournamentEvent parameter) {
 
         if (eventTag.equals(OpenTournamentEventTag.NEXT_ROUND_PAIRED)) {
-            nextRoundButton.setVisibility(View.GONE);
-            pairRoundAgainButton.setVisibility(View.GONE);
-            endTournamentButton.setVisibility(View.GONE);
+            setActionButtonsInvisible();
         } else if (OpenTournamentEventTag.SAVE_GAME_RESULT_CONFIRMED.equals(eventTag)) {
             EnterGameResultConfirmed enterGameResultConfirmed = (EnterGameResultConfirmed) parameter;
 
@@ -316,6 +339,34 @@ public class GameListFragment extends Fragment implements OpenTournamentEventLis
             Game swappedGame = swapPlayerEvent.getGame();
 
             gameListAdapter.endSwapping(swappedGame);
+        } else if (OpenTournamentEventTag.UNDO_ROUND.equals(eventTag)) {
+            UndoRoundEvent undoRoundEvent = (UndoRoundEvent) parameter;
+
+            if (undoRoundEvent.getRound() == round) {
+                setActionButtonsVisible();
+            }
+        } else if (OpenTournamentEventTag.UNDO_TOURNAMENT_ENDING.equals(eventTag)) {
+            setActionButtonsInvisible();
         }
+    }
+
+
+    private void setActionButtonsVisible() {
+
+        nextRoundButton.setVisibility(View.VISIBLE);
+        pairRoundAgainButton.setVisibility(View.VISIBLE);
+        endTournamentButton.setVisibility(View.VISIBLE);
+        undoRoundButton.setVisibility(View.VISIBLE);
+        uploadGamesButton.setVisibility(View.VISIBLE);
+    }
+
+
+    private void setActionButtonsInvisible() {
+
+        nextRoundButton.setVisibility(View.GONE);
+        pairRoundAgainButton.setVisibility(View.GONE);
+        endTournamentButton.setVisibility(View.GONE);
+        undoRoundButton.setVisibility(View.GONE);
+        uploadGamesButton.setVisibility(View.GONE);
     }
 }

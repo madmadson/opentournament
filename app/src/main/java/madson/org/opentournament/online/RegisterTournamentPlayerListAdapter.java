@@ -129,7 +129,7 @@ public class RegisterTournamentPlayerListAdapter extends RecyclerView.Adapter<To
                     }
                 });
 
-            viewHolder.getTournamentPlayerCard().setCardBackgroundColor(Color.MAGENTA);
+            viewHolder.getTournamentPlayerCard().setCardBackgroundColor(Color.CYAN);
             viewHolder.getTournamentPlayerCard()
                 .setLayoutParams(new CardView.LayoutParams(CardView.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.WRAP_CONTENT));

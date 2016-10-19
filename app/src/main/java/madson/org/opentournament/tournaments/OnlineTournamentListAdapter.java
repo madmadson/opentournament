@@ -75,11 +75,11 @@ public class OnlineTournamentListAdapter extends RecyclerView.Adapter<Tournament
 
         if (tournament.getState().equals(Tournament.TournamentState.FINISHED.name())) {
             viewHolder.getTournamentState().setText(R.string.tournament_finished);
-            viewHolder.getTournamentState().setTextColor(Color.BLUE);
+            viewHolder.getTournamentState().setTextColor(Color.RED);
             viewHolder.getTournamentState().setVisibility(View.VISIBLE);
         } else if (tournament.getActualRound() > 0) {
             viewHolder.getTournamentState().setText(R.string.tournament_started);
-            viewHolder.getTournamentState().setTextColor(Color.GREEN);
+            viewHolder.getTournamentState().setTextColor(Color.BLUE);
             viewHolder.getTournamentState().setVisibility(View.VISIBLE);
         } else {
             viewHolder.getTournamentState().setVisibility(View.GONE);
@@ -103,7 +103,7 @@ public class OnlineTournamentListAdapter extends RecyclerView.Adapter<Tournament
                 public void onClick(View v) {
 
                     Intent intent = new Intent(baseActivity, OnlineTournamentActivity.class);
-                    intent.putExtra(OnlineTournamentActivity.EXTRA_TOURNAMENT_UUID, tournament.getUUID());
+                    intent.putExtra(OnlineTournamentActivity.EXTRA_TOURNAMENT, tournament);
                     baseActivity.startActivity(intent);
                 }
             });

@@ -4,9 +4,12 @@ import android.os.AsyncTask;
 
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
-import madson.org.opentournament.organize.setup.TournamentPlayerListAdapter;
+import madson.org.opentournament.events.AddTournamentPlayerEvent;
+import madson.org.opentournament.events.OpenTournamentEventTag;
 import madson.org.opentournament.service.TournamentPlayerService;
 import madson.org.opentournament.utility.BaseApplication;
+
+import java.util.UUID;
 
 
 /**
@@ -18,15 +21,13 @@ public class SaveDummyTournamentPlayerTask extends AsyncTask<Void, Void, Void> {
 
     private BaseApplication baseApplication;
     private Tournament tournament;
-    private TournamentPlayerListAdapter tournamentPlayerListAdapter;
+
     private TournamentPlayer dummyTournamentPlayer;
 
-    public SaveDummyTournamentPlayerTask(BaseApplication baseApplication, Tournament tournament,
-        TournamentPlayerListAdapter tournamentPlayerListAdapter) {
+    public SaveDummyTournamentPlayerTask(BaseApplication baseApplication, Tournament tournament) {
 
         this.baseApplication = baseApplication;
         this.tournament = tournament;
-        this.tournamentPlayerListAdapter = tournamentPlayerListAdapter;
     }
 
     @Override
@@ -38,8 +39,11 @@ public class SaveDummyTournamentPlayerTask extends AsyncTask<Void, Void, Void> {
         dummyTournamentPlayer.setFirstName("Dummy");
         dummyTournamentPlayer.setNickName("THE HAMMER");
         dummyTournamentPlayer.setLastName("Player");
+        dummyTournamentPlayer.setPlayerUUID(UUID.randomUUID().toString());
         dummyTournamentPlayer.setDummy(true);
         dummyTournamentPlayer.setLocal(true);
+        dummyTournamentPlayer.setTeamName("");
+        dummyTournamentPlayer.setTournamentUUID(tournament.getUUID());
 
         tournamentPlayerService.addTournamentPlayerToTournament(dummyTournamentPlayer, tournament);
 
@@ -54,6 +58,7 @@ public class SaveDummyTournamentPlayerTask extends AsyncTask<Void, Void, Void> {
 
         super.onPostExecute(aVoid);
 
-        tournamentPlayerListAdapter.addTournamentPlayer(dummyTournamentPlayer);
+        baseApplication.notifyTournamentEvent(OpenTournamentEventTag.ADD_TOURNAMENT_PLAYER,
+            new AddTournamentPlayerEvent(dummyTournamentPlayer));
     }
 }

@@ -100,7 +100,7 @@ public class AddTournamentPlayerDialog extends DialogFragment {
             }
 
             // Get the layout inflater
-            LayoutInflater inflater = getActivity().getLayoutInflater();
+            final LayoutInflater inflater = getActivity().getLayoutInflater();
 
             View dialogView = inflater.inflate(R.layout.dialog_add_tournament_player, null);
 
@@ -210,10 +210,10 @@ public class AddTournamentPlayerDialog extends DialogFragment {
                     @Override
                     public void onClick(View view) {
 
-                        final EditText newTeamNameEditText = new EditText(getContext());
+                        final View dialogAddTeam = inflater.inflate(R.layout.dialog_add_team, null);
 
                         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                        final AlertDialog newTeamNameDialog = builder.setView(newTeamNameEditText)
+                        final AlertDialog newTeamNameDialog = builder.setView(dialogAddTeam)
                             .setTitle(R.string.add_new_team)
                             .setPositiveButton(R.string.dialog_save, new DialogInterface.OnClickListener() {
 
@@ -232,6 +232,9 @@ public class AddTournamentPlayerDialog extends DialogFragment {
 
                                 @Override
                                 public void onClick(View view) {
+
+                                    EditText newTeamNameEditText = (EditText) dialogAddTeam.findViewById(
+                                            R.id.new_team_name);
 
                                     String newTeamName = newTeamNameEditText.getText().toString();
 
@@ -332,7 +335,7 @@ public class AddTournamentPlayerDialog extends DialogFragment {
                                 tournamentPlayer.setNickName(nickname);
                                 tournamentPlayer.setLastName(lastname);
 
-                                tournamentPlayer.setTournamentId(String.valueOf(tournament.get_id()));
+                                tournamentPlayer.setTournamentUUID(tournament.getUUID());
                                 tournamentPlayer.setFaction(faction);
 
                                 if (!baseActivity.getString(R.string.no_team).equals(teamname)) {
@@ -351,6 +354,10 @@ public class AddTournamentPlayerDialog extends DialogFragment {
                                     tournamentPlayer.setPlayerUUID(uuid);
                                 }
 
+                                if (player == null && tournament_player == null) {
+                                    tournamentPlayer.setLocal(true);
+                                }
+
                                 new SaveTournamentPlayerTask(baseActivity, tournament, tournamentPlayer, dialog)
                                 .execute();
                             } else {
@@ -358,7 +365,7 @@ public class AddTournamentPlayerDialog extends DialogFragment {
                                 tournament_player.setNickName(nickname);
                                 tournament_player.setLastName(lastname);
 
-                                tournament_player.setTournamentId(String.valueOf(tournament.get_id()));
+                                tournament_player.setTournamentUUID(tournament.getUUID());
                                 tournament_player.setFaction(faction);
 
                                 String oldTeamName = tournament_player.getTeamName();

@@ -8,22 +8,16 @@ import android.support.design.widget.Snackbar;
 
 import android.support.v7.app.AlertDialog;
 
-import android.util.Log;
-
 import madson.org.opentournament.R;
-import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.events.AddTournamentPlayerEvent;
 import madson.org.opentournament.events.OpenTournamentEventTag;
-import madson.org.opentournament.events.RemoveAvailablePlayerEvent;
-import madson.org.opentournament.service.PlayerService;
 import madson.org.opentournament.service.TournamentPlayerService;
 import madson.org.opentournament.service.TournamentService;
 import madson.org.opentournament.utility.BaseActivity;
 
 import java.util.List;
-import java.util.UUID;
 
 
 /**

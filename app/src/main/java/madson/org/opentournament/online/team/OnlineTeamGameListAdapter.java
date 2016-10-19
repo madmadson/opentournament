@@ -1,37 +1,20 @@
 package madson.org.opentournament.online.team;
 
-import android.content.ClipData;
-import android.content.DialogInterface;
-
 import android.graphics.Color;
 
 import android.graphics.drawable.Drawable;
 
-import android.os.Bundle;
-
-import android.support.design.widget.Snackbar;
-
-import android.support.v4.app.FragmentManager;
-
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 
-import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import android.widget.ProgressBar;
 
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Game;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
-import madson.org.opentournament.organize.EnterResultForGameDialog;
-import madson.org.opentournament.tasks.SwapPlayersTask;
 import madson.org.opentournament.utility.BaseActivity;
-import madson.org.opentournament.utility.BaseApplication;
 import madson.org.opentournament.viewHolder.GameViewHolder;
 
 import java.util.ArrayList;
@@ -124,6 +107,9 @@ public class OnlineTeamGameListAdapter extends RecyclerView.Adapter<GameViewHold
             holder.getPlayerTwoCardView()
                 .setBackgroundDrawable(game.getParticipant_two_score() == 1 ? winnerShape : looserShape);
         }
+
+        holder.getSwapPlayerOne().setVisibility(View.GONE);
+        holder.getSwapPlayerTwo().setVisibility(View.GONE);
     }
 
 

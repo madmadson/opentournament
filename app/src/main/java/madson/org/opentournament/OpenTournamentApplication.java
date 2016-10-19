@@ -2,6 +2,7 @@ package madson.org.opentournament;
 
 import madson.org.opentournament.about.AppInfo;
 import madson.org.opentournament.about.LibraryItem;
+import madson.org.opentournament.db.OpenTournamentDBHelper;
 import madson.org.opentournament.utility.BaseApplication;
 import madson.org.opentournament.utility.Environment;
 
@@ -33,6 +34,6 @@ public class OpenTournamentApplication extends BaseApplication {
     public AppInfo getAppInfo() {
 
         return new AppInfo(getString(R.string.app_name), BuildConfig.VERSION_NAME, getString(R.string.app_description),
-                R.drawable.open_tournament);
+                R.drawable.open_tournament, String.valueOf(OpenTournamentDBHelper.DB_VERSION));
     }
 }

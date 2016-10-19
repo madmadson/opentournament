@@ -9,15 +9,10 @@ import android.view.View;
 import android.widget.ProgressBar;
 
 import madson.org.opentournament.domain.Game;
-import madson.org.opentournament.domain.Tournament;
-import madson.org.opentournament.domain.TournamentPlayer;
-import madson.org.opentournament.events.OpenTournamentEvent;
 import madson.org.opentournament.events.OpenTournamentEventTag;
 import madson.org.opentournament.events.PairingChangedEvent;
 import madson.org.opentournament.service.OngoingTournamentService;
 import madson.org.opentournament.utility.BaseApplication;
-
-import java.util.Map;
 
 
 /**

@@ -35,7 +35,7 @@ public class TournamentPlayer extends TournamentParticipant implements Parcelabl
     private long _id;
     private String playerUUID;
 
-    private String tournamentId;
+    private String tournamentUUID;
 
     // used for shortcut not always go for names
     private String firstName;
@@ -106,15 +106,15 @@ public class TournamentPlayer extends TournamentParticipant implements Parcelabl
     }
 
 
-    public String getTournamentId() {
+    public String getTournamentUUID() {
 
-        return tournamentId;
+        return tournamentUUID;
     }
 
 
-    public void setTournamentId(String tournamentId) {
+    public void setTournamentUUID(String tournamentUUID) {
 
-        this.tournamentId = tournamentId;
+        this.tournamentUUID = tournamentUUID;
     }
 
 
@@ -266,7 +266,7 @@ public class TournamentPlayer extends TournamentParticipant implements Parcelabl
         return "TournamentPlayer{"
             + "_id=" + _id
             + ", playerUUID='" + playerUUID + '\''
-            + ", tournamentId=" + tournamentId
+            + ", tournamentUUID=" + tournamentUUID
             + ", firstName='" + firstName + '\''
             + ", nickName='" + nickName + '\''
             + ", lastName='" + lastName + '\''

@@ -9,19 +9,19 @@ public class PairingOption {
 
     private String pairingOptionName;
 
-    private boolean defaultPairing;
+    private boolean defaultOption;
 
     private boolean active;
 
     /**
      * @param  pairingOptionName
-     * @param  defaultPairing
+     * @param  defaultOption
      */
-    public PairingOption(String pairingOptionName, boolean defaultPairing) {
+    public PairingOption(String pairingOptionName, boolean defaultOption) {
 
         this.pairingOptionName = pairingOptionName;
-        this.defaultPairing = defaultPairing;
-        this.active = defaultPairing;
+        this.defaultOption = defaultOption;
+        this.active = defaultOption;
     }
 
     public String getPairingOptionName() {
@@ -30,9 +30,9 @@ public class PairingOption {
     }
 
 
-    public boolean isDefaultPairing() {
+    public boolean isDefaultOption() {
 
-        return defaultPairing;
+        return defaultOption;
     }
 
 
@@ -53,7 +53,7 @@ public class PairingOption {
 
         return "PairingOption{"
             + "pairingOptionName='" + pairingOptionName + '\''
-            + ", defaultPairing=" + defaultPairing
+            + ", defaultOption=" + defaultOption
             + ", active=" + active + '}';
     }
 }

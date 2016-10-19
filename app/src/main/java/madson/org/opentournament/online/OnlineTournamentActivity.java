@@ -26,7 +26,6 @@ import com.google.firebase.database.ValueEventListener;
 import madson.org.opentournament.R;
 import madson.org.opentournament.db.FirebaseReferences;
 import madson.org.opentournament.domain.Tournament;
-import madson.org.opentournament.domain.TournamentTyp;
 import madson.org.opentournament.utility.BaseActivity;
 
 
@@ -35,12 +34,12 @@ import madson.org.opentournament.utility.BaseActivity;
  */
 public class OnlineTournamentActivity extends BaseActivity {
 
-    public static final String EXTRA_TOURNAMENT_UUID = "tournament_uuid";
+    public static final String EXTRA_TOURNAMENT = "tournament";
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
 
-    private String tournament_uuid;
+    private Tournament tournament;
     private ActionBar supportActionBar;
     private DatabaseReference loadReferenceTournament;
     private ValueEventListener onlineTournamentListener;
@@ -85,9 +84,9 @@ public class OnlineTournamentActivity extends BaseActivity {
 
         Bundle extras = intent.getExtras();
 
-        tournament_uuid = (String) extras.get(EXTRA_TOURNAMENT_UUID);
+        tournament = (Tournament) extras.get(EXTRA_TOURNAMENT);
 
-        Log.i(this.getClass().toString(), "online tournament opened with uuid " + tournament_uuid);
+        Log.i(this.getClass().toString(), "online tournament opened with uuid " + tournament);
 
         supportActionBar = getSupportActionBar();
 
@@ -121,7 +120,7 @@ public class OnlineTournamentActivity extends BaseActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 Tournament tournament = dataSnapshot.getValue(Tournament.class);
-                tournament.setUuid(tournament_uuid);
+                tournament.setUuid(dataSnapshot.getKey());
 
                 if (supportActionBar != null) {
                     supportActionBar.setTitle(tournament.getName());
@@ -143,7 +142,7 @@ public class OnlineTournamentActivity extends BaseActivity {
         };
 
         loadReferenceTournament = mFirebaseDatabaseReference.child(FirebaseReferences.TOURNAMENTS + "/"
-                + getBaseApplication().getSelectedGameOrSportTyp() + "/" + tournament_uuid);
+                + tournament.getGameOrSportTyp() + "/" + tournament.getUUID());
 
         loadReferenceTournament.addValueEventListener(onlineTournamentListener);
     }

@@ -26,4 +26,5 @@
 
 
     <color name="colorAlmostBlack">#3e3e3d</color>
+    <color name="colorAlmostWhite">#FFFFFF</color>
 </resources>

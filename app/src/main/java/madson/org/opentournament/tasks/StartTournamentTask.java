@@ -2,10 +2,6 @@ package madson.org.opentournament.tasks;
 
 import android.os.AsyncTask;
 
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-
-import madson.org.opentournament.db.FirebaseReferences;
 import madson.org.opentournament.domain.PairingOption;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentRanking;
@@ -52,11 +48,6 @@ public class StartTournamentTask extends AsyncTask<Void, Void, Void> {
 
         ongoingTournamentService.createGamesForRound(tournament, 1, rankingForRound, pairingOptions);
         tournamentService.updateActualRound(tournament, 1);
-
-        DatabaseReference reference = FirebaseDatabase.getInstance()
-                .getReference(FirebaseReferences.TOURNAMENT_REGISTRATIONS + "/" + tournament.getUUID());
-
-        reference.setValue(null);
 
         return null;
     }

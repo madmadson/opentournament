@@ -1,8 +1,6 @@
 package madson.org.opentournament.service;
 
 import madson.org.opentournament.domain.Player;
-import madson.org.opentournament.domain.Tournament;
-import madson.org.opentournament.domain.TournamentPlayer;
 
 import java.util.List;
 

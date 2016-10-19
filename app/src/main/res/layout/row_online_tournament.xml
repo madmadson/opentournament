@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/row_item_height"
+    android:layout_height="wrap_content"
     android:orientation="vertical">
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/row_tournament"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/row_item_height_content"
+        android:layout_height="wrap_content"
         android:paddingBottom="@dimen/main_tick"
         android:paddingTop="@dimen/main_tick">
 
@@ -15,7 +15,13 @@
             android:id="@+id/tournament_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/main_tick" />
+
+        <TextView
+            android:id="@+id/tournament_state"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tournament_name"
             android:layout_marginLeft="@dimen/main_tick" />
 
         <TextView
@@ -24,14 +30,6 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/online_tournament_date_margin_left" />
-
-        <TextView
-            android:id="@+id/tournament_state"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:textSize="@dimen/library_text_large"
-            android:layout_marginLeft="@dimen/online_tournament_state_margin_left" />
 
         <TextView
             android:id="@+id/amount_players"
@@ -45,13 +43,13 @@
             android:id="@+id/team_tournament_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
             android:layout_alignParentRight="@dimen/halve_tick"
+            android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/halve_tick"
             android:layout_toLeftOf="@id/amount_players"
             android:background="@android:color/transparent"
             android:src="@drawable/ic_people_black_24dp"
-            android:visibility="gone"/>
+            android:visibility="gone" />
     </RelativeLayout>
 
     <View

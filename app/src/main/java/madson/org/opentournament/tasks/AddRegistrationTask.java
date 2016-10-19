@@ -13,8 +13,6 @@ import madson.org.opentournament.service.TournamentPlayerService;
 import madson.org.opentournament.service.TournamentService;
 import madson.org.opentournament.utility.BaseActivity;
 
-import java.util.HashMap;
-
 
 /**
  * Write some fancy Javadoc!

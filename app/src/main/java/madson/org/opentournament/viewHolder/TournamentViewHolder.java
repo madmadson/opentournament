@@ -1,16 +1,6 @@
 package madson.org.opentournament.viewHolder;
 
-import android.content.Intent;
-
-import android.os.Bundle;
-
-import android.support.v4.app.FragmentManager;
-
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-
-import android.util.Log;
 
 import android.view.View;
 
@@ -19,11 +9,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import madson.org.opentournament.R;
-import madson.org.opentournament.domain.Game;
-import madson.org.opentournament.domain.Tournament;
-import madson.org.opentournament.organize.EnterResultForGameDialog;
-import madson.org.opentournament.organize.GameListAdapter;
-import madson.org.opentournament.organize.TournamentOrganizeActivity;
 
 
 /**

@@ -70,9 +70,9 @@ public class RankingServiceImpl implements RankingService {
 
         Cursor cursor = readableDatabase.query(TournamentRankingTable.TABLE_TOURNAMENT_RANKING,
                 TournamentRankingTable.ALL_COLS_FOR_TOURNAMENT_RANKING,
-                TournamentRankingTable.COLUMN_TOURNAMENT_ID + " = ? AND "
+                TournamentRankingTable.COLUMN_TOURNAMENT_UUID + " = ? AND "
                 + TournamentRankingTable.COLUMN_TOURNAMENT_ROUND
-                + " = ?", new String[] { Long.toString(tournament.get_id()), String.valueOf(round) }, null, null, null);
+                + " = ?", new String[] { tournament.getUUID(), String.valueOf(round) }, null, null, null);
 
         cursor.moveToFirst();
 
@@ -123,7 +123,7 @@ public class RankingServiceImpl implements RankingService {
 
         for (TournamentTeam team : allTeamsForTournament.keySet()) {
             TournamentRanking tournamentRanking = new TournamentRanking();
-            tournamentRanking.setTournament_id(String.valueOf(tournament.get_id()));
+            tournamentRanking.setTournamentUUID(tournament.getUUID());
 
             tournamentRanking.setParticipantUUID(team.getTeamName());
             tournamentRanking.setTournamentParticipant(team);
@@ -133,7 +133,7 @@ public class RankingServiceImpl implements RankingService {
             mapOfRankings.put(team.getTeamName(), tournamentRanking);
         }
 
-        List<Game> allGamesTillRound = getAllGamesForTournamentTillRound(tournament.get_id(), round_for_calculation);
+        List<Game> allGamesTillRound = getAllGamesForTournamentTillRound(tournament, round_for_calculation);
 
         for (Game game : allGamesTillRound) {
             // teamName is key
@@ -202,7 +202,7 @@ public class RankingServiceImpl implements RankingService {
 
         for (TournamentPlayer tournamentPlayer : allPlayersForTournament) {
             TournamentRanking tournamentRanking = new TournamentRanking();
-            tournamentRanking.setTournament_id(String.valueOf(tournament.get_id()));
+            tournamentRanking.setTournamentUUID(tournament.getUUID());
 
             tournamentRanking.setParticipantUUID(tournamentPlayer.getPlayerUUID());
             tournamentRanking.setTournamentParticipant(tournamentPlayer);
@@ -212,8 +212,7 @@ public class RankingServiceImpl implements RankingService {
             mapOfRankings.put(tournamentPlayer.getPlayerUUID(), tournamentRanking);
         }
 
-        List<Game> gamesOfPlayerForTournament = getAllGamesForTournamentTillRound(tournament.get_id(),
-                round_for_calculation);
+        List<Game> gamesOfPlayerForTournament = getAllGamesForTournamentTillRound(tournament, round_for_calculation);
 
         for (Game game : gamesOfPlayerForTournament) {
             TournamentRanking playerOneRanking = mapOfRankings.get(game.getParticipantOneUUID());
@@ -260,8 +259,8 @@ public class RankingServiceImpl implements RankingService {
         SQLiteDatabase writableDatabase = openTournamentDBHelper.getWritableDatabase();
 
         writableDatabase.delete(TournamentRankingTable.TABLE_TOURNAMENT_RANKING,
-            TournamentRankingTable.COLUMN_TOURNAMENT_ID + " = ? AND " + TournamentRankingTable.COLUMN_TOURNAMENT_ROUND
-            + " = ?", new String[] { String.valueOf(tournament.get_id()), String.valueOf(roundToDelete) });
+            TournamentRankingTable.COLUMN_TOURNAMENT_UUID + " = ? AND " + TournamentRankingTable.COLUMN_TOURNAMENT_ROUND
+            + " = ?", new String[] { tournament.getUUID(), String.valueOf(roundToDelete) });
     }
 
 
@@ -271,7 +270,8 @@ public class RankingServiceImpl implements RankingService {
         int actualRound = tournament.getActualRound();
 
         DatabaseReference referenceForRankingToDelete = FirebaseDatabase.getInstance()
-                .getReference(FirebaseReferences.TOURNAMENT_RANKINGS + "/" + tournament.getUUID());
+                .getReference(FirebaseReferences.TOURNAMENT_RANKINGS + "/" + tournament.getGameOrSportTyp() + "/"
+                    + tournament.getUUID());
         referenceForRankingToDelete.removeValue();
 
         for (int i = 1; i <= actualRound; i++) {
@@ -283,7 +283,8 @@ public class RankingServiceImpl implements RankingService {
                 UUID uuid = UUID.randomUUID();
 
                 DatabaseReference referenceForRankings = FirebaseDatabase.getInstance()
-                        .getReference(FirebaseReferences.TOURNAMENT_RANKINGS + "/" + tournament.getUUID()
+                        .getReference(FirebaseReferences.TOURNAMENT_RANKINGS + "/" + tournament.getGameOrSportTyp()
+                            + "/" + tournament.getUUID()
                             + "/" + i + "/" + uuid);
 
                 // for sorting after insert
@@ -302,8 +303,7 @@ public class RankingServiceImpl implements RankingService {
         SQLiteDatabase writableDatabase = openTournamentDBHelper.getWritableDatabase();
 
         writableDatabase.delete(TournamentRankingTable.TABLE_TOURNAMENT_RANKING,
-            TournamentRankingTable.COLUMN_TOURNAMENT_ID + " = ? ",
-            new String[] { String.valueOf(tournament.get_id()) });
+            TournamentRankingTable.COLUMN_TOURNAMENT_UUID + " = ? ", new String[] { tournament.getUUID() });
     }
 
 
@@ -333,7 +333,7 @@ public class RankingServiceImpl implements RankingService {
 
         for (TournamentRanking ranking : newRankingForRoundList.values()) {
             ContentValues contentValues = new ContentValues();
-            contentValues.put(TournamentRankingTable.COLUMN_TOURNAMENT_ID, ranking.getTournament_id());
+            contentValues.put(TournamentRankingTable.COLUMN_TOURNAMENT_UUID, ranking.getTournamentUUID());
             contentValues.put(TournamentRankingTable.COLUMN_TOURNAMENT_ROUND, ranking.getTournament_round());
             contentValues.put(TournamentRankingTable.COLUMN_PARTICIPANT_UUID, ranking.getParticipantUUID());
 
@@ -347,16 +347,16 @@ public class RankingServiceImpl implements RankingService {
     }
 
 
-    private List<Game> getAllGamesForTournamentTillRound(long tournament_id, int tournament_round) {
+    private List<Game> getAllGamesForTournamentTillRound(Tournament tournament, int tournament_round) {
 
         List<Game> games = new ArrayList<>();
 
         SQLiteDatabase readableDatabase = openTournamentDBHelper.getReadableDatabase();
 
         Cursor cursor = readableDatabase.query(GameTable.TABLE_TOURNAMENT_GAME, GameTable.ALL_COLS_FOR_TOURNAMENT_GAME,
-                GameTable.COLUMN_TOURNAMENT_ID + "  = ? AND " + GameTable.COLUMN_TOURNAMENT_ROUND
+                GameTable.COLUMN_TOURNAMENT_UUID + "  = ? AND " + GameTable.COLUMN_TOURNAMENT_ROUND
                 + " <= ? AND " + GameTable.COLUMN_FINISHED + " != 0  AND " + GameTable.COLUMN_PARENT_UUID + " IS NULL",
-                new String[] { String.valueOf(tournament_id), String.valueOf(tournament_round) }, null, null, null);
+                new String[] { tournament.getUUID(), String.valueOf(tournament_round) }, null, null, null);
 
         cursor.moveToFirst();
 
@@ -377,7 +377,7 @@ public class RankingServiceImpl implements RankingService {
         TournamentRanking tournamentRanking = new TournamentRanking();
         tournamentRanking.set_id(cursor.getInt(0));
 
-        tournamentRanking.setTournament_id(cursor.getString(1));
+        tournamentRanking.setTournamentUUID(cursor.getString(1));
         tournamentRanking.setTournament_round(cursor.getInt(2));
 
         tournamentRanking.setParticipantUUID(cursor.getString(3));

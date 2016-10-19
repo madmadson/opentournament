@@ -4,22 +4,15 @@ import android.content.Intent;
 
 import android.os.Bundle;
 
-import android.support.design.widget.TabLayout;
-
-import android.support.v4.view.ViewPager;
-
 import android.support.v7.app.ActionBar;
 
 import android.util.Log;
 
 import android.view.Menu;
 
-import android.widget.ProgressBar;
-
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Game;
 import madson.org.opentournament.domain.Tournament;
-import madson.org.opentournament.tasks.LoadTournamentTask;
 import madson.org.opentournament.utility.BaseActivity;
 
 

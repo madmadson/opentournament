@@ -27,7 +27,7 @@ public class TournamentPlayerTable {
      * 11: local
      */
     public static final String[] ALL_COLS_FOR_TOURNAMENT_PLAYER_TABLE = {
-        TournamentPlayerTable.COLUMN_ID, TournamentPlayerTable.COLUMN_TOURNAMENT_ID,
+        TournamentPlayerTable.COLUMN_ID, TournamentPlayerTable.COLUMN_TOURNAMENT_UUID,
         TournamentPlayerTable.COLUMN_PLAYER_UUID, TournamentPlayerTable.COLUMN_FIRSTNAME,
         TournamentPlayerTable.COLUMN_NICKNAME, TournamentPlayerTable.COLUMN_LASTNAME,
         TournamentPlayerTable.COLUMN_TEAMNAME, TournamentPlayerTable.COLUMN_FACTION, TournamentPlayerTable.COLUMN_META,
@@ -38,7 +38,7 @@ public class TournamentPlayerTable {
     public static final String TABLE_TOURNAMENT_PLAYER = "tournament_player";
 
     public static final String COLUMN_ID = "_id";
-    public static final String COLUMN_TOURNAMENT_ID = "tournament_id";
+    public static final String COLUMN_TOURNAMENT_UUID = "tournament_uuid";
     public static final String COLUMN_PLAYER_UUID = "player_uuid";
 
     public static final String COLUMN_FIRSTNAME = "firstname";
@@ -60,7 +60,7 @@ public class TournamentPlayerTable {
         Log.i(TournamentPlayerTable.class.getName(), "create tournament_player table");
 
         db.execSQL(" CREATE TABLE " + TABLE_TOURNAMENT_PLAYER
-            + " (" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_TOURNAMENT_ID + " TEXT,"
+            + " (" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_TOURNAMENT_UUID + " TEXT,"
             + COLUMN_PLAYER_UUID + " TEXT," + COLUMN_FIRSTNAME + " TEXT, " + COLUMN_NICKNAME + " TEXT, "
             + COLUMN_LASTNAME + " TEXT, " + COLUMN_TEAMNAME + " TEXT, " + COLUMN_FACTION + " TEXT, " + COLUMN_META
             + " TEXT, " + COLUMN_DUMMY + " INTEGER, " + COLUMN_DROPPED_IN_ROUND + " INTEGER, " + COLUMN_LOCAL
@@ -75,6 +75,11 @@ public class TournamentPlayerTable {
             + ", which will destroy all old data");
 
         if (oldVersion == 3 && newVersion == 4) {
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_TOURNAMENT_PLAYER);
+            createTable(db);
+        }
+
+        if (oldVersion == 4 && newVersion == 5) {
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_TOURNAMENT_PLAYER);
             createTable(db);
         }

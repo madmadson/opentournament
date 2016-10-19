@@ -2,20 +2,14 @@ package madson.org.opentournament.service;
 
 import android.content.ContentValues;
 import android.content.Context;
-
 import android.database.Cursor;
 import android.database.SQLException;
-
 import android.database.sqlite.SQLiteDatabase;
+
+import java.util.Date;
 
 import madson.org.opentournament.db.TournamentDBHelper;
 import madson.org.opentournament.domain.Tournament;
-
-import org.joda.time.DateTime;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 
 /**

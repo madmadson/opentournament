@@ -34,7 +34,7 @@ public class Game implements Parcelable {
     private long _id;
     private String UUID;
     private String parent_UUID;
-    private String tournamentId;
+    private String tournamentUUID;
     private int tournament_round;
 
     private int playing_field;
@@ -71,7 +71,7 @@ public class Game implements Parcelable {
         _id = in.readLong();
         UUID = in.readString();
         parent_UUID = in.readString();
-        tournamentId = in.readString();
+        tournamentUUID = in.readString();
         tournament_round = in.readInt();
 
         participantOneUUID = in.readString();
@@ -142,9 +142,9 @@ public class Game implements Parcelable {
 
 
     @Exclude
-    public String getTournamentId() {
+    public String getTournamentUUID() {
 
-        return tournamentId;
+        return tournamentUUID;
     }
 
 
@@ -220,9 +220,9 @@ public class Game implements Parcelable {
     }
 
 
-    public void setTournamentId(String tournamentId) {
+    public void setTournamentUUID(String tournamentUUID) {
 
-        this.tournamentId = tournamentId;
+        this.tournamentUUID = tournamentUUID;
     }
 
 
@@ -352,7 +352,7 @@ public class Game implements Parcelable {
         game.setUUID(cursor.getString(1));
         game.setParent_UUID(cursor.getString(2));
 
-        game.setTournamentId(cursor.getString(3));
+        game.setTournamentUUID(cursor.getString(3));
         game.setTournament_round(cursor.getInt(4));
 
         game.setParticipantOneUUID(cursor.getString(5));
@@ -448,7 +448,7 @@ public class Game implements Parcelable {
         dest.writeLong(_id);
         dest.writeString(UUID);
         dest.writeString(parent_UUID);
-        dest.writeString(tournamentId);
+        dest.writeString(tournamentUUID);
         dest.writeInt(tournament_round);
 
         dest.writeString(participantOneUUID);

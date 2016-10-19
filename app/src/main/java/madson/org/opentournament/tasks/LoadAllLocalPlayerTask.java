@@ -2,14 +2,11 @@ package madson.org.opentournament.tasks;
 
 import android.os.AsyncTask;
 
-import android.support.design.widget.Snackbar;
-
 import android.view.View;
 
 import android.widget.Filter;
 import android.widget.TextView;
 
-import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;

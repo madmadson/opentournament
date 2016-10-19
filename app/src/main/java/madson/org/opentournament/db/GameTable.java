@@ -16,7 +16,7 @@ public class GameTable {
      * 0: id
      * 1: uuid
      * 2: parent_uuid
-     * 1: tournament_id
+     * 1: tournament_uuid
      * 2: tournament_round
      * 3: participant_one__uuid
      * 4: PARTICIPANT_one_score
@@ -33,7 +33,7 @@ public class GameTable {
      * 15: participant_two_intermediate_score
      */
     public static final String[] ALL_COLS_FOR_TOURNAMENT_GAME = {
-        GameTable.COLUMN_ID, GameTable.COLUMN_UUID, GameTable.COLUMN_PARENT_UUID, GameTable.COLUMN_TOURNAMENT_ID,
+        GameTable.COLUMN_ID, GameTable.COLUMN_UUID, GameTable.COLUMN_PARENT_UUID, GameTable.COLUMN_TOURNAMENT_UUID,
         GameTable.COLUMN_TOURNAMENT_ROUND, GameTable.COLUMN_PARTICIPANT_ONE_UUID,
         GameTable.COLUMN_PARTICIPANT_ONE_SCORE, GameTable.COLUMN_PARTICIPANT_ONE_CONTROL_POINTS,
         GameTable.COLUMN_PARTICIPANT_ONE_VICTORY_POINTS, GameTable.COLUMN_PARTICIPANT_TWO_UUID,
@@ -48,7 +48,7 @@ public class GameTable {
     public static final String COLUMN_ID = "_id";
     public static final String COLUMN_UUID = "uuid";
     public static final String COLUMN_PARENT_UUID = "parent_uuid";
-    public static final String COLUMN_TOURNAMENT_ID = "tournament_id";
+    public static final String COLUMN_TOURNAMENT_UUID = "tournament_uuid";
     public static final String COLUMN_TOURNAMENT_ROUND = "tournament_round";
 
     public static final String COLUMN_PARTICIPANT_ONE_UUID = "participant_one_uuid";
@@ -76,7 +76,7 @@ public class GameTable {
 
         db.execSQL(" CREATE TABLE " + TABLE_TOURNAMENT_GAME
             + " (" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_UUID + " TEXT, " + COLUMN_PARENT_UUID
-            + " TEXT, " + COLUMN_TOURNAMENT_ID + " TEXT, " + COLUMN_TOURNAMENT_ROUND + " INTEGER, "
+            + " TEXT, " + COLUMN_TOURNAMENT_UUID + " TEXT, " + COLUMN_TOURNAMENT_ROUND + " INTEGER, "
             + COLUMN_PARTICIPANT_ONE_UUID + " TEXT, " + COLUMN_PARTICIPANT_ONE_SCORE + " INTEGER, "
             + COLUMN_PARTICIPANT_ONE_CONTROL_POINTS + " INTEGER, " + COLUMN_PARTICIPANT_ONE_VICTORY_POINTS
             + " INTEGER, " + COLUMN_PARTICIPANT_TWO_UUID
@@ -91,6 +91,11 @@ public class GameTable {
     public static void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
         if (oldVersion == 3 && newVersion == 4) {
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_TOURNAMENT_GAME);
+            createTable(db);
+        }
+
+        if (oldVersion == 4 && newVersion == 5) {
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_TOURNAMENT_GAME);
             createTable(db);
         }

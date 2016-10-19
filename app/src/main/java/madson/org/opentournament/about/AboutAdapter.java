@@ -140,6 +140,15 @@ public class AboutAdapter extends RecyclerView.Adapter {
             viewHolder.version.setVisibility(View.VISIBLE);
         }
 
+        String dbVersion = appInfo.getDbVersionName();
+        viewHolder.dbVersion.setText(context.getString(R.string.db_version, dbVersion));
+
+        if (dbVersion == null || dbVersion.isEmpty()) {
+            viewHolder.dbVersion.setVisibility(View.GONE);
+        } else {
+            viewHolder.dbVersion.setVisibility(View.VISIBLE);
+        }
+
         String description = appInfo.getDescription();
         viewHolder.description.setText(Html.fromHtml(description));
 

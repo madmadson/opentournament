@@ -27,10 +27,15 @@ public class MapOfPairingConfig {
 
         pairingOptions = new HashMap<>();
 
-        List<PairingOption> list = new ArrayList<>();
-        list.add(new PairingOption(PLAYER_NOT_PLAY_TWICE_AGAINST_EACH_OVER, true));
-        list.add(new PairingOption(PLAYER_WITH_SAME_TEAM_NOT_PLAY_AGAINST_EACH_OTHER, false));
-        pairingOptions.put(GameOrSportTyp.ALL, list);
+        List<PairingOption> optionsForAllTournaments = new ArrayList<>();
+        optionsForAllTournaments.add(new PairingOption(PLAYER_NOT_PLAY_TWICE_AGAINST_EACH_OVER, true));
+
+        pairingOptions.put(GameOrSportTyp.ALL, optionsForAllTournaments);
+
+        List<PairingOption> optionsForSoloWarmachine = new ArrayList<>();
+        optionsForSoloWarmachine.add(new PairingOption(PLAYER_WITH_SAME_TEAM_NOT_PLAY_AGAINST_EACH_OTHER, false));
+
+        pairingOptions.put(GameOrSportTyp.WARMACHINE_SOLO, optionsForSoloWarmachine);
     }
 
     public Map<GameOrSportTyp, List<PairingOption>> getPairingOptions() {

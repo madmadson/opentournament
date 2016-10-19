@@ -1,7 +1,5 @@
 package madson.org.opentournament.domain;
 
-import madson.org.opentournament.db.PlayerTable;
-
 import java.util.Comparator;
 
 

@@ -14,18 +14,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import madson.org.opentournament.R;
-import madson.org.opentournament.domain.Game;
-import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.Tournament;
-import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.events.OpenTournamentEvent;
 import madson.org.opentournament.events.OpenTournamentEventListener;
 import madson.org.opentournament.events.OpenTournamentEventTag;
 import madson.org.opentournament.events.PairRoundAgainEvent;
-import madson.org.opentournament.tasks.LoadGameListTask;
 import madson.org.opentournament.utility.BaseActivity;
-
-import java.util.HashMap;
 
 
 public class TournamentRoundManagementFragment extends Fragment implements OpenTournamentEventListener {

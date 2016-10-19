@@ -15,7 +15,7 @@ public class TournamentRanking {
 
     private long _id;
 
-    private String tournamentId;
+    private String tournamentUUID;
     private int tournament_round;
 
     private String participantUUID;
@@ -153,15 +153,15 @@ public class TournamentRanking {
     }
 
 
-    public String getTournament_id() {
+    public String getTournamentUUID() {
 
-        return tournamentId;
+        return tournamentUUID;
     }
 
 
-    public void setTournament_id(String tournamentId) {
+    public void setTournamentUUID(String tournamentUUID) {
 
-        this.tournamentId = tournamentId;
+        this.tournamentUUID = tournamentUUID;
     }
 
 
@@ -188,7 +188,7 @@ public class TournamentRanking {
 
         return "TournamentRanking{"
             + "_id=" + _id
-            + ", tournamentId='" + tournamentId + '\''
+            + ", tournamentUUID='" + tournamentUUID + '\''
             + ", tournament_round=" + tournament_round
             + ", participantUUID='" + participantUUID + '\''
             + ", tournamentParticipant=" + tournamentParticipant

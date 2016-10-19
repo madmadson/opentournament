@@ -8,7 +8,6 @@ import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.events.OpenTournamentEventTag;
 import madson.org.opentournament.events.UpdateTournamentEvent;
-import madson.org.opentournament.events.UpdateTournamentPlayerEvent;
 import madson.org.opentournament.service.TournamentService;
 import madson.org.opentournament.utility.BaseActivity;
 

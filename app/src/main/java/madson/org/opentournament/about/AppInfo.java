@@ -10,12 +10,15 @@ public class AppInfo {
     private String description;
     private int aboutIconResourceId;
 
-    public AppInfo(String name, String versionName, String description, int aboutIconResourceId) {
+    private String dbVersionName;
+
+    public AppInfo(String name, String versionName, String description, int aboutIconResourceId, String dbVersion) {
 
         this.name = name;
         this.versionName = versionName;
         this.description = description;
         this.aboutIconResourceId = aboutIconResourceId;
+        this.dbVersionName = dbVersion;
     }
 
     public String getName() {
@@ -39,5 +42,11 @@ public class AppInfo {
     public int getAboutIconResourceId() {
 
         return aboutIconResourceId;
+    }
+
+
+    public String getDbVersionName() {
+
+        return dbVersionName;
     }
 }

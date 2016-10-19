@@ -30,7 +30,6 @@ import madson.org.opentournament.domain.Game;
 import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.utility.BaseActivity;
-import madson.org.opentournament.utility.BaseApplication;
 
 
 /**
@@ -98,7 +97,7 @@ public class OnlineGamesListFragment extends Fragment {
         mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
 
         DatabaseReference child = mFirebaseDatabaseReference.child(FirebaseReferences.TOURNAMENT_GAMES + "/"
-                + tournament.getUUID() + "/" + round);
+                + tournament.getGameOrSportTyp() + "/" + tournament.getUUID() + "/" + round);
 
         Query orderedGames = child.orderByChild(GameTable.COLUMN_PLAYING_FIELD);
 

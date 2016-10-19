@@ -9,16 +9,10 @@ import android.view.View;
 import android.widget.ProgressBar;
 
 import madson.org.opentournament.R;
-import madson.org.opentournament.domain.Game;
 import madson.org.opentournament.domain.Tournament;
-import madson.org.opentournament.organize.GameListAdapter;
 import madson.org.opentournament.organize.TournamentOrganizeActivity;
-import madson.org.opentournament.service.OngoingTournamentService;
 import madson.org.opentournament.service.TournamentService;
 import madson.org.opentournament.utility.BaseActivity;
-import madson.org.opentournament.utility.BaseApplication;
-
-import java.util.List;
 
 
 /**
@@ -33,25 +27,20 @@ public class LoadTournamentTask extends AsyncTask<Void, Void, Void> {
     private TournamentOrganizeActivity.SectionsPagerAdapter adapter;
     private ViewPager pager;
     private ProgressBar progressBar;
+    private float widthOfScreen;
     private Tournament actualTournament;
     private View dialogView;
 
     public LoadTournamentTask(BaseActivity baseActivity, Tournament tournament,
-        TournamentOrganizeActivity.SectionsPagerAdapter adapter, ViewPager pager, ProgressBar progressBar) {
+        TournamentOrganizeActivity.SectionsPagerAdapter adapter, ViewPager pager, ProgressBar progressBar,
+        float widthOfScreen) {
 
         this.baseActivity = baseActivity;
         this.tournament = tournament;
         this.adapter = adapter;
         this.pager = pager;
         this.progressBar = progressBar;
-    }
-
-
-    public LoadTournamentTask(BaseActivity baseActivity, View dialogView, Tournament tournament) {
-
-        this.baseActivity = baseActivity;
-        this.dialogView = dialogView;
-        this.tournament = tournament;
+        this.widthOfScreen = widthOfScreen;
     }
 
     @Override
@@ -69,7 +58,7 @@ public class LoadTournamentTask extends AsyncTask<Void, Void, Void> {
     protected Void doInBackground(Void... params) {
 
         TournamentService tournamentService = baseActivity.getBaseApplication().getTournamentService();
-        actualTournament = tournamentService.getTournamentForId(tournament.get_id());
+        actualTournament = tournamentService.getTournamentForId(tournament.getUUID());
 
         return null;
     }
@@ -83,8 +72,13 @@ public class LoadTournamentTask extends AsyncTask<Void, Void, Void> {
         if (adapter != null)
             adapter.setTournamentToOrganize(actualTournament);
 
-        if (pager != null)
-            pager.setCurrentItem(actualTournament.getActualRound());
+        if (pager != null) {
+            if (widthOfScreen < 720) {
+                pager.setCurrentItem((actualTournament.getActualRound() * 2) - 1);
+            } else {
+                pager.setCurrentItem(actualTournament.getActualRound());
+            }
+        }
 
         if (progressBar != null)
             progressBar.setVisibility(View.GONE);

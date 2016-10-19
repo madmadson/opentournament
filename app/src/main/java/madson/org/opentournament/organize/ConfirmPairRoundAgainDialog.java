@@ -113,7 +113,7 @@ public class ConfirmPairRoundAgainDialog extends DialogFragment {
                     }
                 });
 
-            toggleButton.setChecked(option.isDefaultPairing());
+            toggleButton.setChecked(option.isDefaultOption());
 
             container.addView(pairingOption);
         }

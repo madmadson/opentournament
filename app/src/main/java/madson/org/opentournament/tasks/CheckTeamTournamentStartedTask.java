@@ -1,14 +1,11 @@
 package madson.org.opentournament.tasks;
 
-import android.content.DialogInterface;
-
 import android.os.AsyncTask;
 import android.os.Bundle;
 
 import android.support.design.widget.Snackbar;
 
 import android.support.v4.app.FragmentManager;
-import android.support.v4.view.LayoutInflaterCompat;
 
 import android.support.v7.app.AlertDialog;
 
@@ -19,17 +16,13 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import madson.org.opentournament.R;
-import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.domain.TournamentTeam;
-import madson.org.opentournament.organize.setup.AddTournamentPlayerDialog;
 import madson.org.opentournament.organize.setup.ConfirmStartTournamentDialog;
 import madson.org.opentournament.utility.BaseActivity;
-import madson.org.opentournament.utility.BaseApplication;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 

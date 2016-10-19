@@ -7,10 +7,7 @@ import android.content.DialogInterface;
 
 import android.os.Bundle;
 
-import android.support.annotation.IntegerRes;
 import android.support.annotation.Nullable;
-
-import android.support.design.widget.Snackbar;
 
 import android.support.v4.app.DialogFragment;
 
@@ -32,7 +29,6 @@ import com.google.firebase.auth.FirebaseUser;
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentTyp;
-import madson.org.opentournament.service.TournamentService;
 import madson.org.opentournament.tasks.DeleteTournamentTask;
 import madson.org.opentournament.tasks.SaveTournamentTask;
 import madson.org.opentournament.tasks.UpdateTournamentTask;

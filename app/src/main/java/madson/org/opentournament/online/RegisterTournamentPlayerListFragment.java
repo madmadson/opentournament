@@ -180,7 +180,7 @@ public class RegisterTournamentPlayerListFragment extends Fragment {
         mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
 
         DatabaseReference child = mFirebaseDatabaseReference.child(FirebaseReferences.TOURNAMENT_REGISTRATIONS + "/"
-                + tournament.getUUID());
+                + tournament.getGameOrSportTyp() + "/" + tournament.getUUID());
 
         child.addChildEventListener(new ChildEventListener() {
 

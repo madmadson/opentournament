@@ -23,7 +23,7 @@ public class TournamentRankingTable {
      * 7: vp
      */
     public static final String[] ALL_COLS_FOR_TOURNAMENT_RANKING = {
-        TournamentRankingTable.COLUMN_ID, TournamentRankingTable.COLUMN_TOURNAMENT_ID,
+        TournamentRankingTable.COLUMN_ID, TournamentRankingTable.COLUMN_TOURNAMENT_UUID,
         TournamentRankingTable.COLUMN_TOURNAMENT_ROUND, TournamentRankingTable.COLUMN_PARTICIPANT_UUID,
         TournamentRankingTable.COLUMN_SCORE, TournamentRankingTable.COLUMN_SOS,
         TournamentRankingTable.COLUMN_CONTROL_POINTS, TournamentRankingTable.COLUMN_VICTORY_POINTS,
@@ -32,7 +32,7 @@ public class TournamentRankingTable {
     public static final String TABLE_TOURNAMENT_RANKING = "tournament_ranking";
 
     public static final String COLUMN_ID = "_id";
-    public static final String COLUMN_TOURNAMENT_ID = "tournament_id";
+    public static final String COLUMN_TOURNAMENT_UUID = "tournament_uuid";
     public static final String COLUMN_TOURNAMENT_ROUND = "tournament_round";
 
     public static final String COLUMN_PARTICIPANT_UUID = "participant_uuid";
@@ -47,7 +47,7 @@ public class TournamentRankingTable {
         Log.i(TournamentRankingTable.class.getName(), "create tournament ranking table");
 
         db.execSQL(" CREATE TABLE " + TABLE_TOURNAMENT_RANKING
-            + " (" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_TOURNAMENT_ID + " TEXT, "
+            + " (" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_TOURNAMENT_UUID + " TEXT, "
             + COLUMN_PARTICIPANT_UUID + " TEXT, " + COLUMN_TOURNAMENT_ROUND + " INTEGER, " + COLUMN_SCORE + " INTEGER, "
             + COLUMN_SOS + " INTEGER, " + COLUMN_CONTROL_POINTS + " INTEGER, " + COLUMN_VICTORY_POINTS + " INTEGER)");
     }
@@ -56,6 +56,11 @@ public class TournamentRankingTable {
     public static void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
         if (oldVersion == 3 && newVersion == 4) {
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_TOURNAMENT_RANKING);
+            createTable(db);
+        }
+
+        if (oldVersion == 4 && newVersion == 5) {
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_TOURNAMENT_RANKING);
             createTable(db);
         }

@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/row_item_height"
+    android:layout_height="wrap_content"
     android:orientation="vertical">
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/row_tournament"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/row_item_height_content"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/main_tick"
         android:paddingTop="@dimen/main_tick">
 
         <ImageButton
@@ -18,7 +19,7 @@
             android:layout_marginLeft="@dimen/main_tick"
             android:background="@android:color/transparent"
             android:tint="@color/colorPrimaryDark"
-            android:src="@drawable/ic_build_black_24dp" />
+            android:src="@drawable/ic_build_black_36dp" />
 
         <ImageButton
             android:id="@+id/button_upload_tournament"
@@ -29,23 +30,22 @@
             android:layout_toRightOf="@id/button_edit_tournament"
             android:background="@android:color/transparent"
             android:tint="@color/colorPrimaryDark"
-            android:src="@drawable/ic_cloud_upload_black_24dp" />
+            android:src="@drawable/ic_cloud_upload_black_36dp" />
 
         <TextView
             android:id="@+id/tournament_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/organised_tournament_name_margin_left" />
+            android:layout_toRightOf="@id/button_upload_tournament"
+            android:layout_marginLeft="@dimen/halve_tick" />
 
         <TextView
             android:id="@+id/tournament_state"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/organised_tournament_state_margin_left"
-            android:textSize="@dimen/library_text_large" />
-
+            android:layout_toRightOf="@id/button_upload_tournament"
+            android:layout_below="@id/tournament_name"
+            android:layout_marginLeft="@dimen/halve_tick" />
         
         <TextView
             android:id="@+id/amount_players"

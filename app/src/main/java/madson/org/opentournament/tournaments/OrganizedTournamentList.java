@@ -23,7 +23,6 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
 import madson.org.opentournament.R;
-import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.events.AddTournamentEvent;
 import madson.org.opentournament.events.DeleteTournamentEvent;
 import madson.org.opentournament.events.OpenTournamentEvent;

@@ -81,7 +81,7 @@ public class OnlineRankingListFragment extends Fragment {
         mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
 
         DatabaseReference child = mFirebaseDatabaseReference.child(FirebaseReferences.TOURNAMENT_RANKINGS + "/"
-                + tournament.getUUID() + "/" + round);
+                + tournament.getGameOrSportTyp() + "/" + tournament.getUUID() + "/" + round);
 
         Query orderedGames = child.orderByChild("rank");
         final OnlineRankingListAdapter onlineRankingListAdapter = new OnlineRankingListAdapter(getActivity(),

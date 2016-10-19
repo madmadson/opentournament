@@ -58,7 +58,7 @@ public class Tournament implements Parcelable {
     // empty constructor
     public Tournament() {
 
-        gameOrSportTyp = GameOrSportTyp.WARMACHINE;
+        gameOrSportTyp = GameOrSportTyp.WARMACHINE_SOLO;
         tournamentTyp = TournamentTyp.SOLO;
     }
 

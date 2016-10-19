@@ -183,7 +183,7 @@ public class OnlineTournamentPlayerTeamExpandableListAdapter extends BaseExpanda
             if (baseActivity.getBaseApplication().getAuthenticatedPlayer() != null
                     && baseActivity.getBaseApplication().getAuthenticatedPlayer().getUUID()
                     .equals(tournamentPlayer.getPlayerUUID())) {
-                card.setCardBackgroundColor(Color.MAGENTA);
+                card.setCardBackgroundColor(Color.CYAN);
             } else {
                 if (childPosition % 2 == 0) {
                     card.setCardBackgroundColor(Color.LTGRAY);
@@ -191,6 +191,12 @@ public class OnlineTournamentPlayerTeamExpandableListAdapter extends BaseExpanda
                     card.setCardBackgroundColor(Color.WHITE);
                 }
             }
+
+            ImageView editButton = (ImageView) convertView.findViewById(R.id.tournament_player_row_edit_icon);
+            editButton.setVisibility(View.GONE);
+
+            ImageView addListButton = (ImageView) convertView.findViewById(R.id.tournament_player_row_add_List);
+            addListButton.setVisibility(View.GONE);
         }
 
         return convertView;

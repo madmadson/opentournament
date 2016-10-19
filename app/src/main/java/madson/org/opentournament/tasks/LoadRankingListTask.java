@@ -2,12 +2,9 @@ package madson.org.opentournament.tasks;
 
 import android.os.AsyncTask;
 
-import android.service.notification.NotificationListenerService;
-
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentRanking;
 import madson.org.opentournament.organize.RankingListFragment;
-import madson.org.opentournament.service.OngoingTournamentService;
 import madson.org.opentournament.service.RankingService;
 import madson.org.opentournament.utility.BaseApplication;
 

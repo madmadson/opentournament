@@ -1,6 +1,7 @@
 package madson.org.opentournament.organize;
 
 import android.content.Context;
+import android.content.DialogInterface;
 
 import android.graphics.Color;
 
@@ -10,23 +11,27 @@ import android.support.annotation.Nullable;
 
 import android.support.v4.app.Fragment;
 
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Tournament;
-import madson.org.opentournament.domain.TournamentParticipant;
 import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.domain.TournamentRanking;
-import madson.org.opentournament.domain.TournamentTeam;
 import madson.org.opentournament.domain.TournamentTyp;
 import madson.org.opentournament.tasks.LoadRankingListTask;
+import madson.org.opentournament.tasks.TournamentUploadTask;
+import madson.org.opentournament.tasks.UndoEndTournamentTask;
 import madson.org.opentournament.utility.BaseActivity;
 import madson.org.opentournament.viewHolder.TournamentRankingViewHolder;
 
@@ -47,6 +52,8 @@ public class RankingListFragment extends Fragment {
     private int round;
     private RankingListAdapter rankingListAdapter;
     private BaseActivity baseActivity;
+    private Button uploadGamesButton;
+    private Button undoEndTournamentButton;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -99,15 +106,69 @@ public class RankingListFragment extends Fragment {
 
         TextView heading = (TextView) view.findViewById(R.id.heading_ranking_for_round);
 
+        undoEndTournamentButton = (Button) view.findViewById(R.id.button_undo_end_tournament);
+        undoEndTournamentButton.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setTitle(R.string.confirm_undo_round)
+                    .setView(R.layout.dialog_undo_round)
+                    .setPositiveButton(R.string.dialog_save, new DialogInterface.OnClickListener() {
+
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                    new UndoEndTournamentTask(baseActivity, tournament, round).execute();
+                                }
+                            })
+                    .setNegativeButton(R.string.dialog_cancel, null)
+                    .show();
+                }
+            });
+
+        uploadGamesButton = (Button) view.findViewById(R.id.button_upload_games);
+        uploadGamesButton.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+
+                    if (baseActivity.isConnected()) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                        builder.setTitle(R.string.confirm_upload_tournament)
+                        .setView(R.layout.dialog_upload_games)
+                        .setPositiveButton(R.string.dialog_save, new DialogInterface.OnClickListener() {
+
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+
+                                        Toolbar toolbar = baseActivity.getToolbar();
+                                        ProgressBar progressBar = (ProgressBar) toolbar.findViewById(
+                                                R.id.toolbar_progress_bar);
+
+                                        new TournamentUploadTask(baseActivity, tournament, progressBar).execute();
+                                    }
+                                })
+                        .setNegativeButton(R.string.dialog_cancel, null)
+                        .show();
+                    } else {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                        builder.setTitle(R.string.offline_text).setPositiveButton(R.string.dialog_confirm, null).show();
+                    }
+                }
+            });
+
         if (tournament.getState().equals(Tournament.TournamentState.FINISHED.name())
                 && round == tournament.getActualRound()) {
             heading.setText(getString(R.string.final_standings));
+            undoEndTournamentButton.setVisibility(View.VISIBLE);
+            uploadGamesButton.setVisibility(View.VISIBLE);
         } else {
             heading.setText(R.string.heading_ranking_for_round);
+            undoEndTournamentButton.setVisibility(View.GONE);
+            uploadGamesButton.setVisibility(View.GONE);
         }
-
-        RankingListHeaderFragment headerFragment = new RankingListHeaderFragment();
-        getChildFragmentManager().beginTransaction().add(R.id.row_ranking_header_container, headerFragment).commit();
 
         rankingListAdapter = new RankingListAdapter(baseActivity.getBaseApplication());
         recyclerView.setAdapter(rankingListAdapter);

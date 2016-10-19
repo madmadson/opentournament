@@ -1,22 +1,15 @@
 package madson.org.opentournament.tasks;
 
-import android.content.DialogInterface;
-
 import android.os.AsyncTask;
 
 import android.support.design.widget.Snackbar;
 
-import android.support.v7.app.AlertDialog;
-
 import madson.org.opentournament.R;
-import madson.org.opentournament.domain.Game;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.events.AddTournamentEvent;
 import madson.org.opentournament.events.OpenTournamentEventTag;
-import madson.org.opentournament.service.OngoingTournamentService;
 import madson.org.opentournament.service.TournamentService;
 import madson.org.opentournament.utility.BaseActivity;
-import madson.org.opentournament.utility.BaseApplication;
 
 
 /**

@@ -13,7 +13,6 @@ import android.view.Menu;
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Game;
 import madson.org.opentournament.domain.Tournament;
-import madson.org.opentournament.organize.team.TeamGameListFragment;
 import madson.org.opentournament.utility.BaseActivity;
 
 

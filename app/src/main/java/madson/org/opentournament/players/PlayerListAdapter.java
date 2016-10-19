@@ -15,8 +15,6 @@ import android.view.ViewGroup;
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.PlayerComparator;
-import madson.org.opentournament.domain.TournamentPlayerComparator;
-import madson.org.opentournament.tournaments.TournamentComparator;
 import madson.org.opentournament.viewHolder.PlayerViewHolder;
 
 import java.util.ArrayList;

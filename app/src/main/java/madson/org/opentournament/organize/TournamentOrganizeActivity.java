@@ -24,13 +24,12 @@ import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.events.OpenTournamentEvent;
 import madson.org.opentournament.events.OpenTournamentEventListener;
 import madson.org.opentournament.events.OpenTournamentEventTag;
+import madson.org.opentournament.events.UndoRoundEvent;
 import madson.org.opentournament.organize.setup.AvailablePlayerListFragment;
 import madson.org.opentournament.organize.setup.TournamentPlayerListFragment;
 import madson.org.opentournament.organize.setup.TournamentSetupFragment;
 import madson.org.opentournament.tasks.LoadTournamentTask;
 import madson.org.opentournament.utility.BaseActivity;
-
-import java.util.HashMap;
 
 
 /**
@@ -44,6 +43,7 @@ public class TournamentOrganizeActivity extends BaseActivity implements OpenTour
     private ViewPager mViewPager;
     private ProgressBar progressBar;
     private Tournament initialTournament;
+    private float widthOfScreen;
 
     @Override
     public boolean useTabLayout() {
@@ -99,6 +99,8 @@ public class TournamentOrganizeActivity extends BaseActivity implements OpenTour
 
         getBaseApplication().registerTournamentEventListener(this);
 
+        widthOfScreen = getWidthOfScreen();
+
         Intent intent = getIntent();
 
         Bundle extras = intent.getExtras();
@@ -123,13 +125,14 @@ public class TournamentOrganizeActivity extends BaseActivity implements OpenTour
             tabLayout.setupWithViewPager(mViewPager);
 
             progressBar = (ProgressBar) getToolbar().findViewById(R.id.toolbar_progress_bar);
-            new LoadTournamentTask(this, initialTournament, mSectionsPagerAdapter, mViewPager, progressBar).execute();
+            new LoadTournamentTask(this, initialTournament, mSectionsPagerAdapter, mViewPager, progressBar,
+                widthOfScreen).execute();
         }
     }
 
 
     @Override
-    public void handleEvent(OpenTournamentEventTag eventTag, OpenTournamentEvent parameterObject) {
+    public void handleEvent(OpenTournamentEventTag eventTag, OpenTournamentEvent parameter) {
 
         if (eventTag.equals(OpenTournamentEventTag.TOURNAMENT_STARTED)) {
             finish();
@@ -138,7 +141,27 @@ public class TournamentOrganizeActivity extends BaseActivity implements OpenTour
             intent.putExtra(TournamentOrganizeActivity.EXTRA_TOURNAMENT, initialTournament);
             startActivity(intent);
         } else if (eventTag.equals(OpenTournamentEventTag.NEXT_ROUND_PAIRED)) {
-            new LoadTournamentTask(this, initialTournament, mSectionsPagerAdapter, mViewPager, progressBar).execute();
+            new LoadTournamentTask(this, initialTournament, mSectionsPagerAdapter, mViewPager, progressBar,
+                widthOfScreen).execute();
+        } else if (OpenTournamentEventTag.UNDO_ROUND.equals(eventTag)) {
+            UndoRoundEvent undoRoundEvent = (UndoRoundEvent) parameter;
+
+            if (undoRoundEvent.getRound() == 0) {
+                finish();
+
+                Intent intent = new Intent(this, TournamentOrganizeActivity.class);
+                intent.putExtra(TournamentOrganizeActivity.EXTRA_TOURNAMENT, initialTournament);
+                startActivity(intent);
+            } else {
+                new LoadTournamentTask(this, initialTournament, mSectionsPagerAdapter, mViewPager, progressBar,
+                    widthOfScreen).execute();
+            }
+        } else if (OpenTournamentEventTag.UNDO_TOURNAMENT_ENDING.equals(eventTag)) {
+            finish();
+
+            Intent intent = new Intent(this, TournamentOrganizeActivity.class);
+            intent.putExtra(TournamentOrganizeActivity.EXTRA_TOURNAMENT, initialTournament);
+            startActivity(intent);
         }
     }
 
@@ -158,8 +181,6 @@ public class TournamentOrganizeActivity extends BaseActivity implements OpenTour
 
             Log.i(this.getClass().getName(),
                 "create initialTournament fragment: " + tournamentToOrganize + " on position: " + position);
-
-            float widthOfScreen = getWidthOfScreen();
 
             if (state.equals(Tournament.TournamentState.PLANED.name())) {
                 if (widthOfScreen < 720) {
@@ -202,8 +223,6 @@ public class TournamentOrganizeActivity extends BaseActivity implements OpenTour
         @Override
         public int getCount() {
 
-            float widthOfScreen = getWidthOfScreen();
-
             if (state != null) {
                 if (state.equals(Tournament.TournamentState.PLANED.name())) {
                     if (widthOfScreen < 720) {
@@ -235,8 +254,6 @@ public class TournamentOrganizeActivity extends BaseActivity implements OpenTour
         @Override
         public CharSequence getPageTitle(int position) {
 
-            float widthOfScreen = getWidthOfScreen();
-
             if (position == 0) {
                 return getApplication().getResources().getString(R.string.nav_tournament_players);
             }
@@ -250,13 +267,13 @@ public class TournamentOrganizeActivity extends BaseActivity implements OpenTour
             if (widthOfScreen < 720) {
                 int round = (position + 1) / 2;
 
-                if (state.equals(Tournament.TournamentState.FINISHED.name()) && position == (actualRound * 2)) {
+                if (state.equals(Tournament.TournamentState.FINISHED.name()) && position == (actualRound * 2) - 1) {
                     return getApplication().getResources().getString(R.string.nav_final_standing_tab);
                 } else {
                     if (position % 2 == 1) {
                         return getApplication().getResources().getString(R.string.nav_games_tab, round);
                     } else {
-                        return getApplication().getResources().getString(R.string.nav_ranking_tab, round);
+                        return getApplication().getResources().getString(R.string.nav_ranking_tab, (round - 1));
                     }
                 }
             } else {

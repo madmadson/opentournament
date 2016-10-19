@@ -111,7 +111,7 @@ public class OnlineTournamentPlayerListFragment extends Fragment {
         mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
 
         DatabaseReference child = mFirebaseDatabaseReference.child(FirebaseReferences.TOURNAMENT_PLAYERS + "/"
-                + tournament.getUUID());
+                + tournament.getGameOrSportTyp() + "/" + tournament.getUUID());
 
         child.addValueEventListener(new ValueEventListener() {
 

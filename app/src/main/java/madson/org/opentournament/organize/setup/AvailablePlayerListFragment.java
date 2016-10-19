@@ -235,20 +235,22 @@ public class AvailablePlayerListFragment extends BaseFragment implements OpenTou
             RemoveTournamentPlayerEvent removeTournamentPlayerEvent = (RemoveTournamentPlayerEvent) parameter;
             TournamentPlayer tournamentPlayer = removeTournamentPlayerEvent.getTournamentPlayer();
 
-            Player player = new Player();
+            if (!tournamentPlayer.isDummy()) {
+                Player player = new Player();
 
-            player.setFirstName(tournamentPlayer.getFirstName());
-            player.setNickName(tournamentPlayer.getNickName());
-            player.setLastName(tournamentPlayer.getLastName());
-            player.setUUID(tournamentPlayer.getPlayerUUID());
-            player.setLocal(tournamentPlayer.isLocal());
+                player.setFirstName(tournamentPlayer.getFirstName());
+                player.setNickName(tournamentPlayer.getNickName());
+                player.setLastName(tournamentPlayer.getLastName());
+                player.setUUID(tournamentPlayer.getPlayerUUID());
+                player.setLocal(tournamentPlayer.isLocal());
 
-            if (tournamentPlayer.isLocal()) {
-                localPlayerListAdapter.add(player);
-                doFilter(filterPlayerTextView.getText());
-            } else {
-                onlinePlayerListAdapter.addPlayer(player);
-                doFilter(filterPlayerTextView.getText());
+                if (tournamentPlayer.isLocal()) {
+                    localPlayerListAdapter.add(player);
+                    doFilter(filterPlayerTextView.getText());
+                } else {
+                    onlinePlayerListAdapter.addPlayer(player);
+                    doFilter(filterPlayerTextView.getText());
+                }
             }
         } else if (OpenTournamentEventTag.DELETE_LOCAL_PLAYER.equals(eventTag)) {
             DeleteLocalPlayerEvent deleteLocalPlayerEvent = (DeleteLocalPlayerEvent) parameter;

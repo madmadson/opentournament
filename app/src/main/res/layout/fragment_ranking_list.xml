@@ -12,10 +12,35 @@
         android:layout_gravity="center_horizontal"
         android:textAppearance="@android:style/TextAppearance.Large" />
 
-    <FrameLayout
-        android:id="@+id/row_ranking_header_container"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <Button
+        android:id="@+id/button_undo_end_tournament"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="@dimen/halve_tick"
+        android:background="@color/colorWarning"
+        android:drawableLeft="@drawable/ic_undo_white_24dp"
+        android:drawablePadding="@dimen/halve_tick"
+        android:paddingLeft="@dimen/halve_tick"
+        android:paddingRight="@dimen/halve_tick"
+        android:text="@string/undo_end_tournament"
+        android:textColor="@color/colorTextIcon"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/button_upload_games"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="@dimen/halve_tick"
+        android:background="@color/colorPrimaryDark"
+        android:drawableLeft="@drawable/ic_cloud_upload_white_24dp"
+        android:drawablePadding="@dimen/halve_tick"
+        android:paddingLeft="@dimen/halve_tick"
+        android:paddingRight="@dimen/halve_tick"
+        android:text="@string/upload_games"
+        android:textColor="@color/colorTextIcon"
+        android:textStyle="bold" />
 
     <View
         android:layout_width="match_parent"

@@ -52,7 +52,7 @@ public class TournamentUploadTask extends AsyncTask<Void, Void, Void> {
         OngoingTournamentService ongoingTournamentService = baseActivity.getBaseApplication()
                 .getOngoingTournamentService();
 
-        Tournament actualTournament = tournamentService.getTournamentForId(tournament.get_id());
+        Tournament actualTournament = tournamentService.getTournamentForId(tournament.getUUID());
         Tournament uploadedTournament = tournamentService.uploadTournament(actualTournament);
         tournamentPlayerService.uploadTournamentPlayers(uploadedTournament);
         rankingService.uploadRankingsForTournament(uploadedTournament);

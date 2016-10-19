@@ -1,7 +1,6 @@
 package madson.org.opentournament.events;
 
 import madson.org.opentournament.domain.Tournament;
-import madson.org.opentournament.domain.TournamentPlayer;
 
 
 /**

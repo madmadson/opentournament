@@ -11,5 +11,6 @@ import java.io.Serializable;
 public enum GameOrSportTyp implements Serializable {
 
     ALL,
-    WARMACHINE
+    WARMACHINE_SOLO,
+    WARMACHINE_TEAM
 }

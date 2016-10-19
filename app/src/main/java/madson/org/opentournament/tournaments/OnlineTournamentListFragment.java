@@ -30,6 +30,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import madson.org.opentournament.R;
 import madson.org.opentournament.db.FirebaseReferences;
+import madson.org.opentournament.domain.GameOrSportTyp;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.utility.BaseActivity;
 import madson.org.opentournament.utility.Environment;
@@ -110,50 +111,56 @@ public class OnlineTournamentListFragment extends Fragment {
                     baseActivity);
 
             // do this configurable for other sport games
-            DatabaseReference child = mFirebaseDatabaseReference.child(FirebaseReferences.TOURNAMENTS + "/"
-                    + baseActivity.getBaseApplication().getSelectedGameOrSportTyp());
+            DatabaseReference childSolo = mFirebaseDatabaseReference.child(FirebaseReferences.TOURNAMENTS + "/"
+                    + GameOrSportTyp.WARMACHINE_SOLO);
 
-            child.addChildEventListener(new ChildEventListener() {
+            // do this configurable for other sport games
+            DatabaseReference childTeam = mFirebaseDatabaseReference.child(FirebaseReferences.TOURNAMENTS + "/"
+                    + GameOrSportTyp.WARMACHINE_TEAM);
 
-                    @Override
-                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+            ChildEventListener tournamentEventListener = new ChildEventListener() {
 
-                        progressBar.setVisibility(View.GONE);
-                        noTournamentsTextView.setVisibility(View.GONE);
+                @Override
+                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
-                        Tournament tournament = dataSnapshot.getValue(Tournament.class);
-                        tournament.setUuid(dataSnapshot.getKey());
-                        onlineTournamentListAdapter.addTournament(tournament);
-                    }
+                    progressBar.setVisibility(View.GONE);
+                    noTournamentsTextView.setVisibility(View.GONE);
 
-
-                    @Override
-                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-                        Tournament tournament = dataSnapshot.getValue(Tournament.class);
-                        tournament.setUuid(dataSnapshot.getKey());
-                        onlineTournamentListAdapter.replaceTournament(tournament);
-                    }
+                    Tournament tournament = dataSnapshot.getValue(Tournament.class);
+                    tournament.setUuid(dataSnapshot.getKey());
+                    onlineTournamentListAdapter.addTournament(tournament);
+                }
 
 
-                    @Override
-                    public void onChildRemoved(DataSnapshot dataSnapshot) {
+                @Override
+                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
 
-                        Tournament tournament = dataSnapshot.getValue(Tournament.class);
-                        tournament.setUuid(dataSnapshot.getKey());
-                        onlineTournamentListAdapter.removeTournament(tournament);
-                    }
-
-
-                    @Override
-                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-                    }
+                    Tournament tournament = dataSnapshot.getValue(Tournament.class);
+                    tournament.setUuid(dataSnapshot.getKey());
+                    onlineTournamentListAdapter.replaceTournament(tournament);
+                }
 
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                    }
-                });
+                @Override
+                public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                    Tournament tournament = dataSnapshot.getValue(Tournament.class);
+                    tournament.setUuid(dataSnapshot.getKey());
+                    onlineTournamentListAdapter.removeTournament(tournament);
+                }
+
+
+                @Override
+                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                }
+
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                }
+            };
+            childSolo.addChildEventListener(tournamentEventListener);
+            childTeam.addChildEventListener(tournamentEventListener);
 
             mOnlineTournamentRecyclerView.setAdapter(onlineTournamentListAdapter);
 

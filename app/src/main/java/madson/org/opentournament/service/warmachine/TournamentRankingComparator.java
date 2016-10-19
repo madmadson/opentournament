@@ -1,6 +1,5 @@
 package madson.org.opentournament.service.warmachine;
 
-import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.domain.TournamentRanking;
 
 import java.util.Comparator;

@@ -75,6 +75,10 @@
     </string>
     <string name="no_online_tournaments_found">No online Tournaments found</string>
 
+    <string name="team_match_not_online_yet">
+        Tournament Organizer haven\'t upload team match yet 
+    </string>
+
     <!--dialog -->
     <string name="dialog_save">Save</string>
     <string name="dialog_cancel">Cancel</string>
@@ -118,11 +122,11 @@
     <string name="heading_local_players">Players from local database (only visible for you)</string>
     <string name="label_faction">Faction</string>
     <string name="label_teamname">Teamname</string>
-    <string name="label_add_teamname">Add new Teamname</string>
+    <string name="label_add_teamname">Add new Team name</string>
     <string name="team_name">Team:</string>
     <string name="faction">Faction: </string>
     <string name="no_team">No Team</string>
-    <string name="add_new_team">Add new Teamname</string>
+    <string name="add_new_team">Add new Team name</string>
 
 
     <!-- Pairing table -->
@@ -307,5 +311,15 @@
     <string name="team_name_already_taken">Teamname already taken</string>
     <string name="team_already_full">Team already full</string>
     <string name="counter_tournament_players">(%1$d/%2$d)</string>
+    <string name="undo_round">undo round</string>
+    <string name="undo_end_tournament">undo end tournament</string>
+    <string name="confirm_undo_round">Really undo round?</string>
+    <string name="success_undo_round">Successfully delete round</string>
+    <string name="success_undo_tournament_ending">Successfully undo end tournament</string>
+    <string name="undo_round_information">
+        Undoing a round will delete all inserted games and actual ranking. Online data is not affected. 
+        Please upload the tournament again to overwrite the data.
+    </string>
+    <string name="db_version">DBVersion %1$s</string>
 
 </resources>

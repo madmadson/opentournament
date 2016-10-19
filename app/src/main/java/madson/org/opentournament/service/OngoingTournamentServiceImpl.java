@@ -94,8 +94,7 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
         SQLiteDatabase readableDatabase = openTournamentDBHelper.getReadableDatabase();
 
         Cursor cursor = readableDatabase.query(GameTable.TABLE_TOURNAMENT_GAME, GameTable.ALL_COLS_FOR_TOURNAMENT_GAME,
-                GameTable.COLUMN_TOURNAMENT_ID + "  = ? ", new String[] { String.valueOf(tournament.get_id()) }, null,
-                null, null);
+                GameTable.COLUMN_TOURNAMENT_UUID + "  = ? ", new String[] { tournament.getUUID() }, null, null, null);
 
         cursor.moveToFirst();
 
@@ -144,8 +143,8 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
         SQLiteDatabase readableDatabase = openTournamentDBHelper.getReadableDatabase();
 
         Cursor cursor = readableDatabase.query(GameTable.TABLE_TOURNAMENT_GAME, GameTable.ALL_COLS_FOR_TOURNAMENT_GAME,
-                GameTable.COLUMN_TOURNAMENT_ID + "  = ? AND " + GameTable.COLUMN_PARENT_UUID + " IS null",
-                new String[] { String.valueOf(tournament.get_id()) }, null, null, null);
+                GameTable.COLUMN_TOURNAMENT_UUID + "  = ? AND " + GameTable.COLUMN_PARENT_UUID + " IS null",
+                new String[] { tournament.getUUID() }, null, null, null);
 
         cursor.moveToFirst();
 
@@ -279,7 +278,7 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
                 if (match) {
                     Game game = new Game();
 
-                    game.setTournamentId(String.valueOf(tournament.get_id()));
+                    game.setTournamentUUID(tournament.getUUID());
                     game.setTournament_round(round);
 
                     game.setParticipantOne(player1.getTournamentParticipant());
@@ -339,7 +338,7 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
                 if (match) {
                     Game game = new Game();
 
-                    game.setTournamentId(String.valueOf(tournament.get_id()));
+                    game.setTournamentUUID(tournament.getUUID());
                     game.setTournament_round(round);
 
                     game.setParticipantOne(player1.getTournamentParticipant());
@@ -416,8 +415,8 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
         SQLiteDatabase writableDatabase = openTournamentDBHelper.getWritableDatabase();
 
         writableDatabase.delete(GameTable.TABLE_TOURNAMENT_GAME,
-            GameTable.COLUMN_TOURNAMENT_ID + " = ? AND " + GameTable.COLUMN_TOURNAMENT_ROUND
-            + " = ?", new String[] { String.valueOf(tournament.get_id()), String.valueOf(roundToDelete) });
+            GameTable.COLUMN_TOURNAMENT_UUID + " = ? AND " + GameTable.COLUMN_TOURNAMENT_ROUND
+            + " = ?", new String[] { tournament.getUUID(), String.valueOf(roundToDelete) });
     }
 
 
@@ -427,7 +426,8 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
         int actualRound = uploadedTournament.getActualRound();
 
         DatabaseReference referenceForGamesToDelete = FirebaseDatabase.getInstance()
-                .getReference(FirebaseReferences.TOURNAMENT_GAMES + "/" + uploadedTournament.getUUID());
+                .getReference(FirebaseReferences.TOURNAMENT_GAMES + "/" + uploadedTournament.getGameOrSportTyp() + "/"
+                    + uploadedTournament.getUUID());
         referenceForGamesToDelete.removeValue();
 
         for (int i = 1; i <= actualRound; i++) {
@@ -437,7 +437,8 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
                 UUID uuid = UUID.randomUUID();
 
                 DatabaseReference referenceForGames = FirebaseDatabase.getInstance()
-                        .getReference(FirebaseReferences.TOURNAMENT_GAMES + "/" + uploadedTournament.getUUID()
+                        .getReference(FirebaseReferences.TOURNAMENT_GAMES + "/" + uploadedTournament
+                            .getGameOrSportTyp() + "/" + uploadedTournament.getUUID()
                             + "/" + i + "/" + uuid);
 
                 referenceForGames.setValue(game);
@@ -446,20 +447,19 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
     }
 
 
-    private List<Game> getAllGamesForTeamTournamentForRound(Tournament uploadedTournament, int round) {
+    private List<Game> getAllGamesForTeamTournamentForRound(Tournament tournament, int round) {
 
         Map<String, TournamentPlayer> allPlayerMapForTournament = tournamentPlayerService.getAllPlayerMapForTournament(
-                uploadedTournament);
+                tournament);
 
         Map<String, TournamentTeam> allTeamMapForTournament = tournamentPlayerService.getAllTeamMapForTournament(
-                uploadedTournament);
+                tournament);
 
         List<Game> gamesToReturn = new ArrayList<>();
         SQLiteDatabase readableDatabase = openTournamentDBHelper.getReadableDatabase();
 
         Cursor cursor = readableDatabase.query(GameTable.TABLE_TOURNAMENT_GAME, GameTable.ALL_COLS_FOR_TOURNAMENT_GAME,
-                GameTable.COLUMN_TOURNAMENT_ID + "  = ? ", new String[] { String.valueOf(uploadedTournament.get_id()) },
-                null, null, null);
+                GameTable.COLUMN_TOURNAMENT_UUID + "  = ? ", new String[] { tournament.getUUID() }, null, null, null);
 
         cursor.moveToFirst();
 
@@ -468,7 +468,7 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
 
             if (game.getTournament_round() < round) {
                 // collect information about opponents in current round
-                if (uploadedTournament.getTournamentTyp().equals(TournamentTyp.SOLO.name())) {
+                if (tournament.getTournamentTyp().equals(TournamentTyp.SOLO.name())) {
                     TournamentPlayer participantOne = allPlayerMapForTournament.get(game.getParticipantOneUUID());
                     TournamentPlayer participantTwo = allPlayerMapForTournament.get(game.getParticipantTwoUUID());
                     participantOne.getListOfOpponentsUUIDs().add(participantTwo.getUuid());
@@ -476,7 +476,7 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
 
                     allPlayerMapForTournament.put(game.getParticipantOneUUID(), participantOne);
                     allPlayerMapForTournament.put(game.getParticipantTwoUUID(), participantTwo);
-                } else if (uploadedTournament.getTournamentTyp().equals(TournamentTyp.TEAM.name())
+                } else if (tournament.getTournamentTyp().equals(TournamentTyp.TEAM.name())
                         && game.getParent_UUID() == null) {
                     TournamentTeam teamOne = allTeamMapForTournament.get(game.getParticipantOneUUID());
                     TournamentTeam teamTwo = allTeamMapForTournament.get(game.getParticipantTwoUUID());
@@ -490,8 +490,7 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
             }
 
             if (game.getTournament_round() == round) {
-                if (uploadedTournament.getTournamentTyp().equals(TournamentTyp.TEAM.name())
-                        && game.getParent_UUID() == null) {
+                if (tournament.getTournamentTyp().equals(TournamentTyp.TEAM.name()) && game.getParent_UUID() == null) {
                     game.setParticipantOne(allTeamMapForTournament.get(game.getParticipantOneUUID()));
                     game.setParticipantTwo(allTeamMapForTournament.get(game.getParticipantTwoUUID()));
 
@@ -501,7 +500,7 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
                     game.setParticipantTwo(allPlayerMapForTournament.get(game.getParticipantTwoUUID()));
 
                     if (game.getParent_UUID() != null
-                            || uploadedTournament.getTournamentTyp().equals(TournamentTyp.SOLO.name())) {
+                            || tournament.getTournamentTyp().equals(TournamentTyp.SOLO.name())) {
                         game.setTournamentPlayerOne(allPlayerMapForTournament.get(game.getParticipantOneUUID()));
                         game.setTournamentPlayerTwo(allPlayerMapForTournament.get(game.getParticipantTwoUUID()));
                     }
@@ -524,8 +523,8 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
 
         SQLiteDatabase writableDatabase = openTournamentDBHelper.getWritableDatabase();
 
-        writableDatabase.delete(GameTable.TABLE_TOURNAMENT_GAME, GameTable.COLUMN_TOURNAMENT_ID + " = ? ",
-            new String[] { String.valueOf(tournament.get_id()) });
+        writableDatabase.delete(GameTable.TABLE_TOURNAMENT_GAME, GameTable.COLUMN_TOURNAMENT_UUID + " = ? ",
+            new String[] { tournament.getUUID() });
     }
 
 
@@ -539,8 +538,8 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
         SQLiteDatabase readableDatabase = openTournamentDBHelper.getReadableDatabase();
 
         Cursor cursor = readableDatabase.query(GameTable.TABLE_TOURNAMENT_GAME, GameTable.ALL_COLS_FOR_TOURNAMENT_GAME,
-                GameTable.COLUMN_TOURNAMENT_ID + "  = ? AND " + GameTable.COLUMN_PARENT_UUID + " = ? ",
-                new String[] { String.valueOf(tournament.get_id()), parent_game.getUUID() }, null, null, null);
+                GameTable.COLUMN_TOURNAMENT_UUID + "  = ? AND " + GameTable.COLUMN_PARENT_UUID + " = ? ",
+                new String[] { tournament.getUUID(), parent_game.getUUID() }, null, null, null);
 
         cursor.moveToFirst();
 
@@ -586,7 +585,7 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
                 contentValues.put(GameTable.COLUMN_UUID, uuid);
                 contentValues.put(GameTable.COLUMN_PARENT_UUID, parent_game.getUUID());
 
-                contentValues.put(GameTable.COLUMN_TOURNAMENT_ID, String.valueOf(tournament.get_id()));
+                contentValues.put(GameTable.COLUMN_TOURNAMENT_UUID, tournament.getUUID());
                 contentValues.put(GameTable.COLUMN_TOURNAMENT_ROUND, parent_game.getTournament_round());
                 contentValues.put(GameTable.COLUMN_PLAYING_FIELD, i + 1);
 
@@ -611,7 +610,7 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
             ContentValues contentValues = new ContentValues();
             contentValues.put(GameTable.COLUMN_UUID, UUID.randomUUID().toString());
 
-            contentValues.put(GameTable.COLUMN_TOURNAMENT_ID, games.get(i).getTournamentId());
+            contentValues.put(GameTable.COLUMN_TOURNAMENT_UUID, games.get(i).getTournamentUUID());
             contentValues.put(GameTable.COLUMN_TOURNAMENT_ROUND, games.get(i).getTournament_round());
             contentValues.put(GameTable.COLUMN_PLAYING_FIELD, i + 1);
 

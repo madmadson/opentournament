@@ -33,7 +33,6 @@ import madson.org.opentournament.events.EndSwapPlayerEvent;
 import madson.org.opentournament.events.OpenTournamentEventTag;
 import madson.org.opentournament.events.SwapPlayerEvent;
 import madson.org.opentournament.organize.EnterResultForGameDialog;
-import madson.org.opentournament.organize.GameListAdapter;
 import madson.org.opentournament.tasks.SwapPlayersTask;
 import madson.org.opentournament.utility.BaseActivity;
 import madson.org.opentournament.utility.BaseApplication;

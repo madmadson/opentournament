@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -28,7 +29,6 @@ import madson.org.opentournament.db.FirebaseReferences;
 import madson.org.opentournament.db.GameTable;
 import madson.org.opentournament.domain.Game;
 import madson.org.opentournament.domain.Tournament;
-import madson.org.opentournament.online.OnlineGamesListAdapter;
 import madson.org.opentournament.utility.BaseActivity;
 
 
@@ -45,6 +45,7 @@ public class OnlineTeamGameListFragment extends Fragment {
     private BaseActivity baseActivity;
     private ProgressBar mProgressBar;
     private DatabaseReference mFirebaseDatabaseReference;
+    private TextView teamMatchNotOnline;
 
     @Override
     public void onAttach(Context context) {
@@ -83,6 +84,8 @@ public class OnlineTeamGameListFragment extends Fragment {
         mProgressBar = (ProgressBar) view.findViewById(R.id.progressBar);
         mProgressBar.setVisibility(View.VISIBLE);
 
+        teamMatchNotOnline = (TextView) view.findViewById(R.id.team_match_not_online_yet);
+
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.game_list_recycler_view);
         recyclerView.setHasFixedSize(true);
 
@@ -95,7 +98,7 @@ public class OnlineTeamGameListFragment extends Fragment {
         mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
 
         DatabaseReference child = mFirebaseDatabaseReference.child(FirebaseReferences.TOURNAMENT_GAMES + "/"
-                + tournament.getUUID() + "/" + parentGame.getTournament_round());
+                + tournament.getGameOrSportTyp() + "/" + tournament.getUUID() + "/" + parentGame.getTournament_round());
 
         Query orderedGames = child.orderByChild(GameTable.COLUMN_PLAYING_FIELD);
 
@@ -109,6 +112,7 @@ public class OnlineTeamGameListFragment extends Fragment {
 
                         if (game != null) {
                             mProgressBar.setVisibility(View.GONE);
+                            teamMatchNotOnline.setVisibility(View.GONE);
 
                             if (parentGame.getUUID().equals(game.getParent_UUID())) {
                                 gamesListAdapter.addGame(game);
@@ -133,6 +137,7 @@ public class OnlineTeamGameListFragment extends Fragment {
                 public void run() {
 
                     if (gamesListAdapter.getItemCount() == 0) {
+                        teamMatchNotOnline.setVisibility(View.VISIBLE);
                         mProgressBar.setVisibility(ProgressBar.GONE);
                     }
                 }

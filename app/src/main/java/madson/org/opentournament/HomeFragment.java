@@ -1,7 +1,5 @@
 package madson.org.opentournament;
 
-import android.content.Context;
-
 import android.os.Bundle;
 
 import android.support.annotation.Nullable;
@@ -17,15 +15,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.TextView;
-
-import madson.org.opentournament.tournaments.OrganizedTournamentListAdapter;
 import madson.org.opentournament.utility.BaseActivity;
 import madson.org.opentournament.utility.Environment;
 import madson.org.opentournament.viewHolder.NewsViewHolder;
-import madson.org.opentournament.viewHolder.TournamentViewHolder;
 
 
 public class HomeFragment extends Fragment {

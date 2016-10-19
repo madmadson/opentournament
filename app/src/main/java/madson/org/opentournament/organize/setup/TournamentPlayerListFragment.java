@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 
 import android.support.v4.app.Fragment;
@@ -16,6 +17,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+
+import android.util.DisplayMetrics;
+import android.util.Log;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -227,6 +231,31 @@ public class TournamentPlayerListFragment extends Fragment implements OpenTourna
                 }
             });
 
+        if (getWidthOfScreen() < 720 && tournament.getState().equals(Tournament.TournamentState.PLANED.name())) {
+            FloatingActionButton floatingActionButton = ((BaseActivity) getActivity()).getFloatingActionButton();
+            floatingActionButton.setVisibility(View.VISIBLE);
+            floatingActionButton.setImageResource(R.drawable.ic_add_white_24dp);
+
+            floatingActionButton.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+
+                        Log.i(this.getClass().getName(),
+                            "click floatingActionButton player addTournamentPlayer to tournament");
+
+                        AddTournamentPlayerDialog dialog = new AddTournamentPlayerDialog();
+
+                        Bundle bundle = new Bundle();
+                        bundle.putParcelable(AddTournamentPlayerDialog.BUNDLE_TOURNAMENT, tournament);
+                        dialog.setArguments(bundle);
+
+                        FragmentManager supportFragmentManager = getChildFragmentManager();
+                        dialog.show(supportFragmentManager, "tournament setup new player");
+                    }
+                });
+        }
+
         return view;
     }
 
@@ -250,8 +279,7 @@ public class TournamentPlayerListFragment extends Fragment implements OpenTourna
                             public void onClick(DialogInterface dialog, int which) {
 
                                 BaseApplication application = (BaseApplication) getActivity().getApplication();
-                                new SaveDummyTournamentPlayerTask(application, tournament, tournamentPlayerListAdapter)
-                                .execute();
+                                new SaveDummyTournamentPlayerTask(application, tournament).execute();
                             }
                         })
                 .setNegativeButton(R.string.dialog_cancel, null)
@@ -289,7 +317,7 @@ public class TournamentPlayerListFragment extends Fragment implements OpenTourna
         DatabaseReference mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
 
         DatabaseReference child = mFirebaseDatabaseReference.child(FirebaseReferences.TOURNAMENT_REGISTRATIONS + "/"
-                + tournament.getUUID());
+                + tournament.getGameOrSportTyp() + "/" + tournament.getUUID());
 
         child.addChildEventListener(new ChildEventListener() {
 
@@ -418,7 +446,23 @@ public class TournamentPlayerListFragment extends Fragment implements OpenTourna
         if (interCounterTournamentPlayers > tournament.getMaxNumberOfParticipants()) {
             counterTournamentPlayers.setTextColor(Color.RED);
         } else {
-            counterTournamentPlayers.setTextColor(Color.GREEN);
+            counterTournamentPlayers.setTextColor(Color.BLUE);
         }
+    }
+
+
+    public float getWidthOfScreen() {
+
+        DisplayMetrics metrics = new DisplayMetrics();
+        baseActivity.getWindowManager().getDefaultDisplay().getMetrics(metrics);
+
+        int widthPixels = metrics.widthPixels;
+        int heightPixels = metrics.heightPixels;
+
+        float scaleFactor = metrics.density;
+        float widthDp = widthPixels / scaleFactor;
+        float heightDp = heightPixels / scaleFactor;
+
+        return Math.min(widthDp, heightDp);
     }
 }

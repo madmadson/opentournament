@@ -24,8 +24,6 @@ public class TournamentEndTask extends AsyncTask<Void, Void, Void> {
     private Tournament tournament;
     private ProgressBar progressBar;
 
-    private int next_round;
-
     public TournamentEndTask(BaseApplication application, Tournament tournament, ProgressBar progressBar) {
 
         this.application = application;

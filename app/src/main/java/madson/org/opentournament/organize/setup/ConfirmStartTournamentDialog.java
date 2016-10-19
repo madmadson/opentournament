@@ -22,7 +22,6 @@ import android.widget.ToggleButton;
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.PairingOption;
 import madson.org.opentournament.domain.Tournament;
-import madson.org.opentournament.tasks.LoadTournamentTask;
 import madson.org.opentournament.tasks.StartTournamentTask;
 import madson.org.opentournament.utility.BaseActivity;
 
@@ -76,8 +75,6 @@ public class ConfirmStartTournamentDialog extends DialogFragment {
 
         View dialogView = inflater.inflate(R.layout.dialog_confirm_start_tournament, null);
 
-        new LoadTournamentTask(baseActivity, dialogView, tournament).execute();
-
         LinearLayout container = (LinearLayout) dialogView.findViewById(R.id.pairing_options_container);
 
         pairingOptions = baseActivity.getBaseApplication().getPairingOptionsForTournament(tournament);
@@ -105,7 +102,7 @@ public class ConfirmStartTournamentDialog extends DialogFragment {
                     }
                 });
 
-            toggleButton.setChecked(option.isDefaultPairing());
+            toggleButton.setChecked(option.isDefaultOption());
 
             container.addView(pairingOption);
         }

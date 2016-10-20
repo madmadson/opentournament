@@ -9,11 +9,11 @@ import android.os.Bundle;
 
 import android.support.annotation.Nullable;
 
+import android.support.design.widget.TextInputLayout;
+
 import android.support.v4.app.DialogFragment;
 
 import android.support.v7.app.AlertDialog;
-
-import android.util.Log;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +23,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
+import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseUser;
 
@@ -64,7 +65,7 @@ public class OrganizedTournamentEditDialog extends DialogFragment {
     private RadioButton tournamentTypeSoloRadio;
     private RadioButton tournamentTypeTeamRadio;
     private BaseActivity baseActivity;
-    private EditText teamsize;
+    private TextView teamSize;
     private View teamsizeLayout;
 
     @Override
@@ -95,32 +96,32 @@ public class OrganizedTournamentEditDialog extends DialogFragment {
 
         teamsizeLayout = dialogView.findViewById(R.id.teamsize_layout);
 
-        ImageButton teamSizeIncreaseButton = (ImageButton) dialogView.findViewById(R.id.teamsize_increase);
+        ImageButton teamSizeIncreaseButton = (ImageButton) dialogView.findViewById(R.id.team_size_increase);
         teamSizeIncreaseButton.setOnClickListener(new View.OnClickListener() {
 
                 @Override
                 public void onClick(View v) {
 
-                    if (Integer.valueOf(teamsize.getText().toString()) < 10) {
-                        Integer integer = Integer.valueOf(teamsize.getText().toString());
-                        teamsize.setText(String.valueOf(integer + 1));
+                    if (Integer.valueOf(teamSize.getText().toString()) < 10) {
+                        Integer integer = Integer.valueOf(teamSize.getText().toString());
+                        teamSize.setText(String.valueOf(integer + 1));
                     }
                 }
             });
 
-        ImageButton teamSizeDecreaseButton = (ImageButton) dialogView.findViewById(R.id.teamsize_decrease);
+        ImageButton teamSizeDecreaseButton = (ImageButton) dialogView.findViewById(R.id.team_size_decrease);
         teamSizeDecreaseButton.setOnClickListener(new View.OnClickListener() {
 
                 @Override
                 public void onClick(View v) {
 
-                    if (Integer.valueOf(teamsize.getText().toString()) > 2) {
-                        Integer integer = Integer.valueOf(teamsize.getText().toString());
-                        teamsize.setText(String.valueOf(integer - 1));
+                    if (Integer.valueOf(teamSize.getText().toString()) > 2) {
+                        Integer integer = Integer.valueOf(teamSize.getText().toString());
+                        teamSize.setText(String.valueOf(integer - 1));
                     }
                 }
             });
-        teamsize = (EditText) dialogView.findViewById(R.id.teamsize);
+        teamSize = (TextView) dialogView.findViewById(R.id.team_size);
 
         tournamentNameEditText = (EditText) dialogView.findViewById(R.id.tournament_name);
         tournamentLocationEditText = (EditText) dialogView.findViewById(R.id.tournament_location);
@@ -204,7 +205,7 @@ public class OrganizedTournamentEditDialog extends DialogFragment {
             } else if (tournamentTyp.equals(TournamentTyp.TEAM.name())) {
                 tournamentTypeTeamRadio.setChecked(true);
                 teamsizeLayout.setVisibility(View.VISIBLE);
-                teamsize.setText(String.valueOf(tournament.getTeamSize()));
+                teamSize.setText(String.valueOf(tournament.getTeamSize()));
             }
 
             tournamentTypeSoloRadio.setEnabled(false);
@@ -236,50 +237,7 @@ public class OrganizedTournamentEditDialog extends DialogFragment {
                     @Override
                     public void onClick(View v) {
 
-                        Log.i(this.getClass().getName(), "save tournament");
-
-                        String tournamentName = tournamentNameEditText.getText().toString();
-                        String location = tournamentLocationEditText.getText().toString();
-                        String date = tournamentDateEditText.getText().toString();
-
-                        String tournamentType = "";
-
-                        if (tournamentTypeTeamRadio.isChecked()) {
-                            tournamentType = TournamentTyp.TEAM.name();
-                        } else if (tournamentTypeSoloRadio.isChecked()) {
-                            tournamentType = TournamentTyp.SOLO.name();
-                        }
-
-                        Date parsed_date = null;
-
-                        try {
-                            parsed_date = dateFormatter.parse(date);
-                        } catch (ParseException e) {
-                            Log.i(this.getClass().getName(), "Failed to parse date");
-                        }
-
-                        String maxPlayers = tournamentMaxPlayersEditText.getText().toString();
-
-                        if (!tournamentName.isEmpty()) {
-                            if (tournament == null) {
-                                createNewTournament(tournamentName, location, date, parsed_date, maxPlayers,
-                                    tournamentType);
-                            } else {
-                                updateTournament(tournamentName, location, date, parsed_date, maxPlayers,
-                                    tournamentType);
-                            }
-
-                            dialog.dismiss();
-                        } else {
-                            Log.i(this.getClass().getName(), "validation failed");
-
-                            if (tournamentName.isEmpty()) {
-                                tournamentNameEditText.setError(
-                                    getContext().getString(R.string.validation_error_empty));
-                            } else {
-                                tournamentNameEditText.setError(null);
-                            }
-                        }
+                        saveTournament(dialog);
                     }
                 });
 
@@ -322,73 +280,114 @@ public class OrganizedTournamentEditDialog extends DialogFragment {
     }
 
 
-    /**
-     * ************************* UPDATE TOURNAMENT.*************************
-     */
-    private void updateTournament(final String tournamentName, final String location, final String date,
-        final Date parsed_date, final String maxPlayers, final String tournamentType) {
+    private void saveTournament(AlertDialog dialog) {
 
-        fillTournamentWithData(tournament, tournamentName, location, date, parsed_date, maxPlayers, tournamentType);
+        String tournamentName = tournamentNameEditText.getText().toString();
+        String location = tournamentLocationEditText.getText().toString();
+        String dateString = tournamentDateEditText.getText().toString();
+        String maxPlayers = tournamentMaxPlayersEditText.getText().toString();
 
-        new UpdateTournamentTask(baseActivity, tournament).execute();
-    }
+        String tournamentType = "";
 
-
-    /**
-     * *****************NEW TOURNAMENT.****************************
-     */
-    private void createNewTournament(final String tournamentName, final String location, final String date,
-        final Date parsed_date, final String maxPlayers, final String tournamentType) {
-
-        Tournament newTournament = new Tournament();
-        fillTournamentWithData(newTournament, tournamentName, location, date, parsed_date, maxPlayers, tournamentType);
-        new SaveTournamentTask(baseActivity, newTournament).execute();
-    }
-
-
-    private void fillTournamentWithData(Tournament newTournament, String tournamentName, String location, String date,
-        Date parsed_date, String maxPlayers, String tournamentType) {
-
-        newTournament.setName(tournamentName);
-
-        if (!location.isEmpty()) {
-            newTournament.setLocation(location);
-        } else {
-            newTournament.setLocation(null);
+        if (tournamentTypeTeamRadio.isChecked()) {
+            tournamentType = TournamentTyp.TEAM.name();
+        } else if (tournamentTypeSoloRadio.isChecked()) {
+            tournamentType = TournamentTyp.SOLO.name();
         }
 
-        if (!date.isEmpty()) {
-            newTournament.setDateOfTournament(parsed_date);
-        } else {
-            newTournament.setDateOfTournament(null);
+        Date parsed_date = null;
+        boolean valid = true;
+
+        if (!dateString.isEmpty()) {
+            try {
+                parsed_date = dateFormatter.parse(dateString);
+
+                DateTime oneYearBefore = DateTime.now().minusYears(1);
+                DateTime oneYearAfter = DateTime.now().plusYears(1);
+
+                if (parsed_date.before(oneYearBefore.toDate())) {
+                    valid = false;
+                    tournamentDateEditText.requestFocus();
+                    tournamentDateEditText.setError(getContext().getString(R.string.validation_before_date));
+                } else if (parsed_date.after(oneYearAfter.toDate())) {
+                    valid = false;
+                    tournamentDateEditText.requestFocus();
+                    tournamentDateEditText.setError(getContext().getString(R.string.validation_after_date));
+                } else {
+                    tournamentDateEditText.setError(null);
+                }
+            } catch (ParseException e) {
+                valid = false;
+                tournamentDateEditText.requestFocus();
+                tournamentDateEditText.setError(getContext().getString(R.string.validation_invalid_date));
+            }
         }
 
-        if (!maxPlayers.isEmpty()) {
-            newTournament.setMaxNumberOfParticipants(Integer.valueOf(maxPlayers));
+        if (tournamentName.isEmpty()) {
+            valid = false;
+            tournamentNameEditText.requestFocus();
+            tournamentNameEditText.setError(getContext().getString(R.string.validation_error_empty));
         } else {
-            newTournament.setMaxNumberOfParticipants(0);
+            tournamentNameEditText.setError(null);
         }
 
-        if (!tournamentType.isEmpty()) {
-            newTournament.setTournamentTyp(tournamentType);
-        } else {
-            newTournament.setTournamentTyp(TournamentTyp.SOLO.name());
-        }
+        if (valid) {
+            boolean isNewTournament = false;
 
-        FirebaseUser currentFireBaseUser = baseActivity.getCurrentFireBaseUser();
+            if (tournament == null) {
+                isNewTournament = true;
+                tournament = new Tournament();
+            }
 
-        if (currentFireBaseUser != null) {
-            newTournament.setCreatorName(currentFireBaseUser.getDisplayName());
-            newTournament.setCreatorEmail(currentFireBaseUser.getEmail());
-        } else {
-            newTournament.setCreatorName("anonymous");
-            newTournament.setCreatorEmail("anonymous");
-        }
+            tournament.setName(tournamentName);
 
-        newTournament.setState(Tournament.TournamentState.PLANED.name());
+            if (!location.isEmpty()) {
+                tournament.setLocation(location);
+            } else {
+                tournament.setLocation(null);
+            }
 
-        if (tournamentType.equals(TournamentTyp.TEAM.name())) {
-            newTournament.setTeamSize(Integer.valueOf(teamsize.getText().toString()));
+            if (!dateString.isEmpty()) {
+                tournament.setDateOfTournament(parsed_date);
+            } else {
+                tournament.setDateOfTournament(null);
+            }
+
+            if (!maxPlayers.isEmpty()) {
+                tournament.setMaxNumberOfParticipants(Integer.valueOf(maxPlayers));
+            } else {
+                tournament.setMaxNumberOfParticipants(0);
+            }
+
+            if (!tournamentType.isEmpty()) {
+                tournament.setTournamentTyp(tournamentType);
+            } else {
+                tournament.setTournamentTyp(TournamentTyp.SOLO.name());
+            }
+
+            FirebaseUser currentFireBaseUser = baseActivity.getCurrentFireBaseUser();
+
+            if (currentFireBaseUser != null) {
+                tournament.setCreatorName(currentFireBaseUser.getDisplayName());
+                tournament.setCreatorEmail(currentFireBaseUser.getEmail());
+            } else {
+                tournament.setCreatorName("anonymous");
+                tournament.setCreatorEmail("anonymous");
+            }
+
+            tournament.setState(Tournament.TournamentState.PLANED.name());
+
+            if (tournamentType.equals(TournamentTyp.TEAM.name())) {
+                tournament.setTeamSize(Integer.valueOf(teamSize.getText().toString()));
+            }
+
+            if (isNewTournament) {
+                new SaveTournamentTask(baseActivity, tournament).execute();
+            } else {
+                new UpdateTournamentTask(baseActivity, tournament).execute();
+            }
+
+            dialog.dismiss();
         }
     }
 }

@@ -321,5 +321,9 @@
         Please upload the tournament again to overwrite the data.
     </string>
     <string name="db_version">DBVersion %1$s</string>
+    <string name="default_team_size_new_tournament">5</string>
+    <string name="validation_invalid_date">Invalid date</string>
+    <string name="validation_before_date">Date must be maximum 1 year before</string>
+    <string name="validation_after_date">Maximum of date is 1 year after today</string>
 
 </resources>

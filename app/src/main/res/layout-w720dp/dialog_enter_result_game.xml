@@ -4,12 +4,11 @@
     android:descendantFocusability="beforeDescendants"
     android:focusableInTouchMode="true"
     android:orientation="vertical">
-
     <!-- Players -->
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:paddingLeft="@dimen/main_tick"
         android:paddingRight="@dimen/main_tick"
@@ -126,6 +125,8 @@
                 android:paddingLeft="@dimen/main_tick"
                 android:paddingRight="@dimen/main_tick"
                 android:inputType="number"
+                android:maxLines="1"
+                android:maxLength="1"
                 android:text="0" />
 
             <ImageButton
@@ -157,6 +158,8 @@
                 android:paddingLeft="@dimen/main_tick"
                 android:paddingRight="@dimen/main_tick"
                 android:inputType="number"
+                android:maxLines="1"
+                android:maxLength="1"
                 android:text="0" />
 
             <ImageButton
@@ -233,6 +236,8 @@
                 android:paddingLeft="@dimen/main_tick"
                 android:paddingRight="@dimen/main_tick"
                 android:inputType="number"
+                android:maxLines="1"
+                android:maxLength="3"
                 android:text="0" />
 
             <ImageButton
@@ -262,6 +267,8 @@
                 android:paddingLeft="@dimen/main_tick"
                 android:paddingRight="@dimen/main_tick"
                 android:inputType="number"
+                android:maxLines="1"
+                android:maxLength="3"
                 android:text="0" />
 
             <ImageButton

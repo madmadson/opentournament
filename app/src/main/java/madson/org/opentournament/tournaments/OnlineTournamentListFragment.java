@@ -97,7 +97,7 @@ public class OnlineTournamentListFragment extends Fragment {
                 }
             });
 
-        if (((BaseActivity) getActivity()).getBaseApplication().isOnline()) {
+        if (baseActivity.getBaseApplication().isOnline()) {
             noTournamentsTextView = (TextView) view.findViewById(R.id.no_online_tournaments);
 
             mOnlineTournamentRecyclerView = (RecyclerView) view.findViewById(R.id.online_tournament_list_recycler_view);

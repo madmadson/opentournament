@@ -44,12 +44,14 @@ public class Game implements Parcelable {
     private int participant_one_score;
     private int participant_one_control_points;
     private int participant_one_victory_points;
+    private String participant_one_army_list;
 
     private String participantTwoUUID;
     private TournamentParticipant participantTwo;
     private int participant_two_score;
     private int participant_two_control_points;
     private int participant_two_victory_points;
+    private String participant_two_army_list;
 
     private boolean finished;
     private String scenario;
@@ -78,11 +80,13 @@ public class Game implements Parcelable {
         participant_one_score = in.readInt();
         participant_one_control_points = in.readInt();
         participant_one_victory_points = in.readInt();
+        participant_one_army_list = in.readString();
 
         participantTwoUUID = in.readString();
         participant_two_score = in.readInt();
         participant_two_control_points = in.readInt();
         participant_two_victory_points = in.readInt();
+        participant_two_army_list = in.readString();
 
         finished = in.readByte() != 0;
         scenario = in.readString();
@@ -360,21 +364,23 @@ public class Game implements Parcelable {
         game.setParticipant_one_score(cursor.getInt(6));
         game.setParticipant_one_control_points(cursor.getInt(7));
         game.setParticipant_one_victory_points(cursor.getInt(8));
+        game.setParticipant_one_army_list(cursor.getString(9));
 
-        game.setParticipantTwoUUID(cursor.getString(9));
+        game.setParticipantTwoUUID(cursor.getString(10));
 
-        game.setParticipant_two_score(cursor.getInt(10));
-        game.setParticipant_two_control_points(cursor.getInt(11));
-        game.setParticipant_two_victory_points(cursor.getInt(12));
+        game.setParticipant_two_score(cursor.getInt(11));
+        game.setParticipant_two_control_points(cursor.getInt(12));
+        game.setParticipant_two_victory_points(cursor.getInt(13));
+        game.setParticipant_two_army_list(cursor.getString(14));
 
-        game.setFinished(cursor.getInt(13) == 1);
+        game.setFinished(cursor.getInt(15) == 1);
 
-        game.setScenario(cursor.getString(14));
+        game.setScenario(cursor.getString(16));
 
-        game.setPlaying_field(cursor.getInt(15));
+        game.setPlaying_field(cursor.getInt(17));
 
-        game.setParticipant_one_intermediate_points(cursor.getInt(16));
-        game.setParticipant_two_intermediate_points(cursor.getInt(17));
+        game.setParticipant_one_intermediate_points(cursor.getInt(18));
+        game.setParticipant_two_intermediate_points(cursor.getInt(19));
 
         return game;
     }
@@ -455,11 +461,13 @@ public class Game implements Parcelable {
         dest.writeInt(participant_one_score);
         dest.writeInt(participant_one_control_points);
         dest.writeInt(participant_one_victory_points);
+        dest.writeString(participant_one_army_list);
 
         dest.writeString(participantTwoUUID);
         dest.writeInt(participant_two_score);
         dest.writeInt(participant_two_control_points);
         dest.writeInt(participant_two_victory_points);
+        dest.writeString(participant_two_army_list);
 
         dest.writeByte((byte) (finished ? 1 : 0));
         dest.writeString(scenario);
@@ -502,5 +510,51 @@ public class Game implements Parcelable {
     public void setParticipant_two_intermediate_points(int participant_two_intermediate_points) {
 
         this.participant_two_intermediate_points = participant_two_intermediate_points;
+    }
+
+
+    public String getParticipant_two_army_list() {
+
+        return participant_two_army_list;
+    }
+
+
+    @Exclude
+    public String getParticipantTwoArmyListWithMaximumCharacters(int maxChars) {
+
+        if (participant_two_army_list != null && participant_two_army_list.length() > maxChars) {
+            return participant_two_army_list.substring(0, maxChars).concat("...");
+        } else {
+            return participant_two_army_list;
+        }
+    }
+
+
+    public void setParticipant_two_army_list(String participant_two_army_list) {
+
+        this.participant_two_army_list = participant_two_army_list;
+    }
+
+
+    public String getParticipant_one_army_list() {
+
+        return participant_one_army_list;
+    }
+
+
+    @Exclude
+    public String getParticipantOneArmyListWithMaximumCharacters(int maxChars) {
+
+        if (participant_one_army_list != null && participant_one_army_list.length() > maxChars) {
+            return participant_one_army_list.substring(0, maxChars).concat("...");
+        } else {
+            return participant_one_army_list;
+        }
+    }
+
+
+    public void setParticipant_one_army_list(String participant_one_army_list) {
+
+        this.participant_one_army_list = participant_one_army_list;
     }
 }

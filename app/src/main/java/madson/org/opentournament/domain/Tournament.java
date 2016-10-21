@@ -117,6 +117,28 @@ public class Tournament implements Parcelable {
     }
 
 
+    @Exclude
+    public String getNameWithMaximumChars(int maximumChars) {
+
+        if (name != null && name.length() > maximumChars) {
+            return name.substring(0, maximumChars).concat("...");
+        } else {
+            return name;
+        }
+    }
+
+
+    @Exclude
+    public String getLocationWithMaximumChars(int maximumChars) {
+
+        if (location != null && location.length() > maximumChars) {
+            return location.substring(0, maximumChars).concat("...");
+        } else {
+            return location;
+        }
+    }
+
+
     public int getTeamSize() {
 
         return teamSize;

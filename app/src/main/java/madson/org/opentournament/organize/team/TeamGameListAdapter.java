@@ -138,8 +138,8 @@ public class TeamGameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
 
         holder.getPlayerOneNameInList()
             .setText(baseActivity.getResources()
-                .getString(R.string.player_name_in_row, player1.getFirstName(), player1.getNickName(),
-                    player1.getLastName()));
+                .getString(R.string.player_name_in_row, player1.getFirstNameWithMaximumCharacters(10),
+                    player1.getNickNameWithMaximumCharacters(10), player1.getLastNameWithMaximumCharacters(10)));
         holder.getPlayerOneTeam().setText(player1.getTeamName());
         holder.getPlayerOneFaction().setText(player1.getFaction());
 
@@ -147,8 +147,8 @@ public class TeamGameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
 
         holder.getPlayerTwoNameInList()
             .setText(baseActivity.getResources()
-                .getString(R.string.player_name_in_row, player2.getFirstName(), player2.getNickName(),
-                    player2.getLastName()));
+                .getString(R.string.player_name_in_row, player2.getFirstNameWithMaximumCharacters(10),
+                    player2.getNickNameWithMaximumCharacters(10), player2.getLastNameWithMaximumCharacters(10)));
         holder.getPlayerTwoTeam().setText(player2.getTeamName());
         holder.getPlayerTwoFaction().setText(player2.getFaction());
 
@@ -220,6 +220,24 @@ public class TeamGameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
 
         if (game.isStartSwappingPlayerTwo()) {
             holder.getPlayerTwoCardView().setBackgroundDrawable(startedShape);
+        }
+
+        if (game.getParticipant_one_army_list() != null && !game.getParticipant_one_army_list().isEmpty()) {
+            holder.getPlayerOneArmyListIcon().setVisibility(View.VISIBLE);
+            holder.getPlayerOneArmyList().setVisibility(View.VISIBLE);
+            holder.getPlayerOneArmyList().setText(game.getParticipantOneArmyListWithMaximumCharacters(15));
+        } else {
+            holder.getPlayerOneArmyList().setVisibility(View.GONE);
+            holder.getPlayerOneArmyListIcon().setVisibility(View.GONE);
+        }
+
+        if (game.getParticipant_two_army_list() != null && !game.getParticipant_two_army_list().isEmpty()) {
+            holder.getPlayerTwoArmyListIcon().setVisibility(View.VISIBLE);
+            holder.getPlayerTwoArmyList().setVisibility(View.VISIBLE);
+            holder.getPlayerTwoArmyList().setText(game.getParticipantTwoArmyListWithMaximumCharacters(15));
+        } else {
+            holder.getPlayerTwoArmyListIcon().setVisibility(View.GONE);
+            holder.getPlayerTwoArmyList().setVisibility(View.GONE);
         }
     }
 

@@ -181,13 +181,12 @@ public class TournamentPlayerTeamExpandableListAdapter extends BaseExpandableLis
             TextView playerNumber = (TextView) convertView.findViewById(R.id.tournament_player_row_player_number);
             playerNumber.setText(String.valueOf(childPosition + 1));
 
-            TextView fullname = (TextView) convertView.findViewById(R.id.tournament_player_fullname);
+            TextView fullNameTextView = (TextView) convertView.findViewById(R.id.tournament_player_fullname);
 
-            String firstname = tournamentPlayer.getFirstName();
-            String nickname = tournamentPlayer.getNickName();
-            String lastname = tournamentPlayer.getLastName();
-            fullname.setText(baseActivity.getResources()
-                .getString(R.string.player_name_in_row, firstname, nickname, lastname));
+            fullNameTextView.setText(baseActivity.getResources()
+                .getString(R.string.player_name_in_row, tournamentPlayer.getFirstNameWithMaximumCharacters(10),
+                    tournamentPlayer.getNickNameWithMaximumCharacters(10),
+                    tournamentPlayer.getLastNameWithMaximumCharacters(10)));
 
             TextView faction = (TextView) convertView.findViewById(R.id.tournament_player_row_faction);
             faction.setText(tournamentPlayer.getFaction());

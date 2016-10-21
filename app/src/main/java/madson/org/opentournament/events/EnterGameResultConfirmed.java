@@ -21,10 +21,4 @@ public class EnterGameResultConfirmed extends OpenTournamentEvent {
 
         return enteredGame;
     }
-
-
-    public void setEnteredGame(Game enteredGame) {
-
-        this.enteredGame = enteredGame;
-    }
 }

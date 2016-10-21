@@ -47,6 +47,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.FirebaseDatabase;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -234,7 +235,9 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                 mFirebaseAuth.signOut();
                 LoginManager.getInstance().logOut();
 
-                Auth.GoogleSignInApi.signOut(mGoogleApiClient);
+                if (mGoogleApiClient != null) {
+                    Auth.GoogleSignInApi.signOut(mGoogleApiClient);
+                }
 
                 startActivity(new Intent(this, SignInActivity.class));
             } else if (isConnected() && mFirebaseAuth == null) {

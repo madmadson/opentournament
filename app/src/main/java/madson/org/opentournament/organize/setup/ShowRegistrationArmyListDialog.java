@@ -82,8 +82,8 @@ public class ShowRegistrationArmyListDialog extends DialogFragment {
                 tournament, tournamentPlayer, null);
 
         DatabaseReference reference = FirebaseDatabase.getInstance()
-                .getReference(FirebaseReferences.TOURNAMENT_ARMY_LISTS + "/" + tournament.getUUID() + "/"
-                    + tournamentPlayer.getPlayerUUID());
+                .getReference(FirebaseReferences.TOURNAMENT_ARMY_LISTS + "/" + tournament.getGameOrSportTyp() + "/"
+                    + tournament.getUUID() + "/" + tournamentPlayer.getPlayerUUID());
 
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
 

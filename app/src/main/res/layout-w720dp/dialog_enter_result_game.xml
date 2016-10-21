@@ -13,20 +13,32 @@
         android:paddingLeft="@dimen/main_tick"
         android:paddingRight="@dimen/main_tick"
         android:paddingTop="@dimen/main_tick">
-
+        
         <TextView
             android:id="@+id/result_player_one_name"
-            android:layout_width="wrap_content"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
+            android:gravity="center_horizontal"
             android:textSize="18sp"
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/result_player_two_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center_horizontal"
+            android:textSize="30sp"
+            android:textStyle="bold" 
+            android:textColor="@color/colorAlmostBlack"
+            android:text="VS"/>
+
+        <TextView
+            android:id="@+id/result_player_two_name"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
+            android:gravity="center_horizontal"
             android:textSize="18sp"
             android:textStyle="bold" />
     </RelativeLayout>
@@ -39,14 +51,36 @@
         android:orientation="horizontal"
         android:padding="@dimen/main_tick">
 
+
         <Button
             android:id="@+id/result_player_one_win_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:padding="@dimen/main_tick"
-            android:textSize="18sp"
-            android:text="@string/player_1_win" />
+            android:text="@string/player_1_win"
+            android:textSize="18sp" />
+
+        <ImageView
+            android:id="@+id/player_one_list"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/result_player_one_win_button"
+            android:paddingLeft="@dimen/small_tick"
+            android:src="@drawable/ic_insert_drive_file_black_48dp"
+            android:tint="@color/colorPrimaryDark" />
+
+
+        <ImageView
+            android:id="@+id/player_two_list"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@id/result_player_two_win_button"
+            android:paddingRight="@dimen/small_tick"
+            android:src="@drawable/ic_insert_drive_file_black_48dp"
+            android:tint="@color/colorPrimaryDark" />
 
         <Button
             android:id="@+id/result_player_two_win_button"
@@ -54,8 +88,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:padding="@dimen/main_tick"
-            android:textSize="18sp"
-            android:text="@string/player_2_win" />
+            android:text="@string/player_2_win"
+            android:textSize="18sp" />
     </RelativeLayout>
 
     <View
@@ -75,7 +109,7 @@
         android:paddingLeft="@dimen/main_tick"
         android:paddingRight="@dimen/main_tick"
         android:paddingTop="@dimen/main_tick">
-
+        
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -122,11 +156,11 @@
                 android:layout_height="wrap_content"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
+                android:inputType="number"
+                android:maxLength="1"
+                android:maxLines="1"
                 android:paddingLeft="@dimen/main_tick"
                 android:paddingRight="@dimen/main_tick"
-                android:inputType="number"
-                android:maxLines="1"
-                android:maxLength="1"
                 android:text="0" />
 
             <ImageButton
@@ -155,11 +189,11 @@
                 android:layout_height="wrap_content"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
+                android:inputType="number"
+                android:maxLength="1"
+                android:maxLines="1"
                 android:paddingLeft="@dimen/main_tick"
                 android:paddingRight="@dimen/main_tick"
-                android:inputType="number"
-                android:maxLines="1"
-                android:maxLength="1"
                 android:text="0" />
 
             <ImageButton
@@ -187,13 +221,13 @@
         android:paddingLeft="@dimen/main_tick"
         android:paddingRight="@dimen/main_tick"
         android:paddingTop="@dimen/main_tick">
-
+        
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:text="@string/victory_points"
             android:paddingLeft="@dimen/padding_input_labels"
+            android:text="@string/victory_points"
             android:textSize="12sp"
             android:textStyle="bold" />
 
@@ -233,11 +267,11 @@
                 android:layout_height="wrap_content"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
+                android:inputType="number"
+                android:maxLength="3"
+                android:maxLines="1"
                 android:paddingLeft="@dimen/main_tick"
                 android:paddingRight="@dimen/main_tick"
-                android:inputType="number"
-                android:maxLines="1"
-                android:maxLength="3"
                 android:text="0" />
 
             <ImageButton
@@ -264,11 +298,11 @@
                 android:layout_height="wrap_content"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
+                android:inputType="number"
+                android:maxLength="3"
+                android:maxLines="1"
                 android:paddingLeft="@dimen/main_tick"
                 android:paddingRight="@dimen/main_tick"
-                android:inputType="number"
-                android:maxLines="1"
-                android:maxLength="3"
                 android:text="0" />
 
             <ImageButton
@@ -278,6 +312,7 @@
                 android:src="@drawable/ic_remove_black_24dp" />
         </LinearLayout>
     </RelativeLayout>
+
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/line_tick"

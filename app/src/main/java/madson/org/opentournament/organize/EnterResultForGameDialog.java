@@ -11,6 +11,7 @@ import android.os.Handler;
 import android.os.Looper;
 
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentManager;
 
 import android.support.v7.app.AlertDialog;
 
@@ -22,12 +23,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Game;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
+import madson.org.opentournament.online.RegisterTournamentPlayerDialog;
+import madson.org.opentournament.organize.setup.ShowRegistrationArmyListDialog;
 import madson.org.opentournament.tasks.SaveGameResultTask;
 import madson.org.opentournament.tasks.SaveTeamGameResultTask;
 import madson.org.opentournament.utility.BaseActivity;
@@ -162,23 +166,25 @@ public class EnterResultForGameDialog extends DialogFragment {
             final ImageButton button_decrease_player_two_victory_points = (ImageButton) dialog.findViewById(
                     R.id.result_player_two_dec_victory_points);
 
-            TournamentPlayer player1 = (TournamentPlayer) game.getParticipantOne();
-            TournamentPlayer player2 = (TournamentPlayer) game.getParticipantTwo();
+            final TournamentPlayer player1 = (TournamentPlayer) game.getParticipantOne();
+            final TournamentPlayer player2 = (TournamentPlayer) game.getParticipantTwo();
 
             text_name_player_one.setText(baseActivity.getResources()
-                .getString(R.string.player_name_in_row, player1.getFirstName(), player1.getNickName(),
-                    player1.getLastName()));
+                .getString(R.string.player_name_in_row_three_lines, player1.getFirstNameWithMaximumCharacters(10),
+                    player1.getNickNameWithMaximumCharacters(10), player1.getLastNameWithMaximumCharacters(10)));
 
             text_name_player_two.setText(baseActivity.getResources()
-                .getString(R.string.player_name_in_row, player2.getFirstName(), player2.getNickName(),
-                    player2.getLastName()));
+                .getString(R.string.player_name_in_row_three_lines, player2.getFirstNameWithMaximumCharacters(10),
+                    player2.getNickNameWithMaximumCharacters(10), player2.getLastNameWithMaximumCharacters(10)));
 
             if (game.getParticipant_one_score() == 1) {
-                setPlayerToWinner(1, text_name_player_one, text_name_player_two);
+                text_name_player_one.setTextColor(getResources().getColor(R.color.colorWin));
+                text_name_player_two.setTextColor(getResources().getColor(R.color.colorLoose));
             }
 
             if (game.getParticipant_two_score() == 1) {
-                setPlayerToWinner(2, text_name_player_one, text_name_player_two);
+                text_name_player_two.setTextColor(getResources().getColor(R.color.colorWin));
+                text_name_player_one.setTextColor(getResources().getColor(R.color.colorLoose));
             }
 
             text_player_one_control_points.setText(String.valueOf(game.getParticipant_one_control_points()));
@@ -223,6 +229,50 @@ public class EnterResultForGameDialog extends DialogFragment {
                 WaysOfScoring.VICTORY_POINTS, IncreaseOrDecrease.DECREASE);
 
             viewConfirmButton(dialog);
+
+            ImageView player_one_playedList = (ImageView) dialog.findViewById(R.id.player_one_list);
+            player_one_playedList.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+
+                        Log.i(this.getClass().getName(), "addList");
+
+                        SelectPlayedArmyListDialog dialog = new SelectPlayedArmyListDialog();
+
+                        Bundle bundle = new Bundle();
+                        bundle.putParcelable(SelectPlayedArmyListDialog.BUNDLE_TOURNAMENT, tournament);
+                        bundle.putParcelable(SelectPlayedArmyListDialog.BUNDLE_TOURNAMENT_PLAYER, player1);
+                        bundle.putParcelable(SelectPlayedArmyListDialog.BUNDLE_GAME, game);
+                        dialog.setArguments(bundle);
+
+                        FragmentManager supportFragmentManager = baseActivity.getSupportFragmentManager();
+
+                        dialog.show(supportFragmentManager, "tournament setup new player");
+                    }
+                });
+
+            ImageView player_two_playedList = (ImageView) dialog.findViewById(R.id.player_two_list);
+            player_two_playedList.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+
+                        Log.i(this.getClass().getName(), "addList");
+
+                        SelectPlayedArmyListDialog dialog = new SelectPlayedArmyListDialog();
+
+                        Bundle bundle = new Bundle();
+                        bundle.putParcelable(SelectPlayedArmyListDialog.BUNDLE_TOURNAMENT, tournament);
+                        bundle.putParcelable(SelectPlayedArmyListDialog.BUNDLE_TOURNAMENT_PLAYER, player2);
+                        bundle.putParcelable(SelectPlayedArmyListDialog.BUNDLE_GAME, game);
+                        dialog.setArguments(bundle);
+
+                        FragmentManager supportFragmentManager = baseActivity.getSupportFragmentManager();
+
+                        dialog.show(supportFragmentManager, "tournament setup new player");
+                    }
+                });
         }
     }
 
@@ -386,6 +436,13 @@ public class EnterResultForGameDialog extends DialogFragment {
         final TextView text_name_player_two) {
 
         if (player_number == 1) {
+            if (game.getParticipant_one_score() == 1) {
+                game.setParticipant_one_score(0);
+                text_name_player_one.setTextColor(getResources().getColor(R.color.colorLoose));
+
+                return;
+            }
+
             game.setParticipant_one_score(1);
             game.setParticipant_two_score(0);
 
@@ -397,6 +454,13 @@ public class EnterResultForGameDialog extends DialogFragment {
                 text_name_player_two.setTextColor(getResources().getColor(R.color.colorLoose));
             }
         } else if (player_number == 2) {
+            if (game.getParticipant_two_score() == 1) {
+                game.setParticipant_two_score(0);
+                text_name_player_two.setTextColor(getResources().getColor(R.color.colorLoose));
+
+                return;
+            }
+
             game.setParticipant_two_score(1);
             game.setParticipant_one_score(0);
 

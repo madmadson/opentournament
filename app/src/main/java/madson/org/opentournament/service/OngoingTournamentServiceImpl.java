@@ -320,7 +320,7 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
                         teamTwoName = player2.getParticipantUUID();
                     }
 
-                    if (teamOneName != null && teamTwoName != null) {
+                    if (!teamOneName.isEmpty() && !teamTwoName.isEmpty()) {
                         if (teamOneName.equals(teamTwoName)) {
                             Log.i(this.getClass().getName(), "" + player1 + " VS " + player2 + " not possible");
 
@@ -719,6 +719,27 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
             new String[] { teamMatch.getUUID() });
 
         return teamMatch;
+    }
+
+
+    @Override
+    public Game saveArmyList(Game gameToSave, TournamentPlayer tournamentPlayer, String armyList) {
+
+        SQLiteDatabase db = openTournamentDBHelper.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+
+        if (gameToSave.getParticipantOne().equals(tournamentPlayer)) {
+            contentValues.put(GameTable.COLUMN_PARTICIPANT_ONE_ARMY_LIST, armyList);
+            gameToSave.setParticipant_one_army_list(armyList);
+        } else if (gameToSave.getParticipantTwo().equals(tournamentPlayer)) {
+            contentValues.put(GameTable.COLUMN_PARTICIPANT_TWO_ARMY_LIST, armyList);
+            gameToSave.setParticipant_two_army_list(armyList);
+        }
+
+        db.update(GameTable.TABLE_TOURNAMENT_GAME, contentValues, GameTable.COLUMN_UUID + " = ? ",
+            new String[] { gameToSave.getUUID() });
+
+        return gameToSave;
     }
 
 

@@ -38,7 +38,6 @@ public class PairNewRoundTask extends AsyncTask<Void, Void, Boolean> {
     private ProgressBar progressBar;
     private boolean pairAgain;
     private Map<String, PairingOption> pairingOptions;
-    private Tournament updatedTournament;
 
     public PairNewRoundTask(BaseApplication application, Tournament tournament, Snackbar snackbar,
         ProgressBar progressBar, boolean pairAgain, Map<String, PairingOption> pairingOptions) {
@@ -85,7 +84,7 @@ public class PairNewRoundTask extends AsyncTask<Void, Void, Boolean> {
 
             TournamentService tournamentService = application.getTournamentService();
 
-            updatedTournament = tournamentService.updateActualRound(tournament, tournament.getActualRound() + 1);
+            tournamentService.updateActualRound(tournament, tournament.getActualRound() + 1);
         }
 
         return success;

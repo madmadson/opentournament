@@ -2,7 +2,6 @@ package madson.org.opentournament.organize;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 
 import android.os.Bundle;
 
@@ -64,6 +63,7 @@ public class GameListFragment extends Fragment implements OpenTournamentEventLis
     private FrameLayout containerForActions;
     private BaseActivity baseActivity;
     private Button undoRoundButton;
+    private TextView noGamesInfo;
 
     @Override
     public void onAttach(Context context) {
@@ -123,7 +123,7 @@ public class GameListFragment extends Fragment implements OpenTournamentEventLis
         gameListAdapter = new GameListAdapter((BaseActivity) getActivity(), round, tournament);
         recyclerView.setAdapter(gameListAdapter);
 
-        new LoadGameListTask(baseActivity.getBaseApplication(), tournament, round, gameListAdapter).execute();
+        noGamesInfo = (TextView) view.findViewById(R.id.no_games_info);
 
         containerForActions = (FrameLayout) view.findViewById(R.id.container_view_toggle_action);
 
@@ -300,6 +300,9 @@ public class GameListFragment extends Fragment implements OpenTournamentEventLis
             setActionButtonsInvisible();
         }
 
+        new LoadGameListTask(baseActivity.getBaseApplication(), tournament, round, gameListAdapter, noGamesInfo,
+            nextRoundButton, endTournamentButton).execute();
+
         return view;
     }
 
@@ -326,7 +329,8 @@ public class GameListFragment extends Fragment implements OpenTournamentEventLis
             if (pairRoundAgainEvent.getRound() == round) {
                 Log.i(this.getClass().getName(),
                     "pair again for: " + pairRoundAgainEvent.getRound() + " round: " + round);
-                new LoadGameListTask(baseActivity.getBaseApplication(), tournament, round, gameListAdapter).execute();
+                new LoadGameListTask(baseActivity.getBaseApplication(), tournament, round, gameListAdapter, noGamesInfo,
+                    nextRoundButton, endTournamentButton).execute();
             }
         } else if (OpenTournamentEventTag.SWAP_PLAYER.equals(eventTag)) {
             SwapPlayerEvent swapPlayerEvent = (SwapPlayerEvent) parameter;

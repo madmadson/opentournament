@@ -75,11 +75,11 @@ public class TournamentPlayerListAdapter extends RecyclerView.Adapter<Tournament
 
         holder.getFaction().setText(tournamentPlayer.getFaction());
 
-        String firstname = tournamentPlayer.getFirstName();
-        String nickname = tournamentPlayer.getNickName();
-        String lastname = tournamentPlayer.getLastName();
         holder.getPlayerNameInList()
-            .setText(baseActivity.getResources().getString(R.string.player_name_in_row, firstname, nickname, lastname));
+            .setText(baseActivity.getResources()
+                .getString(R.string.player_name_in_row, tournamentPlayer.getFirstNameWithMaximumCharacters(10),
+                    tournamentPlayer.getNickNameWithMaximumCharacters(10),
+                    tournamentPlayer.getLastNameWithMaximumCharacters(10)));
 
         // mark online tournamentPlayer
         if (tournamentPlayer.isLocal()) {

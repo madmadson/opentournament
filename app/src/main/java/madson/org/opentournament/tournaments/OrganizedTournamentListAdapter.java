@@ -66,7 +66,7 @@ public class OrganizedTournamentListAdapter extends RecyclerView.Adapter<Tournam
 
         final Tournament tournament = mDataset.get(position);
 
-        viewHolder.getTournamentNameInList().setText(tournament.getName());
+        viewHolder.getTournamentNameInList().setText(tournament.getNameWithMaximumChars(25));
 
         if (viewHolder.getTournamentDateInList() != null) {
             if (tournament.getDateOfTournament() != null) {
@@ -76,7 +76,7 @@ public class OrganizedTournamentListAdapter extends RecyclerView.Adapter<Tournam
         }
 
         if (viewHolder.getTournamentLocationInList() != null) {
-            viewHolder.getTournamentLocationInList().setText(tournament.getLocation());
+            viewHolder.getTournamentLocationInList().setText(tournament.getLocationWithMaximumChars(20));
         }
 
         int actualPlayers = tournament.getActualPlayers();

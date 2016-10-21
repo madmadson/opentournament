@@ -14,9 +14,9 @@
 
         <TextView
             android:id="@+id/result_player_one_name"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
+            android:gravity="center"
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <Button
@@ -25,6 +25,14 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:text="@string/player_1_win" />
+
+        <ImageView
+            android:id="@+id/player_one_list"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/ic_insert_drive_file_black_48dp"
+            android:tint="@color/colorPrimaryDark" />
 
         <View
             android:layout_width="match_parent"
@@ -59,11 +67,11 @@
                 android:layout_height="wrap_content"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
+                android:inputType="number"
+                android:maxLength="1"
+                android:maxLines="1"
                 android:paddingLeft="@dimen/main_tick"
                 android:paddingRight="@dimen/main_tick"
-                android:maxLines="1"
-                android:maxLength="1"
-                android:inputType="number"
                 android:text="0" />
 
             <ImageButton
@@ -105,11 +113,11 @@
                 android:layout_height="wrap_content"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
+                android:inputType="number"
+                android:maxLength="3"
+                android:maxLines="1"
                 android:paddingLeft="@dimen/main_tick"
                 android:paddingRight="@dimen/main_tick"
-                android:maxLines="1"
-                android:maxLength="3"
-                android:inputType="number"
                 android:text="0" />
 
             <ImageButton
@@ -126,9 +134,9 @@
 
         <TextView
             android:id="@+id/result_player_two_name"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
+            android:gravity="center"
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <Button
@@ -137,6 +145,15 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:text="@string/player_2_win" />
+
+        <ImageView
+            android:id="@+id/player_two_list"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/ic_insert_drive_file_black_48dp"
+            android:tint="@color/colorPrimaryDark" />
+
 
         <View
             android:layout_width="match_parent"
@@ -168,11 +185,11 @@
                 android:layout_height="wrap_content"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
+                android:inputType="number"
+                android:maxLength="1"
+                android:maxLines="1"
                 android:paddingLeft="@dimen/main_tick"
                 android:paddingRight="@dimen/main_tick"
-                android:maxLines="1"
-                android:maxLength="1"
-                android:inputType="number"
                 android:text="0" />
 
             <ImageButton
@@ -212,11 +229,11 @@
                 android:layout_height="wrap_content"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
+                android:inputType="number"
+                android:maxLength="3"
+                android:maxLines="1"
                 android:paddingLeft="@dimen/main_tick"
                 android:paddingRight="@dimen/main_tick"
-                android:inputType="number"
-                android:maxLines="1"
-                android:maxLength="3"
                 android:text="0" />
 
             <ImageButton

@@ -3,6 +3,7 @@ package madson.org.opentournament.service;
 import madson.org.opentournament.domain.Game;
 import madson.org.opentournament.domain.PairingOption;
 import madson.org.opentournament.domain.Tournament;
+import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.domain.TournamentRanking;
 
 import java.util.List;
@@ -95,4 +96,12 @@ public interface OngoingTournamentService {
      * @return
      */
     Game updateTeamMatch(Game gameToSave, Tournament tournament);
+
+
+    /**
+     * @param  gameToSave
+     * @param  tournamentPlayer
+     * @param  armyList
+     */
+    Game saveArmyList(Game gameToSave, TournamentPlayer tournamentPlayer, String armyList);
 }

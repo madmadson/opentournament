@@ -34,6 +34,8 @@ public class GameViewHolder extends RecyclerView.ViewHolder {
     private TextView playerOneScore;
     private TextView playerOneControlPoints;
     private TextView playerOneVictoryPoints;
+    private ImageView playerOneArmyListIcon;
+    private TextView playerOneArmyList;
 
     private CardView playerTwoCardView;
 
@@ -42,6 +44,8 @@ public class GameViewHolder extends RecyclerView.ViewHolder {
     private TextView playerTwoScore;
     private TextView playerTwoControlPoints;
     private TextView playerTwoVictoryPoints;
+    private ImageView playerTwoArmyListIcon;
+    private TextView playerTwoArmyList;
 
     public GameViewHolder(View v) {
 
@@ -63,6 +67,8 @@ public class GameViewHolder extends RecyclerView.ViewHolder {
         playerOneControlPoints = (TextView) v.findViewById(R.id.pairing_player_one_control_points);
         playerOneVictoryPoints = (TextView) v.findViewById(R.id.pairing_player_one_victory_points);
         playerOneIntermediatePoints = (TextView) v.findViewById(R.id.player_one_intermediate_points);
+        playerOneArmyListIcon = (ImageView) v.findViewById(R.id.army_list_player_one_icon);
+        playerOneArmyList = (TextView) v.findViewById(R.id.army_list_player_one);
 
         playerTwoNameInList = (TextView) v.findViewById(R.id.player_two_name);
         playerTwoTeam = (TextView) v.findViewById(R.id.player_two_team);
@@ -71,6 +77,8 @@ public class GameViewHolder extends RecyclerView.ViewHolder {
         playerTwoControlPoints = (TextView) v.findViewById(R.id.pairing_player_two_control_points);
         playerTwoVictoryPoints = (TextView) v.findViewById(R.id.pairing_player_two_victory_points);
         playerTwoIntermediatePoints = (TextView) v.findViewById(R.id.player_two_intermediate_points);
+        playerTwoArmyListIcon = (ImageView) v.findViewById(R.id.army_list_player_two_icon);
+        playerTwoArmyList = (TextView) v.findViewById(R.id.army_list_player_two);
     }
 
     public CardView getPlayerOneCardView() {
@@ -190,5 +198,29 @@ public class GameViewHolder extends RecyclerView.ViewHolder {
     public TextView getPlayerTwoIntermediatePoints() {
 
         return playerTwoIntermediatePoints;
+    }
+
+
+    public ImageView getPlayerOneArmyListIcon() {
+
+        return playerOneArmyListIcon;
+    }
+
+
+    public TextView getPlayerOneArmyList() {
+
+        return playerOneArmyList;
+    }
+
+
+    public ImageView getPlayerTwoArmyListIcon() {
+
+        return playerTwoArmyListIcon;
+    }
+
+
+    public TextView getPlayerTwoArmyList() {
+
+        return playerTwoArmyList;
     }
 }

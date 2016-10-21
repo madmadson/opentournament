@@ -83,6 +83,24 @@ public abstract class BaseApplication extends Application {
         JodaTimeAndroid.init(this);
         FacebookSdk.sdkInitialize(getApplicationContext());
 
+        if (isOnline()) {
+            FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+
+            DatabaseReference tournaments = FirebaseDatabase.getInstance().getReference(FirebaseReferences.TOURNAMENTS);
+            tournaments.keepSynced(true);
+
+            DatabaseReference players = FirebaseDatabase.getInstance().getReference(FirebaseReferences.PLAYERS);
+            players.keepSynced(true);
+
+            DatabaseReference registrations = FirebaseDatabase.getInstance()
+                    .getReference(FirebaseReferences.TOURNAMENT_REGISTRATIONS);
+            registrations.keepSynced(true);
+
+            DatabaseReference armyLists = FirebaseDatabase.getInstance()
+                    .getReference(FirebaseReferences.TOURNAMENT_ARMY_LISTS);
+            armyLists.keepSynced(true);
+        }
+
         // NOTE: order of service wiring matters!
 
         if (playerService == null) {

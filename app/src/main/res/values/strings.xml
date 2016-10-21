@@ -88,9 +88,6 @@
     <!-- Tournament management dialog-->
     <string name="dialog_edit_tournament">Edit Tournament</string>
     
-    
-    
-    
     <string name="nav_tournament_setup">Tournament Setup</string>
     <string name="nav_round_tab">Round %1$d</string>
     <string name="nav_games_tab">Games %1$d</string>
@@ -114,6 +111,7 @@
     <string name="start_tournament">START</string>
 
     <string name="player_name_in_row">%1$s \"%2$s\" %3$s</string>
+    <string name="player_name_in_row_three_lines">%1$s \n\"%2$s\"\n %3$s</string>
     
     <string name="heading_tournament_player">Player in %2$s tournament: (%1$d)</string>
     
@@ -325,5 +323,10 @@
     <string name="validation_invalid_date">Invalid date</string>
     <string name="validation_before_date">Date must be maximum 1 year before</string>
     <string name="validation_after_date">Maximum of date is 1 year after today</string>
+    <string name="successfully_start_tournament">Successfully start tournament</string>
+    <string name="no_games_info">Pairing unsuccessful. Wrong pairing options? Tournament finsihed?</string>
+    <string name="select_army_lists">Select played army list</string>
+    <string name="nothing_saved">Nothing saved</string>
+    <string name="success_save_army_list">Successfully save played army list</string>
 
 </resources>

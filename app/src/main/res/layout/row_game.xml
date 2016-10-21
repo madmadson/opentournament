@@ -8,8 +8,7 @@
     android:paddingLeft="@dimen/main_tick"
     android:paddingRight="@dimen/main_tick"
     android:paddingTop="@dimen/small_tick">
-
-
+    
     <TextView
         android:id="@+id/table_number"
         android:layout_width="wrap_content"
@@ -31,19 +30,21 @@
             android:src="@drawable/ic_swap_horiz_black_48dp"
             android:tint="@color/colorPrimaryDark" />
 
-        <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+        <android.support.v7.widget.CardView 
+            xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:card_view="http://schemas.android.com/apk/res-auto"
             android:id="@+id/game_list_player_one_card_view"
             android:layout_width="@dimen/game_card_width"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            card_view:cardBackgroundColor="@color/colorBackground"
+            card_view:cardBackgroundColor="?attr/colorCardBackground"
             card_view:cardCornerRadius="4dp">
 
             <LinearLayout
                 android:id="@+id/pairing_player_one_content"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?android:attr/selectableItemBackground"
                 android:orientation="vertical">
 
                 <TextView
@@ -51,8 +52,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:layout_margin="@dimen/small_tick"
-                    android:gravity="center_vertical" />
+                    android:layout_margin="@dimen/halve_tick"
+                    android:maxLines="1" 
+                    android:ellipsize="end"
+                    android:gravity="center" />
 
                 <TextView
                     android:id="@+id/player_one_team"
@@ -93,7 +96,9 @@
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/halve_tick"
+                    android:layout_marginTop="@dimen/halve_tick"
                     android:orientation="horizontal">
 
                     <TextView
@@ -118,7 +123,27 @@
                         android:layout_centerVertical="true"
                         android:layout_toRightOf="@id/pairing_player_one_control_points"
                         android:paddingLeft="@dimen/halve_tick" />
+                    
+                    <ImageView
+                        android:id="@+id/army_list_player_one_icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toRightOf="@id/pairing_player_one_victory_points"
+                        android:background="@android:color/transparent"
+                        android:src="@drawable/ic_insert_drive_file_black_24dp"
+                        android:visibility="gone"/>
                 </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/army_list_player_one"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="@dimen/small_tick"
+                    android:gravity="center_vertical"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:visibility="gone"/>
 
             </LinearLayout>
         </android.support.v7.widget.CardView>
@@ -158,7 +183,7 @@
             <LinearLayout
                 android:id="@+id/pairing_player_two_content"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="vertical">
 
                 <TextView
@@ -166,8 +191,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:layout_margin="@dimen/small_tick"
-                    android:gravity="center_vertical" />
+                    android:layout_margin="@dimen/halve_tick"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:gravity="center" />
 
                 <TextView
                     android:id="@+id/player_two_team"
@@ -209,6 +236,8 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_marginBottom="@dimen/halve_tick"
+                    android:layout_marginTop="@dimen/halve_tick"
                     android:orientation="horizontal">
 
                     <TextView
@@ -224,7 +253,7 @@
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:layout_toLeftOf="@id/pairing_player_two_control_points"
-                        android:paddingRight="@dimen/main_tick" />
+                        android:paddingRight="@dimen/halve_tick" />
 
 
                     <TextView
@@ -233,19 +262,32 @@
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:layout_toRightOf="@id/pairing_player_two_control_points"
-                        android:paddingLeft="@dimen/small_tick" />
+                        android:paddingLeft="@dimen/halve_tick" />
+
+                    <ImageView
+                        android:id="@+id/army_list_player_two_icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toRightOf="@id/pairing_player_two_victory_points"
+                        android:background="@android:color/transparent"
+                        android:src="@drawable/ic_insert_drive_file_black_24dp"
+                        android:visibility="gone"/>
 
                 </RelativeLayout>
+                <TextView
+                    android:id="@+id/army_list_player_two"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="@dimen/small_tick"
+                    android:gravity="center_vertical"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:visibility="gone"/>
 
             </LinearLayout>
         </android.support.v7.widget.CardView>
     </RelativeLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/line_tick"
-        android:background="@color/colorAccent"
-        android:paddingBottom="@dimen/main_tick"
-        android:paddingTop="@dimen/main_tick" />
+    
 </LinearLayout>
 

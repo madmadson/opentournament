@@ -1,6 +1,7 @@
 package madson.org.opentournament.players;
 
 import android.content.Context;
+import android.content.Intent;
 
 import android.support.v4.content.ContextCompat;
 
@@ -15,6 +16,8 @@ import android.view.ViewGroup;
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.PlayerComparator;
+import madson.org.opentournament.online.OnlineTournamentActivity;
+import madson.org.opentournament.utility.BaseActivity;
 import madson.org.opentournament.viewHolder.PlayerViewHolder;
 
 import java.util.ArrayList;
@@ -31,11 +34,11 @@ public class PlayerListAdapter extends RecyclerView.Adapter<PlayerViewHolder> {
 
     private List<Player> playerList;
 
-    private Context context;
+    private BaseActivity baseActivity;
 
-    public PlayerListAdapter(Context context) {
+    public PlayerListAdapter(BaseActivity baseActivity) {
 
-        this.context = context;
+        this.baseActivity = baseActivity;
 
         this.playerList = new ArrayList<>();
     }
@@ -55,15 +58,28 @@ public class PlayerListAdapter extends RecyclerView.Adapter<PlayerViewHolder> {
         final Player player = playerList.get(position);
 
         holder.getPlayerNameInList()
-            .setText(context.getResources()
+            .setText(baseActivity.getResources()
                 .getString(R.string.player_name_in_row, player.getFirstName(), player.getNickName(),
                     player.getLastName()));
 
         if (position % 2 == 0) {
-            holder.getPlayerCardLayout().setBackgroundColor(ContextCompat.getColor(context, R.color.colorLightGrey));
+            holder.getPlayerCardLayout()
+                .setBackgroundColor(ContextCompat.getColor(baseActivity, R.color.colorLightGrey));
         } else {
-            holder.getPlayerCardLayout().setBackgroundColor(ContextCompat.getColor(context, R.color.colorAlmostWhite));
+            holder.getPlayerCardLayout()
+                .setBackgroundColor(ContextCompat.getColor(baseActivity, R.color.colorAlmostWhite));
         }
+
+        holder.getPlayerCardLayout().setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+
+                    Intent intent = new Intent(baseActivity, PlayerTournamentListActivity.class);
+                    intent.putExtra(PlayerTournamentListActivity.EXTRA_PLAYER, player);
+                    baseActivity.startActivity(intent);
+                }
+            });
     }
 
 

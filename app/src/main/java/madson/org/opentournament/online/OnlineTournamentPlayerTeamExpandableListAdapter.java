@@ -185,12 +185,12 @@ public class OnlineTournamentPlayerTeamExpandableListAdapter extends BaseExpanda
             if (baseActivity.getBaseApplication().getAuthenticatedPlayer() != null
                     && baseActivity.getBaseApplication().getAuthenticatedPlayer().getUUID()
                     .equals(tournamentPlayer.getPlayerUUID())) {
-                card.setCardBackgroundColor(ContextCompat.getColor(baseActivity, R.color.colorTurquoise));
+                card.setCardBackgroundColor(ContextCompat.getColor(baseActivity, R.color.colorYours));
             } else {
                 if (childPosition % 2 == 0) {
-                    card.setCardBackgroundColor(ContextCompat.getColor(baseActivity, R.color.colorLightGrey));
+                    card.setCardBackgroundColor(ContextCompat.getColor(baseActivity, R.color.colorTurquoise));
                 } else {
-                    card.setCardBackgroundColor(ContextCompat.getColor(baseActivity, R.color.colorAlmostWhite));
+                    card.setCardBackgroundColor(ContextCompat.getColor(baseActivity, R.color.colorLightTurquoise));
                 }
             }
 

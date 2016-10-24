@@ -30,4 +30,6 @@
 
     <color name="colorLightTurquoise">#d9f8ff</color>
     <color name="colorTurquoise">#a7efff</color>
+
+    <color name="colorYours">#a295fc</color>
 </resources>

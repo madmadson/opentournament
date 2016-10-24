@@ -1,16 +1,23 @@
 package madson.org.opentournament.players;
 
 import android.content.Context;
+
 import android.os.Bundle;
 import android.os.Handler;
+
 import android.support.annotation.Nullable;
+
 import android.support.design.widget.FloatingActionButton;
+
 import android.support.v4.app.Fragment;
+
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -88,10 +95,10 @@ public class PlayerListFragment extends Fragment {
 
         DatabaseReference mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(baseActivity);
         mOnlinePlayerRecyclerView.setLayoutManager(linearLayoutManager);
 
-        final PlayerListAdapter playerListAdapter = new PlayerListAdapter(getActivity().getApplicationContext());
+        final PlayerListAdapter playerListAdapter = new PlayerListAdapter(baseActivity);
 
         DatabaseReference child = mFirebaseDatabaseReference.child(FirebaseReferences.PLAYERS);
 

@@ -37,6 +37,7 @@ import java.util.List;
  */
 public class OnlineGamesListAdapter extends RecyclerView.Adapter<GameViewHolder> {
 
+    private Drawable normalShape;
     private List<Game> gameList;
 
     private Tournament tournament;
@@ -54,6 +55,7 @@ public class OnlineGamesListAdapter extends RecyclerView.Adapter<GameViewHolder>
 
         winnerShape = ContextCompat.getDrawable(baseActivity, R.drawable.shape_winner);
         looserShape = ContextCompat.getDrawable(baseActivity, R.drawable.shape_looser);
+        normalShape = ContextCompat.getDrawable(baseActivity, R.drawable.shape_normal);
     }
 
     @Override
@@ -78,6 +80,9 @@ public class OnlineGamesListAdapter extends RecyclerView.Adapter<GameViewHolder>
                 .setBackground(game.getParticipant_one_score() == 1 ? winnerShape : looserShape);
             holder.getPlayerTwoCardView()
                 .setBackground(game.getParticipant_two_score() == 1 ? winnerShape : looserShape);
+        } else {
+            holder.getPlayerOneCardView().setBackground(normalShape);
+            holder.getPlayerTwoCardView().setBackground(normalShape);
         }
 
         if (position % 2 == 0) {
@@ -165,10 +170,10 @@ public class OnlineGamesListAdapter extends RecyclerView.Adapter<GameViewHolder>
         if (authenticatedPlayer != null) {
             if (authenticatedPlayer.getUUID().equals(player1.getPlayerUUID())) {
                 holder.getPlayerOneCardView()
-                    .setCardBackgroundColor(ContextCompat.getColor(baseActivity, R.color.colorTurquoise));
+                    .setCardBackgroundColor(ContextCompat.getColor(baseActivity, R.color.colorYours));
             } else if (authenticatedPlayer.getUUID().equals(player2.getPlayerUUID())) {
                 holder.getPlayerTwoCardView()
-                    .setCardBackgroundColor(ContextCompat.getColor(baseActivity, R.color.colorTurquoise));
+                    .setCardBackgroundColor(ContextCompat.getColor(baseActivity, R.color.colorYours));
             }
         }
 

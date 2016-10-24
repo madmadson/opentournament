@@ -72,7 +72,7 @@ public class RegisterTournamentPlayerDialog extends DialogFragment {
     private Player player;
 
     private ArrayAdapter<String> team_adapter;
-    private TextView labelTeamname;
+    private TextView labelTeamName;
     private TextInputLayout lastnameParent;
     private TextInputLayout firstnameParent;
     private TextInputLayout nicknameParent;
@@ -119,7 +119,7 @@ public class RegisterTournamentPlayerDialog extends DialogFragment {
 
             factionSpinner = (Spinner) dialogView.findViewById(R.id.dialog_add_tournament_player_faction_spinner);
 
-            labelTeamname = (TextView) dialogView.findViewById(R.id.label_teamname);
+            labelTeamName = (TextView) dialogView.findViewById(R.id.label_teamname);
             teamnameSpinner = (Spinner) dialogView.findViewById(R.id.teamname_spinner);
             labelTeammembers = (TextView) dialogView.findViewById(R.id.team_members);
 
@@ -296,6 +296,8 @@ public class RegisterTournamentPlayerDialog extends DialogFragment {
                                             labelTeammembers.setText("(0/" + tournament.getTeamSize() + ")");
                                         }
 
+                                        labelTeamName.setError(null);
+
                                         newTeamNameDialog.dismiss();
                                     }
                                 }
@@ -412,12 +414,12 @@ public class RegisterTournamentPlayerDialog extends DialogFragment {
                         if (tournament.getTournamentTyp().equals(TournamentTyp.TEAM.name())) {
                             if (teamname == null) {
                                 valide = false;
-                                labelTeamname.setError(getContext().getString(R.string.validation_error_empty));
+                                labelTeamName.setError(getContext().getString(R.string.validation_error_empty));
                             } else if (teamname.equals(getString(R.string.no_team))) {
                                 valide = false;
-                                labelTeamname.setError(getContext().getString(R.string.validation_team_no_team));
+                                labelTeamName.setError(getContext().getString(R.string.validation_team_no_team));
                             } else {
-                                labelTeamname.setError(null);
+                                labelTeamName.setError(null);
                             }
                         }
 

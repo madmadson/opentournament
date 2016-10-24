@@ -2,18 +2,15 @@ package madson.org.opentournament.service;
 
 import android.content.ContentValues;
 import android.content.Context;
+
 import android.database.Cursor;
+
 import android.database.sqlite.SQLiteDatabase;
+
 import android.util.Log;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import madson.org.opentournament.db.FirebaseReferences;
 import madson.org.opentournament.db.OpenTournamentDBHelper;
@@ -23,6 +20,12 @@ import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.domain.TournamentPlayerComparator;
 import madson.org.opentournament.domain.TournamentTeam;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -313,6 +316,16 @@ public class TournamentPlayerServiceImpl implements TournamentPlayerService {
                         + tournament.getUUID() + "/" + online_uuid);
 
             referenceForUpdateTournamentPlayer.setValue(player);
+
+            if (tournament.getState().equals(Tournament.TournamentState.FINISHED.name())) {
+                DatabaseReference referenceForTournamentPlayers = FirebaseDatabase.getInstance()
+                        .getReference(FirebaseReferences.PLAYER_GAMES + "/" + tournament.getGameOrSportTyp()
+                            + "/" + player.getUuid() + "/" + tournament.getUUID());
+
+                referenceForTournamentPlayers.removeValue();
+
+                referenceForTournamentPlayers.setValue(tournament);
+            }
         }
     }
 

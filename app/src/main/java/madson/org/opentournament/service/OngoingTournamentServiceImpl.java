@@ -425,10 +425,10 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
 
         int actualRound = uploadedTournament.getActualRound();
 
-        DatabaseReference referenceForGamesToDelete = FirebaseDatabase.getInstance()
+        DatabaseReference referenceForTournamentGamesToDelete = FirebaseDatabase.getInstance()
                 .getReference(FirebaseReferences.TOURNAMENT_GAMES + "/" + uploadedTournament.getGameOrSportTyp() + "/"
                     + uploadedTournament.getUUID());
-        referenceForGamesToDelete.removeValue();
+        referenceForTournamentGamesToDelete.removeValue();
 
         for (int i = 1; i <= actualRound; i++) {
             List<Game> allGamesForRound = getAllGamesForTeamTournamentForRound(uploadedTournament, i);
@@ -442,6 +442,22 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
                             + "/" + i + "/" + uuid);
 
                 referenceForGames.setValue(game);
+
+                if (uploadedTournament.getState().equals(Tournament.TournamentState.FINISHED.name())) {
+                    DatabaseReference referenceForPlayerOneGames = FirebaseDatabase.getInstance()
+                            .getReference(FirebaseReferences.PLAYER_GAMES + "/" + uploadedTournament
+                                .getGameOrSportTyp() + "/" + game.getParticipantOne().getUuid() + "/"
+                                + uploadedTournament.getUUID() + "/" + uuid);
+
+                    referenceForPlayerOneGames.setValue(game);
+
+                    DatabaseReference referenceForPlayerTwoGames = FirebaseDatabase.getInstance()
+                            .getReference(FirebaseReferences.PLAYER_GAMES + "/" + uploadedTournament
+                                .getGameOrSportTyp() + "/" + game.getParticipantTwo().getUuid() + "/"
+                                + uploadedTournament.getUUID() + "/" + uuid);
+
+                    referenceForPlayerTwoGames.setValue(game);
+                }
             }
         }
     }

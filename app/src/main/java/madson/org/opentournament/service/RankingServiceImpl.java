@@ -292,6 +292,15 @@ public class RankingServiceImpl implements RankingService {
                 tournamentRanking.setRank(j + 1);
 
                 referenceForRankings.setValue(tournamentRanking);
+
+                if (i == actualRound && tournament.getState().equals(Tournament.TournamentState.FINISHED.name())) {
+                    DatabaseReference referenceForTournamentPlayers = FirebaseDatabase.getInstance()
+                            .getReference(FirebaseReferences.PLAYER_GAMES + "/" + tournament.getGameOrSportTyp()
+                                + "/" + tournamentRanking.getParticipantUUID() + "/" + tournament.getUUID()
+                                + "/ranking");
+
+                    referenceForTournamentPlayers.setValue(tournamentRanking);
+                }
             }
         }
     }

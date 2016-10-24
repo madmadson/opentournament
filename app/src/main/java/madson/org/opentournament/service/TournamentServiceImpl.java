@@ -17,6 +17,7 @@ import madson.org.opentournament.db.OpenTournamentDBHelper;
 import madson.org.opentournament.db.TournamentTable;
 import madson.org.opentournament.domain.GameOrSportTyp;
 import madson.org.opentournament.domain.Tournament;
+import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.domain.TournamentTyp;
 
 import org.joda.time.DateTime;

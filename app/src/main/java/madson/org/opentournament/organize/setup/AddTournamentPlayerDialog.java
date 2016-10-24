@@ -148,7 +148,8 @@ public class AddTournamentPlayerDialog extends DialogFragment {
                         String teamName = (String) parent.getItemAtPosition(position);
                         int teamMembers;
 
-                        if (teamName.equals(baseActivity.getString(R.string.no_team))) {
+                        if (teamName.equals(baseActivity.getString(R.string.no_team))
+                                && teamNameMap.get(new TournamentTeam("")) != null) {
                             teamMembers = teamNameMap.get(new TournamentTeam("")).size();
                         } else if (teamNameMap.get(new TournamentTeam(teamName)) != null) {
                             teamMembers = teamNameMap.get(new TournamentTeam(teamName)).size();
@@ -264,6 +265,8 @@ public class AddTournamentPlayerDialog extends DialogFragment {
                                         } else {
                                             labelTeamMembers.setText("(0/" + tournament.getTeamSize() + ")");
                                         }
+
+                                        labelTeamName.setError(null);
 
                                         newTeamNameDialog.dismiss();
                                     }

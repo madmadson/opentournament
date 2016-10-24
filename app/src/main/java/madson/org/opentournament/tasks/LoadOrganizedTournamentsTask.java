@@ -1,17 +1,15 @@
 package madson.org.opentournament.tasks;
 
 import android.os.AsyncTask;
-
 import android.view.View;
-
 import android.widget.ProgressBar;
+
+import java.util.List;
 
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.service.TournamentService;
 import madson.org.opentournament.tournaments.OrganizedTournamentListAdapter;
 import madson.org.opentournament.utility.BaseApplication;
-
-import java.util.List;
 
 
 /**

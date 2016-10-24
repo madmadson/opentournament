@@ -1,43 +1,34 @@
 package madson.org.opentournament.organize;
 
 import android.app.Dialog;
-
 import android.content.Context;
 import android.content.DialogInterface;
-
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
-
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
-
 import android.util.Log;
-
 import android.view.LayoutInflater;
 import android.view.View;
-
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Game;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
-import madson.org.opentournament.online.RegisterTournamentPlayerDialog;
-import madson.org.opentournament.organize.setup.ShowRegistrationArmyListDialog;
 import madson.org.opentournament.tasks.SaveGameResultTask;
 import madson.org.opentournament.tasks.SaveTeamGameResultTask;
 import madson.org.opentournament.utility.BaseActivity;
-
-import java.util.Timer;
-import java.util.TimerTask;
 
 
 /**
@@ -178,13 +169,13 @@ public class EnterResultForGameDialog extends DialogFragment {
                     player2.getNickNameWithMaximumCharacters(10), player2.getLastNameWithMaximumCharacters(10)));
 
             if (game.getParticipant_one_score() == 1) {
-                text_name_player_one.setTextColor(getResources().getColor(R.color.colorWin));
-                text_name_player_two.setTextColor(getResources().getColor(R.color.colorLoose));
+                text_name_player_one.setTextColor(ContextCompat.getColor(baseActivity, R.color.colorWin));
+                text_name_player_two.setTextColor(ContextCompat.getColor(baseActivity, R.color.colorLoose));
             }
 
             if (game.getParticipant_two_score() == 1) {
-                text_name_player_two.setTextColor(getResources().getColor(R.color.colorWin));
-                text_name_player_one.setTextColor(getResources().getColor(R.color.colorLoose));
+                text_name_player_two.setTextColor(ContextCompat.getColor(baseActivity, R.color.colorWin));
+                text_name_player_one.setTextColor(ContextCompat.getColor(baseActivity, R.color.colorLoose));
             }
 
             text_player_one_control_points.setText(String.valueOf(game.getParticipant_one_control_points()));
@@ -438,25 +429,17 @@ public class EnterResultForGameDialog extends DialogFragment {
         if (player_number == 1) {
             if (game.getParticipant_one_score() == 1) {
                 game.setParticipant_one_score(0);
-                text_name_player_one.setTextColor(getResources().getColor(R.color.colorLoose));
+                text_name_player_one.setTextColor(ContextCompat.getColor(baseActivity, R.color.colorLoose));
 
                 return;
             }
 
             game.setParticipant_one_score(1);
             game.setParticipant_two_score(0);
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                text_name_player_one.setTextColor(getResources().getColor(R.color.colorWin, null));
-                text_name_player_two.setTextColor(getResources().getColor(R.color.colorLoose, null));
-            } else {
-                text_name_player_one.setTextColor(getResources().getColor(R.color.colorWin));
-                text_name_player_two.setTextColor(getResources().getColor(R.color.colorLoose));
-            }
         } else if (player_number == 2) {
             if (game.getParticipant_two_score() == 1) {
                 game.setParticipant_two_score(0);
-                text_name_player_two.setTextColor(getResources().getColor(R.color.colorLoose));
+                text_name_player_two.setTextColor(ContextCompat.getColor(baseActivity, R.color.colorLoose));
 
                 return;
             }
@@ -464,13 +447,8 @@ public class EnterResultForGameDialog extends DialogFragment {
             game.setParticipant_two_score(1);
             game.setParticipant_one_score(0);
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                text_name_player_one.setTextColor(getResources().getColor(R.color.colorLoose, null));
-                text_name_player_two.setTextColor(getResources().getColor(R.color.colorWin, null));
-            } else {
-                text_name_player_one.setTextColor(getResources().getColor(R.color.colorLoose));
-                text_name_player_two.setTextColor(getResources().getColor(R.color.colorWin));
-            }
+            text_name_player_one.setTextColor(ContextCompat.getColor(baseActivity, R.color.colorLoose));
+            text_name_player_two.setTextColor(ContextCompat.getColor(baseActivity, R.color.colorWin));
         }
     }
 

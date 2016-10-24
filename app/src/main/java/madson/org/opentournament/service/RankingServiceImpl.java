@@ -125,12 +125,12 @@ public class RankingServiceImpl implements RankingService {
             TournamentRanking tournamentRanking = new TournamentRanking();
             tournamentRanking.setTournamentUUID(tournament.getUUID());
 
-            tournamentRanking.setParticipantUUID(team.getTeamName());
+            tournamentRanking.setParticipantUUID(team.getName());
             tournamentRanking.setTournamentParticipant(team);
 
             tournamentRanking.setTournament_round(round_for_calculation);
 
-            mapOfRankings.put(team.getTeamName(), tournamentRanking);
+            mapOfRankings.put(team.getName(), tournamentRanking);
         }
 
         List<Game> allGamesTillRound = getAllGamesForTournamentTillRound(tournament, round_for_calculation);

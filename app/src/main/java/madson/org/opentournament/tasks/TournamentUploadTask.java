@@ -4,6 +4,8 @@ import android.os.AsyncTask;
 
 import android.support.design.widget.Snackbar;
 
+import android.support.v4.content.ContextCompat;
+
 import android.view.View;
 
 import android.widget.ProgressBar;
@@ -69,7 +71,7 @@ public class TournamentUploadTask extends AsyncTask<Void, Void, Void> {
 
         Snackbar snackbar = Snackbar.make(baseActivity.getCoordinatorLayout(), R.string.success_upload_tournament,
                 Snackbar.LENGTH_LONG);
-        snackbar.getView().setBackgroundColor(baseActivity.getResources().getColor(R.color.colorPositive));
+        snackbar.getView().setBackgroundColor(ContextCompat.getColor(baseActivity, R.color.colorAccent));
         snackbar.show();
     }
 }

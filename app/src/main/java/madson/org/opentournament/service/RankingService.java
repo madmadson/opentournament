@@ -1,10 +1,10 @@
 package madson.org.opentournament.service;
 
-import madson.org.opentournament.domain.Tournament;
-import madson.org.opentournament.domain.TournamentRanking;
-
 import java.util.List;
 import java.util.Map;
+
+import madson.org.opentournament.domain.Tournament;
+import madson.org.opentournament.domain.TournamentRanking;
 
 
 /**

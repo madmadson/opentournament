@@ -2,13 +2,12 @@ package madson.org.opentournament.organize.setup;
 
 import android.content.DialogInterface;
 
-import android.graphics.Color;
-
 import android.os.Bundle;
 
 import android.support.design.widget.Snackbar;
 
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
@@ -96,9 +95,11 @@ public class TournamentPlayerListAdapter extends RecyclerView.Adapter<Tournament
         }
 
         if (position % 2 == 0) {
-            holder.getTournamentPlayerCard().setCardBackgroundColor(Color.LTGRAY);
+            holder.getTournamentPlayerCard()
+                .setCardBackgroundColor(ContextCompat.getColor(baseActivity, R.color.colorLightGrey));
         } else {
-            holder.getTournamentPlayerCard().setCardBackgroundColor(Color.WHITE);
+            holder.getTournamentPlayerCard()
+                .setCardBackgroundColor(ContextCompat.getColor(baseActivity, R.color.colorAlmostWhite));
         }
 
         if (tournament.getState().equals(Tournament.TournamentState.PLANED.name())) {
@@ -144,7 +145,7 @@ public class TournamentPlayerListAdapter extends RecyclerView.Adapter<Tournament
                                         R.string.cant_upload_list_for_local_players, Snackbar.LENGTH_LONG);
 
                                 snackbar.getView()
-                                .setBackgroundColor(baseActivity.getResources().getColor(R.color.colorNegative));
+                                .setBackgroundColor(ContextCompat.getColor(baseActivity, R.color.colorWarning));
 
                                 snackbar.show();
                             }

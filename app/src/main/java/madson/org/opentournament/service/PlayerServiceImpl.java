@@ -2,19 +2,16 @@ package madson.org.opentournament.service;
 
 import android.content.ContentValues;
 import android.content.Context;
-
 import android.database.Cursor;
-
 import android.database.sqlite.SQLiteDatabase;
-
 import android.util.Log;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import madson.org.opentournament.db.OpenTournamentDBHelper;
 import madson.org.opentournament.db.PlayerTable;
 import madson.org.opentournament.domain.Player;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 /**

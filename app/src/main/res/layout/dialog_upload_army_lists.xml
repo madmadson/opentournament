@@ -7,11 +7,31 @@
     android:orientation="vertical"
     android:padding="@dimen/main_tick">
 
+    <TextView
+        android:id="@+id/upload_successfully_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorAccent"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/upload_successfully"
+        android:visibility="gone"/>
+    <TextView
+        android:id="@+id/delete_successfully_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorWarning"
+        android:layout_gravity="center_horizontal"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:text="@string/delete_uploaded_army_lists"
+        android:visibility="gone"/>
+
 
     <ExpandableListView
         android:id="@+id/expandable_armylist_list_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:groupIndicator="@drawable/custom_expandable"/>
 
     <View
         android:layout_width="match_parent"

@@ -6,6 +6,8 @@ import android.graphics.Color;
 
 import android.graphics.drawable.Drawable;
 
+import android.support.v4.content.ContextCompat;
+
 import android.support.v7.widget.RecyclerView;
 
 import android.util.Log;
@@ -50,8 +52,8 @@ public class OnlineGamesListAdapter extends RecyclerView.Adapter<GameViewHolder>
 
         this.gameList = new ArrayList<>();
 
-        winnerShape = baseActivity.getResources().getDrawable(R.drawable.shape_winner);
-        looserShape = baseActivity.getResources().getDrawable(R.drawable.shape_looser);
+        winnerShape = ContextCompat.getDrawable(baseActivity, R.drawable.shape_winner);
+        looserShape = ContextCompat.getDrawable(baseActivity, R.drawable.shape_looser);
     }
 
     @Override
@@ -73,15 +75,15 @@ public class OnlineGamesListAdapter extends RecyclerView.Adapter<GameViewHolder>
 
         if (game.isFinished()) {
             holder.getPlayerOneCardView()
-                .setBackgroundDrawable(game.getParticipant_one_score() == 1 ? winnerShape : looserShape);
+                .setBackground(game.getParticipant_one_score() == 1 ? winnerShape : looserShape);
             holder.getPlayerTwoCardView()
-                .setBackgroundDrawable(game.getParticipant_two_score() == 1 ? winnerShape : looserShape);
+                .setBackground(game.getParticipant_two_score() == 1 ? winnerShape : looserShape);
         }
 
         if (position % 2 == 0) {
-            holder.getPairingRow().setBackgroundColor(Color.LTGRAY);
+            holder.getPairingRow().setBackgroundColor(ContextCompat.getColor(baseActivity, R.color.colorLightGrey));
         } else {
-            holder.getPairingRow().setBackgroundColor(Color.WHITE);
+            holder.getPairingRow().setBackgroundColor(ContextCompat.getColor(baseActivity, R.color.colorAlmostWhite));
         }
 
         if (tournament.getTournamentTyp().equals(TournamentTyp.SOLO.name())) {
@@ -162,9 +164,11 @@ public class OnlineGamesListAdapter extends RecyclerView.Adapter<GameViewHolder>
 
         if (authenticatedPlayer != null) {
             if (authenticatedPlayer.getUUID().equals(player1.getPlayerUUID())) {
-                holder.getPlayerOneCardView().setCardBackgroundColor(Color.CYAN);
+                holder.getPlayerOneCardView()
+                    .setCardBackgroundColor(ContextCompat.getColor(baseActivity, R.color.colorTurquoise));
             } else if (authenticatedPlayer.getUUID().equals(player2.getPlayerUUID())) {
-                holder.getPlayerTwoCardView().setCardBackgroundColor(Color.CYAN);
+                holder.getPlayerTwoCardView()
+                    .setCardBackgroundColor(ContextCompat.getColor(baseActivity, R.color.colorTurquoise));
             }
         }
 

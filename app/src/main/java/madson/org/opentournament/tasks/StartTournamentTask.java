@@ -6,6 +6,8 @@ import android.os.AsyncTask;
 
 import android.support.design.widget.Snackbar;
 
+import android.support.v4.content.ContextCompat;
+
 import android.widget.TextView;
 
 import madson.org.opentournament.R;
@@ -70,13 +72,13 @@ public class StartTournamentTask extends AsyncTask<Void, Void, Void> {
 
         if (successful) {
             snackbar.setText(R.string.successfully_start_tournament);
-            snackbar.getView().setBackgroundColor(baseActivity.getResources().getColor(R.color.colorAccent));
+            snackbar.getView().setBackgroundColor(ContextCompat.getColor(baseActivity, R.color.colorAccent));
         } else {
             snackbar.setText(R.string.no_games_created);
 
             TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
-            tv.setTextColor(Color.BLACK);
-            snackbar.getView().setBackgroundColor(baseActivity.getResources().getColor(R.color.colorNeutral));
+            tv.setTextColor(ContextCompat.getColor(baseActivity, R.color.colorAlmostBlack));
+            snackbar.getView().setBackgroundColor(ContextCompat.getColor(baseActivity, R.color.colorWarning));
         }
 
         snackbar.show();

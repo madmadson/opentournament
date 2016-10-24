@@ -127,53 +127,6 @@ public class GameListFragment extends Fragment implements OpenTournamentEventLis
 
         containerForActions = (FrameLayout) view.findViewById(R.id.container_view_toggle_action);
 
-        undoRoundButton = (Button) view.findViewById(R.id.button_undo_round);
-        undoRoundButton.setOnClickListener(new View.OnClickListener() {
-
-                @Override
-                public void onClick(View v) {
-
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                    builder.setTitle(R.string.confirm_undo_round)
-                    .setView(R.layout.dialog_undo_round)
-                    .setPositiveButton(R.string.dialog_save, new DialogInterface.OnClickListener() {
-
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-
-                                    new UndoRoundTask(baseActivity, tournament, round).execute();
-                                }
-                            })
-                    .setNegativeButton(R.string.dialog_cancel, null)
-                    .show();
-                }
-            });
-
-        pairRoundAgainButton = (Button) view.findViewById(R.id.button_pair_again);
-        pairRoundAgainButton.setOnClickListener(new View.OnClickListener() {
-
-                @Override
-                public void onClick(View v) {
-
-                    if (!gameListAdapter.atLeastOneGameStarted()) {
-                        ConfirmPairRoundAgainDialog dialog = new ConfirmPairRoundAgainDialog();
-
-                        Bundle bundle = new Bundle();
-                        bundle.putParcelable(ConfirmPairingNewRoundDialog.BUNDLE_TOURNAMENT, tournament);
-                        bundle.putInt(ConfirmPairingNewRoundDialog.BUNDLE_ROUND, round);
-                        dialog.setArguments(bundle);
-
-                        FragmentManager supportFragmentManager = getActivity().getSupportFragmentManager();
-                        dialog.show(supportFragmentManager, "confirm  pair round again");
-                    } else {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                        builder.setTitle(R.string.at_least_one_game_started)
-                        .setPositiveButton(R.string.dialog_confirm, null)
-                        .show();
-                    }
-                }
-            });
-
         uploadGamesButton = (Button) view.findViewById(R.id.button_upload_games);
         uploadGamesButton.setOnClickListener(new View.OnClickListener() {
 
@@ -202,6 +155,53 @@ public class GameListFragment extends Fragment implements OpenTournamentEventLis
                         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                         builder.setTitle(R.string.offline_text).setPositiveButton(R.string.dialog_confirm, null).show();
                     }
+                }
+            });
+
+        pairRoundAgainButton = (Button) view.findViewById(R.id.button_pair_again);
+        pairRoundAgainButton.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+
+                    if (!gameListAdapter.atLeastOneGameStarted()) {
+                        ConfirmPairRoundAgainDialog dialog = new ConfirmPairRoundAgainDialog();
+
+                        Bundle bundle = new Bundle();
+                        bundle.putParcelable(ConfirmPairingNewRoundDialog.BUNDLE_TOURNAMENT, tournament);
+                        bundle.putInt(ConfirmPairingNewRoundDialog.BUNDLE_ROUND, round);
+                        dialog.setArguments(bundle);
+
+                        FragmentManager supportFragmentManager = getActivity().getSupportFragmentManager();
+                        dialog.show(supportFragmentManager, "confirm  pair round again");
+                    } else {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                        builder.setTitle(R.string.at_least_one_game_started)
+                        .setPositiveButton(R.string.dialog_confirm, null)
+                        .show();
+                    }
+                }
+            });
+
+        undoRoundButton = (Button) view.findViewById(R.id.button_undo_round);
+        undoRoundButton.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setTitle(R.string.confirm_undo_round)
+                    .setView(R.layout.dialog_undo_round)
+                    .setPositiveButton(R.string.dialog_save, new DialogInterface.OnClickListener() {
+
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                    new UndoRoundTask(baseActivity, tournament, round).execute();
+                                }
+                            })
+                    .setNegativeButton(R.string.dialog_cancel, null)
+                    .show();
                 }
             });
 
@@ -288,16 +288,16 @@ public class GameListFragment extends Fragment implements OpenTournamentEventLis
 
                     if (containerForActions.isShown()) {
                         containerForActions.setVisibility(View.GONE);
-                        toggleActionButton.setImageResource(R.drawable.ic_keyboard_arrow_down_black_24dp);
+                        toggleActionButton.setImageResource(R.drawable.ic_keyboard_arrow_down_black_36dp);
                     } else {
                         containerForActions.setVisibility(View.VISIBLE);
-                        toggleActionButton.setImageResource(R.drawable.ic_keyboard_arrow_up_black_24dp);
+                        toggleActionButton.setImageResource(R.drawable.ic_keyboard_arrow_up_black_36dp);
                     }
                 }
             });
 
-        if (round < tournament.getActualRound()) {
-            setActionButtonsInvisible();
+        if (round == tournament.getActualRound()) {
+            setActionButtonsVisible();
         }
 
         new LoadGameListTask(baseActivity.getBaseApplication(), tournament, round, gameListAdapter, noGamesInfo,

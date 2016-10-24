@@ -4,6 +4,8 @@ import android.os.AsyncTask;
 
 import android.support.design.widget.Snackbar;
 
+import android.support.v4.content.ContextCompat;
+
 import android.util.Log;
 
 import madson.org.opentournament.R;
@@ -56,7 +58,7 @@ public class RemoveTournamentPlayerFromTournamentTask extends AsyncTask<Void, Vo
 
         Snackbar snackbar = Snackbar.make(baseActivity.getCoordinatorLayout(), R.string.success_remove_player,
                 Snackbar.LENGTH_LONG);
-        snackbar.getView().setBackgroundColor(baseActivity.getResources().getColor(R.color.colorPositive));
+        snackbar.getView().setBackgroundColor(ContextCompat.getColor(baseActivity, R.color.colorAccent));
         snackbar.show();
     }
 }

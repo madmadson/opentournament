@@ -155,8 +155,8 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
                 TournamentTeam teamOne = allTeamMapForTournament.get(game.getParticipantOneUUID());
                 TournamentTeam teamTwo = allTeamMapForTournament.get(game.getParticipantTwoUUID());
 
-                teamOne.getListOfOpponentsIds().add(teamTwo.getUuid());
-                teamTwo.getListOfOpponentsIds().add(teamOne.getUuid());
+                teamOne.getListOfOpponentsUUIDs().add(teamTwo.getUuid());
+                teamTwo.getListOfOpponentsUUIDs().add(teamOne.getUuid());
 
                 allTeamMapForTournament.put(game.getParticipantOneUUID(), teamOne);
                 allTeamMapForTournament.put(game.getParticipantTwoUUID(), teamTwo);
@@ -481,8 +481,8 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
                     TournamentTeam teamOne = allTeamMapForTournament.get(game.getParticipantOneUUID());
                     TournamentTeam teamTwo = allTeamMapForTournament.get(game.getParticipantTwoUUID());
 
-                    teamOne.getListOfOpponentsIds().add(teamTwo.getUuid());
-                    teamTwo.getListOfOpponentsIds().add(teamOne.getUuid());
+                    teamOne.getListOfOpponentsUUIDs().add(teamTwo.getUuid());
+                    teamTwo.getListOfOpponentsUUIDs().add(teamOne.getUuid());
 
                     allTeamMapForTournament.put(game.getParticipantOneUUID(), teamOne);
                     allTeamMapForTournament.put(game.getParticipantTwoUUID(), teamTwo);

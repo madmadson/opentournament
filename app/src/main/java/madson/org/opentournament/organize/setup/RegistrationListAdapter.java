@@ -2,13 +2,12 @@ package madson.org.opentournament.organize.setup;
 
 import android.content.DialogInterface;
 
-import android.graphics.Color;
-
 import android.os.Bundle;
 
 import android.support.design.widget.Snackbar;
 
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
@@ -87,9 +86,11 @@ public class RegistrationListAdapter extends RecyclerView.Adapter<TournamentPlay
             .setText(baseActivity.getResources().getString(R.string.player_name_in_row, firstname, nickname, lastname));
 
         if (position % 2 == 0) {
-            viewHolder.getTournamentPlayerCard().setCardBackgroundColor(Color.LTGRAY);
+            viewHolder.getTournamentPlayerCard()
+                .setCardBackgroundColor(ContextCompat.getColor(baseActivity, R.color.colorLightGrey));
         } else {
-            viewHolder.getTournamentPlayerCard().setCardBackgroundColor(Color.WHITE);
+            viewHolder.getTournamentPlayerCard()
+                .setCardBackgroundColor(ContextCompat.getColor(baseActivity, R.color.colorAlmostWhite));
         }
 
         viewHolder.getTournamentPlayerCard().setOnClickListener(new View.OnClickListener() {
@@ -109,7 +110,7 @@ public class RegistrationListAdapter extends RecyclerView.Adapter<TournamentPlay
                                     R.string.team_already_full, Snackbar.LENGTH_LONG);
 
                             snackbar.getView()
-                            .setBackgroundColor(baseActivity.getResources().getColor(R.color.colorNegative));
+                            .setBackgroundColor(ContextCompat.getColor(baseActivity, R.color.colorWarning));
 
                             snackbar.show();
                         }
@@ -120,7 +121,7 @@ public class RegistrationListAdapter extends RecyclerView.Adapter<TournamentPlay
                                 R.string.player_already_is_in_tournament, Snackbar.LENGTH_LONG);
 
                         snackbar.getView()
-                        .setBackgroundColor(baseActivity.getResources().getColor(R.color.colorNegative));
+                        .setBackgroundColor(ContextCompat.getColor(baseActivity, R.color.colorWarning));
 
                         snackbar.show();
 

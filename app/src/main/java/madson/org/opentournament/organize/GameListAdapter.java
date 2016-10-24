@@ -4,8 +4,6 @@ import android.content.ClipData;
 import android.content.DialogInterface;
 import android.content.Intent;
 
-import android.graphics.Color;
-
 import android.graphics.drawable.Drawable;
 
 import android.os.Bundle;
@@ -13,6 +11,7 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -74,14 +73,14 @@ public class GameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
         this.gamesForRound = new ArrayList<>();
         this.baseActivity = baseActivity;
 
-        enterShape = baseActivity.getResources().getDrawable(R.drawable.shape_droptarget_entered);
-        normalShape = baseActivity.getResources().getDrawable(R.drawable.shape_normal);
-        startShape = baseActivity.getResources().getDrawable(R.drawable.shape_droptarget_started);
+        enterShape = ContextCompat.getDrawable(baseActivity, R.drawable.shape_droptarget_entered);
+        normalShape = ContextCompat.getDrawable(baseActivity, R.drawable.shape_normal);
+        startShape = ContextCompat.getDrawable(baseActivity, R.drawable.shape_droptarget_started);
 
-        winnerShape = baseActivity.getResources().getDrawable(R.drawable.shape_winner);
-        looserShape = baseActivity.getResources().getDrawable(R.drawable.shape_looser);
+        winnerShape = ContextCompat.getDrawable(baseActivity, R.drawable.shape_winner);
+        looserShape = ContextCompat.getDrawable(baseActivity, R.drawable.shape_looser);
 
-        startedShape = baseActivity.getResources().getDrawable(R.drawable.shape_started);
+        startedShape = ContextCompat.getDrawable(baseActivity, R.drawable.shape_started);
     }
 
     public void updateGame(Game game) {
@@ -174,16 +173,16 @@ public class GameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
             .setText(baseActivity.getResources().getString(R.string.game_vp, game.getParticipant_two_victory_points()));
 
         if (position % 2 == 0) {
-            holder.getPairingRow().setBackgroundColor(Color.LTGRAY);
+            holder.getPairingRow().setBackgroundColor(ContextCompat.getColor(baseActivity, R.color.colorLightGrey));
         } else {
-            holder.getPairingRow().setBackgroundColor(Color.WHITE);
+            holder.getPairingRow().setBackgroundColor(ContextCompat.getColor(baseActivity, R.color.colorAlmostWhite));
         }
 
         if (game.isFinished()) {
             holder.getPlayerOneCardView()
-                .setBackgroundDrawable(game.getParticipant_one_score() == 1 ? winnerShape : looserShape);
+                .setBackground(game.getParticipant_one_score() == 1 ? winnerShape : looserShape);
             holder.getPlayerTwoCardView()
-                .setBackgroundDrawable(game.getParticipant_two_score() == 1 ? winnerShape : looserShape);
+                .setBackground(game.getParticipant_two_score() == 1 ? winnerShape : looserShape);
 
             holder.getPlayerOneCardView().setOnLongClickListener(null);
             holder.getPlayerOneCardView().setOnDragListener(null);
@@ -194,8 +193,8 @@ public class GameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
             holder.getSwapPlayerOne().setVisibility(View.GONE);
             holder.getSwapPlayerTwo().setVisibility(View.GONE);
         } else {
-            holder.getPlayerOneCardView().setBackgroundDrawable(normalShape);
-            holder.getPlayerTwoCardView().setBackgroundDrawable(normalShape);
+            holder.getPlayerOneCardView().setBackground(normalShape);
+            holder.getPlayerTwoCardView().setBackground(normalShape);
 
             if (game.getParticipant_one_intermediate_points() == 0
                     && game.getParticipant_two_intermediate_points() == 0) {
@@ -211,8 +210,8 @@ public class GameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
         }
 
         if (game.isSwappable()) {
-            holder.getPlayerOneCardView().setBackgroundDrawable(enterShape);
-            holder.getPlayerTwoCardView().setBackgroundDrawable(enterShape);
+            holder.getPlayerOneCardView().setBackground(enterShape);
+            holder.getPlayerTwoCardView().setBackground(enterShape);
             holder.getPlayerOneCardView().setOnLongClickListener(null);
             holder.getPlayerOneCardView().setOnDragListener(null);
 
@@ -224,11 +223,11 @@ public class GameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
         }
 
         if (game.isStartSwappingPlayerOne()) {
-            holder.getPlayerOneCardView().setBackgroundDrawable(startedShape);
+            holder.getPlayerOneCardView().setBackground(startedShape);
         }
 
         if (game.isStartSwappingPlayerTwo()) {
-            holder.getPlayerTwoCardView().setBackgroundDrawable(startedShape);
+            holder.getPlayerTwoCardView().setBackground(startedShape);
         }
     }
 
@@ -382,7 +381,7 @@ public class GameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
             Snackbar snackbar = Snackbar.make(baseActivity.getCoordinatorLayout(), R.string.click_for_swapping,
                     Snackbar.LENGTH_LONG);
 
-            snackbar.getView().setBackgroundColor(baseActivity.getResources().getColor(R.color.colorAccent));
+            snackbar.getView().setBackgroundColor(ContextCompat.getColor(baseActivity, R.color.colorAccent));
 
             snackbar.show();
 
@@ -412,7 +411,7 @@ public class GameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
             Snackbar snackbar = Snackbar.make(baseActivity.getCoordinatorLayout(), R.string.swapping_canceled,
                     Snackbar.LENGTH_LONG);
 
-            snackbar.getView().setBackgroundColor(baseActivity.getResources().getColor(R.color.colorNegative));
+            snackbar.getView().setBackgroundColor(ContextCompat.getColor(baseActivity, R.color.colorWarning));
 
             snackbar.show();
 
@@ -471,7 +470,7 @@ public class GameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
                                         baseActivity.getResources().getString(R.string.player_swapped_successfully),
                                         Snackbar.LENGTH_LONG);
                                 snackbar.getView()
-                                .setBackgroundColor(baseActivity.getResources().getColor(R.color.colorPositive));
+                                .setBackgroundColor(ContextCompat.getColor(baseActivity, R.color.colorAccent));
                                 new SwapPlayersTask(baseActivity.getBaseApplication(), gameOneToSwap, gameTwoToSwap,
                                     progressBar, snackbar).execute();
                             }
@@ -493,7 +492,7 @@ public class GameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
                             .getString(R.string.player_already_played_each_other,
                                 gameOneToSwap.getParticipantOne().getName(),
                                 gameTwoToSwap.getParticipantTwo().getName()), Snackbar.LENGTH_LONG);
-                snackbar.getView().setBackgroundColor(baseActivity.getResources().getColor(R.color.colorNeutral));
+                snackbar.getView().setBackgroundColor(ContextCompat.getColor(baseActivity, R.color.colorNeutral));
                 snackbar.show();
 
                 return false;
@@ -505,7 +504,7 @@ public class GameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
                             .getString(R.string.player_already_played_each_other,
                                 gameTwoToSwap.getParticipantOne().getName(),
                                 gameOneToSwap.getParticipantTwo().getName()), Snackbar.LENGTH_LONG);
-                snackbar.getView().setBackgroundColor(baseActivity.getResources().getColor(R.color.colorNeutral));
+                snackbar.getView().setBackgroundColor(ContextCompat.getColor(baseActivity, R.color.colorNeutral));
 
                 snackbar.show();
 
@@ -520,7 +519,7 @@ public class GameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
                             .getString(R.string.player_already_played_each_other,
                                 gameOneToSwap.getParticipantTwo().getName(),
                                 gameTwoToSwap.getParticipantTwo().getName()), Snackbar.LENGTH_LONG);
-                snackbar.getView().setBackgroundColor(baseActivity.getResources().getColor(R.color.colorNeutral));
+                snackbar.getView().setBackgroundColor(ContextCompat.getColor(baseActivity, R.color.colorNeutral));
                 snackbar.show();
 
                 return false;
@@ -532,7 +531,7 @@ public class GameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
                             .getString(R.string.player_already_played_each_other,
                                 gameTwoToSwap.getParticipantOne().getName(),
                                 gameOneToSwap.getParticipantOne().getName()), Snackbar.LENGTH_LONG);
-                snackbar.getView().setBackgroundColor(baseActivity.getResources().getColor(R.color.colorNeutral));
+                snackbar.getView().setBackgroundColor(ContextCompat.getColor(baseActivity, R.color.colorNeutral));
 
                 snackbar.show();
 
@@ -547,7 +546,7 @@ public class GameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
                             .getString(R.string.player_already_played_each_other,
                                 gameOneToSwap.getParticipantOne().getName(),
                                 gameTwoToSwap.getParticipantOne().getName()), Snackbar.LENGTH_LONG);
-                snackbar.getView().setBackgroundColor(baseActivity.getResources().getColor(R.color.colorNeutral));
+                snackbar.getView().setBackgroundColor(ContextCompat.getColor(baseActivity, R.color.colorNeutral));
                 snackbar.show();
 
                 return false;
@@ -559,7 +558,7 @@ public class GameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
                             .getString(R.string.player_already_played_each_other,
                                 gameTwoToSwap.getParticipantTwo().getName(),
                                 gameOneToSwap.getParticipantTwo().getName()), Snackbar.LENGTH_LONG);
-                snackbar.getView().setBackgroundColor(baseActivity.getResources().getColor(R.color.colorNeutral));
+                snackbar.getView().setBackgroundColor(ContextCompat.getColor(baseActivity, R.color.colorNeutral));
 
                 snackbar.show();
 
@@ -574,7 +573,7 @@ public class GameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
                             .getString(R.string.player_already_played_each_other,
                                 gameOneToSwap.getParticipantTwo().getName(),
                                 gameTwoToSwap.getParticipantOne().getName()), Snackbar.LENGTH_LONG);
-                snackbar.getView().setBackgroundColor(baseActivity.getResources().getColor(R.color.colorNeutral));
+                snackbar.getView().setBackgroundColor(ContextCompat.getColor(baseActivity, R.color.colorNeutral));
                 snackbar.show();
 
                 return false;
@@ -586,7 +585,7 @@ public class GameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
                             .getString(R.string.player_already_played_each_other,
                                 gameTwoToSwap.getParticipantOne().getName(),
                                 gameOneToSwap.getParticipantOne().getName()), Snackbar.LENGTH_LONG);
-                snackbar.getView().setBackgroundColor(baseActivity.getResources().getColor(R.color.colorNeutral));
+                snackbar.getView().setBackgroundColor(ContextCompat.getColor(baseActivity, R.color.colorNeutral));
 
                 snackbar.show();
 
@@ -692,16 +691,16 @@ public class GameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
             switch (action) {
                 case DragEvent.ACTION_DRAG_STARTED:
 
-                    v.setBackgroundDrawable(startShape);
+                    v.setBackground(startShape);
 
                     break;
 
                 case DragEvent.ACTION_DRAG_ENTERED:
-                    v.setBackgroundDrawable(enterShape);
+                    v.setBackground(enterShape);
                     break;
 
                 case DragEvent.ACTION_DRAG_EXITED:
-                    v.setBackgroundDrawable(startShape);
+                    v.setBackground(startShape);
                     break;
 
                 case DragEvent.ACTION_DROP:
@@ -715,7 +714,7 @@ public class GameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
 
                 case DragEvent.ACTION_DRAG_ENDED:
 
-                    v.setBackgroundDrawable(normalShape);
+                    v.setBackground(normalShape);
                     break;
 
                 default:

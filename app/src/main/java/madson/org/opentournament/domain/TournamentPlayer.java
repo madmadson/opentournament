@@ -360,4 +360,15 @@ public class TournamentPlayer extends TournamentParticipant implements Parcelabl
 
         return opponentsIds;
     }
+
+
+    @Exclude
+    public String getTeamNameWithMaximumCharacters(int maxChars) {
+
+        if (teamName != null && teamName.length() > maxChars) {
+            return teamName.substring(0, maxChars).concat("...");
+        } else {
+            return teamName;
+        }
+    }
 }

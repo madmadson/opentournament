@@ -6,6 +6,8 @@ import android.os.AsyncTask;
 
 import android.support.design.widget.Snackbar;
 
+import android.support.v4.content.ContextCompat;
+
 import android.support.v7.app.AlertDialog;
 
 import madson.org.opentournament.R;
@@ -114,7 +116,7 @@ public class SaveTournamentPlayerTask extends AsyncTask<Void, Void, Void> {
         Snackbar snackbar = Snackbar.make(baseActivity.getCoordinatorLayout(), R.string.success_new_player_inserted,
                 Snackbar.LENGTH_LONG);
 
-        snackbar.getView().setBackgroundColor(baseActivity.getResources().getColor(R.color.colorAccent));
+        snackbar.getView().setBackgroundColor(ContextCompat.getColor(baseActivity, R.color.colorAccent));
 
         snackbar.show();
 

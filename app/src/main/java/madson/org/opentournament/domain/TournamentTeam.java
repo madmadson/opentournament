@@ -34,21 +34,16 @@ public class TournamentTeam extends TournamentParticipant implements Parcelable 
 
     private long _id;
 
-    private long tournamentId;
     private String teamName;
-    private String teamUUID;
-
     private String meta;
-
     private int droppedInRound;
 
-    private boolean dummy;
-
-    private List<String> opponentsIds = new ArrayList<>();
+    private List<String> opponentsIds;
 
     public TournamentTeam(String teamName) {
 
         this.teamName = teamName;
+        opponentsIds = new ArrayList<>();
     }
 
 
@@ -74,72 +69,6 @@ public class TournamentTeam extends TournamentParticipant implements Parcelable 
     }
 
 
-    public long getTournamentId() {
-
-        return tournamentId;
-    }
-
-
-    public void setTournamentId(long tournamentId) {
-
-        this.tournamentId = tournamentId;
-    }
-
-
-    public String getTeamName() {
-
-        return teamName;
-    }
-
-
-    public void setTeamName(String teamName) {
-
-        this.teamName = teamName;
-    }
-
-
-    public String getMeta() {
-
-        return meta;
-    }
-
-
-    public void setMeta(String meta) {
-
-        this.meta = meta;
-    }
-
-
-    public boolean isDummy() {
-
-        return dummy;
-    }
-
-
-    public void setDummy(boolean dummy) {
-
-        this.dummy = dummy;
-    }
-
-
-    public int getDroppedInRound() {
-
-        return droppedInRound;
-    }
-
-
-    public void setDroppedInRound(int droppedInRound) {
-
-        this.droppedInRound = droppedInRound;
-    }
-
-
-    public List<String> getListOfOpponentsIds() {
-
-        return opponentsIds;
-    }
-
-
     @Override
     public void writeToParcel(Parcel parcel, int i) {
 
@@ -147,7 +76,6 @@ public class TournamentTeam extends TournamentParticipant implements Parcelable 
 
         parcel.writeString(teamName);
         parcel.writeString(meta);
-        parcel.writeInt(dummy ? 0 : 1);
         parcel.writeInt(droppedInRound);
     }
 

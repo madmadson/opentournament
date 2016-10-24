@@ -1,7 +1,6 @@
 package madson.org.opentournament.tasks;
 
 import android.os.AsyncTask;
-
 import android.util.Log;
 
 import madson.org.opentournament.domain.Player;

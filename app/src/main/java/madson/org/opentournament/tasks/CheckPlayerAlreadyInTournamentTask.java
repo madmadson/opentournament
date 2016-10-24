@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Player;
@@ -52,7 +53,7 @@ public class CheckPlayerAlreadyInTournamentTask extends AsyncTask<Void, Void, Vo
             Snackbar snackbar = Snackbar.make(baseActivity.getCoordinatorLayout(),
                     R.string.player_already_is_in_tournament, Snackbar.LENGTH_LONG);
 
-            snackbar.getView().setBackgroundColor(baseActivity.getResources().getColor(R.color.colorNegative));
+            snackbar.getView().setBackgroundColor(ContextCompat.getColor(baseActivity, R.color.colorWarning));
 
             snackbar.show();
         } else {

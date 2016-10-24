@@ -65,14 +65,14 @@ public class LoadTournamentTeamTask extends AsyncTask<Void, Void, Map<Tournament
             team_adapter.add(baseActivity.getString(R.string.no_team));
 
             for (TournamentTeam key : mapOfTeams.keySet()) {
-                if (!key.getTeamName().isEmpty()) {
-                    team_adapter.add(key.getTeamName());
+                if (!key.getName().isEmpty()) {
+                    team_adapter.add(key.getName());
                 }
             }
         } else {
             for (TournamentTeam key : mapOfTeams.keySet()) {
                 if (mapOfTeams.get(key).size() < tournament.getTeamSize()) {
-                    team_adapter.add(key.getTeamName());
+                    team_adapter.add(key.getName());
                 }
             }
         }

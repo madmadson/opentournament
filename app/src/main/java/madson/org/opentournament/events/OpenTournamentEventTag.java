@@ -25,5 +25,5 @@ public enum OpenTournamentEventTag {
     END_SWAP_PLAYER,
     DELETE_LOCAL_PLAYER,
     UNDO_ROUND,
-    UNDO_TOURNAMENT_ENDING;
+    UNDO_TOURNAMENT_ENDING
 }

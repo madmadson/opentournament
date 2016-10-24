@@ -2,7 +2,7 @@ package madson.org.opentournament.organize.setup;
 
 import android.content.DialogInterface;
 
-import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
 
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
@@ -72,9 +72,11 @@ public class LocalPlayerListAdapter extends RecyclerView.Adapter<PlayerViewHolde
                     player.getLastName()));
 
         if (position % 2 == 0) {
-            holder.getPlayerCardLayout().setBackgroundColor(Color.LTGRAY);
+            holder.getPlayerCardLayout()
+                .setBackgroundColor(ContextCompat.getColor(baseActivity, R.color.colorLightGrey));
         } else {
-            holder.getPlayerCardLayout().setBackgroundColor(Color.WHITE);
+            holder.getPlayerCardLayout()
+                .setBackgroundColor(ContextCompat.getColor(baseActivity, R.color.colorAlmostWhite));
         }
 
         holder.getPlayerCardLayout().setOnClickListener(new View.OnClickListener() {

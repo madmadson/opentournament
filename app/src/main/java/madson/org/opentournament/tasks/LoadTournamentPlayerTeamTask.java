@@ -1,11 +1,12 @@
 package madson.org.opentournament.tasks;
 
 import android.os.AsyncTask;
-
 import android.view.View;
-
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import java.util.List;
+import java.util.Map;
 
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
@@ -13,9 +14,6 @@ import madson.org.opentournament.domain.TournamentTeam;
 import madson.org.opentournament.organize.setup.TournamentPlayerTeamExpandableListAdapter;
 import madson.org.opentournament.service.TournamentPlayerService;
 import madson.org.opentournament.utility.BaseApplication;
-
-import java.util.List;
-import java.util.Map;
 
 
 /**

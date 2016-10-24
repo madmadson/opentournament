@@ -18,6 +18,7 @@ import android.support.design.widget.Snackbar;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 
@@ -47,7 +48,6 @@ import com.google.android.gms.common.api.GoogleApiClient;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.FirebaseDatabase;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -124,7 +124,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         } else {
             Snackbar snackbar = Snackbar.make(coordinatorLayout, R.string.offline_text, Snackbar.LENGTH_LONG);
 
-            snackbar.getView().setBackgroundColor(getResources().getColor(R.color.colorWarning));
+            snackbar.getView().setBackgroundColor(ContextCompat.getColor(this, R.color.colorWarning));
 
             snackbar.show();
         }

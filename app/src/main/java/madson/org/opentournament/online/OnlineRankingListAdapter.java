@@ -2,7 +2,7 @@ package madson.org.opentournament.online;
 
 import android.content.Context;
 
-import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
 
 import android.support.v7.widget.RecyclerView;
 
@@ -68,9 +68,9 @@ public class OnlineRankingListAdapter extends RecyclerView.Adapter<TournamentRan
         }
 
         if (position % 2 == 0) {
-            holder.getRankingCard().setCardBackgroundColor(Color.LTGRAY);
+            holder.getRankingCard().setCardBackgroundColor(ContextCompat.getColor(context, R.color.colorLightGrey));
         } else {
-            holder.getRankingCard().setCardBackgroundColor(Color.WHITE);
+            holder.getRankingCard().setCardBackgroundColor(ContextCompat.getColor(context, R.color.colorAlmostWhite));
         }
     }
 

@@ -13,6 +13,7 @@ import android.view.View;
 
 import android.widget.ExpandableListView;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -53,6 +54,8 @@ public class AddArmyListDialog extends DialogFragment {
     private Map<String, ArmyList> listDataChild;
     private ImageButton imageButton;
     private ArmyListExpandableListAdapter listAdapter;
+    private TextView uploadSuccess;
+    private TextView deleteSuccess;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -69,7 +72,7 @@ public class AddArmyListDialog extends DialogFragment {
         View dialogView = inflater.inflate(R.layout.dialog_upload_army_lists, null);
         String title = getString(R.string.upload_lists);
 
-        builder.setView(dialogView).setTitle(title).setPositiveButton(R.string.dialog_confirm, null);
+        builder.setView(dialogView).setTitle(title).setPositiveButton(R.string.dialog_close, null);
 
         AlertDialog alertDialog = builder.create();
 
@@ -80,6 +83,8 @@ public class AddArmyListDialog extends DialogFragment {
         listDataChild = new HashMap<>();
 
         imageButton = (ImageButton) dialogView.findViewById(R.id.add_list_button);
+        uploadSuccess = (TextView) dialogView.findViewById(R.id.upload_successfully_message);
+        deleteSuccess = (TextView) dialogView.findViewById(R.id.delete_successfully_message);
 
         imageButton.setOnClickListener(new View.OnClickListener() {
 
@@ -95,7 +100,7 @@ public class AddArmyListDialog extends DialogFragment {
             });
 
         listAdapter = new ArmyListExpandableListAdapter((BaseActivity) getActivity(), listDataHeader, listDataChild,
-                tournament, tournamentPlayer, imageButton);
+                tournament, tournamentPlayer, imageButton, uploadSuccess, deleteSuccess);
 
         DatabaseReference reference = FirebaseDatabase.getInstance()
                 .getReference(FirebaseReferences.TOURNAMENT_ARMY_LISTS + "/" + tournament.getGameOrSportTyp() + "/"
@@ -110,7 +115,7 @@ public class AddArmyListDialog extends DialogFragment {
                         ArmyList armyList = armyLists.getValue(ArmyList.class);
 
                         if (armyList != null) {
-                            listDataHeader.add("List " + (listAdapter.getGroupCount() + 1));
+                            listDataHeader.add(armyList.getName());
                             listDataChild.put(listDataHeader.get(listAdapter.getGroupCount() - 1), armyList);
                             listAdapter.notifyDataSetChanged();
                         }

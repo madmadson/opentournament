@@ -6,6 +6,8 @@ import android.os.AsyncTask;
 
 import android.support.design.widget.Snackbar;
 
+import android.support.v4.content.ContextCompat;
+
 import android.view.View;
 
 import android.widget.ProgressBar;
@@ -105,13 +107,13 @@ public class PairNewRoundTask extends AsyncTask<Void, Void, Boolean> {
 
         if (successful) {
             snackbar.setText(R.string.successfully_pair_round_again);
-            snackbar.getView().setBackgroundColor(application.getResources().getColor(R.color.colorAccent));
+            snackbar.getView().setBackgroundColor(ContextCompat.getColor(application, R.color.colorAccent));
         } else {
             snackbar.setText(R.string.no_games_created);
 
             TextView tv = (TextView) snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
-            tv.setTextColor(Color.BLACK);
-            snackbar.getView().setBackgroundColor(application.getResources().getColor(R.color.colorNeutral));
+            tv.setTextColor(ContextCompat.getColor(application, R.color.colorAlmostBlack));
+            snackbar.getView().setBackgroundColor(ContextCompat.getColor(application, R.color.colorAccent));
         }
 
         snackbar.setDuration(Snackbar.LENGTH_LONG);

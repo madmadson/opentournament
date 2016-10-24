@@ -3,18 +3,14 @@ package madson.org.opentournament;
 import android.support.test.espresso.contrib.DrawerActions;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
-
 import android.support.v7.widget.Toolbar;
-
 import android.view.Gravity;
-
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 
 import org.junit.Rule;
 import org.junit.Test;
-
 import org.junit.runner.RunWith;
 
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
@@ -25,7 +21,6 @@ import static android.support.test.espresso.matcher.ViewMatchers.isAssignableFro
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-
 import static org.hamcrest.CoreMatchers.allOf;
 
 

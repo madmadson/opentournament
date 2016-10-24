@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -64,8 +65,13 @@ public class RegisterTournamentPlayerListAdapter extends RecyclerView.Adapter<To
 
         viewHolder.getPlayerNumber().setText(String.valueOf(position + 1));
 
+        viewHolder.getPlayerNameInList()
+            .setText(baseActivity.getResources()
+                .getString(R.string.player_name_in_row, player.getFirstNameWithMaximumCharacters(10),
+                    player.getNickNameWithMaximumCharacters(10), player.getLastNameWithMaximumCharacters(10)));
+
         if (player.getTeamName() != null) {
-            viewHolder.getTeamName().setText(player.getTeamName());
+            viewHolder.getTeamName().setText(player.getTeamNameWithMaximumCharacters(15));
             viewHolder.getTeamName().setVisibility(View.VISIBLE);
         } else {
             viewHolder.getTeamName().setVisibility(View.GONE);
@@ -73,16 +79,12 @@ public class RegisterTournamentPlayerListAdapter extends RecyclerView.Adapter<To
 
         viewHolder.getFaction().setText(player.getFaction());
 
-        String firstname = player.getFirstName();
-        String nickname = player.getNickName();
-        String lastname = player.getLastName();
-        viewHolder.getPlayerNameInList()
-            .setText(baseActivity.getResources().getString(R.string.player_name_in_row, firstname, nickname, lastname));
-
         if (position % 2 == 0) {
-            viewHolder.getTournamentPlayerCard().setCardBackgroundColor(Color.LTGRAY);
+            viewHolder.getTournamentPlayerCard()
+                .setCardBackgroundColor(ContextCompat.getColor(baseActivity, R.color.colorLightGrey));
         } else {
-            viewHolder.getTournamentPlayerCard().setCardBackgroundColor(Color.WHITE);
+            viewHolder.getTournamentPlayerCard()
+                .setCardBackgroundColor(ContextCompat.getColor(baseActivity, R.color.colorAlmostWhite));
         }
 
         if (baseActivity.getBaseApplication().getAuthenticatedPlayer() != null
@@ -129,31 +131,33 @@ public class RegisterTournamentPlayerListAdapter extends RecyclerView.Adapter<To
                     }
                 });
 
-            viewHolder.getTournamentPlayerCard().setCardBackgroundColor(Color.CYAN);
+            viewHolder.getTournamentPlayerCard()
+                .setCardBackgroundColor(ContextCompat.getColor(baseActivity, R.color.colorTurquoise));
             viewHolder.getTournamentPlayerCard()
                 .setLayoutParams(new CardView.LayoutParams(CardView.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.WRAP_CONTENT));
 
             viewHolder.getPlayerNumber().setTextSize(20);
-            viewHolder.getPlayerNumber().setTextColor(Color.BLACK);
+            viewHolder.getPlayerNumber().setTextColor(ContextCompat.getColor(baseActivity, R.color.colorAlmostBlack));
 
             viewHolder.getTeamName().setTextSize(20);
-            viewHolder.getTeamName().setTextColor(Color.BLACK);
+            viewHolder.getTeamName().setTextColor(ContextCompat.getColor(baseActivity, R.color.colorAlmostBlack));
 
             viewHolder.getFaction().setTextSize(20);
-            viewHolder.getFaction().setTextColor(Color.BLACK);
+            viewHolder.getFaction().setTextColor(ContextCompat.getColor(baseActivity, R.color.colorAlmostBlack));
 
             viewHolder.getPlayerNameInList().setTextSize(20);
-            viewHolder.getPlayerNameInList().setTextColor(Color.BLACK);
+            viewHolder.getPlayerNameInList()
+                .setTextColor(ContextCompat.getColor(baseActivity, R.color.colorAlmostBlack));
 
             viewHolder.getAddListIcon().setVisibility(View.VISIBLE);
             viewHolder.getEditIcon().setVisibility(View.VISIBLE);
 
             viewHolder.getAddListIcon()
-                .setImageDrawable(baseActivity.getResources().getDrawable(R.drawable.ic_insert_drive_file_black_48dp));
+                .setImageDrawable(ContextCompat.getDrawable(baseActivity, R.drawable.ic_insert_drive_file_black_48dp));
 
             viewHolder.getEditIcon()
-                .setImageDrawable(baseActivity.getResources().getDrawable(R.drawable.ic_build_black_48dp));
+                .setImageDrawable(ContextCompat.getDrawable(baseActivity, R.drawable.ic_build_black_48dp));
         } else {
             viewHolder.getEditIcon().setVisibility(View.GONE);
             viewHolder.getAddListIcon().setVisibility(View.GONE);
@@ -164,16 +168,17 @@ public class RegisterTournamentPlayerListAdapter extends RecyclerView.Adapter<To
             viewHolder.getTournamentPlayerCard().setLayoutParams(layoutParams);
 
             viewHolder.getPlayerNumber().setTextSize(12);
-            viewHolder.getPlayerNumber().setTextColor(Color.BLACK);
+            viewHolder.getPlayerNumber().setTextColor(ContextCompat.getColor(baseActivity, R.color.colorAlmostBlack));
 
             viewHolder.getTeamName().setTextSize(12);
-            viewHolder.getTeamName().setTextColor(Color.BLACK);
+            viewHolder.getTeamName().setTextColor(ContextCompat.getColor(baseActivity, R.color.colorAlmostBlack));
 
             viewHolder.getFaction().setTextSize(12);
-            viewHolder.getFaction().setTextColor(Color.BLACK);
+            viewHolder.getFaction().setTextColor(ContextCompat.getColor(baseActivity, R.color.colorAlmostBlack));
 
             viewHolder.getPlayerNameInList().setTextSize(12);
-            viewHolder.getPlayerNameInList().setTextColor(Color.BLACK);
+            viewHolder.getPlayerNameInList()
+                .setTextColor(ContextCompat.getColor(baseActivity, R.color.colorAlmostBlack));
         }
     }
 

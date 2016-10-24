@@ -11,6 +11,7 @@ import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -135,7 +136,7 @@ public class AccountFragment extends Fragment {
                                     R.string.success_upload_player_data, Snackbar.LENGTH_LONG);
 
                             snackbar.getView()
-                            .setBackgroundColor(getContext().getResources().getColor(R.color.colorAccent));
+                            .setBackgroundColor(ContextCompat.getColor(baseActivity, R.color.colorAccent));
 
                             snackbar.show();
                         }

@@ -2,14 +2,14 @@ package madson.org.opentournament.tasks;
 
 import android.os.AsyncTask;
 
+import java.util.UUID;
+
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.events.AddTournamentPlayerEvent;
 import madson.org.opentournament.events.OpenTournamentEventTag;
 import madson.org.opentournament.service.TournamentPlayerService;
 import madson.org.opentournament.utility.BaseApplication;
-
-import java.util.UUID;
 
 
 /**

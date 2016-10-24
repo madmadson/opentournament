@@ -21,10 +21,13 @@
     <color name="colorPositive">#77c180</color>
     <color name="colorAction">#33b8ff</color>
     
-    <color name="colorLightGrey">#E0E0E0</color>
+    <color name="colorLightGrey">#bcbcbc</color>
     <color name="colorBlack">#000000</color>
 
 
     <color name="colorAlmostBlack">#3e3e3d</color>
     <color name="colorAlmostWhite">#FFFFFF</color>
+
+    <color name="colorLightTurquoise">#d9f8ff</color>
+    <color name="colorTurquoise">#a7efff</color>
 </resources>

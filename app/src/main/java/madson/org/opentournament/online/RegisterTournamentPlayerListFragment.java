@@ -9,6 +9,7 @@ import android.support.design.widget.Snackbar;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -110,7 +111,7 @@ public class RegisterTournamentPlayerListFragment extends Fragment {
                                     R.string.cannot_register_without_player_profile, Snackbar.LENGTH_LONG);
 
                             snackbar.getView()
-                            .setBackgroundColor(baseActivity.getResources().getColor(R.color.colorNegative));
+                            .setBackgroundColor(ContextCompat.getColor(baseActivity, R.color.colorWarning));
 
                             snackbar.show();
                         } else if (!registrationListAdapter.playerNotRegistered(authenticatedPlayer)) {
@@ -118,7 +119,7 @@ public class RegisterTournamentPlayerListFragment extends Fragment {
                                     R.string.you_are_already_registered, Snackbar.LENGTH_LONG);
 
                             snackbar.getView()
-                            .setBackgroundColor(baseActivity.getResources().getColor(R.color.colorNegative));
+                            .setBackgroundColor(ContextCompat.getColor(baseActivity, R.color.colorWarning));
 
                             snackbar.show();
                         } else {

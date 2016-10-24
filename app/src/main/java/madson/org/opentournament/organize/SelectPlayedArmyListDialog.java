@@ -11,6 +11,7 @@ import android.os.Handler;
 import android.support.design.widget.Snackbar;
 
 import android.support.v4.app.DialogFragment;
+import android.support.v4.content.ContextCompat;
 
 import android.support.v7.app.AlertDialog;
 
@@ -55,6 +56,7 @@ public class SelectPlayedArmyListDialog extends DialogFragment {
     private TournamentPlayer tournamentPlayer;
     private BaseActivity baseActivity;
     private Game game;
+    private ArrayAdapter<String> adapter;
 
     @Override
     public void onAttach(Context context) {
@@ -98,7 +100,7 @@ public class SelectPlayedArmyListDialog extends DialogFragment {
                             Snackbar snackbar = Snackbar.make(baseActivity.getCoordinatorLayout(),
                                     R.string.nothing_saved, Snackbar.LENGTH_LONG);
                             snackbar.getView()
-                            .setBackgroundColor(baseActivity.getResources().getColor(R.color.colorWarning));
+                            .setBackgroundColor(ContextCompat.getColor(baseActivity, R.color.colorWarning));
                             snackbar.show();
                         }
                     }
@@ -111,8 +113,7 @@ public class SelectPlayedArmyListDialog extends DialogFragment {
 
         final List<String> listOfArmyListNames = new ArrayList<>();
 
-        final ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
-                android.R.layout.simple_dropdown_item_1line, listOfArmyListNames);
+        adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_dropdown_item_1line, listOfArmyListNames);
 
         if (baseActivity.getBaseApplication().isOnline()) {
             DatabaseReference reference = FirebaseDatabase.getInstance()
@@ -148,7 +149,14 @@ public class SelectPlayedArmyListDialog extends DialogFragment {
                     @Override
                     public void onFocusChange(View v, boolean hasFocus) {
 
-                        autoCompleteArmyListEditText.showDropDown();
+                        new Handler().postDelayed(new Runnable() {
+
+                                @Override
+                                public void run() {
+
+                                    autoCompleteArmyListEditText.showDropDown();
+                                }
+                            }, 500);
                     }
                 });
             autoCompleteArmyListEditText.setThreshold(0);

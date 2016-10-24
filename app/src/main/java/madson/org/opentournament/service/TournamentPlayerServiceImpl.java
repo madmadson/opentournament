@@ -2,15 +2,18 @@ package madson.org.opentournament.service;
 
 import android.content.ContentValues;
 import android.content.Context;
-
 import android.database.Cursor;
-
 import android.database.sqlite.SQLiteDatabase;
-
 import android.util.Log;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import madson.org.opentournament.db.FirebaseReferences;
 import madson.org.opentournament.db.OpenTournamentDBHelper;
@@ -20,12 +23,6 @@ import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.domain.TournamentPlayerComparator;
 import madson.org.opentournament.domain.TournamentTeam;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 
 /**
@@ -329,7 +326,8 @@ public class TournamentPlayerServiceImpl implements TournamentPlayerService {
         contentValues.put(TournamentPlayerTable.COLUMN_DROPPED_IN_ROUND, tournament.getActualRound());
 
         db.update(TournamentPlayerTable.TABLE_TOURNAMENT_PLAYER, contentValues,
-            TournamentPlayerTable.COLUMN_PLAYER_UUID + " = ?", new String[] { player.getUuid() });
+            TournamentPlayerTable.COLUMN_PLAYER_UUID + " = ? AND " + TournamentPlayerTable.COLUMN_TOURNAMENT_UUID
+            + " = ? ", new String[] { player.getUuid(), tournament.getUUID() });
     }
 
 
@@ -344,7 +342,8 @@ public class TournamentPlayerServiceImpl implements TournamentPlayerService {
         contentValues.put(TournamentPlayerTable.COLUMN_FACTION, tournamentPlayer.getFaction());
 
         db.update(TournamentPlayerTable.TABLE_TOURNAMENT_PLAYER, contentValues,
-            TournamentPlayerTable.COLUMN_PLAYER_UUID + " = ?", new String[] { tournamentPlayer.getPlayerUUID() });
+            TournamentPlayerTable.COLUMN_PLAYER_UUID + " = ? AND " + TournamentPlayerTable.COLUMN_TOURNAMENT_UUID
+            + " = ? ", new String[] { tournamentPlayer.getPlayerUUID(), tournament.getUUID() });
     }
 
 

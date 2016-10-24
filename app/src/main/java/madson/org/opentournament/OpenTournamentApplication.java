@@ -1,12 +1,12 @@
 package madson.org.opentournament;
 
+import java.util.List;
+
 import madson.org.opentournament.about.AppInfo;
 import madson.org.opentournament.about.LibraryItem;
 import madson.org.opentournament.db.OpenTournamentDBHelper;
 import madson.org.opentournament.utility.BaseApplication;
 import madson.org.opentournament.utility.Environment;
-
-import java.util.List;
 
 
 /**

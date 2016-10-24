@@ -4,6 +4,8 @@ import android.content.Context;
 
 import android.graphics.Color;
 
+import android.support.v4.content.ContextCompat;
+
 import android.support.v7.widget.CardView;
 
 import android.view.LayoutInflater;
@@ -123,8 +125,8 @@ public class OnlineTournamentPlayerTeamExpandableListAdapter extends BaseExpanda
 
             TextView teamName = (TextView) convertView.findViewById(R.id.expandableList_team_name);
 
-            if (team.getTeamName() != null && !team.getTeamName().isEmpty()) {
-                teamName.setText(team.getTeamName() + " (" + getChildrenCount(groupPosition) + ")");
+            if (team.getName() != null && !team.getName().isEmpty()) {
+                teamName.setText(team.getName() + " (" + getChildrenCount(groupPosition) + ")");
             } else {
                 teamName.setText(baseActivity.getResources().getString(R.string.no_team) + " ("
                     + getChildrenCount(groupPosition) + ")");
@@ -136,9 +138,9 @@ public class OnlineTournamentPlayerTeamExpandableListAdapter extends BaseExpanda
             teamNumber.setText(String.valueOf(groupPosition + 1));
 
             if (groupPosition % 2 == 0) {
-                layout.setBackgroundColor(Color.LTGRAY);
+                layout.setBackgroundColor(ContextCompat.getColor(baseActivity, R.color.colorLightGrey));
             } else {
-                layout.setBackgroundColor(Color.WHITE);
+                layout.setBackgroundColor(ContextCompat.getColor(baseActivity, R.color.colorAlmostWhite));
             }
         }
 
@@ -183,12 +185,12 @@ public class OnlineTournamentPlayerTeamExpandableListAdapter extends BaseExpanda
             if (baseActivity.getBaseApplication().getAuthenticatedPlayer() != null
                     && baseActivity.getBaseApplication().getAuthenticatedPlayer().getUUID()
                     .equals(tournamentPlayer.getPlayerUUID())) {
-                card.setCardBackgroundColor(Color.CYAN);
+                card.setCardBackgroundColor(ContextCompat.getColor(baseActivity, R.color.colorTurquoise));
             } else {
                 if (childPosition % 2 == 0) {
-                    card.setCardBackgroundColor(Color.LTGRAY);
+                    card.setCardBackgroundColor(ContextCompat.getColor(baseActivity, R.color.colorLightGrey));
                 } else {
-                    card.setCardBackgroundColor(Color.WHITE);
+                    card.setCardBackgroundColor(ContextCompat.getColor(baseActivity, R.color.colorAlmostWhite));
                 }
             }
 

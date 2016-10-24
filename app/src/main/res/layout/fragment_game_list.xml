@@ -27,7 +27,8 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/huge_tick"
             android:background="@android:color/transparent"
-            android:src="@drawable/ic_keyboard_arrow_up_black_24dp" />
+            android:src="@drawable/ic_keyboard_arrow_up_black_36dp"
+            android:tint="@color/colorPrimaryDark" />
 
         <TextView
             android:id="@+id/heading_game_for_round"
@@ -58,22 +59,23 @@
                 android:padding="@dimen/main_tick" />
 
             <Button
-                android:id="@+id/button_undo_round"
+                android:id="@+id/button_start_next_round"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/halve_tick"
-                android:layout_marginBottom="@dimen/halve_tick"
                 android:layout_marginLeft="@dimen/halve_tick"
                 android:layout_marginRight="@dimen/halve_tick"
-                android:background="@color/colorWarning"
-                android:drawableLeft="@drawable/ic_undo_white_24dp"
+                android:layout_marginTop="@dimen/halve_tick"
+                android:layout_marginBottom="@dimen/halve_tick"
+                android:background="@color/colorPrimaryDark"
+                android:drawableLeft="@android:drawable/ic_media_play"
                 android:drawablePadding="@dimen/halve_tick"
                 android:paddingLeft="@dimen/halve_tick"
                 android:paddingRight="@dimen/halve_tick"
-                android:text="@string/undo_round"
+                android:text="@string/next_round"
                 android:textColor="@color/colorTextIcon"
-                android:textStyle="bold" />
-            
+                android:textStyle="bold"
+                android:visibility="gone" />
+
             <Button
                 android:id="@+id/button_pair_again"
                 android:layout_width="match_parent"
@@ -88,29 +90,16 @@
                 android:paddingRight="@dimen/halve_tick"
                 android:text="@string/pair_again"
                 android:textColor="@color/colorTextIcon"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:visibility="gone" />
 
-            <Button
-                android:id="@+id/button_start_next_round"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/halve_tick"
-                android:layout_marginRight="@dimen/halve_tick"
-                android:background="@color/colorPrimaryDark"
-                android:drawableLeft="@android:drawable/ic_media_play"
-                android:drawablePadding="@dimen/halve_tick"
-                android:paddingLeft="@dimen/halve_tick"
-                android:paddingRight="@dimen/halve_tick"
-                android:text="@string/next_round"
-                android:textColor="@color/colorTextIcon"
-                android:textStyle="bold" />
             
+
             <Button
                 android:id="@+id/button_upload_games"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/halve_tick"
-                android:layout_marginTop="@dimen/halve_tick"
                 android:layout_marginLeft="@dimen/halve_tick"
                 android:layout_marginRight="@dimen/halve_tick"
                 android:background="@color/colorPrimaryDark"
@@ -120,8 +109,25 @@
                 android:paddingRight="@dimen/halve_tick"
                 android:text="@string/upload_games"
                 android:textColor="@color/colorTextIcon"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:visibility="gone" />
 
+            <Button
+                android:id="@+id/button_undo_round"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/halve_tick"
+                android:layout_marginLeft="@dimen/halve_tick"
+                android:layout_marginRight="@dimen/halve_tick"
+                android:background="@color/colorWarning"
+                android:drawableLeft="@drawable/ic_undo_white_24dp"
+                android:drawablePadding="@dimen/halve_tick"
+                android:paddingLeft="@dimen/halve_tick"
+                android:paddingRight="@dimen/halve_tick"
+                android:text="@string/undo_round"
+                android:textColor="@color/colorTextIcon"
+                android:textStyle="bold"
+                android:visibility="gone" />
             <Button
                 android:id="@+id/button_end_tournament"
                 android:layout_width="match_parent"
@@ -136,7 +142,8 @@
                 android:paddingRight="@dimen/halve_tick"
                 android:text="@string/end_tournament"
                 android:textColor="@color/colorBlack"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:visibility="gone" />
 
         </LinearLayout>
     </FrameLayout>

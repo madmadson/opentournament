@@ -3,11 +3,10 @@ package madson.org.opentournament.tournaments;
 import android.content.DialogInterface;
 import android.content.Intent;
 
-import android.graphics.Color;
-
 import android.os.Bundle;
 
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
@@ -87,11 +86,11 @@ public class OrganizedTournamentListAdapter extends RecyclerView.Adapter<Tournam
 
         if (tournament.getState().equals(Tournament.TournamentState.FINISHED.name())) {
             viewHolder.getTournamentState().setText(R.string.tournament_finished);
-            viewHolder.getTournamentState().setTextColor(Color.RED);
+            viewHolder.getTournamentState().setTextColor(ContextCompat.getColor(baseActivity, R.color.colorNegative));
             viewHolder.getTournamentState().setVisibility(View.VISIBLE);
         } else if (tournament.getActualRound() > 0) {
             viewHolder.getTournamentState().setText(R.string.tournament_started);
-            viewHolder.getTournamentState().setTextColor(Color.BLUE);
+            viewHolder.getTournamentState().setTextColor(ContextCompat.getColor(baseActivity, R.color.colorAction));
             viewHolder.getTournamentState().setVisibility(View.VISIBLE);
         } else {
             viewHolder.getTournamentState().setVisibility(View.GONE);
@@ -156,9 +155,11 @@ public class OrganizedTournamentListAdapter extends RecyclerView.Adapter<Tournam
         }
 
         if (position % 2 == 0) {
-            viewHolder.getRowTournament().setBackgroundColor(Color.LTGRAY);
+            viewHolder.getRowTournament()
+                .setBackgroundColor(ContextCompat.getColor(baseActivity, R.color.colorLightGrey));
         } else {
-            viewHolder.getRowTournament().setBackgroundColor(Color.WHITE);
+            viewHolder.getRowTournament()
+                .setBackgroundColor(ContextCompat.getColor(baseActivity, R.color.colorAlmostWhite));
         }
 
         viewHolder.getRowTournament().setOnClickListener(new View.OnClickListener() {

@@ -2,7 +2,7 @@ package madson.org.opentournament.online;
 
 import android.content.Context;
 
-import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
 
 import android.support.v7.widget.RecyclerView;
 
@@ -69,9 +69,11 @@ public class OnlineTournamentPlayerListAdapter extends RecyclerView.Adapter<Tour
         }
 
         if (position % 2 == 0) {
-            viewHolder.getTournamentPlayerCard().setCardBackgroundColor(Color.LTGRAY);
+            viewHolder.getTournamentPlayerCard()
+                .setCardBackgroundColor(ContextCompat.getColor(context, R.color.colorLightGrey));
         } else {
-            viewHolder.getTournamentPlayerCard().setCardBackgroundColor(Color.WHITE);
+            viewHolder.getTournamentPlayerCard()
+                .setCardBackgroundColor(ContextCompat.getColor(context, R.color.colorAlmostWhite));
         }
 
         if (viewHolder.getEditIcon() != null) {

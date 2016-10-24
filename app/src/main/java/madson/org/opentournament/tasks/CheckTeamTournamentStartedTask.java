@@ -2,18 +2,18 @@ package madson.org.opentournament.tasks;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
-
 import android.support.design.widget.Snackbar;
-
 import android.support.v4.app.FragmentManager;
-
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
-
 import android.view.LayoutInflater;
 import android.view.View;
-
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Tournament;
@@ -21,10 +21,6 @@ import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.domain.TournamentTeam;
 import madson.org.opentournament.organize.setup.ConfirmStartTournamentDialog;
 import madson.org.opentournament.utility.BaseActivity;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 
 /**
@@ -85,7 +81,7 @@ public class CheckTeamTournamentStartedTask extends AsyncTask<Void, Void, Void> 
         if (unevenTeams) {
             Snackbar snackbar = Snackbar.make(baseActivity.getCoordinatorLayout(), R.string.uneven_teams,
                     Snackbar.LENGTH_LONG);
-            snackbar.getView().setBackgroundColor(baseActivity.getResources().getColor(R.color.colorNegative));
+            snackbar.getView().setBackgroundColor(ContextCompat.getColor(baseActivity, R.color.colorWarning));
 
             snackbar.show();
         } else if (someTeamsNotFull) {

@@ -36,8 +36,7 @@
             android:imeOptions="actionNext"
             android:inputType="textEmailAddress"
             android:maxLines="1"
-            android:maxLength="100"
-            android:singleLine="true" />
+            android:maxLength="100" />
 
     </android.support.design.widget.TextInputLayout>
 

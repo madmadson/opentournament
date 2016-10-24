@@ -1,8 +1,8 @@
 package madson.org.opentournament.online.team;
 
-import android.graphics.Color;
-
 import android.graphics.drawable.Drawable;
+
+import android.support.v4.content.ContextCompat;
 
 import android.support.v7.widget.RecyclerView;
 
@@ -33,17 +33,16 @@ public class OnlineTeamGameListAdapter extends RecyclerView.Adapter<GameViewHold
 
     private List<Game> gamesInTeamMatch;
     private BaseActivity baseActivity;
-    private Tournament tournament;
 
     public OnlineTeamGameListAdapter(BaseActivity baseActivity, Tournament tournament) {
 
-        this.tournament = tournament;
+        Tournament tournament1 = tournament;
 
         this.gamesInTeamMatch = new ArrayList<>();
         this.baseActivity = baseActivity;
 
-        winnerShape = baseActivity.getResources().getDrawable(R.drawable.shape_winner);
-        looserShape = baseActivity.getResources().getDrawable(R.drawable.shape_looser);
+        winnerShape = ContextCompat.getDrawable(baseActivity, R.drawable.shape_winner);
+        looserShape = ContextCompat.getDrawable(baseActivity, R.drawable.shape_looser);
     }
 
     @Override
@@ -96,16 +95,17 @@ public class OnlineTeamGameListAdapter extends RecyclerView.Adapter<GameViewHold
             .setText(baseActivity.getResources().getString(R.string.game_vp, game.getParticipant_two_victory_points()));
 
         if (position % 2 == 0) {
-            holder.getPairingRow().setBackgroundColor(Color.LTGRAY);
+            holder.getPairingRow().setBackgroundColor(ContextCompat.getColor(baseActivity, R.color.colorTurquoise));
         } else {
-            holder.getPairingRow().setBackgroundColor(Color.WHITE);
+            holder.getPairingRow()
+                .setBackgroundColor(ContextCompat.getColor(baseActivity, R.color.colorLightTurquoise));
         }
 
         if (game.isFinished()) {
             holder.getPlayerOneCardView()
-                .setBackgroundDrawable(game.getParticipant_one_score() == 1 ? winnerShape : looserShape);
+                .setBackground(game.getParticipant_one_score() == 1 ? winnerShape : looserShape);
             holder.getPlayerTwoCardView()
-                .setBackgroundDrawable(game.getParticipant_two_score() == 1 ? winnerShape : looserShape);
+                .setBackground(game.getParticipant_two_score() == 1 ? winnerShape : looserShape);
         }
 
         holder.getSwapPlayerOne().setVisibility(View.GONE);

@@ -146,16 +146,14 @@ public class AddTournamentPlayerDialog extends DialogFragment {
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
                         String teamName = (String) parent.getItemAtPosition(position);
-                        int teamMembers = 0;
+                        int teamMembers;
 
-                        if (teamNameMap.get(new TournamentTeam(teamName)) != null) {
+                        if (teamName.equals(baseActivity.getString(R.string.no_team))) {
+                            teamMembers = teamNameMap.get(new TournamentTeam("")).size();
+                        } else if (teamNameMap.get(new TournamentTeam(teamName)) != null) {
                             teamMembers = teamNameMap.get(new TournamentTeam(teamName)).size();
                         } else {
-                            if (teamNameMap.get(new TournamentTeam("")) == null) {
-                                teamMembers = 0;
-                            } else {
-                                teamMembers = teamNameMap.get(new TournamentTeam("")).size();
-                            }
+                            teamMembers = 0;
                         }
 
                         if (!tournament.getTournamentTyp().equals(TournamentTyp.TEAM.name())) {

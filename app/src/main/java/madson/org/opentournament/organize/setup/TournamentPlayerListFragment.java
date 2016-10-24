@@ -13,6 +13,7 @@ import android.support.design.widget.Snackbar;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
@@ -444,9 +445,9 @@ public class TournamentPlayerListFragment extends Fragment implements OpenTourna
                 tournament.getMaxNumberOfParticipants()));
 
         if (interCounterTournamentPlayers > tournament.getMaxNumberOfParticipants()) {
-            counterTournamentPlayers.setTextColor(Color.RED);
+            counterTournamentPlayers.setTextColor(ContextCompat.getColor(baseActivity, R.color.colorNegative));
         } else {
-            counterTournamentPlayers.setTextColor(Color.BLUE);
+            counterTournamentPlayers.setTextColor(ContextCompat.getColor(baseActivity, R.color.colorAction));
         }
     }
 

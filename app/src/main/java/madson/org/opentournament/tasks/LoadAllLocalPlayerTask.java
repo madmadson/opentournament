@@ -1,19 +1,17 @@
 package madson.org.opentournament.tasks;
 
 import android.os.AsyncTask;
-
 import android.view.View;
-
 import android.widget.Filter;
 import android.widget.TextView;
+
+import java.util.List;
 
 import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.organize.setup.LocalPlayerListAdapter;
 import madson.org.opentournament.utility.BaseApplication;
-
-import java.util.List;
 
 
 /**

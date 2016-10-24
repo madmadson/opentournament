@@ -62,14 +62,16 @@ public class LoadGameListTask extends AsyncTask<Void, Void, Void> {
 
         gameListAdapter.setGamesForRound(gamesForRound, round);
 
-        if (gamesForRound.isEmpty()) {
-            noGamesInfo.setVisibility(View.VISIBLE);
-            endTournamentButton.setVisibility(View.GONE);
-            nextRoundButton.setVisibility(View.GONE);
-        } else {
-            noGamesInfo.setVisibility(View.GONE);
-            endTournamentButton.setVisibility(View.VISIBLE);
-            nextRoundButton.setVisibility(View.VISIBLE);
+        if (tournament.getActualRound() == round) {
+            if (gamesForRound.isEmpty()) {
+                noGamesInfo.setVisibility(View.VISIBLE);
+                endTournamentButton.setVisibility(View.GONE);
+                nextRoundButton.setVisibility(View.GONE);
+            } else {
+                noGamesInfo.setVisibility(View.GONE);
+                endTournamentButton.setVisibility(View.VISIBLE);
+                nextRoundButton.setVisibility(View.VISIBLE);
+            }
         }
     }
 }

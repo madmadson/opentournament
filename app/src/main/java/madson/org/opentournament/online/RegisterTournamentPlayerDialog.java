@@ -13,6 +13,7 @@ import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 
 import android.support.v4.app.DialogFragment;
+import android.support.v4.content.ContextCompat;
 
 import android.support.v7.app.AlertDialog;
 
@@ -135,7 +136,8 @@ public class RegisterTournamentPlayerDialog extends DialogFragment {
             team_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
             DatabaseReference reference = FirebaseDatabase.getInstance()
-                    .getReference(FirebaseReferences.TOURNAMENT_REGISTRATIONS + "/" + tournament.getUUID());
+                    .getReference(FirebaseReferences.TOURNAMENT_REGISTRATIONS + "/" + tournament.getGameOrSportTyp()
+                        + "/" + tournament.getUUID());
 
             teamnameMap = new HashMap<>();
 
@@ -148,13 +150,13 @@ public class RegisterTournamentPlayerDialog extends DialogFragment {
                             TournamentPlayer player = playerSnapshot.getValue(TournamentPlayer.class);
 
                             if (player != null) {
-                                String teamname = player.getTeamName();
+                                String teamName = player.getTeamName();
 
-                                if (teamname != null && !teamname.isEmpty()) {
-                                    if (!teamnameMap.containsKey(teamname)) {
-                                        teamnameMap.put(teamname, 1);
+                                if (teamName != null && !teamName.isEmpty()) {
+                                    if (!teamnameMap.containsKey(teamName)) {
+                                        teamnameMap.put(teamName, 1);
                                     } else {
-                                        teamnameMap.put(teamname, teamnameMap.get(teamname) + 1);
+                                        teamnameMap.put(teamName, teamnameMap.get(teamName) + 1);
                                     }
                                 }
                             }
@@ -194,19 +196,19 @@ public class RegisterTournamentPlayerDialog extends DialogFragment {
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-                        String teamname = (String) parent.getItemAtPosition(position);
-                        int teammembers;
+                        String teamName = (String) parent.getItemAtPosition(position);
+                        int teamMembers;
 
-                        if (teamnameMap.get(teamname) == null) {
-                            teammembers = 0;
+                        if (teamnameMap.get(teamName) == null) {
+                            teamMembers = 0;
                         } else {
-                            teammembers = teamnameMap.get(teamname);
+                            teamMembers = teamnameMap.get(teamName);
                         }
 
                         if (!tournament.getTournamentTyp().equals(TournamentTyp.TEAM.name())) {
-                            labelTeammembers.setText("(" + teammembers + ")");
+                            labelTeammembers.setText("(" + teamMembers + ")");
                         } else {
-                            labelTeammembers.setText("(" + teammembers + "/" + tournament.getTeamSize() + ")");
+                            labelTeammembers.setText("(" + teamMembers + "/" + tournament.getTeamSize() + ")");
                         }
                     }
 
@@ -374,7 +376,7 @@ public class RegisterTournamentPlayerDialog extends DialogFragment {
                             Snackbar snackbar = Snackbar.make(baseActivity.getCoordinatorLayout(),
                                     R.string.success_registration, Snackbar.LENGTH_LONG);
                             snackbar.getView()
-                            .setBackgroundColor(baseActivity.getResources().getColor(R.color.colorPositive));
+                            .setBackgroundColor(ContextCompat.getColor(baseActivity, R.color.colorAccent));
                             snackbar.show();
 
                             dialog.dismiss();

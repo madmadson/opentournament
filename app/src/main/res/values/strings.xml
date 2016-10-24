@@ -328,5 +328,8 @@
     <string name="select_army_lists">Select played army list</string>
     <string name="nothing_saved">Nothing saved</string>
     <string name="success_save_army_list">Successfully save played army list</string>
+    <string name="dialog_close">close</string>
+    <string name="upload_successfully">Army List upload successful</string>
+    <string name="delete_uploaded_army_lists">Delete uploaded Army List</string>
 
 </resources>

@@ -3,13 +3,12 @@ package madson.org.opentournament.organize;
 import android.content.Context;
 import android.content.DialogInterface;
 
-import android.graphics.Color;
-
 import android.os.Bundle;
 
 import android.support.annotation.Nullable;
 
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
@@ -221,9 +220,11 @@ public class RankingListFragment extends Fragment {
             }
 
             if (position % 2 == 0) {
-                holder.getRankingCard().setCardBackgroundColor(Color.LTGRAY);
+                holder.getRankingCard()
+                    .setCardBackgroundColor(ContextCompat.getColor(baseActivity, R.color.colorLightGrey));
             } else {
-                holder.getRankingCard().setCardBackgroundColor(Color.WHITE);
+                holder.getRankingCard()
+                    .setCardBackgroundColor(ContextCompat.getColor(baseActivity, R.color.colorAlmostWhite));
             }
         }
 

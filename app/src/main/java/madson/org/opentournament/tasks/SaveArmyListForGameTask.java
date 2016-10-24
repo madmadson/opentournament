@@ -4,6 +4,8 @@ import android.os.AsyncTask;
 
 import android.support.design.widget.Snackbar;
 
+import android.support.v4.content.ContextCompat;
+
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Game;
 import madson.org.opentournament.domain.TournamentPlayer;
@@ -58,7 +60,7 @@ public class SaveArmyListForGameTask extends AsyncTask<Void, Void, Void> {
 
         Snackbar snackbar = Snackbar.make(baseActivity.getCoordinatorLayout(), R.string.success_save_army_list,
                 Snackbar.LENGTH_LONG);
-        snackbar.getView().setBackgroundColor(baseActivity.getResources().getColor(R.color.colorPositive));
+        snackbar.getView().setBackgroundColor(ContextCompat.getColor(baseActivity, R.color.colorAccent));
         snackbar.show();
     }
 }

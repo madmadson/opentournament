@@ -3,13 +3,12 @@ package madson.org.opentournament.organize.setup;
 import android.content.Context;
 import android.content.DialogInterface;
 
-import android.graphics.Color;
-
 import android.os.Bundle;
 
 import android.support.design.widget.Snackbar;
 
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
@@ -142,8 +141,8 @@ public class TournamentPlayerTeamExpandableListAdapter extends BaseExpandableLis
 
             TextView teamName = (TextView) convertView.findViewById(R.id.expandableList_team_name);
 
-            if (team.getTeamName() != null && !team.getTeamName().isEmpty()) {
-                teamName.setText(team.getTeamName() + " (" + getChildrenCount(groupPosition) + ")");
+            if (team.getName() != null && !team.getName().isEmpty()) {
+                teamName.setText(team.getName() + " (" + getChildrenCount(groupPosition) + ")");
             } else {
                 teamName.setText(baseActivity.getResources().getString(R.string.no_team) + " ("
                     + getChildrenCount(groupPosition) + ")");
@@ -155,9 +154,9 @@ public class TournamentPlayerTeamExpandableListAdapter extends BaseExpandableLis
             teamNumber.setText(String.valueOf(groupPosition + 1));
 
             if (groupPosition % 2 == 0) {
-                layout.setBackgroundColor(Color.LTGRAY);
+                layout.setBackgroundColor(ContextCompat.getColor(baseActivity, R.color.colorLightGrey));
             } else {
-                layout.setBackgroundColor(Color.WHITE);
+                layout.setBackgroundColor(ContextCompat.getColor(baseActivity, R.color.colorAlmostWhite));
             }
         }
 
@@ -212,9 +211,9 @@ public class TournamentPlayerTeamExpandableListAdapter extends BaseExpandableLis
             CardView card = (CardView) convertView.findViewById(R.id.tournament_player_row_card_view);
 
             if (childPosition % 2 == 0) {
-                card.setCardBackgroundColor(Color.LTGRAY);
+                card.setCardBackgroundColor(ContextCompat.getColor(baseActivity, R.color.colorTurquoise));
             } else {
-                card.setCardBackgroundColor(Color.WHITE);
+                card.setCardBackgroundColor(ContextCompat.getColor(baseActivity, R.color.colorLightTurquoise));
             }
 
             ImageView editIcon = (ImageView) convertView.findViewById(R.id.tournament_player_row_edit_icon);
@@ -263,7 +262,7 @@ public class TournamentPlayerTeamExpandableListAdapter extends BaseExpandableLis
                                             R.string.cant_upload_list_for_local_players, Snackbar.LENGTH_LONG);
 
                                     snackbar.getView()
-                                    .setBackgroundColor(baseActivity.getResources().getColor(R.color.colorNegative));
+                                    .setBackgroundColor(ContextCompat.getColor(baseActivity, R.color.colorWarning));
 
                                     snackbar.show();
                                 }

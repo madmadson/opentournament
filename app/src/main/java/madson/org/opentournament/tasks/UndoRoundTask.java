@@ -1,7 +1,10 @@
 package madson.org.opentournament.tasks;
 
 import android.os.AsyncTask;
+
 import android.support.design.widget.Snackbar;
+
+import android.support.v4.content.ContextCompat;
 
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Tournament;
@@ -56,7 +59,7 @@ public class UndoRoundTask extends AsyncTask<Void, Void, Void> {
         Snackbar snackbar = Snackbar.make(baseActivity.getCoordinatorLayout(), R.string.success_undo_round,
                 Snackbar.LENGTH_LONG);
 
-        snackbar.getView().setBackgroundColor(baseActivity.getResources().getColor(R.color.colorAccent));
+        snackbar.getView().setBackgroundColor(ContextCompat.getColor(baseActivity, R.color.colorAccent));
 
         snackbar.show();
 

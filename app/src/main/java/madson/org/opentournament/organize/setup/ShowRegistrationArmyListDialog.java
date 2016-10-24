@@ -79,7 +79,7 @@ public class ShowRegistrationArmyListDialog extends DialogFragment {
         listDataChild = new HashMap<>();
 
         listAdapter = new ArmyListExpandableListAdapter((BaseActivity) getActivity(), listDataHeader, listDataChild,
-                tournament, tournamentPlayer, null);
+                tournament, tournamentPlayer, null, null, null);
 
         DatabaseReference reference = FirebaseDatabase.getInstance()
                 .getReference(FirebaseReferences.TOURNAMENT_ARMY_LISTS + "/" + tournament.getGameOrSportTyp() + "/"
@@ -94,7 +94,7 @@ public class ShowRegistrationArmyListDialog extends DialogFragment {
                         ArmyList armyList = armyLists.getValue(ArmyList.class);
 
                         if (armyList != null) {
-                            listDataHeader.add("List " + (listAdapter.getGroupCount() + 1));
+                            listDataHeader.add(armyList.getName());
                             listDataChild.put(listDataHeader.get(listAdapter.getGroupCount() - 1), armyList);
                             listAdapter.notifyDataSetChanged();
                         }

@@ -55,6 +55,8 @@ public class Tournament implements Parcelable {
     private GameOrSportTyp gameOrSportTyp;
     private String state;
 
+    private TournamentRanking ranking;
+
     // empty constructor
     public Tournament() {
 
@@ -142,6 +144,19 @@ public class Tournament implements Parcelable {
     public int getTeamSize() {
 
         return teamSize;
+    }
+
+
+    @Exclude
+    public TournamentRanking getRanking() {
+
+        return ranking;
+    }
+
+
+    public void setRanking(TournamentRanking ranking) {
+
+        this.ranking = ranking;
     }
 
 

@@ -22,6 +22,8 @@
     <string name="header_tournament_name">Tournament</string>
     <string name="header_remaining_seats">Seats</string>
 
+    <string name="header_rank">Rank</string>
+
     <!-- toolbar titles-->
     <string name="toolbar_title_home">Home</string>
     <string name="toolbar_title_home_DEMO">Home - DEMO</string>
@@ -331,5 +333,6 @@
     <string name="dialog_close">close</string>
     <string name="upload_successfully">Army List upload successful</string>
     <string name="delete_uploaded_army_lists">Delete uploaded Army List</string>
+    <string name="no_player_tournaments_found">No Tournaments for player found</string>
 
 </resources>

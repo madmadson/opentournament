@@ -102,6 +102,10 @@ public abstract class BaseApplication extends Application {
             DatabaseReference armyLists = FirebaseDatabase.getInstance()
                     .getReference(FirebaseReferences.TOURNAMENT_ARMY_LISTS);
             armyLists.keepSynced(true);
+
+            DatabaseReference playerTournaments = FirebaseDatabase.getInstance()
+                    .getReference(FirebaseReferences.PLAYER_TOURNAMENTS);
+            playerTournaments.keepSynced(true);
         }
 
         // NOTE: order of service wiring matters!

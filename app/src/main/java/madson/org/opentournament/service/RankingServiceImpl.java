@@ -269,6 +269,12 @@ public class RankingServiceImpl implements RankingService {
 
         int actualRound = tournament.getActualRound();
 
+        List<TournamentPlayer> allPlayerForTournament = new ArrayList<>();
+
+        if (tournament.getTournamentTyp().equals(TournamentTyp.TEAM.name())) {
+            allPlayerForTournament = tournamentPlayerService.getAllPlayersForTournament(tournament);
+        }
+
         DatabaseReference referenceForRankingToDelete = FirebaseDatabase.getInstance()
                 .getReference(FirebaseReferences.TOURNAMENT_RANKINGS + "/" + tournament.getGameOrSportTyp() + "/"
                     + tournament.getUUID());
@@ -294,12 +300,27 @@ public class RankingServiceImpl implements RankingService {
                 referenceForRankings.setValue(tournamentRanking);
 
                 if (i == actualRound && tournament.getState().equals(Tournament.TournamentState.FINISHED.name())) {
-                    DatabaseReference referenceForTournamentPlayers = FirebaseDatabase.getInstance()
-                            .getReference(FirebaseReferences.PLAYER_GAMES + "/" + tournament.getGameOrSportTyp()
-                                + "/" + tournamentRanking.getParticipantUUID() + "/" + tournament.getUUID()
-                                + "/ranking");
+                    if (tournament.getTournamentTyp().equals(TournamentTyp.TEAM.name())) {
+                        for (TournamentPlayer tournamentPlayer : allPlayerForTournament) {
+                            if (tournamentPlayer.getTeamName().equals(tournamentRanking.getParticipantUUID())) {
+                                DatabaseReference referenceForTournamentPlayers = FirebaseDatabase.getInstance()
+                                        .getReference(FirebaseReferences.PLAYER_TOURNAMENTS + "/"
+                                            + tournament.getGameOrSportTyp()
+                                            + "/" + tournamentPlayer.getPlayerUUID() + "/" + tournament.getUUID()
+                                            + "/ranking");
 
-                    referenceForTournamentPlayers.setValue(tournamentRanking);
+                                referenceForTournamentPlayers.setValue(tournamentRanking);
+                            }
+                        }
+                    } else {
+                        DatabaseReference referenceForTournamentPlayers = FirebaseDatabase.getInstance()
+                                .getReference(FirebaseReferences.PLAYER_TOURNAMENTS + "/"
+                                    + tournament.getGameOrSportTyp()
+                                    + "/" + tournamentRanking.getParticipantUUID() + "/" + tournament.getUUID()
+                                    + "/ranking");
+
+                        referenceForTournamentPlayers.setValue(tournamentRanking);
+                    }
                 }
             }
         }

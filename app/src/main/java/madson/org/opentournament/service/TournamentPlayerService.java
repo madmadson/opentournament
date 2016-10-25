@@ -38,7 +38,7 @@ public interface TournamentPlayerService {
     /**
      * @param  tournament  tournament
      *
-     * @return  map of all players; tournament player id is key
+     * @return  map of all tournament teams; tournament player id is key
      */
     Map<String, TournamentTeam> getAllTeamMapForTournament(Tournament tournament);
 

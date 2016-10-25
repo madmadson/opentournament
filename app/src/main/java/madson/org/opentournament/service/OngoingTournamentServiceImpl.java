@@ -444,19 +444,23 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
                 referenceForGames.setValue(game);
 
                 if (uploadedTournament.getState().equals(Tournament.TournamentState.FINISHED.name())) {
-                    DatabaseReference referenceForPlayerOneGames = FirebaseDatabase.getInstance()
-                            .getReference(FirebaseReferences.PLAYER_GAMES + "/" + uploadedTournament
-                                .getGameOrSportTyp() + "/" + game.getParticipantOne().getUuid() + "/"
-                                + uploadedTournament.getUUID() + "/" + uuid);
+                    // for team games we don't need games
+                    if (!uploadedTournament.getTournamentTyp().equals(TournamentTyp.TEAM.name())
+                            || game.getParent_UUID() != null) {
+                        DatabaseReference referenceForPlayerOneGames = FirebaseDatabase.getInstance()
+                                .getReference(FirebaseReferences.PLAYER_TOURNAMENTS + "/"
+                                    + uploadedTournament.getGameOrSportTyp() + "/" + game.getParticipantOne().getUuid()
+                                    + "/" + uploadedTournament.getUUID() + "/games/" + uuid);
 
-                    referenceForPlayerOneGames.setValue(game);
+                        referenceForPlayerOneGames.setValue(game);
 
-                    DatabaseReference referenceForPlayerTwoGames = FirebaseDatabase.getInstance()
-                            .getReference(FirebaseReferences.PLAYER_GAMES + "/" + uploadedTournament
-                                .getGameOrSportTyp() + "/" + game.getParticipantTwo().getUuid() + "/"
-                                + uploadedTournament.getUUID() + "/" + uuid);
+                        DatabaseReference referenceForPlayerTwoGames = FirebaseDatabase.getInstance()
+                                .getReference(FirebaseReferences.PLAYER_TOURNAMENTS + "/"
+                                    + uploadedTournament.getGameOrSportTyp() + "/" + game.getParticipantTwo().getUuid()
+                                    + "/" + uploadedTournament.getUUID() + "/games/" + uuid);
 
-                    referenceForPlayerTwoGames.setValue(game);
+                        referenceForPlayerTwoGames.setValue(game);
+                    }
                 }
             }
         }

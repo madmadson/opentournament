@@ -319,7 +319,7 @@ public class TournamentPlayerServiceImpl implements TournamentPlayerService {
 
             if (tournament.getState().equals(Tournament.TournamentState.FINISHED.name())) {
                 DatabaseReference referenceForTournamentPlayers = FirebaseDatabase.getInstance()
-                        .getReference(FirebaseReferences.PLAYER_GAMES + "/" + tournament.getGameOrSportTyp()
+                        .getReference(FirebaseReferences.PLAYER_TOURNAMENTS + "/" + tournament.getGameOrSportTyp()
                             + "/" + player.getUuid() + "/" + tournament.getUUID());
 
                 referenceForTournamentPlayers.removeValue();

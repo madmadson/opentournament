@@ -17,7 +17,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -27,26 +26,27 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import madson.org.opentournament.R;
 import madson.org.opentournament.db.FirebaseReferences;
-import madson.org.opentournament.domain.GameOrSportTyp;
+import madson.org.opentournament.domain.Game;
 import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.Tournament;
-import madson.org.opentournament.domain.TournamentRanking;
 import madson.org.opentournament.utility.BaseActivity;
 
 
-public class PlayerTournamentListFragment extends Fragment {
+public class PlayerTournamentGamesListFragment extends Fragment {
 
     public static final String BUNDLE_PLAYER = "player";
+    public static final String BUNDLE_TOURNAMENT = "tournament";
 
     private BaseActivity baseActivity;
 
-    private Player player;
     private DatabaseReference mFirebaseDatabaseReference;
     private ProgressBar progressBar;
-    private TextView noTournamentsTextView;
-    private RecyclerView playerTournamentRecyclerView;
-    private PlayerTournamentListAdapter playerTournamentListAdapter;
-    private TextView offlineText;
+
+    private RecyclerView playerTournamentGamesRecyclerView;
+    private PlayerTournamentGamesListAdapter playerTournamentGamesListAdapter;
+
+    private Player player;
+    private Tournament tournament;
 
     @Override
     public void onAttach(Context context) {
@@ -73,27 +73,29 @@ public class PlayerTournamentListFragment extends Fragment {
         if (bundle != null && bundle.getParcelable(BUNDLE_PLAYER) != null) {
             player = bundle.getParcelable(BUNDLE_PLAYER);
         }
+
+        if (bundle != null && bundle.getParcelable(BUNDLE_TOURNAMENT) != null) {
+            tournament = bundle.getParcelable(BUNDLE_TOURNAMENT);
+        }
     }
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        final View view = inflater.inflate(R.layout.fragment_player_tournament_list, container, false);
+        final View view = inflater.inflate(R.layout.fragment_player_tournament_games_list, container, false);
 
         progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
-        offlineText = (TextView) view.findViewById(R.id.offline_text);
 
-        noTournamentsTextView = (TextView) view.findViewById(R.id.no_player_tournaments);
-
-        playerTournamentRecyclerView = (RecyclerView) view.findViewById(R.id.player_tournament_list_recycler_view);
-        playerTournamentRecyclerView.setHasFixedSize(true);
+        playerTournamentGamesRecyclerView = (RecyclerView) view.findViewById(
+                R.id.player_tournament_games_list_recycler_view);
+        playerTournamentGamesRecyclerView.setHasFixedSize(true);
         mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-        playerTournamentRecyclerView.setLayoutManager(linearLayoutManager);
+        playerTournamentGamesRecyclerView.setLayoutManager(linearLayoutManager);
 
-        playerTournamentListAdapter = new PlayerTournamentListAdapter(baseActivity, player);
+        playerTournamentGamesListAdapter = new PlayerTournamentGamesListAdapter(baseActivity);
 
         loadPlayerTournaments();
 
@@ -107,48 +109,39 @@ public class PlayerTournamentListFragment extends Fragment {
             mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
 
             // do this configurable for other sport games
-            DatabaseReference childSolo = mFirebaseDatabaseReference.child(FirebaseReferences.PLAYER_TOURNAMENTS + "/"
-                    + GameOrSportTyp.WARMACHINE_SOLO + "/" + player.getUUID());
+            DatabaseReference gamesOfTournament = mFirebaseDatabaseReference.child(FirebaseReferences.PLAYER_TOURNAMENTS
+                    + "/" + tournament.getGameOrSportTyp() + "/" + player.getUUID() + "/" + tournament.getUUID()
+                    + "/games");
 
-            // do this configurable for other sport games
-            DatabaseReference childTeam = mFirebaseDatabaseReference.child(FirebaseReferences.PLAYER_TOURNAMENTS + "/"
-                    + GameOrSportTyp.WARMACHINE_TEAM + "/" + player.getUUID());
-
-            ChildEventListener tournamentEventListener = new ChildEventListener() {
+            ChildEventListener gamesEventListener = new ChildEventListener() {
 
                 @Override
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
                     progressBar.setVisibility(View.GONE);
-                    noTournamentsTextView.setVisibility(View.GONE);
 
-                    Tournament tournament = dataSnapshot.getValue(Tournament.class);
-                    tournament.setUuid(dataSnapshot.getKey());
+                    Game game = dataSnapshot.getValue(Game.class);
+                    game.setUUID(dataSnapshot.getKey());
 
-                    DataSnapshot rankingSnapshot = dataSnapshot.child("ranking");
-                    TournamentRanking ranking = rankingSnapshot.getValue(TournamentRanking.class);
-
-                    tournament.setRanking(ranking);
-
-                    playerTournamentListAdapter.addTournament(tournament);
+                    playerTournamentGamesListAdapter.addGame(game);
                 }
 
 
                 @Override
                 public void onChildChanged(DataSnapshot dataSnapshot, String s) {
 
-                    Tournament tournament = dataSnapshot.getValue(Tournament.class);
-                    tournament.setUuid(dataSnapshot.getKey());
-                    playerTournamentListAdapter.replaceTournament(tournament);
+                    Game game = dataSnapshot.getValue(Game.class);
+                    game.setUUID(dataSnapshot.getKey());
+                    playerTournamentGamesListAdapter.replaceGame(game);
                 }
 
 
                 @Override
                 public void onChildRemoved(DataSnapshot dataSnapshot) {
 
-                    Tournament tournament = dataSnapshot.getValue(Tournament.class);
-                    tournament.setUuid(dataSnapshot.getKey());
-                    playerTournamentListAdapter.removeTournament(tournament);
+                    Game game = dataSnapshot.getValue(Game.class);
+                    game.setUUID(dataSnapshot.getKey());
+                    playerTournamentGamesListAdapter.removeGame(game);
                 }
 
 
@@ -161,19 +154,17 @@ public class PlayerTournamentListFragment extends Fragment {
                 public void onCancelled(DatabaseError databaseError) {
                 }
             };
-            childSolo.addChildEventListener(tournamentEventListener);
-            childTeam.addChildEventListener(tournamentEventListener);
+            gamesOfTournament.addChildEventListener(gamesEventListener);
 
-            playerTournamentRecyclerView.setAdapter(playerTournamentListAdapter);
+            playerTournamentGamesRecyclerView.setAdapter(playerTournamentGamesListAdapter);
 
             final Runnable runnable = new Runnable() {
 
                 @Override
                 public void run() {
 
-                    if (playerTournamentListAdapter.getItemCount() == 0) {
+                    if (playerTournamentGamesListAdapter.getItemCount() == 0) {
                         progressBar.setVisibility(View.GONE);
-                        noTournamentsTextView.setVisibility(View.VISIBLE);
                     }
                 }
             };
@@ -181,7 +172,6 @@ public class PlayerTournamentListFragment extends Fragment {
             Handler handler = new Handler();
             handler.postDelayed(runnable, 10000);
         } else {
-            offlineText.setVisibility(View.VISIBLE);
             progressBar.setVisibility(View.GONE);
         }
     }

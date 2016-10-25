@@ -18,6 +18,7 @@
     <!-- this must be a pair -->
     <string-array name="news_header">
         <item>Welcome!</item>
+        <item>Di 24.10: Version 0.4.6-ALPHA Released</item>
         <item>Mo 23.10: Version 0.4.3-ALPHA Released</item>
         <item>Fr 21.10: Version 0.4.2-ALPHA Released</item>
         <item>Do 20.10: Version 0.4.1-ALPHA Released</item>
@@ -32,6 +33,12 @@
 
     <string-array name="news">
         <item>Create more Tournaments! Give Feedback!</item>
+        
+          <item>* New Feature: you can clik on player in player overview to\n
+                * see all Tournaments the player was involved before.\n
+                * Only games from finished tournaments are uploaded for players.\n
+                * First data is only the name of the participants more will come.
+        </item>
            <item>* Improved upload army list \n
                  * delete uploaded army list now possible \n
                  * fixed bug ongoing tournament that you can do next round again.

@@ -11,10 +11,9 @@
         <FrameLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
-
             <include
-                android:id="@+id/row_header_online_tournament"
-                layout="@layout/row_header_online_tournament" />
+                android:id="@+id/row_header_player_tournament"
+                layout="@layout/row_header_player_tournament" />
         </FrameLayout>
 
         <TextView
@@ -27,11 +26,11 @@
             android:visibility="gone" />
 
         <TextView
-            android:id="@+id/no_online_tournaments"
+            android:id="@+id/no_player_tournaments"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="@dimen/main_tick"
-            android:text="@string/no_online_tournaments_found"
+            android:text="@string/no_player_tournaments_found"
             android:textStyle="bold"
             android:visibility="gone" />
 
@@ -45,7 +44,7 @@
             android:paddingTop="@dimen/main_tick" />
 
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/online_tournament_list_recycler_view"
+            android:id="@+id/player_tournament_list_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 

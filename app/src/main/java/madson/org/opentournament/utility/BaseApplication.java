@@ -10,6 +10,8 @@ import android.util.Log;
 
 import com.facebook.FacebookSdk;
 
+import com.facebook.appevents.AppEventsLogger;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -82,6 +84,7 @@ public abstract class BaseApplication extends Application {
 
         JodaTimeAndroid.init(this);
         FacebookSdk.sdkInitialize(getApplicationContext());
+        AppEventsLogger.activateApp(this);
 
         if (isOnline()) {
             FirebaseDatabase.getInstance().setPersistenceEnabled(true);

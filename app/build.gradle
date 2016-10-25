@@ -31,12 +31,12 @@ android {
             storePassword debug_store_password
         }
     }
-    compileSdkVersion 24
+    compileSdkVersion 25
     buildToolsVersion "25.0.0"
     defaultConfig {
         applicationId "madson.org.opentournament"
         minSdkVersion 16
-        targetSdkVersion 24
+        targetSdkVersion 25
         versionCode 20
         versionName "0.4.5-ALPHA"
 
@@ -99,14 +99,14 @@ dependencies {
         exclude group: 'com.android.support'
     }
     // Google
-    compile 'com.google.android.gms:play-services-auth:9.6.1'
+    compile 'com.google.android.gms:play-services-auth:9.8.0'
     // Firebase
-    compile 'com.google.firebase:firebase-database:9.6.1'
-    compile 'com.google.firebase:firebase-auth:9.6.1'
+    compile 'com.google.firebase:firebase-database:9.8.0'
+    compile 'com.google.firebase:firebase-auth:9.8.0'
     // Firebase UI
-    compile 'com.firebaseui:firebase-ui-database:0.4.0'
+    compile 'com.firebaseui:firebase-ui-database:0.6.2'
     // facebook
-    compile 'com.facebook.android:facebook-android-sdk:4.13.1'
+    compile 'com.facebook.android:facebook-android-sdk:4.16.1'
 }
 
 apply plugin: 'com.google.gms.google-services'

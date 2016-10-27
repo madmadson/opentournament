@@ -20,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -28,6 +29,10 @@ import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.domain.TournamentRanking;
 import madson.org.opentournament.domain.TournamentTyp;
+import madson.org.opentournament.events.OpenTournamentEvent;
+import madson.org.opentournament.events.OpenTournamentEventListener;
+import madson.org.opentournament.events.OpenTournamentEventTag;
+import madson.org.opentournament.events.UpdateTournamentEvent;
 import madson.org.opentournament.tasks.LoadRankingListTask;
 import madson.org.opentournament.tasks.TournamentUploadTask;
 import madson.org.opentournament.tasks.UndoEndTournamentTask;
@@ -43,7 +48,7 @@ import java.util.List;
  *
  * @author  Tobias Matt - tmatt@contargo.net
  */
-public class RankingListFragment extends Fragment {
+public class RankingListFragment extends Fragment implements OpenTournamentEventListener {
 
     public static final String BUNDLE_TOURNAMENT = "tournament";
     public static final String BUNDLE_ROUND = "round";
@@ -53,6 +58,7 @@ public class RankingListFragment extends Fragment {
     private BaseActivity baseActivity;
     private Button uploadGamesButton;
     private Button undoEndTournamentButton;
+    private ImageView uploadedIcon;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -77,8 +83,16 @@ public class RankingListFragment extends Fragment {
     public void onAttach(Context context) {
 
         super.onAttach(context);
-
         baseActivity = (BaseActivity) getActivity();
+        baseActivity.getBaseApplication().registerTournamentEventListener(this);
+    }
+
+
+    @Override
+    public void onDetach() {
+
+        super.onDetach();
+        baseActivity.getBaseApplication().unregisterTournamentEventListener(this);
     }
 
 
@@ -104,8 +118,9 @@ public class RankingListFragment extends Fragment {
         recyclerView.setLayoutManager(linearLayoutManager);
 
         TextView heading = (TextView) view.findViewById(R.id.heading_ranking_for_round);
-
+        uploadedIcon = (ImageView) view.findViewById(R.id.uploaded_icon);
         undoEndTournamentButton = (Button) view.findViewById(R.id.button_undo_end_tournament);
+
         undoEndTournamentButton.setOnClickListener(new View.OnClickListener() {
 
                 @Override
@@ -135,9 +150,9 @@ public class RankingListFragment extends Fragment {
 
                     if (baseActivity.isConnected()) {
                         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                        builder.setTitle(R.string.confirm_upload_tournament)
-                        .setView(R.layout.dialog_upload_games)
-                        .setPositiveButton(R.string.dialog_save, new DialogInterface.OnClickListener() {
+                        builder.setTitle(R.string.confirm_upload_finished_tournament)
+                        .setView(R.layout.dialog_upload_games_end_tournament)
+                        .setPositiveButton(R.string.dialog_confirm, new DialogInterface.OnClickListener() {
 
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
@@ -163,6 +178,13 @@ public class RankingListFragment extends Fragment {
             heading.setText(getString(R.string.final_standings));
             undoEndTournamentButton.setVisibility(View.VISIBLE);
             uploadGamesButton.setVisibility(View.VISIBLE);
+
+            if (tournament.getUploadedRound() >= round) {
+                uploadedIcon.setVisibility(View.VISIBLE);
+                undoEndTournamentButton.setVisibility(View.GONE);
+            } else {
+                uploadedIcon.setVisibility(View.GONE);
+            }
         } else {
             heading.setText(R.string.heading_ranking_for_round);
             undoEndTournamentButton.setVisibility(View.GONE);
@@ -175,6 +197,23 @@ public class RankingListFragment extends Fragment {
         new LoadRankingListTask(baseActivity.getBaseApplication(), tournament, round, rankingListAdapter).execute();
 
         return view;
+    }
+
+
+    @Override
+    public void handleEvent(OpenTournamentEventTag eventTag, OpenTournamentEvent parameterObject) {
+
+        if (OpenTournamentEventTag.UPDATE_TOURNAMENT.equals(eventTag)) {
+            UpdateTournamentEvent updateTournamentEvent = (UpdateTournamentEvent) parameterObject;
+            getArguments().putParcelable(BUNDLE_TOURNAMENT, updateTournamentEvent.getTournament());
+
+            if (updateTournamentEvent.getTournament().getUploadedRound() >= round
+                    && Tournament.TournamentState.FINISHED
+                    .name().equals(tournament.getState())) {
+                uploadedIcon.setVisibility(View.VISIBLE);
+                undoEndTournamentButton.setVisibility(View.GONE);
+            }
+        }
     }
 
     public class RankingListAdapter extends RecyclerView.Adapter<TournamentRankingViewHolder> {

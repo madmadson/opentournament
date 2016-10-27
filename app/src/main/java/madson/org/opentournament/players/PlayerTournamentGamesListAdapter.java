@@ -72,6 +72,40 @@ public class PlayerTournamentGamesListAdapter extends RecyclerView.Adapter<Playe
         } else {
             viewHolder.getRowGame().setBackgroundColor(ContextCompat.getColor(baseActivity, R.color.colorAlmostWhite));
         }
+
+        if (game.getParticipant_one_score() == 1) {
+            viewHolder.getPlayerOne().setTextColor(ContextCompat.getColor(baseActivity, R.color.colorWin));
+        } else {
+            viewHolder.getPlayerOne().setTextColor(ContextCompat.getColor(baseActivity, R.color.colorLoose));
+        }
+
+        if (game.getParticipant_two_score() == 1) {
+            viewHolder.getPlayerTwo().setTextColor(ContextCompat.getColor(baseActivity, R.color.colorWin));
+        } else {
+            viewHolder.getPlayerTwo().setTextColor(ContextCompat.getColor(baseActivity, R.color.colorLoose));
+        }
+
+        viewHolder.getPlayerOneStat()
+            .setText(baseActivity.getString(R.string.player_tournament_stat, game.getParticipant_one_control_points(),
+                    game.getParticipant_one_victory_points()));
+
+        viewHolder.getPlayerTwoStat()
+            .setText(baseActivity.getString(R.string.player_tournament_stat, game.getParticipant_two_control_points(),
+                    game.getParticipant_two_victory_points()));
+
+        if (game.getParticipant_one_army_list() != null) {
+            viewHolder.getPlayerOneArmyList().setText(game.getParticipant_one_army_list());
+            viewHolder.getPlayerOneArmyList().setVisibility(View.VISIBLE);
+        } else {
+            viewHolder.getPlayerOneArmyList().setVisibility(View.GONE);
+        }
+
+        if (game.getParticipant_two_army_list() != null) {
+            viewHolder.getPlayerTwoArmyList().setText(game.getParticipant_two_army_list());
+            viewHolder.getPlayerTwoArmyList().setVisibility(View.VISIBLE);
+        } else {
+            viewHolder.getPlayerTwoArmyList().setVisibility(View.GONE);
+        }
     }
 
 

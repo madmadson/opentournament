@@ -155,7 +155,7 @@ public class AvailablePlayerListFragment extends BaseFragment implements OpenTou
 
                             Player player = playerSnapShot.getValue(Player.class);
 
-                            if (player != null && !player.getTournaments().containsKey(tournament.getUUID())) {
+                            if (player != null && !player.getTournaments().containsKey(tournament.getUuid())) {
                                 player.setUUID(player_online_uuid);
 
                                 if (!alreadyPlayingPlayersUUIDs.contains(player_online_uuid)) {

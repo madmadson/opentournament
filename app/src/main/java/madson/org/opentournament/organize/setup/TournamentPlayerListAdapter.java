@@ -120,7 +120,7 @@ public class TournamentPlayerListAdapter extends RecyclerView.Adapter<Tournament
                     }
                 });
 
-            if (baseActivity.getBaseApplication().isOnline() && tournament.getUUID() != null) {
+            if (baseActivity.getBaseApplication().isOnline() && tournament.getUuid() != null) {
                 holder.getAddListIcon().setOnClickListener(new View.OnClickListener() {
 
                         @Override
@@ -164,7 +164,7 @@ public class TournamentPlayerListAdapter extends RecyclerView.Adapter<Tournament
                 @Override
                 public void onClick(View v) {
 
-                    if (tournament.getActualRound() == 0) {
+                    if (Tournament.TournamentState.PLANED.name().equals(tournament.getState())) {
                         AlertDialog.Builder builder = new AlertDialog.Builder(baseActivity);
                         final AlertDialog confirmDialog = builder.setTitle(R.string.confirm_remove_tournament_player)
                             .setPositiveButton(R.string.dialog_confirm, new DialogInterface.OnClickListener() {
@@ -182,7 +182,7 @@ public class TournamentPlayerListAdapter extends RecyclerView.Adapter<Tournament
                             .setNeutralButton(R.string.dialog_cancel, null)
                             .create();
                         confirmDialog.show();
-                    } else {
+                    } else if (Tournament.TournamentState.STARTED.name().equals(tournament.getState())) {
                         AlertDialog.Builder builder = new AlertDialog.Builder(baseActivity);
                         final AlertDialog confirmDialog = builder.setTitle(R.string.confirm_drop_tournament_player)
                             .setPositiveButton(R.string.dialog_confirm, new DialogInterface.OnClickListener() {

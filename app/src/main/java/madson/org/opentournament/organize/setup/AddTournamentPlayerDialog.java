@@ -336,7 +336,7 @@ public class AddTournamentPlayerDialog extends DialogFragment {
                                 tournamentPlayer.setNickName(nickname);
                                 tournamentPlayer.setLastName(lastname);
 
-                                tournamentPlayer.setTournamentUUID(tournament.getUUID());
+                                tournamentPlayer.setTournamentUUID(tournament.getUuid());
                                 tournamentPlayer.setFaction(faction);
 
                                 if (!baseActivity.getString(R.string.no_team).equals(teamname)) {
@@ -366,7 +366,7 @@ public class AddTournamentPlayerDialog extends DialogFragment {
                                 tournament_player.setNickName(nickname);
                                 tournament_player.setLastName(lastname);
 
-                                tournament_player.setTournamentUUID(tournament.getUUID());
+                                tournament_player.setTournamentUUID(tournament.getUuid());
                                 tournament_player.setFaction(faction);
 
                                 String oldTeamName = tournament_player.getTeamName();

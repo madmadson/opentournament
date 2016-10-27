@@ -1,34 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:id="@+id/row_player_tournament_game">
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/row_player_tournament_game"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/player_one"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingBottom="@dimen/main_tick"
-        android:paddingTop="@dimen/main_tick">
+        android:layout_centerHorizontal="true" />
 
-        <TextView
-            android:id="@+id/player_one"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/main_tick" />
-        
-        <TextView
-            android:id="@+id/player_two"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="@dimen/main_tick" />
-    </RelativeLayout>
+    <TextView
+        android:id="@+id/player_one_stat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/player_one"
+        android:layout_centerHorizontal="true" />
 
+    <TextView
+        android:id="@+id/player_one_army_list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/player_one_stat"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:id="@+id/game_divider"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
+        android:layout_below="@id/player_one_army_list"
+        android:text="@string/game_divider" />
+    
+    <TextView
+        android:id="@+id/player_two"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/game_divider" />
+
+    <TextView
+        android:id="@+id/player_two_stat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" 
+        android:layout_below="@id/player_two"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:id="@+id/player_two_army_list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/player_two_stat"
+        android:layout_centerHorizontal="true" />
+    
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/line_tick"
         android:background="@color/colorDivider"
+        android:layout_below="@id/player_two_army_list"
         android:paddingBottom="@dimen/main_tick"
         android:paddingTop="@dimen/main_tick" />
-</LinearLayout>
+</RelativeLayout>

@@ -12,6 +12,8 @@ import android.widget.ProgressBar;
 
 import madson.org.opentournament.R;
 import madson.org.opentournament.domain.Tournament;
+import madson.org.opentournament.events.OpenTournamentEventTag;
+import madson.org.opentournament.events.UpdateTournamentEvent;
 import madson.org.opentournament.service.OngoingTournamentService;
 import madson.org.opentournament.service.RankingService;
 import madson.org.opentournament.service.TournamentPlayerService;
@@ -29,6 +31,7 @@ public class TournamentUploadTask extends AsyncTask<Void, Void, Void> {
     private BaseActivity baseActivity;
     private Tournament tournament;
     private ProgressBar progressBar;
+    private Tournament actualTournament;
 
     public TournamentUploadTask(BaseActivity baseActivity, Tournament tournament, ProgressBar progressBar) {
 
@@ -54,7 +57,10 @@ public class TournamentUploadTask extends AsyncTask<Void, Void, Void> {
         OngoingTournamentService ongoingTournamentService = baseActivity.getBaseApplication()
                 .getOngoingTournamentService();
 
-        Tournament actualTournament = tournamentService.getTournamentForId(tournament.getUUID());
+        actualTournament = tournamentService.getTournamentForId(tournament.getUuid());
+        actualTournament.setUploadedRound(actualTournament.getActualRound());
+        tournamentService.setUploadedRound(actualTournament);
+
         Tournament uploadedTournament = tournamentService.uploadTournament(actualTournament);
         tournamentPlayerService.uploadTournamentPlayers(uploadedTournament);
         rankingService.uploadRankingsForTournament(uploadedTournament);
@@ -68,6 +74,10 @@ public class TournamentUploadTask extends AsyncTask<Void, Void, Void> {
     protected void onPostExecute(Void aVoid) {
 
         progressBar.setVisibility(View.GONE);
+
+        baseActivity.getBaseApplication()
+            .notifyTournamentEvent(OpenTournamentEventTag.UPDATE_TOURNAMENT,
+                new UpdateTournamentEvent(actualTournament));
 
         Snackbar snackbar = Snackbar.make(baseActivity.getCoordinatorLayout(), R.string.success_upload_tournament,
                 Snackbar.LENGTH_LONG);

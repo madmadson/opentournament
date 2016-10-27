@@ -16,6 +16,7 @@ import android.support.v7.app.ActionBar;
 import android.util.Log;
 
 import android.view.Menu;
+import android.view.View;
 
 import android.widget.ProgressBar;
 
@@ -25,6 +26,7 @@ import madson.org.opentournament.events.OpenTournamentEvent;
 import madson.org.opentournament.events.OpenTournamentEventListener;
 import madson.org.opentournament.events.OpenTournamentEventTag;
 import madson.org.opentournament.events.UndoRoundEvent;
+import madson.org.opentournament.events.UpdateTournamentEvent;
 import madson.org.opentournament.organize.setup.AvailablePlayerListFragment;
 import madson.org.opentournament.organize.setup.TournamentPlayerListFragment;
 import madson.org.opentournament.organize.setup.TournamentSetupFragment;

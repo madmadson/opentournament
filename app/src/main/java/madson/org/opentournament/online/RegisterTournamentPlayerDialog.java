@@ -137,7 +137,7 @@ public class RegisterTournamentPlayerDialog extends DialogFragment {
 
             DatabaseReference reference = FirebaseDatabase.getInstance()
                     .getReference(FirebaseReferences.TOURNAMENT_REGISTRATIONS + "/" + tournament.getGameOrSportTyp()
-                        + "/" + tournament.getUUID());
+                        + "/" + tournament.getUuid());
 
             teamnameMap = new HashMap<>();
 
@@ -371,7 +371,7 @@ public class RegisterTournamentPlayerDialog extends DialogFragment {
                             DatabaseReference reference = FirebaseDatabase.getInstance()
                                 .getReference(
                                     FirebaseReferences.TOURNAMENT_REGISTRATIONS + "/" + tournament.getGameOrSportTyp()
-                                    + "/" + tournament.getUUID() + "/" + player.getUUID());
+                                    + "/" + tournament.getUuid() + "/" + player.getUUID());
 
                             reference.setValue(tournamentPlayer);
 

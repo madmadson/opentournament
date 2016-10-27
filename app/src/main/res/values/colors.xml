@@ -10,7 +10,7 @@
     <color name="colorSecondaryText">#727272</color>
         
     <color name="colorLoose">#F24000</color>
-    <color name="colorWin">#00B000</color>
+    <color name="colorWin">#02ba4f</color>
     
     <color name="colorBackground">#d9ddf7</color>
     
@@ -21,7 +21,7 @@
     <color name="colorPositive">#77c180</color>
     <color name="colorAction">#33b8ff</color>
     
-    <color name="colorLightGrey">#bcbcbc</color>
+    <color name="colorLightGrey">#d7d7d7</color>
     <color name="colorBlack">#000000</color>
 
 

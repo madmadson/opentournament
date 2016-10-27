@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/warning_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:background="@android:color/transparent"
+            android:padding="@dimen/main_tick"
+            android:src="@android:drawable/stat_sys_warning"
+            android:tint="@color/colorWarning"
+            android:contentDescription="@string/warning_upload_finished_tournament_message" />
+
+        <TextView
+            android:id="@+id/warning_upload_finished_tournament_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/warning_icon"
+            android:padding="@dimen/main_tick"
+            android:text="@string/warning_upload_finished_tournament_message"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textColor="@color/colorWarning" />
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/warning_upload_finished_tournament_message"
+        android:padding="@dimen/main_tick"
+        android:text="@string/confirm_upload_games_text" />
+</LinearLayout>

@@ -35,6 +35,8 @@ public class UpdateTournamentTask extends AsyncTask<Void, Void, Void> {
 
         final TournamentService tournamentService = baseActivity.getBaseApplication().getTournamentService();
         tournamentService.updateTournament(tournamentToSave);
+        tournamentService.unsetUploadedRound(tournamentToSave);
+        tournamentToSave.setUploadedRound(-1);
 
         return null;
     }

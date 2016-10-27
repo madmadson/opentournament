@@ -19,6 +19,10 @@ public class PlayerTournamentGameViewHolder extends RecyclerView.ViewHolder {
 
     private final TextView playerOne;
     private final TextView playerTwo;
+    private final TextView playerOneStat;
+    private final TextView playerTwoStat;
+    private final TextView playerOneArmyList;
+    private final TextView playerTwoArmyList;
     private View rowGame;
 
     public PlayerTournamentGameViewHolder(View v) {
@@ -28,7 +32,11 @@ public class PlayerTournamentGameViewHolder extends RecyclerView.ViewHolder {
         rowGame = v.findViewById(R.id.row_player_tournament_game);
 
         playerOne = (TextView) v.findViewById(R.id.player_one);
+        playerOneStat = (TextView) v.findViewById(R.id.player_one_stat);
         playerTwo = (TextView) v.findViewById(R.id.player_two);
+        playerTwoStat = (TextView) v.findViewById(R.id.player_two_stat);
+        playerOneArmyList = (TextView) v.findViewById(R.id.player_one_army_list);
+        playerTwoArmyList = (TextView) v.findViewById(R.id.player_two_army_list);
     }
 
     public View getRowGame() {
@@ -46,5 +54,29 @@ public class PlayerTournamentGameViewHolder extends RecyclerView.ViewHolder {
     public TextView getPlayerTwo() {
 
         return playerTwo;
+    }
+
+
+    public TextView getPlayerOneStat() {
+
+        return playerOneStat;
+    }
+
+
+    public TextView getPlayerTwoStat() {
+
+        return playerTwoStat;
+    }
+
+
+    public TextView getPlayerOneArmyList() {
+
+        return playerOneArmyList;
+    }
+
+
+    public TextView getPlayerTwoArmyList() {
+
+        return playerTwoArmyList;
     }
 }

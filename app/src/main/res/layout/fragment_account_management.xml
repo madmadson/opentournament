@@ -116,11 +116,34 @@
 
         </android.support.design.widget.TextInputLayout>
 
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/affiliation_parent"
+            android:layout_width="600dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/lastname_parent"
+            android:layout_centerHorizontal="true"
+            android:paddingTop="@dimen/halve_tick">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/field_affiliation"
+                android:layout_width="600dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/main_tick"
+                android:layout_marginRight="@dimen/main_tick"
+                android:hint="@string/label_affiliation"
+                android:imeOptions="actionNext"
+                android:inputType="text"
+                android:maxLines="1"
+                android:maxLength="25"
+                android:visibility="gone" />
+
+        </android.support.design.widget.TextInputLayout>
+
         <Button
             android:id="@+id/button_add_as_player"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/lastname_parent"
+            android:layout_below="@id/affiliation_parent"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/main_tick"
             android:layout_marginBottom="@dimen/main_tick"

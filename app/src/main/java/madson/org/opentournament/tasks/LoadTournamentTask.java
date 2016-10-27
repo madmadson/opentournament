@@ -29,7 +29,6 @@ public class LoadTournamentTask extends AsyncTask<Void, Void, Void> {
     private ProgressBar progressBar;
     private float widthOfScreen;
     private Tournament actualTournament;
-    private View dialogView;
 
     public LoadTournamentTask(BaseActivity baseActivity, Tournament tournament,
         TournamentOrganizeActivity.SectionsPagerAdapter adapter, ViewPager pager, ProgressBar progressBar,
@@ -58,7 +57,7 @@ public class LoadTournamentTask extends AsyncTask<Void, Void, Void> {
     protected Void doInBackground(Void... params) {
 
         TournamentService tournamentService = baseActivity.getBaseApplication().getTournamentService();
-        actualTournament = tournamentService.getTournamentForId(tournament.getUUID());
+        actualTournament = tournamentService.getTournamentForId(tournament.getUuid());
 
         return null;
     }
@@ -82,11 +81,5 @@ public class LoadTournamentTask extends AsyncTask<Void, Void, Void> {
 
         if (progressBar != null)
             progressBar.setVisibility(View.GONE);
-
-        if (dialogView != null) {
-            if ((Math.pow(2, actualTournament.getActualRound() + 1)) > actualTournament.getActualPlayers()) {
-                dialogView.findViewById(R.id.confirm_dialog_too_much_rounds).setVisibility(View.VISIBLE);
-            }
-        }
     }
 }

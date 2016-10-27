@@ -1,14 +1,20 @@
 package madson.org.opentournament.online;
 
 import android.content.Intent;
+
 import android.os.Bundle;
+
 import android.support.design.widget.TabLayout;
+
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+
 import android.support.v7.app.ActionBar;
+
 import android.util.Log;
+
 import android.view.Menu;
 
 import com.google.firebase.database.DataSnapshot;
@@ -136,7 +142,7 @@ public class OnlineTournamentActivity extends BaseActivity {
         };
 
         loadReferenceTournament = mFirebaseDatabaseReference.child(FirebaseReferences.TOURNAMENTS + "/"
-                + tournament.getGameOrSportTyp() + "/" + tournament.getUUID());
+                + tournament.getGameOrSportTyp() + "/" + tournament.getUuid());
 
         loadReferenceTournament.addValueEventListener(onlineTournamentListener);
     }

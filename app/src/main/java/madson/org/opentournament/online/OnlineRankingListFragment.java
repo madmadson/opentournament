@@ -2,12 +2,16 @@ package madson.org.opentournament.online;
 
 import android.os.Bundle;
 import android.os.Handler;
+
 import android.support.v4.app.Fragment;
+
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import android.widget.ProgressBar;
 
 import com.google.firebase.database.DataSnapshot;
@@ -77,7 +81,7 @@ public class OnlineRankingListFragment extends Fragment {
         mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
 
         DatabaseReference child = mFirebaseDatabaseReference.child(FirebaseReferences.TOURNAMENT_RANKINGS + "/"
-                + tournament.getGameOrSportTyp() + "/" + tournament.getUUID() + "/" + round);
+                + tournament.getGameOrSportTyp() + "/" + tournament.getUuid() + "/" + round);
 
         Query orderedGames = child.orderByChild("rank");
         final OnlineRankingListAdapter onlineRankingListAdapter = new OnlineRankingListAdapter(getActivity(),

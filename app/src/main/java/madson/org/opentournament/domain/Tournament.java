@@ -54,6 +54,7 @@ public class Tournament implements Parcelable {
     private TournamentTyp tournamentTyp;
     private GameOrSportTyp gameOrSportTyp;
     private String state;
+    private int uploadedRound;
 
     private TournamentRanking ranking;
 
@@ -79,13 +80,14 @@ public class Tournament implements Parcelable {
         this.actualPlayers = tournament.getActualPlayers();
         this.dateOfTournament = tournament.getDateOfTournament();
         this.actualRound = tournament.getActualRound();
-        this.uuid = tournament.getUUID();
+        this.uuid = tournament.getUuid();
         this.creatorName = tournament.getCreatorName();
         this.creatorEmail = tournament.getCreatorEmail();
         this.tournamentTyp = TournamentTyp.valueOf(tournament.getTournamentTyp());
         this.gameOrSportTyp = GameOrSportTyp.valueOf(tournament.getGameOrSportTyp());
         this.state = tournament.getState();
         this.teamSize = tournament.getTeamSize();
+        this.uploadedRound = tournament.getUploadedRound();
     }
 
 
@@ -111,6 +113,7 @@ public class Tournament implements Parcelable {
         setGameOrSportTyp(in.readString());
         state = in.readString();
         teamSize = in.readInt();
+        uploadedRound = in.readInt();
     }
 
     public void setTeamSize(int teamSize) {
@@ -190,6 +193,7 @@ public class Tournament implements Parcelable {
         parcel.writeString(getGameOrSportTyp());
         parcel.writeString(state);
         parcel.writeInt(teamSize);
+        parcel.writeInt(uploadedRound);
     }
 
 
@@ -286,13 +290,6 @@ public class Tournament implements Parcelable {
     public void setActualRound(int actualRound) {
 
         this.actualRound = actualRound;
-    }
-
-
-    @Exclude
-    public String getUUID() {
-
-        return uuid;
     }
 
 
@@ -402,5 +399,24 @@ public class Tournament implements Parcelable {
     public void setState(String state) {
 
         this.state = state;
+    }
+
+
+    @Exclude
+    public int getUploadedRound() {
+
+        return uploadedRound;
+    }
+
+
+    public String getUuid() {
+
+        return uuid;
+    }
+
+
+    public void setUploadedRound(int uploadedRound) {
+
+        this.uploadedRound = uploadedRound;
     }
 }

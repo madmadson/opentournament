@@ -42,6 +42,8 @@ public class AccountFragment extends Fragment {
     private TextInputLayout lastname_parent;
     private BaseActivity baseActivity;
     private TextView welcomeTextView;
+    private TextView affiliationField;
+    private TextInputLayout affiliation_parent;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -53,6 +55,15 @@ public class AccountFragment extends Fragment {
 
 
     @Override
+    public void onAttach(Context context) {
+
+        super.onAttach(context);
+
+        baseActivity = (BaseActivity) getActivity();
+    }
+
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         final View view = inflater.inflate(R.layout.fragment_account_management, container, false);
@@ -60,10 +71,12 @@ public class AccountFragment extends Fragment {
         firstnameField = (TextView) view.findViewById(R.id.field_firstname);
         nicknameField = (TextView) view.findViewById(R.id.field_nickname);
         lastnameField = (TextView) view.findViewById(R.id.field_lastname);
+        affiliationField = (TextView) view.findViewById(R.id.field_affiliation);
 
         firstname_parent = (TextInputLayout) view.findViewById(R.id.firstname_parent);
         nickname_parent = (TextInputLayout) view.findViewById(R.id.nickname_parent);
         lastname_parent = (TextInputLayout) view.findViewById(R.id.lastname_parent);
+        affiliation_parent = (TextInputLayout) view.findViewById(R.id.affiliation_parent);
 
         welcomeTextView = (TextView) view.findViewById(R.id.welcome_text);
 
@@ -80,12 +93,14 @@ public class AccountFragment extends Fragment {
             firstnameField.setVisibility(View.VISIBLE);
             nicknameField.setVisibility(View.VISIBLE);
             lastnameField.setVisibility(View.VISIBLE);
+            affiliationField.setVisibility(View.VISIBLE);
             addButton.setVisibility(View.VISIBLE);
 
             if (authenticatedPlayer != null) {
                 firstnameField.setText(authenticatedPlayer.getFirstName());
                 nicknameField.setText(authenticatedPlayer.getNickName());
                 lastnameField.setText(authenticatedPlayer.getLastName());
+                affiliationField.setText(authenticatedPlayer.getMeta());
 
                 addButton.setText(getString(R.string.change_player));
 
@@ -109,6 +124,7 @@ public class AccountFragment extends Fragment {
                             player.setFirstName(String.valueOf(firstnameField.getText()));
                             player.setNickName(String.valueOf(nicknameField.getText()));
                             player.setLastName(String.valueOf(lastnameField.getText()));
+                            player.setMeta(String.valueOf(affiliationField.getText()));
                             player.setAuthenticatedEmail(user.getEmail());
 
                             final DatabaseReference mFirebaseDatabaseReference = FirebaseDatabase.getInstance()
@@ -119,11 +135,12 @@ public class AccountFragment extends Fragment {
 
                             child.setValue(player);
 
-                            ((BaseActivity) getActivity()).getBaseApplication().updateAuthenticatedUser();
+                            baseActivity.getBaseApplication().updateAuthenticatedUser();
 
                             firstnameField.setText(player.getFirstName());
                             nicknameField.setText(player.getNickName());
                             lastnameField.setText(player.getLastName());
+                            affiliationField.setText(player.getMeta());
 
                             addButton.setText(getString(R.string.change_player));
 
@@ -190,14 +207,5 @@ public class AccountFragment extends Fragment {
         if (floatingActionButton != null) {
             floatingActionButton.setVisibility(View.GONE);
         }
-    }
-
-
-    @Override
-    public void onAttach(Context context) {
-
-        super.onAttach(context);
-
-        baseActivity = (BaseActivity) getActivity();
     }
 }

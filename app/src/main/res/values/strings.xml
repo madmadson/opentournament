@@ -98,9 +98,10 @@
     <string name="nav_tournament_final">Final Results</string>
     <string name="search_player">Filter available players</string>
 
-    <string name="label_firstname">Firstname</string>
-    <string name="label_nickname">Nickname</string>
-    <string name="label_lastname">Lastname</string>
+    <string name="label_firstname">Firstname*</string>
+    <string name="label_nickname">Nickname*</string>
+    <string name="label_lastname">Lastname*</string>
+    <string name="label_affiliation">Club/City/Country</string>
     
     
     <!-- New Player For Tournament dialog-->
@@ -213,7 +214,8 @@
     <string name="uneven_player_message_title">Uneven Players in Tournament.</string>
     <string name="uneven_player_message"> You can\'t start a Tournament with uneven amount of players.\n Should a dummy TournamentPlayer be inserted for you?</string>
     
-    <string name="not_all_games_finished_next_round">Not all games are finished. Please insert results before pair next round.</string>
+    <string name="not_all_games_finished_next_round">Not all games are finished.</string>
+    <string name="not_all_games_finished_next_round_msg">Please insert results before pair next round.</string>
     <string name="not_all_games_finished_end_tournament">Not all games are finished. Please insert all results before end tournament.</string>
     <string name="at_least_one_game_started">At least one game is finished</string>
     <string name="confirm_drop_tournament_player">Confirm drop tournamentPlayer</string>
@@ -335,5 +337,15 @@
     <string name="delete_uploaded_army_lists">Army List %1$s deleted</string>
     <string name="no_player_tournaments_found">No Tournaments for player found</string>
     <string name="players_are_in_same_team">%1$s and %2$s are in the same Team</string>
+    <string name="heading_player_tournament_games">Games %1$s</string>
+    <string name="player_tournament_stat">CP: %1$d VP: %2$d</string>
+    <string name="all_games_finished_next_round">All games are finished</string>
+    <string name="next_round_recommendation">Want to pair next round?</string>
+    <string name="tournament_end_recommendation">Tournament ending is recommended</string>
+    <string name="confirm_upload_finished_tournament">Confirm upload finished Tournament</string>
+    <string name="warning_upload_finished_tournament_message">
+        WARNING after upload finished tournament. 
+        Tournament can\'t be undone anymore. 
+    </string>
 
 </resources>

@@ -108,7 +108,7 @@ public class ArmyListExpandableListAdapter extends BaseExpandableListAdapter {
                         DatabaseReference addListReference = FirebaseDatabase.getInstance()
                             .getReference(
                                 FirebaseReferences.TOURNAMENT_ARMY_LISTS + "/" + tournament.getGameOrSportTyp() + "/"
-                                + tournament.getUUID()
+                                + tournament.getUuid()
                                 + "/" + tournamentPlayer.getPlayerUUID() + "/" + listPosition);
 
                         addListReference.setValue(armyList);
@@ -195,7 +195,7 @@ public class ArmyListExpandableListAdapter extends BaseExpandableListAdapter {
                     DatabaseReference deleteListReference = FirebaseDatabase.getInstance()
                         .getReference(
                             FirebaseReferences.TOURNAMENT_ARMY_LISTS + "/" + tournament.getGameOrSportTyp() + "/"
-                            + tournament.getUUID()
+                            + tournament.getUuid()
                             + "/" + tournamentPlayer.getPlayerUUID() + "/" + listPosition);
 
                     deleteListReference.setValue(null);

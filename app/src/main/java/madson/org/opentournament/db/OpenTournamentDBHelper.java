@@ -1,6 +1,7 @@
 package madson.org.opentournament.db;
 
 import android.content.Context;
+
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -13,7 +14,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class OpenTournamentDBHelper extends SQLiteOpenHelper {
 
     private static final String DB_NAME = "opentournament.db";
-    public static final int DB_VERSION = 6;
+    public static final int DB_VERSION = 7;
 
     public OpenTournamentDBHelper(Context context) {
 

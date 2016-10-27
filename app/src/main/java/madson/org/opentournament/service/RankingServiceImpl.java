@@ -72,7 +72,7 @@ public class RankingServiceImpl implements RankingService {
                 TournamentRankingTable.ALL_COLS_FOR_TOURNAMENT_RANKING,
                 TournamentRankingTable.COLUMN_TOURNAMENT_UUID + " = ? AND "
                 + TournamentRankingTable.COLUMN_TOURNAMENT_ROUND
-                + " = ?", new String[] { tournament.getUUID(), String.valueOf(round) }, null, null, null);
+                + " = ?", new String[] { tournament.getUuid(), String.valueOf(round) }, null, null, null);
 
         cursor.moveToFirst();
 
@@ -123,7 +123,7 @@ public class RankingServiceImpl implements RankingService {
 
         for (TournamentTeam team : allTeamsForTournament.keySet()) {
             TournamentRanking tournamentRanking = new TournamentRanking();
-            tournamentRanking.setTournamentUUID(tournament.getUUID());
+            tournamentRanking.setTournamentUUID(tournament.getUuid());
 
             tournamentRanking.setParticipantUUID(team.getName());
             tournamentRanking.setTournamentParticipant(team);
@@ -202,7 +202,7 @@ public class RankingServiceImpl implements RankingService {
 
         for (TournamentPlayer tournamentPlayer : allPlayersForTournament) {
             TournamentRanking tournamentRanking = new TournamentRanking();
-            tournamentRanking.setTournamentUUID(tournament.getUUID());
+            tournamentRanking.setTournamentUUID(tournament.getUuid());
 
             tournamentRanking.setParticipantUUID(tournamentPlayer.getPlayerUUID());
             tournamentRanking.setTournamentParticipant(tournamentPlayer);
@@ -260,7 +260,7 @@ public class RankingServiceImpl implements RankingService {
 
         writableDatabase.delete(TournamentRankingTable.TABLE_TOURNAMENT_RANKING,
             TournamentRankingTable.COLUMN_TOURNAMENT_UUID + " = ? AND " + TournamentRankingTable.COLUMN_TOURNAMENT_ROUND
-            + " = ?", new String[] { tournament.getUUID(), String.valueOf(roundToDelete) });
+            + " = ?", new String[] { tournament.getUuid(), String.valueOf(roundToDelete) });
     }
 
 
@@ -277,7 +277,7 @@ public class RankingServiceImpl implements RankingService {
 
         DatabaseReference referenceForRankingToDelete = FirebaseDatabase.getInstance()
                 .getReference(FirebaseReferences.TOURNAMENT_RANKINGS + "/" + tournament.getGameOrSportTyp() + "/"
-                    + tournament.getUUID());
+                    + tournament.getUuid());
         referenceForRankingToDelete.removeValue();
 
         for (int i = 1; i <= actualRound; i++) {
@@ -290,7 +290,7 @@ public class RankingServiceImpl implements RankingService {
 
                 DatabaseReference referenceForRankings = FirebaseDatabase.getInstance()
                         .getReference(FirebaseReferences.TOURNAMENT_RANKINGS + "/" + tournament.getGameOrSportTyp()
-                            + "/" + tournament.getUUID()
+                            + "/" + tournament.getUuid()
                             + "/" + i + "/" + uuid);
 
                 // for sorting after insert
@@ -306,7 +306,7 @@ public class RankingServiceImpl implements RankingService {
                                 DatabaseReference referenceForTournamentPlayers = FirebaseDatabase.getInstance()
                                         .getReference(FirebaseReferences.PLAYER_TOURNAMENTS + "/"
                                             + tournament.getGameOrSportTyp()
-                                            + "/" + tournamentPlayer.getPlayerUUID() + "/" + tournament.getUUID()
+                                            + "/" + tournamentPlayer.getPlayerUUID() + "/" + tournament.getUuid()
                                             + "/ranking");
 
                                 referenceForTournamentPlayers.setValue(tournamentRanking);
@@ -316,7 +316,7 @@ public class RankingServiceImpl implements RankingService {
                         DatabaseReference referenceForTournamentPlayers = FirebaseDatabase.getInstance()
                                 .getReference(FirebaseReferences.PLAYER_TOURNAMENTS + "/"
                                     + tournament.getGameOrSportTyp()
-                                    + "/" + tournamentRanking.getParticipantUUID() + "/" + tournament.getUUID()
+                                    + "/" + tournamentRanking.getParticipantUUID() + "/" + tournament.getUuid()
                                     + "/ranking");
 
                         referenceForTournamentPlayers.setValue(tournamentRanking);
@@ -333,7 +333,7 @@ public class RankingServiceImpl implements RankingService {
         SQLiteDatabase writableDatabase = openTournamentDBHelper.getWritableDatabase();
 
         writableDatabase.delete(TournamentRankingTable.TABLE_TOURNAMENT_RANKING,
-            TournamentRankingTable.COLUMN_TOURNAMENT_UUID + " = ? ", new String[] { tournament.getUUID() });
+            TournamentRankingTable.COLUMN_TOURNAMENT_UUID + " = ? ", new String[] { tournament.getUuid() });
     }
 
 
@@ -386,7 +386,7 @@ public class RankingServiceImpl implements RankingService {
         Cursor cursor = readableDatabase.query(GameTable.TABLE_TOURNAMENT_GAME, GameTable.ALL_COLS_FOR_TOURNAMENT_GAME,
                 GameTable.COLUMN_TOURNAMENT_UUID + "  = ? AND " + GameTable.COLUMN_TOURNAMENT_ROUND
                 + " <= ? AND " + GameTable.COLUMN_FINISHED + " != 0  AND " + GameTable.COLUMN_PARENT_UUID + " IS NULL",
-                new String[] { tournament.getUUID(), String.valueOf(tournament_round) }, null, null, null);
+                new String[] { tournament.getUuid(), String.valueOf(tournament_round) }, null, null, null);
 
         cursor.moveToFirst();
 

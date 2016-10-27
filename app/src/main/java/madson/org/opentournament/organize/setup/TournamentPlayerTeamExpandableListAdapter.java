@@ -237,7 +237,7 @@ public class TournamentPlayerTeamExpandableListAdapter extends BaseExpandableLis
                         }
                     });
 
-                if (baseActivity.getBaseApplication().isOnline() && tournament.getUUID() != null) {
+                if (baseActivity.getBaseApplication().isOnline() && tournament.getUuid() != null) {
                     addListIcon.setOnClickListener(new View.OnClickListener() {
 
                             @Override

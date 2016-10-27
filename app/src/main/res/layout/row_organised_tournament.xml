@@ -8,8 +8,8 @@
         android:id="@+id/row_tournament"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="@dimen/main_tick"
-        android:paddingTop="@dimen/main_tick">
+        android:paddingBottom="@dimen/halve_tick"
+        android:paddingTop="@dimen/halve_tick">
 
         <ImageButton
             android:id="@+id/button_edit_tournament"
@@ -56,10 +56,21 @@
             android:layout_marginRight="@dimen/main_tick" />
 
         <ImageView
+            android:id="@+id/uploaded_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="@dimen/halve_tick"
+            android:layout_marginRight="@dimen/halve_tick"
+            android:layout_toLeftOf="@id/amount_players"
+            android:layout_below="@id/team_tournament_icon"
+            android:background="@android:color/transparent"
+            android:tint="@color/colorWin"
+            android:src="@drawable/ic_cloud_done_black_24dp" />
+
+        <ImageView
             android:id="@+id/team_tournament_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
             android:layout_alignParentRight="@dimen/halve_tick"
             android:layout_marginRight="@dimen/halve_tick"
             android:layout_toLeftOf="@id/amount_players"

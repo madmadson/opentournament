@@ -22,6 +22,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -38,7 +39,9 @@ import madson.org.opentournament.events.PairRoundAgainEvent;
 import madson.org.opentournament.events.PairingChangedEvent;
 import madson.org.opentournament.events.SwapPlayerEvent;
 import madson.org.opentournament.events.UndoRoundEvent;
+import madson.org.opentournament.events.UpdateTournamentEvent;
 import madson.org.opentournament.tasks.LoadGameListTask;
+import madson.org.opentournament.tasks.LoadTournamentTask;
 import madson.org.opentournament.tasks.TournamentEndTask;
 import madson.org.opentournament.tasks.TournamentUploadTask;
 import madson.org.opentournament.tasks.UndoRoundTask;
@@ -64,6 +67,7 @@ public class GameListFragment extends Fragment implements OpenTournamentEventLis
     private BaseActivity baseActivity;
     private Button undoRoundButton;
     private TextView noGamesInfo;
+    private ImageView uploadedIcon;
 
     @Override
     public void onAttach(Context context) {
@@ -126,6 +130,13 @@ public class GameListFragment extends Fragment implements OpenTournamentEventLis
         noGamesInfo = (TextView) view.findViewById(R.id.no_games_info);
 
         containerForActions = (FrameLayout) view.findViewById(R.id.container_view_toggle_action);
+        uploadedIcon = (ImageView) view.findViewById(R.id.uploaded_icon);
+
+        if (tournament.getUploadedRound() >= round) {
+            uploadedIcon.setVisibility(View.VISIBLE);
+        } else {
+            uploadedIcon.setVisibility(View.GONE);
+        }
 
         uploadGamesButton = (Button) view.findViewById(R.id.button_upload_games);
         uploadGamesButton.setOnClickListener(new View.OnClickListener() {
@@ -224,6 +235,7 @@ public class GameListFragment extends Fragment implements OpenTournamentEventLis
                     } else {
                         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                         builder.setTitle(R.string.not_all_games_finished_next_round)
+                        .setMessage(R.string.not_all_games_finished_next_round_msg)
                         .setPositiveButton(R.string.dialog_confirm, null)
                         .show();
                     }
@@ -258,18 +270,7 @@ public class GameListFragment extends Fragment implements OpenTournamentEventLis
                         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                         builder.setTitle(R.string.end_tournament)
                         .setMessage(message)
-                        .setPositiveButton(R.string.dialog_confirm, new DialogInterface.OnClickListener() {
-
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-
-                                        Toolbar toolbar = baseActivity.getToolbar();
-                                        ProgressBar progressBar = (ProgressBar) toolbar.findViewById(
-                                                R.id.toolbar_progress_bar);
-                                        new TournamentEndTask(baseActivity.getBaseApplication(), tournament,
-                                            progressBar).execute();
-                                    }
-                                })
+                        .setPositiveButton(R.string.dialog_confirm, new EndTournamentClickListener())
                         .setNegativeButton(R.string.dialog_cancel, null)
                         .show();
                     } else {
@@ -321,6 +322,41 @@ public class GameListFragment extends Fragment implements OpenTournamentEventLis
             EnterGameResultConfirmed enterGameResultConfirmed = (EnterGameResultConfirmed) parameter;
 
             gameListAdapter.updateGame(enterGameResultConfirmed.getEnteredGame());
+
+            if (enterGameResultConfirmed.getEnteredGame().getTournament_round() == round) {
+                if (gameListAdapter.allGamesAreFinished()) {
+                    String message = "";
+
+                    DialogInterface.OnClickListener onClickListener = null;
+
+                    if (tournament.getTournamentTyp().equals(TournamentTyp.SOLO.name())) {
+                        if ((Math.pow(2, tournament.getActualRound())) < tournament.getActualPlayers()) {
+                            message = baseActivity.getResources().getString(R.string.next_round_recommendation);
+                            onClickListener = new NextRoundClickListener();
+                        } else {
+                            message = baseActivity.getResources().getString(R.string.tournament_end_recommendation);
+                            onClickListener = new EndTournamentClickListener();
+                        }
+                    } else {
+                        int amountTeams = tournament.getActualPlayers() / tournament.getTeamSize();
+
+                        if ((Math.pow(2, tournament.getActualRound())) < amountTeams) {
+                            message = baseActivity.getResources().getString(R.string.next_round_recommendation);
+                            onClickListener = new NextRoundClickListener();
+                        } else {
+                            message = baseActivity.getResources().getString(R.string.tournament_end_recommendation);
+                            onClickListener = new EndTournamentClickListener();
+                        }
+                    }
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    builder.setTitle(R.string.all_games_finished_next_round)
+                        .setMessage(message)
+                        .setPositiveButton(R.string.dialog_confirm, onClickListener)
+                        .setNegativeButton(R.string.dialog_cancel, null)
+                        .show();
+                }
+            }
         } else if (OpenTournamentEventTag.PAIRING_CHANGED.equals(eventTag)) {
             PairingChangedEvent enterGameResultConfirmed = (PairingChangedEvent) parameter;
 
@@ -356,6 +392,17 @@ public class GameListFragment extends Fragment implements OpenTournamentEventLis
             }
         } else if (OpenTournamentEventTag.UNDO_TOURNAMENT_ENDING.equals(eventTag)) {
             setActionButtonsInvisible();
+        } else if (OpenTournamentEventTag.UPDATE_TOURNAMENT.equals(eventTag)) {
+            UpdateTournamentEvent updateTournamentEvent = (UpdateTournamentEvent) parameter;
+            getArguments().putParcelable(BUNDLE_TOURNAMENT, updateTournamentEvent.getTournament());
+
+            if (uploadedIcon != null) {
+                if (updateTournamentEvent.getTournament().getUploadedRound() >= round) {
+                    uploadedIcon.setVisibility(View.VISIBLE);
+                } else {
+                    uploadedIcon.setVisibility(View.GONE);
+                }
+            }
         }
     }
 
@@ -377,5 +424,40 @@ public class GameListFragment extends Fragment implements OpenTournamentEventLis
         endTournamentButton.setVisibility(View.GONE);
         undoRoundButton.setVisibility(View.GONE);
         uploadGamesButton.setVisibility(View.GONE);
+    }
+
+    public class EndTournamentClickListener implements DialogInterface.OnClickListener {
+
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+
+            Toolbar toolbar = baseActivity.getToolbar();
+            ProgressBar progressBar = (ProgressBar) toolbar.findViewById(R.id.toolbar_progress_bar);
+            new TournamentEndTask(baseActivity.getBaseApplication(), tournament, progressBar).execute();
+        }
+    }
+
+    public class NextRoundClickListener implements DialogInterface.OnClickListener {
+
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+
+            if (gameListAdapter.allGamesAreFinished()) {
+                ConfirmPairingNewRoundDialog dialogConfirmRound = new ConfirmPairingNewRoundDialog();
+
+                Bundle bundle = new Bundle();
+                bundle.putParcelable(ConfirmPairingNewRoundDialog.BUNDLE_TOURNAMENT, tournament);
+                bundle.putInt(ConfirmPairingNewRoundDialog.BUNDLE_ROUND, round + 1);
+                dialogConfirmRound.setArguments(bundle);
+
+                FragmentManager supportFragmentManager = getActivity().getSupportFragmentManager();
+                dialogConfirmRound.show(supportFragmentManager, "confirm  pair next round");
+            } else {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setTitle(R.string.not_all_games_finished_next_round)
+                    .setPositiveButton(R.string.dialog_confirm, null)
+                    .show();
+            }
+        }
     }
 }

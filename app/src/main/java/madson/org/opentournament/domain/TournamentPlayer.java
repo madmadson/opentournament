@@ -53,6 +53,9 @@ public class TournamentPlayer extends TournamentParticipant implements Parcelabl
     private boolean dummy;
     private boolean local;
 
+    private int gamesCounter;
+    private int elo;
+
     private List<String> opponentsIds = new ArrayList<>();
 
     public TournamentPlayer() {
@@ -72,6 +75,8 @@ public class TournamentPlayer extends TournamentParticipant implements Parcelabl
         local = in.readInt() != 0;
         dummy = in.readInt() != 0;
         droppedInRound = in.readInt();
+        gamesCounter = in.readInt();
+        elo = in.readInt();
     }
 
     @Exclude
@@ -239,6 +244,32 @@ public class TournamentPlayer extends TournamentParticipant implements Parcelabl
 
 
     @Exclude
+    public int getGamesCounter() {
+
+        return gamesCounter;
+    }
+
+
+    public void setGamesCounter(int gamesCounter) {
+
+        this.gamesCounter = gamesCounter;
+    }
+
+
+    @Exclude
+    public int getElo() {
+
+        return elo;
+    }
+
+
+    public void setElo(int elo) {
+
+        this.elo = elo;
+    }
+
+
+    @Exclude
     public String getFirstNameWithMaximumCharacters(int maxChars) {
 
         if (firstName != null && firstName.length() > maxChars) {
@@ -335,6 +366,8 @@ public class TournamentPlayer extends TournamentParticipant implements Parcelabl
         parcel.writeInt(local ? 0 : 1);
         parcel.writeInt(dummy ? 0 : 1);
         parcel.writeInt(droppedInRound);
+        parcel.writeInt(gamesCounter);
+        parcel.writeInt(elo);
     }
 
 

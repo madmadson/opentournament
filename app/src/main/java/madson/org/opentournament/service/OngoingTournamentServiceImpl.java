@@ -9,8 +9,11 @@ import android.database.sqlite.SQLiteDatabase;
 
 import android.util.Log;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import madson.org.opentournament.config.MapOfPairingConfig;
 import madson.org.opentournament.db.FirebaseReferences;
@@ -18,6 +21,7 @@ import madson.org.opentournament.db.GameTable;
 import madson.org.opentournament.db.OpenTournamentDBHelper;
 import madson.org.opentournament.domain.Game;
 import madson.org.opentournament.domain.PairingOption;
+import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.domain.TournamentRanking;
@@ -47,6 +51,8 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
     private RankingService rankingService;
     private boolean playerWithSameTeamDontPlayAgainstEachOther;
     private boolean playerDontPlayTwiceAgainstEachOther;
+    private DatabaseReference referenceForPlayerOneElo;
+    private DatabaseReference referenceForPlayerTwoElo;
 
     public OngoingTournamentServiceImpl(Context context) {
 
@@ -94,7 +100,7 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
         SQLiteDatabase readableDatabase = openTournamentDBHelper.getReadableDatabase();
 
         Cursor cursor = readableDatabase.query(GameTable.TABLE_TOURNAMENT_GAME, GameTable.ALL_COLS_FOR_TOURNAMENT_GAME,
-                GameTable.COLUMN_TOURNAMENT_UUID + "  = ? ", new String[] { tournament.getUUID() }, null, null, null);
+                GameTable.COLUMN_TOURNAMENT_UUID + "  = ? ", new String[] { tournament.getUuid() }, null, null, null);
 
         cursor.moveToFirst();
 
@@ -144,7 +150,7 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
 
         Cursor cursor = readableDatabase.query(GameTable.TABLE_TOURNAMENT_GAME, GameTable.ALL_COLS_FOR_TOURNAMENT_GAME,
                 GameTable.COLUMN_TOURNAMENT_UUID + "  = ? AND " + GameTable.COLUMN_PARENT_UUID + " IS null",
-                new String[] { tournament.getUUID() }, null, null, null);
+                new String[] { tournament.getUuid() }, null, null, null);
 
         cursor.moveToFirst();
 
@@ -278,7 +284,7 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
                 if (match) {
                     Game game = new Game();
 
-                    game.setTournamentUUID(tournament.getUUID());
+                    game.setTournamentUUID(tournament.getUuid());
                     game.setTournament_round(round);
 
                     game.setParticipantOne(player1.getTournamentParticipant());
@@ -338,7 +344,7 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
                 if (match) {
                     Game game = new Game();
 
-                    game.setTournamentUUID(tournament.getUUID());
+                    game.setTournamentUUID(tournament.getUuid());
                     game.setTournament_round(round);
 
                     game.setParticipantOne(player1.getTournamentParticipant());
@@ -416,7 +422,7 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
 
         writableDatabase.delete(GameTable.TABLE_TOURNAMENT_GAME,
             GameTable.COLUMN_TOURNAMENT_UUID + " = ? AND " + GameTable.COLUMN_TOURNAMENT_ROUND
-            + " = ?", new String[] { tournament.getUUID(), String.valueOf(roundToDelete) });
+            + " = ?", new String[] { tournament.getUuid(), String.valueOf(roundToDelete) });
     }
 
 
@@ -427,7 +433,7 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
 
         DatabaseReference referenceForTournamentGamesToDelete = FirebaseDatabase.getInstance()
                 .getReference(FirebaseReferences.TOURNAMENT_GAMES + "/" + uploadedTournament.getGameOrSportTyp() + "/"
-                    + uploadedTournament.getUUID());
+                    + uploadedTournament.getUuid());
         referenceForTournamentGamesToDelete.removeValue();
 
         for (int i = 1; i <= actualRound; i++) {
@@ -438,7 +444,7 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
 
                 DatabaseReference referenceForGames = FirebaseDatabase.getInstance()
                         .getReference(FirebaseReferences.TOURNAMENT_GAMES + "/" + uploadedTournament
-                            .getGameOrSportTyp() + "/" + uploadedTournament.getUUID()
+                            .getGameOrSportTyp() + "/" + uploadedTournament.getUuid()
                             + "/" + i + "/" + uuid);
 
                 referenceForGames.setValue(game);
@@ -447,19 +453,65 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
                     // for team games we don't need games
                     if (!uploadedTournament.getTournamentTyp().equals(TournamentTyp.TEAM.name())
                             || game.getParent_UUID() != null) {
-                        DatabaseReference referenceForPlayerOneGames = FirebaseDatabase.getInstance()
-                                .getReference(FirebaseReferences.PLAYER_TOURNAMENTS + "/"
-                                    + uploadedTournament.getGameOrSportTyp() + "/" + game.getParticipantOne().getUuid()
-                                    + "/" + uploadedTournament.getUUID() + "/games/" + uuid);
+                        if (!game.getTournamentPlayerOne().isLocal()) {
+                            DatabaseReference referenceForPlayerOneGames = FirebaseDatabase.getInstance()
+                                    .getReference(FirebaseReferences.PLAYER_TOURNAMENTS + "/"
+                                        + uploadedTournament.getGameOrSportTyp() + "/"
+                                        + game.getParticipantOne().getUuid()
+                                        + "/" + uploadedTournament.getUuid() + "/games/" + uuid);
 
-                        referenceForPlayerOneGames.setValue(game);
+                            referenceForPlayerOneGames.setValue(game);
 
-                        DatabaseReference referenceForPlayerTwoGames = FirebaseDatabase.getInstance()
-                                .getReference(FirebaseReferences.PLAYER_TOURNAMENTS + "/"
-                                    + uploadedTournament.getGameOrSportTyp() + "/" + game.getParticipantTwo().getUuid()
-                                    + "/" + uploadedTournament.getUUID() + "/games/" + uuid);
+                            referenceForPlayerOneElo = FirebaseDatabase.getInstance()
+                                .getReference(FirebaseReferences.PLAYERS + "/"
+                                        + game.getTournamentPlayerOne().getPlayerUUID());
 
-                        referenceForPlayerTwoGames.setValue(game);
+                            referenceForPlayerOneElo.addListenerForSingleValueEvent(new ValueEventListener() {
+
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+
+                                        Player player = dataSnapshot.getValue(Player.class);
+                                        player.setGamesCounter((player.getGamesCounter() + 1));
+                                        referenceForPlayerOneElo.setValue(player);
+                                    }
+
+
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+                                    }
+                                });
+                        }
+
+                        if (!game.getTournamentPlayerTwo().isLocal()) {
+                            DatabaseReference referenceForPlayerTwoGames = FirebaseDatabase.getInstance()
+                                    .getReference(FirebaseReferences.PLAYER_TOURNAMENTS + "/"
+                                        + uploadedTournament.getGameOrSportTyp() + "/"
+                                        + game.getParticipantTwo().getUuid()
+                                        + "/" + uploadedTournament.getUuid() + "/games/" + uuid);
+
+                            referenceForPlayerTwoGames.setValue(game);
+
+                            referenceForPlayerTwoElo = FirebaseDatabase.getInstance()
+                                .getReference(FirebaseReferences.PLAYERS + "/"
+                                        + game.getTournamentPlayerTwo().getPlayerUUID());
+
+                            referenceForPlayerTwoElo.addListenerForSingleValueEvent(new ValueEventListener() {
+
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+
+                                        Player player = dataSnapshot.getValue(Player.class);
+                                        player.setGamesCounter((player.getGamesCounter() + 1));
+                                        referenceForPlayerTwoElo.setValue(player);
+                                    }
+
+
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+                                    }
+                                });
+                        }
                     }
                 }
             }
@@ -479,7 +531,7 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
         SQLiteDatabase readableDatabase = openTournamentDBHelper.getReadableDatabase();
 
         Cursor cursor = readableDatabase.query(GameTable.TABLE_TOURNAMENT_GAME, GameTable.ALL_COLS_FOR_TOURNAMENT_GAME,
-                GameTable.COLUMN_TOURNAMENT_UUID + "  = ? ", new String[] { tournament.getUUID() }, null, null, null);
+                GameTable.COLUMN_TOURNAMENT_UUID + "  = ? ", new String[] { tournament.getUuid() }, null, null, null);
 
         cursor.moveToFirst();
 
@@ -544,7 +596,7 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
         SQLiteDatabase writableDatabase = openTournamentDBHelper.getWritableDatabase();
 
         writableDatabase.delete(GameTable.TABLE_TOURNAMENT_GAME, GameTable.COLUMN_TOURNAMENT_UUID + " = ? ",
-            new String[] { tournament.getUUID() });
+            new String[] { tournament.getUuid() });
     }
 
 
@@ -559,7 +611,7 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
 
         Cursor cursor = readableDatabase.query(GameTable.TABLE_TOURNAMENT_GAME, GameTable.ALL_COLS_FOR_TOURNAMENT_GAME,
                 GameTable.COLUMN_TOURNAMENT_UUID + "  = ? AND " + GameTable.COLUMN_PARENT_UUID + " = ? ",
-                new String[] { tournament.getUUID(), parent_game.getUUID() }, null, null, null);
+                new String[] { tournament.getUuid(), parent_game.getUUID() }, null, null, null);
 
         cursor.moveToFirst();
 
@@ -610,7 +662,7 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
                 contentValues.put(GameTable.COLUMN_UUID, uuid);
                 contentValues.put(GameTable.COLUMN_PARENT_UUID, parent_game.getUUID());
 
-                contentValues.put(GameTable.COLUMN_TOURNAMENT_UUID, tournament.getUUID());
+                contentValues.put(GameTable.COLUMN_TOURNAMENT_UUID, tournament.getUuid());
                 contentValues.put(GameTable.COLUMN_TOURNAMENT_ROUND, parent_game.getTournament_round());
                 contentValues.put(GameTable.COLUMN_PLAYING_FIELD, i + 1);
 

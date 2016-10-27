@@ -38,6 +38,17 @@
             android:layout_centerInParent="true"
             android:paddingTop="@dimen/main_tick"
             android:textAppearance="@android:style/TextAppearance.Large" />
+
+        <ImageView
+            android:id="@+id/uploaded_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/halve_tick"
+            android:layout_toRightOf="@id/heading_game_for_round"
+            android:layout_centerVertical="true"
+            android:background="@android:color/transparent"
+            android:tint="@color/colorWin"
+            android:src="@drawable/ic_cloud_done_black_24dp" />
     </RelativeLayout>
 
     <FrameLayout

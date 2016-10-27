@@ -154,6 +154,12 @@ public class OrganizedTournamentListAdapter extends RecyclerView.Adapter<Tournam
             viewHolder.getTeamIcon().setVisibility(View.GONE);
         }
 
+        if (tournament.getUploadedRound() != -1) {
+            viewHolder.getUploadedIcon().setVisibility(View.VISIBLE);
+        } else {
+            viewHolder.getUploadedIcon().setVisibility(View.GONE);
+        }
+
         if (position % 2 == 0) {
             viewHolder.getRowTournament()
                 .setBackgroundColor(ContextCompat.getColor(baseActivity, R.color.colorLightGrey));
@@ -200,11 +206,13 @@ public class OrganizedTournamentListAdapter extends RecyclerView.Adapter<Tournam
 
     public void replaceTournament(Tournament tournament) {
 
-        int index = mDataset.indexOf(tournament);
+        if (mDataset.contains(tournament)) {
+            int index = mDataset.indexOf(tournament);
 
-        mDataset.set(index, tournament);
-        Collections.sort(mDataset, new TournamentComparator());
-        notifyDataSetChanged();
+            mDataset.set(index, tournament);
+            Collections.sort(mDataset, new TournamentComparator());
+            notifyDataSetChanged();
+        }
     }
 
 

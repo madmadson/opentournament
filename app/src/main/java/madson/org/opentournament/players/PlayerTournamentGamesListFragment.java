@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -87,6 +88,10 @@ public class PlayerTournamentGamesListFragment extends Fragment {
 
         progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
 
+        TextView heading = (TextView) view.findViewById(R.id.heading_player_tournament_games);
+        heading.setText(baseActivity.getString(R.string.heading_player_tournament_games,
+                tournament.getNameWithMaximumChars(15)));
+
         playerTournamentGamesRecyclerView = (RecyclerView) view.findViewById(
                 R.id.player_tournament_games_list_recycler_view);
         playerTournamentGamesRecyclerView.setHasFixedSize(true);
@@ -110,7 +115,7 @@ public class PlayerTournamentGamesListFragment extends Fragment {
 
             // do this configurable for other sport games
             DatabaseReference gamesOfTournament = mFirebaseDatabaseReference.child(FirebaseReferences.PLAYER_TOURNAMENTS
-                    + "/" + tournament.getGameOrSportTyp() + "/" + player.getUUID() + "/" + tournament.getUUID()
+                    + "/" + tournament.getGameOrSportTyp() + "/" + player.getUUID() + "/" + tournament.getUuid()
                     + "/games");
 
             ChildEventListener gamesEventListener = new ChildEventListener() {

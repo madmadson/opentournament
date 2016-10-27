@@ -39,6 +39,9 @@ public class Player implements Parcelable {
     private String nickName;
     private String lastName;
 
+    private int gamesCounter;
+    private int elo;
+
     private boolean local;
 
     // list of tournaments player played. Note: online persistent
@@ -68,6 +71,8 @@ public class Player implements Parcelable {
         authenticatedEmail = in.readString();
         meta = in.readString();
         local = in.readInt() != 0;
+        gamesCounter = in.readInt();
+        elo = in.readInt();
     }
 
     public Map<String, Boolean> getTournaments() {
@@ -180,6 +185,30 @@ public class Player implements Parcelable {
     }
 
 
+    public void setGamesCounter(int gamesCounter) {
+
+        this.gamesCounter = gamesCounter;
+    }
+
+
+    public int getGamesCounter() {
+
+        return gamesCounter;
+    }
+
+
+    public int getElo() {
+
+        return elo;
+    }
+
+
+    public void setElo(int elo) {
+
+        this.elo = elo;
+    }
+
+
     @Override
     public String toString() {
 
@@ -236,5 +265,7 @@ public class Player implements Parcelable {
         parcel.writeString(authenticatedEmail);
         parcel.writeString(meta);
         parcel.writeInt(local ? 1 : 0);
+        parcel.writeInt(gamesCounter);
+        parcel.writeInt(elo);
     }
 }

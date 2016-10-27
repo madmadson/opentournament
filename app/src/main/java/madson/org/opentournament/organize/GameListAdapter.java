@@ -88,9 +88,12 @@ public class GameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
         if (gamesForRound.contains(game)) {
             int indexOfGame = gamesForRound.indexOf(game);
 
-            gamesForRound.remove(game);
-            gamesForRound.add(indexOfGame, game);
-            notifyDataSetChanged();
+            if (game.getUUID().equals(gamesForRound.get(indexOfGame).getUUID())) {
+                gamesForRound.remove(game);
+
+                gamesForRound.add(indexOfGame, game);
+                notifyDataSetChanged();
+            }
         }
     }
 

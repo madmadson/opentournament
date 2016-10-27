@@ -318,7 +318,7 @@ public class TournamentPlayerListFragment extends Fragment implements OpenTourna
         DatabaseReference mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
 
         DatabaseReference child = mFirebaseDatabaseReference.child(FirebaseReferences.TOURNAMENT_REGISTRATIONS + "/"
-                + tournament.getGameOrSportTyp() + "/" + tournament.getUUID());
+                + tournament.getGameOrSportTyp() + "/" + tournament.getUuid());
 
         child.addChildEventListener(new ChildEventListener() {
 

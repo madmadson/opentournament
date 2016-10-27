@@ -1,8 +1,8 @@
 package madson.org.opentournament.service;
 
-import java.util.List;
-
 import madson.org.opentournament.domain.Tournament;
+
+import java.util.List;
 
 
 /**
@@ -60,14 +60,6 @@ public interface TournamentService {
 
 
     /**
-     * Update tournament online.
-     *
-     * @param  tournament  to upload
-     */
-    void updateTournamentInFirebase(Tournament tournament);
-
-
-    /**
      * Pushes a tournament to online services. Add tournament UUID to tournament.
      *
      * @param  tournament  to upload
@@ -87,4 +79,16 @@ public interface TournamentService {
      * @param  tournament
      */
     void endTournament(Tournament tournament);
+
+
+    /**
+     * @param  actualTournament
+     */
+    void setUploadedRound(Tournament actualTournament);
+
+
+    /**
+     * @param  actualTournament
+     */
+    void unsetUploadedRound(Tournament actualTournament);
 }

@@ -99,7 +99,7 @@ public class OnlineTeamGameListFragment extends Fragment {
         mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
 
         DatabaseReference child = mFirebaseDatabaseReference.child(FirebaseReferences.TOURNAMENT_GAMES + "/"
-                + tournament.getGameOrSportTyp() + "/" + tournament.getUUID() + "/" + parentGame.getTournament_round());
+                + tournament.getGameOrSportTyp() + "/" + tournament.getUuid() + "/" + parentGame.getTournament_round());
 
         Query orderedGames = child.orderByChild(GameTable.COLUMN_PLAYING_FIELD);
 

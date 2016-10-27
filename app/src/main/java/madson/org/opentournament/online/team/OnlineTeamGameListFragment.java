@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -102,23 +103,48 @@ public class OnlineTeamGameListFragment extends Fragment {
 
         Query orderedGames = child.orderByChild(GameTable.COLUMN_PLAYING_FIELD);
 
-        orderedGames.addValueEventListener(new ValueEventListener() {
+        orderedGames.addChildEventListener(new ChildEventListener() {
 
                 @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
+                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
-                    for (DataSnapshot playerSnapshot : dataSnapshot.getChildren()) {
-                        Game game = playerSnapshot.getValue(Game.class);
+                    Game game = dataSnapshot.getValue(Game.class);
 
-                        if (game != null) {
-                            mProgressBar.setVisibility(View.GONE);
-                            teamMatchNotOnline.setVisibility(View.GONE);
+                    if (game != null) {
+                        mProgressBar.setVisibility(View.GONE);
+                        teamMatchNotOnline.setVisibility(View.GONE);
 
-                            if (parentGame.getUUID().equals(game.getParent_UUID())) {
-                                gamesListAdapter.addGame(game);
-                            }
+                        if (parentGame.getUUID().equals(game.getParent_UUID())) {
+                            gamesListAdapter.addGame(game);
                         }
                     }
+                }
+
+
+                @Override
+                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                    Game game = dataSnapshot.getValue(Game.class);
+
+                    if (parentGame.getUUID().equals(game.getParent_UUID())) {
+                        gamesListAdapter.updateGame(game);
+                    }
+                }
+
+
+                @Override
+                public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                    Game game = dataSnapshot.getValue(Game.class);
+
+                    if (parentGame.getUUID().equals(game.getParent_UUID())) {
+                        gamesListAdapter.removeGame(game);
+                    }
+                }
+
+
+                @Override
+                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
                 }
 
 

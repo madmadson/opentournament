@@ -326,13 +326,14 @@
     <string name="validation_before_date">Date must be maximum 1 year before</string>
     <string name="validation_after_date">Maximum of date is 1 year after today</string>
     <string name="successfully_start_tournament">Successfully start tournament</string>
-    <string name="no_games_info">Pairing unsuccessful. Wrong pairing options? Tournament finsihed?</string>
+    <string name="no_games_info">Pairing unsuccessful. Wrong pairing options? Tournament finished?</string>
     <string name="select_army_lists">Select played army list</string>
     <string name="nothing_saved">Nothing saved</string>
     <string name="success_save_army_list">Successfully save played army list</string>
     <string name="dialog_close">close</string>
-    <string name="upload_successfully">Army List upload successful</string>
-    <string name="delete_uploaded_army_lists">Delete uploaded Army List</string>
+    <string name="upload_successfully"> %1$s Army List upload successful</string>
+    <string name="delete_uploaded_army_lists">Army List %1$s deleted</string>
     <string name="no_player_tournaments_found">No Tournaments for player found</string>
+    <string name="players_are_in_same_team">%1$s and %2$s are in the same Team</string>
 
 </resources>

@@ -568,6 +568,8 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
 
             game.setParticipantOne(allPlayerMapForTournament.get(game.getParticipantOneUUID()));
             game.setParticipantTwo(allPlayerMapForTournament.get(game.getParticipantTwoUUID()));
+            game.setTournamentPlayerOne(allPlayerMapForTournament.get(game.getParticipantOneUUID()));
+            game.setTournamentPlayerTwo(allPlayerMapForTournament.get(game.getParticipantTwoUUID()));
 
             gamesToReturn.add(game);
 
@@ -600,6 +602,9 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
                 game.setParticipantTwoUUID(teamTwoMembers.get(i).getUuid());
                 game.setParticipantTwo(teamTwoMembers.get(i));
                 game.setPlaying_field(i + 1);
+
+                game.setTournamentPlayerOne(teamOneMembers.get(i));
+                game.setTournamentPlayerTwo(teamTwoMembers.get(i));
 
                 ContentValues contentValues = new ContentValues();
                 contentValues.put(GameTable.COLUMN_UUID, uuid);

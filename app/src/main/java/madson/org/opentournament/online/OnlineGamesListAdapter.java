@@ -206,8 +206,6 @@ public class OnlineGamesListAdapter extends RecyclerView.Adapter<GameViewHolder>
 
     public void addGame(Game game) {
 
-        Log.i(this.getClass().getName(), "player added to adapter ");
-
         gameList.add(game);
         notifyDataSetChanged();
     }
@@ -223,6 +221,28 @@ public class OnlineGamesListAdapter extends RecyclerView.Adapter<GameViewHolder>
         }
 
         return -1;
+    }
+
+
+    public void updateGame(Game game) {
+
+        if (gameList.contains(game)) {
+            int index = gameList.indexOf(game);
+
+            gameList.set(index, game);
+
+            notifyDataSetChanged();
+        }
+    }
+
+
+    public void removeGame(Game game) {
+
+        if (gameList.contains(game)) {
+            gameList.remove(game);
+
+            notifyDataSetChanged();
+        }
     }
 
     private class TeamManagementClickListener implements View.OnClickListener {

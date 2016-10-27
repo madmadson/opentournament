@@ -156,4 +156,14 @@ public class OnlineTeamGameListAdapter extends RecyclerView.Adapter<GameViewHold
 
         notifyDataSetChanged();
     }
+
+
+    public void removeGame(Game game) {
+
+        if (gamesInTeamMatch.contains(game)) {
+            gamesInTeamMatch.remove(game);
+
+            notifyDataSetChanged();
+        }
+    }
 }

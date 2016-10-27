@@ -3,16 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="55dip"
     android:orientation="vertical">
-    <Button
-        android:id="@+id/upload_list_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="@dimen/main_tick"
-        android:background="@color/colorPrimaryDark"
-        android:padding="@dimen/halve_tick"
-        android:text="@string/upload_list"
-        android:textColor="@color/colorTextIcon" />
+   
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/list_name_parent"
@@ -47,5 +38,16 @@
             android:inputType="textMultiLine" />
 
     </android.support.design.widget.TextInputLayout>
+
+    <Button
+        android:id="@+id/upload_list_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="@dimen/halve_tick"
+        android:background="@color/colorPrimaryDark"
+        android:padding="@dimen/halve_tick"
+        android:text="@string/upload_list"
+        android:textColor="@color/colorTextIcon" />
 
 </LinearLayout>

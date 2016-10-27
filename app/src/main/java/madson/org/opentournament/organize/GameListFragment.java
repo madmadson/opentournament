@@ -312,6 +312,11 @@ public class GameListFragment extends Fragment implements OpenTournamentEventLis
 
         if (eventTag.equals(OpenTournamentEventTag.NEXT_ROUND_PAIRED)) {
             setActionButtonsInvisible();
+
+            if (round == tournament.getActualRound()
+                    && !tournament.getState().equals(Tournament.TournamentState.FINISHED.name())) {
+                setActionButtonsVisible();
+            }
         } else if (OpenTournamentEventTag.SAVE_GAME_RESULT_CONFIRMED.equals(eventTag)) {
             EnterGameResultConfirmed enterGameResultConfirmed = (EnterGameResultConfirmed) parameter;
 

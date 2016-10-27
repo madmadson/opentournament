@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 
 import android.widget.ProgressBar;
 
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -103,22 +104,55 @@ public class OnlineGamesListFragment extends Fragment {
 
         final OnlineGamesListAdapter gamesListAdapter = new OnlineGamesListAdapter(baseActivity, tournament);
 
-        orderedGames.addValueEventListener(new ValueEventListener() {
+        orderedGames.addChildEventListener(new ChildEventListener() {
 
                 @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
+                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
-                    for (DataSnapshot playerSnapshot : dataSnapshot.getChildren()) {
-                        Game game = playerSnapshot.getValue(Game.class);
+                    Game game = dataSnapshot.getValue(Game.class);
 
-                        if (game != null) {
-                            mProgressBar.setVisibility(View.GONE);
+                    if (game != null) {
+                        mProgressBar.setVisibility(View.GONE);
 
-                            if (game.getParent_UUID() == null) {
-                                gamesListAdapter.addGame(game);
-                            }
+                        if (game.getParent_UUID() == null) {
+                            gamesListAdapter.addGame(game);
                         }
                     }
+                }
+
+
+                @Override
+                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                    Game game = dataSnapshot.getValue(Game.class);
+
+                    if (game != null) {
+                        mProgressBar.setVisibility(View.GONE);
+
+                        if (game.getParent_UUID() == null) {
+                            gamesListAdapter.updateGame(game);
+                        }
+                    }
+                }
+
+
+                @Override
+                public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                    Game game = dataSnapshot.getValue(Game.class);
+
+                    if (game != null) {
+                        mProgressBar.setVisibility(View.GONE);
+
+                        if (game.getParent_UUID() == null) {
+                            gamesListAdapter.removeGame(game);
+                        }
+                    }
+                }
+
+
+                @Override
+                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
                 }
 
 

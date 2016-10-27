@@ -269,7 +269,7 @@ public class RegisterTournamentPlayerDialog extends DialogFragment {
 
                                     boolean valid = true;
 
-                                    if (teamnameMap.get(new TournamentTeam(newTeamName)) != null) {
+                                    if (teamnameMap.get(newTeamName) != null) {
                                         newTeamNameEditText.setError(getString(R.string.team_name_already_taken));
                                         valid = false;
                                     }

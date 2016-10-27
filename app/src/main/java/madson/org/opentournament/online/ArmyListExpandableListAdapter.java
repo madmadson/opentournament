@@ -115,6 +115,9 @@ public class ArmyListExpandableListAdapter extends BaseExpandableListAdapter {
 
                         addListButton.setVisibility(View.VISIBLE);
                         uploadSuccess.setVisibility(View.VISIBLE);
+                        uploadSuccess.setText(
+                            baseActivity.getString(R.string.upload_successfully, listName.getText().toString()));
+
                         deleteSuccess.setVisibility(View.GONE);
 
                         listDataChild.put(armyList.getName(), armyList);
@@ -172,9 +175,9 @@ public class ArmyListExpandableListAdapter extends BaseExpandableListAdapter {
         final String headerTitle = (String) getGroup(groupPosition);
 
         if (convertView == null) {
-            LayoutInflater infalInflater = (LayoutInflater) this.baseActivity.getSystemService(
+            LayoutInflater inflater = (LayoutInflater) this.baseActivity.getSystemService(
                     Context.LAYOUT_INFLATER_SERVICE);
-            convertView = infalInflater.inflate(R.layout.dialog_army_lists_list_group, null);
+            convertView = inflater.inflate(R.layout.dialog_army_lists_list_group, null);
         }
 
         TextView lblListHeader = (TextView) convertView.findViewById(R.id.expandable_army_list_list_header_text);
@@ -202,6 +205,8 @@ public class ArmyListExpandableListAdapter extends BaseExpandableListAdapter {
 
                     uploadSuccess.setVisibility(View.GONE);
                     deleteSuccess.setVisibility(View.VISIBLE);
+
+                    deleteSuccess.setText(baseActivity.getString(R.string.delete_uploaded_army_lists, headerTitle));
 
                     notifyDataSetChanged();
                 }

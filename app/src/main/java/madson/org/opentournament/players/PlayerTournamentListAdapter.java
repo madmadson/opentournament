@@ -56,7 +56,7 @@ public class PlayerTournamentListAdapter extends RecyclerView.Adapter<PlayerTour
 
         final Tournament tournament = mDataset.get(position);
 
-        viewHolder.getTournamentNameInList().setText(tournament.getName());
+        viewHolder.getTournamentNameInList().setText(tournament.getNameWithMaximumChars(20));
 
         int actualPlayers = tournament.getActualPlayers();
         int rank = tournament.getRanking().getRank();

@@ -144,18 +144,11 @@ public class TournamentOrganizeActivity extends BaseActivity implements OpenTour
             new LoadTournamentTask(this, initialTournament, mSectionsPagerAdapter, mViewPager, progressBar,
                 widthOfScreen).execute();
         } else if (OpenTournamentEventTag.UNDO_ROUND.equals(eventTag)) {
-            UndoRoundEvent undoRoundEvent = (UndoRoundEvent) parameter;
+            finish();
 
-            if (undoRoundEvent.getRound() == 0) {
-                finish();
-
-                Intent intent = new Intent(this, TournamentOrganizeActivity.class);
-                intent.putExtra(TournamentOrganizeActivity.EXTRA_TOURNAMENT, initialTournament);
-                startActivity(intent);
-            } else {
-                new LoadTournamentTask(this, initialTournament, mSectionsPagerAdapter, mViewPager, progressBar,
-                    widthOfScreen).execute();
-            }
+            Intent intent = new Intent(this, TournamentOrganizeActivity.class);
+            intent.putExtra(TournamentOrganizeActivity.EXTRA_TOURNAMENT, initialTournament);
+            startActivity(intent);
         } else if (OpenTournamentEventTag.UNDO_TOURNAMENT_ENDING.equals(eventTag)) {
             finish();
 

@@ -1,6 +1,7 @@
 package madson.org.opentournament.domain;
 
 import android.database.Cursor;
+
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -92,6 +93,38 @@ public class Game implements Parcelable {
         playing_field = in.readInt();
         participant_one_intermediate_points = in.readInt();
         participant_two_intermediate_points = in.readInt();
+    }
+
+
+    public Game(Game game) {
+
+        this._id = game.get_id();
+        this.UUID = game.getUUID();
+        this.parent_UUID = game.getParent_UUID();
+        this.tournamentUUID = game.getTournamentUUID();
+        this.tournament_round = game.getTournament_round();
+        this.playing_field = game.getPlaying_field();
+        this.participantOneUUID = game.getParticipantOneUUID();
+        this.participantOne = game.getParticipantOne();
+        this.participant_one_score = game.getParticipant_one_score();
+        this.participant_one_control_points = game.getParticipant_one_control_points();
+        this.participant_one_victory_points = game.getParticipant_one_victory_points();
+        this.participant_one_army_list = game.getParticipant_one_army_list();
+        this.participantTwoUUID = game.getParticipantTwoUUID();
+        this.participantTwo = game.getParticipantTwo();
+        this.participant_two_score = game.getParticipant_two_score();
+        this.participant_two_control_points = game.getParticipant_two_control_points();
+        this.participant_two_victory_points = game.getParticipant_two_victory_points();
+        this.participant_two_army_list = game.getParticipant_two_army_list();
+        this.finished = game.isFinished();
+        this.scenario = game.getScenario();
+        this.participant_one_intermediate_points = game.getParticipant_one_intermediate_points();
+        this.participant_two_intermediate_points = game.getParticipant_two_intermediate_points();
+        this.tournamentPlayerOne = game.tournamentPlayerOne;
+        this.tournamentPlayerTwo = game.tournamentPlayerTwo;
+        this.swappable = game.isSwappable();
+        this.startSwappingPlayerOne = game.isStartSwappingPlayerOne();
+        this.startSwappingPlayerTwo = game.isStartSwappingPlayerTwo();
     }
 
 

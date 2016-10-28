@@ -58,7 +58,7 @@ public class OnlineTournamentListAdapter extends RecyclerView.Adapter<Tournament
 
         final Tournament tournament = mDataset.get(position);
 
-        viewHolder.getTournamentNameInList().setText(tournament.getName());
+        viewHolder.getTournamentNameInList().setText(tournament.getNameWithMaximumChars(20));
 
         if (tournament.getDateOfTournament() != null) {
             String formattedDate = dateFormatter.format(tournament.getDateOfTournament());

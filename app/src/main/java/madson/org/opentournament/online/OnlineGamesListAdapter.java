@@ -143,8 +143,10 @@ public class OnlineGamesListAdapter extends RecyclerView.Adapter<GameViewHolder>
 
         TournamentPlayer player1 = game.getTournamentPlayerOne();
 
-        if (player1.getTeamName().isEmpty()) {
+        if (player1.getTeamName() == null || player1.getTeamName().isEmpty()) {
             holder.getPlayerOneTeam().setVisibility(View.GONE);
+        } else {
+            holder.getPlayerOneTeam().setVisibility(View.VISIBLE);
         }
 
         holder.getPlayerOneNameInList()
@@ -155,8 +157,10 @@ public class OnlineGamesListAdapter extends RecyclerView.Adapter<GameViewHolder>
 
         TournamentPlayer player2 = game.getTournamentPlayerTwo();
 
-        if (player2.getTeamName().isEmpty()) {
+        if (player2.getTeamName() == null || player2.getTeamName().isEmpty()) {
             holder.getPlayerTwoTeam().setVisibility(View.GONE);
+        } else {
+            holder.getPlayerTwoTeam().setVisibility(View.VISIBLE);
         }
 
         holder.getPlayerTwoNameInList()

@@ -2,7 +2,9 @@ package madson.org.opentournament.viewHolder;
 
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+
 import android.view.View;
+
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -16,6 +18,7 @@ import madson.org.opentournament.R;
  */
 public class TournamentPlayerViewHolder extends RecyclerView.ViewHolder {
 
+    private final TextView affiliation;
     private ImageView addListIcon;
     private ImageView editIcon;
     private TextView faction;
@@ -44,6 +47,8 @@ public class TournamentPlayerViewHolder extends RecyclerView.ViewHolder {
         teamName = (TextView) v.findViewById(R.id.tournament_player_teamname);
         faction = (TextView) v.findViewById(R.id.tournament_player_row_faction);
         droppedInRound = (TextView) v.findViewById(R.id.dropped_in_round);
+        affiliation = (TextView) v.findViewById(R.id.tournament_player_affiliation);
+
         localIcon = (ImageView) v.findViewById(R.id.tournament_player_row_local_icon);
         editIcon = (ImageView) v.findViewById(R.id.tournament_player_row_edit_icon);
         addListIcon = (ImageView) v.findViewById(R.id.tournament_player_row_add_List);
@@ -100,5 +105,11 @@ public class TournamentPlayerViewHolder extends RecyclerView.ViewHolder {
     public ImageView getAddListIcon() {
 
         return addListIcon;
+    }
+
+
+    public TextView getAffiliation() {
+
+        return affiliation;
     }
 }

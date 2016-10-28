@@ -243,6 +243,9 @@ public class AvailablePlayerListFragment extends BaseFragment implements OpenTou
                 player.setLastName(tournamentPlayer.getLastName());
                 player.setUUID(tournamentPlayer.getPlayerUUID());
                 player.setLocal(tournamentPlayer.isLocal());
+                player.setElo(tournamentPlayer.getElo());
+                player.setGamesCounter(tournamentPlayer.getGamesCounter());
+                player.setMeta(tournamentPlayer.getMeta());
 
                 if (tournamentPlayer.isLocal()) {
                     localPlayerListAdapter.add(player);

@@ -67,6 +67,20 @@ public class OnlinePlayerListAdapter extends RecyclerView.Adapter<PlayerViewHold
                 .getString(R.string.player_name_in_row, player.getFirstName(), player.getNickName(),
                     player.getLastName()));
 
+        if (player.getMeta() != null) {
+            holder.getPlayerAffiliation().setText(player.getMeta());
+            holder.getPlayerAffiliation().setVisibility(View.VISIBLE);
+        } else {
+            holder.getPlayerAffiliation().setVisibility(View.GONE);
+        }
+
+        if (player.getGamesCounter() >= 5) {
+            holder.getPlayerElo().setText(String.valueOf(player.getElo()));
+            holder.getPlayerAffiliation().setVisibility(View.VISIBLE);
+        } else {
+            holder.getPlayerElo().setVisibility(View.GONE);
+        }
+
         if (position % 2 == 0) {
             holder.getPlayerCardLayout()
                 .setBackgroundColor(ContextCompat.getColor(baseActivity, R.color.colorLightGrey));

@@ -45,13 +45,21 @@
                 android:layout_below="@id/tournament_player_fullname"
                 android:layout_marginLeft="@dimen/main_tick" 
                 android:visibility="gone"/>
+            
+            <TextView
+                android:id="@+id/tournament_player_affiliation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tournament_player_teamname"
+                android:layout_marginLeft="@dimen/main_tick" />
 
             <TextView
                 android:id="@+id/tournament_player_row_faction"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/tournament_player_teamname"
+                android:layout_below="@id/tournament_player_affiliation"
                 android:layout_marginLeft="@dimen/main_tick" />
+            
 
             <TextView
                 android:id="@+id/dropped_in_round"
@@ -68,6 +76,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
+            android:paddingTop="@dimen/main_tick"
             android:paddingRight="@dimen/main_tick">
 
             <ImageView

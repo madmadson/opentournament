@@ -175,6 +175,9 @@ public class OnlineTournamentPlayerTeamExpandableListAdapter extends BaseExpanda
             TextView faction = (TextView) convertView.findViewById(R.id.tournament_player_row_faction);
             faction.setText(tournamentPlayer.getFaction());
 
+            TextView affiliation = (TextView) convertView.findViewById(R.id.tournament_player_affiliation);
+            affiliation.setText(tournamentPlayer.getMeta());
+
             convertView.findViewById(R.id.tournament_player_teamname).setVisibility(View.GONE);
 
             ImageView localIcon = (ImageView) convertView.findViewById(R.id.tournament_player_row_local_icon);

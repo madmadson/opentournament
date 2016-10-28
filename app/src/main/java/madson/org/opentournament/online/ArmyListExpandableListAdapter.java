@@ -177,7 +177,7 @@ public class ArmyListExpandableListAdapter extends BaseExpandableListAdapter {
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) this.baseActivity.getSystemService(
                     Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.dialog_army_lists_list_group, null);
+            convertView = inflater.inflate(R.layout.dialog_army_lists_list_group, parent, false);
         }
 
         TextView lblListHeader = (TextView) convertView.findViewById(R.id.expandable_army_list_list_header_text);

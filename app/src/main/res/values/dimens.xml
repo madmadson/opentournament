@@ -50,4 +50,5 @@
     <dimen name="sign_in_input_fields_width">400dp</dimen>
     
     <dimen name="text_extra_large">30sp</dimen>
+    <dimen name="text_large">20sp</dimen>
 </resources>

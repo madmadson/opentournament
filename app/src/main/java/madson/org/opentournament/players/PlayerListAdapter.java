@@ -70,6 +70,20 @@ public class PlayerListAdapter extends RecyclerView.Adapter<PlayerViewHolder> {
                 .setBackgroundColor(ContextCompat.getColor(baseActivity, R.color.colorAlmostWhite));
         }
 
+        if (player.getMeta() != null) {
+            holder.getPlayerAffiliation().setText(player.getMeta());
+            holder.getPlayerAffiliation().setVisibility(View.VISIBLE);
+        } else {
+            holder.getPlayerAffiliation().setVisibility(View.GONE);
+        }
+
+        if (player.getGamesCounter() >= 5) {
+            holder.getPlayerElo().setText(String.valueOf(player.getElo()));
+            holder.getPlayerAffiliation().setVisibility(View.VISIBLE);
+        } else {
+            holder.getPlayerElo().setVisibility(View.GONE);
+        }
+
         holder.getPlayerCardLayout().setOnClickListener(new View.OnClickListener() {
 
                 @Override

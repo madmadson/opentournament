@@ -59,14 +59,17 @@ public class PlayerTournamentListAdapter extends RecyclerView.Adapter<PlayerTour
         viewHolder.getTournamentNameInList().setText(tournament.getNameWithMaximumChars(20));
 
         int actualPlayers = tournament.getActualPlayers();
-        int rank = tournament.getRanking().getRank();
 
-        if (tournament.getTournamentTyp().equals(TournamentTyp.TEAM.name())) {
-            int teamCounter = actualPlayers / tournament.getTeamSize();
+        if (tournament.getRanking() != null) {
+            int rank = tournament.getRanking().getRank();
 
-            viewHolder.getRanking().setText(rank + "/" + teamCounter);
-        } else if (tournament.getTournamentTyp().equals(TournamentTyp.SOLO.name())) {
-            viewHolder.getRanking().setText(rank + "/" + actualPlayers);
+            if (tournament.getTournamentTyp().equals(TournamentTyp.TEAM.name())) {
+                int teamCounter = actualPlayers / tournament.getTeamSize();
+
+                viewHolder.getRanking().setText(rank + "/" + teamCounter);
+            } else if (tournament.getTournamentTyp().equals(TournamentTyp.SOLO.name())) {
+                viewHolder.getRanking().setText(rank + "/" + actualPlayers);
+            }
         }
 
         if (tournament.getTournamentTyp().equals(TournamentTyp.TEAM.name())) {

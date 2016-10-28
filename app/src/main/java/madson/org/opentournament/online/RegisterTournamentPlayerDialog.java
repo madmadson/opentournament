@@ -1,5 +1,7 @@
 package madson.org.opentournament.online;
 
+import android.annotation.SuppressLint;
+
 import android.app.Dialog;
 
 import android.content.Context;
@@ -41,7 +43,6 @@ import madson.org.opentournament.db.FirebaseReferences;
 import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
-import madson.org.opentournament.domain.TournamentTeam;
 import madson.org.opentournament.domain.TournamentTyp;
 import madson.org.opentournament.utility.BaseActivity;
 
@@ -61,26 +62,29 @@ public class RegisterTournamentPlayerDialog extends DialogFragment {
     public static final String BUNDLE_PLAYER = "player";
     public static final String BUNDLE_TOURNAMENT_PLAYER = "tournament_player";
 
-    private EditText firstnameEditText;
-    private EditText nicknameEditText;
-    private EditText lastnameEditText;
+    private EditText firstNameEditText;
+    private EditText nickNameEditText;
+    private EditText lastNameEditText;
     private Spinner factionSpinner;
-    private Spinner teamnameSpinner;
-    private ImageButton addNewTeamnameButton;
+    private Spinner teamNameSpinner;
+    private ImageButton addNewTeamNameButton;
 
     private Tournament tournament;
     private Player player;
 
     private ArrayAdapter<String> team_adapter;
     private TextView labelTeamName;
-    private TextInputLayout lastnameParent;
-    private TextInputLayout firstnameParent;
-    private TextInputLayout nicknameParent;
-    private TextView labelTeammembers;
-    private Map<String, Integer> teamnameMap;
+    private TextInputLayout lastNameParent;
+    private TextInputLayout firstNameParent;
+    private TextInputLayout nickNameParent;
+
+    private TextView labelTeamMembers;
+    private Map<String, Integer> teamNameMap;
 
     private BaseActivity baseActivity;
     private TournamentPlayer tournamentPlayer;
+    private EditText affiliationEditText;
+    private TextInputLayout affiliationParent;
 
     @Override
     public void onAttach(Context context) {
@@ -104,26 +108,31 @@ public class RegisterTournamentPlayerDialog extends DialogFragment {
             // Get the layout inflater
             final LayoutInflater inflater = getActivity().getLayoutInflater();
 
+            // its an alert dialog no chance to attach it to parent
+            @SuppressLint("InflateParams")
             View dialogView = inflater.inflate(R.layout.dialog_add_tournament_player, null);
 
-            firstnameEditText = (EditText) dialogView.findViewById(R.id.dialog_add_tournament_player_firstname);
-            nicknameEditText = (EditText) dialogView.findViewById(R.id.dialog_add_tournament_player_nickname);
-            lastnameEditText = (EditText) dialogView.findViewById(R.id.dialog_add_tournament_player_lastname);
+            firstNameEditText = (EditText) dialogView.findViewById(R.id.dialog_add_tournament_player_firstname);
+            nickNameEditText = (EditText) dialogView.findViewById(R.id.dialog_add_tournament_player_nickname);
+            lastNameEditText = (EditText) dialogView.findViewById(R.id.dialog_add_tournament_player_lastname);
+            affiliationEditText = (EditText) dialogView.findViewById(R.id.dialog_add_tournament_player_affiliation);
 
-            firstnameParent = (TextInputLayout) dialogView.findViewById(
+            firstNameParent = (TextInputLayout) dialogView.findViewById(
                     R.id.dialog_add_tournament_player_firstname_parent);
-            nicknameParent = (TextInputLayout) dialogView.findViewById(
+            nickNameParent = (TextInputLayout) dialogView.findViewById(
                     R.id.dialog_add_tournament_player_nickname_parent);
-            lastnameParent = (TextInputLayout) dialogView.findViewById(
+            lastNameParent = (TextInputLayout) dialogView.findViewById(
                     R.id.dialog_add_tournament_player_lastname_parent);
+            affiliationParent = (TextInputLayout) dialogView.findViewById(
+                    R.id.dialog_add_tournament_player_affiliation_parent);
 
             factionSpinner = (Spinner) dialogView.findViewById(R.id.dialog_add_tournament_player_faction_spinner);
 
             labelTeamName = (TextView) dialogView.findViewById(R.id.label_teamname);
-            teamnameSpinner = (Spinner) dialogView.findViewById(R.id.teamname_spinner);
-            labelTeammembers = (TextView) dialogView.findViewById(R.id.team_members);
+            teamNameSpinner = (Spinner) dialogView.findViewById(R.id.teamname_spinner);
+            labelTeamMembers = (TextView) dialogView.findViewById(R.id.team_members);
 
-            addNewTeamnameButton = (ImageButton) dialogView.findViewById(
+            addNewTeamNameButton = (ImageButton) dialogView.findViewById(
                     R.id.dialog_add_tournament_player_add_new_team);
 
             ArrayAdapter<CharSequence> faction_adapter = ArrayAdapter.createFromResource(getActivity(),
@@ -139,7 +148,7 @@ public class RegisterTournamentPlayerDialog extends DialogFragment {
                     .getReference(FirebaseReferences.TOURNAMENT_REGISTRATIONS + "/" + tournament.getGameOrSportTyp()
                         + "/" + tournament.getUuid());
 
-            teamnameMap = new HashMap<>();
+            teamNameMap = new HashMap<>();
 
             reference.addListenerForSingleValueEvent(new ValueEventListener() {
 
@@ -153,10 +162,10 @@ public class RegisterTournamentPlayerDialog extends DialogFragment {
                                 String teamName = player.getTeamName();
 
                                 if (teamName != null && !teamName.isEmpty()) {
-                                    if (!teamnameMap.containsKey(teamName)) {
-                                        teamnameMap.put(teamName, 1);
+                                    if (!teamNameMap.containsKey(teamName)) {
+                                        teamNameMap.put(teamName, 1);
                                     } else {
-                                        teamnameMap.put(teamName, teamnameMap.get(teamName) + 1);
+                                        teamNameMap.put(teamName, teamNameMap.get(teamName) + 1);
                                     }
                                 }
                             }
@@ -165,21 +174,21 @@ public class RegisterTournamentPlayerDialog extends DialogFragment {
                         if (!tournament.getTournamentTyp().equals(TournamentTyp.TEAM.name())) {
                             team_adapter.add(baseActivity.getString(R.string.no_team));
 
-                            for (String key : teamnameMap.keySet()) {
+                            for (String key : teamNameMap.keySet()) {
                                 team_adapter.add(key);
                             }
                         } else {
-                            for (String key : teamnameMap.keySet()) {
-                                if (teamnameMap.get(key) < tournament.getTeamSize()) {
+                            for (String key : teamNameMap.keySet()) {
+                                if (teamNameMap.get(key) < tournament.getTeamSize()) {
                                     team_adapter.add(key);
                                 }
                             }
                         }
 
                         if (team_adapter.isEmpty()) {
-                            teamnameSpinner.setVisibility(View.GONE);
+                            teamNameSpinner.setVisibility(View.GONE);
                         } else {
-                            teamnameSpinner.setVisibility(View.VISIBLE);
+                            teamNameSpinner.setVisibility(View.VISIBLE);
                         }
 
                         team_adapter.notifyDataSetChanged();
@@ -191,7 +200,7 @@ public class RegisterTournamentPlayerDialog extends DialogFragment {
                     }
                 });
 
-            teamnameSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            teamNameSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -199,16 +208,16 @@ public class RegisterTournamentPlayerDialog extends DialogFragment {
                         String teamName = (String) parent.getItemAtPosition(position);
                         int teamMembers;
 
-                        if (teamnameMap.get(teamName) == null) {
+                        if (teamNameMap.get(teamName) == null) {
                             teamMembers = 0;
                         } else {
-                            teamMembers = teamnameMap.get(teamName);
+                            teamMembers = teamNameMap.get(teamName);
                         }
 
                         if (!tournament.getTournamentTyp().equals(TournamentTyp.TEAM.name())) {
-                            labelTeammembers.setText("(" + teamMembers + ")");
+                            labelTeamMembers.setText("(" + teamMembers + ")");
                         } else {
-                            labelTeammembers.setText("(" + teamMembers + "/" + tournament.getTeamSize() + ")");
+                            labelTeamMembers.setText("(" + teamMembers + "/" + tournament.getTeamSize() + ")");
                         }
                     }
 
@@ -218,23 +227,24 @@ public class RegisterTournamentPlayerDialog extends DialogFragment {
                     }
                 });
 
-            teamnameSpinner.setAdapter(team_adapter);
+            teamNameSpinner.setAdapter(team_adapter);
 
-            firstnameEditText.setText(player.getFirstName());
-            nicknameEditText.setText(player.getNickName());
-            lastnameEditText.setText(player.getLastName());
-            firstnameEditText.setEnabled(false);
-            nicknameEditText.setEnabled(false);
-            lastnameEditText.setEnabled(false);
-            firstnameEditText.setTypeface(Typeface.DEFAULT_BOLD);
-            nicknameEditText.setTypeface(Typeface.DEFAULT_BOLD);
-            lastnameEditText.setTypeface(Typeface.DEFAULT_BOLD);
+            firstNameEditText.setText(player.getFirstName());
+            nickNameEditText.setText(player.getNickName());
+            lastNameEditText.setText(player.getLastName());
+            affiliationEditText.setText(player.getMeta());
+            firstNameEditText.setEnabled(false);
+            nickNameEditText.setEnabled(false);
+            lastNameEditText.setEnabled(false);
+            firstNameEditText.setTypeface(Typeface.DEFAULT_BOLD);
+            nickNameEditText.setTypeface(Typeface.DEFAULT_BOLD);
+            lastNameEditText.setTypeface(Typeface.DEFAULT_BOLD);
 
             if (tournamentPlayer != null && tournamentPlayer.getFaction() != null) {
                 factionSpinner.setSelection(faction_adapter.getPosition(tournamentPlayer.getFaction()));
             }
 
-            addNewTeamnameButton.setOnClickListener(new View.OnClickListener() {
+            addNewTeamNameButton.setOnClickListener(new View.OnClickListener() {
 
                     @Override
                     public void onClick(View view) {
@@ -269,7 +279,7 @@ public class RegisterTournamentPlayerDialog extends DialogFragment {
 
                                     boolean valid = true;
 
-                                    if (teamnameMap.get(newTeamName) != null) {
+                                    if (teamNameMap.get(newTeamName) != null) {
                                         newTeamNameEditText.setError(getString(R.string.team_name_already_taken));
                                         valid = false;
                                     }
@@ -285,15 +295,15 @@ public class RegisterTournamentPlayerDialog extends DialogFragment {
                                     }
 
                                     if (valid) {
-                                        teamnameSpinner.setVisibility(View.VISIBLE);
+                                        teamNameSpinner.setVisibility(View.VISIBLE);
                                         team_adapter.add(newTeamName);
                                         team_adapter.notifyDataSetChanged();
-                                        teamnameSpinner.setSelection(team_adapter.getCount());
+                                        teamNameSpinner.setSelection(team_adapter.getCount());
 
                                         if (!tournament.getTournamentTyp().equals(TournamentTyp.TEAM.name())) {
-                                            labelTeammembers.setText("(0)");
+                                            labelTeamMembers.setText("(0)");
                                         } else {
-                                            labelTeammembers.setText("(0/" + tournament.getTeamSize() + ")");
+                                            labelTeamMembers.setText("(0/" + tournament.getTeamSize() + ")");
                                         }
 
                                         labelTeamName.setError(null);
@@ -343,27 +353,31 @@ public class RegisterTournamentPlayerDialog extends DialogFragment {
 
                         Log.i(this.getClass().getName(), "addTournamentPlayer new tournament_player");
 
-                        final String firstname = firstnameEditText.getText().toString();
-                        final String nickname = nicknameEditText.getText().toString();
-                        final String lastname = lastnameEditText.getText().toString();
-                        String teamname = null;
+                        final String firstName = firstNameEditText.getText().toString();
+                        final String nickName = nickNameEditText.getText().toString();
+                        final String lastName = lastNameEditText.getText().toString();
+                        final String affiliation = affiliationEditText.getText().toString();
+                        String teamName = null;
 
-                        if (teamnameSpinner.getSelectedItem() != null) {
-                            teamname = teamnameSpinner.getSelectedItem().toString();
+                        if (teamNameSpinner.getSelectedItem() != null) {
+                            teamName = teamNameSpinner.getSelectedItem().toString();
                         }
 
                         final String faction = factionSpinner.getSelectedItem().toString();
 
-                        if (validateForm(firstname, nickname, lastname, teamname)) {
+                        if (validateForm(firstName, nickName, lastName, teamName)) {
                             TournamentPlayer tournamentPlayer = new TournamentPlayer();
                             tournamentPlayer.setPlayerUUID(player.getUUID());
 
-                            tournamentPlayer.setFirstName(firstname);
-                            tournamentPlayer.setNickName(nickname);
-                            tournamentPlayer.setLastName(lastname);
+                            tournamentPlayer.setFirstName(firstName);
+                            tournamentPlayer.setNickName(nickName);
+                            tournamentPlayer.setLastName(lastName);
+                            tournamentPlayer.setMeta(affiliation);
+                            tournamentPlayer.setElo(player.getElo());
+                            tournamentPlayer.setGamesCounter(player.getGamesCounter());
 
-                            if (teamname != null && !teamname.equals(baseActivity.getString(R.string.no_team))) {
-                                tournamentPlayer.setTeamName(teamname);
+                            if (teamName != null && !teamName.equals(baseActivity.getString(R.string.no_team))) {
+                                tournamentPlayer.setTeamName(teamName);
                             }
 
                             tournamentPlayer.setFaction(faction);
@@ -388,42 +402,42 @@ public class RegisterTournamentPlayerDialog extends DialogFragment {
 
                     private boolean validateForm(String firstname, String nickname, String lastname, String teamname) {
 
-                        boolean valide = true;
+                        boolean valid = true;
 
                         if (firstname.isEmpty()) {
-                            valide = false;
-                            firstnameParent.setError(getContext().getString(R.string.validation_error_empty));
+                            valid = false;
+                            firstNameParent.setError(getContext().getString(R.string.validation_error_empty));
                         } else {
-                            firstnameParent.setError(null);
+                            firstNameParent.setError(null);
                         }
 
                         if (nickname.isEmpty()) {
-                            valide = false;
-                            nicknameParent.setError(getContext().getString(R.string.validation_error_empty));
+                            valid = false;
+                            nickNameParent.setError(getContext().getString(R.string.validation_error_empty));
                         } else {
-                            nicknameParent.setError(null);
+                            nickNameParent.setError(null);
                         }
 
                         if (lastname.isEmpty()) {
-                            valide = false;
-                            lastnameParent.setError(getContext().getString(R.string.validation_error_empty));
+                            valid = false;
+                            lastNameParent.setError(getContext().getString(R.string.validation_error_empty));
                         } else {
-                            lastnameParent.setError(null);
+                            lastNameParent.setError(null);
                         }
 
                         if (tournament.getTournamentTyp().equals(TournamentTyp.TEAM.name())) {
                             if (teamname == null) {
-                                valide = false;
+                                valid = false;
                                 labelTeamName.setError(getContext().getString(R.string.validation_error_empty));
                             } else if (teamname.equals(getString(R.string.no_team))) {
-                                valide = false;
+                                valid = false;
                                 labelTeamName.setError(getContext().getString(R.string.validation_team_no_team));
                             } else {
                                 labelTeamName.setError(null);
                             }
                         }
 
-                        return valide;
+                        return valid;
                     }
                 });
         }

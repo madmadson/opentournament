@@ -87,6 +87,13 @@ public class TournamentPlayerListAdapter extends RecyclerView.Adapter<Tournament
             holder.getLocalIcon().setVisibility(View.GONE);
         }
 
+        if (tournamentPlayer.getMeta() != null) {
+            holder.getAffiliation().setText(tournamentPlayer.getMeta());
+            holder.getAffiliation().setVisibility(View.VISIBLE);
+        } else {
+            holder.getAffiliation().setVisibility(View.GONE);
+        }
+
         if (tournamentPlayer.getDroppedInRound() != 0) {
             holder.getDroppedInRound()
                 .setText(baseActivity.getResources()

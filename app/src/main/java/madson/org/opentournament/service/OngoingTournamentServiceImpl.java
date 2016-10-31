@@ -820,6 +820,16 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
     }
 
 
+    @Override
+    public void deleteGamesForTeamMatch(Game game) {
+
+        SQLiteDatabase writableDatabase = openTournamentDBHelper.getWritableDatabase();
+
+        writableDatabase.delete(GameTable.TABLE_TOURNAMENT_GAME, GameTable.COLUMN_PARENT_UUID + " = ? ",
+            new String[] { game.getUUID() });
+    }
+
+
     private List<Game> getAllGamesForTeamMatch(String parent_uuid, Tournament tournament) {
 
         Map<String, TournamentPlayer> allPlayerMapForTournament = tournamentPlayerService.getAllPlayerMapForTournament(

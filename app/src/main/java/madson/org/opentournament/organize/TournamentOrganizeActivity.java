@@ -201,9 +201,9 @@ public class TournamentOrganizeActivity extends BaseActivity implements OpenTour
                 }
 
                 if (position % 2 == 1) {
-                    return GameListFragment.newInstance(round, tournamentToOrganize);
-                } else {
                     return RankingListFragment.newInstance(round, tournamentToOrganize);
+                } else {
+                    return GameListFragment.newInstance(round, tournamentToOrganize);
                 }
             } else {
                 if (state.equals(Tournament.TournamentState.FINISHED.name()) && position == actualRound) {
@@ -266,9 +266,9 @@ public class TournamentOrganizeActivity extends BaseActivity implements OpenTour
                     return getApplication().getResources().getString(R.string.nav_final_standing_tab);
                 } else {
                     if (position % 2 == 1) {
-                        return getApplication().getResources().getString(R.string.nav_games_tab, round);
-                    } else {
                         return getApplication().getResources().getString(R.string.nav_ranking_tab, (round - 1));
+                    } else {
+                        return getApplication().getResources().getString(R.string.nav_games_tab, round);
                     }
                 }
             } else {

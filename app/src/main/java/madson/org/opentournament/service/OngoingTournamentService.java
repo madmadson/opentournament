@@ -104,4 +104,12 @@ public interface OngoingTournamentService {
      * @param  armyList
      */
     Game saveArmyList(Game gameToSave, TournamentPlayer tournamentPlayer, String armyList);
+
+
+    /**
+     * @param  game
+     *
+     * @return
+     */
+    void deleteGamesForTeamMatch(Game game);
 }

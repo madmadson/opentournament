@@ -180,9 +180,9 @@ public class OnlineTournamentActivity extends BaseActivity {
             }
 
             if (position % 2 == 1) {
-                return OnlineGamesListFragment.newInstance(round, tournament);
-            } else {
                 return OnlineRankingListFragment.newInstance(round, tournament);
+            } else {
+                return OnlineGamesListFragment.newInstance(round, tournament);
             }
         }
 
@@ -214,9 +214,9 @@ public class OnlineTournamentActivity extends BaseActivity {
                 return getApplication().getResources().getString(R.string.nav_final_standing_tab);
             } else {
                 if (position % 2 == 1) {
-                    return getApplication().getResources().getString(R.string.nav_games_tab, round);
-                } else {
                     return getApplication().getResources().getString(R.string.nav_ranking_tab, (round - 1));
+                } else {
+                    return getApplication().getResources().getString(R.string.nav_games_tab, round);
                 }
             }
         }

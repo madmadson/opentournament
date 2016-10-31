@@ -180,15 +180,18 @@ public class RankingListFragment extends Fragment implements OpenTournamentEvent
             uploadGamesButton.setVisibility(View.VISIBLE);
 
             if (tournament.getUploadedRound() >= round) {
-                uploadedIcon.setVisibility(View.VISIBLE);
                 undoEndTournamentButton.setVisibility(View.GONE);
-            } else {
-                uploadedIcon.setVisibility(View.GONE);
             }
         } else {
             heading.setText(R.string.heading_ranking_for_round);
             undoEndTournamentButton.setVisibility(View.GONE);
             uploadGamesButton.setVisibility(View.GONE);
+        }
+
+        if (tournament.getUploadedRound() >= round) {
+            uploadedIcon.setVisibility(View.VISIBLE);
+        } else {
+            uploadedIcon.setVisibility(View.GONE);
         }
 
         rankingListAdapter = new RankingListAdapter(baseActivity.getBaseApplication());

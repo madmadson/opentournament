@@ -35,6 +35,7 @@ import madson.org.opentournament.events.EndSwapPlayerEvent;
 import madson.org.opentournament.events.OpenTournamentEventTag;
 import madson.org.opentournament.events.SwapPlayerEvent;
 import madson.org.opentournament.organize.team.TeamTournamentManagementActivity;
+import madson.org.opentournament.tasks.DeleteGamesTask;
 import madson.org.opentournament.tasks.SwapPlayersTask;
 import madson.org.opentournament.utility.BaseActivity;
 import madson.org.opentournament.viewHolder.GameViewHolder;
@@ -439,6 +440,11 @@ public class GameListAdapter extends RecyclerView.Adapter<GameViewHolder> {
                                     playerNumberGameTwoToSwap);
 
                             if (swappingValid) {
+                                if (TournamentTyp.TEAM.name().equals(tournament.getState())) {
+                                    new DeleteGamesTask(baseActivity.getBaseApplication(), gameOneToSwap, gameTwoToSwap)
+                                    .execute();
+                                }
+
                                 if (playerNumberGameOneToSwap == 1) {
                                     if (playerNumberGameTwoToSwap == 1) {
                                         gameOneToSwap.setParticipantOne(gameTwoToSwap.getParticipantOne());

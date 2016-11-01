@@ -68,8 +68,8 @@ public class LocalPlayerListAdapter extends RecyclerView.Adapter<PlayerViewHolde
 
         holder.getPlayerNameInList()
             .setText(baseActivity.getResources()
-                .getString(R.string.player_name_in_row, player.getFirstName(), player.getNickName(),
-                    player.getLastName()));
+                .getString(R.string.player_name_in_row, player.getLastNameWithMaximumCharacters(10),
+                    player.getNickNameWithMaximumCharacters(10), player.getLastNameWithMaximumCharacters(10)));
 
         if (position % 2 == 0) {
             holder.getPlayerCardLayout()
@@ -87,6 +87,20 @@ public class LocalPlayerListAdapter extends RecyclerView.Adapter<PlayerViewHolde
                     new CheckPlayerAlreadyInTournamentTask(baseActivity, tournament, player).execute();
                 }
             });
+
+        if (player.getMeta() != null) {
+            if (!player.getMeta().isEmpty()) {
+                holder.getPlayerAffiliation().setText(player.getMeta());
+                holder.getPlayerAffiliation().setVisibility(View.VISIBLE);
+            } else {
+                holder.getPlayerAffiliation().setVisibility(View.GONE);
+            }
+        } else {
+            holder.getPlayerAffiliation().setVisibility(View.GONE);
+        }
+
+        holder.getPlayerElo().setVisibility(View.GONE);
+        holder.getEloIcon().setVisibility(View.GONE);
 
         holder.getLocalIcon().setVisibility(View.VISIBLE);
         holder.getDeleteIcon().setVisibility(View.VISIBLE);

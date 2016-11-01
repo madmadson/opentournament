@@ -50,6 +50,17 @@
             android:layout_below="@id/player_affiliation"
             android:layout_height="wrap_content" />
 
+        <ImageView
+            android:id="@+id/elo_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:src="@drawable/my_crown_small"
+            android:layout_marginRight="@dimen/halve_tick"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@id/player_elo"
+            android:layout_below="@id/player_affiliation"
+            android:layout_centerHorizontal="true" />
 
         <ImageView
             android:id="@+id/local_icon"

@@ -78,7 +78,6 @@ public class AddTournamentPlayerDialog extends DialogFragment {
     private TournamentPlayer tournament_player;
     private BaseActivity baseActivity;
     private EditText affiliationEditText;
-    private TextInputLayout affiliationParent;
 
     @Override
     public void onAttach(Context context) {
@@ -117,8 +116,6 @@ public class AddTournamentPlayerDialog extends DialogFragment {
                     R.id.dialog_add_tournament_player_nickname_parent);
             lastNameParent = (TextInputLayout) dialogView.findViewById(
                     R.id.dialog_add_tournament_player_lastname_parent);
-            affiliationParent = (TextInputLayout) dialogView.findViewById(
-                    R.id.dialog_add_tournament_player_affiliation_parent);
 
             factionSpinner = (Spinner) dialogView.findViewById(R.id.dialog_add_tournament_player_faction_spinner);
 

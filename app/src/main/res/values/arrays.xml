@@ -18,6 +18,7 @@
     <!-- this must be a pair -->
     <string-array name="news_header">
         <item>Welcome!</item>
+        <item>Fr 31.10: Version 0.5.0-ALPHA Released</item>
         <item>Fr 28.10: Version 0.4.10-ALPHA Released</item>
         <item>Di 24.10: Version 0.4.6-ALPHA Released</item>
         <item>Mo 23.10: Version 0.4.3-ALPHA Released</item>
@@ -35,6 +36,12 @@
     <string-array name="news">
         <item>Create more Tournaments! Give Feedback!</item>
 
+         <item>* New Feature: ELO ranking now working!\n
+            * Fix bug with team tournament and swapping in ongoing matches\n
+             * swap ranking and game tab\n
+             * after uploading finished game you cannot upload/undo something, because of ELO\n
+             * various layout issues
+          </item>
         <item>* New Feature: you can choose your affiliation\n
             * ELO feature will be introduced in near future.
           </item>

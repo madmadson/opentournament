@@ -79,7 +79,25 @@ public class RegisterTournamentPlayerListAdapter extends RecyclerView.Adapter<To
 
         viewHolder.getFaction().setText(player.getFaction());
 
-        viewHolder.getAffiliation().setText(player.getMeta());
+        if (player.getMeta() != null) {
+            if (!player.getMeta().isEmpty()) {
+                viewHolder.getAffiliation().setText(player.getMeta());
+                viewHolder.getAffiliation().setVisibility(View.VISIBLE);
+            } else {
+                viewHolder.getAffiliation().setVisibility(View.GONE);
+            }
+        } else {
+            viewHolder.getAffiliation().setVisibility(View.GONE);
+        }
+
+        if (player.getGamesCounter() >= 5) {
+            viewHolder.getElo().setText(String.valueOf(player.getElo()));
+            viewHolder.getElo().setVisibility(View.VISIBLE);
+            viewHolder.getEloIcon().setVisibility(View.VISIBLE);
+        } else {
+            viewHolder.getElo().setVisibility(View.GONE);
+            viewHolder.getEloIcon().setVisibility(View.GONE);
+        }
 
         if (position % 2 == 0) {
             viewHolder.getTournamentPlayerCard()

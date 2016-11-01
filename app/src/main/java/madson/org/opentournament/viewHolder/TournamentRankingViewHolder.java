@@ -18,6 +18,9 @@ import madson.org.opentournament.R;
  */
 public class TournamentRankingViewHolder extends RecyclerView.ViewHolder {
 
+    private final TextView playerAffiliation;
+    private final TextView playerElo;
+    private final ImageView playerEloIcon;
     private CardView rankingCard;
     private TextView droppedInRound;
     private ImageView offlineIcon;
@@ -36,6 +39,10 @@ public class TournamentRankingViewHolder extends RecyclerView.ViewHolder {
 
         playerNameInList = (TextView) itemView.findViewById(R.id.ranking_row_name);
         playerTeamNameInList = (TextView) itemView.findViewById(R.id.ranking_player_teamname);
+        playerAffiliation = (TextView) itemView.findViewById(R.id.ranking_row_affiliation);
+        playerElo = (TextView) itemView.findViewById(R.id.ranking_row_elo);
+        playerEloIcon = (ImageView) itemView.findViewById(R.id.ranking_row_elo_icon);
+
         playerFactionInList = (TextView) itemView.findViewById(R.id.ranking_player_faction);
         playerNumber = (TextView) itemView.findViewById(R.id.ranking_row_player_number);
         score = (TextView) itemView.findViewById(R.id.ranking_row_score);
@@ -110,5 +117,29 @@ public class TournamentRankingViewHolder extends RecyclerView.ViewHolder {
     public CardView getRankingCard() {
 
         return rankingCard;
+    }
+
+
+    public TextView getPlayerAffiliation() {
+
+        return playerAffiliation;
+    }
+
+
+    public TextView getPlayerElo() {
+
+        return playerElo;
+    }
+
+
+    public TextView getPlayerNumber() {
+
+        return playerNumber;
+    }
+
+
+    public ImageView getPlayerEloIcon() {
+
+        return playerEloIcon;
     }
 }

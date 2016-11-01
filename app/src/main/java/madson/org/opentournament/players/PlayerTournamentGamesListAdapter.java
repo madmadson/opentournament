@@ -73,16 +73,23 @@ public class PlayerTournamentGamesListAdapter extends RecyclerView.Adapter<Playe
             viewHolder.getRowGame().setBackgroundColor(ContextCompat.getColor(baseActivity, R.color.colorAlmostWhite));
         }
 
+        viewHolder.getPlayerOneEloTrend().setText(String.valueOf(game.getPlayerOneEloChanging()));
+        viewHolder.getPlayerTwoEloTrend().setText(String.valueOf(game.getPlayerTwoEloChanging()));
+
         if (game.getParticipant_one_score() == 1) {
             viewHolder.getPlayerOne().setTextColor(ContextCompat.getColor(baseActivity, R.color.colorWin));
+            viewHolder.getPlayerOneEloTrend().setTextColor(ContextCompat.getColor(baseActivity, R.color.colorWin));
         } else {
             viewHolder.getPlayerOne().setTextColor(ContextCompat.getColor(baseActivity, R.color.colorLoose));
+            viewHolder.getPlayerOneEloTrend().setTextColor(ContextCompat.getColor(baseActivity, R.color.colorLoose));
         }
 
         if (game.getParticipant_two_score() == 1) {
             viewHolder.getPlayerTwo().setTextColor(ContextCompat.getColor(baseActivity, R.color.colorWin));
+            viewHolder.getPlayerTwoEloTrend().setTextColor(ContextCompat.getColor(baseActivity, R.color.colorWin));
         } else {
             viewHolder.getPlayerTwo().setTextColor(ContextCompat.getColor(baseActivity, R.color.colorLoose));
+            viewHolder.getPlayerTwoEloTrend().setTextColor(ContextCompat.getColor(baseActivity, R.color.colorLoose));
         }
 
         viewHolder.getPlayerOneStat()

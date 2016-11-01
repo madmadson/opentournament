@@ -453,64 +453,108 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
                     // for team games we don't need games
                     if (!uploadedTournament.getTournamentTyp().equals(TournamentTyp.TEAM.name())
                             || game.getParent_UUID() != null) {
-                        if (!game.getTournamentPlayerOne().isLocal()) {
-                            DatabaseReference referenceForPlayerOneGames = FirebaseDatabase.getInstance()
-                                    .getReference(FirebaseReferences.PLAYER_TOURNAMENTS + "/"
-                                        + uploadedTournament.getGameOrSportTyp() + "/"
-                                        + game.getParticipantOne().getUuid()
-                                        + "/" + uploadedTournament.getUuid() + "/games/" + uuid);
+                        if (!game.getTournamentPlayerOne().isLocal() || !game.getTournamentPlayerTwo().isLocal()) {
+                            // elo calculation
+                            double valueOnePlayerOne =
+                                ((double) (game.getTournamentPlayerOne().getElo()
+                                        - game.getTournamentPlayerTwo().getElo()) / 400.0d);
+                            double valueTwoPlayerOne = 1 + Math.pow(10, valueOnePlayerOne);
+                            double expectancyValuePlayerOne = 1 / valueTwoPlayerOne;
 
-                            referenceForPlayerOneGames.setValue(game);
+                            double valueOnePlayerTwo =
+                                ((double) (game.getTournamentPlayerTwo().getElo()
+                                        - game.getTournamentPlayerOne().getElo()) / 400.0d);
+                            double valueTwoPlayerTwo = 1 + Math.pow(10, valueOnePlayerTwo);
+                            double expectancyValuePlayerTwo = 1 / valueTwoPlayerTwo;
 
-                            referenceForPlayerOneElo = FirebaseDatabase.getInstance()
-                                .getReference(FirebaseReferences.PLAYERS + "/"
-                                        + game.getTournamentPlayerOne().getPlayerUUID());
+                            final int newEloPlayerOne;
+                            final int newEloPlayerTwo;
 
-                            referenceForPlayerOneElo.addListenerForSingleValueEvent(new ValueEventListener() {
+                            if (game.getParticipant_one_score() > game.getParticipant_two_score()) {
+                                newEloPlayerOne = (int) (game.getTournamentPlayerOne().getElo()
+                                        + 40 * (1 - expectancyValuePlayerOne));
+                            } else if (game.getParticipant_one_score() == game.getParticipant_two_score()) {
+                                newEloPlayerOne = (int) (game.getTournamentPlayerOne().getElo()
+                                        + 40 * (0.5 - expectancyValuePlayerOne));
+                            } else {
+                                newEloPlayerOne = (int) (game.getTournamentPlayerOne().getElo()
+                                        + 40 * (0 - expectancyValuePlayerOne));
+                            }
 
-                                    @Override
-                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                            if (game.getParticipant_two_score() > game.getParticipant_one_score()) {
+                                newEloPlayerTwo = (int) (game.getTournamentPlayerTwo().getElo()
+                                        + 40 * (1 - expectancyValuePlayerTwo));
+                            } else if (game.getParticipant_one_score() == game.getParticipant_two_score()) {
+                                newEloPlayerTwo = (int) (game.getTournamentPlayerOne().getElo()
+                                        + 40 * (0.5 - expectancyValuePlayerTwo));
+                            } else {
+                                newEloPlayerTwo = (int) (game.getTournamentPlayerOne().getElo()
+                                        + 40 * (0 - expectancyValuePlayerTwo));
+                            }
 
-                                        Player player = dataSnapshot.getValue(Player.class);
-                                        player.setGamesCounter((player.getGamesCounter() + 1));
-                                        referenceForPlayerOneElo.setValue(player);
-                                    }
+                            game.setPlayerTwoEloChanging((newEloPlayerTwo - game.getTournamentPlayerTwo().getElo()));
+                            game.setPlayerOneEloChanging((newEloPlayerOne - game.getTournamentPlayerOne().getElo()));
+
+                            if (!game.getTournamentPlayerOne().isLocal()) {
+                                DatabaseReference referenceForPlayerOneGames = FirebaseDatabase.getInstance()
+                                        .getReference(FirebaseReferences.PLAYER_TOURNAMENTS + "/"
+                                            + uploadedTournament.getGameOrSportTyp() + "/"
+                                            + game.getTournamentPlayerOne().getUuid()
+                                            + "/" + uploadedTournament.getUuid() + "/games/" + uuid);
+
+                                referenceForPlayerOneGames.setValue(game);
+                                referenceForPlayerOneElo = FirebaseDatabase.getInstance()
+                                    .getReference(FirebaseReferences.PLAYERS + "/"
+                                            + game.getTournamentPlayerOne().getPlayerUUID());
+
+                                referenceForPlayerOneElo.addListenerForSingleValueEvent(new ValueEventListener() {
+
+                                        @Override
+                                        public void onDataChange(DataSnapshot dataSnapshot) {
+
+                                            Player player = dataSnapshot.getValue(Player.class);
+                                            player.setGamesCounter((player.getGamesCounter() + 1));
+                                            player.setElo(newEloPlayerOne);
+                                            referenceForPlayerOneElo.setValue(player);
+                                        }
 
 
-                                    @Override
-                                    public void onCancelled(DatabaseError databaseError) {
-                                    }
-                                });
-                        }
+                                        @Override
+                                        public void onCancelled(DatabaseError databaseError) {
+                                        }
+                                    });
+                            }
 
-                        if (!game.getTournamentPlayerTwo().isLocal()) {
-                            DatabaseReference referenceForPlayerTwoGames = FirebaseDatabase.getInstance()
-                                    .getReference(FirebaseReferences.PLAYER_TOURNAMENTS + "/"
-                                        + uploadedTournament.getGameOrSportTyp() + "/"
-                                        + game.getParticipantTwo().getUuid()
-                                        + "/" + uploadedTournament.getUuid() + "/games/" + uuid);
+                            if (!game.getTournamentPlayerTwo().isLocal()) {
+                                DatabaseReference referenceForPlayerTwoGames = FirebaseDatabase.getInstance()
+                                        .getReference(FirebaseReferences.PLAYER_TOURNAMENTS + "/"
+                                            + uploadedTournament.getGameOrSportTyp() + "/"
+                                            + game.getParticipantTwo().getUuid()
+                                            + "/" + uploadedTournament.getUuid() + "/games/" + uuid);
 
-                            referenceForPlayerTwoGames.setValue(game);
+                                referenceForPlayerTwoGames.setValue(game);
 
-                            referenceForPlayerTwoElo = FirebaseDatabase.getInstance()
-                                .getReference(FirebaseReferences.PLAYERS + "/"
-                                        + game.getTournamentPlayerTwo().getPlayerUUID());
+                                referenceForPlayerTwoElo = FirebaseDatabase.getInstance()
+                                    .getReference(FirebaseReferences.PLAYERS + "/"
+                                            + game.getTournamentPlayerTwo().getPlayerUUID());
 
-                            referenceForPlayerTwoElo.addListenerForSingleValueEvent(new ValueEventListener() {
+                                referenceForPlayerTwoElo.addListenerForSingleValueEvent(new ValueEventListener() {
 
-                                    @Override
-                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        @Override
+                                        public void onDataChange(DataSnapshot dataSnapshot) {
 
-                                        Player player = dataSnapshot.getValue(Player.class);
-                                        player.setGamesCounter((player.getGamesCounter() + 1));
-                                        referenceForPlayerTwoElo.setValue(player);
-                                    }
+                                            Player player = dataSnapshot.getValue(Player.class);
+                                            player.setGamesCounter((player.getGamesCounter() + 1));
+                                            player.setElo(newEloPlayerTwo);
+                                            referenceForPlayerTwoElo.setValue(player);
+                                        }
 
 
-                                    @Override
-                                    public void onCancelled(DatabaseError databaseError) {
-                                    }
-                                });
+                                        @Override
+                                        public void onCancelled(DatabaseError databaseError) {
+                                        }
+                                    });
+                            }
                         }
                     }
                 }

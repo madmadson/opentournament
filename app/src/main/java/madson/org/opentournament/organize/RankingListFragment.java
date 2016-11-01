@@ -190,6 +190,7 @@ public class RankingListFragment extends Fragment implements OpenTournamentEvent
 
         if (tournament.getUploadedRound() >= round) {
             uploadedIcon.setVisibility(View.VISIBLE);
+            uploadGamesButton.setVisibility(View.GONE);
         } else {
             uploadedIcon.setVisibility(View.GONE);
         }
@@ -215,6 +216,7 @@ public class RankingListFragment extends Fragment implements OpenTournamentEvent
                     .name().equals(tournament.getState())) {
                 uploadedIcon.setVisibility(View.VISIBLE);
                 undoEndTournamentButton.setVisibility(View.GONE);
+                uploadGamesButton.setVisibility(View.GONE);
             }
         }
     }
@@ -238,9 +240,8 @@ public class RankingListFragment extends Fragment implements OpenTournamentEvent
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_ranking, parent, false);
 
             // set the view's size, margins, paddings and layout parameters
-            TournamentRankingViewHolder vh = new TournamentRankingViewHolder(v);
 
-            return vh;
+            return new TournamentRankingViewHolder(v);
         }
 
 
@@ -276,6 +277,9 @@ public class RankingListFragment extends Fragment implements OpenTournamentEvent
             holder.getPlayerNameInList().setText(ranking.getParticipantUUID());
             holder.getPlayerTeamNameInList().setVisibility(View.GONE);
             holder.getPlayerFactionInList().setVisibility(View.GONE);
+            holder.getPlayerElo().setVisibility(View.GONE);
+            holder.getPlayerEloIcon().setVisibility(View.GONE);
+            holder.getPlayerAffiliation().setVisibility(View.GONE);
         }
 
 
@@ -285,10 +289,41 @@ public class RankingListFragment extends Fragment implements OpenTournamentEvent
 
             holder.getPlayerNameInList()
                 .setText(context.getResources()
-                    .getString(R.string.player_name_in_row, tournamentPlayer.getFirstName(),
-                        tournamentPlayer.getNickName(), tournamentPlayer.getLastName()));
+                    .getString(R.string.player_name_in_row, tournamentPlayer.getFirstNameWithMaximumCharacters(10),
+                        tournamentPlayer.getNickNameWithMaximumCharacters(10),
+                        tournamentPlayer.getLastNameWithMaximumCharacters(10)));
 
-            holder.getPlayerTeamNameInList().setText(tournamentPlayer.getTeamName());
+            if (tournamentPlayer.getTeamName() != null) {
+                if (!tournamentPlayer.getTeamName().isEmpty()) {
+                    holder.getPlayerTeamNameInList().setText(tournamentPlayer.getTeamName());
+                    holder.getPlayerTeamNameInList().setVisibility(View.VISIBLE);
+                } else {
+                    holder.getPlayerTeamNameInList().setVisibility(View.GONE);
+                }
+            } else {
+                holder.getPlayerTeamNameInList().setVisibility(View.GONE);
+            }
+
+            if (tournamentPlayer.getMeta() != null) {
+                if (!tournamentPlayer.getMeta().isEmpty()) {
+                    holder.getPlayerAffiliation().setText(tournamentPlayer.getMeta());
+                    holder.getPlayerAffiliation().setVisibility(View.VISIBLE);
+                } else {
+                    holder.getPlayerAffiliation().setVisibility(View.GONE);
+                }
+            } else {
+                holder.getPlayerAffiliation().setVisibility(View.GONE);
+            }
+
+            if (tournamentPlayer.getGamesCounter() >= 5) {
+                holder.getPlayerElo().setText(String.valueOf(tournamentPlayer.getElo()));
+                holder.getPlayerElo().setVisibility(View.VISIBLE);
+                holder.getPlayerEloIcon().setVisibility(View.VISIBLE);
+            } else {
+                holder.getPlayerElo().setVisibility(View.GONE);
+                holder.getPlayerEloIcon().setVisibility(View.GONE);
+            }
+
             holder.getPlayerFactionInList().setText(tournamentPlayer.getFaction());
 
             if (tournamentPlayer.isLocal()) {

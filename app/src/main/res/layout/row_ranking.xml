@@ -13,7 +13,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/ranking_row_player_number"
@@ -28,7 +28,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:layout_centerInParent="true"
             android:paddingLeft="@dimen/main_tick">
 
             <TextView
@@ -39,18 +38,45 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/ranking_player_teamname"
+                android:id="@+id/ranking_row_affiliation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/ranking_row_name"
-                android:layout_marginLeft="@dimen/main_tick" />
+                android:layout_marginLeft="@dimen/main_tick"
+                android:visibility="gone"/>
+
+            <TextView
+                android:id="@+id/ranking_row_elo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/ranking_row_affiliation"
+                android:layout_marginLeft="@dimen/main_tick"
+                android:visibility="gone"/>
+
+            <ImageView
+                android:id="@+id/ranking_row_elo_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:src="@drawable/my_crown_small"
+                android:layout_marginRight="@dimen/halve_tick"
+                android:layout_below="@id/ranking_row_affiliation"
+                android:layout_toRightOf="@id/ranking_row_elo" />
+
+            <TextView
+                android:id="@+id/ranking_player_teamname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/ranking_row_elo"
+                android:layout_marginLeft="@dimen/main_tick"
+                android:visibility="gone"/>
 
             <TextView
                 android:id="@+id/ranking_player_faction"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/ranking_player_teamname"
-                android:layout_marginLeft="@dimen/main_tick" />
+                android:layout_marginLeft="@dimen/main_tick"
+                android:layout_below="@id/ranking_player_teamname" />
 
             <TextView
                 android:id="@+id/dropped_in_round"
@@ -66,15 +92,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
             android:paddingRight="@dimen/halve_tick"
-            android:paddingTop="@dimen/main_tick">
+            android:paddingTop="20dp">
 
             <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
-                android:layout_centerInParent="true"
                 android:paddingRight="@dimen/main_tick">
 
                 <TextView
@@ -97,7 +121,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
-                android:layout_centerInParent="true"
+            
                 android:paddingRight="@dimen/main_tick">
 
                 <TextView
@@ -120,7 +144,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
-                android:layout_centerInParent="true"
+          
                 android:paddingRight="@dimen/main_tick">
 
                 <TextView
@@ -143,8 +167,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
-                android:layout_centerInParent="true"
-                android:paddingRight="@dimen/main_tick">
+                android:paddingRight="@dimen/halve_tick">
 
                 <TextView
                     android:id="@+id/ranking_row_vp_label"

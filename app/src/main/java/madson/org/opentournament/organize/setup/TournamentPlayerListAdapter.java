@@ -88,10 +88,23 @@ public class TournamentPlayerListAdapter extends RecyclerView.Adapter<Tournament
         }
 
         if (tournamentPlayer.getMeta() != null) {
-            holder.getAffiliation().setText(tournamentPlayer.getMeta());
-            holder.getAffiliation().setVisibility(View.VISIBLE);
+            if (!tournamentPlayer.getMeta().isEmpty()) {
+                holder.getAffiliation().setText(tournamentPlayer.getMeta());
+                holder.getAffiliation().setVisibility(View.VISIBLE);
+            } else {
+                holder.getAffiliation().setVisibility(View.GONE);
+            }
         } else {
             holder.getAffiliation().setVisibility(View.GONE);
+        }
+
+        if (tournamentPlayer.getGamesCounter() >= 5) {
+            holder.getElo().setText(String.valueOf(tournamentPlayer.getElo()));
+            holder.getElo().setVisibility(View.VISIBLE);
+            holder.getEloIcon().setVisibility(View.VISIBLE);
+        } else {
+            holder.getElo().setVisibility(View.GONE);
+            holder.getEloIcon().setVisibility(View.GONE);
         }
 
         if (tournamentPlayer.getDroppedInRound() != 0) {

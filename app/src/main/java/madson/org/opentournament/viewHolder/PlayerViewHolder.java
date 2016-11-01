@@ -19,6 +19,7 @@ public class PlayerViewHolder extends RecyclerView.ViewHolder {
 
     private final TextView playerAffiliation;
     private final TextView playerElo;
+    private final ImageView eloIcon;
     private ImageView deleteIcon;
     private ImageView localIcon;
     private View playerCardLayout;
@@ -41,6 +42,7 @@ public class PlayerViewHolder extends RecyclerView.ViewHolder {
 
         localIcon = (ImageView) v.findViewById(R.id.local_icon);
         deleteIcon = (ImageView) v.findViewById(R.id.delete_icon);
+        eloIcon = (ImageView) v.findViewById(R.id.elo_icon);
     }
 
     public TextView getPlayerNameInList() {
@@ -76,5 +78,11 @@ public class PlayerViewHolder extends RecyclerView.ViewHolder {
     public TextView getPlayerElo() {
 
         return playerElo;
+    }
+
+
+    public ImageView getEloIcon() {
+
+        return eloIcon;
     }
 }

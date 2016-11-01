@@ -25,6 +25,8 @@ public class TournamentPlayerTable {
      * 9: dummy
      * 10: dropped_in_round
      * 11: local
+     * 12: gamesCounter
+     * 13: elo
      */
     public static final String[] ALL_COLS_FOR_TOURNAMENT_PLAYER_TABLE = {
         TournamentPlayerTable.COLUMN_ID, TournamentPlayerTable.COLUMN_TOURNAMENT_UUID,
@@ -32,7 +34,7 @@ public class TournamentPlayerTable {
         TournamentPlayerTable.COLUMN_NICKNAME, TournamentPlayerTable.COLUMN_LASTNAME,
         TournamentPlayerTable.COLUMN_TEAMNAME, TournamentPlayerTable.COLUMN_FACTION, TournamentPlayerTable.COLUMN_META,
         TournamentPlayerTable.COLUMN_DUMMY, TournamentPlayerTable.COLUMN_DROPPED_IN_ROUND,
-        TournamentPlayerTable.COLUMN_LOCAL
+        TournamentPlayerTable.COLUMN_LOCAL, TournamentPlayerTable.COLUMN_GAMES_COUNTER, TournamentPlayerTable.COLUMN_ELO
     };
 
     public static final String TABLE_TOURNAMENT_PLAYER = "tournament_player";
@@ -49,6 +51,8 @@ public class TournamentPlayerTable {
     public static final String COLUMN_TEAMNAME = "teamname";
     public static final String COLUMN_FACTION = "faction";
     public static final String COLUMN_META = "meta";
+    public static final String COLUMN_GAMES_COUNTER = "gamesCounter";
+    public static final String COLUMN_ELO = "elo";
 
     public static final String COLUMN_DUMMY = "dummy";
 
@@ -64,7 +68,7 @@ public class TournamentPlayerTable {
             + COLUMN_PLAYER_UUID + " TEXT," + COLUMN_FIRSTNAME + " TEXT, " + COLUMN_NICKNAME + " TEXT, "
             + COLUMN_LASTNAME + " TEXT, " + COLUMN_TEAMNAME + " TEXT, " + COLUMN_FACTION + " TEXT, " + COLUMN_META
             + " TEXT, " + COLUMN_DUMMY + " INTEGER, " + COLUMN_DROPPED_IN_ROUND + " INTEGER, " + COLUMN_LOCAL
-            + " INTEGER)");
+            + " INTEGER, " + COLUMN_GAMES_COUNTER + " INTEGER, " + COLUMN_ELO + " INTEGER)");
     }
 
 
@@ -82,6 +86,13 @@ public class TournamentPlayerTable {
         if (oldVersion == 4 && newVersion == 5) {
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_TOURNAMENT_PLAYER);
             createTable(db);
+        }
+
+        if (8 > oldVersion) {
+            db.execSQL("ALTER TABLE " + TABLE_TOURNAMENT_PLAYER + " ADD COLUMN " + COLUMN_GAMES_COUNTER
+                + " INTEGER");
+            db.execSQL("ALTER TABLE " + TABLE_TOURNAMENT_PLAYER + " ADD COLUMN " + COLUMN_ELO
+                + " INTEGER");
         }
     }
 }

@@ -40,10 +40,38 @@
                 android:layout_marginLeft="@dimen/main_tick"/>
 
             <TextView
-                android:id="@+id/ranking_player_teamname"
+                android:id="@+id/ranking_row_affiliation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/ranking_row_name"
+                android:layout_marginLeft="@dimen/main_tick"
+                android:visibility="gone"/>
+
+            <TextView
+                android:id="@+id/ranking_row_elo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/ranking_row_affiliation"
+                android:layout_marginLeft="@dimen/double_tick"
+                android:visibility="gone"/>
+
+            <ImageView
+                android:id="@+id/ranking_row_elo_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:src="@drawable/my_crown_small"
+                android:layout_marginRight="@dimen/halve_tick"
+                android:layout_toLeftOf="@id/ranking_row_elo"
+                android:layout_below="@id/ranking_row_affiliation"
+   />
+
+
+            <TextView
+                android:id="@+id/ranking_player_teamname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/ranking_row_elo"
                 android:layout_marginLeft="@dimen/main_tick"/>
 
             <TextView

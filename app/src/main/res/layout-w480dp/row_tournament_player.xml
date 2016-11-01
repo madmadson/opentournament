@@ -51,12 +51,19 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/tournament_player_teamname"
                 android:layout_marginLeft="@dimen/main_tick" />
+
+            <TextView
+                android:id="@+id/tournament_player_elo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tournament_player_affiliation"
+                android:layout_marginLeft="@dimen/main_tick" />
             
             <TextView
                 android:id="@+id/dropped_in_round"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/tournament_player_affiliation"
+                android:layout_below="@id/tournament_player_elo"
                 android:layout_marginLeft="@dimen/main_tick"
                 android:textColor="@color/colorDanger"
                 android:visibility="gone" />

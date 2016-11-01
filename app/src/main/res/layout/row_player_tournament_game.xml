@@ -25,13 +25,34 @@
         android:layout_below="@id/player_one_stat"
         android:layout_centerHorizontal="true" />
 
+
+   
+    <TextView
+        android:id="@+id/player_one_elo_trend"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/player_one_army_list"
+        android:layout_centerHorizontal="true" />
+
+    <ImageView
+        android:id="@+id/player_one_elo_trend_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:src="@drawable/my_crown_small"
+        android:layout_marginRight="@dimen/halve_tick"
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@id/player_one_elo_trend"
+        android:layout_below="@id/player_one_army_list"
+        android:layout_centerHorizontal="true" />
+
     <TextView
         android:id="@+id/game_divider"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
-        android:layout_below="@id/player_one_army_list"
+        android:layout_below="@id/player_one_elo_trend"
         android:text="@string/game_divider" />
     
     <TextView
@@ -54,12 +75,31 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/player_two_stat"
         android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:id="@+id/player_two_elo_trend"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/player_two_army_list"
+        android:layout_centerHorizontal="true" />
+
+    <ImageView
+        android:id="@+id/player_two_elo_trend_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:src="@drawable/my_crown_small"
+        android:layout_marginRight="@dimen/halve_tick"
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@id/player_two_elo_trend"
+        android:layout_below="@id/player_two_army_list"
+        android:layout_centerHorizontal="true" />
     
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/line_tick"
         android:background="@color/colorDivider"
-        android:layout_below="@id/player_two_army_list"
+        android:layout_below="@id/player_two_elo_trend"
         android:paddingBottom="@dimen/main_tick"
         android:paddingTop="@dimen/main_tick" />
 </RelativeLayout>

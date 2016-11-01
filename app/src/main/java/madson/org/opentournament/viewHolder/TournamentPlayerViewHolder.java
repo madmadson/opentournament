@@ -19,6 +19,8 @@ import madson.org.opentournament.R;
 public class TournamentPlayerViewHolder extends RecyclerView.ViewHolder {
 
     private final TextView affiliation;
+    private final TextView elo;
+    private final ImageView eloIcon;
     private ImageView addListIcon;
     private ImageView editIcon;
     private TextView faction;
@@ -48,6 +50,8 @@ public class TournamentPlayerViewHolder extends RecyclerView.ViewHolder {
         faction = (TextView) v.findViewById(R.id.tournament_player_row_faction);
         droppedInRound = (TextView) v.findViewById(R.id.dropped_in_round);
         affiliation = (TextView) v.findViewById(R.id.tournament_player_affiliation);
+        elo = (TextView) v.findViewById(R.id.tournament_player_elo);
+        eloIcon = (ImageView) v.findViewById(R.id.tournament_player_elo_icon);
 
         localIcon = (ImageView) v.findViewById(R.id.tournament_player_row_local_icon);
         editIcon = (ImageView) v.findViewById(R.id.tournament_player_row_edit_icon);
@@ -111,5 +115,17 @@ public class TournamentPlayerViewHolder extends RecyclerView.ViewHolder {
     public TextView getAffiliation() {
 
         return affiliation;
+    }
+
+
+    public TextView getElo() {
+
+        return elo;
+    }
+
+
+    public ImageView getEloIcon() {
+
+        return eloIcon;
     }
 }

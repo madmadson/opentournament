@@ -243,7 +243,6 @@ public class TournamentPlayer extends TournamentParticipant implements Parcelabl
     }
 
 
-    @Exclude
     public int getGamesCounter() {
 
         return gamesCounter;
@@ -256,7 +255,6 @@ public class TournamentPlayer extends TournamentParticipant implements Parcelabl
     }
 
 
-    @Exclude
     public int getElo() {
 
         return elo;

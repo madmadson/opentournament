@@ -4,7 +4,6 @@ import android.support.v7.widget.RecyclerView;
 
 import android.view.View;
 
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import madson.org.opentournament.R;
@@ -23,6 +22,8 @@ public class PlayerTournamentGameViewHolder extends RecyclerView.ViewHolder {
     private final TextView playerTwoStat;
     private final TextView playerOneArmyList;
     private final TextView playerTwoArmyList;
+    private final TextView playerOneEloTrend;
+    private final TextView playerTwoEloTrend;
     private View rowGame;
 
     public PlayerTournamentGameViewHolder(View v) {
@@ -37,6 +38,9 @@ public class PlayerTournamentGameViewHolder extends RecyclerView.ViewHolder {
         playerTwoStat = (TextView) v.findViewById(R.id.player_two_stat);
         playerOneArmyList = (TextView) v.findViewById(R.id.player_one_army_list);
         playerTwoArmyList = (TextView) v.findViewById(R.id.player_two_army_list);
+
+        playerOneEloTrend = (TextView) v.findViewById(R.id.player_one_elo_trend);
+        playerTwoEloTrend = (TextView) v.findViewById(R.id.player_two_elo_trend);
     }
 
     public View getRowGame() {
@@ -78,5 +82,17 @@ public class PlayerTournamentGameViewHolder extends RecyclerView.ViewHolder {
     public TextView getPlayerTwoArmyList() {
 
         return playerTwoArmyList;
+    }
+
+
+    public TextView getPlayerOneEloTrend() {
+
+        return playerOneEloTrend;
+    }
+
+
+    public TextView getPlayerTwoEloTrend() {
+
+        return playerTwoEloTrend;
     }
 }

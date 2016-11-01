@@ -208,6 +208,31 @@ public class TournamentPlayerTeamExpandableListAdapter extends BaseExpandableLis
                 localIcon.setVisibility(View.GONE);
             }
 
+            TextView meta = (TextView) convertView.findViewById(R.id.tournament_player_affiliation);
+
+            if (tournamentPlayer.getMeta() != null) {
+                if (!tournamentPlayer.getMeta().isEmpty()) {
+                    meta.setText(tournamentPlayer.getMeta());
+                    meta.setVisibility(View.VISIBLE);
+                } else {
+                    meta.setVisibility(View.GONE);
+                }
+            } else {
+                meta.setVisibility(View.GONE);
+            }
+
+            TextView elo = (TextView) convertView.findViewById(R.id.tournament_player_elo);
+            ImageView elo_icon = (ImageView) convertView.findViewById(R.id.tournament_player_elo_icon);
+
+            if (tournamentPlayer.getGamesCounter() >= 5) {
+                elo.setText(String.valueOf(tournamentPlayer.getElo()));
+                elo.setVisibility(View.VISIBLE);
+                elo_icon.setVisibility(View.VISIBLE);
+            } else {
+                elo.setVisibility(View.GONE);
+                elo_icon.setVisibility(View.GONE);
+            }
+
             CardView card = (CardView) convertView.findViewById(R.id.tournament_player_row_card_view);
 
             if (childPosition % 2 == 0) {

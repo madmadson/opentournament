@@ -68,6 +68,10 @@ public class Game implements Parcelable {
     private boolean startSwappingPlayerOne;
     private boolean startSwappingPlayerTwo;
 
+    // only for elo calculating
+    private int playerOneEloChanging;
+    private int playerTwoEloChanging;
+
     public Game(Parcel in) {
 
         _id = in.readLong();
@@ -588,5 +592,29 @@ public class Game implements Parcelable {
     public void setParticipant_one_army_list(String participant_one_army_list) {
 
         this.participant_one_army_list = participant_one_army_list;
+    }
+
+
+    public int getPlayerOneEloChanging() {
+
+        return playerOneEloChanging;
+    }
+
+
+    public void setPlayerOneEloChanging(int playerOneEloChanging) {
+
+        this.playerOneEloChanging = playerOneEloChanging;
+    }
+
+
+    public int getPlayerTwoEloChanging() {
+
+        return playerTwoEloChanging;
+    }
+
+
+    public void setPlayerTwoEloChanging(int playerTwoEloChanging) {
+
+        this.playerTwoEloChanging = playerTwoEloChanging;
     }
 }

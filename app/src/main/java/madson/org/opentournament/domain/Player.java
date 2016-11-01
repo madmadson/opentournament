@@ -124,6 +124,39 @@ public class Player implements Parcelable {
     }
 
 
+    @Exclude
+    public String getFirstNameWithMaximumCharacters(int maxChars) {
+
+        if (firstName != null && firstName.length() > maxChars) {
+            return firstName.substring(0, maxChars).concat("...");
+        } else {
+            return firstName;
+        }
+    }
+
+
+    @Exclude
+    public String getNickNameWithMaximumCharacters(int maxChars) {
+
+        if (nickName != null && nickName.length() > maxChars) {
+            return nickName.substring(0, maxChars).concat("...");
+        } else {
+            return nickName;
+        }
+    }
+
+
+    @Exclude
+    public String getLastNameWithMaximumCharacters(int maxChars) {
+
+        if (lastName != null && lastName.length() > maxChars) {
+            return lastName.substring(0, maxChars).concat("...");
+        } else {
+            return lastName;
+        }
+    }
+
+
     public void setFirstName(String firstName) {
 
         this.firstName = firstName;

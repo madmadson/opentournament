@@ -178,6 +178,9 @@ public class TournamentPlayerServiceImpl implements TournamentPlayerService {
         contentValues.put(TournamentPlayerTable.COLUMN_FACTION, player.getFaction());
         contentValues.put(TournamentPlayerTable.COLUMN_DUMMY, player.isDummy());
         contentValues.put(TournamentPlayerTable.COLUMN_LOCAL, player.isLocal());
+        contentValues.put(TournamentPlayerTable.COLUMN_META, player.getMeta());
+        contentValues.put(TournamentPlayerTable.COLUMN_GAMES_COUNTER, player.getGamesCounter());
+        contentValues.put(TournamentPlayerTable.COLUMN_ELO, player.getElo());
 
         db.insert(TournamentPlayerTable.TABLE_TOURNAMENT_PLAYER, null, contentValues);
     }
@@ -292,6 +295,8 @@ public class TournamentPlayerServiceImpl implements TournamentPlayerService {
         tournamentPlayer.setDummy(cursor.getInt(9) != 0);
         tournamentPlayer.setDroppedInRound(cursor.getInt(10));
         tournamentPlayer.setLocal(cursor.getInt(11) != 0);
+        tournamentPlayer.setGamesCounter(cursor.getInt(12));
+        tournamentPlayer.setElo(cursor.getInt(13));
 
         return tournamentPlayer;
     }

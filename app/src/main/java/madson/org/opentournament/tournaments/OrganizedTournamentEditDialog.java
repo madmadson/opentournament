@@ -373,7 +373,7 @@ public class OrganizedTournamentEditDialog extends DialogFragment {
                 tournament.setCreatorEmail("anonymous");
             }
 
-            tournament.setState(Tournament.TournamentState.PLANED.name());
+            tournament.setState(Tournament.TournamentState.PLANNED.name());
 
             if (tournamentType.equals(TournamentTyp.TEAM.name())) {
                 tournament.setTeamSize(Integer.valueOf(teamSize.getText().toString()));

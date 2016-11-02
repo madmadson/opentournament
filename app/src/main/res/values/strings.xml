@@ -9,7 +9,7 @@
     <string name="drawer_nav_home">Home</string>
     <string name="drawer_nav_online_tournaments">Online Tournaments</string>
     <string name="drawer_nav_players">Players</string>
-    <string name="drawer_nav_organized_tournaments">My Tournaments</string>
+    <string name="drawer_nav_organized_tournaments">Organize Tournament</string>
 
     <string name="drawer_nav_account">Account</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -347,5 +347,7 @@
         WARNING after upload finished tournament. 
         Tournament can\'t be undone anymore. 
     </string>
+    <string name="label_state_filter">Filter state</string>
+    <string name="drawer_nav_my_tournaments">My Tournaments</string>
 
 </resources>

@@ -18,8 +18,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.google.firebase.database.ChildEventListener;
@@ -27,6 +32,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 
 import madson.org.opentournament.R;
 import madson.org.opentournament.db.FirebaseReferences;
@@ -45,6 +51,9 @@ public class OnlineTournamentListFragment extends Fragment {
 
     private Button linkToOwnTournamentButton;
     private BaseActivity baseActivity;
+    private Spinner stateFilter;
+    private Query soloQuery;
+    private Query teamQuery;
 
     @Override
     public void onAttach(Context context) {
@@ -110,15 +119,28 @@ public class OnlineTournamentListFragment extends Fragment {
             final OnlineTournamentListAdapter onlineTournamentListAdapter = new OnlineTournamentListAdapter(
                     baseActivity);
 
+            stateFilter = (Spinner) view.findViewById(R.id.state_filter);
+
+            final ArrayAdapter<CharSequence> tournament_states_adapter = ArrayAdapter.createFromResource(baseActivity,
+                    R.array.tournament_states, android.R.layout.simple_spinner_item);
+            tournament_states_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            stateFilter.setAdapter(tournament_states_adapter);
+
             // do this configurable for other sport games
-            DatabaseReference childSolo = mFirebaseDatabaseReference.child(FirebaseReferences.TOURNAMENTS + "/"
+            final DatabaseReference childSolo = mFirebaseDatabaseReference.child(FirebaseReferences.TOURNAMENTS + "/"
                     + GameOrSportTyp.WARMACHINE_SOLO);
 
+            soloQuery = childSolo.orderByChild("state")
+                .equalTo(String.valueOf(tournament_states_adapter.getItem(0)).toUpperCase());
+
             // do this configurable for other sport games
-            DatabaseReference childTeam = mFirebaseDatabaseReference.child(FirebaseReferences.TOURNAMENTS + "/"
+            final DatabaseReference childTeam = mFirebaseDatabaseReference.child(FirebaseReferences.TOURNAMENTS + "/"
                     + GameOrSportTyp.WARMACHINE_TEAM);
 
-            ChildEventListener tournamentEventListener = new ChildEventListener() {
+            teamQuery = childTeam.orderByChild("state")
+                .equalTo(String.valueOf(tournament_states_adapter.getItem(0)).toUpperCase());
+
+            final ChildEventListener tournamentEventListener = new ChildEventListener() {
 
                 @Override
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -159,8 +181,8 @@ public class OnlineTournamentListFragment extends Fragment {
                 public void onCancelled(DatabaseError databaseError) {
                 }
             };
-            childSolo.addChildEventListener(tournamentEventListener);
-            childTeam.addChildEventListener(tournamentEventListener);
+            soloQuery.addChildEventListener(tournamentEventListener);
+            teamQuery.addChildEventListener(tournamentEventListener);
 
             mOnlineTournamentRecyclerView.setAdapter(onlineTournamentListAdapter);
 
@@ -178,6 +200,35 @@ public class OnlineTournamentListFragment extends Fragment {
 
             Handler handler = new Handler();
             handler.postDelayed(runnable, 10000);
+
+            stateFilter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+                    @Override
+                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+                        String filter = String.valueOf(tournament_states_adapter.getItem(i)).toUpperCase();
+
+                        onlineTournamentListAdapter.deleteAllTournaments();
+                        soloQuery.removeEventListener(tournamentEventListener);
+                        teamQuery.removeEventListener(tournamentEventListener);
+
+                        if (filter.equals("ALL")) {
+                            soloQuery = childSolo.orderByChild("state");
+                            teamQuery = childTeam.orderByChild("state");
+                        } else {
+                            soloQuery = childSolo.orderByChild("state").equalTo(filter);
+                            teamQuery = childTeam.orderByChild("state").equalTo(filter);
+                        }
+
+                        soloQuery.addChildEventListener(tournamentEventListener);
+                        teamQuery.addChildEventListener(tournamentEventListener);
+                    }
+
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> adapterView) {
+                    }
+                });
         } else {
             TextView offlineText = (TextView) view.findViewById(R.id.offline_text);
             offlineText.setVisibility(View.VISIBLE);

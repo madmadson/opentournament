@@ -3,8 +3,6 @@ package madson.org.opentournament.organize.setup;
 import android.content.Context;
 import android.content.DialogInterface;
 
-import android.graphics.Color;
-
 import android.os.Bundle;
 import android.os.Handler;
 
@@ -165,7 +163,7 @@ public class TournamentPlayerListFragment extends Fragment implements OpenTourna
         registrationRecyclerView.setAdapter(registrationListAdapter);
 
         if (baseActivity.isConnected()) {
-            if (tournament.getState().equals(Tournament.TournamentState.PLANED.name())) {
+            if (tournament.getState().equals(Tournament.TournamentState.PLANNED.name())) {
                 loadRegistrations();
             } else {
                 progressbarRegistration.setVisibility(View.GONE);
@@ -232,7 +230,7 @@ public class TournamentPlayerListFragment extends Fragment implements OpenTourna
                 }
             });
 
-        if (getWidthOfScreen() < 720 && tournament.getState().equals(Tournament.TournamentState.PLANED.name())) {
+        if (getWidthOfScreen() < 720 && tournament.getState().equals(Tournament.TournamentState.PLANNED.name())) {
             FloatingActionButton floatingActionButton = ((BaseActivity) getActivity()).getFloatingActionButton();
             floatingActionButton.setVisibility(View.VISIBLE);
             floatingActionButton.setImageResource(R.drawable.ic_add_white_24dp);

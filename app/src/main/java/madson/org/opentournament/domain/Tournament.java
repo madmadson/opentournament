@@ -33,8 +33,8 @@ public class Tournament implements Parcelable {
 
     public enum TournamentState implements Serializable {
 
-        PLANED,
-        STARTED,
+        PLANNED,
+        ONGOING,
         FINISHED
     }
 

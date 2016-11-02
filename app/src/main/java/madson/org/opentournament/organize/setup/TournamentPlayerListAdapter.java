@@ -122,7 +122,7 @@ public class TournamentPlayerListAdapter extends RecyclerView.Adapter<Tournament
                 .setCardBackgroundColor(ContextCompat.getColor(baseActivity, R.color.colorAlmostWhite));
         }
 
-        if (tournament.getState().equals(Tournament.TournamentState.PLANED.name())) {
+        if (tournament.getState().equals(Tournament.TournamentState.PLANNED.name())) {
             holder.getEditIcon().setOnClickListener(new View.OnClickListener() {
 
                     @Override
@@ -184,7 +184,7 @@ public class TournamentPlayerListAdapter extends RecyclerView.Adapter<Tournament
                 @Override
                 public void onClick(View v) {
 
-                    if (Tournament.TournamentState.PLANED.name().equals(tournament.getState())) {
+                    if (Tournament.TournamentState.PLANNED.name().equals(tournament.getState())) {
                         AlertDialog.Builder builder = new AlertDialog.Builder(baseActivity);
                         final AlertDialog confirmDialog = builder.setTitle(R.string.confirm_remove_tournament_player)
                             .setPositiveButton(R.string.dialog_confirm, new DialogInterface.OnClickListener() {
@@ -202,7 +202,7 @@ public class TournamentPlayerListAdapter extends RecyclerView.Adapter<Tournament
                             .setNeutralButton(R.string.dialog_cancel, null)
                             .create();
                         confirmDialog.show();
-                    } else if (Tournament.TournamentState.STARTED.name().equals(tournament.getState())) {
+                    } else if (Tournament.TournamentState.ONGOING.name().equals(tournament.getState())) {
                         AlertDialog.Builder builder = new AlertDialog.Builder(baseActivity);
                         final AlertDialog confirmDialog = builder.setTitle(R.string.confirm_drop_tournament_player)
                             .setPositiveButton(R.string.dialog_confirm, new DialogInterface.OnClickListener() {

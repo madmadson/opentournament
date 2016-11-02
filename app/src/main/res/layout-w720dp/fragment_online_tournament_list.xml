@@ -8,34 +8,16 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/heading_online_tournaments"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:paddingBottom="@dimen/main_tick"
-                android:paddingTop="@dimen/main_tick"
-                android:text="@string/heading_online_tournaments"
-                android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
-                android:textColor="@color/colorPrimary" />
-
-            <Button
-                android:id="@+id/create_own_tournament_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_marginBottom="@dimen/main_tick"
-                android:layout_marginRight="@dimen/main_tick"
-                android:layout_marginTop="@dimen/main_tick"
-                android:background="@color/colorPrimaryDark"
-                android:padding="@dimen/halve_tick"
-                android:text="@string/create_own_tournament_button"
-                android:textColor="@color/colorTextIcon" />
-        </RelativeLayout>
+        <Button
+            android:id="@+id/create_own_tournament_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:background="@color/colorPrimaryDark"
+            android:padding="@dimen/halve_tick"
+            android:text="@string/create_own_tournament_button"
+            android:textColor="@color/colorTextIcon" />
 
 
         <View
@@ -44,6 +26,35 @@
             android:background="@color/colorAccent"
             android:paddingBottom="@dimen/main_tick"
             android:paddingTop="@dimen/main_tick" />
+
+        <FrameLayout
+            android:id="@+id/container_view_toggle_action"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="visible">
+
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <Spinner
+                    android:id="@+id/state_filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/main_tick"
+                    android:hint="@string/label_state_filter" />
+
+            </LinearLayout>
+        </FrameLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/line_tick"
+            android:background="@color/colorAccent"
+            android:paddingBottom="@dimen/main_tick"
+            android:paddingTop="@dimen/main_tick" />
+
 
         <FrameLayout
             android:layout_width="wrap_content"

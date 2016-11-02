@@ -161,7 +161,7 @@ public class OnlineTournamentActivity extends BaseActivity {
         @Override
         public Fragment getItem(int position) {
 
-            if (state.equals(Tournament.TournamentState.PLANED.name())) {
+            if (state.equals(Tournament.TournamentState.PLANNED.name())) {
                 return RegisterTournamentPlayerListFragment.newInstance(tournament);
             }
 
@@ -190,7 +190,7 @@ public class OnlineTournamentActivity extends BaseActivity {
         @Override
         public int getCount() {
 
-            if (state.equals(Tournament.TournamentState.PLANED.name())) {
+            if (state.equals(Tournament.TournamentState.PLANNED.name())) {
                 return 1;
             }
 
@@ -201,7 +201,7 @@ public class OnlineTournamentActivity extends BaseActivity {
         @Override
         public CharSequence getPageTitle(int position) {
 
-            if (state.equals(Tournament.TournamentState.PLANED.name())) {
+            if (state.equals(Tournament.TournamentState.PLANNED.name())) {
                 return getApplication().getResources().getString(R.string.nav_registration_tab);
             }
 

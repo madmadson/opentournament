@@ -17,7 +17,6 @@ import madson.org.opentournament.db.OpenTournamentDBHelper;
 import madson.org.opentournament.db.TournamentTable;
 import madson.org.opentournament.domain.GameOrSportTyp;
 import madson.org.opentournament.domain.Tournament;
-import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.domain.TournamentTyp;
 
 import org.joda.time.DateTime;
@@ -141,9 +140,9 @@ public class TournamentServiceImpl implements TournamentService {
         contentValues.put(TournamentTable.COLUMN_ACTUAL_ROUND, round);
 
         if (round == 0) {
-            contentValues.put(TournamentTable.COLUMN_STATE, Tournament.TournamentState.PLANED.name());
+            contentValues.put(TournamentTable.COLUMN_STATE, Tournament.TournamentState.PLANNED.name());
         } else {
-            contentValues.put(TournamentTable.COLUMN_STATE, Tournament.TournamentState.STARTED.name());
+            contentValues.put(TournamentTable.COLUMN_STATE, Tournament.TournamentState.ONGOING.name());
         }
 
         SQLiteDatabase writableDatabase = openTournamentDBHelper.getWritableDatabase();
@@ -154,9 +153,9 @@ public class TournamentServiceImpl implements TournamentService {
         tournament.setActualRound(round);
 
         if (round == 0) {
-            tournament.setState(Tournament.TournamentState.PLANED.name());
+            tournament.setState(Tournament.TournamentState.PLANNED.name());
         } else {
-            tournament.setState(Tournament.TournamentState.STARTED.name());
+            tournament.setState(Tournament.TournamentState.ONGOING.name());
         }
 
         return tournament;
@@ -301,8 +300,8 @@ public class TournamentServiceImpl implements TournamentService {
         }
 
         contentValues.put(TournamentTable.COLUMN_ACTUAL_PLAYERS, 0);
-        contentValues.put(TournamentTable.COLUMN_STATE, Tournament.TournamentState.PLANED.name());
-        tournament.setState(Tournament.TournamentState.PLANED.name());
+        contentValues.put(TournamentTable.COLUMN_STATE, Tournament.TournamentState.PLANNED.name());
+        tournament.setState(Tournament.TournamentState.PLANNED.name());
 
         contentValues.put(TournamentTable.COLUMN_TEAM_SIZE, tournament.getTeamSize());
         contentValues.put(TournamentTable.COLUMN_UPLOADED_ROUND, -1);

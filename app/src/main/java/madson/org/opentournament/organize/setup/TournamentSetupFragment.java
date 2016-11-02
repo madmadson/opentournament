@@ -82,7 +82,7 @@ public class TournamentSetupFragment extends Fragment implements OpenTournamentE
 
         FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
 
-        if (tournament.getState().equals(Tournament.TournamentState.PLANED.name())) {
+        if (tournament.getState().equals(Tournament.TournamentState.PLANNED.name())) {
             createAvailablePlayerListFragment();
             fragmentTransaction.replace(R.id.available_player_fragment_container, availablePlayerListFragment);
         }
@@ -95,7 +95,7 @@ public class TournamentSetupFragment extends Fragment implements OpenTournamentE
         fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         fragmentTransaction.commit();
 
-        if (tournament.getState().equals(Tournament.TournamentState.PLANED.name())) {
+        if (tournament.getState().equals(Tournament.TournamentState.PLANNED.name())) {
             FloatingActionButton floatingActionButton = ((BaseActivity) getActivity()).getFloatingActionButton();
             floatingActionButton.setVisibility(View.VISIBLE);
             floatingActionButton.setImageResource(R.drawable.ic_add_white_24dp);

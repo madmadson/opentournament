@@ -18,6 +18,7 @@
     <!-- this must be a pair -->
     <string-array name="news_header">
         <item>Welcome!</item>
+        <item>Di 01.11: Version 0.5.1-ALPHA Released</item>
         <item>Fr 31.10: Version 0.5.0-ALPHA Released</item>
         <item>Fr 28.10: Version 0.4.10-ALPHA Released</item>
         <item>Di 24.10: Version 0.4.6-ALPHA Released</item>
@@ -36,6 +37,9 @@
     <string-array name="news">
         <item>Create more Tournaments! Give Feedback!</item>
 
+        <item>* New Icon and Logo\n
+            * add filter for online Tournaments
+          </item>
          <item>* New Feature: ELO ranking now working!\n
             * Fix bug with team tournament and swapping in ongoing matches\n
              * swap ranking and game tab\n
@@ -97,5 +101,11 @@
             * Shortcut button to organized Tournaments from online Tournaments
         </item>
      </string-array>
- 
+    <string-array name="tournament_states">
+        <item>Planned</item>
+        <item>Ongoing</item>
+        <item>Finished</item>
+        <item>All</item>
+    </string-array>
+
 </resources>

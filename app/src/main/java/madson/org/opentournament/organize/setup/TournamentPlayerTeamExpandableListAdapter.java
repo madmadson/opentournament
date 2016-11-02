@@ -244,7 +244,7 @@ public class TournamentPlayerTeamExpandableListAdapter extends BaseExpandableLis
             ImageView editIcon = (ImageView) convertView.findViewById(R.id.tournament_player_row_edit_icon);
             ImageView addListIcon = (ImageView) convertView.findViewById(R.id.tournament_player_row_add_List);
 
-            if (tournament.getState().equals(Tournament.TournamentState.PLANED.name())) {
+            if (tournament.getState().equals(Tournament.TournamentState.PLANNED.name())) {
                 editIcon.setOnClickListener(new View.OnClickListener() {
 
                         @Override

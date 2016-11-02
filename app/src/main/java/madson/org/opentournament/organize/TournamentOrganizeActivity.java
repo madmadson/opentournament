@@ -16,7 +16,6 @@ import android.support.v7.app.ActionBar;
 import android.util.Log;
 
 import android.view.Menu;
-import android.view.View;
 
 import android.widget.ProgressBar;
 
@@ -25,8 +24,6 @@ import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.events.OpenTournamentEvent;
 import madson.org.opentournament.events.OpenTournamentEventListener;
 import madson.org.opentournament.events.OpenTournamentEventTag;
-import madson.org.opentournament.events.UndoRoundEvent;
-import madson.org.opentournament.events.UpdateTournamentEvent;
 import madson.org.opentournament.organize.setup.AvailablePlayerListFragment;
 import madson.org.opentournament.organize.setup.TournamentPlayerListFragment;
 import madson.org.opentournament.organize.setup.TournamentSetupFragment;
@@ -177,7 +174,7 @@ public class TournamentOrganizeActivity extends BaseActivity implements OpenTour
             Log.i(this.getClass().getName(),
                 "create initialTournament fragment: " + tournamentToOrganize + " on position: " + position);
 
-            if (state.equals(Tournament.TournamentState.PLANED.name())) {
+            if (state.equals(Tournament.TournamentState.PLANNED.name())) {
                 if (widthOfScreen < 720) {
                     if (position == 0) {
                         return TournamentPlayerListFragment.newInstance(tournamentToOrganize);
@@ -219,7 +216,7 @@ public class TournamentOrganizeActivity extends BaseActivity implements OpenTour
         public int getCount() {
 
             if (state != null) {
-                if (state.equals(Tournament.TournamentState.PLANED.name())) {
+                if (state.equals(Tournament.TournamentState.PLANNED.name())) {
                     if (widthOfScreen < 720) {
                         return 2;
                     } else {
@@ -253,7 +250,7 @@ public class TournamentOrganizeActivity extends BaseActivity implements OpenTour
                 return getApplication().getResources().getString(R.string.nav_tournament_players);
             }
 
-            if (state.equals(Tournament.TournamentState.PLANED.name())) {
+            if (state.equals(Tournament.TournamentState.PLANNED.name())) {
                 if (position == 1 && widthOfScreen < 720) {
                     return getApplication().getResources().getString(R.string.nav_available_players);
                 }

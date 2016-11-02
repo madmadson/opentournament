@@ -124,7 +124,7 @@ public class OnlineTournamentListAdapter extends RecyclerView.Adapter<Tournament
     public void addTournament(Tournament tournament) {
 
         mDataset.add(tournament);
-        Collections.sort(mDataset, new TournamentComparator());
+
         notifyDataSetChanged();
     }
 
@@ -132,7 +132,7 @@ public class OnlineTournamentListAdapter extends RecyclerView.Adapter<Tournament
     public void removeTournament(Tournament tournament) {
 
         mDataset.remove(tournament);
-        Collections.sort(mDataset, new TournamentComparator());
+
         notifyDataSetChanged();
     }
 
@@ -142,7 +142,12 @@ public class OnlineTournamentListAdapter extends RecyclerView.Adapter<Tournament
         int index = mDataset.indexOf(tournament);
 
         mDataset.set(index, tournament);
-        Collections.sort(mDataset, new TournamentComparator());
         notifyDataSetChanged();
+    }
+
+
+    public void deleteAllTournaments() {
+
+        mDataset.clear();
     }
 }

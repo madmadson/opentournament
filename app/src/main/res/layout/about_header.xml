@@ -13,7 +13,7 @@
         android:layout_width="@dimen/about_icon_size"
         android:layout_height="@dimen/about_icon_size"
         android:layout_centerHorizontal="true"
-        android:src="@mipmap/icon"
+        android:src="@mipmap/ic_launcher"
         />
 
     <TextView

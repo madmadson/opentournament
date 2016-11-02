@@ -82,6 +82,7 @@ public class TournamentPlayerServiceImpl implements TournamentPlayerService {
                 List<TournamentPlayer> teamMembers = new ArrayList<>();
 
                 teamMembers.add(tournamentPlayer);
+                tournamentTeam.setMeta(tournamentPlayer.getMeta());
                 teamMap.put(tournamentTeam, teamMembers);
             } else {
                 List<TournamentPlayer> tournamentPlayers = teamMap.get(tournamentTeam);

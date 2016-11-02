@@ -34,6 +34,10 @@ import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.domain.TournamentTeam;
 import madson.org.opentournament.domain.TournamentTyp;
+import madson.org.opentournament.events.OpenTournamentEvent;
+import madson.org.opentournament.events.OpenTournamentEventListener;
+import madson.org.opentournament.events.OpenTournamentEventTag;
+import madson.org.opentournament.events.TournamentTeamLoadedEvent;
 import madson.org.opentournament.tasks.LoadTournamentTeamTask;
 import madson.org.opentournament.tasks.SaveLocalPlayerTask;
 import madson.org.opentournament.tasks.SaveTournamentPlayerTask;
@@ -41,6 +45,7 @@ import madson.org.opentournament.tasks.UpdateTournamentPlayerTask;
 import madson.org.opentournament.utility.BaseActivity;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -52,7 +57,7 @@ import java.util.concurrent.ExecutionException;
  *
  * @author  Tobias Matt - tmatt@contargo.net
  */
-public class AddTournamentPlayerDialog extends DialogFragment {
+public class AddTournamentPlayerDialog extends DialogFragment implements OpenTournamentEventListener {
 
     public static final String BUNDLE_TOURNAMENT = "tournament";
     public static final String BUNDLE_PLAYER = "player";
@@ -74,10 +79,13 @@ public class AddTournamentPlayerDialog extends DialogFragment {
     private TextInputLayout firstNameParent;
     private TextInputLayout nickNameParent;
     private TextView labelTeamMembers;
-    private Map<TournamentTeam, List<TournamentPlayer>> teamNameMap;
+    private Map<TournamentTeam, List<TournamentPlayer>> teamNameMap = new HashMap<>();
     private TournamentPlayer tournament_player;
     private BaseActivity baseActivity;
     private EditText affiliationEditText;
+    private TextInputLayout affiliationParent;
+    private TextView teamAffiliation;
+    private TextView teamAffiliationLabel;
 
     @Override
     public void onAttach(Context context) {
@@ -85,6 +93,17 @@ public class AddTournamentPlayerDialog extends DialogFragment {
         super.onAttach(context);
 
         baseActivity = (BaseActivity) getActivity();
+
+        baseActivity.getBaseApplication().registerTournamentEventListener(this);
+    }
+
+
+    @Override
+    public void onDetach() {
+
+        super.onDetach();
+
+        baseActivity.getBaseApplication().unregisterTournamentEventListener(this);
     }
 
 
@@ -109,6 +128,8 @@ public class AddTournamentPlayerDialog extends DialogFragment {
             nickNameEditText = (EditText) dialogView.findViewById(R.id.dialog_add_tournament_player_nickname);
             lastNameEditText = (EditText) dialogView.findViewById(R.id.dialog_add_tournament_player_lastname);
             affiliationEditText = (EditText) dialogView.findViewById(R.id.dialog_add_tournament_player_affiliation);
+            teamAffiliation = (TextView) dialogView.findViewById(R.id.tv_team_affiliation);
+            teamAffiliationLabel = (TextView) dialogView.findViewById(R.id.label_team_affiliation);
 
             firstNameParent = (TextInputLayout) dialogView.findViewById(
                     R.id.dialog_add_tournament_player_firstname_parent);
@@ -116,6 +137,8 @@ public class AddTournamentPlayerDialog extends DialogFragment {
                     R.id.dialog_add_tournament_player_nickname_parent);
             lastNameParent = (TextInputLayout) dialogView.findViewById(
                     R.id.dialog_add_tournament_player_lastname_parent);
+            affiliationParent = (TextInputLayout) dialogView.findViewById(
+                    R.id.dialog_add_tournament_player_affiliation_parent);
 
             factionSpinner = (Spinner) dialogView.findViewById(R.id.dialog_add_tournament_player_faction_spinner);
 
@@ -131,15 +154,18 @@ public class AddTournamentPlayerDialog extends DialogFragment {
             faction_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             factionSpinner.setAdapter(faction_adapter);
 
-            team_adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item,
+            team_adapter = new ArrayAdapter<>(baseActivity, android.R.layout.simple_spinner_item,
                     new ArrayList<String>());
             team_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-            try {
-                teamNameMap = new LoadTournamentTeamTask((BaseActivity) getActivity(), tournament, team_adapter,
-                        teamNameSpinner, tournament_player).execute().get();
-            } catch (ExecutionException | InterruptedException e) {
-                e.printStackTrace();
+            new LoadTournamentTeamTask(baseActivity, tournament).execute();
+
+            if (TournamentTyp.TEAM.name().equals(tournament.getTournamentTyp())) {
+                affiliationEditText.setVisibility(View.GONE);
+                affiliationParent.setVisibility(View.GONE);
+            } else {
+                affiliationEditText.setVisibility(View.VISIBLE);
+                affiliationParent.setVisibility(View.VISIBLE);
             }
 
             teamNameSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -163,6 +189,12 @@ public class AddTournamentPlayerDialog extends DialogFragment {
                             labelTeamMembers.setText("(" + teamMembers + ")");
                         } else {
                             labelTeamMembers.setText("(" + teamMembers + "/" + tournament.getTeamSize() + ")");
+
+                            if (teamNameMap.get(new TournamentTeam(teamName)) != null) {
+                                TournamentPlayer tournamentPlayer = teamNameMap.get(new TournamentTeam(teamName))
+                                    .get(0);
+                                teamAffiliation.setText(tournamentPlayer.getMeta());
+                            }
                         }
                     }
 
@@ -181,13 +213,17 @@ public class AddTournamentPlayerDialog extends DialogFragment {
                     firstNameEditText.setText(player.getFirstName());
                     nickNameEditText.setText(player.getNickName());
                     lastNameEditText.setText(player.getLastName());
-                    affiliationEditText.setText(player.getMeta());
+
                     firstNameEditText.setEnabled(false);
                     nickNameEditText.setEnabled(false);
                     lastNameEditText.setEnabled(false);
                     firstNameEditText.setTypeface(Typeface.DEFAULT_BOLD);
                     nickNameEditText.setTypeface(Typeface.DEFAULT_BOLD);
                     lastNameEditText.setTypeface(Typeface.DEFAULT_BOLD);
+
+                    if (!TournamentTyp.TEAM.name().equals(tournament.getTournamentTyp())) {
+                        affiliationEditText.setText(player.getMeta());
+                    }
                 }
             }
 
@@ -195,7 +231,7 @@ public class AddTournamentPlayerDialog extends DialogFragment {
                 firstNameEditText.setText(tournament_player.getFirstName());
                 nickNameEditText.setText(tournament_player.getNickName());
                 lastNameEditText.setText(tournament_player.getLastName());
-                affiliationEditText.setText(tournament_player.getMeta());
+
                 firstNameEditText.setEnabled(false);
                 nickNameEditText.setEnabled(false);
                 lastNameEditText.setEnabled(false);
@@ -205,6 +241,16 @@ public class AddTournamentPlayerDialog extends DialogFragment {
 
                 if (tournament_player.getFaction() != null) {
                     factionSpinner.setSelection(faction_adapter.getPosition(tournament_player.getFaction()));
+                }
+
+                if (TournamentTyp.TEAM.name().equals(tournament.getTournamentTyp())) {
+                    if (tournament_player.getTeamName() != null) {
+                        teamAffiliation.setVisibility(View.VISIBLE);
+                        teamAffiliationLabel.setVisibility(View.VISIBLE);
+                        teamAffiliation.setText(tournament_player.getMeta());
+                    }
+                } else {
+                    affiliationEditText.setText(tournament_player.getMeta());
                 }
             }
 
@@ -236,25 +282,43 @@ public class AddTournamentPlayerDialog extends DialogFragment {
                                 @Override
                                 public void onClick(View view) {
 
+                                    TextInputLayout newTeamNameParent = (TextInputLayout) dialogAddTeam.findViewById(
+                                            R.id.new_team_name_parent);
+
                                     EditText newTeamNameEditText = (EditText) dialogAddTeam.findViewById(
                                             R.id.new_team_name);
 
                                     String newTeamName = newTeamNameEditText.getText().toString();
 
+                                    TextInputLayout newTeamAffiliationParent = (TextInputLayout)
+                                        dialogAddTeam.findViewById(R.id.new_team_affiliation_parent);
+
+                                    EditText newTeamAffiliationEditText = (EditText) dialogAddTeam.findViewById(
+                                            R.id.new_team_affiliation);
+
+                                    String newTeamAffiliation = newTeamAffiliationEditText.getText().toString();
+
+                                    if (!TournamentTyp.TEAM.name().equals(tournament.getTournamentTyp())) {
+                                        newTeamAffiliationEditText.setVisibility(View.GONE);
+                                        newTeamAffiliationParent.setVisibility(View.GONE);
+                                    }
+
                                     boolean valid = true;
 
                                     if (teamNameMap.get(new TournamentTeam(newTeamName)) != null) {
-                                        newTeamNameEditText.setError(getString(R.string.team_name_already_taken));
+                                        newTeamNameParent.setError(getString(R.string.team_name_already_taken));
                                         valid = false;
                                     }
 
-                                    if (newTeamName.toLowerCase().equals(getString(R.string.no_team))) {
-                                        newTeamNameEditText.setError(getString(R.string.validation_error_no_team));
+                                    if (newTeamName.trim()
+                                            .toLowerCase()
+                                            .equals(getString(R.string.no_team).toLowerCase())) {
+                                        newTeamNameParent.setError(getString(R.string.validation_error_no_team));
                                         valid = false;
                                     }
 
                                     if (newTeamName.length() == 0) {
-                                        newTeamNameEditText.setError(getString(R.string.validation_error_empty));
+                                        newTeamNameParent.setError(getString(R.string.validation_error_empty));
                                         valid = false;
                                     }
 
@@ -270,7 +334,17 @@ public class AddTournamentPlayerDialog extends DialogFragment {
                                             labelTeamMembers.setText("(0/" + tournament.getTeamSize() + ")");
                                         }
 
-                                        labelTeamName.setError(null);
+                                        newTeamNameParent.setError(null);
+
+                                        if (!newTeamAffiliation.isEmpty()) {
+                                            teamAffiliation.setVisibility(View.VISIBLE);
+                                            teamAffiliationLabel.setVisibility(View.VISIBLE);
+                                            teamAffiliation.setText(newTeamAffiliation);
+                                        } else {
+                                            teamAffiliation.setVisibility(View.GONE);
+                                            teamAffiliationLabel.setVisibility(View.GONE);
+                                            teamAffiliation.setText(null);
+                                        }
 
                                         newTeamNameDialog.dismiss();
                                     }
@@ -321,7 +395,14 @@ public class AddTournamentPlayerDialog extends DialogFragment {
                         final String firstName = firstNameEditText.getText().toString();
                         final String nickName = nickNameEditText.getText().toString();
                         final String lastName = lastNameEditText.getText().toString();
-                        final String affiliation = affiliationEditText.getText().toString();
+                        String affiliation;
+
+                        if (TournamentTyp.TEAM.name().equals(tournament.getTournamentTyp())) {
+                            affiliation = teamAffiliation.getText().toString();
+                        } else {
+                            affiliation = affiliationEditText.getText().toString();
+                        }
+
                         String teamName = null;
 
                         if (teamNameSpinner.getSelectedItem() != null) {
@@ -398,7 +479,7 @@ public class AddTournamentPlayerDialog extends DialogFragment {
                                 newLocalPlayer.setFirstName(firstName);
                                 newLocalPlayer.setNickName(nickName);
                                 newLocalPlayer.setLastName(lastName);
-                                newLocalPlayer.setLastName(affiliation);
+                                newLocalPlayer.setMeta(affiliation);
                                 newLocalPlayer.setElo(0);
                                 newLocalPlayer.setGamesCounter(0);
 
@@ -450,6 +531,57 @@ public class AddTournamentPlayerDialog extends DialogFragment {
                         return valid;
                     }
                 });
+        }
+    }
+
+
+    @Override
+    public void handleEvent(OpenTournamentEventTag eventTag, OpenTournamentEvent parameterObject) {
+
+        if (OpenTournamentEventTag.TOURNAMENT_TEAM_LOADED_EVENT.equals(eventTag)) {
+            TournamentTeamLoadedEvent parameter = (TournamentTeamLoadedEvent) parameterObject;
+            Map<TournamentTeam, List<TournamentPlayer>> mapOfTeams = parameter.getTeamMap();
+
+            if (!tournament.getTournamentTyp().equals(TournamentTyp.TEAM.name())) {
+                team_adapter.add(baseActivity.getString(R.string.no_team));
+
+                for (TournamentTeam key : mapOfTeams.keySet()) {
+                    if (!key.getName().isEmpty()) {
+                        team_adapter.add(key.getName());
+                    }
+                }
+            } else {
+                String firstTeamAffiliation = null;
+
+                for (TournamentTeam key : mapOfTeams.keySet()) {
+                    if (mapOfTeams.get(key).size() < tournament.getTeamSize()) {
+                        team_adapter.add(key.getName());
+
+                        if (firstTeamAffiliation == null) {
+                            firstTeamAffiliation = key.getMeta();
+                        }
+                    }
+                }
+
+                if (team_adapter.getCount() != 0) {
+                    teamAffiliation.setVisibility(View.VISIBLE);
+                    teamAffiliationLabel.setVisibility(View.VISIBLE);
+                    teamAffiliation.setText(firstTeamAffiliation);
+                }
+            }
+
+            if (team_adapter.isEmpty()) {
+                teamNameSpinner.setVisibility(View.GONE);
+            } else {
+                teamNameSpinner.setVisibility(View.VISIBLE);
+            }
+
+            if (tournament_player != null && tournament_player.getTeamName() != null) {
+                teamNameSpinner.setSelection(team_adapter.getPosition(tournament_player.getTeamName()));
+            }
+
+            teamNameMap = mapOfTeams;
+            team_adapter.notifyDataSetChanged();
         }
     }
 }

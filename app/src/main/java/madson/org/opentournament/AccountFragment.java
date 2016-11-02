@@ -43,7 +43,6 @@ public class AccountFragment extends Fragment {
     private BaseActivity baseActivity;
     private TextView welcomeTextView;
     private TextView affiliationField;
-    private TextInputLayout affiliation_parent;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -76,7 +75,8 @@ public class AccountFragment extends Fragment {
         firstname_parent = (TextInputLayout) view.findViewById(R.id.firstname_parent);
         nickname_parent = (TextInputLayout) view.findViewById(R.id.nickname_parent);
         lastname_parent = (TextInputLayout) view.findViewById(R.id.lastname_parent);
-        affiliation_parent = (TextInputLayout) view.findViewById(R.id.affiliation_parent);
+
+        TextInputLayout affiliation_parent = (TextInputLayout) view.findViewById(R.id.affiliation_parent);
 
         welcomeTextView = (TextView) view.findViewById(R.id.welcome_text);
 
@@ -89,7 +89,7 @@ public class AccountFragment extends Fragment {
             welcomeTextView.setText(getActivity().getResources().getString(R.string.please_sign_in_text));
             progressBar.setVisibility(View.GONE);
         } else {
-            Player authenticatedPlayer = baseActivity.getBaseApplication().getAuthenticatedPlayer();
+            final Player authenticatedPlayer = baseActivity.getBaseApplication().getAuthenticatedPlayer();
             firstnameField.setVisibility(View.VISIBLE);
             nicknameField.setVisibility(View.VISIBLE);
             lastnameField.setVisibility(View.VISIBLE);
@@ -119,6 +119,9 @@ public class AccountFragment extends Fragment {
                     public void onClick(View v) {
 
                         if (validateForm()) {
+                            final Player authenticatedPlayer = baseActivity.getBaseApplication()
+                                .getAuthenticatedPlayer();
+
                             Player player = new Player();
                             player.setUUID(user.getUid());
                             player.setFirstName(String.valueOf(firstnameField.getText()));
@@ -126,6 +129,19 @@ public class AccountFragment extends Fragment {
                             player.setLastName(String.valueOf(lastnameField.getText()));
                             player.setMeta(String.valueOf(affiliationField.getText()));
                             player.setAuthenticatedEmail(user.getEmail());
+
+                            if (authenticatedPlayer == null) {
+                                player.setElo(1000);
+                                player.setGamesCounter(0);
+                            } else {
+                                if (authenticatedPlayer.getElo() == 0) {
+                                    player.setElo(1000);
+                                    player.setGamesCounter(0);
+                                } else {
+                                    player.setElo(authenticatedPlayer.getElo());
+                                    player.setGamesCounter(authenticatedPlayer.getGamesCounter());
+                                }
+                            }
 
                             final DatabaseReference mFirebaseDatabaseReference = FirebaseDatabase.getInstance()
                                 .getReference();

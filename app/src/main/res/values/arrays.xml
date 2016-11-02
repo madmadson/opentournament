@@ -18,6 +18,7 @@
     <!-- this must be a pair -->
     <string-array name="news_header">
         <item>Welcome!</item>
+        <item>Mi 02.11: Version 0.5.2-ALPHA Released</item>
         <item>Di 01.11: Version 0.5.1-ALPHA Released</item>
         <item>Fr 31.10: Version 0.5.0-ALPHA Released</item>
         <item>Fr 28.10: Version 0.4.10-ALPHA Released</item>
@@ -36,7 +37,10 @@
 
     <string-array name="news">
         <item>Create more Tournaments! Give Feedback!</item>
-
+            <item>* New Feature: Club/City/Country pairing option now ready\n
+                * Club/City/Country now for teams\n
+                * new player have elo 1000. elo ranking will be visible after 5 games
+          </item>
         <item>* New Icon and Logo\n
             * add filter for online Tournaments
           </item>

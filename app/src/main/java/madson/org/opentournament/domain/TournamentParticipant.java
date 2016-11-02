@@ -19,5 +19,8 @@ public abstract class TournamentParticipant implements Parcelable {
     public abstract String getName();
 
 
+    public abstract String getAffiliation();
+
+
     public abstract List<String> getListOfOpponentsUUIDs();
 }

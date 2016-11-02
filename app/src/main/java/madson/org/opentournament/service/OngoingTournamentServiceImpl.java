@@ -51,6 +51,7 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
     private RankingService rankingService;
     private boolean playerWithSameTeamDontPlayAgainstEachOther;
     private boolean playerDontPlayTwiceAgainstEachOther;
+    private boolean participantWithSameAffiliationDontPlayTwiceAgainstEachOther;
     private DatabaseReference referenceForPlayerOneElo;
     private DatabaseReference referenceForPlayerTwoElo;
 
@@ -199,6 +200,11 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
             && pairingOptions.get(MapOfPairingConfig.PLAYER_WITH_SAME_TEAM_NOT_PLAY_AGAINST_EACH_OTHER)
                 .isActive();
 
+        participantWithSameAffiliationDontPlayTwiceAgainstEachOther = pairingOptions.containsKey(
+                MapOfPairingConfig.PARTICIPANT_WITH_SAME_AFFILIATION_NOT_PLAY_AGAINST_EACH_OTHER)
+            && pairingOptions.get(MapOfPairingConfig.PARTICIPANT_WITH_SAME_AFFILIATION_NOT_PLAY_AGAINST_EACH_OTHER)
+                .isActive();
+
         List<Game> games = new ArrayList<>(rankings.size() / 2);
 
         Collections.shuffle(rankings);
@@ -244,6 +250,16 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
 
                 if (playerDontPlayTwiceAgainstEachOther) {
                     if (player1.getListOfOpponentsPlayerIds().contains(player2.getParticipantUUID())) {
+                        Log.i(this.getClass().getName(), "" + player1 + " VS " + player2 + " not possible");
+
+                        continue;
+                    }
+                }
+
+                if (participantWithSameAffiliationDontPlayTwiceAgainstEachOther) {
+                    if (player1.getTournamentParticipant()
+                            .getAffiliation()
+                            .equals(player2.getTournamentParticipant().getAffiliation())) {
                         Log.i(this.getClass().getName(), "" + player1 + " VS " + player2 + " not possible");
 
                         continue;
@@ -308,6 +324,18 @@ public class OngoingTournamentServiceImpl implements OngoingTournamentService {
 
                 if (playerDontPlayTwiceAgainstEachOther) {
                     if (player1.getListOfOpponentsPlayerIds().contains(player2.getParticipantUUID())) {
+                        Log.i(this.getClass().getName(), "" + player1 + " VS " + player2 + " not possible");
+
+                        continue;
+                    }
+                }
+
+                if (participantWithSameAffiliationDontPlayTwiceAgainstEachOther) {
+                    if (player1.getTournamentParticipant()
+                            .getAffiliation()
+                            .trim()
+                            .toLowerCase()
+                            .equals(player2.getTournamentParticipant().getAffiliation().trim().toLowerCase())) {
                         Log.i(this.getClass().getName(), "" + player1 + " VS " + player2 + " not possible");
 
                         continue;

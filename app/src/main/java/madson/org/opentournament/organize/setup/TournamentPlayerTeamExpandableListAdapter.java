@@ -190,6 +190,9 @@ public class TournamentPlayerTeamExpandableListAdapter extends BaseExpandableLis
             TextView faction = (TextView) convertView.findViewById(R.id.tournament_player_row_faction);
             faction.setText(tournamentPlayer.getFaction());
 
+            TextView affiliation = (TextView) convertView.findViewById(R.id.tournament_player_affiliation);
+            affiliation.setText(tournamentPlayer.getMeta());
+
             convertView.findViewById(R.id.tournament_player_teamname).setVisibility(View.GONE);
 
             TextView dropped = (TextView) convertView.findViewById(R.id.dropped_in_round);

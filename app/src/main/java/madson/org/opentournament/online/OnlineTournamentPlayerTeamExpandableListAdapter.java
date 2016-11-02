@@ -164,13 +164,12 @@ public class OnlineTournamentPlayerTeamExpandableListAdapter extends BaseExpanda
             TextView playerNumber = (TextView) convertView.findViewById(R.id.tournament_player_row_player_number);
             playerNumber.setText(String.valueOf(childPosition + 1));
 
-            TextView fullname = (TextView) convertView.findViewById(R.id.tournament_player_fullname);
+            TextView fullNameTextView = (TextView) convertView.findViewById(R.id.tournament_player_fullname);
 
-            String firstname = tournamentPlayer.getFirstName();
-            String nickname = tournamentPlayer.getNickName();
-            String lastname = tournamentPlayer.getLastName();
-            fullname.setText(baseActivity.getResources()
-                .getString(R.string.player_name_in_row, firstname, nickname, lastname));
+            fullNameTextView.setText(baseActivity.getResources()
+                .getString(R.string.player_name_in_row, tournamentPlayer.getFirstNameWithMaximumCharacters(10),
+                    tournamentPlayer.getNickNameWithMaximumCharacters(10),
+                    tournamentPlayer.getLastNameWithMaximumCharacters(10)));
 
             TextView faction = (TextView) convertView.findViewById(R.id.tournament_player_row_faction);
             faction.setText(tournamentPlayer.getFaction());
@@ -181,7 +180,37 @@ public class OnlineTournamentPlayerTeamExpandableListAdapter extends BaseExpanda
             convertView.findViewById(R.id.tournament_player_teamname).setVisibility(View.GONE);
 
             ImageView localIcon = (ImageView) convertView.findViewById(R.id.tournament_player_row_local_icon);
-            localIcon.setVisibility(View.GONE);
+
+            if (tournamentPlayer.isLocal()) {
+                localIcon.setVisibility(View.VISIBLE);
+            } else {
+                localIcon.setVisibility(View.GONE);
+            }
+
+            TextView meta = (TextView) convertView.findViewById(R.id.tournament_player_affiliation);
+
+            if (tournamentPlayer.getMeta() != null) {
+                if (!tournamentPlayer.getMeta().isEmpty()) {
+                    meta.setText(tournamentPlayer.getMeta());
+                    meta.setVisibility(View.VISIBLE);
+                } else {
+                    meta.setVisibility(View.GONE);
+                }
+            } else {
+                meta.setVisibility(View.GONE);
+            }
+
+            TextView elo = (TextView) convertView.findViewById(R.id.tournament_player_elo);
+            ImageView elo_icon = (ImageView) convertView.findViewById(R.id.tournament_player_elo_icon);
+
+            if (tournamentPlayer.getGamesCounter() >= 5) {
+                elo.setText(String.valueOf(tournamentPlayer.getElo()));
+                elo.setVisibility(View.VISIBLE);
+                elo_icon.setVisibility(View.VISIBLE);
+            } else {
+                elo.setVisibility(View.GONE);
+                elo_icon.setVisibility(View.GONE);
+            }
 
             CardView card = (CardView) convertView.findViewById(R.id.tournament_player_row_card_view);
 

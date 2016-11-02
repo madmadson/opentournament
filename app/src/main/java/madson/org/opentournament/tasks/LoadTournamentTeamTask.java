@@ -12,6 +12,8 @@ import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
 import madson.org.opentournament.domain.TournamentTeam;
 import madson.org.opentournament.domain.TournamentTyp;
+import madson.org.opentournament.events.OpenTournamentEventTag;
+import madson.org.opentournament.events.TournamentTeamLoadedEvent;
 import madson.org.opentournament.service.TournamentPlayerService;
 import madson.org.opentournament.utility.BaseActivity;
 
@@ -24,69 +26,39 @@ import java.util.Map;
  *
  * @author  Tobias Matt - tmatt@contargo.net
  */
-public class LoadTournamentTeamTask extends AsyncTask<Void, Void, Map<TournamentTeam, List<TournamentPlayer>>> {
+public class LoadTournamentTeamTask extends AsyncTask<Void, Void, Void> {
 
     private BaseActivity baseActivity;
     private Tournament tournament;
-    private ArrayAdapter<String> team_adapter;
-    private Spinner teamnameSpinner;
-    private TournamentPlayer tournament_player;
 
     private Map<TournamentTeam, List<TournamentPlayer>> mapOfTeams;
 
-    public LoadTournamentTeamTask(BaseActivity baseActivity, Tournament tournament, ArrayAdapter<String> team_adapter,
-        Spinner teamNameSpinner, TournamentPlayer tournament_player) {
+    public LoadTournamentTeamTask(BaseActivity baseActivity, Tournament tournament) {
 
         this.baseActivity = baseActivity;
         this.tournament = tournament;
-        this.team_adapter = team_adapter;
-        this.teamnameSpinner = teamNameSpinner;
-        this.tournament_player = tournament_player;
     }
 
     @Override
-    protected Map<TournamentTeam, List<TournamentPlayer>> doInBackground(Void... params) {
+    protected Void doInBackground(Void... voids) {
 
         TournamentPlayerService tournamentPlayerService = baseActivity.getBaseApplication()
                 .getTournamentPlayerService();
 
         mapOfTeams = tournamentPlayerService.getTeamMapForTournament(tournament);
 
-        return mapOfTeams;
+        return null;
     }
 
 
     @Override
-    protected void onPostExecute(Map<TournamentTeam, List<TournamentPlayer>> aVoid) {
+    protected void onPostExecute(Void aVoid) {
 
         super.onPostExecute(aVoid);
 
-        if (!tournament.getTournamentTyp().equals(TournamentTyp.TEAM.name())) {
-            team_adapter.add(baseActivity.getString(R.string.no_team));
+        TournamentTeamLoadedEvent tournamentTeamLoadedEvent = new TournamentTeamLoadedEvent(mapOfTeams);
 
-            for (TournamentTeam key : mapOfTeams.keySet()) {
-                if (!key.getName().isEmpty()) {
-                    team_adapter.add(key.getName());
-                }
-            }
-        } else {
-            for (TournamentTeam key : mapOfTeams.keySet()) {
-                if (mapOfTeams.get(key).size() < tournament.getTeamSize()) {
-                    team_adapter.add(key.getName());
-                }
-            }
-        }
-
-        if (team_adapter.isEmpty()) {
-            teamnameSpinner.setVisibility(View.GONE);
-        } else {
-            teamnameSpinner.setVisibility(View.VISIBLE);
-        }
-
-        if (tournament_player != null && tournament_player.getTeamName() != null) {
-            teamnameSpinner.setSelection(team_adapter.getPosition(tournament_player.getTeamName()));
-        }
-
-        team_adapter.notifyDataSetChanged();
+        baseActivity.getBaseApplication()
+            .notifyTournamentEvent(OpenTournamentEventTag.TOURNAMENT_TEAM_LOADED_EVENT, tournamentTeamLoadedEvent);
     }
 }

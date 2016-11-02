@@ -210,6 +210,9 @@
     <!--Caution dynamic generated keys of pairing options -->
     <string name="pairing_option_player_not_play_twice_against_each_other">Player don\'t play twice against each other</string>
     <string name="pairing_option_player_with_same_team_not_play_against_each_other">Player in same team don\'t play against each other</string>
+    <string name="pairing_option_affiliation_with_same_affiliation_not_play_against_each_other">
+        Player/Team with same Club/City/Country don\'t play against each other
+    </string>
     
     <string name="uneven_player_message_title">Uneven Players in Tournament.</string>
     <string name="uneven_player_message"> You can\'t start a Tournament with uneven amount of players.\n Should a dummy TournamentPlayer be inserted for you?</string>
@@ -349,5 +352,7 @@
     </string>
     <string name="label_state_filter">Filter state</string>
     <string name="drawer_nav_my_tournaments">My Tournaments</string>
+    <string name="add_new_team_affiliation">Club/City/Country</string>
+    <string name="label_team_affiliation">Team (Club/City/Country):</string>
 
 </resources>

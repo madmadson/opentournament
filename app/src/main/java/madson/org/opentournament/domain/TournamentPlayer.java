@@ -387,6 +387,14 @@ public class TournamentPlayer extends TournamentParticipant implements Parcelabl
 
     @Exclude
     @Override
+    public String getAffiliation() {
+
+        return meta;
+    }
+
+
+    @Exclude
+    @Override
     public List<String> getListOfOpponentsUUIDs() {
 
         return opponentsIds;

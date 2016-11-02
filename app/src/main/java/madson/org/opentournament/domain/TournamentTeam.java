@@ -123,9 +123,29 @@ public class TournamentTeam extends TournamentParticipant implements Parcelable 
     }
 
 
+    @Exclude
+    @Override
+    public String getAffiliation() {
+
+        return meta;
+    }
+
+
     @Override
     public List<String> getListOfOpponentsUUIDs() {
 
         return opponentsIds;
+    }
+
+
+    public String getMeta() {
+
+        return meta;
+    }
+
+
+    public void setMeta(String meta) {
+
+        this.meta = meta;
     }
 }

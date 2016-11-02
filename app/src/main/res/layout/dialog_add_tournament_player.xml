@@ -126,6 +126,32 @@
         android:orientation="horizontal">
 
         <TextView
+            android:id="@+id/label_team_affiliation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/halve_tick"
+            android:paddingTop="@dimen/halve_tick"
+            android:text="@string/label_team_affiliation"
+            android:textStyle="bold" 
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/tv_team_affiliation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/label_team_affiliation"
+            android:paddingTop="10dp"
+            android:paddingLeft="@dimen/halve_tick"
+            android:visibility="gone"/>
+
+    </RelativeLayout>
+    
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <TextView
             android:id="@+id/label_faction"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

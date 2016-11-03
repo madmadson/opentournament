@@ -37,8 +37,8 @@ android {
         applicationId "madson.org.opentournament"
         minSdkVersion 16
         targetSdkVersion 25
-        versionCode 29
-        versionName "0.5.2-ALPHA"
+        versionCode 30
+        versionName "0.5.3-ALPHA"
 
         testInstrumentationRunner "android.support.down.runner.AndroidJUnitRunner"
     }

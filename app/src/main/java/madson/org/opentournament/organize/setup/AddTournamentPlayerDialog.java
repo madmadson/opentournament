@@ -276,6 +276,16 @@ public class AddTournamentPlayerDialog extends DialogFragment implements OpenTou
                             .create();
                         newTeamNameDialog.show();
 
+                        final EditText newTeamAffiliationEditText = (EditText) dialogAddTeam.findViewById(
+                                R.id.new_team_affiliation);
+                        TextInputLayout newTeamAffiliationParent = (TextInputLayout) dialogAddTeam.findViewById(
+                                R.id.new_team_affiliation_parent);
+
+                        if (!TournamentTyp.TEAM.name().equals(tournament.getTournamentTyp())) {
+                            newTeamAffiliationEditText.setVisibility(View.GONE);
+                            newTeamAffiliationParent.setVisibility(View.GONE);
+                        }
+
                         newTeamNameDialog.getButton(DialogInterface.BUTTON_POSITIVE)
                         .setOnClickListener(new View.OnClickListener() {
 
@@ -290,18 +300,7 @@ public class AddTournamentPlayerDialog extends DialogFragment implements OpenTou
 
                                     String newTeamName = newTeamNameEditText.getText().toString();
 
-                                    TextInputLayout newTeamAffiliationParent = (TextInputLayout)
-                                        dialogAddTeam.findViewById(R.id.new_team_affiliation_parent);
-
-                                    EditText newTeamAffiliationEditText = (EditText) dialogAddTeam.findViewById(
-                                            R.id.new_team_affiliation);
-
                                     String newTeamAffiliation = newTeamAffiliationEditText.getText().toString();
-
-                                    if (!TournamentTyp.TEAM.name().equals(tournament.getTournamentTyp())) {
-                                        newTeamAffiliationEditText.setVisibility(View.GONE);
-                                        newTeamAffiliationParent.setVisibility(View.GONE);
-                                    }
 
                                     boolean valid = true;
 

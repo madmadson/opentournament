@@ -79,11 +79,10 @@ public class RegistrationListAdapter extends RecyclerView.Adapter<TournamentPlay
 
         viewHolder.getFaction().setText(player.getFaction());
 
-        final String firstname = player.getFirstName();
-        final String nickname = player.getNickName();
-        final String lastname = player.getLastName();
         viewHolder.getPlayerNameInList()
-            .setText(baseActivity.getResources().getString(R.string.player_name_in_row, firstname, nickname, lastname));
+            .setText(baseActivity.getResources()
+                .getString(R.string.player_name_in_row, player.getFirstNameWithMaximumCharacters(10),
+                    player.getNickNameWithMaximumCharacters(10), player.getLastNameWithMaximumCharacters(10)));
 
         if (position % 2 == 0) {
             viewHolder.getTournamentPlayerCard()

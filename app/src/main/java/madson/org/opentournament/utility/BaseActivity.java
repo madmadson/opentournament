@@ -56,6 +56,7 @@ import madson.org.opentournament.HomeFragment;
 import madson.org.opentournament.R;
 import madson.org.opentournament.SignInActivity;
 import madson.org.opentournament.about.AboutActivity;
+import madson.org.opentournament.mypage.MyPageFragment;
 import madson.org.opentournament.players.PlayerListFragment;
 import madson.org.opentournament.tournaments.OnlineTournamentListFragment;
 import madson.org.opentournament.tournaments.OrganizedTournamentList;
@@ -194,6 +195,9 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
             } else if (id == R.id.nav_players) {
                 Log.i("Nav", "Open players");
                 replaceFragment(new PlayerListFragment());
+            } else if (id == R.id.nav_my_registrations) {
+                Log.i("Nav", "Open My Tournaments");
+                replaceFragment(new MyPageFragment());
             } else if (id == R.id.nav_account) {
                 Log.i("Nav", "Open Account Management");
                 replaceFragment(new AccountFragment());

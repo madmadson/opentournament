@@ -22,11 +22,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import madson.org.opentournament.R;
+import madson.org.opentournament.armylist.ArmyListExpandableListAdapter;
 import madson.org.opentournament.db.FirebaseReferences;
 import madson.org.opentournament.domain.ArmyList;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentPlayer;
-import madson.org.opentournament.online.ArmyListExpandableListAdapter;
 import madson.org.opentournament.utility.BaseActivity;
 
 import java.util.ArrayList;

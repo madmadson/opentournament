@@ -74,7 +74,8 @@ public class RegisterTournamentPlayerListAdapter extends RecyclerView.Adapter<To
             viewHolder.getTeamName().setText(player.getTeamNameWithMaximumCharacters(15));
             viewHolder.getTeamName().setVisibility(View.VISIBLE);
         } else {
-            viewHolder.getTeamName().setVisibility(View.GONE);
+            viewHolder.getTeamName().setText(baseActivity.getString(R.string.no_team));
+            viewHolder.getTeamName().setVisibility(View.VISIBLE);
         }
 
         viewHolder.getFaction().setText(player.getFaction());

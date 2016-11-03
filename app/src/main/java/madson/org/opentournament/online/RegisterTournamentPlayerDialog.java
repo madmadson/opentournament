@@ -317,6 +317,16 @@ public class RegisterTournamentPlayerDialog extends DialogFragment {
                             .create();
                         newTeamNameDialog.show();
 
+                        final EditText newTeamAffiliationEditText = (EditText) dialogAddTeam.findViewById(
+                                R.id.new_team_affiliation);
+                        TextInputLayout newTeamAffiliationParent = (TextInputLayout) dialogAddTeam.findViewById(
+                                R.id.new_team_affiliation_parent);
+
+                        if (!TournamentTyp.TEAM.name().equals(tournament.getTournamentTyp())) {
+                            newTeamAffiliationEditText.setVisibility(View.GONE);
+                            newTeamAffiliationParent.setVisibility(View.GONE);
+                        }
+
                         newTeamNameDialog.getButton(DialogInterface.BUTTON_POSITIVE)
                         .setOnClickListener(new View.OnClickListener() {
 
@@ -330,17 +340,7 @@ public class RegisterTournamentPlayerDialog extends DialogFragment {
 
                                     String newTeamName = newTeamNameEditText.getText().toString();
 
-                                    EditText newTeamAffiliationEditText = (EditText) dialogAddTeam.findViewById(
-                                            R.id.new_team_affiliation);
-                                    TextInputLayout newTeamAffiliationParent = (TextInputLayout)
-                                        dialogAddTeam.findViewById(R.id.new_team_affiliation_parent);
-
                                     String newTeamAffiliation = newTeamAffiliationEditText.getText().toString();
-
-                                    if (!TournamentTyp.TEAM.name().equals(tournament.getTournamentTyp())) {
-                                        newTeamAffiliationEditText.setVisibility(View.GONE);
-                                        newTeamAffiliationParent.setVisibility(View.GONE);
-                                    }
 
                                     boolean valid = true;
 
@@ -464,12 +464,19 @@ public class RegisterTournamentPlayerDialog extends DialogFragment {
 
                             tournamentPlayer.setFaction(faction);
 
-                            DatabaseReference reference = FirebaseDatabase.getInstance()
+                            DatabaseReference tournamentRegistration = FirebaseDatabase.getInstance()
                                 .getReference(
                                     FirebaseReferences.TOURNAMENT_REGISTRATIONS + "/" + tournament.getGameOrSportTyp()
                                     + "/" + tournament.getUuid() + "/" + player.getUUID());
 
-                            reference.setValue(tournamentPlayer);
+                            tournamentRegistration.setValue(tournamentPlayer);
+
+                            DatabaseReference playerRegistration = FirebaseDatabase.getInstance()
+                                .getReference(
+                                    FirebaseReferences.PLAYER_REGISTRATIONS + "/" + player.getUUID()
+                                    + "/" + tournament.getUuid());
+
+                            playerRegistration.setValue(tournament);
 
                             Snackbar snackbar = Snackbar.make(baseActivity.getCoordinatorLayout(),
                                     R.string.success_registration, Snackbar.LENGTH_LONG);

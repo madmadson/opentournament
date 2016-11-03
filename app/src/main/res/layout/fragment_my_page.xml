@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+    
+    <TextView
+        android:id="@+id/heading_my_page_registrations"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/main_tick"
+        android:paddingBottom="@dimen/main_tick"
+        android:textColor="@color/colorPrimary"
+        android:textStyle="bold"
+        android:layout_centerHorizontal="true"
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
+        android:text="@string/heading_my_page_registration"/>
+
+    <TextView
+        android:id="@+id/offline_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/main_tick"
+        android:text="@string/offline_text"
+        android:textStyle="bold"
+        android:layout_below="@id/heading_my_page_registrations"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/no_registrations"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:paddingTop="@dimen/main_tick"
+        android:paddingBottom="@dimen/main_tick"
+        android:layout_below="@id/heading_my_page_registrations"
+        android:textStyle="bold"
+        android:text="@string/no_registrations" />
+
+    <View
+        android:id="@+id/heading_my_page_registrations_divider"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/line_tick"
+        android:background="@color/colorAccent"
+        android:layout_below="@id/heading_my_page_registrations"
+        android:paddingBottom="@dimen/main_tick"
+        android:paddingTop="@dimen/main_tick" />
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/my_registration_list_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/heading_my_page_registrations_divider"
+        android:scrollbars="vertical" />
+
+</RelativeLayout>

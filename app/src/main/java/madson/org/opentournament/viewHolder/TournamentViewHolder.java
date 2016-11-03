@@ -19,6 +19,7 @@ import madson.org.opentournament.R;
 public class TournamentViewHolder extends RecyclerView.ViewHolder {
 
     private final ImageView uploadedIcon;
+    private final ImageView deleteIcon;
     private ImageView teamIcon;
     private TextView tournamentState;
     private View rowTournament;
@@ -46,6 +47,7 @@ public class TournamentViewHolder extends RecyclerView.ViewHolder {
 
         uploadedIcon = (ImageView) v.findViewById(R.id.uploaded_icon);
         teamIcon = (ImageView) v.findViewById(R.id.team_tournament_icon);
+        deleteIcon = (ImageView) v.findViewById(R.id.delete_icon);
     }
 
     public TextView getTournamentNameInList() {
@@ -105,5 +107,11 @@ public class TournamentViewHolder extends RecyclerView.ViewHolder {
     public ImageView getUploadedIcon() {
 
         return uploadedIcon;
+    }
+
+
+    public ImageView getDeleteIcon() {
+
+        return deleteIcon;
     }
 }

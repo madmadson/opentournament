@@ -110,7 +110,7 @@
                 android:layout_height="wrap_content"
                 android:paddingRight="@dimen/small_tick"
                 android:tint="@color/colorPrimaryDark"
-                android:src="@drawable/ic_build_black_24dp" />
+                android:src="@drawable/ic_build_black_36dp" />
 
             <ImageView
                 android:id="@+id/tournament_player_row_add_List"
@@ -118,7 +118,7 @@
                 android:layout_height="wrap_content"
                 android:paddingRight="@dimen/small_tick"
                 android:tint="@color/colorPrimaryDark"
-                android:src="@drawable/ic_insert_drive_file_black_24dp" />
+                android:src="@drawable/ic_insert_drive_file_black_36dp" />
         </LinearLayout>
     </RelativeLayout>
 </android.support.v7.widget.CardView>

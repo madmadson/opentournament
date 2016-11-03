@@ -31,6 +31,8 @@
     <string name="toolbar_title_online_tournaments_DEMO">Online Tournaments - DEMO</string>
     <string name="toolbar_title_players">Online Players</string>
     <string name="toolbar_title_players_DEMO">Online Players - DEMO</string>
+    <string name="toolbar_title_mypage">MyPage</string>
+    <string name="toolbar_title_mypage_DEMO">MyPage - DEMO</string>
     <string name="toolbar_title_account">Account Management</string>
     <string name="toolbar_title_account_DEMO">Account Management - DEMO</string>
     <string name="toolbar_title_organized_tournaments">Organized Tournaments</string>
@@ -129,6 +131,7 @@
     <string name="no_team">No Team</string>
     <string name="add_new_team">Add new Team name</string>
 
+    <string name="heading_my_page_registration">Your Registrations</string>
 
     <!-- Pairing table -->
     <string name="heading_games_for_round">Games round: %1$d</string>
@@ -197,6 +200,7 @@
     <string name="offline_text">you are offline - you cannot up/download any data</string>
     <string name="offline_player_text">you are offline - cannot load online players</string>
     <string name="no_tournament_players">No Tournament Players found</string>
+    <string name="no_registrations">No Registrations found</string>
 
     <string name="confirm_remove_tournament_player">Sure remove tournamentPlayer from tournament?</string>
 
@@ -351,7 +355,7 @@
         Tournament can\'t be undone anymore. 
     </string>
     <string name="label_state_filter">Filter state</string>
-    <string name="drawer_nav_my_tournaments">My Tournaments</string>
+    <string name="drawer_nav_my_registrations">My Registrations</string>
     <string name="add_new_team_affiliation">Club/City/Country</string>
     <string name="label_team_affiliation">Team (Club/City/Country):</string>
 

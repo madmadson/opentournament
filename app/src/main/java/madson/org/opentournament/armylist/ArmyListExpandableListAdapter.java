@@ -1,4 +1,4 @@
-package madson.org.opentournament.online;
+package madson.org.opentournament.armylist;
 
 import android.content.Context;
 
@@ -105,13 +105,13 @@ public class ArmyListExpandableListAdapter extends BaseExpandableListAdapter {
                         armyList.setName(listName.getText().toString());
 
                         int listPosition = groupPosition + 1;
-                        DatabaseReference addListReference = FirebaseDatabase.getInstance()
+                        DatabaseReference addTournamentArmyListReference = FirebaseDatabase.getInstance()
                             .getReference(
                                 FirebaseReferences.TOURNAMENT_ARMY_LISTS + "/" + tournament.getGameOrSportTyp() + "/"
                                 + tournament.getUuid()
                                 + "/" + tournamentPlayer.getPlayerUUID() + "/" + listPosition);
 
-                        addListReference.setValue(armyList);
+                        addTournamentArmyListReference.setValue(armyList);
 
                         addListButton.setVisibility(View.VISIBLE);
                         uploadSuccess.setVisibility(View.VISIBLE);

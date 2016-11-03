@@ -19,15 +19,14 @@
     </group>
 
     <group android:checkableBehavior="single">
-        <!--<item-->
-            <!--android:id="@+id/nav_my_tournaments"-->
-            <!--android:icon="@drawable/my_crown_small"-->
-            <!--android:title="@string/drawer_nav_my_tournaments" />-->
+        <item
+            android:id="@+id/nav_my_registrations"
+            android:icon="@drawable/my_crown_small"
+            android:title="@string/drawer_nav_my_registrations" />
         <item
             android:id="@+id/nav_account"
             android:icon="@drawable/ic_account_circle_black_24dp"
             android:title="@string/drawer_nav_account" />
-
         <item
             android:id="@+id/nav_organized_tournaments"
             android:icon="@drawable/ic_add_black_24dp"

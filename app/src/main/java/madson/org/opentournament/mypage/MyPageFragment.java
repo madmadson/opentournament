@@ -24,6 +24,7 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -97,7 +98,9 @@ public class MyPageFragment extends Fragment {
         progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
         noRegistration = (TextView) view.findViewById(R.id.no_registrations);
 
-        if (baseActivity.getBaseApplication().isOnline()) {
+        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        if (baseActivity.getBaseApplication().isOnline() && user != null && !user.isAnonymous()) {
             myRegistrationRecyclerView = (RecyclerView) view.findViewById(R.id.my_registration_list_recycler_view);
             myRegistrationRecyclerView.setHasFixedSize(true);
             mFirebaseDatabaseReference = FirebaseDatabase.getInstance().getReference();
@@ -129,11 +132,21 @@ public class MyPageFragment extends Fragment {
 
                 @Override
                 public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                    Tournament tournament = dataSnapshot.getValue(Tournament.class);
+                    myRegistrationListAdapter.replaceTournament(tournament);
                 }
 
 
                 @Override
                 public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                    Tournament tournament = dataSnapshot.getValue(Tournament.class);
+                    myRegistrationListAdapter.removeTournament(tournament);
+
+                    if (myRegistrationListAdapter.getItemCount() == 0) {
+                        noRegistration.setVisibility(View.GONE);
+                    }
                 }
 
 
@@ -168,6 +181,7 @@ public class MyPageFragment extends Fragment {
             TextView offlineText = (TextView) view.findViewById(R.id.offline_text);
             offlineText.setVisibility(View.VISIBLE);
             progressBar.setVisibility(View.GONE);
+            noRegistration.setVisibility(View.GONE);
         }
 
         return view;

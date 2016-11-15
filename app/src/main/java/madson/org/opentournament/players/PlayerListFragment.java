@@ -1,6 +1,7 @@
 package madson.org.opentournament.players;
 
 import android.content.Context;
+import android.content.Intent;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -18,9 +19,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -42,6 +47,7 @@ public class PlayerListFragment extends Fragment {
     private TextView noPlayersTextView;
 
     private BaseActivity baseActivity;
+    private FrameLayout ownPlayerFragment;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -90,6 +96,8 @@ public class PlayerListFragment extends Fragment {
         progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
         noPlayersTextView = (TextView) view.findViewById(R.id.no_online_players);
 
+        ownPlayerFragment = (FrameLayout) view.findViewById(R.id.row_own_player);
+
         RecyclerView mOnlinePlayerRecyclerView = (RecyclerView) view.findViewById(R.id.player_list_recycler_view);
         mOnlinePlayerRecyclerView.setHasFixedSize(true);
 
@@ -102,6 +110,8 @@ public class PlayerListFragment extends Fragment {
 
         DatabaseReference child = mFirebaseDatabaseReference.child(FirebaseReferences.PLAYERS);
 
+        final Player authenticatedPlayer = baseActivity.getBaseApplication().getAuthenticatedPlayer();
+
         Query orderedPlayer = child.orderByChild(PlayerTable.COLUMN_NICKNAME);
 
         orderedPlayer.addChildEventListener(new ChildEventListener() {
@@ -113,7 +123,14 @@ public class PlayerListFragment extends Fragment {
 
                     Player player = dataSnapshot.getValue(Player.class);
                     player.setUUID(dataSnapshot.getKey());
-                    playerListAdapter.addPlayer(player);
+
+                    if (!player.equals(authenticatedPlayer)) {
+                        playerListAdapter.addPlayer(player);
+                    } else {
+                        ownPlayerFragment.setVisibility(View.VISIBLE);
+
+                        setOwnPlayerView(player);
+                    }
                 }
 
 
@@ -122,7 +139,14 @@ public class PlayerListFragment extends Fragment {
 
                     Player player = dataSnapshot.getValue(Player.class);
                     player.setUUID(dataSnapshot.getKey());
-                    playerListAdapter.updatePlayer(player);
+
+                    if (!player.equals(authenticatedPlayer)) {
+                        playerListAdapter.updatePlayer(player);
+                    } else {
+                        ownPlayerFragment.setVisibility(View.VISIBLE);
+
+                        setOwnPlayerView(player);
+                    }
                 }
 
 
@@ -131,7 +155,12 @@ public class PlayerListFragment extends Fragment {
 
                     Player player = dataSnapshot.getValue(Player.class);
                     player.setUUID(dataSnapshot.getKey());
-                    playerListAdapter.removePlayer(player);
+
+                    if (!player.equals(authenticatedPlayer)) {
+                        playerListAdapter.removePlayer(player);
+                    } else {
+                        ownPlayerFragment.setVisibility(View.GONE);
+                    }
                 }
 
 
@@ -163,5 +192,51 @@ public class PlayerListFragment extends Fragment {
         handler.postDelayed(runnable, 5000);
 
         return view;
+    }
+
+
+    private void setOwnPlayerView(final Player player) {
+
+        TextView ownPlayerFullName = (TextView) ownPlayerFragment.findViewById(R.id.own_player_full_name);
+        View playerCard = ownPlayerFragment.findViewById(R.id.own_player_card_layout);
+        TextView ownPlayerAffiliation = (TextView) ownPlayerFragment.findViewById(R.id.own_player_affiliation);
+
+        TextView ownPlayerElo = (TextView) ownPlayerFragment.findViewById(R.id.own_player_elo);
+
+        ImageView ownPlayerEloIcon = (ImageView) ownPlayerFragment.findViewById(R.id.own_player_elo_icon);
+
+        ownPlayerFullName.setText(baseActivity.getResources()
+            .getString(R.string.player_name_in_row, player.getFirstName(), player.getNickName(), player.getLastName()));
+
+        if (player.getMeta() != null) {
+            if (!player.getMeta().isEmpty()) {
+                ownPlayerAffiliation.setText(player.getMeta());
+                ownPlayerAffiliation.setVisibility(View.VISIBLE);
+            } else {
+                ownPlayerAffiliation.setVisibility(View.GONE);
+            }
+        } else {
+            ownPlayerAffiliation.setVisibility(View.GONE);
+        }
+
+        if (player.getGamesCounter() >= 5) {
+            ownPlayerElo.setText(String.valueOf(player.getElo()));
+            ownPlayerElo.setVisibility(View.VISIBLE);
+            ownPlayerEloIcon.setVisibility(View.VISIBLE);
+        } else {
+            ownPlayerElo.setVisibility(View.GONE);
+            ownPlayerEloIcon.setVisibility(View.GONE);
+        }
+
+        playerCard.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View view) {
+
+                    Intent intent = new Intent(baseActivity, PlayerTournamentListActivity.class);
+                    intent.putExtra(PlayerTournamentListActivity.EXTRA_PLAYER, player);
+                    baseActivity.startActivity(intent);
+                }
+            });
     }
 }

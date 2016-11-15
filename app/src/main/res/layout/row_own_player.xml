@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_gravity="center"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:id="@+id/available_player_card_view"
+    card_view:cardCornerRadius="@dimen/small_tick"
+    card_view:cardBackgroundColor="@color/colorYours"
+    android:layout_marginLeft="@dimen/main_tick"
+    android:layout_marginRight="@dimen/main_tick"
+    android:layout_marginBottom="@dimen/small_tick"
+    android:layout_marginTop="@dimen/small_tick">
+
+    <RelativeLayout
+        android:id="@+id/own_player_card_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        
+        <TextView
+            android:id="@+id/own_player_full_name"
+            android:padding="@dimen/halve_tick"
+            android:layout_centerHorizontal="true"
+            android:layout_width="wrap_content"
+            android:textColor="@color/colorAlmostBlack"
+            android:textSize="@dimen/text_large"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/own_player_affiliation"
+            android:layout_centerHorizontal="true"
+            android:layout_width="wrap_content"
+            android:layout_below="@id/own_player_full_name"
+            android:layout_height="wrap_content" />
+        
+        <TextView
+            android:id="@+id/own_player_elo"
+            android:layout_centerHorizontal="true"
+            android:layout_width="wrap_content"
+            android:layout_below="@id/own_player_affiliation"
+            android:layout_height="wrap_content" />
+
+        <ImageView
+            android:id="@+id/own_player_elo_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:src="@drawable/my_crown_small"
+            android:layout_marginRight="@dimen/halve_tick"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@id/own_player_elo"
+            android:layout_below="@id/own_player_affiliation"
+            android:layout_centerHorizontal="true" />
+        
+    </RelativeLayout>
+</android.support.v7.widget.CardView>
+

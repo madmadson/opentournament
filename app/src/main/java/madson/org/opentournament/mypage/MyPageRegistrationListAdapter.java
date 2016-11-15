@@ -1,19 +1,30 @@
 package madson.org.opentournament.mypage;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 
 import android.support.v4.content.ContextCompat;
 
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.ProgressBar;
+
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import madson.org.opentournament.R;
+import madson.org.opentournament.db.FirebaseReferences;
+import madson.org.opentournament.domain.Player;
 import madson.org.opentournament.domain.Tournament;
 import madson.org.opentournament.domain.TournamentTyp;
 import madson.org.opentournament.online.OnlineTournamentActivity;
+import madson.org.opentournament.tasks.TournamentUploadTask;
 import madson.org.opentournament.utility.BaseActivity;
 import madson.org.opentournament.viewHolder.TournamentViewHolder;
 
@@ -72,6 +83,35 @@ public class MyPageRegistrationListAdapter extends RecyclerView.Adapter<Tourname
 
                 @Override
                 public void onClick(View view) {
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(baseActivity);
+                    builder.setTitle(R.string.confirm_delete_registration)
+                    .setPositiveButton(R.string.dialog_save, new DialogInterface.OnClickListener() {
+
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                    DatabaseReference mFirebaseDatabaseReference = FirebaseDatabase.getInstance()
+                                        .getReference();
+                                    final Player authenticatedPlayer = baseActivity.getBaseApplication()
+                                        .getAuthenticatedPlayer();
+
+                                    final DatabaseReference ownPlayerRegistration = mFirebaseDatabaseReference.child(
+                                            FirebaseReferences.PLAYER_REGISTRATIONS
+                                            + "/" + authenticatedPlayer.getUUID() + "/" + tournament.getUuid());
+
+                                    ownPlayerRegistration.removeValue();
+
+                                    DatabaseReference tournamentRegistration = mFirebaseDatabaseReference.child(
+                                            FirebaseReferences.TOURNAMENT_REGISTRATIONS + "/"
+                                            + tournament.getGameOrSportTyp() + "/" + tournament.getUuid() + "/"
+                                            + authenticatedPlayer.getUUID());
+
+                                    tournamentRegistration.removeValue();
+                                }
+                            })
+                    .setNegativeButton(R.string.dialog_cancel, null)
+                    .show();
                 }
             });
 

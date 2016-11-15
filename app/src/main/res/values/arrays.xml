@@ -18,8 +18,9 @@
     <!-- this must be a pair -->
     <string-array name="news_header">
         <item>Welcome!</item>
+        <item>Di 15.11: Version 0.5.4-ALPHA Released</item>
         <item>Mi 02.11: Version 0.5.2-ALPHA Released</item>
-        <item>Di 01.11: Version 0.5.1-ALPHA Released</item>
+        <item>Di 01.11: Version 0.5.1-ALPHA Released</item> 
         <item>Fr 31.10: Version 0.5.0-ALPHA Released</item>
         <item>Fr 28.10: Version 0.4.10-ALPHA Released</item>
         <item>Di 24.10: Version 0.4.6-ALPHA Released</item>
@@ -37,6 +38,9 @@
 
     <string-array name="news">
         <item>Create more Tournaments! Give Feedback!</item>
+         <item>* See your own registrations. Delete your own registrations\n
+                * You can see your account as first entry in player list
+          </item>
             <item>* New Feature: Club/City/Country pairing option now ready\n
                 * Club/City/Country now for teams\n
                 * new player have elo 1000. elo ranking will be visible after 5 games

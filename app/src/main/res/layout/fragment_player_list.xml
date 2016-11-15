@@ -53,6 +53,15 @@
         android:id="@+id/offline_player_text"
         android:text="@string/offline_player_text"
         android:visibility="gone"/>
+
+    <FrameLayout
+        android:id="@+id/row_own_player"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone">
+        <include
+            layout="@layout/row_own_player" />
+    </FrameLayout>
     
 
     <android.support.v7.widget.RecyclerView

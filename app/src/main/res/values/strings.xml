@@ -197,6 +197,7 @@
     <string name="success_tournament_player_is_online">Tournament saved online</string>
 
     <!-- offline stuff -->
+    <string name="offline_my_page">you are offline and/or anonymous - please connect or login/make an account to see your registrations</string>
     <string name="offline_text">you are offline - you cannot up/download any data</string>
     <string name="offline_player_text">you are offline - cannot load online players</string>
     <string name="no_tournament_players">No Tournament Players found</string>
@@ -358,5 +359,6 @@
     <string name="drawer_nav_my_registrations">My Registrations</string>
     <string name="add_new_team_affiliation">Club/City/Country</string>
     <string name="label_team_affiliation">Team (Club/City/Country):</string>
+    <string name="confirm_delete_registration">Really delete registration for Tournament?</string>
 
 </resources>

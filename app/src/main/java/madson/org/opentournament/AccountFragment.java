@@ -80,14 +80,12 @@ public class AccountFragment extends Fragment {
 
         welcomeTextView = (TextView) view.findViewById(R.id.welcome_text);
 
-        final ProgressBar progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
         final Button addButton = (Button) view.findViewById(R.id.button_add_as_player);
 
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
         if (user == null || user.isAnonymous()) {
             welcomeTextView.setText(getActivity().getResources().getString(R.string.please_sign_in_text));
-            progressBar.setVisibility(View.GONE);
         } else {
             final Player authenticatedPlayer = baseActivity.getBaseApplication().getAuthenticatedPlayer();
             firstnameField.setVisibility(View.VISIBLE);

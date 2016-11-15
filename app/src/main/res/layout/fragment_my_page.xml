@@ -29,8 +29,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="@dimen/main_tick"
-        android:text="@string/offline_text"
+        android:text="@string/offline_my_page"
         android:textStyle="bold"
+        android:layout_centerInParent="true"
         android:layout_below="@id/heading_my_page_registrations"
         android:visibility="gone" />
 
@@ -43,7 +44,9 @@
         android:paddingBottom="@dimen/main_tick"
         android:layout_below="@id/heading_my_page_registrations"
         android:textStyle="bold"
-        android:text="@string/no_registrations" />
+        android:text="@string/no_registrations"
+        android:layout_centerInParent="true"
+        android:visibility="gone"/>
 
     <View
         android:id="@+id/heading_my_page_registrations_divider"
